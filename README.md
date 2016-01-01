@@ -4,7 +4,7 @@ A series of new works to be viewed and performed via a lightweight website. The 
 
 
 ## Advantages over traditional scores
-- easily accessible and widely compatible <!--(desktop computers, mobile devices, public libraries)-->
+- easily accessible and widely compatible
 - reliable use of color
 - use of animation
 - built-in tutorial function
@@ -51,6 +51,7 @@ The current scope of this project is to require as few dependencies as possible 
 - download pre-selected vector files and pdfs of scores
 - download local copy of repository and works to run on local machine or LAN/darknet
 - documentation of premiere performances and other performances as available
+
 <!--
 shareable links. option to include parameters (with query string?)
 -->
