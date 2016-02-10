@@ -63,9 +63,8 @@ var offset = barHeight;
 var card = chart.selectAll("g")
     .data(cards)
     .enter().append("g")
-    .attr("transform", function(d, i) { var pos = (i * (barHeight + padd)); return "translate(" + pos + ", 100)"; })
-    // .style("opacity", function(d, i) { return (i * 0.25) + 0.5 })
-    .style("opacity", function(d, i) { return 1 - (i * (0.3)) })
+    .attr("transform", function(d, i) { var pos = offset + (i * (barHeight + padd)); return "translate(" + pos + ", 100)"; })
+    .style("opacity", function(d, i) { return 1 - (i * (0.5)) })
     ;
 
 card.append("rect")
@@ -79,34 +78,31 @@ card.append("text")
     // .attr("dx", "-.35em")
     .text(function(d, i) { return i; });
 
-//
-// var button=d3.select("button");
-var button=d3.select(".chart");
+var button=d3.select(".chart"); // click anywhere on svg
 var pointer = 0;
 button.on("click", function() {
-if (pointer < cards.length)
-{
-    pointer++;
-    card.transition()
-    .attr("transform", function(d, i) {
-        var pos =
-            (i * (barHeight + padd))
-            - (offset * pointer) // move by pointer
-            - (padd * pointer); // also move by spacing
-        return "translate(" + pos + ", 100)";
-    })
-    .duration(600)
-    .style("opacity", function(d, i) { return ((pointer - i) + 1.6) - ((pointer - i)* (0.3)) })
-        //   .delay(500)
-      //.delay(function(d, i) { return i * 1000; })
-    ;
-    // d3.select('g:first-child').transition()
-    // .style("opacity", 0)
-    // .duration(2000)
-    // .delay(500)
-    // //.delay(function(d, i) { return i * 1000; })
-    // ;
-}
+    if (pointer < cards.length)
+    {
+        pointer++;
+        card.transition()
+        .attr("transform", function(d, i) {
+            var pos =
+                offset +
+                (i * (barHeight + padd))
+                - (offset * pointer) // move by pointer
+                - (padd * pointer); // also move by spacing
+            return "translate(" + pos + ", 100)";
+        })
+        .duration(600)
+        .style("opacity", function(d, i) {
+            if(pointer > i ){
+                return 0;
+            }
+            else {
+                return (0.5 * (pointer - i)) + 1;
+            }
+        });
+    }
 })
 
 </script>
