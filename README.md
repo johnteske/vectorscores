@@ -29,6 +29,7 @@ A series of new works to be viewed and performed via a lightweight website. The 
 - Greater control over musical texture and density. From core musical concepts, generate parts based on ensemble size. A logical next step in algorithmically generated music and music using open instrumentation.
 - Morphing clouds of sound, like the murmuration of birds.
 - Clustering and group dynamics. Control orchestration through use of motion in score.
+- Decision Tree. At each section, performer is given a choice between two cells of music, all branching from a single source to many possibilities. Animated similar to storyboard.
 - More to be developed as project takes shape.
 
 
