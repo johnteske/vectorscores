@@ -1,0 +1,14 @@
+.main rect {
+  fill: white;
+  stroke: #888;
+  stroke-width: 1px;
+  /*shape-rendering: geometricPrecision;*/
+  shape-rendering: crispEdges;
+}
+
+.main text {
+  fill: #444;
+  font-size: 20px;
+  font-family: 'Courier New', sans-serif;
+  text-anchor: middle;
+}
