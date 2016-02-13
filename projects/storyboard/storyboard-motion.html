@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-/*
+
 body {
     width: 100%;
 }
 .chart {
-    margin: 0 auto;
-}*/
+    margin: 0 auto; /*border: 1px solid red;*/
+}
 
 .chart rect {
   fill: white;
@@ -20,19 +20,15 @@ body {
 .chart text {
   fill: #444;
   font-size: 20px;
-  font-family: 'Monaco';
-  /*font-weight: 100;*/
-  /*text-transform: uppercase;*/
+  font-family: 'Courier New', sans-serif;
   text-anchor: middle;
 }
 
 </style>
 <svg class="chart"></svg>
-<!-- <button class="btn btn-mini" id="button">Transition</button> -->
-<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="../../js/d3.v3.min.js" charset="utf-8"></script><!--<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>-->
 <script>
 
-var data = [4, 8];//, 15, 16, 23, 42];
 var cards = [
     ["one"],
     ["two"],
@@ -46,39 +42,34 @@ var cards = [
     ["four"]
 ];
 
-var width = 600,
-    barHeight = 120,
-    padd = 10;
-
-var x = d3.scale.linear()
-    .domain([0, d3.max(data)])
-    .range([0, width]);
+var cardWidth = 120,
+    cardPadding = 10,
+    offset = cardWidth,
+    width = (cardWidth * 4) + (cardPadding * 2),
+    height = cardWidth * 3;
 
 var chart = d3.select(".chart")
     .attr("width", width)
-    .attr("height", width); //barHeight * data.length);
+    .attr("height", height);
 
-//
-var offset = barHeight;
 var card = chart.selectAll("g")
     .data(cards)
     .enter().append("g")
-    .attr("transform", function(d, i) { var pos = offset + (i * (barHeight + padd)); return "translate(" + pos + ", 100)"; })
-    .style("opacity", function(d, i) { return 1 - (i * (0.5)) })
-    ;
+    .attr("transform", function(d, i) { var pos = offset + (i * (cardWidth + cardPadding)); return "translate(" + pos + ", 100)"; })
+    .style("opacity", function(d, i) { return 1 - (i * (0.5)) });
 
 card.append("rect")
-    .attr("width", barHeight - 1)
-    .attr("height", barHeight - 1);
+    .attr("width", cardWidth - 1)
+    .attr("height", cardWidth - 1);
 
 card.append("text")
-    .attr("x", barHeight / 2) //function(d) { return x(d) - 3; })
-    .attr("y", barHeight / 2)
+    .attr("x", cardWidth / 2)
+    .attr("y", cardWidth / 2)
     .attr("dy", ".35em")
     // .attr("dx", "-.35em")
     .text(function(d, i) { return i; });
 
-var button=d3.select(".chart"); // click anywhere on svg
+var button = d3.select(".chart"); // click anywhere on svg
 var pointer = 0;
 button.on("click", function() {
     if (pointer < cards.length)
@@ -88,9 +79,9 @@ button.on("click", function() {
         .attr("transform", function(d, i) {
             var pos =
                 offset +
-                (i * (barHeight + padd))
+                (i * (cardWidth + cardPadding))
                 - (offset * pointer) // move by pointer
-                - (padd * pointer); // also move by spacing
+                - (cardPadding * pointer); // also move by spacing
             return "translate(" + pos + ", 100)";
         })
         .duration(600)
