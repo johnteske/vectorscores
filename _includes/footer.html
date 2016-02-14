@@ -24,7 +24,7 @@
           {% endif %}
           {% if site.website %}
           <li>
-              <a href="{{ site.website }}"><span class="username">{{ site.website }}</span></a>
+              <a href="{{ site.website }}"><span class="username">{{ site.website | replace: 'http://','' }}</span></a>
           </li>
           {% endif %}
         </ul>

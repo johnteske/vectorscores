@@ -6,7 +6,7 @@ description: >
 baseurl: "/vectorscores" # the subpath of your site, e.g. /blog
 url: "http://vectorscor.es" # the base hostname & protocol for your site
 twitter_username: johnteske
-github_username:  johnteske
+github_username:  johnteske/vectorscores
 website: http://johnteskemusic.com
 
 # Build settings
