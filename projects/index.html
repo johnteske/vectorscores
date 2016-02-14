@@ -9,7 +9,7 @@ menu: true
 <ul>
 {% for project in site.pages %}
     {% if project.url contains '/projects' and project.url != page.url %} <!-- list all projects, exclude index page -->
-        <li><a href="{{ project.url }}">{{ project.title }}</a></li>
+        <li><a href="{{ project.url | prepend: site.baseurl }}">{{ project.title }}</a></li>
     {% endif %}
 {% endfor %}
 </ul>
