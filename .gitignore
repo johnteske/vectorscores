@@ -1,4 +1,8 @@
+# system files
 .DS_Store
+
+# local development
+js/
 
 # Jekyll
 _site/
