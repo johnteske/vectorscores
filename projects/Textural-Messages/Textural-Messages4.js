@@ -3,7 +3,7 @@
    var currentpart = 0;
    var mastery = 75;
    var xmargin = 150;
-   
+
    var scrolly = 0; // how many px to scroll, if needed
 
 	var pdense = new Path.Rectangle({
@@ -26,7 +26,7 @@
 	pdense.join(pdense2);
 	pdense.scale(2);
 	pdense3.scale(2);
-	
+
 /*
     var pdense = new Path.Rectangle({
             from: [0, 0],
@@ -46,7 +46,7 @@
     var wymbol = new Symbol(pdense3); // whitespace
     var symbol = new Symbol(path);
 	var group = new Group();
-		
+
 	var gopacity = 0;
 
 function texturalMsg() {
@@ -55,18 +55,18 @@ function texturalMsg() {
 		gopacity = 0;
 
 		var yadvance = 125; // can edit to match new tmsg height
-		
+
 		if( mastery > (view.size.height - (yadvance * 0.5)) ) {
 			scrolly = yadvance;
 // 			view.scrollBy(new Point(0, yadvance)); // save, if anim is turned off
 		}
-		
+
 		if(currentpart == 0) {
 	        var denter = new Point(xmargin, mastery);
 	        currentpart++;
 	        currentpart %= parts;
 	        mastery += yadvance;
-	       
+
    	        var dplaced = dymbol.place(denter);
 // 	        var wplaced = wymbol.place(dymbol.position); // quick n dirty
 	        var wplaced = wymbol.place(denter - [115,5]); // quick n dirty
@@ -119,12 +119,12 @@ function texturalMsg() {
 				    fontSize: 36
 				});
 				group.addChild(text);
-				
+
 			} // endif currentpart
 
 		}
-		
-}    
+
+}
 
 		// works
         function onMouseDown(event) {
@@ -134,24 +134,24 @@ function texturalMsg() {
 		// seems to make one, then none
 //		document.setInterval(texturalMsg(), 3000);
 
-//    	texturalMsg();
+   	texturalMsg();
 		var cooldown = 0;
 
         function onFrame(event) {
-	        
-	        // quick n dirty way to add timing
-	        if(cooldown <= 0) {
-		        var newtxtprob = Math.random();
-			}
-	        if(newtxtprob < 0.025) {
-	        	texturalMsg();
-	        	cooldown = 30; // counted in frames?
-        	}
-        	cooldown--;
-	        
+
+	        // // quick n dirty way to add timing
+	        // if(cooldown <= 0) {
+		    //     var newtxtprob = Math.random();
+			// }
+	        // if(newtxtprob < 0.025) {
+	        // 	texturalMsg();
+	        // 	cooldown = 30; // counted in frames?
+        	// }
+        	// cooldown--;
+
 	        group.opacity = (gopacity/100);
 	        gopacity = gopacity + 15;
-	        
+
 			if(scrolly > 0) {
 // 				view.scrollBy(new Point(0, 1));
 // 				scrolly--;

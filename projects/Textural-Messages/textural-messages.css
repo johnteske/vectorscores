@@ -1,0 +1,29 @@
+.main rect {
+  fill: #eee;
+  stroke: #eee;
+  stroke-width: 1px;
+  /*rx: 12;*/
+  /*shape-rendering: geometricPrecision;*/
+  /*shape-rendering: crispEdges;*/
+}
+.main.debug rect {
+    opacity: 0.5;
+    fill: blue;
+    stroke: blue;
+}
+
+.main rect.mask {
+  fill: white;
+  stroke: white;
+  stroke-width: 1px;
+  /*rx: 12;*/
+  /*shape-rendering: geometricPrecision;*/
+  /*shape-rendering: crispEdges;*/
+}
+
+.main text {
+  fill: #444;
+  font-size: 12px;
+  font-family: sans-serif;
+  text-anchor: middle;
+}
