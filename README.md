@@ -42,7 +42,7 @@ A series of new works to be viewed and performed via a lightweight website. The 
 - **Compositions**. Use *vector scores* to create your own works. You are welcome to use my works and code as a starting point—but please make them your own!
 - **Repository**. I encourage feedback and contributions to this project. Feel free to submit issues and pull requests!
 
-## Roadmap / todo
+## Roadmap
 ### Scope
 The current scope of this project is to require as few dependencies as possible for ease of set up for performances and contribution. Future iterations or other projects may involve servers or other technologies.
 
@@ -56,7 +56,3 @@ The current scope of this project is to require as few dependencies as possible 
 <!--
 shareable links. option to include parameters (with query string?)
 -->
-
-### Next steps: initial set up
-- Research which JavaScript library is most appropriate for this project. [Paper.js](http://paperjs.org/), [D3](http://d3js.org/), or [Raphaël](http://raphaeljs.com/)?
-- Extract vectors for musical glyphs from open source music engraving fonts.
