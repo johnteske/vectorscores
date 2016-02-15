@@ -1,9 +1,0 @@
-body {
-    width: 100%; }
-
-svg.main {
-    margin: 0 auto; }
-    
-svg.main.debug {
-    border: 1px solid red;
-}
