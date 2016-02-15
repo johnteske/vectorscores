@@ -1,6 +1,6 @@
 # vector scores
 
-A series of new works to be viewed and performed via a lightweight website. The works will be algorithmically generated so that each score and each performance is unique and customized while still being shaped by the composition's parameters. Certain works may use data such as location or instrumentation to create more site- and context-specific performances.
+A series of new works to be viewed and performed via a lightweight website. The works will be algorithmically generated so that each score and each performance is unique and customized while still being shaped by the composition's parameters. <!--Certain works may use data such as location or instrumentation to create more site- and context-specific performances.-->
 
 
 ## Advantages over traditional scores
@@ -41,6 +41,7 @@ A series of new works to be viewed and performed via a lightweight website. The 
 - **Performances**. Perform works created with *vector scores*. Contact me and I'll list performances here along with links to any audio and video documentation.
 - **Compositions**. Use *vector scores* to create your own works. You are welcome to use my works and code as a starting point—but please make them your own!
 - **Repository**. I encourage feedback and contributions to this project. Feel free to submit issues and pull requests!
+
 
 ## Roadmap
 ### Scope

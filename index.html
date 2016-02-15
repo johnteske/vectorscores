@@ -1,10 +1,11 @@
 ---
-layout: page #layout: default
-title: Projects #[none]
+layout: default
 ---
 <p>
-    Works in progress:
+    A series of new compositions built on the web.
+    The works will be algorithmically generated so that each score and each performance is unique and customized while still being shaped by the composition's parameters.
 </p>
+<h3>Works in progress</h3>
 <ul>
 {% for project in site.pages %}
     {% if project.url contains '/projects' and project.url != '/projects/' %} <!-- list all projects, exclude index page -->
