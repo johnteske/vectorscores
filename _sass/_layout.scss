@@ -104,6 +104,12 @@
     padding: $spacing-unit 0;
 }
 
+div.noscript {
+    width: 100%;
+    color: #ff0000;
+    background: #ffeeee;
+}
+
 .footer-heading {
     font-size: 18px;
     margin-bottom: $spacing-unit / 2;
