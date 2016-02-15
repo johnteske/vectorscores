@@ -7,7 +7,11 @@ function makeCard(i) {
 }
 
 for (var i = 0; i < 10; i++) {
-    makeCard(Math.floor(Math.random() * cardChoices.length));
+    var lastCard = cards[i-1];
+    do {
+        var newCard = Math.floor(Math.random() * cardChoices.length);
+    } while (cardChoices[newCard] == lastCard); // do not repeat cards
+    makeCard(newCard);
 }
 
 // display
@@ -49,8 +53,8 @@ button.on("click", function() {
         card.transition()
         .attr("transform", function(d, i) {
             var pos =
-                offset +
-                (i * (cardWidth + cardPadding))
+                offset
+                + (i * (cardWidth + cardPadding))
                 - (offset * pointer) // move by pointer
                 - (cardPadding * pointer); // also move by spacing
             return "translate(" + pos + ", 100)";
