@@ -15,7 +15,7 @@ var ypointer = 0,
 
 function texturalMsg() {
     var relPos = (ypointer % 2); // easy way to handle, for now
-    var newData = ["whatup internet", "o hai"].slice(relPos);
+    var newData = [Math.ceil(Math.random() * 9)];//["whatup internet", "o hai"].slice(relPos);
     var newTxt = main
         .data(newData)
         .append("g")
@@ -42,11 +42,24 @@ function texturalMsg() {
         .attr("ry", 12)
         .attr("width", txtWidth)
         .attr("height", txtHeight);
-    newTxt.append("text")
-        .attr("x", txtWidth * 0.5)
-        .attr("y", txtHeight * 0.5)
-        .attr("dy", ".35em")
-        .text(function(d, i) { return d; });
+
+    var cloud = newTxt.append("g")
+        .attr("transform",
+            "translate(" + 0 + ", " + (-1 * txtHeight) + ")"); // set back to (0,0) of txt
+
+    for (var i = 0; i < newData[0]; i++) {
+        cloud.append("ellipse")
+            .attr("cx", txtWidth * 0.5)
+            .attr("cy", txtHeight * 0.5)
+            .attr("rx", 4)
+            .attr("ry", 5)
+            .attr("transform",
+                "translate(" +
+                    ((txtWidth * 0.5) - (Math.random() * 24) + 6) + ", " +
+                    ((txtHeight * 0.5) - (Math.random() * 24) + 6) +
+                ") rotate(60)"
+            );
+    }
 
     newTxt.style("opacity", "0")
         .transition()
