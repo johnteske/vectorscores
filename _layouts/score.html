@@ -7,9 +7,9 @@
 </head>
 <body>
     <svg class="main"></svg>
-    <!-- {{ content }} -->
-    <!-- <script src="../../js/d3.v3.min.js" charset="utf-8"></script> --> <!-- if offline/development -->
-    <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    {% comment %}<!--{{ content }}-->{% endcomment %}
+    {% include script-d3.html %}
     <script src="script.js" charset="utf-8"></script>
+    {% comment %}<!--Add footer, including score/performance controls-->{% endcomment %}
 </body>
 </html>
