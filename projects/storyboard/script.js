@@ -1,16 +1,16 @@
-var cards = [
-    ["one"],
-    ["two"],
-    ["three"],
-    ["three"],
-    ["three"],
-    ["three"],
-    ["three"],
-    ["three"],
-    ["three"],
-    ["four"]
-];
+// generate card data
+var cards = new Array();
+var cardChoices = ["A", "B", "C", "D", "E"]; // rando rondo
 
+function makeCard(i) {
+    cards.push(cardChoices[i]);
+}
+
+for (var i = 0; i < 10; i++) {
+    makeCard(Math.floor(Math.random() * cardChoices.length));
+}
+
+// display
 var cardWidth = 120,
     cardPadding = 10,
     offset = cardWidth,
@@ -21,6 +21,7 @@ var main = d3.select(".main")
     .attr("width", width)
     .attr("height", height);
 
+// create cards
 var card = main.selectAll("g")
     .data(cards)
     .enter().append("g")
@@ -36,8 +37,9 @@ card.append("text")
     .attr("y", cardWidth / 2)
     .attr("dy", ".35em")
     // .attr("dx", "-.35em")
-    .text(function(d, i) { return i; });
+    .text(function(d, i) { return d; });
 
+// interaction
 var button = d3.select(".main"); // click anywhere on svg
 var pointer = 0;
 button.on("click", function() {
@@ -62,5 +64,8 @@ button.on("click", function() {
                 return (0.5 * (pointer - i)) + 1;
             }
         });
+    }
+    else {
+        console.log("fin");
     }
 })
