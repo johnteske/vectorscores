@@ -1,7 +1,6 @@
 # vector scores
 
-A series of new works to be viewed and performed via a lightweight website. The works will be algorithmically generated so that each score and each performance is unique and customized while still being shaped by the composition's parameters. <!--Certain works may use data such as location or instrumentation to create more site- and context-specific performances.-->
-
+A series of new works to be viewed and performed via a lightweight website. The works will be algorithmically generated so that each score and each performance is unique and customized while still being shaped by the composition's parameters.
 
 ## Advantages over traditional scores
 - easily accessible and widely compatible
@@ -21,13 +20,13 @@ A series of new works to be viewed and performed via a lightweight website. The 
 
 
 ## Work concepts
-- *Textural Messages*. Call and response between ensembles performing graphic/textural/musical content being generated in realtime.
+- [*Textural Messages*]. Call and response between ensembles performing graphic/textural/musical content being generated in realtime.
 - topographic scores. Microcosms of sound, possibly based on data from a user's location.
 - Musically interpreting 3D objects. Any number of musicians are positioned equidistant from a phantom central object, their parts are generated based on the ensemble size. Designed to explore how we use technology to relate to abstract ideas, sometimes referring to physical objects, sometimes not.
-- Music formatted as storyboard frames, transitioning between frames using animation. This could allow for performance of complex moments, allowing musicians to focus on one frame at a time.
+- Music formatted as [storyboard frames], transitioning between frames using animation. This could allow for performance of complex moments, allowing musicians to focus on one frame at a time.
 - Open form/mobile movements, generated in realtime.
 - Greater control over musical texture and density. From core musical concepts, generate parts based on ensemble size. A logical next step in algorithmically generated music and music using open instrumentation.
-- Morphing clouds of sound, like the murmuration of birds.
+- [Morphing clouds] of sound, like the murmuration of birds.
 - Clustering and group dynamics. Control orchestration through use of motion in score.
 - Decision Tree. At each section, performer is given a choice between two cells of music, all branching from a single source to many possibilities. Animated similar to storyboard.
 - More to be developed as project takes shape.
@@ -57,3 +56,7 @@ The current scope of this project is to require as few dependencies as possible 
 <!--
 shareable links. option to include parameters (with query string?)
 -->
+
+[*Textural Messages*]: http://vectorscor.es/projects/Textural-Messages/
+[storyboard frames]: https://vectorscor.es/projects/storyboard/
+[Morphing clouds]: https://vectorscor.es/projects/glob/
