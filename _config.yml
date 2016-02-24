@@ -14,3 +14,14 @@ safe: true
 markdown: kramdown
 sass:
     style: compressed
+
+# Compression settings
+compress_html:
+    clippings: all
+    comments: all #["<!-- ", " -->"]
+    #endings: all
+    #ignore:
+        #envs: [local]
+    #blanklines: false
+    #profile: true
+    #startings: [html, head, body]
