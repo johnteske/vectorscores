@@ -21,7 +21,7 @@ A series of new works to be viewed and performed via a lightweight website. The 
 
 ## Work concepts
 - [*Textural Messages*]. Call and response between ensembles performing graphic/textural/musical content being generated in realtime.
-- topographic scores. Microcosms of sound, possibly based on data from a user's location.
+- topographic scores. Microcosms of sound, possibly based on data from a user's location. Displayed as: isometric? revealed through time? warped fabric?
 - Musically interpreting 3D objects. Any number of musicians are positioned equidistant from a phantom central object, their parts are generated based on the ensemble size. Designed to explore how we use technology to relate to abstract ideas, sometimes referring to physical objects, sometimes not.
 - Music formatted as [storyboard frames], transitioning between frames using animation. This could allow for performance of complex moments, allowing musicians to focus on one frame at a time.
 - Open form/mobile movements, generated in realtime.
@@ -29,6 +29,8 @@ A series of new works to be viewed and performed via a lightweight website. The 
 - [Morphing clouds] of sound, like the murmuration of birds.
 - Clustering and group dynamics. Control orchestration through use of motion in score.
 - Decision Tree. At each section, performer is given a choice between two cells of music, all branching from a single source to many possibilities. Animated similar to storyboard.
+- Cantus firmus/drone works.
+- "Loading GIF" as timing—speed of information is increasing but so is complexity and file size.
 - More to be developed as project takes shape.
 
 
