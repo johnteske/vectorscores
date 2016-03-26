@@ -60,5 +60,5 @@ shareable links. option to include parameters (with query string?)
 -->
 
 [*Textural Messages*]: http://vectorscor.es/projects/Textural-Messages/
-[storyboard frames]: https://vectorscor.es/projects/storyboard/
-[Morphing clouds]: https://vectorscor.es/projects/glob/
+[storyboard frames]: http://vectorscor.es/projects/storyboard/
+[Morphing clouds]: http://vectorscor.es/projects/glob/
