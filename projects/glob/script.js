@@ -1,5 +1,5 @@
 var globWidth = 240,
-    radius = 5; //globWidth * 0.25,
+    radius = 10; //globWidth * 0.25,
     padding = 10;
     width = globWidth + (padding * 2),
     height = globWidth + (padding * 2),
@@ -53,15 +53,14 @@ for (var i = 0; i < cloudSize; i++) {
 //     });
 
 main.append("text")
-    .attr("fill", "black")
+    .attr("fill", "#111")
     .attr("text-anchor", "middle")
     .attr("x", center)
-    .attr("y", globWidth)
-    .text("[0,2,6]");
+    .attr("y", globWidth);
 
 function moveIt(){
-    radius = globWidth * Math.random() * 0.5;
-    // d3.selectAll("ellipse:nth-child("+ Math.floor(Math.random() * cloudSize ) + ")")
+    radius = globWidth * Math.random() * 0.4;
+    d3.selectAll("text").text("[0, " + Math.floor(Math.random() * 2 + 1) + ", " + Math.floor(Math.random() * 2 + 3) + "]");
     d3.selectAll("ellipse")
         .transition()
         .duration(dur)
