@@ -13,9 +13,13 @@ var main = d3.select(".main")
 var ypointer = 0,
     relativePos = 0; // 0 = left, 1 = right
 
+function pointDisp() {
+    return Math.floor((Math.random() * 10) - (Math.random() * 10));
+}
+
 function texturalMsg() {
-    var relPos = (ypointer % 2); // easy way to handle, for now
-    var newData = [Math.ceil(Math.random() * 9)];//["whatup internet", "o hai"].slice(relPos);
+    var relPos = (ypointer % 2); // simple way to alternate left/right, for now
+    var newData = [Math.ceil(Math.random() * 9)];
     var newTxt = main
         .data(newData)
         .append("g")
@@ -24,24 +28,31 @@ function texturalMsg() {
                 y = (ypointer * txtHeight) + margin;
             return "translate(" + x + ", " + y + ")";
         });
-    newTxt.append("rect") // tail, to be masked
-        .attr("x", [0,txtWidth][relPos] + (-1 * margin)) // right side not perfect
-        .attr("y", txtHeight * 0.75)
-        .attr("width", txtWidth * 0.5)
-        .attr("height", txtHeight * 0.25);
-    newTxt.append("rect") // tail mask
-        .classed("mask", true)
-        .attr("x", [(-2 * margin) - 1,txtWidth][relPos])
-        .attr("y", txtHeight * 0.5)
-        .attr("rx", margin)
-        .attr("ry", margin)
-        .attr("width", margin * 2)
-        .attr("height", txtHeight * 0.5);
-    newTxt.append("rect") // main message
-        .attr("rx", 12)
-        .attr("ry", 12)
-        .attr("width", txtWidth)
-        .attr("height", txtHeight);
+
+    pathinfo = [
+        {x:margin, y: 0},
+        {x:txtWidth-margin, y: 0},
+        {x:txtWidth, y:margin},
+        {x:txtWidth, y:txtHeight-margin},
+        {x:txtWidth + margin * (relPos), y:txtHeight}, // tail
+        {x:txtWidth-margin, y:txtHeight},
+        {x:margin, y:txtHeight},
+        {x:margin * (relPos-1), y:txtHeight}, // tail
+        {x:0, y:txtHeight-margin},
+        {x:0, y:margin}
+    ];
+
+    // add pointDisp values here to each x/y value
+
+    var d3line2 = d3.svg.line()
+        .x(function(d){return d.x;})
+        .y(function(d){return d.y;})
+        .interpolate("basis-closed");
+    newTxt.append("path")
+        .attr("d", d3line2(pathinfo))
+        .style("stroke-width", 2)
+        .style("stroke", "#eee")
+        .style("fill", "#eee");
 
     var cloud = newTxt.append("g")
         .attr("transform",
