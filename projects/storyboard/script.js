@@ -36,12 +36,31 @@ card.append("rect")
     .attr("width", cardWidth - 1)
     .attr("height", cardWidth - 1);
 
-card.append("text")
-    .attr("x", cardWidth / 2)
-    .attr("y", cardWidth / 2)
-    .attr("dy", ".35em")
-    // .attr("dx", "-.35em")
-    .text(function(d, i) { return d; });
+var txtWidth = 10;
+var txtHeight = 10;
+var txtSpread = 48;
+for (var i = 0; i < 15; i++) {
+    card.append("ellipse")
+        .attr("cx", txtWidth * 0.5)
+        .attr("cy", txtHeight * 0.5)
+        .attr("rx", 4)
+        .attr("ry", 5)
+        .attr("transform",
+        function() {
+            return "translate(" +
+                ((Math.random() * txtSpread) + (cardWidth / 2) - (txtSpread / 2)) + ", " +
+                ((Math.random() * txtSpread) + (cardWidth / 2) - (txtSpread / 2)) +
+            ") rotate(60)"
+        }
+        );
+}
+
+// card.append("text")
+//     .attr("x", cardWidth / 2)
+//     .attr("y", cardWidth / 2)
+//     .attr("dy", ".35em")
+//     // .attr("dx", "-.35em")
+//     .text(function(d, i) { return d; });
 
 // interaction
 var button = d3.select(".main"); // click anywhere on svg
