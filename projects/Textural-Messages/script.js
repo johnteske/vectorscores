@@ -2,16 +2,18 @@ var txtWidth = 120,
     txtHeight = 60,
     width = 640
     height = 640,
-    margin = 12;
+    margin = 12,
+    transDur = 300;
 
 var main = d3.select(".main")
     .attr("width", width)
     .attr("height", height);
 
+var txtWrapper = main.append("g"); // for easy scrolling
+
 // main.classed("debug", true);
 
-var ypointer = 0,
-    relativePos = 0; // 0 = left, 1 = right
+var ypointer = 0;
 
 function pointDisp() {
     return Math.floor((Math.random() * 10) - (Math.random() * 10));
@@ -20,7 +22,7 @@ function pointDisp() {
 function texturalMsg() {
     var relPos = (ypointer % 2); // simple way to alternate left/right, for now
     var newData = [Math.ceil(Math.random() * 9)];
-    var newTxt = main
+    var newTxt = txtWrapper
         .data(newData)
         .append("g")
         .attr("transform", function(d, i) {
@@ -74,28 +76,20 @@ function texturalMsg() {
 
     newTxt.style("opacity", "0")
         .transition()
-        .duration(300)
+        .duration(transDur)
         .style("opacity", "1");
 
     ypointer++;
-    // if (ypointer * txtHeight > height) {
-    //      // here is where yscroll will be called
-    //     var trans = d3.transform(main.selectAll("g").attr("transform")).translate;
-    //     // var trans = main.selectAll("g").attr("transform").translate;
-    //     console.log(trans);
-    //
-    //     main.selectAll("g")
-    //         // .attr("transform")
-    //         .transition()
-    //         .attr("transform", function(d, i) {
-    //             var x = trans[0],//margin + (width * relPos) - ((txtWidth + (margin * 2)) * relPos),
-    //                 y = (i * txtHeight) + margin - txtHeight;
-    //             return "translate(" + x + ", " + y + ")";
-    //         })
-    //         .duration(300);
-    //     // console.log(main.selectAll("g").attr("transform"));
-    // }
-    // relativePos++; console.log(relativePos, relativePos % 2);
+    if (ypointer * txtHeight > height) {
+        txtWrapper
+            .transition()
+            .attr("transform", function(d, i) {
+                var x = 0,
+                    y = height - (ypointer * txtHeight) - txtHeight; //+ margin - txtHeight;
+                return "translate(" + x + ", " + y + ")";
+            })
+            .duration(transDur);
+    }
 }
 
 var button = d3.select(".main"); // click anywhere on svg
