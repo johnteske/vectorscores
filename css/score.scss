@@ -2,11 +2,14 @@
 # score-specific styles
 ---
 body {
+    margin: 0;
+    padding: 0;
     width: 100%;
     font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
 svg.main {
+    display: block;
     margin: 0 auto;
     -webkit-user-select: none; /* Chrome, Safari */
     -moz-user-select: none; /* Firefox */
