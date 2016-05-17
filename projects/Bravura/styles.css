@@ -1,0 +1,27 @@
+@font-face {
+    font-family: Bravura;
+    src: url(../fonts/Bravura.woff);
+}
+
+div.codepoint {
+    display: inline-block;
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.symbol {
+    font-size: 24px;
+    font-family: Bravura;
+    text-anchor: middle;
+}
+
+.unicode {
+    font-size: 12px;
+    font-family: Courier;
+    text-anchor: middle;
+}
