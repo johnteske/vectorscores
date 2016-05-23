@@ -1,0 +1,10 @@
+h3, p { text-align: center; }
+p.button {
+    margin: 1em;
+    padding: 1em;
+    background: #eee;
+    -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none; -o-user-select:none;
+}
+p.button:hover {
+    background: #ddd;
+}
