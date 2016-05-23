@@ -2,7 +2,7 @@
 .DS_Store
 
 # local development
-js/
+js/d3*
 
 # Jekyll
 _site/
