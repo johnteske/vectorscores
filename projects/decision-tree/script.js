@@ -2,66 +2,52 @@ d3.select("svg").remove();
 var group = d3.select("main").append("div");
 
 // should these be paired? either as array or object?
-var list = ["A", "B", "C"];
-var weight = [1, 1, 1]; // initial weights
-
-
-//
-// var p = group.selectAll("p")
-//     .data([0,1]) // make two, with dummy starting values
-//     .enter()
-//     .append("p")
-//     .text("test");
+var list = ["A", "B", "C", "D", "E"];
+var weight = [1, 1, 1, 1, 1]; // initial weights
 
 var choiceTop = group.append("p").classed("button", "true").text("_").on("click", function() { choiceMake(d3.select(this).data()) }); // potential to be modular?
 var choiceBot = group.append("p").classed("button", "true").text("_").on("click", function() { choiceMake(choiceBot.data()) }); // hard-coded
 
 var readout = group.append("p").text("_");
 
-// choiceTop.data([0]);
-// choiceBot.data([0]);
-
 function updateButtons() {
     // generate another two options
-    var newTop = getRandomItem(list, weight);
+    var newTop = getWeightedItem(list, weight);
     choiceTop.data(newTop).text(newTop);
 
-    var newBot = getRandomItem(list, weight);
+    var newBot = getWeightedItem(list, weight);
     choiceBot.data(newBot).text(newBot);
 
-    readout.text(
-        String(list.join(", ")) + ": " +
-        String(weight.join(", "))
-    );
+    var text2disp = list.reduce(function(arr, v, i) {
+        return arr.concat(v, weight[i]);
+    }, []);
+    // console.log(text2disp);
+    readout.text(text2disp.join(", "));
 }
 
 function choiceMake(choice) {
-    // capture choice
-    // TODO
+    // record choice and add to weight array
     var choiceIndex = list.indexOf(choice[0]); // index 0 as data is array
     console.log(choice[0], choiceIndex);
-    weight[choiceIndex] += 1;
+    weight[choiceIndex] += 1; // may lower the increment depending on how many choices are made--currently the direction is very easily influenced
 
-    // choiceTop.data([0]); console.log( choiceTop.data() );
-    // console.log( choiceBot.data() );
     updateButtons();
 }
 
-////
-
-function rand(min, max) {
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+// Returns a random number between min (inclusive) and max (exclusive)
+function getRandExcl(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-function getRandomItem(list, weight) {
-    var total_weight = weight.reduce( function(prev,cur,i,arr) { return prev + cur; } );
+function getWeightedItem(itemArray, weightArray) {
+    var totalWeight = weight.reduce( function(a,b) {return a + b;} );
+    var randNum = getRandExcl(0, totalWeight);
+    var weightSum = 0;
 
-    var random_num = rand(0, total_weight);
-    var weight_sum = 0;
-
-    for (var i = 0; i < list.length; i++) {
-        weight_sum += weight[i];
-        if (random_num <= weight_sum) { return list[i]; }
+    for (var i = 0; i < itemArray.length; i++) {
+        weightSum += weightArray[i];
+        if (randNum <= weightSum) { return itemArray[i]; }
     }
 }
 
