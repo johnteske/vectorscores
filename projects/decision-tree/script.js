@@ -5,10 +5,10 @@ var group = d3.select("main").append("div");
 var list = ["A", "B", "C", "D", "E"];
 var weight = [1, 1, 1, 1, 1]; // initial weights
 
-var choiceTop = group.append("p").classed("button", "true").text("_").on("click", function() { choiceMake(d3.select(this).data()) }); // potential to be modular?
-var choiceBot = group.append("p").classed("button", "true").text("_").on("click", function() { choiceMake(choiceBot.data()) }); // hard-coded
+var choiceTop = group.append("p").classed("button", "true").on("click", function() { choiceMake(d3.select(this).data()) }); // potential to be modular?
+var choiceBot = group.append("p").classed("button", "true").on("click", function() { choiceMake(choiceBot.data()) }); // hard-coded
 
-var readout = group.append("p").text("_");
+var readout = group.append("p");
 
 function updateButtons() {
     // generate another two options
