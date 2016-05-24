@@ -6,6 +6,10 @@ function getRandExcl(min, max) {
     return Math.random() * (max - min) + min;
 }
 
+function getItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
 function getWeightedItem(itemArray, weightArray) {
     var totalWeight = weight.reduce( function(a,b) {return a + b;} );
     var randNum = getRandExcl(0, totalWeight);
