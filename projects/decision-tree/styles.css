@@ -8,3 +8,14 @@ p.button {
 p.button:hover {
     background: #ddd;
 }
+
+.chart {
+    margin: 0 auto;
+    width: 110px;
+}
+.chart div {
+  background-color: #ddd;
+  text-align: center;
+  width: 20px;
+  margin: 1px;
+}

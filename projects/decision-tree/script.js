@@ -8,7 +8,26 @@ var weight = [1, 1, 1, 1, 1]; // initial weights
 var choiceTop = group.append("p").classed("button", "true").on("click", function() { choiceMake(d3.select(this).data()) }); // potential to be modular?
 var choiceBot = group.append("p").classed("button", "true").on("click", function() { choiceMake(choiceBot.data()) }); // hard-coded
 
-var readout = group.append("p");
+// add bar chart visualization
+d3.select("main").append("div").classed("chart-wrap", true);
+d3.select(".chart-wrap").append("div").classed("chart", true);
+
+d3.select(".chart").selectAll("div")
+    .data(weight)
+    .enter()
+    .append("div")
+    .style("display", "inline-block");
+
+function updateReadout() {
+    var y = d3.scale.linear()
+        .domain([0, d3.max(weight)])
+        .range([0, 30]);
+
+    d3.select(".chart").selectAll("div")
+        .data(weight)
+        .text(function(d) { return d; })
+        .style("height", function(d) { return y(d) + "px"; })
+}
 
 function updateButtons() {
     // generate another two options
@@ -18,17 +37,13 @@ function updateButtons() {
     var newBot = getWeightedItem(list, weight);
     choiceBot.data(newBot).text(newBot);
 
-    var text2disp = list.reduce(function(arr, v, i) {
-        return arr.concat(v, weight[i]);
-    }, []);
-    // console.log(text2disp);
-    readout.text(text2disp.join(", "));
+    updateReadout();
 }
 
 function choiceMake(choice) {
     // record choice and add to weight array
     var choiceIndex = list.indexOf(choice[0]); // index 0 as data is array
-    console.log(choice[0], choiceIndex);
+    // console.log(choice[0], choiceIndex);
     weight[choiceIndex] += 1; // may lower the increment depending on how many choices are made--currently the direction is very easily influenced
 
     updateButtons();
