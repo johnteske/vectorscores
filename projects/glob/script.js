@@ -1,9 +1,11 @@
+// initial values
 var globWidth = 240,
-    radius = 3000; //globWidth * 0.25,
-    padding = 10;
-    width = globWidth + (padding * 2),
-    height = globWidth + (padding * 2),
+    radius = globWidth * 5, // should be relative to width somehow
+    margin = 20,
+    width = globWidth + (margin * 2),
+    height = globWidth + (margin * 2),
     center = width * 0.5,
+    scale = (width / 9600),
     dur = 3000;
 
 var noteheads = [
@@ -32,20 +34,18 @@ function newPoint() {
 var cloudSize = Math.ceil(Math.random() * 10) + 20;
 var glob = main
     .append("g")
-    .attr("transform", function(d, i) {
-        var x = center,
-            y = center - padding;//padding;
-        return "translate(" + x + ", " + y + ")";
-    });
+    .attr("transform", "translate(" + center + ", " + center + ")");
+
+function transformHead() {
+    var point = newPoint();
+    return "scale("+scale+", "+(-1 * scale)+") translate(" + point.x + ", " + point.y + ")"
+}
 
 for (var i = 0; i < cloudSize; i++) {
     glob.append("path")
-        .attr("d", chooseNotehead())
-        .attr("transform", function() {
-            var point = newPoint();
-            return "scale(0.025,-0.025) translate(" + point.x + ", " + point.y + ")"
-        });
-    }
+        .attr("d", noteheads[0]) //chooseNotehead())
+        .attr("transform", function(){return transformHead()});
+}
 
 main.append("text")
     .attr("fill", "#111")
@@ -57,30 +57,57 @@ function moveIt(){
     // radius = globWidth * Math.random() * 0.4;
     d3.selectAll("text").text("[0, " + Math.floor(Math.random() * 2 + 1) + ", " + Math.floor(Math.random() * 2 + 3) + "]");
     d3.selectAll("path")
-        .transition()
-        .duration(50)
-        .attr("d", function() {return chooseNotehead()})
+        // .transition()
+        // .duration(50)
+        // .attr("d", function() {return chooseNotehead()})
         .transition()
         .duration(dur)
-        .attr("transform", function() {
-            var point = newPoint();
-            return "scale(0.025,-0.025) translate(" + point.x + ", " + point.y + ")"
-        });
-    }
+        .attr("transform", function(){return transformHead()});
+}
 
 moveIt();
 
 setInterval(function(){moveIt()}, dur);
 
+// resize
+
+d3.select(window).on('resize', resize);
+
+function resize() {
+    // update width
+    var newwidth = Math.min( parseInt(d3.select('main').style('width'), 10), 480);
+
+    center = newwidth * 0.5;
+
+    main
+        .style('width', newwidth + 'px')
+        .style('height', newwidth + 'px');
+    d3.select('rect')
+        .attr("width", newwidth - (margin*2))
+        .attr("height", newwidth - (margin*2));
+    glob
+        .attr("transform",
+            "translate(" + center + ", " + center + ")" +
+            "scale("+(newwidth/globWidth)+","+(newwidth/globWidth)+")"
+        );
+    d3.select('circle')
+        .attr("transform", "translate(" + center + ", " + center + ")");
+    d3.select('text')
+        .attr("x", center)
+        .attr("y", newwidth);
+}
+
 // DEBUG
 
 main.classed("debug", true);
+main.append("rect")
+    .attr("width", globWidth)
+    .attr("height", globWidth)
+    .attr("stroke", "pink")
+    .attr("fill-opacity", "0")
+    .attr("transform", "translate(" + margin + ", " + margin + ")");
 main.append("circle")
     .attr("stroke", "red")
     .attr("fill", "white")
     .attr("r", 5)
-    .attr("transform", function(d, i) {
-        var x = center
-            y = center
-        return "translate(" + x + ", " + y + ")";
-    });
+    .attr("transform", "translate(" + center + ", " + center + ")");
