@@ -37,19 +37,19 @@ var glob = main.append("g");
 
 var lineData = [
     { "x": 0, "y": globject.rangeEnv.hi[0]},
-    { "x": globWidth * 0.5, "y": globject.rangeEnv.hi[1]},
-    { "x": globWidth, "y": globject.rangeEnv.hi[2]}];
+    { "x": 0.5, "y": globject.rangeEnv.hi[1]},
+    { "x": 1, "y": globject.rangeEnv.hi[2]}];
 var lowData = [
     { "x": 0, "y": globject.rangeEnv.lo[0]},
-    { "x": globWidth * 0.5, "y": globject.rangeEnv.lo[1]},
-    { "x": globWidth, "y": globject.rangeEnv.lo[2]}];
+    { "x": 0.5, "y": globject.rangeEnv.lo[1]},
+    { "x": 1, "y": globject.rangeEnv.lo[2]}];
 
 // draw the top, back around the bottom, then connect back to the first point
 var datLine = lineData.concat(lowData.reverse());
 // .concat(lineData[0]);
 
 var lineFunction = d3.svg.line()
-     .x(function(d) { return d.x + 10; }) // a little offset
+     .x(function(d) { return (d.x * globWidth) + 10; }) // a little offset
      .y(function(d) { return 127 - d.y; }) // pitch is bottom-up, not pixel top2bottom
      .tension(0.8)
      .interpolate("cardinal-closed");
