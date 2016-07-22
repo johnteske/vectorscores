@@ -3,7 +3,7 @@ var width = 480,
     margin = 20,
     boxwidth = width + (margin * 2);
 
-var main = d3.select(".main");
+var main = d3.select(".main")
     .style('width', boxwidth + 'px')
     .style('height', boxwidth + 'px');
 
