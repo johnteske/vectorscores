@@ -2,8 +2,9 @@
 var globWidth = 240,
     radius = globWidth * 5, // should be relative to width somehow
     margin = 20,
-    width = globWidth + (margin * 2),
-    height = globWidth + (margin * 2),
+    innerwidth = 240, // placeholder name
+    maxwidth = 480,
+    width = innerwidth + (margin * 2),
     center = width * 0.5,
     scale = (width / 9600),
     dur = 3000;
@@ -23,8 +24,8 @@ var main = d3.select(".main")
     .style('height', width + 'px');
 
 function newPoint() {
-    var angle = Math.random()*Math.PI*2;
-    var dist = Math.random() - Math.random();
+    var angle = Math.random() * Math.PI * 2,
+        dist = Math.random() - Math.random();
     return {
         x: Math.cos(angle) * radius * dist,
         y: Math.sin(angle) * radius * dist
@@ -51,7 +52,7 @@ main.append("text")
     .attr("fill", "#111")
     .attr("text-anchor", "middle")
     .attr("x", center)
-    .attr("y", globWidth - textoffset);
+    .attr("y", innerwidth - textoffset);
 
 function moveIt(){
     // radius = globWidth * Math.random() * 5;
@@ -75,25 +76,27 @@ d3.select(window).on('resize', resize);
 
 function resize() {
     // update width
-    width = Math.min( parseInt(d3.select('main').style('width'), 10), 480);
-
+    width = Math.min( parseInt(d3.select('main').style('width'), 10), maxwidth);
     center = width * 0.5;
+    innerwidth = width - (margin * 2);
 
     main
         .style('width', width + 'px')
         .style('height', width + 'px');
-    d3.select('rect')
-        .attr("width", width - (margin*2))
-        .attr("height", width - (margin*2));
     glob.attr("transform",
         "translate(" + center + ", " + center + ")" +
         "scale("+(width/globWidth)+","+(width/globWidth)+")"
         );
-    d3.select('circle')
-        .attr("transform", "translate(" + center + ", " + center + ")");
     d3.select('text')
         .attr("x", center)
         .attr("y", width - textoffset);
+
+    // debug
+    // d3.select('rect')
+    //     .attr("width", innerwidth)
+    //     .attr("height", innerwidth);
+    // d3.select('circle')
+    //     .attr("transform", "translate(" + center + ", " + center + ")");
 }
 
 resize();
