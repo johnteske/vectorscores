@@ -3,3 +3,9 @@ text {
     font-size: 12px;
     fill: black;
 }
+
+/*debug*/
+rect, circle {
+    stroke: pink;
+    fill-opacity: 0;
+}

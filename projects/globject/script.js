@@ -1,11 +1,13 @@
-var width = 640,
-    height = width;
+var width = 480,
+    maxwidth = 480,
+    margin = 20,
+    boxwidth = width + (margin * 2);
 
-var main = d3.select(".main")
-    .attr("width", 640)
-    .attr("height", 640);
+var main = d3.select(".main");
+    .style('width', boxwidth + 'px')
+    .style('height', boxwidth + 'px');
 
-globWidth = 100; // fixed, for this test
+globWidth = 120; // fixed, for this test
 
 globject = {
     rangeEnv: {
@@ -71,7 +73,7 @@ glob.append("text")
     .attr("y", 127 + 12)
     .text("[" + globject.pitches.classes + "]");
 
-var dataset = globject.dynamics.values; // [ 0, 1, 3, 4 ];
+var dataset = globject.dynamics.values;
 
 var textline = glob.append("g");
 
@@ -87,4 +89,38 @@ textline.selectAll("text")
     .attr("y", 127 + 32)
     .text(function(d) { return d; });
 
-glob.attr("transform", "translate(" + ((width * 0.5) - globWidth) + "," + 127 + ")");
+// glob.attr("transform", "translate(" + ((width * 0.5) - globWidth) + "," + 127 + ")");
+
+// resize
+
+d3.select(window).on('resize', resize);
+
+function resize() {
+    // update width
+    boxwidth = Math.min( parseInt(d3.select('main').style('width'), 10), maxwidth);
+    center = boxwidth * 0.5;
+    width = boxwidth - (margin * 2);
+
+    main
+        .style('width', boxwidth + 'px')
+        .style('height', boxwidth + 'px');
+    glob.attr("transform", "translate(" + (center - (globWidth*0.5)) + "," + (center - (globWidth*0.5)) + ")");
+
+    // debug
+    d3.select('rect')
+        .attr("width", width)
+        .attr("height", width);
+    d3.select('circle')
+        .attr("transform", "translate(" + center + ", " + center + ")");
+}
+//
+resize();
+//
+main.classed("debug", true);
+main.append("rect")
+    .attr("width", width)
+    .attr("height", width)
+    .attr("transform", "translate(" + margin + ", " + margin + ")");
+main.append("circle")
+    .attr("r", 5)
+    .attr("transform", "translate(" + center + ", " + center + ")");
