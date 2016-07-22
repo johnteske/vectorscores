@@ -13,7 +13,8 @@ globject = {
     rangeEnv: {
         type: 'midi',
         hi: [68, 119, 104, 70],
-        lo: [20, 25, 42, 23]
+        lo: [20, 25, 42, 23],
+        times: [0, 0.3, 0.5, 1] // may want independent times for hi and lo
     },
     pitches: {
         classes: [0, 2, 6],
@@ -35,21 +36,19 @@ globject = {
 
 var glob = main.append("g");
 
-var lineData = [
-    { "x": 0, "y": globject.rangeEnv.hi[0]},
-    { "x": 0.5, "y": globject.rangeEnv.hi[1]},
-    { "x": 1, "y": globject.rangeEnv.hi[2]}];
-var lowData = [
-    { "x": 0, "y": globject.rangeEnv.lo[0]},
-    { "x": 0.5, "y": globject.rangeEnv.lo[1]},
-    { "x": 1, "y": globject.rangeEnv.lo[2]}];
-
+var lineData = [];
+for (var i = 0; i < globject.rangeEnv.times.length; i++) {
+    lineData.push({ "x": globject.rangeEnv.times[i], "y": globject.rangeEnv.hi[i]});
+}
+var lowData = [];
+for (var i = 0; i < globject.rangeEnv.times.length; i++) {
+    lowData.push({ "x": globject.rangeEnv.times[i], "y": globject.rangeEnv.lo[i]});
+}
 // draw the top, back around the bottom, then connect back to the first point
 var datLine = lineData.concat(lowData.reverse());
-// .concat(lineData[0]);
 
 var lineFunction = d3.svg.line()
-     .x(function(d) { return (d.x * globWidth) + 10; }) // a little offset
+     .x(function(d) { return d.x * globWidth; })
      .y(function(d) { return 127 - d.y; }) // pitch is bottom-up, not pixel top2bottom
      .tension(0.8)
      .interpolate("cardinal-closed");
