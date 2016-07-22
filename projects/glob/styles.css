@@ -6,3 +6,9 @@
 ellipse {
     fill: #111;
 }
+
+/*debug*/
+rect, circle {
+    stroke: pink;
+    fill-opacity: 0;
+}
