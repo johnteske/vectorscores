@@ -9,11 +9,45 @@ var main = d3.select(".main")
 
 globWidth = 120; // fixed, for this test
 
+function rangeGen(length, min, max) {
+    var pcs = [];
+    for (var i = 0; i < length; i++) {
+        pcs.push(Math.floor(Math.random() * (max - min)) + min);
+    }
+    return pcs;
+}
+
+function wedgeRangeGen(length, min, max) {
+    var pcs = [];
+    var band = (max - min) / length;
+    for (var i = 0; i < length; i++) {
+        pcs.push(Math.floor(Math.random() * band) + (min + (band * i)));
+    }
+    return pcs;
+}
+
+function stepRangeGen(length, min, max) {
+    var pcs = [];
+    var disp = 10;
+    min += disp;
+    max -= disp;
+    var lmax,
+        lmin;
+    var thispc = Math.floor(Math.random() * (max - min)) + min; // initial selection
+    for (var i = 0; i < length; i++) {
+        lmax = Math.min(thispc + disp, max);
+        lmin = Math.max(thispc - disp, min);
+        thispc = Math.floor(Math.random() * (lmax - lmin)) + lmin;
+        pcs.push(thispc);
+    }
+    return pcs;
+}
+
 globject = {
     rangeEnv: {
         type: 'midi',
-        hi: [68, 119, 104, 70],
-        lo: [20, 25, 42, 23],
+        hi: wedgeRangeGen(4, 64, 127),
+        lo: stepRangeGen(4, 0, 63),
         times: [0, 0.3, 0.5, 1] // may want independent times for hi and lo
     },
     pitches: {
@@ -69,7 +103,7 @@ var lineGraph = glob.append("path")
 //     .attr("d", textarr);
 
 glob.append("text")
-    .attr("y", 127 + 12)
+    .attr("y", 127 + 24)
     .text("[" + globject.pitches.classes + "]");
 
 var dataset = globject.dynamics.values;
@@ -85,7 +119,7 @@ textline.selectAll("text")
             var l = dataset.length - 1;
             return i * (globWidth / l);
         })
-    .attr("y", 127 + 32)
+    .attr("y", 127 + 42)
     .text(function(d) { return d; });
 
 // glob.attr("transform", "translate(" + ((width * 0.5) - globWidth) + "," + 127 + ")");
