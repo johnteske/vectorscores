@@ -1,0 +1,22 @@
+---
+title: timing controls
+---
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+<p id="events"></p>
+
+<div class="play">
+    <button id="back" onclick="stepPointer(-1)">&lt;</button>
+    <button id="seq" onclick="seqFunc()">&#9657;</button>
+    <button id="stop" onclick="stopIt()">&#9633;</button>
+    <button id="fwd" onclick="stepPointer(1)">&gt;</button>
+    <input id="pointer" type="number" value="0"/><!-- step="1" -->
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
