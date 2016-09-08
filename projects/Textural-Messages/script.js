@@ -91,15 +91,15 @@ function texturalMsg() {
 }
 
 function scrollWrapper(dur) {
-     // txtHeight is fixed, height scales -- causes undesired results
+    var maxheight = maxwidth; //
     if ((ypointer * txtHeight) > (height - margin)) {
         txtWrapper
             .transition()
             .attr("transform", function(d, i) {
                 var x = 0,
-                    y = height - (ypointer * txtHeight) - txtHeight; //+ margin - txtHeight;
-                return "translate(" + x + ", " + y + ")" +
-                    "scale(" + (width / maxwidth) + "," + (width / maxwidth) + ")";
+                    y = maxheight - (ypointer * txtHeight) - txtHeight;
+                return "scale(" + (width / maxwidth) + "," + (width / maxwidth) + ")" +
+                    "translate(" + x + ", " + y + ")";
             })
             .duration(dur);
     } else {
