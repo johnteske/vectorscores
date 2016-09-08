@@ -82,6 +82,10 @@ function texturalMsg() {
         .style("opacity", "1");
 
     ypointer++;
+    scrollWrapper(transDur);
+}
+
+function scrollWrapper(dur) {
     if ((ypointer * txtHeight) > (height - margin)) {
         txtWrapper
             .transition()
@@ -90,14 +94,11 @@ function texturalMsg() {
                     y = height - (ypointer * txtHeight) - txtHeight; //+ margin - txtHeight;
                 return "translate(" + x + ", " + y + ")";
             })
-            .duration(transDur);
+            .duration(dur);
     }
 }
 
-var button = d3.select(".main"); // click anywhere on svg
-
-button.on("click", function() {
-    texturalMsg();
-});
+// click anywhere on svg to advance
+d3.select(".main").on("click", function() { texturalMsg() });
 
 texturalMsg(); // create the first message
