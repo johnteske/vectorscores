@@ -1,15 +1,19 @@
-var txtWidth = 120,
-    txtHeight = 60,
-    width = 480
-    height = 480,
+var width = 480,
+    height = width,
+    txtWidth = width * 0.3, // remain fixed
+    txtHeight = txtWidth / 2,
     margin = 12,
     transDur = 300;
+
+var maxwidth = 480;
 
 var main = d3.select(".main")
     .attr("width", width)
     .attr("height", height);
 
-var txtWrapper = main.append("g"); // for easy scrolling
+var txtWrapper = main.append("g") // for easy scrolling
+    .attr("width", width)
+    .attr("height", height);
 
 // main.classed("debug", true);
 
@@ -41,7 +45,8 @@ function texturalMsg() {
         .data(newData)
         .append("g")
         .attr("transform", function(d, i) {
-            var x = margin + (width * relPos) - ((txtWidth + (margin * 2)) * relPos),
+            // calc on maxwidth, is scaled later
+            var x = ( relPos == 0 ? margin : (maxwidth - txtWidth - margin) ),
                 y = (ypointer * txtHeight) + margin;
             return "translate(" + x + ", " + y + ")";
         });
@@ -86,15 +91,19 @@ function texturalMsg() {
 }
 
 function scrollWrapper(dur) {
+     // txtHeight is fixed, height scales -- causes undesired results
     if ((ypointer * txtHeight) > (height - margin)) {
         txtWrapper
             .transition()
             .attr("transform", function(d, i) {
                 var x = 0,
                     y = height - (ypointer * txtHeight) - txtHeight; //+ margin - txtHeight;
-                return "translate(" + x + ", " + y + ")";
+                return "translate(" + x + ", " + y + ")" +
+                    "scale(" + (width / maxwidth) + "," + (width / maxwidth) + ")";
             })
             .duration(dur);
+    } else {
+        txtWrapper.attr("transform", "scale(" + (width / maxwidth) + "," + (width / maxwidth) + ")" );
     }
 }
 
@@ -102,3 +111,18 @@ function scrollWrapper(dur) {
 d3.select(".main").on("click", function() { texturalMsg() });
 
 texturalMsg(); // create the first message
+
+// resize
+
+function resize() {
+    width = Math.min( parseInt(d3.select('main').style('width'), 10), maxwidth);
+
+    main
+        .style('width', width + 'px')
+        .style('height', width + 'px');
+    scrollWrapper(0);
+}
+
+d3.select(window).on('resize', resize);
+
+resize();
