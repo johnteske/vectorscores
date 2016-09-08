@@ -1,7 +1,7 @@
 var txtWidth = 120,
     txtHeight = 60,
-    width = 640
-    height = 640,
+    width = 480
+    height = 480,
     margin = 12,
     transDur = 300;
 
@@ -82,7 +82,7 @@ function texturalMsg() {
         .style("opacity", "1");
 
     ypointer++;
-    if (ypointer * txtHeight > height) {
+    if ((ypointer * txtHeight) > (height - margin)) {
         txtWrapper
             .transition()
             .attr("transform", function(d, i) {
