@@ -19,6 +19,21 @@ function pointDisp() {
     return Math.floor((Math.random() * 10) - (Math.random() * 10));
 }
 
+function makePath(relPos) {
+    return [
+        {x: margin, y: pointDisp()},
+        {x: txtWidth-margin, y: pointDisp()},
+        {x: txtWidth, y: margin + pointDisp()},
+        {x: txtWidth, y: txtHeight-margin+pointDisp()},
+        {x: txtWidth + margin * (relPos), y:txtHeight}, // tail
+        {x: txtWidth-margin, y:txtHeight+pointDisp()},
+        {x: margin, y: txtHeight+pointDisp()},
+        {x: margin * (relPos-1), y:txtHeight}, // tail
+        {x: 0, y: txtHeight-margin+pointDisp()},
+        {x: 0, y: margin + pointDisp()}
+    ];
+}
+
 function texturalMsg() {
     var relPos = (ypointer % 2); // simple way to alternate left/right, for now
     var newData = [Math.ceil(Math.random() * 9)];
@@ -31,20 +46,7 @@ function texturalMsg() {
             return "translate(" + x + ", " + y + ")";
         });
 
-    pathinfo = [
-        {x:margin, y: 0},
-        {x:txtWidth-margin, y: 0},
-        {x:txtWidth, y:margin},
-        {x:txtWidth, y:txtHeight-margin},
-        {x:txtWidth + margin * (relPos), y:txtHeight}, // tail
-        {x:txtWidth-margin, y:txtHeight},
-        {x:margin, y:txtHeight},
-        {x:margin * (relPos-1), y:txtHeight}, // tail
-        {x:0, y:txtHeight-margin},
-        {x:0, y:margin}
-    ];
-
-    // add pointDisp values here to each x/y value
+    pathinfo = makePath(relPos);
 
     var d3line2 = d3.svg.line()
         .x(function(d){return d.x;})
