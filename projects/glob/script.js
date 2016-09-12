@@ -14,6 +14,7 @@ var noteheads = [
     "M223 -289q-96 0 -160 52q-63 52 -63 141q0 152 134 268t321 117q100 0 162 -53t63 -140q0 -143 -150 -264t-307 -121z", // quarter
     // "M625 96q0 28 -15 54q-30 49 -98 49t-227 -93q-215 -123 -215 -210q0 -23 14 -48q31 -53 107 -53t219 96q215 141 215 205zM234 -297q-106 0 -170 52t-64 153t98 235q50 66 146 110t210 44t180 -54q64 -54 64 -139t-43 -161t-91 -124t-136 -82t-194 -34z" // half
 ];
+var debug = getQueryString('debug') == 1 ? true : false;
 
 // function chooseNotehead() {
 //     return noteheads[Math.floor(Math.random()*noteheads.length)];
@@ -91,22 +92,24 @@ function resize() {
         .attr("x", center)
         .attr("y", width - textoffset);
 
-    // debug
-    // d3.select('rect')
-    //     .attr("width", innerwidth)
-    //     .attr("height", innerwidth);
-    // d3.select('circle')
-    //     .attr("transform", "translate(" + center + ", " + center + ")");
+    if(debug){
+        d3.select('rect')
+            .attr("width", innerwidth)
+            .attr("height", innerwidth);
+        d3.select('circle')
+            .attr("transform", "translate(" + center + ", " + center + ")");
+    }
 }
 
 resize();
 
-// // DEBUG
-// main.classed("debug", true);
-// main.append("rect")
-//     .attr("width", width - (margin*2))
-//     .attr("height", width - (margin*2))
-//     .attr("transform", "translate(" + margin + ", " + margin + ")");
-// main.append("circle")
-//     .attr("r", 5)
-//     .attr("transform", "translate(" + center + ", " + center + ")");
+if(debug) {
+    main.classed("debug", true);
+    main.append("rect")
+        .attr("width", width - (margin*2))
+        .attr("height", width - (margin*2))
+        .attr("transform", "translate(" + margin + ", " + margin + ")");
+    main.append("circle")
+        .attr("r", 5)
+        .attr("transform", "translate(" + center + ", " + center + ")");
+}
