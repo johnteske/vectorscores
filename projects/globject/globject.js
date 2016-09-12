@@ -1,4 +1,7 @@
-function globject() {
+function Globject() {
+    // if (!(this instanceof Globject)) {
+    //   return new Globject();
+    // }
     this.rangeEnv =  {
         type: 'midi',
         hi: wedgeRangeGen(4, 64, 127),

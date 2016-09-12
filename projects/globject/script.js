@@ -48,7 +48,7 @@ function stepRangeGen(length, min, max) {
 }
 
 //
-// make globject
+// make Globject
 //
 var glob = main.append("g");
 function transformGlob() {
@@ -102,7 +102,7 @@ function drawGlobject(this_glob){
         .text(function(d) { return d; });
     transformGlob();
 }
-drawGlobject(new globject());
+drawGlobject(new Globject());
 
 //
 // resize
@@ -133,7 +133,7 @@ resize();
 //
 //
 //
-d3.select(".main").on("click", function() { glob.remove(); drawGlobject(new globject()) });
+d3.select(".main").on("click", function() { glob.remove(); drawGlobject(new Globject()) });
 
 //
 // debug
