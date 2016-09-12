@@ -3,25 +3,29 @@ var playing = false,
 	playPointer = 0;
 var timePointer = 0,
 	preroll = 0; // 3000; // delay before play
-var seqBut = document.getElementById("play"),
-	stopBut = document.getElementById("stop");
+var btn = {
+	play: document.getElementById("play"),
+	stop: document.getElementById("stop"),
+	fwd: document.getElementById("fwd"),
+	back: document.getElementById("back")
+}
 
 function play(){
 	if(!playing){
 		console.log('PLAY');
 		playing = true;
-		seqBut.className = 'active';
-		seqBut.textContent = '\u2016'; // pause
-		stopBut.className = '';
-		document.getElementById("back").className = 'disabled';
-		document.getElementById("fwd").className = 'disabled';
+		btn.play.className = 'active';
+		btn.play.textContent = '\u2016'; // pause
+		btn.stop.className = '';
+		btn.back.className = 'disabled';
+		btn.fwd.className = 'disabled';
 		timePointer = myvents[playPointer];
 		var num = myvents[playPointer];
 		schedule(preroll + num - timePointer, testEvent, playPointer);
 	} else {
 		console.log('PAUSED');
 		playing = false;
-		seqBut.textContent = '\u25b9'; // play button
+		btn.play.textContent = '\u25b9'; // play button
 		allVents.forEach(function(thissched){
 			clearTimeout(thissched);
 		});
@@ -29,11 +33,11 @@ function play(){
 }
 function stop(){
 	console.log('STOPPED');
-	seqBut.textContent = '\u25b9'; // play button
-	seqBut.className = '';
-	stopBut.className = 'stopped';
-	document.getElementById("back").className = '';
-	document.getElementById("fwd").className = '';
+	btn.play.textContent = '\u25b9'; // play button
+	btn.play.className = '';
+	btn.stop.className = 'stopped';
+	btn.back.className = '';
+	btn.fwd.className = '';
 	allVents.forEach(function(thissched){
 		clearTimeout(thissched);
 	});
