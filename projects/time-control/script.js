@@ -3,10 +3,10 @@ var playing = false,
 	playPointer = 0;
 var timePointer = 0,
 	preroll = 0; // 3000; // delay before play
-var seqBut = document.getElementById("seq"),
+var seqBut = document.getElementById("play"),
 	stopBut = document.getElementById("stop");
 
-function seqFunc(){
+function play(){
 	if(!playing){
 		console.log('PLAY');
 		playing = true;
@@ -27,7 +27,7 @@ function seqFunc(){
 		});
 	}
 }
-function stopIt(){
+function stop(){
 	console.log('STOPPED');
 	seqBut.textContent = '\u25b9'; // play button
 	seqBut.className = '';
@@ -49,8 +49,8 @@ function stopIt(){
 
 function schedule(time, fn, params) {
     console.log('sched ', params, ': ', time);
-	allVents.push( setTimeout(fn, time, params) ); // not <IE9
-	// 	setTimeout(function(){ myFunction.bind(null, num) }, num); // does not work
+	// allVents.push( setTimeout(fn, time, params) ); // not <IE9
+	allVents.push( setTimeout(function(){ fn(params); }, time) ); // IE fix?
 }
 
 function updatePointer(ndex){
@@ -72,7 +72,7 @@ function testEvent(ndex) {
 	    var diff = myvents[ndex+1] - id;
 		schedule(diff, testEvent, ndex+1);
 	} else {
-    	stopIt();
+		stop();
 	}
 }
 

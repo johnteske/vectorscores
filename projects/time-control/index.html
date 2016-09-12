@@ -1,14 +1,11 @@
 ---
+layout: score
 title: timing controls
+footer: true
 ---
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="styles.css">
-</head>
-<body>
-
 <p id="events"></p>
 
+{% comment %}
 <div class="play">
     <button id="back" onclick="stepPointer(-1)">&lt;</button>
     <button id="seq" onclick="seqFunc()">&#9657;</button>
@@ -16,7 +13,9 @@ title: timing controls
     <button id="fwd" onclick="stepPointer(1)">&gt;</button>
     <input id="pointer" type="number" value="0"/><!-- step="1" -->
 </div>
-
-<script src="script.js"></script>
-</body>
-</html>
+<!--
+PC options (PCs/note names/transpose)
+tutorial
+save/print
+-->
+{% endcomment %}
