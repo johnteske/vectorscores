@@ -26,9 +26,7 @@ function play(){
 		console.log('PAUSED');
 		playing = false;
 		btn.play.textContent = '\u25b9'; // play button
-		allVents.forEach(function(thissched){
-			clearTimeout(thissched);
-		});
+		clearSchedule();
 	}
 }
 function stop(){
@@ -38,9 +36,8 @@ function stop(){
 	btn.stop.className = 'stopped';
 	btn.back.className = '';
 	btn.fwd.className = '';
-	allVents.forEach(function(thissched){
-		clearTimeout(thissched);
-	});
+	clearSchedule();
+
 	// also clear active classes from elements
 	var spanz = document.getElementsByTagName("span");
 	for (var i = 0; i < spanz.length; i++) {
@@ -49,6 +46,12 @@ function stop(){
 	}
 	playing = false;
 	updatePointer(0);
+}
+
+function clearSchedule(){
+	allVents.forEach(function(thissched){
+		clearTimeout(thissched);
+	});
 }
 
 function schedule(time, fn, params) {
