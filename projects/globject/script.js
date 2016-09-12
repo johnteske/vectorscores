@@ -10,6 +10,8 @@ var main = d3.select(".main")
 
 globWidth = 120; // fixed, for this test
 
+var debug = getQueryString('debug') == 1 ? true : false;
+
 //
 // range generators
 //
@@ -120,12 +122,13 @@ function resize() {
         .style('height', boxwidth + 'px');
     transformGlob();
 
-    // debug
-    d3.select('rect')
-        .attr("width", width)
-        .attr("height", width);
-    d3.select('circle')
-        .attr("transform", "translate(" + center + ", " + center + ")");
+    if(debug){
+        d3.select('rect')
+            .attr("width", width)
+            .attr("height", width);
+        d3.select('circle')
+            .attr("transform", "translate(" + center + ", " + center + ")");
+    }
 }
 //
 resize();
@@ -138,11 +141,13 @@ d3.select(".main").on("click", function() { glob.remove(); drawGlobject(new Glob
 //
 // debug
 //
-main.classed("debug", true);
-main.append("rect")
-    .attr("width", width)
-    .attr("height", width)
-    .attr("transform", "translate(" + margin + ", " + margin + ")");
-main.append("circle")
-    .attr("r", 5)
-    .attr("transform", "translate(" + center + ", " + center + ")");
+if(debug){
+    main.classed("debug", true);
+    main.append("rect")
+        .attr("width", width)
+        .attr("height", width)
+        .attr("transform", "translate(" + margin + ", " + margin + ")");
+    main.append("circle")
+        .attr("r", 5)
+        .attr("transform", "translate(" + center + ", " + center + ")");
+}
