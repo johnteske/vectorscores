@@ -1,8 +1,7 @@
 var allVents = [];
 var playing = false,
 	playPointer = 0;
-var timePointer = 0,
-	preroll = 0; // 3000; // delay before play
+var preroll = 0; // 3000; // delay before play
 var btn = {
 	play: document.getElementById("play"),
 	stop: document.getElementById("stop"),
@@ -19,9 +18,7 @@ function play(){
 		btn.stop.className = '';
 		btn.back.className = 'disabled';
 		btn.fwd.className = 'disabled';
-		timePointer = myvents[playPointer];
-		var num = myvents[playPointer];
-		schedule(preroll + num - timePointer, testEvent, playPointer);
+		schedule(preroll, testEvent, playPointer);
 	} else {
 		console.log('PAUSED');
 		playing = false;
