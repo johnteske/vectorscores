@@ -24,17 +24,18 @@ function play(){
 		playing = false;
 		btn.play.textContent = '\u25b9'; // play button
 		clearSchedule();
-		updateStepButtons(); // re-enable buttons
+		updateStepButtons();
 	}
 }
 function stop(){
 	console.log('STOPPED');
+	playing = false;
+	updatePointer(0);
 	btn.play.textContent = '\u25b9'; // play button
 	btn.play.className = '';
 	btn.stop.className = 'stopped';
-	btn.back.className = '';
-	btn.fwd.className = '';
 	clearSchedule();
+	updateStepButtons();
 
 	// also clear active classes from elements
 	var spanz = document.getElementsByTagName("span");
@@ -42,8 +43,6 @@ function stop(){
 		var thisspan = spanz[i];
 		thisspan.className = '';
 	}
-	playing = false;
-	updatePointer(0);
 }
 
 function clearSchedule(){
