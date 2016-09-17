@@ -27,6 +27,7 @@ function play(){
 		playing = false;
 		btn.play.textContent = '\u25b9'; // play button
 		clearSchedule();
+		updateStepButtons(); // re-enable buttons
 	}
 }
 function stop(){
@@ -59,7 +60,19 @@ function schedule(time, fn, params) {
 	// allVents.push( setTimeout(fn, time, params) ); // not <IE9
 	allVents.push( setTimeout(function(){ fn(params); }, time) ); // IE fix?
 }
-
+function updateStepButtons(){
+	if(playPointer == 0) {
+		btn.back.className = 'disabled';
+		btn.fwd.className = '';
+	} else if(playPointer == (myvents.length - 1)) {
+		btn.back.className = '';
+		btn.fwd.className = 'disabled';
+	} else {
+		btn.back.className = '';
+		btn.fwd.className = '';
+	}
+}
+updateStepButtons();
 function updatePointer(ndex){
 	playPointer = ndex;
 	document.getElementById("pointer").value = ndex;
@@ -67,6 +80,7 @@ function updatePointer(ndex){
 function stepPointer(num){
 	if(!playing) { // don't allow skip while playing, for now
 		updatePointer(Math.min(Math.max(playPointer + num, 0), myvents.length - 1));
+		updateStepButtons();
 	}
 }
 
