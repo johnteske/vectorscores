@@ -1,27 +1,29 @@
-var allTimeouts = [];
-var playing = false,
-	playPointer = 0;
-var preroll = 0; // 3000; // delay before play
-var btn = {
-	play: document.getElementById("play"),
-	stop: document.getElementById("stop"),
-	fwd: document.getElementById("fwd"),
-	back: document.getElementById("back")
-}
+var scoreEvents = {
+		playing: false,
+		pointer: 0,
+		preroll: 0, // 300; // delay before play
+		allTimeouts: []
+	},
+	btn = {
+		play: document.getElementById("play"),
+		stop: document.getElementById("stop"),
+		fwd: document.getElementById("fwd"),
+		back: document.getElementById("back")
+	}
 
 function play(){
-	if(!playing){
+	if(!scoreEvents.playing){
 		console.log('PLAY');
-		playing = true;
+		scoreEvents.playing = true;
 		btn.play.className = 'active';
 		btn.play.textContent = '\u2016'; // pause
 		btn.stop.className = '';
 		btn.back.className = 'disabled';
 		btn.fwd.className = 'disabled';
-		schedule(preroll, testEvent, playPointer);
+		schedule(scoreEvents.preroll, testEvent, scoreEvents.pointer);
 	} else {
 		console.log('PAUSED');
-		playing = false;
+		scoreEvents.playing = false;
 		btn.play.textContent = '\u25b9'; // play button
 		clearSchedule();
 		updateStepButtons();
@@ -29,7 +31,7 @@ function play(){
 }
 function stop(){
 	console.log('STOPPED');
-	playing = false;
+	scoreEvents.playing = false;
 	updatePointer(0);
 	btn.play.textContent = '\u25b9'; // play button
 	btn.play.className = '';
@@ -46,7 +48,7 @@ function stop(){
 }
 
 function clearSchedule(){
-	allTimeouts.forEach(function(thissched){
+	scoreEvents.allTimeouts.forEach(function(thissched){
 		clearTimeout(thissched);
 	});
 }
@@ -54,13 +56,13 @@ function clearSchedule(){
 function schedule(time, fn, params) {
     console.log('sched ', params, ': ', time);
 	// allTimeouts.push( setTimeout(fn, time, params) ); // not <IE9
-	allTimeouts.push( setTimeout(function(){ fn(params); }, time) ); // IE fix?
+	scoreEvents.allTimeouts.push( setTimeout(function(){ fn(params); }, time) ); // IE fix?
 }
 function updateStepButtons(){
-	if(playPointer == 0) {
+	if(scoreEvents.pointer == 0) {
 		btn.back.className = 'disabled';
 		btn.fwd.className = '';
-	} else if(playPointer == (testEvents.length - 1)) {
+	} else if(scoreEvents.pointer == (testEvents.length - 1)) {
 		btn.back.className = '';
 		btn.fwd.className = 'disabled';
 	} else {
@@ -70,12 +72,12 @@ function updateStepButtons(){
 }
 updateStepButtons();
 function updatePointer(ndex){
-	playPointer = ndex;
+	scoreEvents.pointer = ndex;
 	document.getElementById("pointer").value = ndex;
 }
 function stepPointer(num){
-	if(!playing) { // don't allow skip while playing, for now
-		updatePointer(Math.min(Math.max(playPointer + num, 0), testEvents.length - 1));
+	if(!scoreEvents.playing) { // don't allow skip while playing, for now
+		updatePointer(Math.min(Math.max(scoreEvents.pointer + num, 0), testEvents.length - 1));
 		updateStepButtons();
 	}
 }
