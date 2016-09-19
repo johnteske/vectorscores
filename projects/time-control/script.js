@@ -98,21 +98,31 @@ function testEvent(ndex) {
 	}
 }
 
+//
+// TEST events
+//
+
 // create events
 var numvents = Math.floor(Math.random()*5) + 10;
-scoreEvents.events.push(0);
 
-for (var i = 0; i < numvents; i++) {
-	scoreEvents.events.push(Math.floor(Math.random()*500)+(i*1500)+1000);
-}
-// create event spans
-for(var i = 0; i < scoreEvents.events.length; i++){
-	var vent = scoreEvents.events[i],
-		spanel = document.createElement("span");
-	spanel.setAttribute("id", vent);
-	spanel.appendChild(document.createTextNode(vent));
+function createSpan(eventTime){
+	var spanel = document.createElement("span");
+	spanel.setAttribute("id", eventTime);
+	spanel.appendChild(document.createTextNode(eventTime));
 	document.getElementById("events").appendChild(spanel);
 }
+
+// create first event
+scoreEvents.events.push(0);
+createSpan(0);
+
+// create remaining events
+for (var i = 0; i < numvents; i++) {
+	var eventTime = Math.floor(Math.random()*500)+(i*1500)+1000;
+	scoreEvents.events.push(eventTime);
+	createSpan(eventTime);
+}
+
 // activate span
 function setSpanActive(id, ndex){
 	var thing = document.getElementById(id);
