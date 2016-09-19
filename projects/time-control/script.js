@@ -5,6 +5,7 @@ var scoreEvents = {
 	playing: false,
 	pointer: 0,
 	preroll: 0, // 300; // delay before play
+	timeAt: function(index){ return this.events[index] },
 	allTimeouts: []
 };
 var btn = {
@@ -85,7 +86,7 @@ function stepPointer(num){
 	}
 }
 function testEvent(ndex) {
-	var id = scoreEvents.events[ndex];
+	var id = scoreEvents.timeAt(ndex);
 	updatePointer(ndex);
 	// this is the only event-specific code
 	// all else should be part of vs library
@@ -93,7 +94,7 @@ function testEvent(ndex) {
 	// ^^^
 	// var id = scoreEvents.events[ndex];
 	if (ndex < scoreEvents.getLength() - 1) {
-		var diff = scoreEvents.events[ndex+1] - id;
+		var diff = scoreEvents.timeAt(ndex+1) - id;
 		schedule(diff, testEvent, ndex+1);
 	} else {
 		stop();
@@ -121,7 +122,7 @@ createSpan(0);
 // create remaining events
 for (var i = 0; i < numvents; i++) {
 	var eventTime = Math.floor(Math.random()*500)+(i*1500)+1000;
-	scoreEvents.add(eventTime); //scoreEvents.events.push(eventTime);
+	scoreEvents.add(eventTime);
 	createSpan(eventTime);
 }
 
