@@ -1,17 +1,18 @@
 var scoreEvents = {
-		add: function(time){ this.events.push(time) },
-		events: [],
-		playing: false,
-		pointer: 0,
-		preroll: 0, // 300; // delay before play
-		allTimeouts: []
-	},
-	btn = {
-		play: document.getElementById("play"),
-		stop: document.getElementById("stop"),
-		fwd: document.getElementById("fwd"),
-		back: document.getElementById("back")
-	}
+	add: function(time){ this.events.push(time) },
+	events: [],
+	getLength: function(){ return this.events.length },
+	playing: false,
+	pointer: 0,
+	preroll: 0, // 300; // delay before play
+	allTimeouts: []
+};
+var btn = {
+	play: document.getElementById("play"),
+	stop: document.getElementById("stop"),
+	fwd: document.getElementById("fwd"),
+	back: document.getElementById("back")
+};
 
 function play(){
 	if(!scoreEvents.playing){
@@ -64,7 +65,7 @@ function updateStepButtons(){
 	if(scoreEvents.pointer == 0) {
 		btn.back.className = 'disabled';
 		btn.fwd.className = '';
-	} else if(scoreEvents.pointer == (scoreEvents.events.length - 1)) {
+	} else if(scoreEvents.pointer == (scoreEvents.getLength() - 1)) {
 		btn.back.className = '';
 		btn.fwd.className = 'disabled';
 	} else {
@@ -79,7 +80,7 @@ function updatePointer(ndex){
 }
 function stepPointer(num){
 	if(!scoreEvents.playing) { // don't allow skip while playing, for now
-		updatePointer(Math.min(Math.max(scoreEvents.pointer + num, 0), scoreEvents.events.length - 1));
+		updatePointer(Math.min(Math.max(scoreEvents.pointer + num, 0), scoreEvents.getLength() - 1));
 		updateStepButtons();
 	}
 }
@@ -91,7 +92,7 @@ function testEvent(ndex) {
 	setSpanActive(id, ndex);
 	// ^^^
 	// var id = scoreEvents.events[ndex];
-	if (ndex < scoreEvents.events.length - 1) {
+	if (ndex < scoreEvents.getLength() - 1) {
 		var diff = scoreEvents.events[ndex+1] - id;
 		schedule(diff, testEvent, ndex+1);
 	} else {
