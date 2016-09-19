@@ -1,4 +1,5 @@
 var scoreEvents = {
+		events: [],
 		playing: false,
 		pointer: 0,
 		preroll: 0, // 300; // delay before play
@@ -62,7 +63,7 @@ function updateStepButtons(){
 	if(scoreEvents.pointer == 0) {
 		btn.back.className = 'disabled';
 		btn.fwd.className = '';
-	} else if(scoreEvents.pointer == (testEvents.length - 1)) {
+	} else if(scoreEvents.pointer == (scoreEvents.events.length - 1)) {
 		btn.back.className = '';
 		btn.fwd.className = 'disabled';
 	} else {
@@ -77,18 +78,20 @@ function updatePointer(ndex){
 }
 function stepPointer(num){
 	if(!scoreEvents.playing) { // don't allow skip while playing, for now
-		updatePointer(Math.min(Math.max(scoreEvents.pointer + num, 0), testEvents.length - 1));
+		updatePointer(Math.min(Math.max(scoreEvents.pointer + num, 0), scoreEvents.events.length - 1));
 		updateStepButtons();
 	}
 }
-
 function testEvent(ndex) {
-	var id = testEvents[ndex];
+	var id = scoreEvents.events[ndex];
 	updatePointer(ndex);
+	// this is the only event-specific code
+	// all else should be part of vs library
 	setSpanActive(id, ndex);
-	// sched next
-	if (ndex < testEvents.length - 1) {
-	    var diff = testEvents[ndex+1] - id;
+	// ^^^
+	// var id = scoreEvents.events[ndex];
+	if (ndex < scoreEvents.events.length - 1) {
+		var diff = scoreEvents.events[ndex+1] - id;
 		schedule(diff, testEvent, ndex+1);
 	} else {
 		stop();
@@ -96,14 +99,15 @@ function testEvent(ndex) {
 }
 
 // create events
-var numvents = Math.floor(Math.random()*5) + 10,
-	testEvents = [0];
+var numvents = Math.floor(Math.random()*5) + 10;
+scoreEvents.events.push(0);
+
 for (var i = 0; i < numvents; i++) {
-	testEvents.push(Math.floor(Math.random()*500)+(i*1500)+1000);
+	scoreEvents.events.push(Math.floor(Math.random()*500)+(i*1500)+1000);
 }
 // create event spans
-for(var i = 0; i < testEvents.length; i++){
-	var vent = testEvents[i],
+for(var i = 0; i < scoreEvents.events.length; i++){
+	var vent = scoreEvents.events[i],
 		spanel = document.createElement("span");
 	spanel.setAttribute("id", vent);
 	spanel.appendChild(document.createTextNode(vent));
