@@ -1,12 +1,17 @@
 var scoreEvents = {
-	add: function(time){ this.events.push(time) },
+	add: function(t){ this.events.push(t) },
 	events: [],
 	getLength: function(){ return this.events.length },
 	playing: false,
 	pointer: 0,
 	preroll: 0, // 300; // delay before play
-	timeAt: function(index){ return this.events[index] },
-	allTimeouts: []
+	timeAt: function(i){ return this.events[i] },
+	allTimeouts: [],
+	clearTimeouts: function() {
+		this.allTimeouts.forEach(function(t){
+			clearTimeout(t);
+		});
+	}
 };
 var btn = {
 	play: document.getElementById("play"),
@@ -29,7 +34,7 @@ function play(){
 		console.log('PAUSED');
 		scoreEvents.playing = false;
 		btn.play.textContent = '\u25b9'; // play button
-		clearSchedule();
+		scoreEvents.clearTimeouts();
 		updateStepButtons();
 	}
 }
@@ -40,7 +45,7 @@ function stop(){
 	btn.play.textContent = '\u25b9'; // play button
 	btn.play.className = '';
 	btn.stop.className = 'stopped';
-	clearSchedule();
+	scoreEvents.clearTimeouts();
 	updateStepButtons();
 
 	// also clear active classes from elements
@@ -49,12 +54,6 @@ function stop(){
 		var thisspan = spanz[i];
 		thisspan.className = '';
 	}
-}
-
-function clearSchedule(){
-	scoreEvents.allTimeouts.forEach(function(thissched){
-		clearTimeout(thissched);
-	});
 }
 
 function schedule(time, fn, params) {
