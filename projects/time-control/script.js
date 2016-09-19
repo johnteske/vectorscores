@@ -1,4 +1,5 @@
 var scoreEvents = {
+		add: function(time){ this.events.push(time) },
 		events: [],
 		playing: false,
 		pointer: 0,
@@ -113,13 +114,13 @@ function createSpan(eventTime){
 }
 
 // create first event
-scoreEvents.events.push(0);
+scoreEvents.add(0);
 createSpan(0);
 
 // create remaining events
 for (var i = 0; i < numvents; i++) {
 	var eventTime = Math.floor(Math.random()*500)+(i*1500)+1000;
-	scoreEvents.events.push(eventTime);
+	scoreEvents.add(eventTime); //scoreEvents.events.push(eventTime);
 	createSpan(eventTime);
 }
 
