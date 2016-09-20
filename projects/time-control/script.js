@@ -23,6 +23,12 @@ var btn = {
 	},
 	enable: function(but){
 		this[but].className = '';
+	},
+	setPlay: function(){
+		this.play.textContent = '\u25b9';
+	},
+	setPause: function(){
+		this.play.textContent = '\u2016';
 	}
 };
 
@@ -30,7 +36,7 @@ function play(){
 	if(!scoreEvents.playing){
 		console.log('PLAY');
 		scoreEvents.playing = true;
-		btn.play.textContent = '\u2016'; // pause
+		btn.setPause();
 		btn.enable('stop');
 		btn.disable('back');
 		btn.disable('fwd');
@@ -38,7 +44,7 @@ function play(){
 	} else {
 		console.log('PAUSED');
 		scoreEvents.playing = false;
-		btn.play.textContent = '\u25b9'; // play button
+		btn.setPlay();
 		scoreEvents.clearAllTimeouts();
 		updateStepButtons();
 	}
@@ -47,7 +53,7 @@ function stop(){
 	console.log('STOPPED');
 	scoreEvents.playing = false;
 	updatePointer(0);
-	btn.play.textContent = '\u25b9'; // play button
+	btn.setPlay();
 	btn.enable('play');
 	btn.disable('stop');
 	scoreEvents.clearAllTimeouts();
