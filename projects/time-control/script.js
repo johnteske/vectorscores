@@ -7,7 +7,7 @@ var scoreEvents = {
 	preroll: 0, // 300; // delay before play
 	timeAt: function(i){ return this.events[i] },
 	allTimeouts: [],
-	clearTimeouts: function() {
+	clearAllTimeouts: function() {
 		this.allTimeouts.forEach(function(t){
 			clearTimeout(t);
 		});
@@ -39,7 +39,7 @@ function play(){
 		console.log('PAUSED');
 		scoreEvents.playing = false;
 		btn.play.textContent = '\u25b9'; // play button
-		scoreEvents.clearTimeouts();
+		scoreEvents.clearAllTimeouts();
 		updateStepButtons();
 	}
 }
@@ -50,7 +50,7 @@ function stop(){
 	btn.play.textContent = '\u25b9'; // play button
 	btn.enable('play');
 	btn.disable('stop');
-	scoreEvents.clearTimeouts();
+	scoreEvents.clearAllTimeouts();
 	updateStepButtons();
 
 	// also clear active classes from elements
