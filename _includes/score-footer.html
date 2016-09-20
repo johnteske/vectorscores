@@ -1,8 +1,8 @@
 {% if page.footer %}
 <div class="play">
-    <button id="back" onclick="stepPointer(-1)">&lt;</button>
+    <button id="back" onclick="stepPointer(-1)" class="disabled">&lt;</button>
     <button id="play" onclick="play()">&#9657;</button>
-    <button id="stop" onclick="stop()">&#9633;</button>
+    <button id="stop" onclick="stop()" class="disabled">&#9633;</button>
     <button id="fwd" onclick="stepPointer(1)">&gt;</button>
     <input id="pointer" type="number" value="0"/><!-- step="1" -->
 </div>
