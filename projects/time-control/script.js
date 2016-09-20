@@ -17,18 +17,23 @@ var btn = {
 	play: document.getElementById("play"),
 	stop: document.getElementById("stop"),
 	fwd: document.getElementById("fwd"),
-	back: document.getElementById("back")
+	back: document.getElementById("back"),
+	disable: function(but){
+		this[but].className = 'disabled';
+	},
+	enable: function(but){
+		this[but].className = '';
+	}
 };
 
 function play(){
 	if(!scoreEvents.playing){
 		console.log('PLAY');
 		scoreEvents.playing = true;
-		btn.play.className = 'active';
 		btn.play.textContent = '\u2016'; // pause
-		btn.stop.className = '';
-		btn.back.className = 'disabled';
-		btn.fwd.className = 'disabled';
+		btn.enable('stop');
+		btn.disable('back');
+		btn.disable('fwd');
 		schedule(scoreEvents.preroll, testEvent, scoreEvents.pointer);
 	} else {
 		console.log('PAUSED');
@@ -43,8 +48,8 @@ function stop(){
 	scoreEvents.playing = false;
 	updatePointer(0);
 	btn.play.textContent = '\u25b9'; // play button
-	btn.play.className = '';
-	btn.stop.className = 'stopped';
+	btn.enable('play');
+	btn.disable('stop');
 	scoreEvents.clearTimeouts();
 	updateStepButtons();
 
@@ -63,17 +68,17 @@ function schedule(time, fn, params) {
 }
 function updateStepButtons(){
 	if(scoreEvents.pointer == 0) {
-		btn.back.className = 'disabled';
-		btn.fwd.className = '';
+		btn.disable('back');
+		btn.enable('fwd');
 	} else if(scoreEvents.pointer == (scoreEvents.getLength() - 1)) {
-		btn.back.className = '';
-		btn.fwd.className = 'disabled';
+		btn.enable('back');
+		btn.disable('fwd');
 	} else {
-		btn.back.className = '';
-		btn.fwd.className = '';
+		btn.enable('back');
+		btn.enable('fwd');
 	}
 }
-updateStepButtons();
+
 function updatePointer(ndex){
 	scoreEvents.pointer = ndex;
 	document.getElementById("pointer").value = ndex;
