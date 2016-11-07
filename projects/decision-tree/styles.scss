@@ -1,3 +1,5 @@
+---
+---
 h3, p { text-align: center; }
 p.button {
     margin: 1em;
@@ -8,14 +10,18 @@ p.button {
 p.button:hover {
     background: #ddd;
 }
+p.button, div.chart div {
+    font-size: 1.5em;
+}
+$bar-width: 40px;
 
 .chart {
     margin: 0 auto;
-    width: 110px;
+    width: ($bar-width + 2px) * 5;
 }
 .chart div {
   background-color: #ddd;
   text-align: center;
-  width: 20px;
+  width: $bar-width;
   margin: 1px;
 }
