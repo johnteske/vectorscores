@@ -3,6 +3,7 @@
 
 # local development
 js/d3*
+workspace_local/
 
 # Jekyll
 _site/
