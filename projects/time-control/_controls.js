@@ -40,7 +40,7 @@ function play(){
 		btn.enable('stop');
 		btn.disable('back');
 		btn.disable('fwd');
-		schedule(scoreEvents.preroll, testEvent, scoreEvents.pointer);
+		schedule(scoreEvents.preroll, playEvent, scoreEvents.pointer);
 	} else {
 		console.log('PAUSED');
 		scoreEvents.playing = false;
@@ -59,12 +59,7 @@ function stop(){
 	scoreEvents.clearAllTimeouts();
 	updateStepButtons();
 
-	// also clear active classes from elements
-	var spanz = document.getElementsByTagName("span");
-	for (var i = 0; i < spanz.length; i++) {
-		var thisspan = spanz[i];
-		thisspan.className = '';
-	}
+	userStop();
 }
 
 function schedule(time, fn, params) {
@@ -72,6 +67,21 @@ function schedule(time, fn, params) {
 	// allTimeouts.push( setTimeout(fn, time, params) ); // not <IE9
 	scoreEvents.allTimeouts.push( setTimeout(function(){ fn(params); }, time) ); // IE fix?
 }
+function playEvent(ndex) {
+	var id = scoreEvents.timeAt(ndex);
+	updatePointer(ndex);
+
+	userEvent();
+
+	// schedule next event
+	if (ndex < scoreEvents.getLength() - 1) {
+		var diff = scoreEvents.timeAt(ndex+1) - id;
+		schedule(diff, playEvent, ndex+1);
+	} else {
+		stop();
+	}
+}
+
 function updateStepButtons(){
 	if(scoreEvents.pointer == 0) {
 		btn.disable('back');
