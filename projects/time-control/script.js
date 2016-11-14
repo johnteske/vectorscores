@@ -8,21 +8,24 @@ d3.select("svg").remove(); // svg not used in test
 document.getElementsByTagName("h3")[0].setAttribute("style","display: none;");
 // document.getElementById("events").setAttribute("style","display: none;");
 
-// single test event, for now
-function userEvent() {
-	var spanel = document.createElement("span");
-	spanel.appendChild(document.createTextNode("event"));
-	document.getElementById("events").appendChild(spanel);
+// an example of using schedule() independent of playEvents()
+// could also create (click/interaction) event apart from scoreEvents
+// or forgo using a score structure altogether
+schedule(1000, play, "no params");
+
+function userEvent(ndex) {
+	var id = scoreEvents.events[ndex];
+	setSpanActive(id, ndex);
 }
 
 // create events
 var numvents = Math.floor(Math.random()*5) + 10;
 
 function createSpan(eventTime){
-	// var spanel = document.createElement("span");
-	// spanel.setAttribute("id", eventTime);
-	// spanel.appendChild(document.createTextNode(eventTime));
-	// document.getElementById("events").appendChild(spanel);
+	var spanel = document.createElement("span");
+	spanel.setAttribute("id", eventTime);
+	spanel.appendChild(document.createTextNode(eventTime));
+	document.getElementById("events").appendChild(spanel);
 }
 
 // create first event

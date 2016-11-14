@@ -62,7 +62,7 @@ function schedule(time, fn, params) {
 function playEvent(ndex) {
 	updatePointer(ndex);
 
-	userEvent();
+	userEvent(ndex);
 
 	// schedule next event
 	if (ndex < scoreEvents.getLength() - 1) {
