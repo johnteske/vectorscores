@@ -21,10 +21,15 @@ var btn = {
 	fwd: document.getElementById("score-fwd"),
 	back: document.getElementById("score-back"),
 	disable: function(but){ this[but].className = 'disabled'; },
-	enable: function(but){ this[but].className = ''; },
+	enable: function(but){ this[but].className = 'enabled'; },
 	setPlay: function(){ this.play.textContent = '\u25b9'; },
 	setPause: function(){ this.play.textContent = '\u2016'; }
 };
+// initialize buttons
+btn.play.onclick = play; btn.enable('play');
+btn.stop.onclick = stop;
+btn.fwd.onclick = function(){stepPointer(1)};  btn.enable('fwd');
+btn.back.onclick = function(){stepPointer(-1)};
 
 function play(){
 	if(!scoreEvents.playing){

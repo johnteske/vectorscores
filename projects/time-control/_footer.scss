@@ -9,6 +9,13 @@ button {
 	border-radius: 20px;
 	background: #eee;
 	transition: background 0.3s, color 0.3s;
+	color: #ddd; // start as .disabled
+	&.disabled {
+		color: #ddd;
+	}
+	&.enabled {
+		color: #000;
+	}
 }
 input {
 	height: 2.5em;
