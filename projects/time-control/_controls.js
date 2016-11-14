@@ -16,10 +16,10 @@ var scoreEvents = {
 	}
 };
 var btn = {
-	play: document.getElementById("play"),
-	stop: document.getElementById("stop"),
-	fwd: document.getElementById("fwd"),
-	back: document.getElementById("back"),
+	play: document.getElementById("score-play"),
+	stop: document.getElementById("score-stop"),
+	fwd: document.getElementById("score-fwd"),
+	back: document.getElementById("score-back"),
 	disable: function(but){ this[but].className = 'disabled'; },
 	enable: function(but){ this[but].className = ''; },
 	setPlay: function(){ this.play.textContent = '\u25b9'; },
@@ -92,7 +92,7 @@ function updateStepButtons(){
 
 function updatePointer(ndex){
 	scoreEvents.pointer = ndex;
-	document.getElementById("pointer").value = ndex;
+	document.getElementById("score-pointer").value = ndex;
 }
 function stepPointer(num){
 	if(!scoreEvents.playing) { // don't allow skip while playing, for now
