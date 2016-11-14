@@ -5,7 +5,9 @@ var scoreEvents = {
 	playing: false,
 	pointer: 0,
 	preroll: 0, // 300; // delay before play
-	timeAt: function(i){ return this.events[i] },
+	timeAt: function(i){ return this.events[i][0] },
+	funcAt: function(i){ return this.events[i][1] },
+	paramsAt: function(i){ return this.events[i][2] },
 	allTimeouts: [],
 	clearAllTimeouts: function() {
 		this.allTimeouts.forEach(function(t){
@@ -62,7 +64,8 @@ function schedule(time, fn, params) {
 function playEvent(ndex) {
 	updatePointer(ndex);
 
-	userEvent(ndex);
+	var thisEvent = scoreEvents.funcAt(ndex);
+	thisEvent(ndex, scoreEvents.paramsAt(ndex));
 
 	// schedule next event
 	if (ndex < scoreEvents.getLength() - 1) {

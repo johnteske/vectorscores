@@ -10,8 +10,12 @@ d3.select("svg").remove(); // svg not used in test
 schedule(1000, play, "no params");
 
 function userEvent(ndex) {
-	var id = scoreEvents.events[ndex];
-	setSpanActive(id);
+	var id = scoreEvents.timeAt(ndex);
+	document.getElementById(id).setAttribute("class", "active");
+}
+function otherEvent(ndex) {
+	var id = scoreEvents.timeAt(ndex);
+	document.getElementById(id).setAttribute("class", "other");
 }
 
 // create events
@@ -24,20 +28,16 @@ function createSpan(eventTime){
 	document.getElementById("events").appendChild(spanel);
 }
 
+var eventChoices = [userEvent, otherEvent];
 function createEvent(eventTime, eventFunc, eventParams) {
-	scoreEvents.add(eventTime); // scoreEvent -- [time, function, params]
+	var thisFunc = getItem(eventChoices);
+	scoreEvents.add([eventTime, thisFunc, ["params"]]); // scoreEvent -- [time, function, params]
 	createSpan(eventTime);
 }
 createEvent(0); // create first event
 for (var i = 0; i < numvents; i++) { // create remaining events
 	var eventTime = Math.floor(Math.random()*500)+(i*1500)+1000;
 	createEvent(eventTime);
-}
-
-// activate span
-function setSpanActive(id){
-	var thing = document.getElementById(id);
-	thing.setAttribute("class", "active");
 }
 
 function userStop() {

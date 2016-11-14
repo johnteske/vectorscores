@@ -22,6 +22,11 @@ span {
 	background-color: rgba(0, 255, 0, 0.25);
 	animation: active 5s;
 }
+.other {
+	background: lightblue;
+	background-color: rgba(0, 0, 255, 0.25);
+	animation: other 5s;
+}
 .stopped {
 	background: red;
 	background-color: rgba(255, 0, 0, 0.25);
@@ -33,6 +38,10 @@ span {
 @keyframes active {
     0%   {background-color: rgba(0,255,0,0.75);}
     100% {background-color: rgba(0,255,0,0.25);}
+}
+@keyframes other {
+    0%   {background-color: rgba(0,0,255,0.75);}
+    100% {background-color: rgba(0,0,255,0.25);}
 }
 @keyframes stop {
     0%   {background-color: rgba(255,0,0,0.75);}
