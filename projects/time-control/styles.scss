@@ -16,6 +16,10 @@ span {
 	border: 5px solid #fff;
 	border-radius: 20px;
 	background: #eee;
+	&.box {
+		border-radius: 0px;
+		transition: border-radius 5s;
+	}
 }
 .active {
 	background: lime;

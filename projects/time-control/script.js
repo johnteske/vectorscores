@@ -9,12 +9,14 @@ d3.select("svg").remove(); // svg not used in test
 // or forgo using a score structure altogether
 schedule(1000, play, "no params");
 
-function userEvent(ndex) {
-	var id = scoreEvents.timeAt(ndex);
-	document.getElementById(id).setAttribute("class", "active");
+function userEvent(ndex, params) {
+	var id = params[0],
+		boxClass = params[1] ? " box" : "";
+	document.getElementById(id).setAttribute("class", "active" + boxClass);
 }
-function otherEvent(ndex) {
-	var id = scoreEvents.timeAt(ndex);
+function otherEvent(ndex, params) {
+	var id = params[0],
+		boxClass = params[1] ? " box" : "";
 	document.getElementById(id).setAttribute("class", "other");
 }
 
@@ -28,10 +30,10 @@ function createSpan(eventTime){
 	document.getElementById("events").appendChild(spanel);
 }
 
-var eventChoices = [userEvent, otherEvent];
 function createEvent(eventTime, eventFunc, eventParams) {
-	var thisFunc = getItem(eventChoices);
-	scoreEvents.add([eventTime, thisFunc, ["params"]]); // scoreEvent -- [time, function, params]
+	var thisFunc = getItem([userEvent, otherEvent]),
+		isBox = getItem([0, 1]);
+	scoreEvents.add([eventTime, thisFunc, [eventTime, isBox]]); // scoreEvent -- [time, function, params]
 	createSpan(eventTime);
 }
 createEvent(0); // create first event
