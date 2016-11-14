@@ -18,18 +18,10 @@ var btn = {
 	stop: document.getElementById("stop"),
 	fwd: document.getElementById("fwd"),
 	back: document.getElementById("back"),
-	disable: function(but){
-		this[but].className = 'disabled';
-	},
-	enable: function(but){
-		this[but].className = '';
-	},
-	setPlay: function(){
-		this.play.textContent = '\u25b9';
-	},
-	setPause: function(){
-		this.play.textContent = '\u2016';
-	}
+	disable: function(but){ this[but].className = 'disabled'; },
+	enable: function(but){ this[but].className = ''; },
+	setPlay: function(){ this.play.textContent = '\u25b9'; },
+	setPause: function(){ this.play.textContent = '\u2016'; }
 };
 
 function play(){
@@ -68,14 +60,14 @@ function schedule(time, fn, params) {
 	scoreEvents.allTimeouts.push( setTimeout(function(){ fn(params); }, time) ); // IE fix?
 }
 function playEvent(ndex) {
-	var id = scoreEvents.timeAt(ndex);
 	updatePointer(ndex);
 
 	userEvent();
 
 	// schedule next event
 	if (ndex < scoreEvents.getLength() - 1) {
-		var diff = scoreEvents.timeAt(ndex+1) - id;
+		var id = scoreEvents.timeAt(ndex),
+			diff = scoreEvents.timeAt(ndex+1) - id;
 		schedule(diff, playEvent, ndex+1);
 	} else {
 		stop();
