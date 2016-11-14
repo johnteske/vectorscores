@@ -4,10 +4,6 @@ d3.select("svg").remove(); // svg not used in test
 
 {% include_relative _controls.js %}
 
-// hide elements, for now
-document.getElementsByTagName("h3")[0].setAttribute("style","display: none;");
-// document.getElementById("events").setAttribute("style","display: none;");
-
 // an example of using schedule() independent of playEvents()
 // could also create (click/interaction) event apart from scoreEvents
 // or forgo using a score structure altogether
