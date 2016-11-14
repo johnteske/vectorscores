@@ -14,9 +14,9 @@ function userEvent(ndex, params) {
 		boxClass = params[1] ? " box" : "";
 	document.getElementById(id).setAttribute("class", "active" + boxClass);
 }
-function otherEvent(ndex, params) {
-	var id = params[0],
-		boxClass = params[1] ? " box" : "";
+function objEvent(ndex, params) {
+	var id = params.time,
+		boxClass = params.box ? " box" : "";
 	document.getElementById(id).setAttribute("class", "other");
 }
 
@@ -31,9 +31,13 @@ function createSpan(eventTime){
 }
 
 function createEvent(eventTime, eventFunc, eventParams) {
-	var thisFunc = getItem([userEvent, otherEvent]),
-		isBox = getItem([0, 1]);
-	scoreEvents.add([eventTime, thisFunc, [eventTime, isBox]]); // scoreEvent -- [time, function, params]
+	var coinFlip = getItem([0, 1]),
+		isBox = getItem([0, 1, 1]);
+	if(coinFlip){
+		scoreEvents.add([eventTime, userEvent, [eventTime, isBox]]); // scoreEvent -- [time, function, params]
+	} else {
+		scoreEvents.add([eventTime, objEvent, {time: eventTime, box: isBox}]); // scoreEvent -- [time, function, params]
+	}
 	createSpan(eventTime);
 }
 createEvent(0); // create first event
