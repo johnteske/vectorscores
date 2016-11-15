@@ -8,6 +8,9 @@ d3.select("svg").remove(); // svg not used in test
 // could also create (click/interaction) event apart from scoreEvents
 // or forgo using a score structure altogether
 schedule(1000, play, "no params");
+// setTimeout(function(){
+	// document.getElementsByTagName("header")[0].setAttribute("class", "hide");
+// }, 3000);
 
 function userEvent(ndex, params) {
 	var id = params[0],

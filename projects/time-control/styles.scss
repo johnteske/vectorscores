@@ -24,5 +24,3 @@ span {
 	border-color: rgba(0, 0, 255, 0.75);
 	transition: border-color $t-time;
 }
-
-{% include_relative _footer.scss %} // @import looks for files _sass/

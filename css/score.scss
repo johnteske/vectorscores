@@ -1,3 +1,14 @@
 ---
 ---
+$layout-color-bg: white; // transparent;
+$layout-color-light: #eeeeee;
+$layout-trans-time: 0.6s;
+$layout-font-stack: "Inconsolata", "Courier New", Courier, monospace;
+$layout-border: 2px solid $layout-color-light;
+
+$score-info-color: #888888;
+$score-info-trans-time: 0.3s;
+
+@import "score/layout";
 @import "score/main";
+@import "score/footer-controls";
