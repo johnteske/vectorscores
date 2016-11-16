@@ -1,4 +1,5 @@
-$footer-height: 3em;
+$unit: 16px;
+$footer-height: 4 * $unit;
 
 html {
     position: relative;
@@ -6,13 +7,24 @@ html {
 }
 
 body {
-    margin: 0 0 $footer-height;
+    margin: 0;
+}
+
+main {
+    margin: $footer-height 0;
 }
 
 header, footer {
-    font-family: $layout-font-stack;
-    padding: 1em;
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: $footer-height;
+    padding: $unit;
     margin: 0;
+    box-sizing: border-box;
+
+    font-family: $layout-font-stack;
+
     background-color: $layout-color-bg;
     transition: $layout-trans-time opacity;
     &.hide {
@@ -25,27 +37,40 @@ header, footer {
 }
 
 header {
+    top: 0;
 	border-bottom: $layout-border;
 }
 
+footer {
+    bottom: 0;
+	border-top: $layout-border;
+}
+
 h1, #score-info {
+    margin: 0;
+    padding: 0;
     display: inline-block;
+    box-sizing: border-box;
 }
 
 h1 {
-    margin: 0;
+    font-size: $unit * 2;
+    line-height: $unit * 2;
+    overflow-x: scroll;
 }
 
 #score-info {
-    width: 1em;
-    height: 1em;
-    padding: 0.5em;
-    text-align: center;
-    border: 2px solid $score-info-color;
-    color: $score-info-color;
-    border-radius: 100%;
     float: right;
+    width: $unit * 2;
+    height: $unit * 2;
+    padding: $unit * 0.5;
+    border: 2px solid $score-info-color;
+    border-radius: 100%;
 
+    font-size: $unit;
+    line-height: $unit;
+    text-align: center;
+    color: $score-info-color;
     background-color: $layout-color-bg;
     transition: $score-info-trans-time background-color;
 
@@ -54,13 +79,4 @@ h1 {
         background-color: $score-info-color;
         transition: $score-info-trans-time background-color;
     }
-}
-
-footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: $footer-height;
-    width: 100%;
-	border-top: $layout-border;
 }
