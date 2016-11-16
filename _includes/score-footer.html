@@ -1,14 +1,16 @@
 {% if page.footer %}
-<div class="score-controls">
-    <button id="score-back">&lt;</button>
-    <button id="score-play">&#9657;</button>
-    <button id="score-stop">&#9633;</button>
-    <button id="score-fwd">&gt;</button>
-    <input id="score-pointer" type="number" value="0" /><!-- step="1" -->
-</div>
+<footer>
+    <button id="score-back">&lt;</button><!--
+ --><button id="score-play">&#9657;</button><!--
+ --><button id="score-stop">&#9633;</button><!--
+ --><button id="score-fwd">&gt;</button><!--
+ --><input id="score-pointer" type="number" value="0" /><!-- step="1" -->
+    <a href="#settings">
+        <div id="score-settings">+</div>
+    </a>
+</footer>
 {% endif %}
 {% comment %}<!--
 PC options (PCs/note names/transpose)
-tutorial
 save/print
 -->{% endcomment %}

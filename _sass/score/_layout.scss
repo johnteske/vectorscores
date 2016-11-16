@@ -19,7 +19,7 @@ header, footer {
     left: 0;
     right: 0;
     height: $footer-height;
-    padding: $unit;
+    // padding: $unit;
     margin: 0;
     box-sizing: border-box;
 
@@ -37,11 +37,13 @@ header, footer {
 }
 
 header {
+    padding: $unit;
     top: 0;
 	border-bottom: $layout-border;
 }
 
 footer {
+    padding: 0 $unit;
     bottom: 0;
 	border-top: $layout-border;
 }
@@ -80,3 +82,5 @@ h1 {
         transition: $score-info-trans-time background-color;
     }
 }
+
+@import "score/footer-controls";

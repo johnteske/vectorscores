@@ -10,16 +10,12 @@ layout: compress-lines
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        {% include score-header.html %}
-    </header>
+    {% include score-header.html %}
     <main>
         <svg class="main"></svg>
         {{ content }}
     </main>
-    <footer>
-        {% include score-footer.html %}
-    </footer>
+    {% include score-footer.html %}
     {% include script-d3.html %}
     {% include script-vs.html %}
     <script src="script.js" charset="utf-8"></script>

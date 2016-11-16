@@ -2,10 +2,14 @@ button, input {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	width: 3em;
-	height: 3em;
-	font-size: 1em;
+	width: $footer-height; // $unit * 2;
+	height: $footer-height; // $unit * 2;
+	display: inline-block;
+	box-sizing: border-box;
+
+	font-size: $unit;
 	background: transparent;
+
 	&:hover {
 		outline: 2px solid $layout-color-light;
 	}
@@ -29,4 +33,20 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
+}
+
+#score-settings {
+	float: right;
+	margin: 0;
+	padding: $unit;
+	border: 0;
+	width: $footer-height; // $unit * 2;
+	height: $footer-height; // $unit * 2;
+	display: inline-block;
+	box-sizing: border-box;
+
+	font-size: $unit;
+    line-height: $unit;
+    text-align: center;
+    color: $score-info-color;
 }
