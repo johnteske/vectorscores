@@ -40,6 +40,9 @@ header {
     padding: $unit;
     top: 0;
 	border-bottom: $layout-border;
+    h1 {
+        font-weight: 400;
+    }
 }
 
 footer {

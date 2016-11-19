@@ -2,13 +2,11 @@
 ---
 $t-time: 1s;
 
-* {
-	font-family: Courier;
-}
 main {
 	padding: 8px;
 }
 .event-span {
+	font-family: Courier;
 	display: inline-block;
 	padding: 0.5em;
 	margin: 6px;

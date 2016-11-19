@@ -14,6 +14,11 @@
 
 .modal-content {
     background: #ffffff;
+    font-family: $layout-font-stack;
+    font-weight: normal;
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: normal;
+    }
     padding: $unit;
     margin: 0 auto;
     margin-bottom: $footer-height * 2;
@@ -29,7 +34,7 @@
     color: #888888;
     float: right;
     font-size: $unit * 2;
-    font-weight: bold;
+    // font-weight: bold;
 }
 
 .close:hover,
