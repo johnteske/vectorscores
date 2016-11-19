@@ -30,6 +30,9 @@ header, footer {
     &.hide {
         opacity: 0;
     }
+    &.show { // actively keep on
+        opacity: 1;
+    }
     &:hover {
         opacity: 1;
     }

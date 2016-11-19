@@ -1,14 +1,18 @@
 var modal = document.getElementById('score-info-modal'),
     info = document.getElementById("score-info"),
-    closeSpan = document.getElementsByClassName("close")[0];
+    closeSpan = document.getElementById("score-info-modal-close");
 
 function openInfoModal() {
     modal.style.display = "block";
-    document.getElementsByClassName("score-header")[0].className = "hide";
+    document.getElementById("score-header").className = "show";
+    document.getElementById("score-footer").className = "show";
+    pause();
 }
 
 function closeInfoModal() {
     modal.style.display = "none";
+    document.getElementById("score-header").className = "";
+	document.getElementById("score-footer").className = "";
 }
 
 info.onclick = openInfoModal;

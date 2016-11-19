@@ -30,15 +30,15 @@
     border: 1px solid #888;
 }
 
-.close {
+.modal-close {
     color: #888888;
     float: right;
     font-size: $unit * 2;
     // font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.modal-close:hover,
+.modal-close:focus {
     color: #000000;
     text-decoration: none;
     cursor: pointer;

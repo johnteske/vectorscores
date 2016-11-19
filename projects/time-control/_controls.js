@@ -26,32 +26,40 @@ var btn = {
 	setPause: function(){ this.play.textContent = '\u2016'; }
 };
 // initialize buttons
-btn.play.onclick = play; btn.enable('play');
+btn.play.onclick = playPause; btn.enable('play');
 btn.stop.onclick = stop;
 btn.fwd.onclick = function(){stepPointer(1)};  btn.enable('fwd');
 btn.back.onclick = function(){stepPointer(-1)};
 
-function play(){
+function playPause(){
 	if(!scoreEvents.playing){
-		console.log('PLAY');
-		scoreEvents.playing = true;
-		btn.setPause();
-		btn.enable('stop');
-		btn.disable('back');
-		btn.disable('fwd');
-		schedule(scoreEvents.preroll, playEvent, scoreEvents.pointer);
-
-		userPlay();
+		play();
 	} else {
-		console.log('PAUSED');
-		scoreEvents.playing = false;
-		btn.setPlay();
-		scoreEvents.clearAllTimeouts();
-		updateStepButtons();
+		pause();
 	}
 }
+
+function play() {
+	// console.log('PLAY');
+	scoreEvents.playing = true;
+	btn.setPause();
+	btn.enable('stop');
+	btn.disable('back');
+	btn.disable('fwd');
+	schedule(scoreEvents.preroll, playEvent, scoreEvents.pointer);
+	userPlay();
+}
+
+function pause() {
+	// console.log('PAUSED');
+	scoreEvents.playing = false;
+	btn.setPlay();
+	scoreEvents.clearAllTimeouts();
+	updateStepButtons();
+}
+
 function stop(){
-	console.log('STOPPED');
+	// console.log('STOPPED');
 	scoreEvents.playing = false;
 	updatePointer(0);
 	btn.setPlay();
@@ -64,7 +72,7 @@ function stop(){
 }
 
 function schedule(time, fn, params) {
-    console.log('sched ', params, ': ', time);
+    // console.log('sched ', params, ': ', time);
 	// allTimeouts.push( setTimeout(fn, time, params) ); // not <IE9
 	scoreEvents.allTimeouts.push( setTimeout(function(){ fn(params); }, time) ); // IE fix?
 }
