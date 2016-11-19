@@ -5,12 +5,16 @@ $t-time: 1s;
 * {
 	font-family: Courier;
 }
-span {
+main {
+	padding: 8px;
+}
+.event-span {
 	display: inline-block;
 	padding: 0.5em;
 	margin: 6px;
 	border: 2px solid #eee;
 	border-radius: 20px;
+	transition: border-radius $t-time, border-color $t-time;
 	&.box {
 		border-radius: 0px;
 		transition: border-radius $t-time;

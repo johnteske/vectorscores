@@ -10,6 +10,5 @@ $score-info-color: #888888;
 $score-info-trans-time: 0.3s;
 
 @import "score/layout";
+@import "score/modal";
 @import "score/main";
-
-.modal-trig { display: none; } // hide until ready

@@ -7,7 +7,7 @@ d3.select("svg").remove(); // svg not used in test
 // an example of using schedule() independent of playEvents()
 // could also create (click/interaction) event apart from scoreEvents
 // or forgo using a score structure altogether
-schedule(1000, play, "no params");
+// schedule(1000, play, "no params");
 // setTimeout(function(){
 	// document.getElementsByTagName("header")[0].setAttribute("class", "hide");
 // }, 3000);
@@ -15,12 +15,12 @@ schedule(1000, play, "no params");
 function userEvent(ndex, params) {
 	var id = params[0],
 		boxClass = params[1] ? " box" : "";
-	document.getElementById(id).setAttribute("class", "active" + boxClass);
+	document.getElementById(id).setAttribute("class", "event-span active" + boxClass);
 }
 function objEvent(ndex, params) {
 	var id = params.time,
 		boxClass = params.box ? " box" : "";
-	document.getElementById(id).setAttribute("class", "other");
+	document.getElementById(id).setAttribute("class", "event-span other");
 }
 
 // create events
@@ -29,6 +29,7 @@ var numvents = Math.floor(Math.random()*5) + 10;
 function createSpan(eventTime){
 	var spanel = document.createElement("span");
 	spanel.setAttribute("id", eventTime);
+	spanel.className = "event-span";
 	spanel.appendChild(document.createTextNode(eventTime));
 	document.getElementById("events").appendChild(spanel);
 }
@@ -50,13 +51,13 @@ for (var i = 0; i < numvents; i++) { // create remaining events
 }
 
 function userStop() {
-	function clearSpans(){
+	// function clearSpans(){
 		// on stop, clear active classes from elements
-		var spanz = document.getElementsByTagName("span");
+		var spanz = document.getElementsByClassName("event-span");
 		for (var i = 0; i < spanz.length; i++) {
 			var thisspan = spanz[i];
-			thisspan.className = '';
+			thisspan.className = 'event-span';
 		}
-	}
-	schedule(3000, clearSpans, "no params");
+	// }
+	// schedule(3000, clearSpans, "no params");
 }
