@@ -2,7 +2,10 @@
     <div class="modal-content">
         <span class="close">×</span>
         <h2>{{ page.title }}</h2>
-        <p>{{ page.composer }} ({{ page.publish_date}})</p>
+        <p>
+            {{ page.composer }}
+            {% if page.publish_date %}({{ page.publish_date}}){% endif %}
+        </p>
         <div>
             {{ page.info }}
         </div>
