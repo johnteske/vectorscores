@@ -1,6 +1,9 @@
 ---
 ---
-h3, p { text-align: center; }
+main {
+    padding: 8px;
+}
+
 p.button {
     margin: 1em;
     padding: 1em;
@@ -15,13 +18,17 @@ p.button, div.chart div {
 }
 $bar-width: 40px;
 
+p.button, .chart-info, .chart div {
+    font-family: monospace;
+    text-align: center;
+}
+
 .chart {
     margin: 0 auto;
     width: ($bar-width + 2px) * 5;
 }
 .chart div {
   background-color: #ddd;
-  text-align: center;
   width: $bar-width;
   margin: 1px;
 }

@@ -9,7 +9,7 @@ var choiceTop = group.append("p").classed("button", "true").on("click", function
 var choiceBot = group.append("p").classed("button", "true").on("click", function() { choiceMake(choiceBot.data()) }); // hard-coded
 
 // add bar chart visualization
-d3.select("main").append("p").text("Relative probability of symbol appearing:");
+d3.select("main").append("p").classed("chart-info", true).text("Relative probability of symbol appearing:");
 d3.select("main").append("div").classed("chart-wrap", true);
 d3.select(".chart-wrap").append("div").classed("chart", true);
 
