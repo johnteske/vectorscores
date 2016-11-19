@@ -50,14 +50,14 @@ for (var i = 0; i < numvents; i++) { // create remaining events
 	createEvent(eventTime);
 }
 
+function userPlay() {
+	document.getElementsByClassName("score-header")[0].className = "hide";
+}
+
 function userStop() {
-	// function clearSpans(){
-		// on stop, clear active classes from elements
-		var spanz = document.getElementsByClassName("event-span");
-		for (var i = 0; i < spanz.length; i++) {
-			var thisspan = spanz[i];
-			thisspan.className = 'event-span';
-		}
-	// }
-	// schedule(3000, clearSpans, "no params");
+	var spanz = document.getElementsByClassName("event-span");
+	for (var i = 0; i < spanz.length; i++) {
+		var thisspan = spanz[i];
+		thisspan.className = 'event-span';
+	}
 }

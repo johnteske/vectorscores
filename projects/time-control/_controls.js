@@ -40,6 +40,8 @@ function play(){
 		btn.disable('back');
 		btn.disable('fwd');
 		schedule(scoreEvents.preroll, playEvent, scoreEvents.pointer);
+
+		userPlay();
 	} else {
 		console.log('PAUSED');
 		scoreEvents.playing = false;

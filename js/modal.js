@@ -2,16 +2,19 @@ var modal = document.getElementById('score-info-modal'),
     info = document.getElementById("score-info"),
     closeSpan = document.getElementsByClassName("close")[0];
 
-info.onclick = function() {
+function openInfoModal() {
     modal.style.display = "block";
+    document.getElementsByClassName("score-header")[0].className = "hide";
 }
 
-closeSpan.onclick = function() {
+function closeInfoModal() {
     modal.style.display = "none";
 }
 
+info.onclick = openInfoModal;
+
+closeSpan.onclick = closeInfoModal;
+
 window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
+    if (event.target == modal) { closeInfoModal(); }
 }
