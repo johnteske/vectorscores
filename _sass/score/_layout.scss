@@ -31,7 +31,6 @@ header, footer {
         opacity: 0;
     }
     &:hover {
-        transition: $layout-trans-time opacity;
         opacity: 1;
     }
 }

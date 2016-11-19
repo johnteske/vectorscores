@@ -51,7 +51,8 @@ for (var i = 0; i < numvents; i++) { // create remaining events
 }
 
 function userPlay() {
-	document.getElementsByClassName("score-header")[0].className = "hide";
+	document.getElementById("score-header").className = "hide";
+	document.getElementById("score-footer").className = "hide";
 }
 
 function userStop() {
@@ -60,4 +61,6 @@ function userStop() {
 		var thisspan = spanz[i];
 		thisspan.className = 'event-span';
 	}
+	document.getElementById("score-header").className = "";
+	document.getElementById("score-footer").className = "";
 }
