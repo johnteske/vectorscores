@@ -25,6 +25,7 @@ header, footer {
     box-sizing: border-box;
 
     font-family: $layout-font-stack;
+    cursor: default;
     @include preventTapHighlight();
     @include preventUserSelect();
 
