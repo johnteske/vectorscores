@@ -108,7 +108,7 @@ function scrollWrapper(dur) {
 }
 
 // click anywhere on svg to advance
-d3.select(".main").on("click", function() { texturalMsg() });
+d3.select("main").on("click", function() { texturalMsg() });
 
 texturalMsg(); // create the first message
 

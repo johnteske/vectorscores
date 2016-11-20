@@ -63,7 +63,7 @@ for (var i = 0; i < 15; i++) {
 //     .text(function(d, i) { return d; });
 
 // interaction
-var button = d3.select(".main"); // click anywhere on svg
+var button = d3.select("main"); // click anywhere on svg
 var pointer = 0;
 button.on("click", function() {
     if (pointer < cards.length)

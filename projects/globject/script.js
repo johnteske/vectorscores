@@ -136,7 +136,7 @@ resize();
 //
 //
 //
-d3.select(".main").on("click", function() { glob.remove(); drawGlobject(new Globject()) });
+d3.select("main").on("click", function() { glob.remove(); drawGlobject(new Globject()) });
 
 //
 // debug
