@@ -1,18 +1,30 @@
+// to add globally, beyond modal.js
+var scoreHeader = document.getElementById("score-header"),
+    scoreFooter = document.getElementById("score-footer");
+function showHeader() {
+    scoreHeader.className = "show";
+}
+function footerClassed(newClass) {
+    if (scoreFooter) { scoreFooter.className = newClass; }
+}
+
 var modal = document.getElementById('score-info-modal'),
     info = document.getElementById("score-info"),
     closeSpan = document.getElementById("score-info-modal-close");
 
 function openInfoModal() {
     modal.style.display = "block";
-    document.getElementById("score-header").className = "show";
-    document.getElementById("score-footer").className = "show";
-    pause();
+    showHeader();
+    footerClassed("show");
+    if (typeof pause === "function") { //
+        pause();
+    }
 }
 
 function closeInfoModal() {
     modal.style.display = "none";
     document.getElementById("score-header").className = "";
-	document.getElementById("score-footer").className = "";
+	footerClassed("");
 }
 
 info.onclick = openInfoModal;
