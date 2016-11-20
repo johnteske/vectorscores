@@ -28,7 +28,7 @@ A series of new works to be viewed and performed via a lightweight website. The 
 - Greater control over musical texture and density. From core musical concepts, generate parts based on ensemble size. A logical next step in algorithmically generated music and music using open instrumentation.
 - [Morphing clouds] of sound, like the murmuration of birds.
 - Clustering and group dynamics. Control orchestration through use of motion in score.
-- Decision Tree. At each section, performer is given a choice between two cells of music, all branching from a single source to many possibilities. Animated similar to storyboard.
+- [Decision Tree]. At each section, performer is given a choice between two cells of music, all branching from a single source to many possibilities. Animated similar to storyboard.
 - Cantus firmus/drone works.
 - "Loading GIF" as timing—speed of information is increasing but so is complexity and file size.
 - More to be developed as project takes shape.
@@ -41,10 +41,11 @@ A series of new works to be viewed and performed via a lightweight website. The 
 ## Contributing
 - **Performances**. Perform works created with *vector scores*. Contact me and I'll list performances here along with links to any audio and video documentation.
 - **Compositions**. Use *vector scores* to create your own works. You are welcome to use my works and code as a starting point—but please make them your own!
-- **Repository**. I encourage feedback and contributions to this project. Feel free to submit issues and pull requests!
+- **Repository**. I encourage feedback and contributions to this project. Feel free to submit issues and pull requests! [Read more about contributing](https://github.com/johnteske/vectorscores/blob/gh-pages/CONTRIBUTING.md).
 
 
 ## Roadmap
+
 ### Scope
 The current scope of this project is to require as few dependencies as possible for ease of set up for performances and contribution. Future iterations or other projects may involve servers or other technologies.
 
@@ -62,3 +63,4 @@ shareable links. option to include parameters (with query string?)
 [*Textural Messages*]: http://vectorscor.es/projects/Textural-Messages/
 [storyboard frames]: http://vectorscor.es/projects/storyboard/
 [Morphing clouds]: http://vectorscor.es/projects/glob/
+[Decision Tree]: http://vectorscor.es/projects/decision-tree/

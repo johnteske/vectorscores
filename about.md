@@ -4,5 +4,4 @@ title: About
 permalink: /about/
 menu: true
 ---
-
-<!-- <a href="../README.html">README</a> -->
+{% include_relative README.md %}
