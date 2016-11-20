@@ -4,6 +4,7 @@
 # local development
 js/d3*
 workspace_local/
+Gemfile.lock
 
 # Jekyll
 _site/
