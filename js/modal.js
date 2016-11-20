@@ -7,6 +7,14 @@ function showHeader() {
 function footerClassed(newClass) {
     if (scoreFooter) { scoreFooter.className = newClass; }
 }
+// not modal, but testing here
+document.getElementById("score-header").onclick = showHeader;
+document.getElementById("score-footer").onclick = footerClassed("show");
+document.getElementsByTagName("main")[0].onclick = function() {
+    document.getElementById("score-header").className = "hide";
+    footerClassed("hide");
+}
+//
 
 var modal = document.getElementById('score-info-modal'),
     info = document.getElementById("score-info"),
