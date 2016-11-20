@@ -9,6 +9,7 @@ $layout-border: 2px solid $layout-color-light;
 $score-info-color: #888888;
 $score-info-trans-time: 0.3s;
 
+@import "mixins";
 @import "score/layout";
 @import "score/modal";
 @import "score/main";
