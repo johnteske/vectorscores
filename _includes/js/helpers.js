@@ -9,9 +9,9 @@ function getItem(array) {
 }
 
 function getWeightedItem(itemArray, weightArray) {
-    var totalWeight = weight.reduce( function(a,b) {return a + b;} );
-    var randNum = getRandExcl(0, totalWeight);
-    var weightSum = 0;
+    var totalWeight = weightArray.reduce( function(a,b) {return a + b;} ),
+        randNum = getRandExcl(0, totalWeight),
+        weightSum = 0;
 
     for (var i = 0; i < itemArray.length; i++) {
         weightSum += weightArray[i];
