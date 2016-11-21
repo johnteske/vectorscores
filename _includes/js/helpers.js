@@ -1,5 +1,3 @@
-console.log("vectorscores loaded");
-
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 // Returns a random number between min (inclusive) and max (exclusive)
 function getRandExcl(min, max) {
