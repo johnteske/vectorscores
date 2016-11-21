@@ -1,4 +1,4 @@
-var modal = document.getElementById('score-info-modal'),
+var modal = document.getElementById("score-info-modal"),
     info = document.getElementById("score-info"),
     closeSpan = document.getElementById("score-info-modal-close");
 
@@ -14,7 +14,7 @@ function openInfoModal() {
 function closeInfoModal() {
     modal.style.display = "none";
     document.getElementById("score-header").className = "";
-	footerClassed("");
+    footerClassed("");
 }
 
 info.onclick = openInfoModal;
