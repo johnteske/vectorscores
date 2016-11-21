@@ -22,5 +22,5 @@ info.onclick = openInfoModal;
 closeSpan.onclick = closeInfoModal;
 
 window.onclick = function(event) {
-    if (event.target == modal) { closeInfoModal(); }
+    if (event.target === modal) { closeInfoModal(); }
 };
