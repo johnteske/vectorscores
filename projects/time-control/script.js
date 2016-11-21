@@ -1,8 +1,4 @@
----
----
 d3.select("svg").remove(); // svg not used in test
-
-{% include_relative _controls.js %}
 
 // an example of using schedule() independent of playEvents()
 // could also create (click/interaction) event apart from scoreEvents

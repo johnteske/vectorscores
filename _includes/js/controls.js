@@ -1,13 +1,13 @@
 var scoreEvents = {
-	add: function(t){ this.events.push(t) },
+	add: function(t){ this.events.push(t); },
 	events: [],
-	getLength: function(){ return this.events.length },
+	getLength: function(){ return this.events.length; },
 	playing: false,
 	pointer: 0,
 	preroll: 0, // 300; // delay before play
-	timeAt: function(i){ return this.events[i][0] },
-	funcAt: function(i){ return this.events[i][1] },
-	paramsAt: function(i){ return this.events[i][2] },
+	timeAt: function(i){ return this.events[i][0]; },
+	funcAt: function(i){ return this.events[i][1]; },
+	paramsAt: function(i){ return this.events[i][2]; },
 	allTimeouts: [],
 	clearAllTimeouts: function() {
 		this.allTimeouts.forEach(function(t){
@@ -28,8 +28,9 @@ var btn = {
 // initialize buttons
 btn.play.onclick = playPause; btn.enable('play');
 btn.stop.onclick = stop;
-btn.fwd.onclick = function(){stepPointer(1)};  btn.enable('fwd');
-btn.back.onclick = function(){stepPointer(-1)};
+btn.fwd.onclick = function(){stepPointer(1);};
+btn.enable('fwd');
+btn.back.onclick = function(){stepPointer(-1);};
 
 function playPause(){
 	if(!scoreEvents.playing){
@@ -93,10 +94,10 @@ function playEvent(ndex) {
 }
 
 function updateStepButtons(){
-	if(scoreEvents.pointer == 0) {
+	if(scoreEvents.pointer === 0) {
 		btn.disable('back');
 		btn.enable('fwd');
-	} else if(scoreEvents.pointer == (scoreEvents.getLength() - 1)) {
+	} else if(scoreEvents.pointer === (scoreEvents.getLength() - 1)) {
 		btn.enable('back');
 		btn.disable('fwd');
 	} else {
