@@ -1,6 +1,7 @@
 ---
 ---
-var score = {};
+var score = {},
+    noop = function() {};
 
 {% include js/helpers.js %}
 {% include js/layout.js %}

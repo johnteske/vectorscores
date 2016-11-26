@@ -41,7 +41,10 @@ control.play.setPause = function(){ this.element.textContent = "\u2016"; };
 control.play.enable();
 control.fwd.enable();
 
-function playPause(){
+var playCallback = noop;
+var stopCallback = noop;
+
+function playPause() {
     if(!scoreEvents.playing){
         play();
     } else {
@@ -56,7 +59,7 @@ function play() {
     control.back.disable();
     control.fwd.disable();
     schedule(scoreEvents.preroll, playEvent, scoreEvents.pointer);
-    userPlay();
+    playCallback();
 }
 
 function pause() {
@@ -66,7 +69,7 @@ function pause() {
     updateStepButtons();
 }
 
-function stop(){
+function stop() {
     scoreEvents.playing = false;
     updatePointer(0);
     control.play.setPlay();
@@ -74,8 +77,7 @@ function stop(){
     control.stop.disable();
     scoreEvents.clearAllTimeouts();
     updateStepButtons();
-
-    userStop();
+    stopCallback();
 }
 
 function schedule(time, fn, params) {
