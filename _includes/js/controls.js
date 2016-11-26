@@ -31,12 +31,11 @@ var btn = {
     play: new ControlButton("score-play", playPause),
     stop: new ControlButton("score-stop", stop),
     fwd: new ControlButton("score-fwd", function(){ stepPointer(1); }),
-    back: new ControlButton("score-back", function(){ stepPointer(-1); }),
-    // disable: function(but){ this[but].className = "disabled"; },
-    // enable: function(but){ this[but].className = "enabled"; },
-    setPlay: function(){ this.play.element.textContent = "\u25b9"; },
-    setPause: function(){ this.play.element.textContent = "\u2016"; }
+    back: new ControlButton("score-back", function(){ stepPointer(-1); })
 };
+btn.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
+btn.play.setPause = function(){ this.element.textContent = "\u2016"; };
+
 // initialize buttons
 btn.play.enable();
 btn.fwd.enable();
@@ -51,7 +50,7 @@ function playPause(){
 
 function play() {
     scoreEvents.playing = true;
-    btn.setPause();
+    btn.play.setPause();
     btn.stop.enable();
     btn.back.disable();
     btn.fwd.disable();
@@ -61,7 +60,7 @@ function play() {
 
 function pause() {
     scoreEvents.playing = false;
-    btn.setPlay();
+    btn.play.setPlay();
     scoreEvents.clearAllTimeouts();
     updateStepButtons();
 }
@@ -69,7 +68,7 @@ function pause() {
 function stop(){
     scoreEvents.playing = false;
     updatePointer(0);
-    btn.setPlay();
+    btn.play.setPlay();
     btn.play.enable();
     btn.stop.disable();
     scoreEvents.clearAllTimeouts();
