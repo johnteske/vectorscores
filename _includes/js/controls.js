@@ -31,7 +31,8 @@ var control = {
     play: new ScoreControl("score-play", playPause),
     stop: new ScoreControl("score-stop", stop),
     fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
-    back: new ScoreControl("score-back", function(){ stepPointer(-1); })
+    back: new ScoreControl("score-back", function(){ stepPointer(-1); }),
+    pointer: new ScoreControl("score-pointer", pause),
 };
 control.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
 control.play.setPause = function(){ this.element.textContent = "\u2016"; };
@@ -112,7 +113,7 @@ function updateStepButtons(){
 
 function updatePointer(ndex){
     scoreEvents.pointer = ndex;
-    document.getElementById("score-pointer").value = ndex;
+    control.pointer.element.value = ndex;
 }
 function stepPointer(num){
     if(!scoreEvents.playing) { // don't allow skip while playing, for now
