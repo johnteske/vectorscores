@@ -27,18 +27,18 @@ ScoreControl.prototype.disable = function() {
     this.element.className = "disabled";
 };
 
-var btn = {
+var control = {
     play: new ScoreControl("score-play", playPause),
     stop: new ScoreControl("score-stop", stop),
     fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
     back: new ScoreControl("score-back", function(){ stepPointer(-1); })
 };
-btn.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
-btn.play.setPause = function(){ this.element.textContent = "\u2016"; };
+control.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
+control.play.setPause = function(){ this.element.textContent = "\u2016"; };
 
 // initialize buttons
-btn.play.enable();
-btn.fwd.enable();
+control.play.enable();
+control.fwd.enable();
 
 function playPause(){
     if(!scoreEvents.playing){
@@ -50,17 +50,17 @@ function playPause(){
 
 function play() {
     scoreEvents.playing = true;
-    btn.play.setPause();
-    btn.stop.enable();
-    btn.back.disable();
-    btn.fwd.disable();
+    control.play.setPause();
+    control.stop.enable();
+    control.back.disable();
+    control.fwd.disable();
     schedule(scoreEvents.preroll, playEvent, scoreEvents.pointer);
     userPlay();
 }
 
 function pause() {
     scoreEvents.playing = false;
-    btn.play.setPlay();
+    control.play.setPlay();
     scoreEvents.clearAllTimeouts();
     updateStepButtons();
 }
@@ -68,9 +68,9 @@ function pause() {
 function stop(){
     scoreEvents.playing = false;
     updatePointer(0);
-    btn.play.setPlay();
-    btn.play.enable();
-    btn.stop.disable();
+    control.play.setPlay();
+    control.play.enable();
+    control.stop.disable();
     scoreEvents.clearAllTimeouts();
     updateStepButtons();
 
@@ -99,14 +99,14 @@ function playEvent(ndex) {
 
 function updateStepButtons(){
     if(scoreEvents.pointer === 0) {
-        btn.back.disable();
-        btn.fwd.enable();
+        control.back.disable();
+        control.fwd.enable();
     } else if(scoreEvents.pointer === (scoreEvents.getLength() - 1)) {
-        btn.back.enable();
-        btn.fwd.disable();
+        control.back.enable();
+        control.fwd.disable();
     } else {
-        btn.back.enable();
-        btn.fwd.enable();
+        control.back.enable();
+        control.fwd.enable();
     }
 }
 
