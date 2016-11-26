@@ -16,22 +16,22 @@ var scoreEvents = {
     }
 };
 
-function ControlButton(id, fn) {
+function ScoreControl(id, fn) {
     this.element = document.getElementById(id);
     this.element.onclick = fn;
 }
-ControlButton.prototype.enable = function() {
+ScoreControl.prototype.enable = function() {
     this.element.className = "enabled";
 };
-ControlButton.prototype.disable = function() {
+ScoreControl.prototype.disable = function() {
     this.element.className = "disabled";
 };
 
 var btn = {
-    play: new ControlButton("score-play", playPause),
-    stop: new ControlButton("score-stop", stop),
-    fwd: new ControlButton("score-fwd", function(){ stepPointer(1); }),
-    back: new ControlButton("score-back", function(){ stepPointer(-1); })
+    play: new ScoreControl("score-play", playPause),
+    stop: new ScoreControl("score-stop", stop),
+    fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
+    back: new ScoreControl("score-back", function(){ stepPointer(-1); })
 };
 btn.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
 btn.play.setPause = function(){ this.element.textContent = "\u2016"; };
