@@ -15,32 +15,31 @@ var scoreEvents = {
         });
     }
 };
+
 function ControlButton(id, fn) {
     this.element = document.getElementById(id);
     this.element.onclick = fn;
-    this.enable = function() {
-        this.element.className = "enabled";
-    };
-    this.disable = function() {
-        this.element.className = "disabled";
-    };
 }
+ControlButton.prototype.enable = function() {
+    this.element.className = "enabled";
+};
+ControlButton.prototype.disable = function() {
+    this.element.className = "disabled";
+};
+
 var btn = {
     play: new ControlButton("score-play", playPause),
-    stop: document.getElementById("score-stop"),
-    fwd: document.getElementById("score-fwd"),
-    back: document.getElementById("score-back"),
-    disable: function(but){ this[but].className = "disabled"; },
-    enable: function(but){ this[but].className = "enabled"; },
+    stop: new ControlButton("score-stop", stop),
+    fwd: new ControlButton("score-fwd", function(){ stepPointer(1); }),
+    back: new ControlButton("score-back", function(){ stepPointer(-1); }),
+    // disable: function(but){ this[but].className = "disabled"; },
+    // enable: function(but){ this[but].className = "enabled"; },
     setPlay: function(){ this.play.element.textContent = "\u25b9"; },
     setPause: function(){ this.play.element.textContent = "\u2016"; }
 };
 // initialize buttons
 btn.play.enable();
-btn.stop.onclick = stop;
-btn.fwd.onclick = function(){stepPointer(1);};
-btn.enable("fwd");
-btn.back.onclick = function(){stepPointer(-1);};
+btn.fwd.enable();
 
 function playPause(){
     if(!scoreEvents.playing){
@@ -53,9 +52,9 @@ function playPause(){
 function play() {
     scoreEvents.playing = true;
     btn.setPause();
-    btn.enable("stop");
-    btn.disable("back");
-    btn.disable("fwd");
+    btn.stop.enable();
+    btn.back.disable();
+    btn.fwd.disable();
     schedule(scoreEvents.preroll, playEvent, scoreEvents.pointer);
     userPlay();
 }
@@ -71,8 +70,8 @@ function stop(){
     scoreEvents.playing = false;
     updatePointer(0);
     btn.setPlay();
-    btn.play.enable(); // btn.enable("play");
-    btn.disable("stop");
+    btn.play.enable();
+    btn.stop.disable();
     scoreEvents.clearAllTimeouts();
     updateStepButtons();
 
@@ -101,14 +100,14 @@ function playEvent(ndex) {
 
 function updateStepButtons(){
     if(scoreEvents.pointer === 0) {
-        btn.disable("back");
-        btn.enable("fwd");
+        btn.back.disable();
+        btn.fwd.enable();
     } else if(scoreEvents.pointer === (scoreEvents.getLength() - 1)) {
-        btn.enable("back");
-        btn.disable("fwd");
+        btn.back.enable();
+        btn.fwd.disable();
     } else {
-        btn.enable("back");
-        btn.enable("fwd");
+        btn.back.enable();
+        btn.fwd.enable();
     }
 }
 
