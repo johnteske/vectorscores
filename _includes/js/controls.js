@@ -41,8 +41,8 @@ control.play.setPause = function(){ this.element.textContent = "\u2016"; };
 control.play.enable();
 control.fwd.enable();
 
-var playCallback = noop;
-var stopCallback = noop;
+var playCallback = VS.noop;
+var stopCallback = VS.noop;
 
 function playPause() {
     if(!scoreEvents.playing){
