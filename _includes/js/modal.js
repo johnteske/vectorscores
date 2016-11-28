@@ -6,8 +6,8 @@ function openInfoModal() {
     modal.style.display = "block";
     VS.page.headerClassed("show");
     VS.page.footerClassed("show");
-    if (typeof pause === "function") { //
-        pause();
+    if (VS.page.footer) {
+        VS.score.pause();
     }
 }
 
