@@ -1,26 +1,38 @@
-var modal = document.getElementById("score-info-modal"),
-    info = document.getElementById("score-info"),
-    closeSpan = document.getElementById("score-info-modal-close");
+VS.modal = (function () {
 
-function openInfoModal() {
-    modal.style.display = "block";
-    VS.page.headerClassed("show");
-    VS.page.footerClassed("show");
-    if (VS.page.footer) {
-        VS.score.pause();
+    var infoOpen = document.getElementById("score-info"),
+        infoClose = document.getElementById("score-info-modal-close");
+
+    infoOpen.onclick = openInfoModal;
+    infoClose.onclick = closeInfoModal;
+
+    function openInfoModal() {
+        VS.modal.overlay.style.display = "block";
+        VS.page.headerClassed("show");
+        VS.page.footerClassed("show");
+        if (VS.page.footer) {
+            VS.score.pause();
+        }
     }
-}
 
-function closeInfoModal() {
-    modal.style.display = "none";
-    VS.page.headerClassed("");
-    VS.page.footerClassed("");
-}
+    function closeInfoModal() {
+        VS.modal.overlay.style.display = "none";
+        VS.page.headerClassed("");
+        VS.page.footerClassed("");
+    }
 
-info.onclick = openInfoModal;
+    window.onclick = function(event) { // addEventHandler?
+        if (event.target === VS.modal.overlay) { closeInfoModal(); }
+    };
 
-closeSpan.onclick = closeInfoModal;
+    return {
+        overlay: document.getElementById("score-info-modal"),
+        info: {
+            openElement: infoOpen,
+            closeElement: infoClose,
+            open: openInfoModal,
+            close: closeInfoModal
+        }
+    };
 
-window.onclick = function(event) {
-    if (event.target === modal) { closeInfoModal(); }
-};
+})();
