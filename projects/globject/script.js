@@ -135,7 +135,17 @@ resize();
 //
 //
 //
-d3.select("main").on("click", function() { glob.remove(); drawGlobject(new Globject()); });
+// d3.select("main").on("click", function() { glob.remove(); drawGlobject(new Globject()); });
+function refreshGlobject() {
+    glob.remove();
+    drawGlobject(new Globject());
+}
+for(var i = 0; i < 10; i++) {
+    VS.score.add([
+        (i * 2000) + (1000 * Math.random()),
+        refreshGlobject
+    ]);
+}
 
 //
 // debug

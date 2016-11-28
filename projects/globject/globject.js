@@ -3,7 +3,7 @@ function Globject() {
     //   return new Globject();
     // }
     this.rangeEnv =  {
-        type: 'midi',
+        type: "midi",
         hi: wedgeRangeGen(4, 64, 127),
         lo: stepRangeGen(4, 0, 63),
         times: [0, 0.3, 0.5, 1] // may want independent times for hi and lo
@@ -23,5 +23,5 @@ function Globject() {
     this.dynamics = { // global
         values: ["mp", "cres.", "f"],
         dur: [0, 0.5, 1] //
-    }
+    };
 }
