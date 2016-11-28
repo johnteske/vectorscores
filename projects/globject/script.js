@@ -10,7 +10,7 @@ var main = d3.select(".main")
 
 globWidth = 120; // fixed, for this test
 
-var debug = getQueryString('debug') == 1 ? true : false;
+var debug = VS.getQueryString('debug') == 1 ? true : false;
 
 //
 // range generators

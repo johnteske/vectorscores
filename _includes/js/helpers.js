@@ -1,26 +1,26 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 // Returns a random number between min (inclusive) and max (exclusive)
-function getRandExcl(min, max) {
+VS.getRandExcl = function(min, max) {
     return Math.random() * (max - min) + min;
-}
+};
 
-function getItem(array) {
+VS.getItem = function(array) {
     return array[Math.floor(Math.random() * array.length)];
-}
+};
 
-function getWeightedItem(itemArray, weightArray) {
+VS.getWeightedItem = function(itemArray, weightArray) {
     var totalWeight = weightArray.reduce( function(a,b) {return a + b;} ),
-        randNum = getRandExcl(0, totalWeight),
+        randNum = VS.getRandExcl(0, totalWeight),
         weightSum = 0;
 
     for (var i = 0; i < itemArray.length; i++) {
         weightSum += weightArray[i];
         if (randNum <= weightSum) { return itemArray[i]; }
     }
-}
+};
 
-function getQueryString(field, url) {
+VS.getQueryString = function(field, url) {
     var href = url ? url : window.location.href,
         string = new RegExp( "[?&]" + field + "=([^&#]*)", "i" ).exec(href);
     return string ? string[1] : null;
-}
+};

@@ -30,7 +30,7 @@ var card = main.selectAll("g")
     .data(cards)
     .enter().append("g")
     .attr("transform", function(d, i) { var pos = offset + (i * (cardWidth + cardPadding)); return "translate(" + pos + ", 100)"; })
-    .style("opacity", function(d, i) { return 1 - (i * (0.5)) });
+    .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
 card.append("rect")
     .attr("width", cardWidth - 1)
@@ -50,7 +50,7 @@ for (var i = 0; i < 15; i++) {
             return "translate(" +
                 ((Math.random() * txtSpread) + (cardWidth / 2) - (txtSpread / 2)) + ", " +
                 ((Math.random() * txtSpread) + (cardWidth / 2) - (txtSpread / 2)) +
-            ") rotate(60)"
+            ") rotate(60)";
         }
         );
 }
@@ -88,7 +88,4 @@ button.on("click", function() {
             }
         });
     }
-    else {
-        console.log("fin");
-    }
-})
+});

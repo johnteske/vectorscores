@@ -22,8 +22,8 @@ function createSpan(eventTime){
 }
 
 function createEvent(eventTime) {
-    var coinFlip = getItem([0, 1]),
-        isBox = getItem([0, 1, 1]);
+    var coinFlip = VS.getItem([0, 1]),
+        isBox = VS.getItem([0, 1, 1]);
     if(coinFlip){
         VS.score.add([eventTime, userEvent, [eventTime, isBox]]); // scoreEvent -- [time, function, params]
     } else {
