@@ -1,4 +1,4 @@
-var scoreEvents = {
+var scoreEvents = { // VS.score
     add: function(t){ this.events.push(t); },
     events: [],
     getLength: function(){ return this.events.length; },
@@ -20,34 +20,32 @@ function ScoreControl(id, fn) {
     this.element = document.getElementById(id);
     this.element.onclick = fn;
 }
+ScoreControl.prototype.enable = function() {
+    this.element.className = "enabled";
+};
+ScoreControl.prototype.disable = function() {
+    this.element.className = "disabled";
+};
 
 if (VS.page.footer) {
-    ScoreControl.prototype.enable = function() {
-        this.element.className = "enabled";
-    };
-    ScoreControl.prototype.disable = function() {
-        this.element.className = "disabled";
-    };
-
-    var control = {
+    VS.control = {
         play: new ScoreControl("score-play", playPause),
         stop: new ScoreControl("score-stop", stop),
         fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
         back: new ScoreControl("score-back", function(){ stepPointer(-1); }),
         pointer: new ScoreControl("score-pointer", pause),
     };
-    control.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
-    control.play.setPause = function(){ this.element.textContent = "\u2016"; };
+    VS.control.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
+    VS.control.play.setPause = function(){ this.element.textContent = "\u2016"; };
 
-    // initialize buttons
-    control.play.enable();
-    control.fwd.enable();
+    VS.control.play.enable();
+    VS.control.fwd.enable();
 }
 
 var playCallback = VS.noop;
 var stopCallback = VS.noop;
 
-function playPause() {
+function playPause() { // VS.score
     if(!scoreEvents.playing){
         play();
     } else {
@@ -55,40 +53,40 @@ function playPause() {
     }
 }
 
-function play() {
+function play() { // VS.score
     scoreEvents.playing = true;
-    control.play.setPause();
-    control.stop.enable();
-    control.back.disable();
-    control.fwd.disable();
+    VS.control.play.setPause();
+    VS.control.stop.enable();
+    VS.control.back.disable();
+    VS.control.fwd.disable();
     schedule(scoreEvents.preroll, playEvent, scoreEvents.pointer);
 
     playCallback();
 }
 
-function pause() {
+function pause() { // VS.score
     scoreEvents.playing = false;
-    control.play.setPlay();
+    VS.control.play.setPlay();
     scoreEvents.clearAllTimeouts();
     updateStepButtons();
 }
 
-function stop() {
+function stop() { // VS.score
     scoreEvents.playing = false;
     updatePointer(0);
-    control.play.setPlay();
-    control.play.enable();
-    control.stop.disable();
+    VS.control.play.setPlay();
+    VS.control.play.enable();
+    VS.control.stop.disable();
     scoreEvents.clearAllTimeouts();
     updateStepButtons();
     stopCallback();
 }
 
-function schedule(time, fn, params) {
+function schedule(time, fn, params) { // VS.score
     // allTimeouts.push( setTimeout(fn, time, params) ); // not <IE9
     scoreEvents.allTimeouts.push( setTimeout(function(){ fn(params); }, time) ); // IE fix?
 }
-function playEvent(ndex) {
+function playEvent(ndex) { // VS.score // private
     updatePointer(ndex);
 
     var thisEvent = scoreEvents.funcAt(ndex);
@@ -104,24 +102,24 @@ function playEvent(ndex) {
     }
 }
 
-function updateStepButtons(){
+function updateStepButtons(){ // VS.control
     if(scoreEvents.pointer === 0) {
-        control.back.disable();
-        control.fwd.enable();
+        VS.control.back.disable();
+        VS.control.fwd.enable();
     } else if(scoreEvents.pointer === (scoreEvents.getLength() - 1)) {
-        control.back.enable();
-        control.fwd.disable();
+        VS.control.back.enable();
+        VS.control.fwd.disable();
     } else {
-        control.back.enable();
-        control.fwd.enable();
+        VS.control.back.enable();
+        VS.control.fwd.enable();
     }
 }
 
-function updatePointer(ndex){
+function updatePointer(ndex){ // score, control
     scoreEvents.pointer = ndex;
-    control.pointer.element.value = ndex;
+    VS.control.pointer.element.value = ndex;
 }
-function stepPointer(num){
+function stepPointer(num){ // score, control
     if(!scoreEvents.playing) { // don't allow skip while playing, for now
         updatePointer(Math.min(Math.max(scoreEvents.pointer + num, 0), scoreEvents.getLength() - 1));
         updateStepButtons();
