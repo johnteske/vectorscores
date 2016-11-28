@@ -20,26 +20,29 @@ function ScoreControl(id, fn) {
     this.element = document.getElementById(id);
     this.element.onclick = fn;
 }
-ScoreControl.prototype.enable = function() {
-    this.element.className = "enabled";
-};
-ScoreControl.prototype.disable = function() {
-    this.element.className = "disabled";
-};
 
-var control = {
-    play: new ScoreControl("score-play", playPause),
-    stop: new ScoreControl("score-stop", stop),
-    fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
-    back: new ScoreControl("score-back", function(){ stepPointer(-1); }),
-    pointer: new ScoreControl("score-pointer", pause),
-};
-control.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
-control.play.setPause = function(){ this.element.textContent = "\u2016"; };
+if (VS.score.footer) {
+    ScoreControl.prototype.enable = function() {
+        this.element.className = "enabled";
+    };
+    ScoreControl.prototype.disable = function() {
+        this.element.className = "disabled";
+    };
 
-// initialize buttons
-control.play.enable();
-control.fwd.enable();
+    var control = {
+        play: new ScoreControl("score-play", playPause),
+        stop: new ScoreControl("score-stop", stop),
+        fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
+        back: new ScoreControl("score-back", function(){ stepPointer(-1); }),
+        pointer: new ScoreControl("score-pointer", pause),
+    };
+    control.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
+    control.play.setPause = function(){ this.element.textContent = "\u2016"; };
+
+    // initialize buttons
+    control.play.enable();
+    control.fwd.enable();
+}
 
 var playCallback = VS.noop;
 var stopCallback = VS.noop;
