@@ -107,7 +107,14 @@ function scrollWrapper(dur) {
 }
 
 // click anywhere on svg to advance
-d3.select("main").on("click", function() { texturalMsg(); });
+// d3.select("main").on("click", function() { texturalMsg(); });
+
+for(var i = 0; i < 16; i++) {
+    VS.score.add([
+        (i * 1000) + (500 * Math.random()),
+        texturalMsg
+    ]);
+}
 
 texturalMsg(); // create the first message
 
