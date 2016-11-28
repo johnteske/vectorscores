@@ -4,8 +4,8 @@ var modal = document.getElementById("score-info-modal"),
 
 function openInfoModal() {
     modal.style.display = "block";
-    showHeader();
-    footerClassed("show");
+    VS.page.headerClassed("show");
+    VS.page.footerClassed("show");
     if (typeof pause === "function") { //
         pause();
     }
@@ -13,8 +13,8 @@ function openInfoModal() {
 
 function closeInfoModal() {
     modal.style.display = "none";
-    document.getElementById("score-header").className = "";
-    footerClassed("");
+    VS.page.headerClassed("");
+    VS.page.footerClassed("");
 }
 
 info.onclick = openInfoModal;
