@@ -46,8 +46,8 @@ for (var i = 0; i < numvents; i++) { // create remaining events
 }
 
 function playCallback() {
-    document.getElementById("score-header").className = "hide";
-    document.getElementById("score-footer").className = "hide";
+    VS.score.headerClassed("hide");
+    VS.score.footerClassed("hide");
 }
 
 function stopCallback() {
@@ -56,6 +56,6 @@ function stopCallback() {
         var thisspan = spanz[i];
         thisspan.className = "event-span";
     }
-    document.getElementById("score-header").className = "";
-    document.getElementById("score-footer").className = "";
+    VS.score.headerClassed("show");
+    VS.score.footerClassed("show");
 }

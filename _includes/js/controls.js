@@ -59,6 +59,7 @@ function play() {
     control.back.disable();
     control.fwd.disable();
     schedule(scoreEvents.preroll, playEvent, scoreEvents.pointer);
+
     playCallback();
 }
 

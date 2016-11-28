@@ -1,18 +1,27 @@
-VS.header = document.getElementById("score-header");
-VS.footer = document.getElementById("score-footer");
+VS.score = {
+    header: document.getElementById("score-header"),
+    footer: document.getElementById("score-footer"),
+    headerClassed: function(newClass) {
+        this.header.className = newClass;
+    },
+    footerClassed: function(newClass) {
+        if (this.footer) { this.footer.className = newClass; }
+    }
+};
 
-function showHeader() {
-    VS.header.className = "show";
-}
-function footerClassed(newClass) {
-    if (VS.footer) { VS.footer.className = newClass; }
+VS.score.header.onclick = function() {
+    VS.score.headerClassed("show");
+    // VS.score.footerClassed("show"); // conflicts with playCallback()
+};
+
+if (VS.score.footer) {
+    VS.score.footer.onclick = function() {
+        // VS.score.headerClassed("show"); // conflicts with playCallback()
+        VS.score.footerClassed("show");
+    };
 }
 
-VS.header.onclick = showHeader;
-if (VS.footer) {
-    VS.footer.onclick = footerClassed("show");
-}
 document.getElementsByTagName("main")[0].onclick = function() {
-    VS.header.className = "hide";
-    footerClassed("hide");
+    VS.score.headerClassed("hide");
+    VS.score.footerClassed("hide");
 };
