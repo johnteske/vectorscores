@@ -1,13 +1,5 @@
 d3.select("svg").remove(); // svg not used in test
 
-// an example of using schedule() independent of playEvents()
-// could also create (click/interaction) event apart from scoreEvents
-// or forgo using a score structure altogether
-// schedule(1000, play, "no params");
-// setTimeout(function(){
-    // document.getElementsByTagName("header")[0].setAttribute("class", "hide");
-// }, 3000);
-
 function userEvent(ndex, params) {
     var id = params[0],
         boxClass = params[1] ? " box" : "";
@@ -33,9 +25,9 @@ function createEvent(eventTime) {
     var coinFlip = getItem([0, 1]),
         isBox = getItem([0, 1, 1]);
     if(coinFlip){
-        scoreEvents.add([eventTime, userEvent, [eventTime, isBox]]); // scoreEvent -- [time, function, params]
+        VS.score.add([eventTime, userEvent, [eventTime, isBox]]); // scoreEvent -- [time, function, params]
     } else {
-        scoreEvents.add([eventTime, objEvent, {time: eventTime, box: isBox}]); // scoreEvent -- [time, function, params]
+        VS.score.add([eventTime, objEvent, {time: eventTime, box: isBox}]); // scoreEvent -- [time, function, params]
     }
     createSpan(eventTime);
 }
@@ -45,12 +37,12 @@ for (var i = 0; i < numvents; i++) { // create remaining events
     createEvent(eventTime);
 }
 
-function playCallback() {
+VS.score.playCallback = function() {
     VS.page.headerClassed("hide");
     VS.page.footerClassed("hide");
-}
+};
 
-function stopCallback() {
+VS.score.stopCallback = function() {
     var spanz = document.getElementsByClassName("event-span");
     for (var i = 0; i < spanz.length; i++) {
         var thisspan = spanz[i];
@@ -58,4 +50,4 @@ function stopCallback() {
     }
     VS.page.headerClassed("show");
     VS.page.footerClassed("show");
-}
+};
