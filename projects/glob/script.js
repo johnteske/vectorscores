@@ -14,15 +14,15 @@ var noteheads = [
     "M223 -289q-96 0 -160 52q-63 52 -63 141q0 152 134 268t321 117q100 0 162 -53t63 -140q0 -143 -150 -264t-307 -121z", // quarter
     // "M625 96q0 28 -15 54q-30 49 -98 49t-227 -93q-215 -123 -215 -210q0 -23 14 -48q31 -53 107 -53t219 96q215 141 215 205zM234 -297q-106 0 -170 52t-64 153t98 235q50 66 146 110t210 44t180 -54q64 -54 64 -139t-43 -161t-91 -124t-136 -82t-194 -34z" // half
 ];
-var debug = VS.getQueryString('debug') == 1 ? true : false;
+var debug = VS.getQueryString("debug") == 1 ? true : false;
 
 // function chooseNotehead() {
 //     return noteheads[Math.floor(Math.random()*noteheads.length)];
 // }
 
 var main = d3.select(".main")
-    .style('width', width + 'px')
-    .style('height', width + 'px');
+    .style("width", width + "px")
+    .style("height", width + "px");
 
 function newPoint() {
     var angle = Math.random() * Math.PI * 2,
@@ -30,7 +30,7 @@ function newPoint() {
     return {
         x: Math.cos(angle) * radius * dist,
         y: Math.sin(angle) * radius * dist
-    }
+    };
 }
 
 var cloudSize = Math.ceil(Math.random() * 10) + 20;
@@ -40,13 +40,13 @@ var glob = main
 
 function transformHead() {
     var point = newPoint();
-    return "scale("+scale+", "+(-1 * scale)+") translate(" + point.x + ", " + point.y + ")"
+    return "scale("+scale+", "+(-1 * scale)+") translate(" + point.x + ", " + point.y + ")";
 }
 
 for (var i = 0; i < cloudSize; i++) {
     glob.append("path")
         .attr("d", noteheads[0]) //chooseNotehead())
-        .attr("transform", function(){return transformHead()});
+        .attr("transform", function(){ return transformHead(); });
 }
 
 main.append("text")
@@ -64,39 +64,39 @@ function moveIt(){
         // .attr("d", function() {return chooseNotehead()})
         .transition()
         .duration(dur)
-        .attr("transform", function(){return transformHead()});
+        .attr("transform", function(){ return transformHead(); });
 }
 
 moveIt();
 
-setInterval(function(){moveIt()}, dur);
+setInterval( function(){moveIt(); }, dur);
 
 // resize
 
-d3.select(window).on('resize', resize);
+d3.select(window).on("resize", resize);
 
 function resize() {
     // update width
-    width = Math.min( parseInt(d3.select('main').style('width'), 10), maxwidth);
+    width = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
     center = width * 0.5;
     innerwidth = width - (margin * 2);
 
     main
-        .style('width', width + 'px')
-        .style('height', width + 'px');
+        .style("width", width + "px")
+        .style("height", width + "px");
     glob.attr("transform",
         "translate(" + center + ", " + center + ")" +
         "scale("+(width/globWidth)+","+(width/globWidth)+")"
         );
-    d3.select('text')
+    d3.select("text")
         .attr("x", center)
         .attr("y", width - textoffset);
 
     if(debug){
-        d3.select('rect')
+        d3.select("rect")
             .attr("width", innerwidth)
             .attr("height", innerwidth);
-        d3.select('circle')
+        d3.select("circle")
             .attr("transform", "translate(" + center + ", " + center + ")");
     }
 }

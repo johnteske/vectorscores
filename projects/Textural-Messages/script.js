@@ -3,9 +3,8 @@ var width = 480,
     txtWidth = width * 0.3, // remain fixed
     txtHeight = txtWidth / 2,
     margin = 12,
-    transDur = 300;
-
-var maxwidth = 480;
+    transDur = 300,
+    maxwidth = 480;
 
 var main = d3.select(".main")
     .attr("width", width)
@@ -44,14 +43,14 @@ function texturalMsg() {
     var newTxt = txtWrapper
         .data(newData)
         .append("g")
-        .attr("transform", function(d, i) {
+        .attr("transform", function() {
             // calc on maxwidth, is scaled later
             var x = ( relPos == 0 ? margin : (maxwidth - txtWidth - margin) ),
                 y = (ypointer * txtHeight) + margin;
             return "translate(" + x + ", " + y + ")";
         });
 
-    pathinfo = makePath(relPos);
+    var pathinfo = makePath(relPos);
 
     var d3line2 = d3.svg.line()
         .x(function(d){return d.x;})
@@ -95,7 +94,7 @@ function scrollWrapper(dur) {
     if ((ypointer * txtHeight) > (height - margin)) {
         txtWrapper
             .transition()
-            .attr("transform", function(d, i) {
+            .attr("transform", function() {
                 var x = 0,
                     y = maxheight - (ypointer * txtHeight) - txtHeight;
                 return "scale(" + (width / maxwidth) + "," + (width / maxwidth) + ")" +
@@ -108,21 +107,21 @@ function scrollWrapper(dur) {
 }
 
 // click anywhere on svg to advance
-d3.select("main").on("click", function() { texturalMsg() });
+d3.select("main").on("click", function() { texturalMsg(); });
 
 texturalMsg(); // create the first message
 
 // resize
 
 function resize() {
-    width = Math.min( parseInt(d3.select('main').style('width'), 10), maxwidth);
+    width = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
 
     main
-        .style('width', width + 'px')
-        .style('height', width + 'px');
+        .style("width", width + "px")
+        .style("height", width + "px");
     scrollWrapper(0);
 }
 
-d3.select(window).on('resize', resize);
+d3.select(window).on("resize", resize);
 
 resize();

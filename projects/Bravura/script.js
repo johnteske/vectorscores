@@ -1,8 +1,9 @@
 d3.select("svg").remove();
 var group = d3.select("main").append("div");
 
-for (i = 57344; i < 57354; i++) {
-    hex = String.fromCharCode(i);
+for (var i = 57344; i < 57354; i++) {
+    var hex = String.fromCharCode(i),
+        codepoint;
     codepoint = group.append("div")
         .classed("codepoint", true);
     codepoint.append("p")
@@ -10,7 +11,7 @@ for (i = 57344; i < 57354; i++) {
         .text(hex);
     codepoint.append("p")
         .classed("unicode", true)
-        .text('\\u' + i.toString(16));
+        .text("\\u" + i.toString(16));
 }
 
 // h = 0xE000;

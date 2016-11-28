@@ -5,12 +5,12 @@ var width = 480,
     center = boxwidth * 0.5;
 
 var main = d3.select(".main")
-    .style('width', boxwidth + 'px')
-    .style('height', boxwidth + 'px');
+    .style("width", boxwidth + "px")
+    .style("height", boxwidth + "px");
 
-globWidth = 120; // fixed, for this test
+var globWidth = 120; // fixed, for this test
 
-var debug = VS.getQueryString('debug') == 1 ? true : false;
+var debug = VS.getQueryString("debug") == 1 ? true : false;
 
 //
 // range generators
@@ -76,7 +76,6 @@ function drawGlobject(this_glob){
          .tension(0.8)
          .interpolate("cardinal-closed");
 
-    //The line SVG Path we draw
     var lineGraph = glob.append("path")
         .attr("d", lineFunction(datLine))
         .attr("stroke", "black")
@@ -96,10 +95,10 @@ function drawGlobject(this_glob){
         .enter()
         .append("text")
         .attr("x", function(d, i) {
-                // evenly spaced, for now
-                var l = dataset.length - 1;
-                return i * (globWidth / l);
-            })
+            // evenly spaced, for now
+            var l = dataset.length - 1;
+            return i * (globWidth / l);
+        })
         .attr("y", 127 + 42)
         .text(function(d) { return d; });
     transformGlob();
@@ -109,24 +108,24 @@ drawGlobject(new Globject());
 //
 // resize
 //
-d3.select(window).on('resize', resize);
+d3.select(window).on("resize", resize);
 
 function resize() {
     // update width
-    boxwidth = Math.min( parseInt(d3.select('main').style('width'), 10), maxwidth);
+    boxwidth = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
     center = boxwidth * 0.5;
     width = boxwidth - (margin * 2);
 
     main
-        .style('width', boxwidth + 'px')
-        .style('height', boxwidth + 'px');
+        .style("width", boxwidth + "px")
+        .style("height", boxwidth + "px");
     transformGlob();
 
     if(debug){
-        d3.select('rect')
+        d3.select("rect")
             .attr("width", width)
             .attr("height", width);
-        d3.select('circle')
+        d3.select("circle")
             .attr("transform", "translate(" + center + ", " + center + ")");
     }
 }
@@ -136,7 +135,7 @@ resize();
 //
 //
 //
-d3.select("main").on("click", function() { glob.remove(); drawGlobject(new Globject()) });
+d3.select("main").on("click", function() { glob.remove(); drawGlobject(new Globject()); });
 
 //
 // debug

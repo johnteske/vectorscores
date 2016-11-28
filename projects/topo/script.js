@@ -2,7 +2,7 @@ var main = d3.select(".main"),
     topo = main.append("g");
 
 var width = 480,
-    height = 480,
+    // height = 480,
     rows = 8,
     cols = 12,
     cellSize = 25,
@@ -13,19 +13,19 @@ var dict = {
     0: ".",
     1: ">",
     2: "-"
-}
+};
 
-main.style('width', width + 'px')
-    .style('height', width + 'px');
+main.style("width", width + "px")
+    .style("height", width + "px");
 
-// main.classed('debug', 1);
+// main.classed("debug", 1);
 
 function createDataset(rows,cols){
     var _array = [];
     for(var i = 0; i < rows; i++){ // row
         _array[i] = [];
         for(var j = 0; j < cols; j++){ // col
-            _array[i][j] = getItem([0,1,2]);
+            _array[i][j] = VS.getItem([0,1,2]);
         }
     }
     return _array;
@@ -39,13 +39,13 @@ topo.selectAll("g")
     // rows
     .enter().append("g")
     .attr("transform", function (d, i) {
-        return "translate(" + (i * rowOffset) + ", " + (i * cellSize) + ")"
+        return "translate(" + (i * rowOffset) + ", " + (i * cellSize) + ")";
     })
     // each column in row
     .selectAll("text")
     .data(function(d) {return d;})
     .enter().append("text")
-    .text(function(d, i) {
+    .text(function(d) {
         return dict[d];
     })
     .attr("x", function(d, i) {
