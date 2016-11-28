@@ -16,39 +16,46 @@ var scoreEvents = { // VS.score
     }
 };
 
-function ScoreControl(id, fn) {
-    this.element = document.getElementById(id);
-    this.element.onclick = fn;
-}
-ScoreControl.prototype.enable = function() {
-    this.element.className = "enabled";
-};
-ScoreControl.prototype.disable = function() {
-    this.element.className = "disabled";
-};
-
 if (VS.page.footer) {
-    VS.control = {
-        play: new ScoreControl("score-play", playPause),
-        stop: new ScoreControl("score-stop", stop),
-        fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
-        back: new ScoreControl("score-back", function(){ stepPointer(-1); }),
-        pointer: new ScoreControl("score-pointer", pause),
-        updateStepButtons: function() {
-            if(scoreEvents.pointer === 0) {
-                VS.control.back.disable();
-                VS.control.fwd.enable();
-            } else if(scoreEvents.pointer === (scoreEvents.getLength() - 1)) {
-                VS.control.back.enable();
-                VS.control.fwd.disable();
-            } else {
-                VS.control.back.enable();
-                VS.control.fwd.enable();
-            }
+
+    VS.control = (function () {
+
+        function ScoreControl(id, fn) {
+            this.element = document.getElementById(id);
+            this.element.onclick = fn;
         }
-    };
-    VS.control.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
-    VS.control.play.setPause = function(){ this.element.textContent = "\u2016"; };
+        ScoreControl.prototype.enable = function() {
+            this.element.className = "enabled";
+        };
+        ScoreControl.prototype.disable = function() {
+            this.element.className = "disabled";
+        };
+
+        var play = new ScoreControl("score-play", playPause);
+        play.setPlay = function(){ this.element.textContent = "\u25b9"; };
+        play.setPause = function(){ this.element.textContent = "\u2016"; };
+
+        return {
+            play: play,
+            stop: new ScoreControl("score-stop", stop),
+            fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
+            back: new ScoreControl("score-back", function(){ stepPointer(-1); }),
+            pointer: new ScoreControl("score-pointer", pause),
+            updateStepButtons: function() {
+                if(scoreEvents.pointer === 0) {
+                    this.back.disable();
+                    this.fwd.enable();
+                } else if(scoreEvents.pointer === (scoreEvents.getLength() - 1)) {
+                    this.back.enable();
+                    this.fwd.disable();
+                } else {
+                    this.back.enable();
+                    this.fwd.enable();
+                }
+            }
+        };
+        
+    })();
 
     VS.control.play.enable();
     VS.control.fwd.enable();
