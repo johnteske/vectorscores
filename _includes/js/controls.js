@@ -21,7 +21,7 @@ function ScoreControl(id, fn) {
     this.element.onclick = fn;
 }
 
-if (VS.score.footer) {
+if (VS.page.footer) {
     ScoreControl.prototype.enable = function() {
         this.element.className = "enabled";
     };

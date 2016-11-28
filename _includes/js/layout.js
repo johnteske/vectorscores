@@ -1,4 +1,4 @@
-VS.score = {
+VS.page = {
     header: document.getElementById("score-header"),
     footer: document.getElementById("score-footer"),
     headerClassed: function(newClass) {
@@ -9,19 +9,19 @@ VS.score = {
     }
 };
 
-VS.score.header.onclick = function() {
-    VS.score.headerClassed("show");
-    // VS.score.footerClassed("show"); // conflicts with playCallback()
+VS.page.header.onclick = function() {
+    VS.page.headerClassed("show");
+    // VS.page.footerClassed("show"); // conflicts with playCallback()
 };
 
-if (VS.score.footer) {
-    VS.score.footer.onclick = function() {
-        // VS.score.headerClassed("show"); // conflicts with playCallback()
-        VS.score.footerClassed("show");
+if (VS.page.footer) {
+    VS.page.footer.onclick = function() {
+        // VS.page.headerClassed("show"); // conflicts with playCallback()
+        VS.page.footerClassed("show");
     };
 }
 
 document.getElementsByTagName("main")[0].onclick = function() {
-    VS.score.headerClassed("hide");
-    VS.score.footerClassed("hide");
+    VS.page.headerClassed("hide");
+    VS.page.footerClassed("hide");
 };
