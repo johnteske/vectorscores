@@ -1,18 +1,17 @@
-// generate card data
-var cards = new Array();
-var cardChoices = ["A", "B", "C", "D", "E"]; // rando rondo
+var cards = [],
+    cardChoices = ["A", "B", "C", "D", "E"], // rando rondo
+    pointer = 0;
 
-function makeCard(i) {
-    cards.push(cardChoices[i]);
+function makeCards() {
+    for (var i = 0; i < 10; i++) {
+        var lastCard = cards[i-1];
+        do {
+            var newCard = Math.floor(Math.random() * cardChoices.length);
+        } while (cardChoices[newCard] == lastCard); // do not repeat cards
+        cards.push(cardChoices[newCard]);
+    }
 }
-
-for (var i = 0; i < 10; i++) {
-    var lastCard = cards[i-1];
-    do {
-        var newCard = Math.floor(Math.random() * cardChoices.length);
-    } while (cardChoices[newCard] == lastCard); // do not repeat cards
-    makeCard(newCard);
-}
+makeCards();
 
 // display
 var cardWidth = 120,
@@ -62,30 +61,37 @@ for (var i = 0; i < 15; i++) {
 //     // .attr("dx", "-.35em")
 //     .text(function(d, i) { return d; });
 
-// interaction
-var button = d3.select("main"); // click anywhere on svg
-var pointer = 0;
-button.on("click", function() {
-    if (pointer < cards.length)
-    {
-        pointer++;
-        card.transition()
-        .attr("transform", function(d, i) {
-            var pos =
-                offset
-                + (i * (cardWidth + cardPadding))
-                - (offset * pointer) // move by pointer
-                - (cardPadding * pointer); // also move by spacing
-            return "translate(" + pos + ", 100)";
-        })
-        .duration(600)
-        .style("opacity", function(d, i) {
-            if(pointer > i ){
-                return 0;
-            }
-            else {
-                return (0.5 * (pointer - i)) + 1;
-            }
-        });
-    }
-});
+function advanceCard() {
+    pointer++;
+    card.transition()
+    .attr("transform", function(d, i) {
+        var pos =
+            offset
+            + (i * (cardWidth + cardPadding))
+            - (offset * pointer) // move by pointer
+            - (cardPadding * pointer); // also move by spacing
+        return "translate(" + pos + ", 100)";
+    })
+    .duration(600)
+    .style("opacity", function(d, i) {
+        if(pointer > i ){
+            return 0;
+        }
+        else {
+            return (0.5 * (pointer - i)) + 1;
+        }
+    });
+}
+
+for(var i = 0; i < cards.length; i++) {
+    var etime = (i * 1500) + (Math.random() * 750);
+    VS.score.add([etime, advanceCard]);
+}
+
+// VS.score.stopCallback = function() {
+//     cards = [];
+//     pointer = 0;
+//     main.html("");
+//
+//     makeCards();
+// };
