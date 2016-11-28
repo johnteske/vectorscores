@@ -67,9 +67,9 @@ function moveIt(){
         .attr("transform", function(){ return transformHead(); });
 }
 
-moveIt();
-
-setInterval( function(){moveIt(); }, dur);
+for(var i = 0; i < 10; i++) {
+    VS.score.add([i * dur, moveIt]);
+}
 
 // resize
 
