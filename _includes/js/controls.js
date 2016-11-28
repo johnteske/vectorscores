@@ -34,6 +34,18 @@ if (VS.page.footer) {
         fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
         back: new ScoreControl("score-back", function(){ stepPointer(-1); }),
         pointer: new ScoreControl("score-pointer", pause),
+        updateStepButtons: function() {
+            if(scoreEvents.pointer === 0) {
+                VS.control.back.disable();
+                VS.control.fwd.enable();
+            } else if(scoreEvents.pointer === (scoreEvents.getLength() - 1)) {
+                VS.control.back.enable();
+                VS.control.fwd.disable();
+            } else {
+                VS.control.back.enable();
+                VS.control.fwd.enable();
+            }
+        }
     };
     VS.control.play.setPlay = function(){ this.element.textContent = "\u25b9"; };
     VS.control.play.setPause = function(){ this.element.textContent = "\u2016"; };
@@ -68,7 +80,7 @@ function pause() { // VS.score
     scoreEvents.playing = false;
     VS.control.play.setPlay();
     scoreEvents.clearAllTimeouts();
-    updateStepButtons();
+    VS.control.updateStepButtons();
 }
 
 function stop() { // VS.score
@@ -78,7 +90,7 @@ function stop() { // VS.score
     VS.control.play.enable();
     VS.control.stop.disable();
     scoreEvents.clearAllTimeouts();
-    updateStepButtons();
+    VS.control.updateStepButtons();
     stopCallback();
 }
 
@@ -102,19 +114,6 @@ function playEvent(ndex) { // VS.score // private
     }
 }
 
-function updateStepButtons(){ // VS.control
-    if(scoreEvents.pointer === 0) {
-        VS.control.back.disable();
-        VS.control.fwd.enable();
-    } else if(scoreEvents.pointer === (scoreEvents.getLength() - 1)) {
-        VS.control.back.enable();
-        VS.control.fwd.disable();
-    } else {
-        VS.control.back.enable();
-        VS.control.fwd.enable();
-    }
-}
-
 function updatePointer(ndex){ // score, control
     scoreEvents.pointer = ndex;
     VS.control.pointer.element.value = ndex;
@@ -122,6 +121,6 @@ function updatePointer(ndex){ // score, control
 function stepPointer(num){ // score, control
     if(!scoreEvents.playing) { // don't allow skip while playing, for now
         updatePointer(Math.min(Math.max(scoreEvents.pointer + num, 0), scoreEvents.getLength() - 1));
-        updateStepButtons();
+        VS.control.updateStepButtons();
     }
 }
