@@ -3,12 +3,17 @@
     /*display: block;*/
 }
 
-ellipse {
-    fill: #111;
-}
-
 /*debug*/
 rect, circle {
     stroke: pink;
     fill-opacity: 0;
+}
+
+path {
+    fill: #111;
+    stroke: #111;
+}
+
+text {
+    font-family: monospace;
 }
