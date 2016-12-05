@@ -34,6 +34,12 @@ A series of new works to be viewed and performed via a lightweight website. The 
 - More to be developed as project takes shape.
 
 
+## Support
+*vector scores* is supported by the Seattle Office of Arts & Culture.
+
+<p align="center"><img src="https://cdn.rawgit.com/johnteske/vectorscores/a2fa6bd7cabaeddcadd3386e1361f43d97237e16/_includes/icons-logos/SOAC-logo-grey.svg" width="128px" /></p>
+
+
 ## Licenses
 *vector scores* is released under the [MIT License](http://opensource.org/licenses/MIT). Compositions resulting from my code and parameters are copyright John Teske.
 
