@@ -16,4 +16,6 @@ path {
 
 text {
     font-family: monospace;
+    fill: #111;
+    text-anchor: middle;
 }

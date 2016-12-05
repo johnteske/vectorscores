@@ -51,16 +51,13 @@ for (var i = 0; i < cloudSize; i++) {
 }
 
 main.append("text")
-    .attr("fill", "#111")
-    .attr("text-anchor", "middle")
     .style("opacity", "0") // init value
-    .text("[ , , ]")
     .attr("x", center)
-    .attr("y", innerwidth - textoffset);
+    .attr("y", width - textoffset);
 
 function moveIt(){
     var newPitchClassSet = "[0, " + Math.floor(Math.random() * 2 + 1) + ", " + Math.floor(Math.random() * 2 + 3) + "]";
-    // radius = globWidth * Math.random() * 5;
+
     d3.select("text")
         .transition(tLong)
         .style("opacity", 0)
@@ -82,14 +79,6 @@ function moveIt(){
 for(var i = 0; i < 10; i++) {
     VS.score.add([i * tLong, moveIt]);
 }
-
-
-// VS.score.playCallback = function() {
-    // d3.selectAll("text")
-    //     .transition()
-    //     .duration(tLong)
-    //     .style("opacity", "1");
-// };
 
 VS.score.stopCallback = function() {
     d3.selectAll("text")
