@@ -83,6 +83,13 @@ function moveIt(){
 for(var i = 0; i < 10; i++) {
     VS.score.add([i * tLong, moveIt]);
 }
+// final event
+VS.score.add([i * tLong, function() {
+    d3.selectAll("text")
+        .transition()
+        .duration(tShort)
+        .style("opacity", "0");
+}]);
 
 VS.score.stopCallback = function() {
     d3.selectAll("text")
