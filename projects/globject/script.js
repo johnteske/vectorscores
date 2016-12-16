@@ -1,3 +1,5 @@
+---
+---
 var width = 480,
     maxwidth = 480,
     margin = 20,
@@ -8,65 +10,40 @@ var main = d3.select(".main")
     .style("width", boxwidth + "px")
     .style("height", boxwidth + "px");
 
-var globWidth = 120; // fixed, for this test
+var glob,
+    globWidth = 120; // fixed size, for this test
 
 var debug = VS.getQueryString("debug") == 1 ? true : false;
 
-//
-// range generators
-//
-function rangeGen(length, min, max) {
-    var pcs = [];
-    for (var i = 0; i < length; i++) {
-        pcs.push(Math.floor(Math.random() * (max - min)) + min);
-    }
-    return pcs;
-}
+{% include_relative globject.js %}
 
-function wedgeRangeGen(length, min, max) {
-    var pcs = [];
-    var band = (max - min) / length;
-    for (var i = 0; i < length; i++) {
-        pcs.push(Math.floor(Math.random() * band) + (min + (band * i)));
-    }
-    return pcs;
-}
+{% include_relative rangeGen.js %}
 
-function stepRangeGen(length, min, max) {
-    var pcs = [];
-    var disp = 10;
-    min += disp;
-    max -= disp;
-    var lmax,
-        lmin;
-    var thispc = Math.floor(Math.random() * (max - min)) + min; // initial selection
-    for (var i = 0; i < length; i++) {
-        lmax = Math.min(thispc + disp, max);
-        lmin = Math.max(thispc - disp, min);
-        thispc = Math.floor(Math.random() * (lmax - lmin)) + lmin;
-        pcs.push(thispc);
-    }
-    return pcs;
-}
 
-//
 // make Globject
-//
+
 var glob = main.append("g");
+
 function transformGlob() {
-    glob.attr("transform", "translate(" + (center - (globWidth*0.5)) + "," + (center - (globWidth*0.5)) + ")");
+    glob.attr("transform", "translate(" +
+      (center - (globWidth * 0.5)) + "," +
+      (center - (globWidth * 0.5)) + ")");
+}
+
+function makeGlobject() {
+    return new Globject();
 }
 
 function drawGlobject(this_glob){
     glob = main.append("g");
-    var lineData = [];
+    var lineData = [],
+        lowData = [];
+
     for (var i = 0; i < this_glob.rangeEnv.times.length; i++) {
         lineData.push({ "x": this_glob.rangeEnv.times[i], "y": this_glob.rangeEnv.hi[i]});
-    }
-    var lowData = [];
-    for (var i = 0; i < this_glob.rangeEnv.times.length; i++) {
         lowData.push({ "x": this_glob.rangeEnv.times[i], "y": this_glob.rangeEnv.lo[i]});
     }
+
     // draw the top, back around the bottom, then connect back to the first point
     var datLine = lineData.concat(lowData.reverse());
 
@@ -103,11 +80,10 @@ function drawGlobject(this_glob){
         .text(function(d) { return d; });
     transformGlob();
 }
-drawGlobject(new Globject());
+drawGlobject(makeGlobject());
 
-//
 // resize
-//
+
 d3.select(window).on("resize", resize);
 
 function resize() {
@@ -132,14 +108,13 @@ function resize() {
 //
 resize();
 
-//
-//
-//
 // d3.select("main").on("click", function() { glob.remove(); drawGlobject(new Globject()); });
 function refreshGlobject() {
     glob.remove();
-    drawGlobject(new Globject());
+    drawGlobject(makeGlobject());
 }
+
+// populate score
 for(var i = 0; i < 10; i++) {
     VS.score.add([
         (i * 2000) + (1000 * Math.random()),
@@ -147,9 +122,6 @@ for(var i = 0; i < 10; i++) {
     ]);
 }
 
-//
-// debug
-//
 if(debug){
     main.classed("debug", true);
     main.append("rect")
