@@ -30,8 +30,37 @@ function transformGlob() {
       (center - (globWidth * 0.5)) + ")");
 }
 
+function randRangeGenerator() {
+    return VS.getItem([rangeGen, wedgeRangeGen, stepRangeGen]);
+}
+
 function makeGlobject() {
-    return new Globject();
+    var _newGlob = new Globject(),
+        hiRangeGen = randRangeGenerator(),
+        loRangeGen = randRangeGenerator();
+    _newGlob.rangeEnv =  {
+        type: "midi",
+        hi: hiRangeGen(4, 64, 127),
+        lo: loRangeGen(4, 0, 63),
+        times: [0, 0.3, 0.5, 1] // may want independent times for hi and lo
+    };
+    _newGlob.pitches = {
+        classes: [0, 2, 6],
+        weight: [0.5, 0.25, 0.25]
+    };
+    _newGlob.duration = {
+        values: [0.5, 0.75, 1],
+        weights: [0.5, 0.25, 0.25]
+    };
+    _newGlob.articulation = {
+        values: [">", "_", "."],
+        weights: [0.5, 0.25, 0.25]
+    };
+    _newGlob.dynamics = { // global
+        values: ["mp", "cres.", "f"],
+        dur: [0, 0.5, 1] //
+    };
+    return _newGlob;
 }
 
 function drawGlobject(this_glob){
