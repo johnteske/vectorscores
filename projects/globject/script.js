@@ -37,7 +37,9 @@ function randRangeGenerator() {
 function makeGlobject() {
     var _newGlob = new Globject(),
         hiRangeGen = randRangeGenerator(),
-        loRangeGen = randRangeGenerator();
+        loRangeGen = randRangeGenerator(),
+        dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
+        newDynamics = ["","",""];
     _newGlob.rangeEnv =  {
         type: "midi",
         hi: hiRangeGen(4, 64, 127),
@@ -45,7 +47,11 @@ function makeGlobject() {
         times: [0, 0.3, 0.5, 1] // may want independent times for hi and lo
     };
     _newGlob.pitches = {
-        classes: [0, 2, 6],
+        classes: [
+            0,
+            Math.round(VS.getRandExcl(1,3)),
+            Math.round(VS.getRandExcl(4,7))
+        ],
         weight: [0.5, 0.25, 0.25]
     };
     _newGlob.duration = {
@@ -56,8 +62,21 @@ function makeGlobject() {
         values: [">", "_", "."],
         weights: [0.5, 0.25, 0.25]
     };
+
+    newDynamics[0] = VS.getItem(dynamics);
+    newDynamics[2] = VS.getItem(dynamics);
+    if(dynamics.indexOf(newDynamics[0]) > dynamics.indexOf(newDynamics[2])) {
+        newDynamics[1] = "dim.";
+    } else if (dynamics.indexOf(newDynamics[0]) < dynamics.indexOf(newDynamics[2])) {
+        newDynamics[1] = "cres.";
+    } else {
+        newDynamics[1] = "subito " + VS.getItem(dynamics);
+        newDynamics[2] = "";
+    }
+    // newDynamics[1] = VS.getItem(dynamics);
+
     _newGlob.dynamics = { // global
-        values: ["mp", "cres.", "f"],
+        values: newDynamics,
         dur: [0, 0.5, 1] //
     };
     return _newGlob;
@@ -90,7 +109,7 @@ function drawGlobject(this_glob){
 
     glob.append("text")
         .attr("y", 127 + 24)
-        .text("[" + this_glob.pitches.classes + "]");
+        .text("[" + this_glob.pitches.classes.join(", ") + "]");
 
     var dataset = this_glob.dynamics.values;
 
