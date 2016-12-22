@@ -22,12 +22,12 @@ var debug = VS.getQueryString("debug") == 1 ? true : false;
 
 // make Globject
 
-var glob = main.append("g");
+var globGroup = main.append("g");
 
 function transformGlob() {
-    glob.attr("transform", "translate(" +
-      (center - (globWidth * 0.5)) + "," +
-      (center - (globWidth * 0.5)) + ")");
+    globGroup.attr("transform", "translate(" +
+        (center - (globWidth * 0.5)) + "," +
+        (center - (globWidth * 0.5)) + ")");
 }
 
 function randRangeGenerator() {
@@ -83,7 +83,7 @@ function makeGlobject() {
 }
 
 function drawGlobject(this_glob){
-    glob = main.append("g");
+    globGroup = main.append("g");
     var lineData = [],
         lowData = [];
 
@@ -101,19 +101,19 @@ function drawGlobject(this_glob){
          .tension(0.8)
          .interpolate("cardinal-closed");
 
-    var lineGraph = glob.append("path")
+    var lineGraph = globGroup.append("path")
         .attr("d", lineFunction(datLine))
         .attr("stroke", "black")
         .attr("stroke-width", 1)
         .attr("fill", "none");
 
-    glob.append("text")
+    globGroup.append("text")
         .attr("y", 127 + 24)
         .text("[" + this_glob.pitches.classes.join(", ") + "]");
 
     var dataset = this_glob.dynamics.values;
 
-    var textline = glob.append("g");
+    var textline = globGroup.append("g");
 
     textline.selectAll("text")
         .data(dataset)
@@ -158,7 +158,7 @@ resize();
 
 // d3.select("main").on("click", function() { glob.remove(); drawGlobject(new Globject()); });
 function refreshGlobject() {
-    glob.remove();
+    globGroup.remove();
     drawGlobject(makeGlobject());
 }
 
