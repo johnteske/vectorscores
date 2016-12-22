@@ -40,28 +40,19 @@ function makeGlobject() {
         loRangeGen = randRangeGenerator(),
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
         newDynamics = ["","",""];
-    _newGlob.rangeEnv =  {
-        type: "midi",
-        hi: hiRangeGen(4, 64, 127),
-        lo: loRangeGen(4, 0, 63),
-        times: [0, 0.3, 0.5, 1] // may want independent times for hi and lo
-    };
-    _newGlob.pitches = {
-        classes: [
-            0,
-            Math.round(VS.getRandExcl(1,3)),
-            Math.round(VS.getRandExcl(4,7))
-        ],
-        weight: [0.5, 0.25, 0.25]
-    };
-    _newGlob.duration = {
-        values: [0.5, 0.75, 1],
-        weights: [0.5, 0.25, 0.25]
-    };
-    _newGlob.articulation = {
-        values: [">", "_", "."],
-        weights: [0.5, 0.25, 0.25]
-    };
+
+    _newGlob.setRangeEnvelopes();
+
+    _newGlob.setPitchClassSet();
+
+    // _newGlob.duration = {
+    //     values: [0.5, 0.75, 1],
+    //     weights: [0.5, 0.25, 0.25]
+    // };
+    // _newGlob.articulation = {
+    //     values: [">", "_", "."],
+    //     weights: [0.5, 0.25, 0.25]
+    // };
 
     newDynamics[0] = VS.getItem(dynamics);
     newDynamics[2] = VS.getItem(dynamics);
@@ -87,9 +78,9 @@ function drawGlobject(this_glob){
     var lineData = [],
         lowData = [];
 
-    for (var i = 0; i < this_glob.rangeEnv.times.length; i++) {
-        lineData.push({ "x": this_glob.rangeEnv.times[i], "y": this_glob.rangeEnv.hi[i]});
-        lowData.push({ "x": this_glob.rangeEnv.times[i], "y": this_glob.rangeEnv.lo[i]});
+    for (var i = 0; i < this_glob.rangeEnvelope.times.length; i++) {
+        lineData.push({ "x": this_glob.rangeEnvelope.times[i], "y": this_glob.rangeEnvelope.hi[i]});
+        lowData.push({ "x": this_glob.rangeEnvelope.times[i], "y": this_glob.rangeEnvelope.lo[i]});
     }
 
     // draw the top, back around the bottom, then connect back to the first point
@@ -107,12 +98,19 @@ function drawGlobject(this_glob){
         .attr("stroke-width", 1)
         .attr("fill", "none");
 
-    globGroup.append("text")
+    var pcs = this_glob.pitches.classes;
+
+    globGroup.selectAll("text")
+        .data(pcs)
+        .enter()
+        .append("text")
+        .attr("x", function(d, i) {
+            return this_glob.pitches.times[i] * globWidth;
+        })
         .attr("y", 127 + 24)
-        .text("[" + this_glob.pitches.classes.join(", ") + "]");
+        .text(function(d) { return "[" + d + "]"; });
 
     var dataset = this_glob.dynamics.values;
-
     var textline = globGroup.append("g");
 
     textline.selectAll("text")
@@ -126,6 +124,7 @@ function drawGlobject(this_glob){
         })
         .attr("y", 127 + 42)
         .text(function(d) { return d; });
+
     transformGlob();
 }
 drawGlobject(makeGlobject());
