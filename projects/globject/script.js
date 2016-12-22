@@ -64,12 +64,9 @@ function makeGlobject() {
         newDynamics[1] = "subito " + VS.getItem(dynamics);
         newDynamics[2] = "";
     }
-    // newDynamics[1] = VS.getItem(dynamics);
 
-    _newGlob.dynamics = { // global
-        values: newDynamics,
-        dur: [0, 0.5, 1] //
-    };
+    _newGlob.setDynamics(newDynamics, [0, 0.5, 1]);
+
     return _newGlob;
 }
 

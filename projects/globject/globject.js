@@ -6,6 +6,7 @@ function Globject() {
     // this.height
     this.pitches = {};
 }
+
 Globject.prototype.setRangeEnvelopes = function (type, hi, lo, times) {
     this.rangeEnvelope =  {
         type: "midi",
@@ -14,6 +15,7 @@ Globject.prototype.setRangeEnvelopes = function (type, hi, lo, times) {
         times: [0, 0.3, 0.5, 1]
     };
 };
+
 Globject.prototype.setPitchClassSet = function (pitchClasses) {
     // check if pitchClasses.length === times.length
     this.pitches.classes = [
@@ -29,4 +31,11 @@ Globject.prototype.setPitchClassSet = function (pitchClasses) {
     ];
     this.pitches.times = [0, 0.6];
     // weight: [0.5, 0.25, 0.25]
+};
+
+Globject.prototype.setDynamics = function (dynamics, times) {
+    this.dynamics =  {
+        values: dynamics,
+        times: times
+    };
 };
