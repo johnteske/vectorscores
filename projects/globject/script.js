@@ -41,9 +41,20 @@ function makeGlobject() {
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
         newDynamics = ["","",""];
 
-    _newGlob.setRangeEnvelopes();
+    _newGlob.setRangeEnvelopes(
+        "midi",
+        hiRangeGen(4, 64, 127),
+        loRangeGen(4, 0, 63),
+        [0, 0.3, 0.5, 1]
+    );
 
-    _newGlob.setPitchClassSet();
+    _newGlob.setPitchClassSets(
+        [
+            [ 0, Math.round(VS.getRandExcl(1,3)) ],
+            [ 0, Math.round(VS.getRandExcl(1,3)), Math.round(VS.getRandExcl(4,7)) ]
+        ],
+        [0, 0.6]
+    );
 
     // _newGlob.duration = {
     //     values: [0.5, 0.75, 1],

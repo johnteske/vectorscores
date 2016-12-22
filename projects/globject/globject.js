@@ -9,27 +9,17 @@ function Globject() {
 
 Globject.prototype.setRangeEnvelopes = function (type, hi, lo, times) {
     this.rangeEnvelope =  {
-        type: "midi",
-        hi: [64, 65, 66, 127],
-        lo: [0,1,2,63],
-        times: [0, 0.3, 0.5, 1]
+        type: type,
+        hi: hi,
+        lo: lo,
+        times: times
     };
 };
 
-Globject.prototype.setPitchClassSet = function (pitchClasses) {
+Globject.prototype.setPitchClassSets = function (pitchClasses, times) {
     // check if pitchClasses.length === times.length
-    this.pitches.classes = [
-        [
-            0,
-            Math.round(VS.getRandExcl(1,3)),
-        ],
-        [
-            0,
-            Math.round(VS.getRandExcl(1,3)),
-            Math.round(VS.getRandExcl(4,7))
-        ]
-    ];
-    this.pitches.times = [0, 0.6];
+    this.pitches.classes = pitchClasses;
+    this.pitches.times = times;
     // weight: [0.5, 0.25, 0.25]
 };
 
