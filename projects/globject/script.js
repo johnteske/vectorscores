@@ -100,16 +100,14 @@ function drawGlobject(this_glob){
          .tension(0.8)
          .interpolate("cardinal-closed");
 
-    var lineGraph = globGroup.append("path")
+    this_glob.rangePath = globGroup.append("path")
         .attr("d", lineFunction(datLine))
-        .attr("stroke", "black")
-        .attr("stroke-width", 1)
-        .attr("fill", "none");
+        .classed("globject", 1);
 
-    var pcs = this_glob.pitches.classes;
+    this_glob.pitchClassGroup = globGroup.append("g");
 
-    globGroup.selectAll("text")
-        .data(pcs)
+    this_glob.pitchClassGroup.selectAll("text")
+        .data(this_glob.pitches.classes)
         .enter()
         .append("text")
         .attr("x", function(d, i) {
@@ -118,17 +116,14 @@ function drawGlobject(this_glob){
         .attr("y", 127 + 24)
         .text(function(d) { return "[" + d + "]"; });
 
-    var dataset = this_glob.dynamics.values;
-    var textline = globGroup.append("g");
+    this_glob.dynamicsGroup = globGroup.append("g");
 
-    textline.selectAll("text")
-        .data(dataset)
+    this_glob.dynamicsGroup.selectAll("text")
+        .data(this_glob.dynamics.values)
         .enter()
         .append("text")
         .attr("x", function(d, i) {
-            // evenly spaced, for now
-            var l = dataset.length - 1;
-            return i * (this_glob.width / l);
+            return this_glob.dynamics.times[i] * this_glob.width;
         })
         .attr("y", 127 + 42)
         .text(function(d) { return d; });

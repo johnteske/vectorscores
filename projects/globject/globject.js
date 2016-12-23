@@ -4,6 +4,7 @@ function Globject(width) {
     }
     this.width = width;
     // this.height
+    // this.rangePath
     this.pitches = {};
 }
 
