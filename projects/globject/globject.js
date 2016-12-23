@@ -1,8 +1,8 @@
-function Globject() {
+function Globject(width) {
     if (!(this instanceof Globject)) {
         return new Globject();
     }
-    // this.width
+    this.width = width;
     // this.height
     this.pitches = {};
 }

@@ -10,8 +10,7 @@ var main = d3.select(".main")
     .style("width", boxwidth + "px")
     .style("height", boxwidth + "px");
 
-var glob,
-    globWidth = 120; // fixed size, for this test
+var glob;
 
 var debug = VS.getQueryString("debug") == 1 ? true : false;
 
@@ -25,9 +24,10 @@ var debug = VS.getQueryString("debug") == 1 ? true : false;
 var globGroup = main.append("g");
 
 function transformGlob() {
+    var groupWidth = globGroup.node().getBBox().width;
     globGroup.attr("transform", "translate(" +
-        (center - (globWidth * 0.5)) + "," +
-        (center - (globWidth * 0.5)) + ")");
+        (center - (groupWidth * 0.5)) + "," +
+        (center - (120 * 0.5)) + ")");
 }
 
 function randRangeGenerator() {
@@ -35,7 +35,7 @@ function randRangeGenerator() {
 }
 
 function makeGlobject() {
-    var _newGlob = new Globject(),
+    var _newGlob = new Globject( Math.round(VS.getRandExcl(100,200)) ),
         hiRangeGen = randRangeGenerator(),
         loRangeGen = randRangeGenerator(),
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
@@ -53,7 +53,7 @@ function makeGlobject() {
             [ 0, Math.round(VS.getRandExcl(1,3)) ],
             [ 0, Math.round(VS.getRandExcl(1,3)), Math.round(VS.getRandExcl(4,7)) ]
         ],
-        [0, 0.6]
+        [0, (Math.random() * 0.2) + 0.4]
     );
 
     // _newGlob.duration = {
@@ -95,7 +95,7 @@ function drawGlobject(this_glob){
     var datLine = lineData.concat(lowData.reverse());
 
     var lineFunction = d3.svg.line()
-         .x(function(d) { return d.x * globWidth; })
+         .x(function(d) { return d.x * this_glob.width; })
          .y(function(d) { return 127 - d.y; }) // pitch is bottom-up, not pixel top2bottom
          .tension(0.8)
          .interpolate("cardinal-closed");
@@ -113,7 +113,7 @@ function drawGlobject(this_glob){
         .enter()
         .append("text")
         .attr("x", function(d, i) {
-            return this_glob.pitches.times[i] * globWidth;
+            return this_glob.pitches.times[i] * this_glob.width;
         })
         .attr("y", 127 + 24)
         .text(function(d) { return "[" + d + "]"; });
@@ -128,7 +128,7 @@ function drawGlobject(this_glob){
         .attr("x", function(d, i) {
             // evenly spaced, for now
             var l = dataset.length - 1;
-            return i * (globWidth / l);
+            return i * (this_glob.width / l);
         })
         .attr("y", 127 + 42)
         .text(function(d) { return d; });
