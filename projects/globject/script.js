@@ -10,11 +10,10 @@ var main = d3.select(".main")
     .style("width", boxwidth + "px")
     .style("height", boxwidth + "px");
 
-var glob;
-
 var debug = VS.getQueryString("debug") == 1 ? true : false;
 
 {% include_relative globject.js %}
+var theGlob = new Globject(150);
 
 {% include_relative rangeGen.js %}
 
@@ -24,10 +23,11 @@ var debug = VS.getQueryString("debug") == 1 ? true : false;
 var globGroup = main.append("g");
 
 function transformGlob() {
-    var groupWidth = globGroup.node().getBBox().width;
-    globGroup.attr("transform", "translate(" +
-        (center - (groupWidth * 0.5)) + "," +
-        (center - (120 * 0.5)) + ")");
+    globGroup
+        .transition(300)
+        .attr("transform", "translate(" +
+            (center - (theGlob.width * 0.5)) + "," +
+            (center - (120 * 0.5)) + ")");
 }
 
 function randRangeGenerator() {
@@ -35,20 +35,21 @@ function randRangeGenerator() {
 }
 
 function makeGlobject() {
-    var _newGlob = new Globject( Math.round(VS.getRandExcl(100,200)) ),
-        hiRangeGen = randRangeGenerator(),
+    var hiRangeGen = randRangeGenerator(),
         loRangeGen = randRangeGenerator(),
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
         newDynamics = ["","",""];
 
-    _newGlob.setRangeEnvelopes(
+    theGlob.width = Math.round(VS.getRandExcl(100,200));
+
+    theGlob.setRangeEnvelopes(
         "midi",
         hiRangeGen(4, 64, 127),
         loRangeGen(4, 0, 63),
         [0, 0.3, 0.5, 1]
     );
 
-    _newGlob.setPitchClassSets(
+    theGlob.setPitchClassSets(
         [
             [ 0, Math.round(VS.getRandExcl(1,3)) ],
             [ 0, Math.round(VS.getRandExcl(1,3)), Math.round(VS.getRandExcl(4,7)) ]
@@ -56,11 +57,11 @@ function makeGlobject() {
         [0, (Math.random() * 0.2) + 0.4]
     );
 
-    // _newGlob.duration = {
+    // theGlob.duration = {
     //     values: [0.5, 0.75, 1],
     //     weights: [0.5, 0.25, 0.25]
     // };
-    // _newGlob.articulation = {
+    // theGlob.articulation = {
     //     values: [">", "_", "."],
     //     weights: [0.5, 0.25, 0.25]
     // };
@@ -76,61 +77,66 @@ function makeGlobject() {
         newDynamics[2] = "";
     }
 
-    _newGlob.setDynamics(newDynamics, [0, 0.5, 1]);
+    theGlob.setDynamics(newDynamics, [0, 0.5, 1]);
 
-    return _newGlob;
+    return theGlob;
 }
+makeGlobject();
+theGlob.rangePath = globGroup.append("path").classed("globject", 1);
+theGlob.pitchClassGroup = globGroup.append("g");
+theGlob.dynamicsGroup = globGroup.append("g");
 
-function drawGlobject(this_glob){
-    globGroup = main.append("g");
+function drawGlobject(){
     var lineData = [],
         lowData = [];
 
-    for (var i = 0; i < this_glob.rangeEnvelope.times.length; i++) {
-        lineData.push({ "x": this_glob.rangeEnvelope.times[i], "y": this_glob.rangeEnvelope.hi[i]});
-        lowData.push({ "x": this_glob.rangeEnvelope.times[i], "y": this_glob.rangeEnvelope.lo[i]});
+    for (var i = 0; i < theGlob.rangeEnvelope.times.length; i++) {
+        lineData.push({ "x": theGlob.rangeEnvelope.times[i], "y": theGlob.rangeEnvelope.hi[i]});
+        lowData.push({ "x": theGlob.rangeEnvelope.times[i], "y": theGlob.rangeEnvelope.lo[i]});
     }
 
     // draw the top, back around the bottom, then connect back to the first point
     var datLine = lineData.concat(lowData.reverse());
 
     var lineFunction = d3.svg.line()
-         .x(function(d) { return d.x * this_glob.width; })
+         .x(function(d) { return d.x * theGlob.width; })
          .y(function(d) { return 127 - d.y; }) // pitch is bottom-up, not pixel top2bottom
          .tension(0.8)
          .interpolate("cardinal-closed");
 
-    this_glob.rangePath = globGroup.append("path")
-        .attr("d", lineFunction(datLine))
-        .classed("globject", 1);
+     theGlob.rangePath
+         .transition(300)
+         .attr("d", lineFunction(datLine));
 
-    this_glob.pitchClassGroup = globGroup.append("g");
+    theGlob.pitchClassGroup.remove();
+    theGlob.pitchClassGroup = globGroup.append("g");
 
-    this_glob.pitchClassGroup.selectAll("text")
-        .data(this_glob.pitches.classes)
+    theGlob.pitchClassGroup.selectAll("text")
+        .data(theGlob.pitches.classes)
         .enter()
         .append("text")
         .attr("x", function(d, i) {
-            return this_glob.pitches.times[i] * this_glob.width;
+            return theGlob.pitches.times[i] * theGlob.width;
         })
         .attr("y", 127 + 24)
         .text(function(d) { return "[" + d + "]"; });
 
-    this_glob.dynamicsGroup = globGroup.append("g");
+    theGlob.dynamicsGroup.remove();
+    theGlob.dynamicsGroup = globGroup.append("g");
 
-    this_glob.dynamicsGroup.selectAll("text")
-        .data(this_glob.dynamics.values)
+    theGlob.dynamicsGroup.selectAll("text")
+        .data(theGlob.dynamics.values)
         .enter()
         .append("text")
         .attr("x", function(d, i) {
-            return this_glob.dynamics.times[i] * this_glob.width;
+            return theGlob.dynamics.times[i] * theGlob.width;
         })
         .attr("y", 127 + 42)
         .text(function(d) { return d; });
 
     transformGlob();
 }
-drawGlobject(makeGlobject());
+drawGlobject();
 
 // resize
 
@@ -158,10 +164,14 @@ function resize() {
 //
 resize();
 
-// d3.select("main").on("click", function() { glob.remove(); drawGlobject(new Globject()); });
+// prevent globject from flying in from top left at load
+globGroup.attr("transform", "translate(" +
+    (center - (theGlob.width * 0.5)) + "," +
+    (center - (120 * 0.5)) + ")");
+
 function refreshGlobject() {
-    globGroup.remove();
-    drawGlobject(makeGlobject());
+    makeGlobject();
+    drawGlobject();
 }
 
 // populate score
