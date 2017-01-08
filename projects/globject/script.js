@@ -19,11 +19,10 @@ var theGlob = new Globject(150);
 
 // make Globject
 
-var globGroup = main.append("g");
+var globGroup;// = main.append("g");
 
 function transformGlob() {
     globGroup
-        .transition(300)
         .attr("transform", "translate(" +
             (center - (theGlob.width * 0.5)) + "," +
             (center - (120 * 0.5)) + ")");
@@ -38,6 +37,8 @@ function makeGlobject() {
         loRangeGen = randRangeGenerator(),
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
         newDynamics = ["","",""];
+
+    globGroup = main.append("g");
 
     theGlob.width = Math.round(VS.getRandExcl(100,200));
 
@@ -78,12 +79,13 @@ function makeGlobject() {
 
     theGlob.setDynamics(newDynamics, [0, 0.5, 1]);
 
+    theGlob.rangePath = globGroup.append("path").classed("globject", 1);
+    theGlob.pitchClassGroup = globGroup.append("g");
+    theGlob.dynamicsGroup = globGroup.append("g");
+
     return theGlob;
 }
 makeGlobject();
-theGlob.rangePath = globGroup.append("path").classed("globject", 1);
-theGlob.pitchClassGroup = globGroup.append("g");
-theGlob.dynamicsGroup = globGroup.append("g");
 
 function drawGlobject(){
     var lineData = [],
@@ -156,12 +158,8 @@ function resize() {
 }
 resize();
 
-// prevent globject from flying in from top left at load
-globGroup.attr("transform", "translate(" +
-    (center - (theGlob.width * 0.5)) + "," +
-    (center - (120 * 0.5)) + ")");
-
 function refreshGlobject() {
+    globGroup.remove();
     makeGlobject();
     drawGlobject();
 }
