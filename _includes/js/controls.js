@@ -7,10 +7,10 @@ if (VS.page.footer) {
             this.element.onclick = fn;
         }
         ScoreControl.prototype.enable = function() {
-            this.element.className = "enabled";
+            this.element.disabled = false;
         };
         ScoreControl.prototype.disable = function() {
-            this.element.className = "disabled";
+            this.element.disabled = true;
         };
 
         var play = new ScoreControl("score-play", VS.score.playPause);
@@ -67,8 +67,8 @@ if (VS.page.footer) {
 
     })();
 
-    VS.control.play.enable();
-    VS.control.fwd.enable();
+    VS.control.back.disable();
+    VS.control.stop.disable();
 }
 
 function updatePointer(ndex){ // score, control
