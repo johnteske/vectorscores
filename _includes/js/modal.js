@@ -15,6 +15,9 @@ if (document.getElementById("score-info-modal")) {
             if (VS.page.footer) {
                 VS.score.pause();
             }
+
+            window.removeEventListener("keydown", VS.control.keydownListener, true);
+
             window.addEventListener("click", clickListener, true);
             window.addEventListener("keydown", keydownListener, true);
         }
@@ -23,8 +26,11 @@ if (document.getElementById("score-info-modal")) {
             VS.modal.overlay.style.display = "none";
             VS.page.headerClassed("");
             VS.page.footerClassed("");
+
             window.removeEventListener("click", clickListener, true);
             window.removeEventListener("keydown", keydownListener, true);
+
+            window.addEventListener("keydown", VS.control.keydownListener, true);
         }
 
         function clickListener(event) {

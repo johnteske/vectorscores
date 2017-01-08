@@ -17,7 +17,7 @@ if (VS.page.footer) {
         play.setPlay = function(){ this.element.textContent = "\u25b9"; };
         play.setPause = function(){ this.element.textContent = "\u2016"; };
 
-        function keydownListener(event) {
+        var keydownListener = function(event) {
             if (event.defaultPrevented) {
                 return;
             }
@@ -43,7 +43,6 @@ if (VS.page.footer) {
             }
             event.preventDefault();
         }
-        window.addEventListener("keydown", keydownListener, true);
 
         return {
             play: play,
@@ -62,13 +61,15 @@ if (VS.page.footer) {
                     this.back.enable();
                     this.fwd.enable();
                 }
-            }
+            },
+            keydownListener: keydownListener
         };
 
     })();
 
     VS.control.back.disable();
     VS.control.stop.disable();
+    window.addEventListener("keydown", VS.control.keydownListener, true);
 }
 
 function updatePointer(ndex){ // score, control
