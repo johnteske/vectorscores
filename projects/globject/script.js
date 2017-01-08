@@ -4,13 +4,12 @@ var width = 480,
     maxwidth = 480,
     margin = 20,
     boxwidth = width + (margin * 2),
-    center = boxwidth * 0.5;
+    center = boxwidth * 0.5,
+    debug = false;
 
 var main = d3.select(".main")
     .style("width", boxwidth + "px")
     .style("height", boxwidth + "px");
-
-var debug = VS.getQueryString("debug") == 1 ? true : false;
 
 {% include_relative globject.js %}
 var theGlob = new Globject(150);
@@ -153,15 +152,8 @@ function resize() {
         .style("height", boxwidth + "px");
     transformGlob();
 
-    if(debug){
-        d3.select("rect")
-            .attr("width", width)
-            .attr("height", width);
-        d3.select("circle")
-            .attr("transform", "translate(" + center + ", " + center + ")");
-    }
+    if(debug){ resizeDebug(width, center); }
 }
-//
 resize();
 
 // prevent globject from flying in from top left at load
@@ -182,13 +174,4 @@ for(var i = 0; i < 10; i++) {
     ]);
 }
 
-if(debug){
-    main.classed("debug", true);
-    main.append("rect")
-        .attr("width", width)
-        .attr("height", width)
-        .attr("transform", "translate(" + margin + ", " + margin + ")");
-    main.append("circle")
-        .attr("r", 5)
-        .attr("transform", "translate(" + center + ", " + center + ")");
-}
+{% include_relative _debug.js %}
