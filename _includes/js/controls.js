@@ -17,6 +17,34 @@ if (VS.page.footer) {
         play.setPlay = function(){ this.element.textContent = "\u25b9"; };
         play.setPause = function(){ this.element.textContent = "\u2016"; };
 
+        function keydownListener(event) {
+            if (event.defaultPrevented) {
+                return;
+            }
+
+            switch (event.key) {
+                case " ":
+                    VS.score.playPause();
+                    break;
+                case "ArrowLeft":
+                    stepPointer(-1);
+                    break;
+                case "ArrowRight":
+                    stepPointer(1);
+                    break;
+                case "Escape":
+                    VS.score.stop();
+                    break;
+                // case "/":
+                //     document.getElementById("score-pointer").focus();
+                //     break;
+                default:
+                    return;
+            }
+            event.preventDefault();
+        }
+        window.addEventListener("keydown", keydownListener, true);
+
         return {
             play: play,
             stop: new ScoreControl("score-stop", VS.score.stop),
