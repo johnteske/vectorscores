@@ -15,17 +15,38 @@ if (document.getElementById("score-info-modal")) {
             if (VS.page.footer) {
                 VS.score.pause();
             }
+            window.addEventListener("click", clickListener, true);
+            window.addEventListener("keydown", keydownListener, true);
         }
 
         function closeInfoModal() {
             VS.modal.overlay.style.display = "none";
             VS.page.headerClassed("");
             VS.page.footerClassed("");
+            window.removeEventListener("click", clickListener, true);
+            window.removeEventListener("keydown", keydownListener, true);
         }
 
-        window.onclick = function(event) { // addEventHandler?
-            if (event.target === VS.modal.overlay) { closeInfoModal(); }
-        };
+        function clickListener(event) {
+            if (event.target === VS.modal.overlay) {
+                closeInfoModal();
+            }
+        }
+
+        function keydownListener(event) {
+            if (event.defaultPrevented) {
+                return;
+            }
+
+            switch (event.key) {
+                case "Escape":
+                    closeInfoModal();
+                    break;
+                default:
+                    return;
+            }
+            event.preventDefault();
+        }
 
         return {
             overlay: overlay,
