@@ -39,8 +39,6 @@ function makeGlobject() {
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
         newDynamics = ["","",""];
 
-    globGroup = main.append("g");
-
     theGlob.width = Math.round(VS.getRandExcl(100,200));
 
     theGlob.setRangeEnvelopes(
@@ -80,29 +78,6 @@ function makeGlobject() {
 
     theGlob.setDynamics(newDynamics, [0, 0.5, 1]);
 
-    theGlob.rangeClip =
-    globGroup.append("clipPath")
-        .attr("id", "glob-clip")
-        .append("path")
-        .attr("transform", "translate(" + globLeft + "," + 0 + ")");
-
-    globGroup
-        .append("rect")
-        .attr("clip-path", "url(#glob-clip)")
-        .style("fill", "#eee")
-        // .style("fill", "none")
-        // cannot use getBBox() on clipPath
-        .attr("height", 150) // max 127?
-        .attr("width", theGlob.width + (globLeft * 2));
-
-    theGlob.rangePath =
-    globGroup.append("path")
-        .attr("transform", "translate(" + globLeft + "," + 0 + ")")
-        .classed("globject", 1);
-
-    theGlob.pitchClassGroup = globGroup.append("g");
-    theGlob.dynamicsGroup = globGroup.append("g");
-
     return theGlob;
 }
 makeGlobject();
@@ -110,6 +85,8 @@ makeGlobject();
 function drawGlobject(){
     var lineData = [],
         lowData = [];
+
+    globGroup = main.append("g");
 
     for (var i = 0; i < theGlob.rangeEnvelope.times.length; i++) {
         lineData.push({ "x": theGlob.rangeEnvelope.times[i], "y": theGlob.rangeEnvelope.hi[i]});
@@ -125,14 +102,40 @@ function drawGlobject(){
          .tension(0.8)
          .interpolate("cardinal-closed");
 
-     theGlob.rangeClip
+    theGlob.rangeClip =
+    globGroup.append("clipPath")
+        .attr("id", "glob-clip")
+        .append("path")
+        .attr("transform", "translate(" + globLeft + "," + 0 + ")")
         //  .transition(300)
-         .attr("d", lineFunction(datLine));
-     theGlob.rangePath
-        //  .transition(300)
+        .attr("d", lineFunction(datLine));
+
+    theGlob.globStuff =
+    globGroup.append("g")
+    .classed("globstuff", 1)
+    .attr("clip-path", "url(#glob-clip)");
+
+    for (var i = 0; i < 32; i++) {
+        theGlob.globStuff
+        .append("text")
+        .text(String.fromCharCode(
+            VS.getItem([57813,57817])
+        ))
+        .attr("transform",
+        function() {
+            return "translate(" +
+                (Math.random() * (theGlob.width + (globLeft * 3))) + ", " +
+                (Math.random() * 127) + ")";
+        });
+    }
+
+     theGlob.rangePath =
+     globGroup.append("path")
+         .attr("transform", "translate(" + globLeft + "," + 0 + ")")
+         .classed("globject", 1)
+         //  .transition(300)
          .attr("d", lineFunction(datLine));
 
-    theGlob.pitchClassGroup.remove();
     theGlob.pitchClassGroup = globGroup.append("g");
 
     theGlob.pitchClassGroup.selectAll("text")
@@ -145,7 +148,6 @@ function drawGlobject(){
         .attr("y", 127 + 24)
         .text(function(d) { return "[" + d + "]"; });
 
-    theGlob.dynamicsGroup.remove();
     theGlob.dynamicsGroup = globGroup.append("g");
 
     theGlob.dynamicsGroup.selectAll("text")
