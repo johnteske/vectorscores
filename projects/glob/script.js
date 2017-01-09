@@ -1,3 +1,6 @@
+---
+layout: compress-js
+---
 // initial values
 var globWidth = 240,
     radius = globWidth * 5, // should be relative to width somehow
