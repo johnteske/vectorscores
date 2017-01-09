@@ -5,6 +5,7 @@ var width = 480,
     margin = 20,
     boxwidth = width + (margin * 2),
     center = boxwidth * 0.5,
+    globLeft = 5;
     debug = false;
 
 var main = d3.select(".main")
@@ -79,7 +80,26 @@ function makeGlobject() {
 
     theGlob.setDynamics(newDynamics, [0, 0.5, 1]);
 
-    theGlob.rangePath = globGroup.append("path").classed("globject", 1);
+    theGlob.rangeClip =
+    globGroup.append("clipPath")
+        .attr("id", "glob-clip")
+        .append("path")
+        .attr("transform", "translate(" + globLeft + "," + 0 + ")");
+
+    globGroup
+        .append("rect")
+        .attr("clip-path", "url(#glob-clip)")
+        .style("fill", "#eee")
+        // .style("fill", "none")
+        // cannot use getBBox() on clipPath
+        .attr("height", 150) // max 127?
+        .attr("width", theGlob.width + (globLeft * 2));
+
+    theGlob.rangePath =
+    globGroup.append("path")
+        .attr("transform", "translate(" + globLeft + "," + 0 + ")")
+        .classed("globject", 1);
+
     theGlob.pitchClassGroup = globGroup.append("g");
     theGlob.dynamicsGroup = globGroup.append("g");
 
@@ -105,8 +125,11 @@ function drawGlobject(){
          .tension(0.8)
          .interpolate("cardinal-closed");
 
+     theGlob.rangeClip
+        //  .transition(300)
+         .attr("d", lineFunction(datLine));
      theGlob.rangePath
-         .transition(300)
+        //  .transition(300)
          .attr("d", lineFunction(datLine));
 
     theGlob.pitchClassGroup.remove();
