@@ -79,15 +79,23 @@ function makeGlobject() {
     theGlob.setDynamics(newDynamics, [0, 0.5, 1]);
 
     theGlob.noteTexture = [];
-    for (var i = 0; i < 32; i++) {
+    var noteCount = 12,
+        globSlice = (theGlob.width / noteCount);
+    for (var i = 0; i < noteCount; i++) {
         var note = {
-            x: (Math.random() * (theGlob.width + (globLeft * 3))),
+            x: (Math.random() * globSlice + (i * globSlice)),
             y: (Math.random() * 127)
         };
         if (note.y > 64) {
-            note.head = String.fromCharCode( VS.getItem([57814,57816]) );
+            note.head =
+                String.fromCharCode( VS.getItem([57814,57816]) ) +
+                " " +
+                String.fromCharCode( VS.getItem([57814,57816]) );
         } else {
-            note.head = String.fromCharCode( VS.getItem([57813,57817]) );
+            note.head =
+                String.fromCharCode( VS.getItem([57813,57817]) ) +
+                " " +
+                String.fromCharCode( VS.getItem([57813,57817]) );
         }
         theGlob.noteTexture.push(note);
     }
