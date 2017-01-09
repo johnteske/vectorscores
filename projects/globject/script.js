@@ -78,6 +78,20 @@ function makeGlobject() {
 
     theGlob.setDynamics(newDynamics, [0, 0.5, 1]);
 
+    theGlob.noteTexture = [];
+    for (var i = 0; i < 32; i++) {
+        var note = {
+            x: (Math.random() * (theGlob.width + (globLeft * 3))),
+            y: (Math.random() * 127)
+        };
+        if (note.y > 64) {
+            note.head = String.fromCharCode( VS.getItem([57814,57816]) );
+        } else {
+            note.head = String.fromCharCode( VS.getItem([57813,57817]) );
+        }
+        theGlob.noteTexture.push(note);
+    }
+
     return theGlob;
 }
 makeGlobject();
@@ -115,19 +129,15 @@ function drawGlobject(){
     .classed("globstuff", 1)
     .attr("clip-path", "url(#glob-clip)");
 
-    for (var i = 0; i < 32; i++) {
-        theGlob.globStuff
+    theGlob.globStuff.selectAll("text")
+        .data(theGlob.noteTexture)
+        .enter()
         .append("text")
-        .text(String.fromCharCode(
-            VS.getItem([57813,57817])
-        ))
+        .text(function(d) {return d.head})
         .attr("transform",
-        function() {
-            return "translate(" +
-                (Math.random() * (theGlob.width + (globLeft * 3))) + ", " +
-                (Math.random() * 127) + ")";
+            function(d) {
+                return "translate(" + d.x + ", " + d.y + ")";
         });
-    }
 
      theGlob.rangePath =
      globGroup.append("path")
