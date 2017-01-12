@@ -22,27 +22,36 @@ if (VS.page.footer) {
                 return;
             }
 
-            switch (event.key) {
+            var keyPressed = event.key || event.keyCode;
+
+            // event.key;
+            // event.keyCode; // deprecated but for Safari support
+            switch (keyPressed) {
                 case " ":
+                case 32:
                     VS.score.playPause();
                     break;
                 case "ArrowLeft":
+                case 37:
                     stepPointer(-1);
                     break;
                 case "ArrowRight":
+                case 39:
                     stepPointer(1);
                     break;
                 case "Escape":
+                case 27:
                     VS.score.stop();
                     break;
                 // case "/":
+                // case 191:
                 //     document.getElementById("score-pointer").focus();
                 //     break;
                 default:
                     return;
             }
             event.preventDefault();
-        }
+        };
 
         return {
             play: play,
