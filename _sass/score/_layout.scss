@@ -69,7 +69,6 @@ h1 {
     font-size: $unit * 2;
     line-height: $unit * 2;
     white-space: nowrap;
-    overflow-x: scroll;
     max-width: 85%;
     @media (max-width: 599px) {
         font-size: $unit;
