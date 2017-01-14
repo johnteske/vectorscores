@@ -7,9 +7,11 @@ var width = 640,
     structurePoints = [0, 0.14586594177599999, 0.236029032, 0.381924, 0.618, 0.763970968, 1 ],
     scoreLength = timePoints[timePoints.length - 1];
 
-d3.select(".main")
+var main = d3.select(".main")
     .attr("height", height)
-    .attr("width", width)
+    .attr("width", width);
+
+main.append("g")
     .selectAll("text")
     .data(timePoints)
     .enter()
@@ -17,6 +19,19 @@ d3.select(".main")
     .text("|")
     .attr("transform", function(d) {
         var x = (width * d) / scoreLength,
+            y = height * 0.5;
+        return "translate(" + x + ", " + y + ")";
+    });
+
+main.append("g")
+    .selectAll("text")
+    .data(structurePoints)
+    .enter()
+    .append("text")
+    .text("|")
+    .style("fill", "red")
+    .attr("transform", function(d) {
+        var x = (width * d),
             y = height * 0.5;
         return "translate(" + x + ", " + y + ")";
     });
