@@ -7,6 +7,19 @@ var width = 640,
     structurePoints = [0, 0.14586594177599999, 0.236029032, 0.381924, 0.618, 0.763970968, 1 ],
     scoreLength = timePoints[timePoints.length - 1];
 
+function linearInterpolate(time,pointA,pointB){
+    var timeSegment = pointB[0] - pointA[0],
+        valueSegment = pointB[1] - pointA[1];
+    var timeFromPointA = time - pointA[0];
+    var timePercent = timeFromPointA / timeSegment;
+    var newvalue = valueSegment * timePercent;
+    return newvalue + pointA[1];
+}
+
+console.log(
+    linearInterpolate(0.3, [0.25,20], [0.6, 120])
+);
+
 var main = d3.select(".main")
     .attr("height", height)
     .attr("width", width);
