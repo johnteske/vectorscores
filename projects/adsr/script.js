@@ -15,6 +15,45 @@ function lerpPoints(v0, v1, t0, t1) {
     return (1 - t) * v0 + t * v1;
 }
 
+// ~durs = [0.2,0.25,0.5,0.75,1,1.5,2,3,4,6,8];
+// ~strlength = InterplEnv([1,1,2,3,4,1,1], m, [\lin]);
+// ~durhi = InterplEnv([0.2, 0.75, 1.5, 3, 6, 4, 4], m, [\lin]);
+// ~durlo = InterplEnv([0.2, 0.5,  0.5, 1.0, 2, 3, 3], m, [\lin]);
+// ~tdisp = InterplEnv([0,0,1,1.5,2,2.5,1], m, [\lin]); // in seconds?
+// ~timbre = InterplEnv([0,2,4,5,6,8,9], m, [\lin]);
+// ~timbres = ["bartok", "pizz.", "ghost", "rolling pizz.", "bow hair pull", "sul pont.", "flutter", "vib.", "ord.", "l.v."];
+// ~noteshi = InterplEnv([0,  0,  0.5,  1,  1.5,  2,  2], m, [\lin]);
+// ~noteslo = InterplEnv([0, -0.5, -1, -1.5, -2, -2, -2], m, [\lin]);
+
+// // ~score = [];
+// // 4.do({|part|
+var part = [];
+for (var i = 0; i < timePoints.length; i++) {
+        var now, durations, durationsLength, timeDispersion, timbre, pitch;
+		now = timePoints[i] / timePoints[timePoints.length - 1];
+
+        timeDispersion = 0; // ~tdisp.at(now);
+		timbre = "bartok"; // 0 // ~timbre.at(now);
+
+		pitch = {
+            high: 2, // ~noteshi.at(now);
+		    low: -2 // ~noteslo.at(now);
+        };
+
+        durations = [];
+		durationsLength = 2; // ~strlength.at(now).round(1);
+        for (var j = 0; j < durationsLength; j++) {
+		// 	// var thisdur = rrand(~durlo.at(now), ~durhi.at(now));
+		// 	// thisdur = thisdur.nearestInList(~durs);
+		// 	// thisstring = thisstring.add(thisdur);
+            durations.push(1);
+		};
+		part.push([timeDispersion, durations, timbre, pitch.high, pitch.low]);
+}
+// 	// ~score = ~score.add(thispart);
+// // });
+console.log(part);
+
 var main = d3.select(".main")
     .attr("height", height)
     .attr("width", width);
