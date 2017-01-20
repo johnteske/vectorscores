@@ -27,7 +27,8 @@ main.append("g")
         .attr("y1", -2 * unit)
         .attr("x2", 0)
         .attr("y2", 3 * unit)
-    .style("stroke", "grey")
+    .style("stroke", "black")
+    .style("stroke-opacity", "0.5")
     .attr("transform", function(d) {
         var x = (width * d) / scoreLength,
             y = height * 0.5;
@@ -50,7 +51,7 @@ main.append("g") // part group
     .each(function(d, i) {
         var durations = part[i][1];
         d3.select(this).append("text")
-            .text(part[i][2])
+            .text(part[i][2] + " [" + part[i][4] + ", " + part[i][3] + "]") // timbre, pitches
             .style("font-family", "monospace")
             .attr("y", -unit);
         d3.select(this).selectAll("rect")
