@@ -47,22 +47,25 @@ main.append("g") // part group
             return "translate(" + x + ", " + y + ")";
         })
     // add phrase content
-    // .append("text")
-    // .text(function(d, i) {
-    //     // notes
-    //     return part[i][1];
-    // });
-    // add phrase content
-    .selectAll("rect")
-        .data(function(d, i) { return part[i][1]; })
-        .enter()
-        .append("rect")
-            .attr("x", function(d, i) {
-                // to get sum of durations to properly space notes,
-                // access to part[i][1] is needed
-                // for now, return a fixed scale
-                return i * (6 * unit + 5); // max length is 6 * 10, add 5 for spacing
-            })
-            .attr("y", function(d, i) { return 0; })
-            .attr("width", function(d) { return d * unit; })
-            .attr("height", unit);
+    .each(function(d, i) {
+        var durations = part[i][1];
+        d3.select(this).append("text")
+            .text(part[i][2])
+            .style("font-family", "monospace")
+            .attr("y", -unit);
+        d3.select(this).selectAll("rect")
+            .data(durations)
+            .enter()
+            .append("rect")
+                .attr("x", function(d, i) {
+                    var upToI = durations.slice(0,i);
+                    var sum = upToI.reduce(function(a, b) {
+                        return a + b + 1; // add padding between here
+                    }, 0);
+
+                    return sum * unit;
+                })
+                .attr("y", function(d, i) { return 0; })
+                .attr("width", function(d) { return d * unit; })
+                .attr("height", unit)
+    });
