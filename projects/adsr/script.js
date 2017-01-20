@@ -17,21 +17,25 @@ function getPrevNextIndicesAndT(array, val) {
         }
     }
 }
+function roundHalf(num) {
+    return Math.round(num*2)/2;
+}
 
 // // ~durs = [0.2,0.25,0.5,0.75,1,1.5,2,3,4,6,8];
+var timbres = ["bartok", "pizz.", "ghost", "rolling pizz.", "bow hair pull", "sul pont.", "flutter", "vib.", "ord.", "l.v."];
 
 var envelopes = {
     phraseLength: [1,1,2,3,4,1,1],
-    timeDispersion: [0,0,1,1.5,2,2.5,1]
+    timeDispersion: [0,0,1,1.5,2,2.5,1],
+    pitch: {
+        high: [0,0,0.5,1,1.5,2,2],
+        low: [0,-0.5,-1,-1.5,-2,-2,-2]
+    },
+    timbre: [0,2,4,5,6,8,9]
 };
 
 // ~durhi = InterplEnv([0.2, 0.75, 1.5, 3, 6, 4, 4], m, [\lin]);
 // ~durlo = InterplEnv([0.2, 0.5,  0.5, 1.0, 2, 3, 3], m, [\lin]);
-// ~tdisp = InterplEnv([0,0,1,1.5,2,2.5,1], m, [\lin]); // in seconds?
-// ~timbre = InterplEnv([0,2,4,5,6,8,9], m, [\lin]);
-// // ~timbres = ["bartok", "pizz.", "ghost", "rolling pizz.", "bow hair pull", "sul pont.", "flutter", "vib.", "ord.", "l.v."];
-// ~noteshi = InterplEnv([0,  0,  0.5,  1,  1.5,  2,  2], m, [\lin]);
-// ~noteslo = InterplEnv([0, -0.5, -1, -1.5, -2, -2, -2], m, [\lin]);
 
 // // ~score = [];
 // // 4.do({|part|
@@ -48,15 +52,34 @@ for (var i = 0; i < timePoints.length; i++) {
             iit[2]
         );
 
-		timbre = "bartok"; // 0 // ~timbre.at(now);
+		timbre = timbres[Math.round(lerp(
+            envelopes.timbre[iit[0]],
+            envelopes.timbre[iit[1]],
+            iit[2]
+        ))];
 
 		pitch = {
-            high: 2, // ~noteshi.at(now);
-		    low: -2 // ~noteslo.at(now);
+            high:
+                roundHalf(lerp(
+                    envelopes.pitch.high[iit[0]],
+                    envelopes.pitch.high[iit[1]],
+                    iit[2]
+                )),
+		    low:
+                roundHalf(lerp(
+                    envelopes.pitch.low[iit[0]],
+                    envelopes.pitch.low[iit[1]],
+                    iit[2]
+                ))
         };
 
+        phraseLength = Math.round(lerp(
+            envelopes.phraseLength[iit[0]],
+            envelopes.phraseLength[iit[1]],
+            iit[2]
+        )),
         notes = [];
-		phraseLength = 2; // ~strlength.at(now).round(1);
+
         for (var j = 0; j < phraseLength; j++) {
 		// 	// var thisdur = rrand(~durlo.at(now), ~durhi.at(now));
 		// 	// thisdur = thisdur.nearestInList(~durs);
