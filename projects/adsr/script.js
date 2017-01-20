@@ -24,6 +24,9 @@ function getPrevNextIndicesAndT(array, val) {
 function roundHalf(num) {
     return Math.round(num*2)/2;
 }
+function lerpEnvelope(env, iit) {
+    return lerp(env[iit[0]], env[iit[1]], iit[2]);
+};
 
 var durations = [0.2,0.25,0.5,0.75,1,1.5,2,3,4,6,8];
 var timbres = ["bartok", "pizz.", "ghost", "rolling pizz.", "bow hair pull", "sul pont.", "flutter", "vib.", "ord.", "l.v."];
@@ -51,53 +54,22 @@ for (var i = 0; i < timePoints.length; i++) {
 
         iit = getPrevNextIndicesAndT(structurePoints, now);
 
-        timeDispersion = lerp(
-            envelopes.timeDispersion[iit[0]],
-            envelopes.timeDispersion[iit[1]],
-            iit[2]
-        );
+        timeDispersion = lerpEnvelope(envelopes.timeDispersion, iit);
 
-		timbre = timbres[Math.round(lerp(
-            envelopes.timbre[iit[0]],
-            envelopes.timbre[iit[1]],
-            iit[2]
-        ))];
+        timbre = timbres[Math.round(lerpEnvelope(envelopes.timbre, iit))];
 
 		pitch = {
-            high:
-                roundHalf(lerp(
-                    envelopes.pitch.high[iit[0]],
-                    envelopes.pitch.high[iit[1]],
-                    iit[2]
-                )),
-		    low:
-                roundHalf(lerp(
-                    envelopes.pitch.low[iit[0]],
-                    envelopes.pitch.low[iit[1]],
-                    iit[2]
-                ))
+            high: roundHalf(lerpEnvelope(envelopes.pitch.high, iit)),
+		    low: roundHalf(lerpEnvelope(envelopes.pitch.low, iit))
         };
 
-        phraseLength = Math.round(lerp(
-            envelopes.phraseLength[iit[0]],
-            envelopes.phraseLength[iit[1]],
-            iit[2]
-        )),
+        phraseLength = Math.round(lerpEnvelope(envelopes.phraseLength, iit));
         notes = [];
 
         for (var j = 0; j < phraseLength; j++) {
-            var highDur =
-                lerp(
-                    envelopes.duration.high[iit[0]],
-                    envelopes.duration.high[iit[1]],
-                    iit[2]
-                );
-            var lowDur =
-                lerp(
-                    envelopes.duration.low[iit[0]],
-                    envelopes.duration.low[iit[1]],
-                    iit[2]
-                );
+            var highDur = lerpEnvelope(envelopes.duration.high, iit);
+            var lowDur = lerpEnvelope(envelopes.duration.low, iit);
+
             // find a (random) duration between these envelopes
             var randDur = VS.getRandExcl(lowDur, highDur);
             // match that to the closest durations
