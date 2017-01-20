@@ -21,11 +21,19 @@ function getPrevNextValue(array, val) {
         }
     }
 }
+function getPrevNextIndicesAndT(array, val) {
+    for (var i = 0; i < array.length; i++) {
+        if (val >= array[i-1] && val <= array[i]) {
+            return [i-1, i, val - array[i-1]];
+        }
+    }
+}
 
 // // ~durs = [0.2,0.25,0.5,0.75,1,1.5,2,3,4,6,8];
 
 var envelopes = {
-    durations: [1,1,2,3,4,1,1]
+    phraseLength: [1,1,2,3,4,1,1],
+    timeDispersion: [0,0,1,1.5,2,2.5,1]
 };
 
 // ~durhi = InterplEnv([0.2, 0.75, 1.5, 3, 6, 4, 4], m, [\lin]);
@@ -40,13 +48,17 @@ var envelopes = {
 // // 4.do({|part|
 var part = [];
 for (var i = 0; i < timePoints.length; i++) {
-        var now, durations, durationsLength, timeDispersion, timbre, pitch;
+        var now, iit, notes, phraseLength, timeDispersion, timbre, pitch;
 		now = timePoints[i] / timePoints[timePoints.length - 1];
-console.log(
-    now,
-    getPrevNextValue(structurePoints, now)
-);
-        timeDispersion = 0; // ~tdisp.at(now);
+
+        iit = getPrevNextIndicesAndT(structurePoints, now);
+
+        timeDispersion = lerp(
+            envelopes.timeDispersion[iit[0]],
+            envelopes.timeDispersion[iit[1]],
+            iit[2]
+        );
+
 		timbre = "bartok"; // 0 // ~timbre.at(now);
 
 		pitch = {
@@ -54,15 +66,15 @@ console.log(
 		    low: -2 // ~noteslo.at(now);
         };
 
-        durations = [];
-		durationsLength = 2; // ~strlength.at(now).round(1);
-        for (var j = 0; j < durationsLength; j++) {
+        notes = [];
+		phraseLength = 2; // ~strlength.at(now).round(1);
+        for (var j = 0; j < phraseLength; j++) {
 		// 	// var thisdur = rrand(~durlo.at(now), ~durhi.at(now));
 		// 	// thisdur = thisdur.nearestInList(~durs);
 		// 	// thisstring = thisstring.add(thisdur);
-            durations.push(1);
+            notes.push(1);
 		};
-		part.push([timeDispersion, durations, timbre, pitch.high, pitch.low]);
+		part.push([timeDispersion, notes, timbre, pitch.high, pitch.low]);
 }
 // 	// ~score = ~score.add(thispart);
 // // });
