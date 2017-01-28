@@ -2,20 +2,25 @@
 # // adapted from original SuperCollider code
 ---
 
-var width = 8000,
+var scoreWidth = 8000,
     height = 640,
     unit = 10;
     timePoints = [ 0, 6.3858708756625, 10.33255612459, 16.718427000252, 27.050983124842, 37.383539249432, 43.769410125095, 47.716095374022, 50.155281000757, 54.101966249685, 60.487837125347, 66.873708001009, 70.820393249937, 77.206264125599, 81.152949374527, 87.538820250189, 97.871376374779, 108.20393249937, 114.58980337503, 124.92235949962, 131.30823037528, 141.64078649987, 158.35921350013, 175.07764050038, 185.41019662497, 195.74275274956, 212.46117974981, 229.17960675006, 239.51216287465, 245.89803375032, 256.23058987491, 262.61646075057, 272.94901687516, 283.28157299975, 289.66744387541, 293.61412912434, 300 ],
     scoreLength = timePoints[timePoints.length - 1],
     // for interpolating parameter envelopes, scaled to 1. originally in SuperCollider as durations, not points in time
-    structurePoints = [0, 0.14586594177599999, 0.236029032, 0.381924, 0.618, 0.763970968, 1 ];
+    structurePoints = [0, 0.14586594177599999, 0.236029032, 0.381924, 0.618, 0.763970968, 1 ],
+    // calculated in resize()
+    viewWidth = 0,
+    viewCenter = 0,
+    //
+    debug = false;
 
 // generate score
 {% include_relative score.js %}
 
 var main = d3.select(".main")
     .attr("height", height)
-    .attr("width", width);
+    .attr("width", scoreWidth);
 
 // create placeholder barlines
 var scoreGroup = main.append("g");
@@ -31,7 +36,7 @@ var scoreGroup = main.append("g");
     .style("stroke", "black")
     .style("stroke-opacity", "0.5")
     .attr("transform", function(d) {
-        var x = (width * d) / scoreLength,
+        var x = (scoreWidth * d) / scoreLength,
             y = height * 0.5;
         return "translate(" + x + ", " + y + ")";
     });
@@ -44,7 +49,7 @@ var partGroup = scoreGroup.append("g"); // part group
         .append("g")
         .attr("transform", function(d, i) {
             var timeDispersion = part[i][0],
-                x = ((width * d) / scoreLength) + (VS.getItem([-1,1]) * timeDispersion * unit), // TODO +/- timeDispersion
+                x = ((scoreWidth * d) / scoreLength) + (VS.getItem([-1,1]) * timeDispersion * unit), // TODO +/- timeDispersion
                 y = height * 0.5;
             return "translate(" + x + ", " + y + ")";
         })
@@ -80,7 +85,7 @@ function scrollScore(ndex, dur) {
     .duration(dur)
     .attr("transform", function() {
         return "translate(" +
-            ((-width * thisPoint) / scoreLength)
+            (viewCenter + (-scoreWidth * thisPoint) / scoreLength)
             + "," + 0 + ")"
     });
 }
@@ -89,3 +94,20 @@ for(var i = 0; i < timePoints.length; i++) {
 }
 VS.score.stopCallback = function(){ scrollScore(0, 300) };
 VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300) };
+
+//
+{% include_relative _debug.js %}
+//
+
+function resize() {
+    viewWidth = parseInt(d3.select("main").style("width"), 10);
+    viewCenter = viewWidth * 0.5;
+
+    if(debug){ resizeDebug(viewWidth, viewCenter); }
+
+    scrollScore(VS.score.pointer, 0);
+}
+
+resize();
+
+d3.select(window).on("resize", resize);
