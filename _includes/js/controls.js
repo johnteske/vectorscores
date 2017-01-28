@@ -90,5 +90,6 @@ function stepPointer(num){ // score, control
     if(!VS.score.playing) { // don't allow skip while playing, for now
         updatePointer(Math.min(Math.max(VS.score.pointer + num, 0), VS.score.getLength() - 1));
         VS.control.updateStepButtons();
+        VS.score.stepCallback();
     }
 }

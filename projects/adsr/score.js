@@ -17,7 +17,7 @@ function roundHalf(num) {
 }
 function lerpEnvelope(env, iit) {
     return lerp(env[iit[0]], env[iit[1]], iit[2]);
-};
+}
 
 var durations = [0.2,0.25,0.5,0.75,1,1.5,2,3,4,6,8];
 var timbres = ["bartok", "pizz.", "ghost", "rolling pizz.", "bow hair pull", "sul pont.", "flutter", "vib.", "ord.", "l.v."];
@@ -40,39 +40,39 @@ var envelopes = {
 // // 4.do({|part|
 var part = [];
 for (var i = 0; i < timePoints.length; i++) {
-        var now, iit, phrase, notes, phraseLength, timeDispersion, timbre, pitch;
-		now = timePoints[i] / scoreLength;
+    var now, iit, phrase, notes, phraseLength, timeDispersion, timbre, pitch;
+    now = timePoints[i] / scoreLength;
 
-        iit = getPrevNextIndicesAndT(structurePoints, now);
+    iit = getPrevNextIndicesAndT(structurePoints, now);
 
-        timeDispersion = lerpEnvelope(envelopes.timeDispersion, iit);
+    timeDispersion = lerpEnvelope(envelopes.timeDispersion, iit);
 
-        timbre = timbres[Math.round(lerpEnvelope(envelopes.timbre, iit))];
+    timbre = timbres[Math.round(lerpEnvelope(envelopes.timbre, iit))];
 
-		pitch = {
-            high: roundHalf(lerpEnvelope(envelopes.pitch.high, iit)),
-		    low: roundHalf(lerpEnvelope(envelopes.pitch.low, iit))
-        };
+    pitch = {
+        high: roundHalf(lerpEnvelope(envelopes.pitch.high, iit)),
+        low: roundHalf(lerpEnvelope(envelopes.pitch.low, iit))
+    };
 
-        phraseLength = Math.round(lerpEnvelope(envelopes.phraseLength, iit));
-        notes = [];
+    phraseLength = Math.round(lerpEnvelope(envelopes.phraseLength, iit));
+    notes = [];
 
-        for (var j = 0; j < phraseLength; j++) {
-            var highDur = lerpEnvelope(envelopes.duration.high, iit);
-            var lowDur = lerpEnvelope(envelopes.duration.low, iit);
+    for (var j = 0; j < phraseLength; j++) {
+        var highDur = lerpEnvelope(envelopes.duration.high, iit);
+        var lowDur = lerpEnvelope(envelopes.duration.low, iit);
 
             // find a (random) duration between these envelopes
-            var randDur = VS.getRandExcl(lowDur, highDur);
+        var randDur = VS.getRandExcl(lowDur, highDur);
             // match that to the closest durations
-			var closeDurIndices = getPrevNextIndices(durations, randDur);
+        var closeDurIndices = getPrevNextIndices(durations, randDur);
             // and pick one of the two
-            var thisDur = durations[VS.getItem(closeDurIndices)];
-            notes.push(thisDur);
-		};
+        var thisDur = durations[VS.getItem(closeDurIndices)];
+        notes.push(thisDur);
+    }
 
-        phrase = [timeDispersion, notes, timbre, pitch.high, pitch.low];
+    phrase = [timeDispersion, notes, timbre, pitch.high, pitch.low];
         // console.log(phrase);
-		part.push(phrase);
+    part.push(phrase);
 }
 // 	// ~score = ~score.add(thispart);
 // // });

@@ -18,7 +18,8 @@ var main = d3.select(".main")
     .attr("width", width);
 
 // create placeholder barlines
-main.append("g")
+var scoreGroup = main.append("g");
+    scoreGroup
     .selectAll("line")
     .data(timePoints)
     .enter()
@@ -35,9 +36,9 @@ main.append("g")
         return "translate(" + x + ", " + y + ")";
     });
 
-main.append("g") // part group
+var partGroup = scoreGroup.append("g"); // part group
     // for each phrase, create a group around a timePoint
-    .selectAll("g")
+    partGroup.selectAll("g")
         .data(timePoints)
         .enter()
         .append("g")
@@ -70,3 +71,21 @@ main.append("g") // part group
                 .attr("width", function(d) { return d * unit; })
                 .attr("height", unit)
     });
+
+
+function scrollScore(ndex, dur) {
+    var thisPoint = timePoints[ndex];
+    scoreGroup
+    .transition()
+    .duration(dur)
+    .attr("transform", function() {
+        return "translate(" +
+            ((-width * thisPoint) / scoreLength)
+            + "," + 0 + ")"
+    });
+}
+for(var i = 0; i < timePoints.length; i++) {
+    VS.score.add([timePoints[i] * 1000, scrollScore, (timePoints[i+1] - timePoints[i]) * 1000]); // time, func, duration
+}
+VS.score.stopCallback = function(){ scrollScore(0, 300) };
+VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300) };
