@@ -16,7 +16,7 @@ var scoreWidth = 8000,
     debug = false;
 
 // generate score
-{% include_relative score.js %}
+{% include_relative _score.js %}
 
 var main = d3.select(".main")
     .attr("height", height)

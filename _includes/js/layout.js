@@ -6,18 +6,24 @@ VS.page = {
     },
     footerClassed: function(newClass) {
         if (this.footer) { this.footer.className = newClass; }
+    },
+    showLayout: function() {
+        VS.page.headerClassed("show");
+        VS.page.footerClassed("show");
+    },
+    hideLayout: function() {
+        VS.page.headerClassed("hide");
+        VS.page.footerClassed("hide");
     }
 };
 
 VS.page.header.onclick = function() {
-    VS.page.headerClassed("show");
-    // VS.page.footerClassed("show"); // conflicts with playCallback()
+    VS.page.showLayout();
 };
 
 if (VS.page.footer) {
     VS.page.footer.onclick = function() {
-        // VS.page.headerClassed("show"); // conflicts with playCallback()
-        VS.page.footerClassed("show");
+        VS.page.showLayout();
     };
 }
 
@@ -25,3 +31,8 @@ document.getElementsByTagName("main")[0].onclick = function() {
     VS.page.headerClassed("hide");
     VS.page.footerClassed("hide");
 };
+
+VS.page.header.addEventListener("mouseover", VS.page.showLayout, true);
+VS.page.header.addEventListener("mouseout", VS.page.hideLayout, true);
+VS.page.footer.addEventListener("mouseover", VS.page.showLayout, true);
+VS.page.footer.addEventListener("mouseout", VS.page.hideLayout, true);

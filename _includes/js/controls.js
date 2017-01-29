@@ -27,28 +27,28 @@ if (VS.page.footer) {
             // event.key;
             // event.keyCode; // deprecated but for Safari support
             switch (keyPressed) {
-                case " ":
-                case 32:
-                    VS.score.playPause();
-                    break;
-                case "ArrowLeft":
-                case 37:
-                    stepPointer(-1);
-                    break;
-                case "ArrowRight":
-                case 39:
-                    stepPointer(1);
-                    break;
-                case "Escape":
-                case 27:
-                    VS.score.stop();
-                    break;
-                // case "/":
-                // case 191:
-                //     document.getElementById("score-pointer").focus();
-                //     break;
-                default:
-                    return;
+            case " ":
+            case 32:
+                VS.score.playPause();
+                break;
+            case "ArrowLeft":
+            case 37:
+                stepPointer(-1);
+                break;
+            case "ArrowRight":
+            case 39:
+                stepPointer(1);
+                break;
+            case "Escape":
+            case 27:
+                VS.score.stop();
+                break;
+            // case "/":
+            // case 191:
+            //     document.getElementById("score-pointer").focus();
+            //     break;
+            default:
+                return;
             }
             event.preventDefault();
         };
@@ -81,12 +81,12 @@ if (VS.page.footer) {
     window.addEventListener("keydown", VS.control.keydownListener, true);
 }
 
-function updatePointer(ndex){ // score, control
+function updatePointer(ndex){ // score, control // should be part of VS, not global
     VS.score.pointer = ndex;
     VS.control.pointer.element.value = ndex;
 }
 
-function stepPointer(num){ // score, control
+function stepPointer(num){ // score, control // should be part of VS, not global
     if(!VS.score.playing) { // don't allow skip while playing, for now
         updatePointer(Math.min(Math.max(VS.score.pointer + num, 0), VS.score.getLength() - 1));
         VS.control.updateStepButtons();

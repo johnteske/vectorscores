@@ -35,10 +35,10 @@ header, footer {
     &.hide {
         opacity: 0;
     }
-    &.show { // actively keep on
+    &.show {
         opacity: 1;
     }
-    &:hover, &:active {
+    &:hover, &:active { // still needed? script handles hover for header/footer
         opacity: 1;
     }
 }

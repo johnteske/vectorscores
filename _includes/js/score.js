@@ -6,7 +6,7 @@ VS.score = (function () {
     }
 
     function playEvent(ndex) {
-        updatePointer(ndex);
+        updatePointer(ndex); // should be part of VS, not global
 
         var thisEvent = VS.score.funcAt(ndex);
         thisEvent(ndex, VS.score.paramsAt(ndex));
@@ -48,6 +48,7 @@ VS.score = (function () {
             VS.control.back.disable();
             VS.control.fwd.disable();
             schedule(VS.score.preroll, playEvent, VS.score.pointer);
+            VS.page.hideLayout();
             VS.score.playCallback();
         },
         pause: function() {
@@ -55,6 +56,7 @@ VS.score = (function () {
             VS.control.play.setPlay();
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
+            VS.page.showLayout();
         },
         playPause: function() {
             if(!VS.score.playing){
@@ -71,6 +73,7 @@ VS.score = (function () {
             VS.control.stop.disable();
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
+            VS.page.showLayout();
             VS.score.stopCallback();
         },
         schedule: schedule
