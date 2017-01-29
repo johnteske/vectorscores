@@ -12,10 +12,10 @@ var main = d3.select(".main")
     .style("width", boxwidth + "px")
     .style("height", boxwidth + "px");
 
-{% include_relative globject.js %}
+{% include_relative _globject.js %}
 var theGlob = new Globject(150);
 
-{% include_relative rangeGen.js %}
+{% include_relative _rangeGen.js %}
 
 
 // make Globject
