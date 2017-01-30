@@ -25,6 +25,8 @@ if (VS.page.footer) {
     VS.page.footer.onclick = function() {
         VS.page.showLayout();
     };
+    VS.page.footer.addEventListener("mouseover", VS.page.showLayout, true);
+    VS.page.footer.addEventListener("mouseout", VS.page.hideLayout, true);
 }
 
 document.getElementsByTagName("main")[0].onclick = function() {
@@ -34,5 +36,3 @@ document.getElementsByTagName("main")[0].onclick = function() {
 
 VS.page.header.addEventListener("mouseover", VS.page.showLayout, true);
 VS.page.header.addEventListener("mouseout", VS.page.hideLayout, true);
-VS.page.footer.addEventListener("mouseover", VS.page.showLayout, true);
-VS.page.footer.addEventListener("mouseout", VS.page.hideLayout, true);
