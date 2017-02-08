@@ -1,5 +1,19 @@
 ---
 ---
+@font-face {
+    font-family: Bravura;
+    src: url(../../fonts/Bravura.woff);
+}
+
 main, svg {
     overflow-x: hidden;
+}
+
+.pitch-range {
+    font-family: 'Bravura';
+}
+
+.timbre {
+    font-family: serif;
+    font-style: italic;
 }
