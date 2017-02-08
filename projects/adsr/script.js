@@ -63,7 +63,7 @@ var partGroup = scoreGroup.append("g"); // part group
             .text(function() {
                 var lo = part[i][4],
                     hi = part[i][3];
-                return "[ " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : '' ) + " ]";
+                return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : '' ) + " \uec83";
             })
             .classed("pitch-range", true)
             .attr("y", -3 * unit);
@@ -76,18 +76,30 @@ var partGroup = scoreGroup.append("g"); // part group
         d3.select(this).selectAll("rect")
             .data(durations)
             .enter()
-            .append("rect")
+            .append("text")
+                .text(function(d, i) { return durDict[d] })
+                .classed("durations", true)
                 .attr("x", function(d, i) {
-                    var upToI = durations.slice(0,i);
-                    var sum = upToI.reduce(function(a, b) {
+                    var upToI = durations.slice(0, i),
+                        sum = upToI.reduce(function(a, b) {
                         return a + b + 1; // add padding between here
                     }, 0);
 
                     return sum * unit;
-                })
-                .attr("y", function(d, i) { return 0; })
-                .attr("width", function(d) { return d * unit; })
-                .attr("height", unit)
+                });
+            // save this, could be an interesting setting to toggle
+            // .append("rect")
+            //     .attr("x", function(d, i) {
+            //         var upToI = durations.slice(0, i),
+            //             sum = upToI.reduce(function(a, b) {
+            //             return a + b + 1; // add padding between here
+            //         }, 0);
+            //
+            //         return sum * unit;
+            //     })
+            //     .attr("y", function(d, i) { return 0; })
+            //     .attr("width", function(d) { return d * unit; })
+            //     .attr("height", unit)
     });
 
 

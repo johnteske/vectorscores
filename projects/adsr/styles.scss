@@ -9,8 +9,13 @@ main, svg {
     overflow-x: hidden;
 }
 
-.pitch-range {
+.pitch-range,
+.durations {
     font-family: 'Bravura';
+}
+
+.durations {
+    font-size: 21px;
 }
 
 .timbre {
