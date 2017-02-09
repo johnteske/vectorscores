@@ -8,7 +8,7 @@ var pitchDict = {
     "1":    "\ue262", // sharp
     "1.5":  "\ue283", // three-quarter sharp (three vertical strokes)
     "2":    "\ue263"  // double sharp
-}
+};
 
 // a little cartoonish--but consistent
 var _dot = "\u2009\uf477"; // &thinsp; + Bravura dot
@@ -25,4 +25,4 @@ var durDict = {
     "4":    "\uf468",        // whole note
     "6":    "\uf468" + _dot, // , dot
     "8":    "\uf467"         // double whole note
-}
+};
