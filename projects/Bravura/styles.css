@@ -3,9 +3,17 @@
     src: url(../../fonts/Bravura.woff);
 }
 
+main {
+    -webkit-user-select: inherit; // Chrome, Safari
+    -moz-user-select: inherit; // Firefox
+    -ms-user-select: inherit; // IE 10+
+    user-select: inherit;
+}
 div.codepoint {
     display: inline-block;
     padding: 12px;
+    width: 120px;
+    height: 120px;
     border: 1px solid #ddd;
 }
 

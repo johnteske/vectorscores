@@ -1,17 +1,30 @@
 d3.select("svg").remove();
-var group = d3.select("main").append("div");
+var group = d3.select("main");
 
-for (var i = 57344; i < 57354; i++) {
-    var hex = String.fromCharCode(i),
-        codepoint;
-    codepoint = group.append("div")
-        .classed("codepoint", true);
-    codepoint.append("p")
-        .classed("symbol", true)
-        .text(hex);
-    codepoint.append("p")
-        .classed("unicode", true)
-        .text("\\u" + i.toString(16));
+document.getElementsByTagName("body")[0].onload = displaySymbols();
+
+function displaySymbols() {
+    var frag = document.createDocumentFragment(),
+        fragSelect = d3.select(frag);
+    for (var i = 57344; i < 65535; i++) {
+        fragSelect.append("div").classed("codepoint", true);
+    }
+    group.node().appendChild(frag);
+
+    // for (var i = 57344; i < 65535; i++) {
+    //     var frag = document.createDocumentFragment();
+    //
+    //     d3.select(frag).append("div")
+    //         .classed("codepoint", true)
+    //     // .append("p")
+    //     //     .classed("symbol", true)
+    //     //     .text(String.fromCharCode(i))
+    //     // .append("p")
+    //     //     .classed("unicode", true)
+    //     //     .text("\\u" + i.toString(16));
+    //
+    //     group.node().appendChild(frag);
+    // }
 }
 
 // h = 0xE000;

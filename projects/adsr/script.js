@@ -12,7 +12,8 @@ var scoreWidth = 8000,
     // calculated in resize()
     viewWidth = 0,
     viewCenter = 0,
-    //
+    // TODO get from settings/query string
+    numParts = 2,
     debug = false;
 
 // symbol dictionary
@@ -25,26 +26,30 @@ var main = d3.select(".main")
     .attr("height", height)
     .attr("width", scoreWidth);
 
-// create placeholder barlines
 var scoreGroup = main.append("g");
-    scoreGroup
-    .selectAll("line")
-    .data(timePoints)
-    .enter()
-    .append("line")
-        .attr("x1", 0)
-        .attr("y1", -2 * unit)
-        .attr("x2", 0)
-        .attr("y2", 3 * unit)
-    .style("stroke", "black")
-    .style("stroke-opacity", "0.5")
-    .attr("transform", function(d) {
-        var x = (scoreWidth * d) / scoreLength,
-            y = height * 0.5;
-        return "translate(" + x + ", " + y + ")";
-    });
 
-var partGroup = scoreGroup.append("g"); // part group
+for (var p = 0; p < numParts; p++) {
+    var part = parts[p];
+    var partGroup = scoreGroup.append("g"); // part group
+    var partYPos = (p + 1) * 12 * unit;
+
+    // create placeholder barlines
+    partGroup.selectAll("line")
+        .data(timePoints)
+        .enter()
+        .append("line")
+            .attr("x1", 0)
+            .attr("y1", -2 * unit)
+            .attr("x2", 0)
+            .attr("y2", 3 * unit)
+        .style("stroke", "black")
+        .style("stroke-opacity", "0.5")
+        .attr("transform", function(d) {
+            var x = (scoreWidth * d) / scoreLength,
+                y = partYPos;
+            return "translate(" + x + ", " + y + ")";
+        });
+
     // for each phrase, create a group around a timePoint
     partGroup.selectAll("g")
         .data(timePoints)
@@ -53,55 +58,55 @@ var partGroup = scoreGroup.append("g"); // part group
         .attr("transform", function(d, i) {
             var timeDispersion = part[i][0],
                 x = ((scoreWidth * d) / scoreLength) + (VS.getItem([-1,1]) * timeDispersion * unit), // TODO +/- timeDispersion
-                y = height * 0.5;
+                y = partYPos;
             return "translate(" + x + ", " + y + ")";
         })
-    // add phrase content
-    .each(function(d, i) {
-        var durations = part[i][1];
-        var pitchRange = d3.select(this).append("text")
-            .text(function() {
-                var lo = part[i][4],
-                    hi = part[i][3];
-                return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : '' ) + " \uec83";
-            })
-            .classed("pitch-range", true)
-            .attr("y", -3 * unit);
-        d3.select(this).append("text")
-            .text(part[i][2])
-            .classed("timbre", true)
-            // .attr("x", pitchRange.node().getBBox().width - 5)
-            .attr("y", -5 * unit);
-            // .attr("y", -3 * unit);
-        d3.select(this).selectAll("rect")
-            .data(durations)
-            .enter()
-            .append("text")
-                .text(function(d, i) { return durDict[d] })
-                .classed("durations", true)
-                .attr("x", function(d, i) {
-                    var upToI = durations.slice(0, i),
-                        sum = upToI.reduce(function(a, b) {
-                        return a + b + 1; // add padding between here
-                    }, 0);
+        // add phrase content
+        .each(function(d, i) {
+            var durations = part[i][1];
+            var pitchRange = d3.select(this).append("text")
+                .text(function() {
+                    var lo = part[i][4],
+                        hi = part[i][3];
+                    return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : '' ) + " \uec83";
+                })
+                .classed("pitch-range", true)
+                .attr("y", -3 * unit);
+            d3.select(this).append("text")
+                .text(part[i][2])
+                .classed("timbre", true)
+                // .attr("x", pitchRange.node().getBBox().width - 5)
+                .attr("y", -5 * unit);
+                // .attr("y", -3 * unit);
+            d3.select(this).selectAll("rect")
+                .data(durations)
+                .enter()
+                .append("text")
+                    .text(function(d, i) { return durDict[d] })
+                    .classed("durations", true)
+                    .attr("x", function(d, i) {
+                        var upToI = durations.slice(0, i),
+                            sum = upToI.reduce(function(a, b) {
+                            return a + b + 1; // add padding between here
+                        }, 0);
 
-                    return sum * unit;
-                });
-            // save this, could be an interesting setting to toggle
-            // .append("rect")
-            //     .attr("x", function(d, i) {
-            //         var upToI = durations.slice(0, i),
-            //             sum = upToI.reduce(function(a, b) {
-            //             return a + b + 1; // add padding between here
-            //         }, 0);
-            //
-            //         return sum * unit;
-            //     })
-            //     .attr("y", function(d, i) { return 0; })
-            //     .attr("width", function(d) { return d * unit; })
-            //     .attr("height", unit)
-    });
-
+                        return sum * unit;
+                    });
+                // save this, could be an interesting setting to toggle
+                // .append("rect")
+                //     .attr("x", function(d, i) {
+                //         var upToI = durations.slice(0, i),
+                //             sum = upToI.reduce(function(a, b) {
+                //             return a + b + 1; // add padding between here
+                //         }, 0);
+                //
+                //         return sum * unit;
+                //     })
+                //     .attr("y", function(d, i) { return 0; })
+                //     .attr("width", function(d) { return d * unit; })
+                //     .attr("height", unit)
+        });
+}
 
 function scrollScore(ndex, dur) {
     var thisPoint = timePoints[ndex];
