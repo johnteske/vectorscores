@@ -13,7 +13,7 @@ var scoreWidth = 8000,
     viewWidth = 0,
     viewCenter = 0,
     // TODO get from settings/query string
-    numParts = 2,
+    numParts = 4,
     debug = false;
 
 // symbol dictionary
@@ -28,27 +28,27 @@ var main = d3.select(".main")
 
 var scoreGroup = main.append("g");
 
+// create placeholder barlines
+scoreGroup.selectAll("line")
+    .data(timePoints)
+    .enter()
+    .append("line")
+        .attr("x1", 0)
+        .attr("y1", 6 * unit)
+        .attr("x2", 0)
+        .attr("y2", height - (6 * unit))
+    .style("stroke", "black")
+    .style("stroke-opacity", "0.25")
+    .attr("transform", function(d) {
+        var x = (scoreWidth * d) / scoreLength,
+            y = 0;
+        return "translate(" + x + ", " + y + ")";
+    });
+
 for (var p = 0; p < numParts; p++) {
     var part = parts[p];
     var partGroup = scoreGroup.append("g"); // part group
     var partYPos = (p + 1) * 12 * unit;
-
-    // create placeholder barlines
-    partGroup.selectAll("line")
-        .data(timePoints)
-        .enter()
-        .append("line")
-            .attr("x1", 0)
-            .attr("y1", -2 * unit)
-            .attr("x2", 0)
-            .attr("y2", 3 * unit)
-        .style("stroke", "black")
-        .style("stroke-opacity", "0.5")
-        .attr("transform", function(d) {
-            var x = (scoreWidth * d) / scoreLength,
-                y = partYPos;
-            return "translate(" + x + ", " + y + ")";
-        });
 
     // for each phrase, create a group around a timePoint
     partGroup.selectAll("g")
@@ -78,7 +78,7 @@ for (var p = 0; p < numParts; p++) {
                 // .attr("x", pitchRange.node().getBBox().width - 5)
                 .attr("y", -5 * unit);
                 // .attr("y", -3 * unit);
-            d3.select(this).selectAll("rect")
+            d3.select(this).selectAll("rect") // TODO should selectAll text, although that is broken
                 .data(durations)
                 .enter()
                 .append("text")
