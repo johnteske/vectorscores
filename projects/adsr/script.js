@@ -12,8 +12,8 @@ var scoreWidth = 8000,
     // calculated in resize()
     viewWidth = 0,
     viewCenter = 0,
-    // TODO get from settings/query string
-    numParts = 4,
+    // TODO allow numParts to be set from settings
+    numParts = +VS.getQueryString("parts") || 4;
     debug = false;
 
 // symbol dictionary
