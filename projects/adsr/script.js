@@ -56,24 +56,24 @@ for (var p = 0; p < numParts; p++) {
         .enter()
         .append("g")
         .attr("transform", function(d, i) {
-            var timeDispersion = part[i][0],
+            var timeDispersion = part[i].timeDispersion,
                 x = ((scoreWidth * d) / scoreLength) + (VS.getItem([-1,1]) * timeDispersion * unit), // TODO +/- timeDispersion
                 y = partYPos;
             return "translate(" + x + ", " + y + ")";
         })
         // add phrase content
         .each(function(d, i) {
-            var durations = part[i][1];
+            var durations = part[i].durations;
             var pitchRange = d3.select(this).append("text")
                 .text(function() {
-                    var lo = part[i][4],
-                        hi = part[i][3];
+                    var lo = part[i].pitch.low,
+                        hi = part[i].pitch.high;
                     return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : '' ) + " \uec83";
                 })
                 .classed("pitch-range", true)
                 .attr("y", -3 * unit);
             d3.select(this).append("text")
-                .text(part[i][2])
+                .text(part[i].timbre)
                 .classed("timbre", true)
                 // .attr("x", pitchRange.node().getBBox().width - 5)
                 .attr("y", -5 * unit);

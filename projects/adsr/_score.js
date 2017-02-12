@@ -40,22 +40,21 @@ var parts = [];
 for (var p = 0; p < numParts; p++) {
     var part = [];
     for (var i = 0; i < timePoints.length; i++) {
-        var now, iit, phrase, notes, phraseLength, timeDispersion, timbre, pitch;
-        now = timePoints[i] / scoreLength;
+        var now = timePoints[i] / scoreLength,
+            iit = getPrevNextIndicesAndT(structurePoints, now),
+            phrase = {};
 
-        iit = getPrevNextIndicesAndT(structurePoints, now);
+        phrase.timeDispersion = lerpEnvelope(envelopes.timeDispersion, iit);
 
-        timeDispersion = lerpEnvelope(envelopes.timeDispersion, iit);
+        phrase.timbre = timbres[Math.round(lerpEnvelope(envelopes.timbre, iit))];
 
-        timbre = timbres[Math.round(lerpEnvelope(envelopes.timbre, iit))];
-
-        pitch = {
+        phrase.pitch = {
             high: roundHalf(lerpEnvelope(envelopes.pitch.high, iit)),
             low: roundHalf(lerpEnvelope(envelopes.pitch.low, iit))
         };
 
-        phraseLength = Math.round(lerpEnvelope(envelopes.phraseLength, iit));
-        notes = [];
+        var phraseLength = Math.round(lerpEnvelope(envelopes.phraseLength, iit));
+        phrase.durations = [];
 
         for (var j = 0; j < phraseLength; j++) {
             var highDur = lerpEnvelope(envelopes.duration.high, iit);
@@ -67,10 +66,9 @@ for (var p = 0; p < numParts; p++) {
             var closeDurIndices = getPrevNextIndices(durations, randDur);
             // and pick one of the two
             var thisDur = durations[VS.getItem(closeDurIndices)];
-            notes.push(thisDur);
+            phrase.durations.push(thisDur);
         }
 
-        phrase = [timeDispersion, notes, timbre, pitch.high, pitch.low];
         part.push(phrase);
     }
     parts.push(part);
