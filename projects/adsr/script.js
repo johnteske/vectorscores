@@ -29,7 +29,10 @@ var main = d3.select(".main")
 var scoreGroup = main.append("g");
 
 // create placeholder barlines
-scoreGroup.selectAll("line")
+
+var layoutGroup = scoreGroup.append("g");
+
+layoutGroup.selectAll("line")
     .data(timePoints)
     .enter()
     .append("line")
