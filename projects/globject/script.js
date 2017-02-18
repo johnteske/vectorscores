@@ -5,7 +5,7 @@ var width = 480,
     margin = 20,
     boxwidth = width + (margin * 2),
     center = boxwidth * 0.5,
-    globLeft = 5;
+    globLeft = 5,
     debug = false;
 
 var main = d3.select(".main")
@@ -141,14 +141,14 @@ function drawGlobject(){
         .data(theGlob.noteTexture)
         .enter()
         .append("text")
-        .text(function(d) {return d.head})
+        .text(function(d) {return d.head;})
         .attr("transform",
             function(d) {
                 return "translate(" + d.x + ", " + d.y + ")";
-        });
+            });
 
-     theGlob.rangePath =
-     globGroup.append("path")
+    theGlob.rangePath =
+    globGroup.append("path")
          .attr("transform", "translate(" + globLeft + "," + 0 + ")")
          .classed("globject", 1)
          //  .transition(300)
