@@ -83,7 +83,7 @@ function moveIt(){
         .attr("transform", transformNotehead);
 }
 
-for(var i = 0; i < 10; i++) {
+for(i = 0; i < 10; i++) {
     VS.score.add([i * tLong, moveIt]);
 }
 // final event
