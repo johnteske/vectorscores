@@ -1,6 +1,5 @@
 var cards = [],
-    cardChoices = ["A", "B", "C", "D", "E"], // rando rondo
-    pointer = 0;
+    cardChoices = ["A", "B", "C", "D", "E"]; // rando rondo
 
 function makeCards() {
     for (var i = 0; i < 10; i++) {
@@ -54,15 +53,8 @@ for (var i = 0; i < 15; i++) {
         );
 }
 
-// card.append("text")
-//     .attr("x", cardWidth / 2)
-//     .attr("y", cardWidth / 2)
-//     .attr("dy", ".35em")
-//     // .attr("dx", "-.35em")
-//     .text(function(d, i) { return d; });
-
-function advanceCard() {
-    pointer++;
+function goToCard(dur) {
+    var pointer = VS.score.pointer;
     card.transition()
     .attr("transform", function(d, i) {
         var pos =
@@ -72,7 +64,7 @@ function advanceCard() {
             - (cardPadding * pointer); // also move by spacing
         return "translate(" + pos + ", 100)";
     })
-    .duration(600)
+    .duration(dur || 600)
     .style("opacity", function(d, i) {
         if(pointer > i ){
             return 0;
@@ -84,14 +76,9 @@ function advanceCard() {
 }
 
 for(i = 0; i < cards.length; i++) {
-    var etime = (i * 1500) + (Math.random() * 750);
-    VS.score.add([etime, advanceCard]);
+    var time = (i * 1500) + (Math.random() * 750);
+    VS.score.add([time, goToCard]);
 }
 
-// VS.score.stopCallback = function() {
-//     cards = [];
-//     pointer = 0;
-//     main.html("");
-//
-//     makeCards();
-// };
+VS.score.stepCallback = function() { goToCard(300); };
+VS.score.stopCallback = goToCard;
