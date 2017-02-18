@@ -29,3 +29,9 @@ and point your mobile device to your computer's private IP address, port 4000.
 #### Ensuring compatibility with GitHub pages
 
 `$ bundle exec jekyll serve`
+
+#### Linting built files
+
+`npm install -g eslint`
+
+`eslint _site`
