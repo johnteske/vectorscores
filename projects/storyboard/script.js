@@ -83,7 +83,7 @@ function advanceCard() {
     });
 }
 
-for(var i = 0; i < cards.length; i++) {
+for(i = 0; i < cards.length; i++) {
     var etime = (i * 1500) + (Math.random() * 750);
     VS.score.add([etime, advanceCard]);
 }
