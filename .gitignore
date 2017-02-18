@@ -3,7 +3,7 @@
 
 # local development
 js/d3*
-workspace_local/
+_workspace/
 Gemfile.lock
 
 # Jekyll

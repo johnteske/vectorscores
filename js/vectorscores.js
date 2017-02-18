@@ -1,4 +1,5 @@
 ---
+layout: compress-js
 ---
 {% include js/vs.js %}
 {% include js/helpers.js %}

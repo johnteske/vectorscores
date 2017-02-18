@@ -45,11 +45,11 @@ if (document.getElementById("score-info-modal")) {
             }
 
             switch (event.key) {
-                case "Escape":
-                    closeInfoModal();
-                    break;
-                default:
-                    return;
+            case "Escape":
+                closeInfoModal();
+                break;
+            default:
+                return;
             }
             event.preventDefault();
         }
