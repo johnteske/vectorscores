@@ -1,5 +1,5 @@
 .main rect {
-  fill: white;
+  fill: none;
   stroke: #888;
   stroke-width: 1px;
   /*shape-rendering: geometricPrecision;*/

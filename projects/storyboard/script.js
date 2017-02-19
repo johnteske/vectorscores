@@ -1,8 +1,8 @@
 var cards = [],
     cardChoices = ["A", "B", "C", "D", "E"]; // rando rondo
 
-function makeCards() {
-    for (var i = 0; i < 10; i++) {
+function makeCards(n) {
+    for (var i = 0; i < n; i++) {
         var lastCard = cards[i-1];
         do {
             var newCard = Math.floor(Math.random() * cardChoices.length);
@@ -10,7 +10,7 @@ function makeCards() {
         cards.push(cardChoices[newCard]);
     }
 }
-makeCards();
+makeCards(20);
 
 // display
 var cardWidth = 120,
@@ -28,30 +28,42 @@ var card = main.selectAll("g")
     .data(cards)
     .enter().append("g")
     .attr("transform", function(d, i) { var pos = offset + (i * (cardWidth + cardPadding)); return "translate(" + pos + ", 100)"; })
-    .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
+    .style("opacity", function(d, i) { return 1 - (i * (0.5)); })
+    .each(function(d) {
+        var thisCard = d3.select(this),
+            indexOfCardChoice = cardChoices.indexOf(d),
+            // simple dummy data: 1-21 notes, based on card
+            numNotes = "abcdefghijklmnopqrstuvwxyz".substr(0, 1 + (indexOfCardChoice * 5)),
+            txtSpread = [
+                {x: 0, y: 0}, // A single note
+                {x: 0, y: 24}, // B chord, cluster
+                {x: 56, y: 0}, // C rhythm
+                {x: 56, y: 24}, // D rect cloud
+                {x: 48, y: 48} // E cloud
+            ][indexOfCardChoice];
+
+        // thisCard.append("text").text(d + indexOfCardChoice); // debug
+
+        thisCard.selectAll("ellipse")
+            .data(numNotes).enter()
+            .append("ellipse")
+                .attr("cx", 5)
+                .attr("cy", 5)
+                .attr("rx", 4)
+                .attr("ry", 5)
+                // TODO non-rectangular spread
+                .attr("transform",
+                    function() {
+                        return "translate(" +
+                            ((Math.random() * txtSpread.x) + (cardWidth / 2) - (txtSpread.x / 2)) + ", " +
+                            ((Math.random() * txtSpread.y) + (cardWidth / 2) - (txtSpread.y / 2)) +
+                        ") rotate(60)"; }
+                );
+    });
 
 card.append("rect")
     .attr("width", cardWidth - 1)
     .attr("height", cardWidth - 1);
-
-var txtWidth = 10;
-var txtHeight = 10;
-var txtSpread = 48;
-for (var i = 0; i < 15; i++) {
-    card.append("ellipse")
-        .attr("cx", txtWidth * 0.5)
-        .attr("cy", txtHeight * 0.5)
-        .attr("rx", 4)
-        .attr("ry", 5)
-        .attr("transform",
-        function() {
-            return "translate(" +
-                ((Math.random() * txtSpread) + (cardWidth / 2) - (txtSpread / 2)) + ", " +
-                ((Math.random() * txtSpread) + (cardWidth / 2) - (txtSpread / 2)) +
-            ") rotate(60)";
-        }
-        );
-}
 
 function goToCard(dur) {
     var pointer = VS.score.pointer;
@@ -75,7 +87,7 @@ function goToCard(dur) {
     });
 }
 
-for(i = 0; i < cards.length; i++) {
+for(var i = 0; i < cards.length; i++) {
     var time = (i * 1500) + (Math.random() * 750);
     VS.score.add([time, goToCard]);
 }
