@@ -11,7 +11,7 @@ function objEvent(ndex, params) {
 }
 
 // create events
-var numvents = Math.floor(Math.random()*5) + 10;
+var numvents = Math.floor(Math.random() * 5) + 10;
 
 function createSpan(eventTime){
     var spanel = document.createElement("span");
@@ -33,21 +33,12 @@ function createEvent(eventTime) {
 }
 createEvent(0); // create first event
 for (var i = 0; i < numvents; i++) { // create remaining events
-    var eventTime = Math.floor(Math.random()*500)+(i*1500)+1000;
+    var eventTime = Math.floor(Math.random() * 500) + (i * 1500) + 1000;
     createEvent(eventTime);
 }
 
-VS.score.playCallback = function() {
-    // VS.page.headerClassed("hide");
-    // VS.page.footerClassed("hide");
-};
+// VS.score.stepCallback = function() {};
 
 VS.score.stopCallback = function() {
-    var spanz = document.getElementsByClassName("event-span");
-    for (var i = 0; i < spanz.length; i++) {
-        var thisspan = spanz[i];
-        thisspan.className = "event-span";
-    }
-    // VS.page.headerClassed("show");
-    // VS.page.footerClassed("show");
+    d3.selectAll(".event-span").attr("class", "event-span"); // force this class only
 };
