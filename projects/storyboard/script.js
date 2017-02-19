@@ -73,8 +73,9 @@ card.append("rect")
     .attr("width", cardWidth - 1)
     .attr("height", cardWidth - 1);
 
-function goToCard(dur) {
+function goToCard(i, dur) {
     var pointer = VS.score.pointer;
+    dur = dur || 600;
     card.transition()
     .attr("transform", function(d, i) {
         var pos =
@@ -84,7 +85,7 @@ function goToCard(dur) {
             - (cardPadding * pointer); // also move by spacing
         return "translate(" + pos + ", 100)";
     })
-    .duration(dur || 600)
+    .duration(dur)
     .style("opacity", function(d, i) {
         if(pointer > i ){
             return 0;
@@ -100,5 +101,5 @@ for(var i = 0; i < cards.length; i++) {
     VS.score.add([time, goToCard]);
 }
 
-VS.score.stepCallback = function() { goToCard(300); };
+VS.score.stepCallback = function() { goToCard(null, 300); };
 VS.score.stopCallback = goToCard;
