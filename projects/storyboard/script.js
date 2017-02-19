@@ -23,6 +23,14 @@ var main = d3.select(".main")
     .attr("width", width)
     .attr("height", height);
 
+function newPoint(spread) {
+    var angle = Math.random() * Math.PI * 2;
+    return {
+        x: Math.cos(angle) * spread.x * VS.getRandExcl(-1,1),
+        y: Math.sin(angle) * spread.y * VS.getRandExcl(-1,1)
+    };
+}
+
 // create cards
 var card = main.selectAll("g")
     .data(cards)
@@ -36,10 +44,10 @@ var card = main.selectAll("g")
             numNotes = "abcdefghijklmnopqrstuvwxyz".substr(0, 1 + (indexOfCardChoice * 5)),
             txtSpread = [
                 {x: 0, y: 0}, // A single note
-                {x: 0, y: 24}, // B chord, cluster
-                {x: 56, y: 0}, // C rhythm
-                {x: 56, y: 24}, // D rect cloud
-                {x: 48, y: 48} // E cloud
+                {x: 0, y: 25}, // B chord, cluster
+                {x: 50, y: 0}, // C rhythm
+                {x: 50, y: 25}, // D rect cloud
+                {x: 35, y: 35} // E cloud
             ][indexOfCardChoice];
 
         // thisCard.append("text").text(d + indexOfCardChoice); // debug
@@ -51,13 +59,13 @@ var card = main.selectAll("g")
                 .attr("cy", 5)
                 .attr("rx", 4)
                 .attr("ry", 5)
-                // TODO non-rectangular spread
                 .attr("transform",
                     function() {
+                        var point = newPoint(txtSpread);
                         return "translate(" +
-                            ((Math.random() * txtSpread.x) + (cardWidth / 2) - (txtSpread.x / 2)) + ", " +
-                            ((Math.random() * txtSpread.y) + (cardWidth / 2) - (txtSpread.y / 2)) +
-                        ") rotate(60)"; }
+                            (point.x + (cardWidth * 0.5)) + ", " +
+                            (point.y + (cardWidth * 0.5) - 5) + ") " + "rotate(60)"; // offset y by note height
+                    }
                 );
     });
 
