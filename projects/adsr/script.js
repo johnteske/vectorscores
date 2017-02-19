@@ -60,7 +60,7 @@ for (p = 0; p < numParts; p++) {
         .append("g")
         .attr("transform", function(d, i) {
             var timeDispersion = part[i].timeDispersion,
-                x = ((scoreWidth * d) / scoreLength) + (VS.getItem([-1,1]) * timeDispersion * unit), // TODO +/- timeDispersion
+                x = ((scoreWidth * d) / scoreLength) + (VS.getItem([-1, 1]) * timeDispersion * unit), // TODO +/- timeDispersion
                 y = partYPos;
             return "translate(" + x + ", " + y + ")";
         })
@@ -114,13 +114,11 @@ function scrollScore(ndex, dur) {
     .transition()
     .duration(dur)
     .attr("transform", function() {
-        return "translate(" +
-            (viewCenter + (-scoreWidth * thisPoint) / scoreLength)
-            + "," + 0 + ")";
+        return "translate(" + (viewCenter + (-scoreWidth * thisPoint) / scoreLength) + "," + 0 + ")";
     });
 }
 for(i = 0; i < timePoints.length; i++) {
-    VS.score.add([timePoints[i] * 1000, scrollScore, (timePoints[i+1] - timePoints[i]) * 1000]); // time, func, duration
+    VS.score.add([timePoints[i] * 1000, scrollScore, (timePoints[i + 1] - timePoints[i]) * 1000]); // time, func, duration
 }
 VS.score.stopCallback = function(){ scrollScore(0, 300); };
 VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300); };

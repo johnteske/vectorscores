@@ -3,8 +3,8 @@ function lerp(v0, v1, t) {
 }
 function getPrevNextIndices(array, val) {
     for (var i = 0; i < array.length; i++) {
-        if (val >= array[i-1] && val <= array[i]) {
-            return [i-1, i];
+        if (val >= array[i - 1] && val <= array[i]) {
+            return [i - 1, i];
         }
     }
 }
@@ -13,13 +13,13 @@ function getPrevNextIndicesAndT(array, val) {
     return [indices[0], indices[1], val - array[indices[0]]];
 }
 function roundHalf(num) {
-    return Math.round(num*2)/2;
+    return Math.round(num * 2) / 2;
 }
 function lerpEnvelope(env, iit) {
     return lerp(env[iit[0]], env[iit[1]], iit[2]);
 }
 
-var durations = [0.2,0.25,0.5,0.75,1,1.5,2,3,4,6,8];
+var durations = [0.2, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6, 8];
 var timbres = ["bartok", "pizz.", "ghost", "rolling pizz.", "bow hair pull", "sul pont.", "flutter", "vib.", "ord.", "l.v."];
 
 var envelopes = {

@@ -1,4 +1,4 @@
-debug = VS.getQueryString("debug") == 1 ? true : false;
+debug = VS.getQueryString("debug") == 1 ||  false;
 
 if(debug) {
     main.append("line")

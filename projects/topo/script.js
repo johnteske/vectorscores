@@ -41,8 +41,8 @@ function drawScore(scoreFragment, x, y) {
 
     topo.node().appendChild(documentFragment);
 }
-topoScore = createScoreFragment(8,7);
+topoScore = createScoreFragment(8, 7);
 drawScore(topoScore, 0, 0);
-drawScore(createScoreFragment(8,1), 7,7);
+drawScore(createScoreFragment(8, 1), 7, 7);
 
 topo.attr("transform", "translate(240,120)");

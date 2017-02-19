@@ -3,7 +3,7 @@ var cards = [],
 
 function makeCards(n) {
     for (var i = 0; i < n; i++) {
-        var lastCard = cards[i-1];
+        var lastCard = cards[i - 1];
         do {
             var newCard = Math.floor(Math.random() * cardChoices.length);
         } while (cardChoices[newCard] == lastCard); // do not repeat cards
@@ -26,8 +26,8 @@ var main = d3.select(".main")
 function newPoint(spread) {
     var angle = Math.random() * Math.PI * 2;
     return {
-        x: Math.cos(angle) * spread.x * VS.getRandExcl(-1,1),
-        y: Math.sin(angle) * spread.y * VS.getRandExcl(-1,1)
+        x: Math.cos(angle) * spread.x * VS.getRandExcl(-1, 1),
+        y: Math.sin(angle) * spread.y * VS.getRandExcl(-1, 1)
     };
 }
 
@@ -79,10 +79,10 @@ function goToCard(i, dur) {
     card.transition()
     .attr("transform", function(d, i) {
         var pos =
-            offset
-            + (i * (cardWidth + cardPadding))
-            - (offset * pointer) // move by pointer
-            - (cardPadding * pointer); // also move by spacing
+            offset + 
+            (i * (cardWidth + cardPadding)) - 
+            (offset * pointer) - // move by pointer
+            (cardPadding * pointer); // also move by spacing
         return "translate(" + pos + ", 100)";
     })
     .duration(dur)

@@ -37,9 +37,9 @@ function makeGlobject() {
     var hiRangeGen = randRangeGenerator(),
         loRangeGen = randRangeGenerator(),
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
-        newDynamics = ["","",""];
+        newDynamics = ["", "", ""];
 
-    theGlob.width = Math.round(VS.getRandExcl(100,200));
+    theGlob.width = Math.round(VS.getRandExcl(100, 200));
 
     theGlob.setRangeEnvelopes(
         "midi",
@@ -50,8 +50,8 @@ function makeGlobject() {
 
     theGlob.setPitchClassSets(
         [
-            [ 0, Math.round(VS.getRandExcl(1,3)) ],
-            [ 0, Math.round(VS.getRandExcl(1,3)), Math.round(VS.getRandExcl(4,7)) ]
+            [ 0, Math.round(VS.getRandExcl(1, 3)) ],
+            [ 0, Math.round(VS.getRandExcl(1, 3)), Math.round(VS.getRandExcl(4, 7)) ]
         ],
         [0, (Math.random() * 0.2) + 0.4]
     );
@@ -88,14 +88,14 @@ function makeGlobject() {
         };
         if (note.y > 64) {
             note.head =
-                String.fromCharCode( VS.getItem([57814,57816]) ) +
+                String.fromCharCode( VS.getItem([57814, 57816]) ) +
                 " " +
-                String.fromCharCode( VS.getItem([57814,57816]) );
+                String.fromCharCode( VS.getItem([57814, 57816]) );
         } else {
             note.head =
-                String.fromCharCode( VS.getItem([57813,57817]) ) +
+                String.fromCharCode( VS.getItem([57813, 57817]) ) +
                 " " +
-                String.fromCharCode( VS.getItem([57813,57817]) );
+                String.fromCharCode( VS.getItem([57813, 57817]) );
         }
         theGlob.noteTexture.push(note);
     }

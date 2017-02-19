@@ -9,7 +9,7 @@ VS.getItem = function(array) {
 };
 
 VS.getWeightedItem = function(itemArray, weightArray) {
-    var totalWeight = weightArray.reduce( function(a,b) {return a + b;} ),
+    var totalWeight = weightArray.reduce( function(a, b) {return a + b;} ),
         randNum = VS.getRandExcl(0, totalWeight),
         weightSum = 0;
 

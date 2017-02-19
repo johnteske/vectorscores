@@ -14,8 +14,8 @@ VS.score = (function () {
         // schedule next event
         if (ndex < VS.score.getLength() - 1) {
             var id = VS.score.timeAt(ndex),
-                diff = VS.score.timeAt(ndex+1) - id;
-            schedule(diff, playEvent, ndex+1);
+                diff = VS.score.timeAt(ndex + 1) - id;
+            schedule(diff, playEvent, ndex + 1);
         } else {
             VS.score.stop();
         }

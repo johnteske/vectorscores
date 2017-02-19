@@ -25,14 +25,14 @@ function pointDisp() {
 function makePath(relPos) {
     return [
         {x: margin, y: pointDisp()},
-        {x: txtWidth-margin, y: pointDisp()},
+        {x: txtWidth - margin, y: pointDisp()},
         {x: txtWidth, y: margin + pointDisp()},
-        {x: txtWidth, y: txtHeight-margin+pointDisp()},
+        {x: txtWidth, y: txtHeight - margin + pointDisp()},
         {x: txtWidth + margin * (relPos), y:txtHeight}, // tail
-        {x: txtWidth-margin, y:txtHeight+pointDisp()},
-        {x: margin, y: txtHeight+pointDisp()},
-        {x: margin * (relPos-1), y:txtHeight}, // tail
-        {x: 0, y: txtHeight-margin+pointDisp()},
+        {x: txtWidth - margin, y:txtHeight + pointDisp()},
+        {x: margin, y: txtHeight + pointDisp()},
+        {x: margin * (relPos - 1), y:txtHeight}, // tail
+        {x: 0, y: txtHeight - margin + pointDisp()},
         {x: 0, y: margin + pointDisp()}
     ];
 }

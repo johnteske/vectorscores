@@ -19,7 +19,7 @@ var noteheads = [
     // "M625 96q0 28 -15 54q-30 49 -98 49t-227 -93q-215 -123 -215 -210q0 -23 14 -48q31 -53 107 -53t219 96q215 141 215 205zM234 -297q-106 0 -170 52t-64 153t98 235q50 66 146 110t210 44t180 -54q64 -54 64 -139t-43 -161t-91 -124t-136 -82t-194 -34z" // half
 ];
 var halfNoteheadWidth = 340;
-var debug = VS.getQueryString("debug") == 1 ? true : false;
+var debug = VS.getQueryString("debug") == 1 || false;
 
 // function chooseNotehead() {
 //     return noteheads[Math.floor(Math.random()*noteheads.length)];
@@ -44,11 +44,11 @@ var glob = main
     .attr("transform", "translate(" + center + ", " + center + ")");
 
 function centerNotehead() {
-    return "scale("+scale+", "+(-1 * scale)+") translate(-" + halfNoteheadWidth + ",0)";
+    return "scale(" + scale + ", " + (-1 * scale) + ") translate(-" + halfNoteheadWidth + ",0)";
 }
 function transformNotehead() {
     var point = newPoint();
-    return "scale("+scale+", "+(-1 * scale)+") translate(" + (point.x - halfNoteheadWidth) + ", " + point.y + ")";
+    return "scale(" + scale + ", " + (-1 * scale) + ") translate(" + (point.x - halfNoteheadWidth) + ", " + point.y + ")";
 }
 
 for (var i = 0; i < cloudSize; i++) {
@@ -121,7 +121,7 @@ function resize() {
         .style("height", width + "px");
     glob.attr("transform",
         "translate(" + center + ", " + center + ")" +
-        "scale("+(width/globWidth)+","+(width/globWidth)+")"
+        "scale(" + (width / globWidth) + "," + (width / globWidth) + ")"
         );
     d3.select("text")
         .attr("x", center)
@@ -141,8 +141,8 @@ resize();
 if(debug) {
     main.classed("debug", true);
     main.append("rect")
-        .attr("width", width - (margin*2))
-        .attr("height", width - (margin*2))
+        .attr("width", width - (margin * 2))
+        .attr("height", width - (margin * 2))
         .attr("transform", "translate(" + margin + ", " + margin + ")");
     main.append("circle")
         .attr("r", 5)
