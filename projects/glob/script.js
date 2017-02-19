@@ -3,7 +3,8 @@ layout: compress-js
 ---
 // initial values
 var globWidth = 240,
-    radius = globWidth * 5, // should be relative to width somehow
+    radius = 48,
+    // radius = globWidth * 5, // should be relative to width somehow
     margin = 20,
     innerwidth = 240, // placeholder name
     maxwidth = 400,
@@ -21,13 +22,11 @@ var noteheads = [
 var halfNoteheadWidth = 340;
 var debug = VS.getQueryString("debug") == 1 || false;
 
-// function chooseNotehead() {
-//     return noteheads[Math.floor(Math.random()*noteheads.length)];
-// }
-
 var main = d3.select(".main")
     .style("width", width + "px")
     .style("height", width + "px");
+
+{% include_relative _glob.js %}
 
 function newPoint() {
     var angle = Math.random() * Math.PI * 2,
@@ -38,23 +37,17 @@ function newPoint() {
     };
 }
 
-var cloudSize = Math.ceil(Math.random() * 10) + 20;
-var glob = main
-    .append("g")
-    .attr("transform", "translate(" + center + ", " + center + ")");
+var glob = new Glob(main, 12);
+glob.draw();
 
 function centerNotehead() {
-    return "scale(" + scale + ", " + (-1 * scale) + ") translate(-" + halfNoteheadWidth + ",0)";
+    return "translate(0, 0)";
+    // return "scale(" + scale + ", " + (-1 * scale) + ") translate(-" + halfNoteheadWidth + ", 0)";
 }
 function transformNotehead() {
     var point = newPoint();
-    return "scale(" + scale + ", " + (-1 * scale) + ") translate(" + (point.x - halfNoteheadWidth) + ", " + point.y + ")";
-}
-
-for (var i = 0; i < cloudSize; i++) {
-    glob.append("path")
-        .attr("d", noteheads[0]) //chooseNotehead())
-        .attr("transform", centerNotehead);
+    return "translate(" + (point.x) + ", " + point.y + ")";
+    // return "scale(" + scale + ", " + (-1 * scale) + ") translate(" + (point.x - halfNoteheadWidth) + ", " + point.y + ")";
 }
 
 main.append("text")
@@ -77,7 +70,7 @@ function moveIt(){
         .transition(tLong)
         .style("opacity", 1);
 
-    d3.selectAll("path")
+    d3.selectAll("ellipse")
         .transition()
         .duration(tLong)
         .attr("transform", transformNotehead);
@@ -99,7 +92,7 @@ VS.score.stopCallback = function() {
         .transition()
         .duration(tShort)
         .style("opacity", "0");
-    d3.selectAll("path")
+    d3.selectAll("ellipse")
         .transition()
         .duration(tShort)
         .attr("transform", centerNotehead);
@@ -119,7 +112,7 @@ function resize() {
     main
         .style("width", width + "px")
         .style("height", width + "px");
-    glob.attr("transform",
+    glob.group.attr("transform",
         "translate(" + center + ", " + center + ")" +
         "scale(" + (width / globWidth) + "," + (width / globWidth) + ")"
         );
