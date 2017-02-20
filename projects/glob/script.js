@@ -34,19 +34,19 @@ glob.group.selectAll("text")
     .data(glob.data).enter()
     .append("text")
     .classed("glob-child", 1)
-    .text(function() { return VS.getItem(["\uf46a", "\uf46a\u2009\uf477", "\uf469"]) });
+    .text(function() { return VS.getItem(["\uf46a", "\uf46a\u2009\uf477", "\uf469"]); });
 glob.children = d3.selectAll("text");
 
-main.append("text")
+glob.pitchSet = main.append("text")
     .classed("pc-set", 1)
     .style("opacity", "0") // init value
     .attr("x", center)
     .attr("y", width - textoffset);
 
-function moveIt(){
+glob.move = function() {
     var newPitchClassSet = "[0, " + Math.floor(Math.random() * 2 + 1) + ", " + Math.floor(Math.random() * 2 + 3) + "]";
 
-    d3.select(".pc-set")
+    glob.pitchSet
         .transition(tLong)
         .style("opacity", 0)
         .remove();
@@ -66,21 +66,21 @@ function moveIt(){
             var point = newPoint();
             return "translate(" + point.x + ", " + point.y + ")";
         });
-}
+};
 
 for(var i = 0; i < scoreLength; i++) {
-    VS.score.add([i * tLong, moveIt]);
+    VS.score.add([i * tLong, glob.move]);
 }
 // final event
 VS.score.add([scoreLength * tLong, function() {
-    d3.selectAll(".pc-set")
+    glob.pitchSet
         .transition()
         .duration(tShort)
         .style("opacity", "0");
 }]);
 
 VS.score.stopCallback = function() {
-    d3.selectAll(".pc-set")
+    glob.pitchSet
         .transition()
         .duration(tShort)
         .style("opacity", "0");
@@ -108,7 +108,7 @@ function resize() {
         "translate(" + center + ", " + center + ")" +
         "scale(" + (width / glob.width) + "," + (width / glob.width) + ")"
         );
-    d3.select(".pc-set")
+    glob.pitchSet
         .attr("x", center)
         .attr("y", width - textoffset);
 
