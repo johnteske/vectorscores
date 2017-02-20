@@ -10,7 +10,7 @@ var radius = 48, // relative to glob.width?
     },
     transitionTime = {
         long: 3000,
-        short: 1500
+        short: 600
     },
     scoreLength = 10,
     textoffset = 5,
@@ -41,11 +41,11 @@ glob.pitchSet = main.append("text")
     .classed("pc-set", 1)
     .style("opacity", "0"); // init value
 
-glob.move = function() {
+glob.move = function(eventIndex, dur) {
     var newPitchClassSet = "[0, " + VS.getItem([1, 2, 3]) + ", " + VS.getItem([4, 5, 6]) + "]";
 
     d3.select(".pc-set")
-        .transition(transitionTime.long)
+        .transition(dur)
         .style("opacity", 0)
         .remove();
     main.append("text")
@@ -54,12 +54,12 @@ glob.move = function() {
         .attr("x", canvas.center)
         .attr("y", canvas.width - textoffset)
         .text(newPitchClassSet)
-        .transition(transitionTime.long)
+        .transition(dur)
         .style("opacity", 1);
 
     glob.children
         .transition()
-        .duration(transitionTime.long)
+        .duration(dur)
         .attr("transform", function() {
             var point = newPoint();
             return "translate(" + point.x + ", " + point.y + ")";
@@ -67,7 +67,7 @@ glob.move = function() {
 };
 
 for(var i = 0; i < scoreLength; i++) {
-    VS.score.add([i * transitionTime.long, glob.move]);
+    VS.score.add([i * transitionTime.long, glob.move, transitionTime.long]);
 }
 // final event
 VS.score.add([scoreLength * transitionTime.long, function() {
@@ -76,6 +76,10 @@ VS.score.add([scoreLength * transitionTime.long, function() {
         .duration(transitionTime.short)
         .style("opacity", "0");
 }]);
+
+VS.score.stepCallback = function() {
+    glob.move(null, transitionTime.short);
+};
 
 VS.score.stopCallback = function() {
     d3.select(".pc-set")
