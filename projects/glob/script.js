@@ -1,10 +1,7 @@
 ---
 layout: compress-js
 ---
-// initial values
-var globWidth = 240,
-    radius = 48,
-    // radius = globWidth * 5, // should be relative to width somehow
+var radius = 48, // relative to glob.width?
     margin = 20,
     innerwidth = 240, // placeholder name
     maxwidth = 400,
@@ -32,21 +29,12 @@ function newPoint() {
 }
 
 var glob = new Glob(main, 12, "ellipse");
+glob.width = 240;
 glob.children
     .attr("cx", 5)
     .attr("cy", 5)
     .attr("rx", 5) // 4, rotate(60) to approx quarter notehead
     .attr("ry", 5);
-
-function centerNotehead() {
-    return "translate(0, 0)";
-    // return "scale(" + scale + ", " + (-1 * scale) + ") translate(-" + halfNoteheadWidth + ", 0)";
-}
-function transformNotehead() {
-    var point = newPoint();
-    return "translate(" + (point.x) + ", " + point.y + ")";
-    // return "scale(" + scale + ", " + (-1 * scale) + ") translate(" + (point.x - halfNoteheadWidth) + ", " + point.y + ")";
-}
 
 main.append("text")
     .style("opacity", "0") // init value
@@ -68,10 +56,13 @@ function moveIt(){
         .transition(tLong)
         .style("opacity", 1);
 
-    d3.selectAll("ellipse")
+    glob.children
         .transition()
         .duration(tLong)
-        .attr("transform", transformNotehead);
+        .attr("transform", function() {
+            var point = newPoint();
+            return "translate(" + point.x + ", " + point.y + ")";
+        });
 }
 
 for(var i = 0; i < scoreLength; i++) {
@@ -93,7 +84,7 @@ VS.score.stopCallback = function() {
     d3.selectAll("ellipse")
         .transition()
         .duration(tShort)
-        .attr("transform", centerNotehead);
+        .attr("transform", "translate(0, 0)");
 };
 
 
@@ -112,7 +103,7 @@ function resize() {
         .style("height", width + "px");
     glob.group.attr("transform",
         "translate(" + center + ", " + center + ")" +
-        "scale(" + (width / globWidth) + "," + (width / globWidth) + ")"
+        "scale(" + (width / glob.width) + "," + (width / glob.width) + ")"
         );
     d3.select("text")
         .attr("x", center)
