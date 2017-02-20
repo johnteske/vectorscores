@@ -2,20 +2,20 @@
 layout: compress-js
 ---
 var radius = 48, // relative to glob.width?
-    margin = 20,
-    innerwidth = 240, // placeholder name
-    maxwidth = 400,
-    width = innerwidth + (margin * 2),
-    center = width * 0.5,
-    tLong = 3000,
-    tShort = 1500,
+    canvas = {
+        margins: 20,
+        maxWidth: 400,
+        width: null,
+        center: null
+    },
+    transitionTime = {
+        long: 3000,
+        short: 1500
+    },
     scoreLength = 10,
     textoffset = 5,
-    debug = VS.getQueryString("debug") == 1 || false;
-
-var main = d3.select(".main")
-    .style("width", width + "px")
-    .style("height", width + "px");
+    debug = VS.getQueryString("debug") == 1 || false,
+    main = d3.select(".main");
 
 {% include_relative _glob.js %}
 
@@ -39,29 +39,27 @@ glob.children = d3.selectAll("text");
 
 glob.pitchSet = main.append("text")
     .classed("pc-set", 1)
-    .style("opacity", "0") // init value
-    .attr("x", center)
-    .attr("y", width - textoffset);
+    .style("opacity", "0"); // init value
 
 glob.move = function() {
-    var newPitchClassSet = "[0, " + Math.floor(Math.random() * 2 + 1) + ", " + Math.floor(Math.random() * 2 + 3) + "]";
+    var newPitchClassSet = "[0, " + VS.getItem([1, 2, 3]) + ", " + VS.getItem([4, 5, 6]) + "]";
 
-    glob.pitchSet
-        .transition(tLong)
+    d3.select(".pc-set")
+        .transition(transitionTime.long)
         .style("opacity", 0)
         .remove();
     main.append("text")
         .classed("pc-set", 1)
         .style("opacity", 0)
-        .attr("x", center)
-        .attr("y", width - textoffset)
+        .attr("x", canvas.center)
+        .attr("y", canvas.width - textoffset)
         .text(newPitchClassSet)
-        .transition(tLong)
+        .transition(transitionTime.long)
         .style("opacity", 1);
 
     glob.children
         .transition()
-        .duration(tLong)
+        .duration(transitionTime.long)
         .attr("transform", function() {
             var point = newPoint();
             return "translate(" + point.x + ", " + point.y + ")";
@@ -69,24 +67,24 @@ glob.move = function() {
 };
 
 for(var i = 0; i < scoreLength; i++) {
-    VS.score.add([i * tLong, glob.move]);
+    VS.score.add([i * transitionTime.long, glob.move]);
 }
 // final event
-VS.score.add([scoreLength * tLong, function() {
-    glob.pitchSet
+VS.score.add([scoreLength * transitionTime.long, function() {
+    gd3.select(".pc-set")
         .transition()
-        .duration(tShort)
+        .duration(transitionTime.short)
         .style("opacity", "0");
 }]);
 
 VS.score.stopCallback = function() {
-    glob.pitchSet
-        .transition()
-        .duration(tShort)
-        .style("opacity", "0");
+    d3.select(".pc-set")
+        .transition(transitionTime.short)
+        .style("opacity", "0")
+        .remove();
     glob.children
         .transition()
-        .duration(tShort)
+        .duration(transitionTime.short)
         .attr("transform", "translate(0, 0)");
 };
 
@@ -97,27 +95,27 @@ d3.select(window).on("resize", resize);
 
 function resize() {
     // update width
-    width = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
-    center = width * 0.5;
-    innerwidth = width - (margin * 2);
+    canvas.width = Math.min( parseInt(d3.select("main").style("width"), 10), canvas.maxWidth);
+    canvas.center = canvas.width * 0.5;
+    var innerwidth = canvas.width - (canvas.margins * 2);
 
     main
-        .style("width", width + "px")
-        .style("height", width + "px");
+        .style("width", canvas.width + "px")
+        .style("height", canvas.width + "px");
     glob.group.attr("transform",
-        "translate(" + center + ", " + center + ")" +
-        "scale(" + (width / glob.width) + "," + (width / glob.width) + ")"
+        "translate(" + canvas.center + ", " + canvas.center + ")" +
+        "scale(" + (canvas.width / glob.width) + "," + (canvas.width / glob.width) + ")"
         );
     glob.pitchSet
-        .attr("x", center)
-        .attr("y", width - textoffset);
+        .attr("x", canvas.center)
+        .attr("y", canvas.width - textoffset);
 
     if(debug){
         d3.select("rect")
             .attr("width", innerwidth)
             .attr("height", innerwidth);
         d3.select("circle")
-            .attr("transform", "translate(" + center + ", " + center + ")");
+            .attr("transform", "translate(" + canvas.center + ", " + canvas.center + ")");
     }
 }
 
@@ -126,10 +124,10 @@ resize();
 if(debug) {
     main.classed("debug", true);
     main.append("rect")
-        .attr("width", width - (margin * 2))
-        .attr("height", width - (margin * 2))
-        .attr("transform", "translate(" + margin + ", " + margin + ")");
+        .attr("width", canvas.width - (canvas.margins * 2))
+        .attr("height", canvas.width - (canvas.margins * 2))
+        .attr("transform", "translate(" + canvas.margins + ", " + canvas.margins + ")");
     main.append("circle")
         .attr("r", 5)
-        .attr("transform", "translate(" + center + ", " + center + ")");
+        .attr("transform", "translate(" + canvas.center + ", " + canvas.center + ")");
 }
