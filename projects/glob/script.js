@@ -37,8 +37,12 @@ function newPoint() {
     };
 }
 
-var glob = new Glob(main, 12);
-glob.draw();
+var glob = new Glob(main, 12, "ellipse");
+glob.children
+    .attr("cx", 5)
+    .attr("cy", 5)
+    .attr("rx", 5) // 4, rotate(60) to approx quarter notehead
+    .attr("ry", 5);
 
 function centerNotehead() {
     return "translate(0, 0)";

@@ -4,21 +4,20 @@
  * @param {D3Selection} parent - Parent element to which the Glob is appended
  * @param {Integer} n - Number of elements in the Glob
 */
-function Glob(parent, n) {
+function Glob(parent, n, element) {
     if (!(this instanceof Glob)) {
         return new Glob();
     }
-    this.size = n;
-    this.group = parent.append("g");
-}
 
-Glob.prototype.draw = function() {
-    // TODO demo element, until custom elements can be defined
-    this.group.selectAll("ellipse")
-        .data(d3.range(this.size)).enter()
-        .append("ellipse")
-            .attr("cx", 5)
-            .attr("cy", 5)
-            .attr("rx", 5) // 4, rotate(60) to approx quarter notehead
-            .attr("ry", 5);
-};
+    this.group = parent.append("g");
+    this.size = n;
+    this.element = element;
+
+    // fallback if no data
+    this.data = d3.range(this.size);
+
+    // create children, assuming uniform children for now
+    this.children = this.group.selectAll(this.element)
+        .data(this.data).enter()
+        .append(this.element);
+}
