@@ -71,7 +71,7 @@ for(var i = 0; i < scoreLength; i++) {
 }
 // final event
 VS.score.add([scoreLength * transitionTime.long, function() {
-    gd3.select(".pc-set")
+    d3.select(".pc-set")
         .transition()
         .duration(transitionTime.short)
         .style("opacity", "0");
