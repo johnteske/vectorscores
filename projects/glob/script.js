@@ -28,15 +28,17 @@ function newPoint() {
     };
 }
 
-var glob = new Glob(main, 12, "ellipse");
+var glob = new Glob(main, 20);
 glob.width = 240;
-glob.children
-    .attr("cx", 5)
-    .attr("cy", 5)
-    .attr("rx", 5) // 4, rotate(60) to approx quarter notehead
-    .attr("ry", 5);
+glob.group.selectAll("text")
+    .data(glob.data).enter()
+    .append("text")
+    .classed("glob-child", 1)
+    .text(function() { return VS.getItem(["\uf46a", "\uf46a\u2009\uf477", "\uf469"]) });
+glob.children = d3.selectAll("text");
 
 main.append("text")
+    .classed("pc-set", 1)
     .style("opacity", "0") // init value
     .attr("x", center)
     .attr("y", width - textoffset);
@@ -44,11 +46,12 @@ main.append("text")
 function moveIt(){
     var newPitchClassSet = "[0, " + Math.floor(Math.random() * 2 + 1) + ", " + Math.floor(Math.random() * 2 + 3) + "]";
 
-    d3.select("text")
+    d3.select(".pc-set")
         .transition(tLong)
         .style("opacity", 0)
         .remove();
     main.append("text")
+        .classed("pc-set", 1)
         .style("opacity", 0)
         .attr("x", center)
         .attr("y", width - textoffset)
@@ -70,18 +73,18 @@ for(var i = 0; i < scoreLength; i++) {
 }
 // final event
 VS.score.add([scoreLength * tLong, function() {
-    d3.selectAll("text")
+    d3.selectAll(".pc-set")
         .transition()
         .duration(tShort)
         .style("opacity", "0");
 }]);
 
 VS.score.stopCallback = function() {
-    d3.selectAll("text")
+    d3.selectAll(".pc-set")
         .transition()
         .duration(tShort)
         .style("opacity", "0");
-    d3.selectAll("ellipse")
+    glob.children
         .transition()
         .duration(tShort)
         .attr("transform", "translate(0, 0)");
@@ -105,7 +108,7 @@ function resize() {
         "translate(" + center + ", " + center + ")" +
         "scale(" + (width / glob.width) + "," + (width / glob.width) + ")"
         );
-    d3.select("text")
+    d3.select(".pc-set")
         .attr("x", center)
         .attr("y", width - textoffset);
 

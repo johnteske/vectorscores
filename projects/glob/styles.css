@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Bravura;
+    src: url(../../fonts/Bravura.woff);
+}
+
 .main {
     /*margin: 0 auto;*/
     /*display: block;*/
@@ -14,7 +19,14 @@ path {
     stroke: #111;
 }
 
-text {
+text.glob-child {
+    font-family: Bravura;
+    font-size: 36px;
+    fill: #111;
+    text-anchor: middle;
+}
+
+text.pc-set {
     font-family: monospace;
     fill: #111;
     text-anchor: middle;
