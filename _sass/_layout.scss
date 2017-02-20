@@ -40,6 +40,10 @@
         &:not(:last-child) {
             margin-right: 20px;
         }
+
+        &.active {
+            text-decoration: underline;
+        }
     }
 
     @include media-query($on-palm) {
