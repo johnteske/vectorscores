@@ -39,6 +39,7 @@ VS.score = (function () {
         },
 
         playCallback: VS.noop,
+        pauseCallback: VS.noop,
         stopCallback: VS.noop,
         stepCallback: VS.noop,
         play: function() {
@@ -57,6 +58,7 @@ VS.score = (function () {
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
             VS.page.showLayout();
+            VS.score.pauseCallback();
         },
         playPause: function() {
             if(!VS.score.playing){

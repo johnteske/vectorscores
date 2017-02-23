@@ -1,5 +1,6 @@
 var cards = [],
-    cardChoices = ["A", "B", "C", "D", "E"]; // rando rondo
+    cardChoices = ["A", "B", "C", "D", "E"], // rando rondo
+    eventTimes = [];
 
 function makeCards(n) {
     for (var i = 0; i < n; i++) {
@@ -10,7 +11,7 @@ function makeCards(n) {
         cards.push(cardChoices[newCard]);
     }
 }
-makeCards(20);
+makeCards(12);
 
 // display
 var cardWidth = 120,
@@ -72,19 +73,24 @@ var card = main.selectAll("g")
 card.append("rect")
     .attr("width", cardWidth - 1)
     .attr("height", cardWidth - 1);
+card.append("rect")
+    .classed("timer", 1)
+    .attr("y", cardWidth)
+    .attr("width", 0)
+    .attr("height", 1);
 
-function goToCard(i, dur) {
-    var pointer = VS.score.pointer;
+function goToCard(eventIndex, dur) {
+    var pointer = eventIndex || VS.score.pointer;
     dur = dur || 600;
     card.transition()
-    .attr("transform", function(d, i) {
-        var pos =
-            offset + 
-            (i * (cardWidth + cardPadding)) - 
-            (offset * pointer) - // move by pointer
-            (cardPadding * pointer); // also move by spacing
-        return "translate(" + pos + ", 100)";
-    })
+        .attr("transform", function(d, i) {
+            var pos =
+                offset +
+                (i * (cardWidth + cardPadding)) -
+                (offset * pointer) - // move by pointer
+                (cardPadding * pointer); // also move by spacing
+            return "translate(" + pos + ", 100)";
+        })
     .duration(dur)
     .style("opacity", function(d, i) {
         if(pointer > i ){
@@ -94,12 +100,43 @@ function goToCard(i, dur) {
             return (0.5 * (pointer - i)) + 1;
         }
     });
+
+    // if playing and not skipping, stopping
+    updateCardTimer(eventIndex);
 }
 
-for(var i = 0; i < cards.length; i++) {
-    var time = (i * 1500) + (Math.random() * 750);
-    VS.score.add([time, goToCard]);
+function updateCardTimer(pointer) {
+    d3.selectAll(".timer")
+        .transition()
+        .ease('linear')
+        .duration(function(d, i) {
+            if(pointer == i ) {
+                return VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer);
+            }
+            else {
+                return 50;
+            }
+        })
+        .attr("width", function(d, i) {
+            if(pointer == i ) {
+                return cardWidth - 1;
+            }
+            else {
+                return 0;
+            }
+        });
 }
+
+// create events, 3 to 8 seconds apart
+for(var i = 0; i < cards.length; i++) {
+    var prevTime = eventTimes[i - 1] || 0;
+        thisTime = prevTime + VS.getRandExcl(3000, 8000);
+    eventTimes[i] = thisTime;
+    VS.score.add([thisTime, goToCard]);
+}
+// and final noop 3 seconds after last card
+VS.score.add([eventTimes[eventTimes.length - 1] + 3000, VS.noop]);
 
 VS.score.stepCallback = function() { goToCard(null, 300); };
+VS.score.pauseCallback = updateCardTimer;
 VS.score.stopCallback = goToCard;
