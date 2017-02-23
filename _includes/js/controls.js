@@ -14,8 +14,14 @@ if (VS.page.footer) {
         };
 
         var play = new ScoreControl("score-play", VS.score.playPause);
-        play.setPlay = function(){ this.element.textContent = "\u25b9"; };
-        play.setPause = function(){ this.element.textContent = "\u2016"; };
+        play.setPlay = function() {
+            d3.select("g#play").classed("hide", 0);
+            d3.select("g#pause").classed("hide", 1);
+        };
+        play.setPause = function() {
+            d3.select("g#play").classed("hide", 1);
+            d3.select("g#pause").classed("hide", 0);
+        };
 
         var keydownListener = function(event) {
             if (event.defaultPrevented) {

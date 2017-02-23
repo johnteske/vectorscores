@@ -20,9 +20,22 @@ button, input {
 }
 
 button {
-	color: #000;
 	&:disabled {
-		color: #ddd;
+        g {
+            stroke: #ddd;
+        }
+	}
+	svg {
+		width: 16px;
+		height: 16px;
+        g {
+            stroke: #000;
+            stroke-width: 8;
+            fill: none;
+            &.hide { // for play/pause
+                display: none;
+            }
+        }
 	}
 }
 
