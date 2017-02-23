@@ -1,14 +1,14 @@
-var cards = [],
+var cardList = [],
     cardChoices = ["A", "B", "C", "D", "E"], // rando rondo
     eventTimes = [];
 
 function makeCards(n) {
     for (var i = 0; i < n; i++) {
-        var lastCard = cards[i - 1];
+        var lastCard = cardList[i - 1];
         do {
             var newCard = Math.floor(Math.random() * cardChoices.length);
         } while (cardChoices[newCard] == lastCard); // do not repeat cards
-        cards.push(cardChoices[newCard]);
+        cardList.push(cardChoices[newCard]);
     }
 }
 makeCards(12);
@@ -33,47 +33,49 @@ function newPoint(spread) {
 }
 
 // create cards
-var card = main.selectAll("g")
-    .data(cards)
+var cards = main.selectAll("g")
+    .data(cardList)
     .enter().append("g")
     .attr("transform", function(d, i) { var pos = offset + (i * (cardWidth + cardPadding)); return "translate(" + pos + ", 100)"; })
-    .style("opacity", function(d, i) { return 1 - (i * (0.5)); })
-    .each(function(d) {
-        var thisCard = d3.select(this),
-            indexOfCardChoice = cardChoices.indexOf(d),
-            // simple dummy data: 1-21 notes, based on card
-            numNotes = "abcdefghijklmnopqrstuvwxyz".substr(0, 1 + (indexOfCardChoice * 5)),
-            txtSpread = [
-                {x: 0, y: 0}, // A single note
-                {x: 0, y: 25}, // B chord, cluster
-                {x: 50, y: 0}, // C rhythm
-                {x: 50, y: 25}, // D rect cloud
-                {x: 35, y: 35} // E cloud
-            ][indexOfCardChoice];
+    .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
-        // thisCard.append("text").text(d + indexOfCardChoice); // debug
+cards.append("rect")
+        .attr("width", cardWidth - 1)
+        .attr("height", cardWidth - 1);
 
-        thisCard.selectAll("ellipse")
-            .data(numNotes).enter()
-            .append("ellipse")
-                .attr("cx", 5)
-                .attr("cy", 5)
-                .attr("rx", 4)
-                .attr("ry", 5)
-                .attr("transform",
-                    function() {
-                        var point = newPoint(txtSpread);
-                        return "translate(" +
-                            (point.x + (cardWidth * 0.5)) + ", " +
-                            (point.y + (cardWidth * 0.5) - 5) + ") " + "rotate(60)"; // offset y by note height
-                    }
-                );
-    });
+cards.each(function(d) {
+    var thisCard = d3.select(this),
+        indexOfCardChoice = cardChoices.indexOf(d),
+        // simple dummy data: 1-21 notes, based on card
+        numNotes = "abcdefghijklmnopqrstuvwxyz".substr(0, 1 + (indexOfCardChoice * 5)),
+        txtSpread = [
+            {x: 0, y: 0}, // A single note
+            {x: 0, y: 25}, // B chord, cluster
+            {x: 50, y: 0}, // C rhythm
+            {x: 50, y: 25}, // D rect cloud
+            {x: 35, y: 35} // E cloud
+        ][indexOfCardChoice];
 
-card.append("rect")
-    .attr("width", cardWidth - 1)
-    .attr("height", cardWidth - 1);
-card.append("rect")
+    // thisCard.append("text").text(d + indexOfCardChoice); // debug
+
+    thisCard.selectAll("ellipse")
+        .data(numNotes).enter()
+        .append("ellipse")
+            .attr("cx", 5)
+            .attr("cy", 5)
+            .attr("rx", 4)
+            .attr("ry", 5)
+            .attr("transform",
+                function() {
+                    var point = newPoint(txtSpread);
+                    return "translate(" +
+                        (point.x + (cardWidth * 0.5)) + ", " +
+                        (point.y + (cardWidth * 0.5) - 5) + ") " + "rotate(60)"; // offset y by note height
+                }
+            );
+});
+
+cards.append("rect")
     .classed("timer", 1)
     .attr("y", cardWidth)
     .attr("width", 0)
@@ -82,7 +84,7 @@ card.append("rect")
 function goToCard(eventIndex, dur) {
     var pointer = eventIndex || VS.score.pointer;
     dur = dur || 600;
-    card.transition()
+    cards.transition()
         .attr("transform", function(d, i) {
             var pos =
                 offset +
@@ -108,7 +110,7 @@ function goToCard(eventIndex, dur) {
 function updateCardTimer(pointer) {
     d3.selectAll(".timer")
         .transition()
-        .ease('linear')
+        .ease("linear")
         .duration(function(d, i) {
             if(pointer == i ) {
                 return VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer);
@@ -128,8 +130,8 @@ function updateCardTimer(pointer) {
 }
 
 // create events, 3 to 8 seconds apart
-for(var i = 0; i < cards.length; i++) {
-    var prevTime = eventTimes[i - 1] || 0;
+for(var i = 0; i < cardList.length; i++) {
+    var prevTime = eventTimes[i - 1] || 0,
         thisTime = prevTime + VS.getRandExcl(3000, 8000);
     eventTimes[i] = thisTime;
     VS.score.add([thisTime, goToCard]);
