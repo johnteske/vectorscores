@@ -1,6 +1,11 @@
+---
+---
 var cardList = [],
     cardChoices = ["A", "B", "C", "D", "E"], // rando rondo
     eventTimes = [];
+
+// symbol dictionary
+{% include_relative _symbols.js %}
 
 function makeCards(n) {
     for (var i = 0; i < n; i++) {
@@ -37,6 +42,7 @@ var cards = main.selectAll("g")
     .data(cardList)
     .enter().append("g")
     .attr("transform", function(d, i) { var pos = offset + (i * (cardWidth + cardPadding)); return "translate(" + pos + ", 100)"; })
+    .classed("card", 1)
     .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
 cards.append("rect")
@@ -54,7 +60,14 @@ cards.each(function(d) {
             {x: 50, y: 0}, // C rhythm
             {x: 50, y: 25}, // D rect cloud
             {x: 35, y: 35} // E cloud
-        ][indexOfCardChoice];
+        ][indexOfCardChoice],
+        dynamic = VS.getItem([
+            ["pp", "p", "mp"],
+            ["p", "mp"],
+            ["mp", "mf"],
+            ["mf", "f"],
+            ["f", "ff", "fff"]
+        ][indexOfCardChoice]);
 
     // thisCard.append("text").text(d + indexOfCardChoice); // debug
 
@@ -70,9 +83,16 @@ cards.each(function(d) {
                     var point = newPoint(txtSpread);
                     return "translate(" +
                         (point.x + (cardWidth * 0.5)) + ", " +
-                        (point.y + (cardWidth * 0.5) - 5) + ") " + "rotate(60)"; // offset y by note height
+                        (point.y + (cardWidth * 0.5) - 5) + ") " + "rotate(60)"; // offset y by 5px note height
                 }
             );
+
+    thisCard.append("text")
+        .attr("x", cardPadding)
+        .attr("y", cardWidth + 24)
+        .text(dynamicsDict[dynamic])
+        .classed("dynamics", 1);
+
 });
 
 cards.append("rect")

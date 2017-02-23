@@ -1,4 +1,9 @@
-.main rect {
+@font-face {
+    font-family: Bravura;
+    src: url(../../fonts/Bravura.woff);
+}
+
+.card rect {
   fill: none;
   stroke: #888;
   stroke-width: 1px;
@@ -6,9 +11,9 @@
   /*shape-rendering: crispEdges;*/
 }
 
-.main text {
+.card text.dynamics {
   fill: #444;
-  font-size: 20px;
-  font-family: 'Courier New', sans-serif;
+  font-size: 24px;
+  font-family: Bravura;
   text-anchor: middle;
 }
