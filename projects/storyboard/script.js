@@ -88,8 +88,14 @@ cards.each(function(d) {
             );
 
     thisCard.append("text")
-        .attr("x", cardPadding)
-        .attr("y", cardWidth + 24)
+        .attr("dy", "-1em")
+        .text("[0, 1, 4]")
+        .classed("pitch-class-set", 1);
+
+    thisCard.append("text")
+        .attr("y", cardWidth)
+        .attr("dx", "0.125em")
+        .attr("dy", "1em")
         .text(dynamicsDict[dynamic])
         .classed("dynamics", 1);
 

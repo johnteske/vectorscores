@@ -11,9 +11,16 @@
   /*shape-rendering: crispEdges;*/
 }
 
+.card text {
+    fill: #444;
+}
+
+.card text.pitch-class-set {
+    font-size: 12px;
+    font-family: monospace;
+}
+
 .card text.dynamics {
-  fill: #444;
   font-size: 24px;
   font-family: Bravura;
-  text-anchor: middle;
 }
