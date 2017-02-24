@@ -52,6 +52,7 @@ cards.append("rect")
 cards.each(function(d) {
     var thisCard = d3.select(this),
         indexOfCardChoice = cardChoices.indexOf(d),
+        // TODO this should all be generated prior to display
         // simple dummy data: 1-21 notes, based on card
         numNotes = "abcdefghijklmnopqrstuvwxyz".substr(0, 1 + (indexOfCardChoice * 5)),
         txtSpread = [
@@ -67,7 +68,14 @@ cards.each(function(d) {
             ["mp", "mf"],
             ["mf", "f"],
             ["f", "ff", "fff"]
-        ][indexOfCardChoice]);
+        ][indexOfCardChoice]),
+        pcSet = [
+            [0, 1, 3],
+            [0, 1, 4],
+            [0, 1, 5],
+            [0, 2, 5],
+            [0, 2, 6]
+        ][indexOfCardChoice];
 
     // thisCard.append("text").text(d + indexOfCardChoice); // debug
 
@@ -89,7 +97,7 @@ cards.each(function(d) {
 
     thisCard.append("text")
         .attr("dy", "-1em")
-        .text("[0, 1, 4]")
+        .text("[" + pcSet.join(", ") + "]")
         .classed("pitch-class-set", 1);
 
     thisCard.append("text")
