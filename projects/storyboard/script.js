@@ -1,6 +1,6 @@
 ---
 ---
-var cardList = [],
+var cardList,
     cardChoices = ["A", "B", "C", "D", "E"], // rando rondo
     eventTimes = [];
 
@@ -40,7 +40,7 @@ cards.append("rect")
 
 cards.each(function(d) {
     var thisCard = d3.select(this),
-        indexOfCardChoice = cardChoices.indexOf(d),
+        indexOfCardChoice = cardChoices.indexOf(d.type),
         // TODO this should all be generated prior to display
         // simple dummy data: 1-21 notes, based on card
         numNotes = "abcdefghijklmnopqrstuvwxyz".substr(0, 1 + (indexOfCardChoice * 5)),

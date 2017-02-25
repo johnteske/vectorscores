@@ -1,11 +1,15 @@
 function makeCards(nCards) {
+    var _cards = [];
     for (var i = 0; i < nCards; i++) {
-        var thisCard,
-            lastCard = cardList[i - 1];
+        var thisCard = {},
+            prevCard = _cards[i - 1] || {};
+
         do {
-            var newCard = Math.floor(Math.random() * cardChoices.length);
-        } while (cardChoices[newCard] == lastCard); // do not repeat cards
-        cardList.push(cardChoices[newCard]);
+            thisCard.type = VS.getItem(cardChoices);
+        } while (thisCard.type == prevCard.type); // do not repeat cards
+
+        _cards.push(thisCard);
     }
+    return _cards;
 }
-makeCards(12);
+cardList = makeCards(12);
