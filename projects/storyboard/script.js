@@ -41,8 +41,6 @@ cards.each(function(d) {
     var thisCard = d3.select(this),
         indexOfCardChoice = cardChoices.indexOf(d.type),
         // TODO this should all be generated prior to display
-        // simple dummy data: 1-21 notes, based on card
-        numNotes = "abcdefghijklmnopqrstuvwxyz".substr(0, 1 + (indexOfCardChoice * 5)),
         txtSpread = [
             {x: 0, y: 0}, // A single note
             {x: 0, y: 25}, // B chord, cluster
@@ -68,7 +66,7 @@ cards.each(function(d) {
     // thisCard.append("text").text(d + indexOfCardChoice); // debug
 
     thisCard.selectAll("ellipse")
-        .data(numNotes).enter()
+        .data(d.nNotes).enter()
         .append("ellipse")
             .attr("cx", 5)
             .attr("cy", 5)

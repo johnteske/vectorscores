@@ -13,7 +13,15 @@ function makeCards(nCards) {
         thisCard.time = prevCard.time + VS.getRandExcl(3000, 8000);
         // thisCard.duration // could also/instead set duration for each card
 
-        _cards.push(thisCard);
+        thisCard.nNotes = d3.range(Math.floor({
+            "A": VS.getRandExcl(1, 5),
+            "B": VS.getRandExcl(1, 10),
+            "C": VS.getRandExcl(6, 15),
+            "D": VS.getRandExcl(11, 20),
+            "E": VS.getRandExcl(16, 25)
+        }[thisCard.type]));
+
+        _cards.push(thisCard); // console.log(thisCard);
     }
     return _cards;
 }
