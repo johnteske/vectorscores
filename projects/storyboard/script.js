@@ -4,19 +4,8 @@ var cardList = [],
     cardChoices = ["A", "B", "C", "D", "E"], // rando rondo
     eventTimes = [];
 
-// symbol dictionary
+{% include_relative _score.js %}
 {% include_relative _symbols.js %}
-
-function makeCards(n) {
-    for (var i = 0; i < n; i++) {
-        var lastCard = cardList[i - 1];
-        do {
-            var newCard = Math.floor(Math.random() * cardChoices.length);
-        } while (cardChoices[newCard] == lastCard); // do not repeat cards
-        cardList.push(cardChoices[newCard]);
-    }
-}
-makeCards(12);
 
 // display
 var cardWidth = 120,
