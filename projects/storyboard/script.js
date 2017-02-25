@@ -41,13 +41,6 @@ cards.each(function(d) {
     var thisCard = d3.select(this),
         indexOfCardChoice = cardChoices.indexOf(d.type),
         // TODO this should all be generated prior to display
-        dynamic = VS.getItem([
-            ["pp", "p", "mp"],
-            ["p", "mp"],
-            ["mp", "mf"],
-            ["mf", "f"],
-            ["f", "ff", "fff"]
-        ][indexOfCardChoice]),
         pcSet = [
             [0, 1, 3],
             [0, 1, 4],
@@ -83,7 +76,7 @@ cards.each(function(d) {
         .attr("y", cardWidth)
         .attr("dx", "0.125em")
         .attr("dy", "1em")
-        .text(dynamicsDict[dynamic])
+        .text(dynamicsDict[d.dynamic])
         .classed("dynamics", 1);
 
 });

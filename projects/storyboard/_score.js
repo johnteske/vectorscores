@@ -31,6 +31,14 @@ function makeCards(nCards) {
             "E": {x: 35, y: 35} // cloud
         }[thisCard.type];
 
+        thisCard.dynamic = {
+            "A": VS.getItem(["pp", "p", "mp"]),
+            "B": VS.getItem(["p", "mp"]),
+            "C": VS.getItem(["mp", "mf"]),
+            "D": VS.getItem(["mf", "f"]),
+            "E": VS.getItem(["f", "ff", "fff"])
+        }[thisCard.type],
+
         _cards.push(thisCard); // console.log(thisCard);
     }
     return _cards;
