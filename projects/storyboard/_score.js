@@ -37,7 +37,15 @@ function makeCards(nCards) {
             "C": VS.getItem(["mp", "mf"]),
             "D": VS.getItem(["mf", "f"]),
             "E": VS.getItem(["f", "ff", "fff"])
-        }[thisCard.type],
+        }[thisCard.type];
+
+        thisCard.pcSet = {
+            "A": [0, 1, 3],
+            "B": [0, 1, 4],
+            "C": [0, 1, 5],
+            "D": [0, 2, 5],
+            "E": [0, 2, 6]
+        }[thisCard.type];
 
         _cards.push(thisCard); // console.log(thisCard);
     }

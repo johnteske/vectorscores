@@ -38,18 +38,7 @@ cards.append("rect")
         .attr("height", cardWidth - 1);
 
 cards.each(function(d) {
-    var thisCard = d3.select(this),
-        indexOfCardChoice = cardChoices.indexOf(d.type),
-        // TODO this should all be generated prior to display
-        pcSet = [
-            [0, 1, 3],
-            [0, 1, 4],
-            [0, 1, 5],
-            [0, 2, 5],
-            [0, 2, 6]
-        ][indexOfCardChoice];
-
-    // thisCard.append("text").text(d + indexOfCardChoice); // debug
+    var thisCard = d3.select(this);
 
     thisCard.selectAll("ellipse")
         .data(d.nNotes).enter()
@@ -69,7 +58,7 @@ cards.each(function(d) {
 
     thisCard.append("text")
         .attr("dy", "-1em")
-        .text("[" + pcSet.join(", ") + "]")
+        .text("[" + d.pcSet.join(", ") + "]")
         .classed("pitch-class-set", 1);
 
     thisCard.append("text")
