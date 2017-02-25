@@ -1,8 +1,7 @@
 ---
 ---
 var cardList,
-    cardChoices = ["A", "B", "C", "D", "E"], // rando rondo
-    eventTimes = [];
+    cardChoices = ["A", "B", "C", "D", "E"]; // rando rondo
 
 {% include_relative _score.js %}
 {% include_relative _symbols.js %}
@@ -152,15 +151,12 @@ function updateCardTimer(pointer) {
         });
 }
 
-// create events, 3 to 8 seconds apart
+// create score events from card times
 for(var i = 0; i < cardList.length; i++) {
-    var prevTime = eventTimes[i - 1] || 0,
-        thisTime = prevTime + VS.getRandExcl(3000, 8000);
-    eventTimes[i] = thisTime;
-    VS.score.add([thisTime, goToCard]);
+    VS.score.add([cardList[i].time, goToCard]);
 }
 // and final noop 3 seconds after last card
-VS.score.add([eventTimes[eventTimes.length - 1] + 3000, VS.noop]);
+VS.score.add([cardList[cardList.length - 1].time + 3000, VS.noop]);
 
 VS.score.stepCallback = function() { goToCard(null, 300); };
 VS.score.pauseCallback = updateCardTimer;
