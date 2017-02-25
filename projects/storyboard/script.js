@@ -41,13 +41,6 @@ cards.each(function(d) {
     var thisCard = d3.select(this),
         indexOfCardChoice = cardChoices.indexOf(d.type),
         // TODO this should all be generated prior to display
-        txtSpread = [
-            {x: 0, y: 0}, // A single note
-            {x: 0, y: 25}, // B chord, cluster
-            {x: 50, y: 0}, // C rhythm
-            {x: 50, y: 25}, // D rect cloud
-            {x: 35, y: 35} // E cloud
-        ][indexOfCardChoice],
         dynamic = VS.getItem([
             ["pp", "p", "mp"],
             ["p", "mp"],
@@ -74,7 +67,7 @@ cards.each(function(d) {
             .attr("ry", 5)
             .attr("transform",
                 function() {
-                    var point = newPoint(txtSpread);
+                    var point = newPoint(d.spread);
                     return "translate(" +
                         (point.x + (cardWidth * 0.5)) + ", " +
                         (point.y + (cardWidth * 0.5) - 5) + ") " + "rotate(60)"; // offset y by 5px note height

@@ -1,3 +1,5 @@
+// TODO could the card types be an object of their own rather than
+// setting their properties individually when creating cards?
 function makeCards(nCards) {
     var _cards = [];
     for (var i = 0; i < nCards; i++) {
@@ -20,6 +22,14 @@ function makeCards(nCards) {
             "D": VS.getRandExcl(11, 20),
             "E": VS.getRandExcl(16, 25)
         }[thisCard.type]));
+
+        thisCard.spread = {
+            "A": {x: 0, y: 0}, // single note
+            "B": {x: 0, y: 25}, // chord, cluster
+            "C": {x: 50, y: 0}, // rhythm
+            "D": {x: 50, y: 25}, // rect cloud
+            "E": {x: 35, y: 35} // cloud
+        }[thisCard.type];
 
         _cards.push(thisCard); // console.log(thisCard);
     }
