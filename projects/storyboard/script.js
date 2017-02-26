@@ -1,7 +1,6 @@
 ---
 ---
-var cardList,
-    cardChoices = ["A", "B", "C", "D", "E"]; // rando rondo
+var cardTypes, cardList;
 
 {% include_relative _score.js %}
 {% include_relative _symbols.js %}
