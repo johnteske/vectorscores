@@ -9,15 +9,15 @@
 }
 
 /*debug*/
-rect, circle {
+/*rect, circle {
     stroke: pink;
     fill-opacity: 0;
-}
+}*/
 
-path {
+/*path {
     fill: #111;
     stroke: #111;
-}
+}*/
 
 text.glob-child {
     font-family: Bravura;
