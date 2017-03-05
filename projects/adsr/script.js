@@ -85,6 +85,8 @@ for (p = 0; p < numParts; p++) {
                 .append("text")
                     .text(function(d) { return durDict[d]; })
                     .classed("durations", true)
+                    // TODO Make phrase spacing a named function, can be re-used.
+                    // Since "durations" us not accessible here, find a way to pass that value
                     .attr("x", function(d, i) {
                         var upToI = durations.slice(0, i),
                             sum = upToI.reduce(function(a, b) {
