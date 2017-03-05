@@ -5,6 +5,10 @@
 //     0, 1, 0, 0
 // ];
 
+var main = d3.select(".main")
+    .style("width", "480px")
+    .style("height", "480px");
+
 var circle = {
     radius: 32,
     x: 240,
@@ -42,6 +46,7 @@ var performer = new Performer;
 performer.setAngle(45);
 performer.positionIndicator = d3.select(".main")
     .append("circle")
+        .classed("performer", 1)
         .attr("cx", performer.x())
         .attr("cy", performer.y())
         .attr("r", 4);
@@ -56,10 +61,14 @@ performerAngleInput.addEventListener("change", function() {
     });
 
 // circle
-d3.select(".main")
-    .style("width", "480px")
-    .style("height", "480px")
-    .append("circle")
-        .attr("cx", circle.x)
-        .attr("cy", circle.y)
-        .attr("r", circle.radius);
+main.append("circle")
+    .attr("cx", circle.x)
+    .attr("cy", circle.y)
+    .attr("r", circle.radius);
+
+// "front" indicator (stage or agreed upon origin)
+main.append("path")
+    .attr("d",
+        "M" + circle.x + "," + (circle.y - circle.radius - 8) +
+        "L" + circle.x + "," + (circle.y - circle.radius + 8)
+    );

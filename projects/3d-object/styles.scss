@@ -1,3 +1,5 @@
+---
+---
 div.angle-control {
     text-align: center;
 }
@@ -8,5 +10,12 @@ label {
 
 circle {
     fill: none;
+    stroke: black;
+    &.performer {
+        stroke: blue;
+    }
+}
+
+path {
     stroke: black;
 }
