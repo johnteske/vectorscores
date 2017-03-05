@@ -1,13 +1,9 @@
 ---
 ---
-div.angle-control {
-    text-align: center;
+svg.indicator {
+    width: 48px;
+    height: 48px;
 }
-label {
-    display: block;
-    font-family: sans-serif;;
-}
-
 circle {
     fill: none;
     stroke: black;
@@ -15,7 +11,24 @@ circle {
         stroke: blue;
     }
 }
-
 path {
     stroke: black;
+}
+
+div.angle-control {
+    display: inline-block;
+    text-align: center;
+    margin-left: 16px;
+}
+label {
+    display: block;
+    font-size: 16px;
+    font-family: monospace;
+    padding-bottom: 8px;
+}
+input#performer-angle {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+    font-family: monospace;
 }

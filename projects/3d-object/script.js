@@ -5,14 +5,14 @@
 //     0, 1, 0, 0
 // ];
 
-var main = d3.select(".main")
-    .style("width", "480px")
-    .style("height", "480px");
+var indicator = d3.select(".indicator")
+    .style("width", "80px")
+    .style("height", "80px");
 
 var circle = {
     radius: 32,
-    x: 240,
-    y: 240
+    x: 40,
+    y: 40
 };
 
 /**
@@ -27,6 +27,8 @@ function Performer() {
             // substract 90 degress so origin is top,
             // then convert to radians
             _angle = (newAngle - 90) * (Math.PI / 180);
+            // TODO these points are pixels, not relevant to the score size
+            // I'll need both to display the indicator and the score
             _point.x = circle.x + (circle.radius * Math.cos(_angle));
             _point.y = circle.y + (circle.radius * Math.sin(_angle));
         },
@@ -43,9 +45,11 @@ function Performer() {
 }
 
 var performer = new Performer;
+// TODO allow this to be set by query string on load,
+// also update query string so bookmarks/share/reloads retain current settings
 performer.setAngle(45);
-performer.positionIndicator = d3.select(".main")
-    .append("circle")
+performer.positionIndicator =
+    indicator.append("circle")
         .classed("performer", 1)
         .attr("cx", performer.x())
         .attr("cy", performer.y())
@@ -61,13 +65,13 @@ performerAngleInput.addEventListener("change", function() {
     });
 
 // circle
-main.append("circle")
+indicator.append("circle")
     .attr("cx", circle.x)
     .attr("cy", circle.y)
     .attr("r", circle.radius);
 
 // "front" indicator (stage or agreed upon origin)
-main.append("path")
+indicator.append("path")
     .attr("d",
         "M" + circle.x + "," + (circle.y - circle.radius - 8) +
         "L" + circle.x + "," + (circle.y - circle.radius + 8)
