@@ -1,25 +1,26 @@
 ---
 ---
-svg.indicator {
-    width: 48px;
-    height: 48px;
+div.position-controls {
+    padding: 0 25%;
+    div {
+        display: inline-block;
+        width: 50%;
+        vertical-align: top;
+        text-align: center;
+    }
 }
 circle {
     fill: none;
     stroke: black;
-    &.performer {
-        stroke: blue;
-    }
 }
 path {
     stroke: black;
 }
-
-div.angle-control {
-    display: inline-block;
-    text-align: center;
-    margin-left: 16px;
+.performer {
+    stroke: blue;
 }
+
+// .angle-control
 label {
     display: block;
     font-size: 16px;

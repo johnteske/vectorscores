@@ -1,11 +1,16 @@
-// var scoreMap = [
-//     0, 0, 0, 0,
-//     0, 1, 1, 1,
-//     0, 1, 1, 0,
-//     0, 1, 0, 0
-// ];
+var scoreMap = [
+    [0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0],
+    [0, 1, 1, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 1, 0, 1, 1]
+];
 
-var indicator = d3.select(".indicator")
+var main = d3.select(".main")
+    .style("width", "240px")
+    .style("height", "240px");
+
+var indicator = d3.select(".indicator svg")
     .style("width", "80px")
     .style("height", "80px");
 
@@ -16,8 +21,8 @@ var circle = {
 };
 
 /**
- * setAngle accepts degrees, saves value as radians
- **/
+ *  setAngle accepts degrees, saves value as radians
+ */
 function Performer() {
     var _angle,
         _point = {};
@@ -54,15 +59,13 @@ performer.positionIndicator =
         .attr("cx", performer.x())
         .attr("cy", performer.y())
         .attr("r", 4);
-
-// TODO also allow performer to set angle by clicking/touching, dragging the indicator
-var performerAngleInput = document.getElementById("performer-angle");
-performerAngleInput.addEventListener("change", function() {
-        performer.setAngle(performerAngleInput.value);
-        performer.positionIndicator
-            .attr("cx", performer.x())
-            .attr("cy", performer.y());
-    });
+// performer.angleIndicator =
+//     indicator.append("path")
+//         .classed("performer", 1)
+//         .attr("d",
+//             "M" + performer.x() + "," + performer.y() +
+//             "L" + circle.x + "," + circle.y // TODO: don't draw the full length, only an 8px arrow
+//         );
 
 // circle
 indicator.append("circle")
@@ -76,3 +79,52 @@ indicator.append("path")
         "M" + circle.x + "," + (circle.y - circle.radius - 8) +
         "L" + circle.x + "," + (circle.y - circle.radius + 8)
     );
+
+// draw score
+var scoreRadius = 8; // give the score a size in relation to performer
+var scoreDemoGroup =
+    main.append("g")
+        .attr("transform", "translate(88, 88)");
+// draw performer circle
+scoreDemoGroup.append("circle")
+    .style("opacity", 0.25)
+    .attr("cx", circle.x)
+    .attr("cy", circle.y)
+    .attr("r", circle.radius);
+// draw performer position
+performer.demoPosition = scoreDemoGroup.append("circle")
+    .classed("performer", 1)
+    .attr("r", 3)
+    .attr("cx", performer.x())
+    .attr("cy", performer.y());
+for (var row = 0; row < scoreMap.length; row++) {
+    for (var col = 0; col < scoreMap[row].length; col++) {
+        var thisPoint = scoreMap[row][col];
+        var pointOffset = circle.radius - scoreRadius;
+        // display scoreMap, for reference only
+        scoreDemoGroup.append("circle")
+            .attr("r", 1)
+            // .attr("r", 3)
+            // TODO make sure these offsets work with a score of any size
+            .style("fill", function() { return thisPoint ? "grey" : "none"; })
+            .attr("cx", pointOffset + (col * 8))
+            .attr("cy", pointOffset + (row * 8));
+    }
+}
+
+/**
+ *  HTML input control
+ */
+
+// TODO also allow performer to set angle by clicking/touching, dragging the indicator
+var performerAngleInput = document.getElementById("performer-angle");
+
+performerAngleInput.addEventListener("change", function() {
+     performer.setAngle(performerAngleInput.value);
+     performer.positionIndicator
+         .attr("cx", performer.x())
+         .attr("cy", performer.y());
+     performer.demoPosition
+         .attr("cx", performer.x())
+         .attr("cy", performer.y());
+});
