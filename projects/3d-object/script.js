@@ -11,13 +11,12 @@ var main = d3.select(".main")
 var indicator = {
     container: d3.select(".indicator svg")
         .style("width", "80px")
-        .style("height", "80px")
-};
-
-var circle = {
-    r: 32,
-    x: 40,
-    y: 40
+        .style("height", "80px"),
+    circle: {
+        r: 32,
+        x: 40,
+        y: 40
+    }
 };
 
 /**
@@ -34,8 +33,8 @@ function Performer() {
             _angle = (newAngle - 90) * (Math.PI / 180);
             // TODO these points are pixels, not relevant to the score size
             // I'll need both to display the indicator and the score
-            _point.x = circle.x + (circle.r * Math.cos(_angle));
-            _point.y = circle.y + (circle.r * Math.sin(_angle));
+            _point.x = indicator.circle.x + (indicator.circle.r * Math.cos(_angle));
+            _point.y = indicator.circle.y + (indicator.circle.r * Math.sin(_angle));
         },
         getAngle: function() {
             return _angle;
@@ -62,15 +61,15 @@ performer.positionIndicator =
 
 // circle
 indicator.container.append("circle")
-    .attr("cx", circle.x)
-    .attr("cy", circle.y)
-    .attr("r", circle.r);
+    .attr("cx", indicator.circle.x)
+    .attr("cy", indicator.circle.y)
+    .attr("r", indicator.circle.r);
 
 // "front" indicator (stage or agreed upon origin)
 indicator.container.append("path")
     .attr("d",
-        "M" + circle.x + "," + (circle.y - circle.r - 8) +
-        "L" + circle.x + "," + (circle.y - circle.r + 8)
+        "M" + indicator.circle.x + "," + (indicator.circle.y - indicator.circle.r - 8) +
+        "L" + indicator.circle.x + "," + (indicator.circle.y - indicator.circle.r + 8)
     );
 
 /**
