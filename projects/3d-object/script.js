@@ -1,10 +1,8 @@
-var scoreMap = [
-    [0, 0, 1, 0, 1],
-    [1, 1, 1, 1, 0],
-    [0, 1, 1, 0, 0],
-    [0, 1, 0, 0, 0],
-    [0, 1, 0, 1, 1]
-];
+---
+---
+// generate (placeholder) score
+{% include_relative _score.js %}
+var scoreMap = createScore(5, 4);
 
 var main = d3.select(".main")
     .style("width", "240px")
