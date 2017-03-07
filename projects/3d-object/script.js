@@ -14,9 +14,9 @@ var main = d3.select(".main")
     .attr("height", 240);
 
 // debug
-main.append("path")
-    .style("stroke", "pink")
-    .attr("d", "M120,0 L120,240 M240,120 L0,120");
+// main.append("path")
+//     .style("stroke", "pink")
+//     .attr("d", "M120,0 L120,240 M240,120 L0,120");
 
 /**
  * setAngle accepts degrees, saves value as radians

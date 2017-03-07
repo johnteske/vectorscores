@@ -40,15 +40,18 @@ miniScore.container.append("circle")
 for (var row = 0; row < score.height; row++) {
     for (var col = 0; col < score.width; col++) {
         var thisPoint = score.obj[row][col];
-        var pointOffset = 0; // miniScore.circle.r; // "score radius"
+        var offset = {
+            x: miniScore.circle.r - (score.width * 0.5 - 0.5),
+            y: miniScore.circle.r - (score.height * 0.5 - 0.5)
+        }
         // display score.obj, for reference only
         miniScore.container.append("circle")
             .attr("r", 0.5)
             .style("stroke", "none")
             .style("fill", function() { return thisPoint ? "black" : "grey"; })
             // TODO make sure these offsets work with a score of any size
-            .attr("cx", pointOffset + col)
-            .attr("cy", pointOffset + row);
+            .attr("cx", offset.x + col)
+            .attr("cy", offset.y + row);
     }
 }
 
