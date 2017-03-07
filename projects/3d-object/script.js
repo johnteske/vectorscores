@@ -9,9 +9,9 @@ var score = {
 }
 score.obj = createScore(score.width, score.height);
 
-var main = d3.select(".main")
-    .attr("width", 240)
-    .attr("height", 240);
+var main = d3.select(".main");
+    // .attr("width", 240)
+    // .attr("height", 240);
 
 // debug
 // main.append("path")

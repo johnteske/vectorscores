@@ -2,12 +2,16 @@
  * Visualize score and performer positions, to aid in creating the final result
  * Make it pixel-perfect, then scale up
  */
+var miniSVG = d3.select("#mini-score")
+    .attr("width", 150)
+    .attr("height", 150);
 
 var miniScore = {
-    container: main.append("g"),
+    container: miniSVG.append("g"),
     circle: {
         r: Math.sqrt( Math.pow(score.width, 2) + Math.pow(score.height, 2) )
-    }
+    },
+    performer: {}
 };
 miniScore.circle.x = miniScore.circle.r;
 miniScore.circle.y = miniScore.circle.r;
@@ -33,9 +37,17 @@ miniScore.container.append("circle")
          .attr("r", 0.5);
 
  miniScore.updatePosition = function(angle) {
+     miniScore.performer = {
+        x: miniScore.circle.x + (miniScore.circle.r * Math.cos(angle)),
+        y: miniScore.circle.y + (miniScore.circle.r * Math.sin(angle))
+     };
      miniScore.positionIndicator
-         .attr("cx", miniScore.circle.x + (miniScore.circle.r * Math.cos(angle)))
-         .attr("cy", miniScore.circle.y + (miniScore.circle.r * Math.sin(angle)));
+         .attr("cx", miniScore.performer.x)
+         .attr("cy", miniScore.performer.y);
+     document.getElementById("performer").innerHTML =
+        "{\n\tx: " + miniScore.performer.x + ",\n\ty: " + miniScore.performer.y + " }";
+     document.getElementById("score-center").innerHTML =
+        "{\n\tx: " + miniScore.center.x + ",\n\ty: " + miniScore.center.y + " }";
  };
  miniScore.updatePosition(performer.getAngle());
 
@@ -60,7 +72,7 @@ var scale = 8;
 miniScore.container
     .attr("transform",
         "translate(" +
-            ( (main.attr("width") * 0.5) - (miniScore.circle.r * scale) ) + "," +
-            ( (main.attr("height") * 0.5) - (miniScore.circle.r * scale) ) + ") " +
+            ( (miniSVG.attr("width") * 0.5) - (miniScore.circle.r * scale) ) + "," +
+            ( (miniSVG.attr("height") * 0.5) - (miniScore.circle.r * scale) ) + ") " +
         "scale(" + scale + ")"
     );

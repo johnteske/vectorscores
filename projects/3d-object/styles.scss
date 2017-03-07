@@ -1,11 +1,18 @@
 ---
 ---
+main {
+    font-family: monospace;
+}
+h3 {
+    text-align: center;
+}
+
 div.position-controls {
     padding: 0 25%;
     div {
         display: inline-block;
         width: 50%;
-        vertical-align: top;
+        vertical-align: middle;
         text-align: center;
     }
 }
@@ -20,16 +27,8 @@ path {
     stroke: blue;
 }
 
-// .angle-control
-label {
-    display: block;
-    font-size: 16px;
-    font-family: monospace;
-    padding-bottom: 8px;
-}
 input#performer-angle {
     width: 48px;
     height: 48px;
     font-size: 16px;
-    font-family: monospace;
 }
