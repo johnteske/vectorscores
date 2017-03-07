@@ -2,7 +2,11 @@
 ---
 // generate (placeholder) score
 {% include_relative _score.js %}
-var scoreMap = createScore(5, 4);
+
+function rando() {
+    return VS.getItem([3, 4, 5]);
+}
+var scoreMap = createScore(rando(), rando());
 
 var main = d3.select(".main")
     .style("width", "240px")
@@ -12,13 +16,11 @@ var main = d3.select(".main")
  * setAngle accepts degrees, saves value as radians
  */
 function Performer() {
-    var _angle,
-        _point = {};
+    var _angle;
 
     return {
         setAngle: function(newAngle) {
-            // substract 90 degress so origin is top,
-            // then convert to radians
+            // substract 90 degress so origin is top, then convert to radians
             _angle = (newAngle - 90) * (Math.PI / 180);
         },
         getAngle: function() {
@@ -33,3 +35,4 @@ var performer = new Performer;
 performer.setAngle(45);
 
 {% include_relative _indicator.js %}
+{% include_relative _mini-score.js %}
