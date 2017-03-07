@@ -1,19 +1,20 @@
 /**
  * Visualize score and performer positions, to aid in creating the final result
+ * Make it pixel-perfect, then scale up
  */
 
 var miniScore = {
-    container: main.append("g")
-        .attr("transform", "translate(88, 88)"),
+    container: main.append("g"),
     circle: {
-        r: 32,
-        x: 40,
-        y: 40
+        r: Math.sqrt( Math.pow(score.width, 2) + Math.pow(score.height, 2) )
     }
 };
+miniScore.circle.x = miniScore.circle.r;
+miniScore.circle.y = miniScore.circle.r;
 
 miniScore.container.append("circle")
      .style("opacity", 0.25)
+     .style("stroke-width", 0.5)
      .attr("cx", miniScore.circle.x)
      .attr("cy", miniScore.circle.y)
      .attr("r", miniScore.circle.r);
@@ -23,7 +24,8 @@ miniScore.container.append("circle")
  miniScore.positionIndicator =
      miniScore.container.append("circle")
          .classed("performer", 1)
-         .attr("r", 4);
+         .style("stroke-width", 0.5)
+         .attr("r", 0.5);
 
  miniScore.updatePosition = function(angle) {
      miniScore.positionIndicator
@@ -35,17 +37,26 @@ miniScore.container.append("circle")
 /**
  * mini-score
  */
- for (var row = 0; row < scoreMap.length; row++) {
-     for (var col = 0; col < scoreMap[row].length; col++) {
-         var thisPoint = scoreMap[row][col];
-         var pointOffset = miniScore.circle.r; // "score radius"
-         // display scoreMap, for reference only
-         miniScore.container.append("circle")
-             .attr("r", 1)
-             // .attr("r", 3)
-             // TODO make sure these offsets work with a score of any size
-             .style("fill", function() { return thisPoint ? "grey" : "none"; })
-             .attr("cx", pointOffset + (col * 8))
-             .attr("cy", pointOffset + (row * 8));
-     }
- }
+for (var row = 0; row < score.height; row++) {
+    for (var col = 0; col < score.width; col++) {
+        var thisPoint = score.obj[row][col];
+        var pointOffset = 0; // miniScore.circle.r; // "score radius"
+        // display score.obj, for reference only
+        miniScore.container.append("circle")
+            .attr("r", 0.5)
+            .style("stroke", "none")
+            .style("fill", function() { return thisPoint ? "black" : "grey"; })
+            // TODO make sure these offsets work with a score of any size
+            .attr("cx", pointOffset + col)
+            .attr("cy", pointOffset + row);
+    }
+}
+
+var scale = 8;
+miniScore.container
+    .attr("transform",
+        "translate(" +
+            ( (main.attr("width") * 0.5) - (miniScore.circle.r * scale) ) + "," +
+            ( (main.attr("height") * 0.5) - (miniScore.circle.r * scale) ) + ") " +
+        "scale(" + scale + ")"
+    );

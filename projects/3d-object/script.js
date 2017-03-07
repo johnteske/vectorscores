@@ -3,14 +3,20 @@
 // generate (placeholder) score
 {% include_relative _score.js %}
 
-function rando() {
-    return VS.getItem([3, 4, 5]);
+var score = {
+    width: VS.getItem([3, 4, 5]),
+    height: VS.getItem([3, 4, 5])
 }
-var scoreMap = createScore(rando(), rando());
+score.obj = createScore(score.width, score.height);
 
 var main = d3.select(".main")
-    .style("width", "240px")
-    .style("height", "240px");
+    .attr("width", 240)
+    .attr("height", 240);
+
+// debug
+main.append("path")
+    .style("stroke", "pink")
+    .attr("d", "M120,0 L120,240 M240,120 L0,120");
 
 /**
  * setAngle accepts degrees, saves value as radians
