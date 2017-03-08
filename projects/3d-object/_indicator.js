@@ -47,7 +47,7 @@ indicator.updatePosition(performer.getAngle());
 var performerAngleInput = document.getElementById("performer-angle");
 
 performerAngleInput.addEventListener("change", function() {
-     performer.setAngle(performerAngleInput.value);
-     indicator.updatePosition(performer.getAngle());
-     miniScore.updatePosition(performer.getAngle());
+     var _newAngle = performer.setAngle(performerAngleInput.value);
+     indicator.updatePosition(_newAngle);
+     miniScore.updatePosition(_newAngle);
 });
