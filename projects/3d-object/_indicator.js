@@ -50,4 +50,5 @@ performerAngleInput.addEventListener("change", function() {
      var _newAngle = performer.setAngle(performerAngleInput.value);
      indicator.updatePosition(_newAngle);
      miniScore.updatePosition(_newAngle);
+     render();
 });

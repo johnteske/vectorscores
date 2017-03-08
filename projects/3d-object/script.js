@@ -4,19 +4,25 @@
 {% include_relative _score.js %}
 
 var score = {
-    width: VS.getItem([3, 4, 5]),
-    height: VS.getItem([3, 4, 5])
+    width: 5, // for debugging //VS.getItem([3, 4, 5]),
+    height: 1, // for debugging //VS.getItem([3, 4, 5]),
+    container: d3.select(".main").append("g")
 };
 score.center = {
     x: score.width * 0.5 - 0.5,
     y: score.height * 0.5 - 0.5
 };
 score.radius = Math.sqrt( Math.pow(score.width, 2) + Math.pow(score.height, 2) ); // distance of player from center of score
-score.obj = createScore(score.width, score.height);
+// score.obj = createScore(score.width, score.height);
 
-var main = d3.select(".main");
-    // .attr("width", 240)
-    // .attr("height", 240);
+d3.select("main").insert("h3", ":first-child").text("Not quite 3D--but something");
+score.obj = [ // for debugging
+    // [0, 0, 0, 0, 1],
+    // [0, 0, 0, 1, 1],
+    [0, 0, 1, 1, 1]
+    // [0, 1, 1, 1, 1],
+    // [1, 1, 1, 1, 1]
+];
 
 /**
  * setAngle accepts degrees, saves value as radians
@@ -53,3 +59,6 @@ performer.setAngle(45);
 
 {% include_relative _indicator.js %}
 {% include_relative _mini-score.js %}
+
+{% include_relative _render.js %}
+render();
