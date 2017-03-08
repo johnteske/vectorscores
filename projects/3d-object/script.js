@@ -6,7 +6,11 @@
 var score = {
     width: VS.getItem([3, 4, 5]),
     height: VS.getItem([3, 4, 5])
-}
+};
+score.center = {
+    x: score.width * 0.5 - 0.5,
+    y: score.height * 0.5 - 0.5
+};
 score.obj = createScore(score.width, score.height);
 
 var main = d3.select(".main");

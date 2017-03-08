@@ -2,29 +2,20 @@
  * Visualize score and performer positions, to aid in creating the final result
  * Make it pixel-perfect, then scale up
  */
-var miniSVG = d3.select("#mini-score")
-    .attr("width", 150)
-    .attr("height", 150);
-
 var miniScore = {
-    container: miniSVG.append("g"),
-    circle: {
-        r: Math.sqrt( Math.pow(score.width, 2) + Math.pow(score.height, 2) )
-    },
-    performer: {}
+    element: d3.select("#mini-score")
+        .attr("width", 150)
+        .attr("height", 150),
+    radius: Math.sqrt( Math.pow(score.width, 2) + Math.pow(score.height, 2) )
 };
-
-miniScore.center = {
-    x: score.width * 0.5 - 0.5,
-    y: score.height * 0.5 - 0.5
-};
+miniScore.container = miniScore.element.append("g");
 
 miniScore.container.append("circle")
      .style("opacity", 0.25)
      .style("stroke-width", 0.5)
-     .attr("cx", miniScore.center.x)
-     .attr("cy", miniScore.center.y)
-     .attr("r", miniScore.circle.r);
+     .attr("cx", score.center.x)
+     .attr("cy", score.center.y)
+     .attr("r", miniScore.radius);
 
 /** basically identical to indicator.positionIndicator */
  // performer position
@@ -36,8 +27,8 @@ miniScore.container.append("circle")
 
  miniScore.updatePosition = function(angle) {
      performer.position = {
-        x: miniScore.center.x + (miniScore.circle.r * Math.cos(angle)),
-        y: miniScore.center.y + (miniScore.circle.r * Math.sin(angle))
+        x: score.center.x + (miniScore.radius * Math.cos(angle)),
+        y: score.center.y + (miniScore.radius * Math.sin(angle))
      };
      miniScore.positionIndicator
          .attr("cx", performer.position.x)
@@ -45,7 +36,7 @@ miniScore.container.append("circle")
      document.getElementById("performer").innerHTML =
         "\n\tx: " + performer.position.x + ",\n\ty: " + performer.position.y;
      document.getElementById("score-center").innerHTML =
-        "\n\tx: " + miniScore.center.x + ",\n\ty: " + miniScore.center.y;
+        "\n\tx: " + score.center.x + ",\n\ty: " + score.center.y;
  };
  miniScore.updatePosition(performer.getAngle());
 
@@ -55,22 +46,19 @@ miniScore.container.append("circle")
 for (var row = 0; row < score.height; row++) {
     for (var col = 0; col < score.width; col++) {
         var thisPoint = score.obj[row][col];
-        // display score.obj, for reference only
         miniScore.container.append("circle")
             .attr("r", 0.5)
             .style("stroke", "none")
             .style("fill", function() { return thisPoint ? "black" : "grey"; })
-            // TODO make sure these offsets work with a score of any size
             .attr("cx", col)
             .attr("cy", row);
     }
 }
 
-var scale = 8;
 miniScore.container
     .attr("transform",
         "translate(" +
-            (miniSVG.attr("width") * 0.5) + "," +
-            (miniSVG.attr("height") * 0.5) + ") " +
-        "scale(" + scale + ")"
+            (miniScore.element.attr("width") * 0.5) + "," +
+            (miniScore.element.attr("height") * 0.5) + ") " +
+        "scale(" + 8 + ")"
     );
