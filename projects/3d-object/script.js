@@ -48,6 +48,13 @@ function Performer() {
         },
         getPosition: function() {
             return _position;
+        },
+        get: function() {
+            return {
+                x: _position.x,
+                y: _position.y,
+                angle: _angle
+            }
         }
     };
 }
