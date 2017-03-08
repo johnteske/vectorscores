@@ -13,19 +13,17 @@ var miniScore = {
     },
     performer: {}
 };
-miniScore.circle.x = miniScore.circle.r;
-miniScore.circle.y = miniScore.circle.r;
 
 miniScore.center = {
-    x: miniScore.circle.r - (score.width * 0.5 - 0.5),
-    y: miniScore.circle.r - (score.height * 0.5 - 0.5)
+    x: score.width * 0.5 - 0.5,
+    y: score.height * 0.5 - 0.5
 };
 
 miniScore.container.append("circle")
      .style("opacity", 0.25)
      .style("stroke-width", 0.5)
-     .attr("cx", miniScore.circle.x)
-     .attr("cy", miniScore.circle.y)
+     .attr("cx", miniScore.center.x)
+     .attr("cy", miniScore.center.y)
      .attr("r", miniScore.circle.r);
 
 /** basically identical to indicator.positionIndicator */
@@ -37,15 +35,15 @@ miniScore.container.append("circle")
          .attr("r", 0.5);
 
  miniScore.updatePosition = function(angle) {
-     miniScore.performer = {
-        x: miniScore.circle.x + (miniScore.circle.r * Math.cos(angle)),
-        y: miniScore.circle.y + (miniScore.circle.r * Math.sin(angle))
+     performer.position = {
+        x: miniScore.center.x + (miniScore.circle.r * Math.cos(angle)),
+        y: miniScore.center.y + (miniScore.circle.r * Math.sin(angle))
      };
      miniScore.positionIndicator
-         .attr("cx", miniScore.performer.x)
-         .attr("cy", miniScore.performer.y);
+         .attr("cx", performer.position.x)
+         .attr("cy", performer.position.y);
      document.getElementById("performer").innerHTML =
-        "{\n\tx: " + miniScore.performer.x + ",\n\ty: " + miniScore.performer.y + " }";
+        "{\n\tx: " + performer.position.x + ",\n\ty: " + performer.position.y + " }";
      document.getElementById("score-center").innerHTML =
         "{\n\tx: " + miniScore.center.x + ",\n\ty: " + miniScore.center.y + " }";
  };
@@ -63,8 +61,8 @@ for (var row = 0; row < score.height; row++) {
             .style("stroke", "none")
             .style("fill", function() { return thisPoint ? "black" : "grey"; })
             // TODO make sure these offsets work with a score of any size
-            .attr("cx", miniScore.center.x + col)
-            .attr("cy", miniScore.center.y + row);
+            .attr("cx", col)
+            .attr("cy", row);
     }
 }
 
@@ -72,7 +70,7 @@ var scale = 8;
 miniScore.container
     .attr("transform",
         "translate(" +
-            ( (miniSVG.attr("width") * 0.5) - (miniScore.circle.r * scale) ) + "," +
-            ( (miniSVG.attr("height") * 0.5) - (miniScore.circle.r * scale) ) + ") " +
+            (miniSVG.attr("width") * 0.5) + "," +
+            (miniSVG.attr("height") * 0.5) + ") " +
         "scale(" + scale + ")"
     );

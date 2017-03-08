@@ -25,6 +25,7 @@ function Performer() {
     var _angle;
 
     return {
+        position: {},
         setAngle: function(newAngle) {
             // substract 90 degress so origin is top, then convert to radians
             _angle = (newAngle - 90) * (Math.PI / 180);
