@@ -43,9 +43,9 @@ miniScore.container.append("circle")
          .attr("cx", performer.position.x)
          .attr("cy", performer.position.y);
      document.getElementById("performer").innerHTML =
-        "{\n\tx: " + performer.position.x + ",\n\ty: " + performer.position.y + " }";
+        "\n\tx: " + performer.position.x + ",\n\ty: " + performer.position.y;
      document.getElementById("score-center").innerHTML =
-        "{\n\tx: " + miniScore.center.x + ",\n\ty: " + miniScore.center.y + " }";
+        "\n\tx: " + miniScore.center.x + ",\n\ty: " + miniScore.center.y;
  };
  miniScore.updatePosition(performer.getAngle());
 
