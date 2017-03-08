@@ -37,13 +37,13 @@ function render() {
         var point = _points[i];
         score.container.append("circle")
             .classed("rendered", 1)
-            .attr("r", 32 / point.z)
+            .attr("r", 32 / (point.z + 1)) // prevent divide by 0
             .style("stroke", "none")
             .style("fill", function() { return point.value ? "black" : "grey"; })
             .attr("cx", point.x * testScale)
             // TODO need to factor in y coordinate as well
             // y display would be more for height, layer
-            // .attr("cy", point.y * testScale); // for TEST, and a tiny amount of depth
+            .attr("cy", point.y); // yes, dots should be in perspective, not flat
     }
 
     score.container.attr("transform", "translate (120, 60)"); // TEST
