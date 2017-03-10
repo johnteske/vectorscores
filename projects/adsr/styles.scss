@@ -22,3 +22,7 @@ main, svg {
     font-family: serif;
     font-style: italic;
 }
+
+line[class^="debug-center"] {
+    stroke: red;
+}

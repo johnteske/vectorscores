@@ -11,6 +11,7 @@ var scoreWidth = 8000,
     structurePoints = [0, 0.14586594177599999, 0.236029032, 0.381924, 0.618, 0.763970968, 1 ],
     // calculated in resize()
     viewWidth = 0,
+    viewHeight = 0,
     viewCenter = 0,
     // TODO allow numParts to be set from settings
     numParts = +VS.getQueryString("parts") || 4,
@@ -37,9 +38,9 @@ layoutGroup.selectAll("line")
     .enter()
     .append("line")
         .attr("x1", 0)
-        .attr("y1", 6 * unit)
+        .attr("y1", 3 * unit)
         .attr("x2", 0)
-        .attr("y2", height - (6 * unit))
+        .attr("y2", (numParts * 12 * unit) + (6 * unit))
     .style("stroke", "black")
     .style("stroke-opacity", "0.25")
     .attr("transform", function(d) {
@@ -116,7 +117,9 @@ function scrollScore(ndex, dur) {
     .transition()
     .duration(dur)
     .attr("transform", function() {
-        return "translate(" + (viewCenter + (-scoreWidth * thisPoint) / scoreLength) + "," + 0 + ")";
+        return "translate(" + (viewCenter + (-scoreWidth * thisPoint) / scoreLength) + "," +
+            ((viewHeight * 0.5) - (scoreGroup.node().getBBox().height * 0.5) - (3 * unit))
+            + ")";
     });
 }
 for(i = 0; i < timePoints.length; i++) {
@@ -132,8 +135,9 @@ VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300); };
 function resize() {
     viewWidth = parseInt(d3.select("main").style("width"), 10);
     viewCenter = viewWidth * 0.5;
+    viewHeight = parseInt(d3.select("main").style("height"), 10);
 
-    if(debug){ resizeDebug(viewWidth, viewCenter); }
+    if(debug){ resizeDebug(); }
 
     scrollScore(VS.score.pointer, 0);
 }
