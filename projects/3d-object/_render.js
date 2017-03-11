@@ -15,10 +15,14 @@ function render() {
                 z = Math.sqrt( Math.pow(a, 2) + Math.pow(b, 2) ),
                 // "Oblique projection"
                 // (x,y) = (x + zcos0,y + zsin0)
-                // TODO x is backwards on one side
                 // TODO y does not factor in -- perhaps here y is actually the z value
-                x = col + (z * Math.cos(_performer.angle)),
-                y = row + (z * Math.sin(_performer.angle));
+                cos = Math.cos(_performer.angle),
+                sin = Math.sin(_performer.angle),
+                x = col + (z * cos),
+                y = row + (z * sin);
+
+                x = _performer.y >= 0 ? x - _performer.x : _performer.x - x;
+                y = _performer.x >= 0 ? y - _performer.y : _performer.y - y;
 
             _points.push({
                 x: x,
