@@ -45,7 +45,7 @@ for (var row = 0; row < score.height; row++) {
         miniScore.container.append("circle")
             .attr("r", 0.5)
             .style("stroke", "none")
-            .style("fill", function() { return thisPoint ? "black" : "grey"; })
+            .style("fill", function() { return colors[thisPoint]; })
             .attr("cx", col)
             .attr("cy", row);
     }

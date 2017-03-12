@@ -9,7 +9,7 @@ function render() {
     for (var row = 0; row < score.height; row++) {
         for (var col = 0; col < score.width; col++) {
             var value = score.obj[row][col],
-                testScale = 16, // use this for simple TEST
+                testScale = 42, // use this for simple TEST
                 a = col - _performer.x,
                 b = row - _performer.y,
                 z = Math.sqrt( Math.pow(a, 2) + Math.pow(b, 2) ),
@@ -22,7 +22,7 @@ function render() {
                 y = row + (z * sin);
 
                 x = _performer.y >= 0 ? x - _performer.x : _performer.x - x;
-                y = _performer.x >= 0 ? y - _performer.y : _performer.y - y;
+                // y = _performer.y = 0 ? y - _performer.y : _performer.y - y;
 
             _points.push({
                 x: x,
@@ -37,19 +37,24 @@ function render() {
         return b.z - a.z;
     });
 
+    // var z1 = _points[0].z;
+    var closest_z = _points[_points.length - 1].z;
+
     for (var i = 0; i < _points.length; i++) {
         var point = _points[i];
+        console.log(closest_z, point.z, closest_z / point.z);
         score.container.append("circle")
             .classed("rendered", 1)
-            .attr("r", 32 / (point.z + 1)) // prevent divide by 0
+            .attr("r", 6 * (closest_z / point.z)) // prevent divide by 0
             .style("stroke", "none")
-            .style("fill", function() { return point.value ? "black" : "grey"; })
+            .style("fill", function() { return colors[point.value]; })
+            // .style("opacity", (closest_z / point.z))
             .attr("cx", point.x * testScale)
             // TODO need to factor in y coordinate as well
             // y display would be more for height, layer
-            .attr("cy", point.y); // yes, dots should be in perspective, not flat
+            .attr("cy", -point.z * 6); // yes, dots should be in perspective, not flat
     }
 
-    score.container.attr("transform", "translate (120, 60)"); // TEST
+    score.container.attr("transform", "translate (150, 90)"); // TEST
 
 }
