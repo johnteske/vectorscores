@@ -25,16 +25,16 @@ function drawScore(scoreFragment, x, y) {
         rows = scoreFragment.length,
         cols = scoreFragment[0].length;
 
-    for(var i = 0; i < rows; i++){ // row
-        for(var j = 0; j < cols; j++){ // col
+    for(var row = 0; row < rows; row++){
+        for(var col = 0; col < cols; col++){
             d3.select(documentFragment).append("svg:text")
             .text(function() {
-                return symbols[scoreFragment[i][j]];
+                return symbols[scoreFragment[row][col]];
             })
             .attr("transform", function() {
                 return "translate(" +
-                    ((x + (j - i)) * tileWidthHalf) + ", " +
-                    ((y + (j + i)) * tileHeightHalf) + ")";
+                    ((x + (col - row)) * tileWidthHalf) + ", " +
+                    ((y + (col + row)) * tileHeightHalf) + ")";
             });
         }
     }
