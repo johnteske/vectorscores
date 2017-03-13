@@ -46,7 +46,7 @@ function makeCards(nCards) {
         thisCardType = cardTypes[thisCard.type];
 
         // set card start time
-        thisCard.time = prevCard.time + VS.getRandExcl(3000, 8000);
+        thisCard.time = prevCard.time + VS.getRandExcl(5000, 8000);
         // thisCard.duration // could also/instead set duration for each card
 
         thisCard.nNotes = d3.range(Math.floor(VS.getRandExcl(

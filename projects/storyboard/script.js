@@ -69,15 +69,20 @@ cards.each(function(d) {
 
 });
 
-cards.append("rect")
-    .classed("timer", 1)
-    .attr("y", cardWidth)
-    .attr("width", 0)
-    .attr("height", 1);
+cards.append("path")
+    .attr("class", function(d, i) { return "indicator indicator--" + i; })
+    .attr("d", "M0,0 L12,0 L6,12 L0,0")
+    .attr("transform", "translate(0, -42)");
+
+// cards.append("rect")
+//     .classed("timer", 1)
+//     .attr("y", cardWidth)
+//     .attr("width", 0)
+//     .attr("height", 1);
 
 function goToCard(eventIndex, dur) {
     var pointer = eventIndex || VS.score.pointer;
-    dur = dur || 600;
+    dur = dur || 325;
     cards.transition()
         .attr("transform", function(d, i) {
             var pos =
@@ -98,30 +103,51 @@ function goToCard(eventIndex, dur) {
     });
 
     // if playing and not skipping, stopping
-    updateCardTimer(eventIndex);
+    if(typeof eventIndex !== "undefined") { updateCardIndicator(eventIndex); }
+    // updateCardTimer(eventIndex);
 }
 
-function updateCardTimer(pointer) {
-    d3.selectAll(".timer")
-        .transition()
-        .ease("linear")
-        .duration(function(d, i) {
-            if(pointer == i ) {
-                return VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer);
-            }
-            else {
-                return 50;
-            }
-        })
-        .attr("width", function(d, i) {
-            if(pointer == i ) {
-                return cardWidth - 1;
-            }
-            else {
-                return 0;
-            }
-        });
+function updateCardIndicator(pointer) {
+    var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
+        indicatorTime = cardDuration - 3000, // start flashing 3 seconds before next card
+        onTime = 25,
+        fadeTime = 725;
+    d3.select(".indicator--" + (pointer + 1))
+        .transition().delay(indicatorTime).duration(onTime)
+        .style("opacity", "1")
+        .transition().delay(indicatorTime + onTime).duration(fadeTime)
+        .style("opacity", "0")
+        .transition().delay(indicatorTime + 1000).duration(onTime)
+        .style("opacity", "1")
+        .transition().delay(indicatorTime + 1000 + onTime).duration(fadeTime)
+        .style("opacity", "0")
+        .transition().delay(indicatorTime + 2000).duration(onTime)
+        .style("opacity", "1")
+        .transition().delay(indicatorTime + 2000 + onTime).duration(fadeTime)
+        .style("opacity", "0");
 }
+
+// function updateCardTimer(pointer) {
+//     d3.selectAll(".timer")
+//         .transition()
+//         .ease("linear")
+//         .duration(function(d, i) {
+//             if(pointer == i ) {
+//                 return VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer);
+//             }
+//             else {
+//                 return 50;
+//             }
+//         })
+//         .attr("width", function(d, i) {
+//             if(pointer == i ) {
+//                 return cardWidth - 1;
+//             }
+//             else {
+//                 return 0;
+//             }
+//         });
+// }
 
 // create score events from card times
 for(var i = 0; i < cardList.length; i++) {
@@ -130,6 +156,6 @@ for(var i = 0; i < cardList.length; i++) {
 // and final noop 3 seconds after last card
 VS.score.add([cardList[cardList.length - 1].time + 3000, VS.noop]);
 
-VS.score.stepCallback = function() { goToCard(null, 300); };
-VS.score.pauseCallback = updateCardTimer;
+VS.score.stepCallback = goToCard;
+// VS.score.pauseCallback = updateCardTimer;
 VS.score.stopCallback = goToCard;
