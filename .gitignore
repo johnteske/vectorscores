@@ -2,7 +2,6 @@
 .DS_Store
 
 # local development
-js/d3*
 _workspace/
 Gemfile.lock
 

@@ -5,10 +5,10 @@ View and develop the site locally with Jekyll using:
 
 `$ jekyll serve`
 
-#### Working offline
+<!-- #### Working offline
 [Download D3](https://d3js.org/) to `/js/d3.v3.min.js` and use:
 
-`$ JEKYLL_ENV=offline jekyll serve`
+`$ JEKYLL_ENV=offline jekyll serve` -->
 
 #### Debug mode
 
