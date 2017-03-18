@@ -1,7 +1,19 @@
 ---
 # // adapted from original SuperCollider code
 ---
-
+/**
+ * TODO
+ * display pitch and timbre inline--and only if there is a change (or make that optional)
+ * bounding boxes for phrases? make optional setting?
+ * dynamics
+ * articulation
+ * rehearsal letters
+ * show bar lengths?
+ * show second ticks?
+ * tie, ghost notes
+ * x notehead
+ * bartok pizz symbol
+ */
 var scoreWidth = 8000,
     height = 640,
     unit = 10,
@@ -10,9 +22,11 @@ var scoreWidth = 8000,
     // for interpolating parameter envelopes, scaled to 1. originally in SuperCollider as durations, not points in time
     structurePoints = [0, 0.14586594177599999, 0.236029032, 0.381924, 0.618, 0.763970968, 1 ],
     // calculated in resize()
-    viewWidth = 0,
-    viewHeight = 0,
-    viewCenter = 0,
+    view = {
+        width: 0,
+        height: 0,
+        center: 0
+    },
     // TODO allow numParts to be set from settings
     numParts = +VS.getQueryString("parts") || 4,
     debug = false;
@@ -117,8 +131,8 @@ function scrollScore(ndex, dur) {
     .transition()
     .duration(dur)
     .attr("transform", function() {
-        return "translate(" + (viewCenter + (-scoreWidth * thisPoint) / scoreLength) + "," +
-            ((viewHeight * 0.5) - (scoreGroup.node().getBBox().height * 0.5) - (3 * unit))
+        return "translate(" + (view.center + (-scoreWidth * thisPoint) / scoreLength) + "," +
+            ((view.height * 0.5) - (scoreGroup.node().getBBox().height * 0.5) - (3 * unit))
             + ")";
     });
 }
@@ -133,9 +147,9 @@ VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300); };
 //
 
 function resize() {
-    viewWidth = parseInt(d3.select("main").style("width"), 10);
-    viewCenter = viewWidth * 0.5;
-    viewHeight = parseInt(d3.select("main").style("height"), 10);
+    view.width = parseInt(d3.select("main").style("width"), 10);
+    view.center = view.width * 0.5;
+    view.height = parseInt(d3.select("main").style("height"), 10);
 
     if(debug){ resizeDebug(); }
 

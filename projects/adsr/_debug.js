@@ -9,9 +9,9 @@ if(debug) {
 
 function resizeDebug() {
     d3.select("line.debug-center-v")
-        .attr("x1", viewCenter)
+        .attr("x1", view.center)
         .attr("y1", 0)
-        .attr("x2", viewCenter)
+        .attr("x2", view.center)
         .attr("y2", 2000);
     // d3.select("line.debug-center-h")
     //     .attr("x1", 0)
