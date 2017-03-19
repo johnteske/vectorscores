@@ -8,18 +8,29 @@
  * dynamics
  * articulation
  * rehearsal letters
- * show bar lengths?
+ * show bar lengths (times above barlines)?
  * show second ticks?
  * tie, ghost notes
  * x notehead
  * bartok pizz symbol
  * double bar
  * error-check if score height exceeds view
+ * current bar indicator (not debug line)--similar to storyboard indicator?
  */
-var score = {
-        width: 8000
-    },
-    unit = 10,
+var score = (function() {
+        var width = 8000;
+        var svg = d3.select(".main")
+            .attr("width", width);
+        var group = svg.append("g");
+
+        return {
+            width: width,
+            svg: svg,
+            group: group
+        };
+    })();
+
+var unit = 10,
     // calculated in resize()
     view = {
         width: 0,
@@ -36,16 +47,9 @@ var score = {
 // generate score
 {% include_relative _score.js %}
 
-var main = d3.select(".main")
-    .attr("width", score.width);
-
-var scoreGroup = main.append("g");
 
 // create placeholder barlines
-
-var layoutGroup = scoreGroup.append("g");
-
-layoutGroup.selectAll("line")
+score.group.append("g").selectAll("line")
     .data(score.bars)
     .enter()
     .append("line")
@@ -63,10 +67,10 @@ layoutGroup.selectAll("line")
 
 for (p = 0; p < numParts; p++) {
     var thisPart = parts[p];
-    var partGroup = scoreGroup.append("g"); // part group
+    var partGroup = score.group.append("g"); // part group
     var partYPos = (p + 1) * 12 * unit;
 
-    // for each phrase, create a group around a timePoint
+    // for each phrase, create a group around a barline
     partGroup.selectAll("g")
         .data(score.bars)
         .enter()
@@ -125,14 +129,17 @@ for (p = 0; p < numParts; p++) {
 
 function scrollScore(ndex, dur) {
     var thisBar = score.bars[ndex];
-    scoreGroup
-    .transition()
-    .duration(dur)
-    .attr("transform", function() {
-        return "translate(" + (view.center + (-score.width * thisBar) / score.totalDuration) + "," +
-            ((view.height * 0.5) - (scoreGroup.node().getBBox().height * 0.5) - (3 * unit))
-            + ")";
-    });
+    var scoreGroupHeight = score.group.node().getBBox().height * 0.5;
+
+    score.group
+        .transition()
+        .duration(dur)
+        // .ease("linear") // TODO setting this should make the score scroll evenly--check that the durations are correct
+        .attr("transform", function() {
+            return "translate(" + (view.center + (-score.width * thisBar) / score.totalDuration) + "," +
+                ((view.height * 0.5) - scoreGroupHeight - (3 * unit))
+                + ")";
+        });
 }
 for(i = 0; i < score.bars.length; i++) {
     VS.score.add([score.bars[i] * 1000, scrollScore, (score.bars[i + 1] - score.bars[i]) * 1000]); // time, func, duration
@@ -149,7 +156,7 @@ function resize() {
     view.center = view.width * 0.5;
     view.height = parseInt(d3.select("main").style("height"), 10);
 
-    main.attr("height", view.height);
+    score.svg.attr("height", view.height);
 
     if(debug){ resizeDebug(); }
 
