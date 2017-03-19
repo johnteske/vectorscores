@@ -8,6 +8,7 @@
  * bounding boxes for phrases? make optional setting?
  * dynamics
  * articulation
+ * allow option to show note names? or pitch classes?
  * rehearsal letters
  * show second ticks?
  * tie, ghost notes
@@ -20,11 +21,11 @@
  */
 var score = (function() {
         var width = 8000;
-        var svg = d3.select(".main")
-            .attr("width", width);
+        var svg = d3.select(".main").attr("width", width);
         var group = svg.append("g");
-        var layout = group.append("g")
-            .classed("layout", 1); // to contain barlines, etc.
+        var layout = {
+            group: group.append("g").classed("layout", 1)
+        };
 
         return {
             width: width,
@@ -63,7 +64,9 @@ function decimalRound(number, precision) {
 }
 
 // create barlines
-score.layout.selectAll("line")
+score.layout.group
+    .append("g")
+    .selectAll("line")
     .data(score.bars)
     .enter()
     .append("line")
@@ -75,7 +78,10 @@ score.layout.selectAll("line")
         return "translate(" + getBarlineX(d) + ", " + 0 + ")";
     });
 
-score.layout.selectAll("text")
+// show durations over barlines
+score.layout.group
+    .append("g")
+    .selectAll("text")
     .data(score.bars)
     .enter()
     .append("text")
@@ -89,7 +95,10 @@ score.layout.selectAll("text")
             return "translate(" + getBarlineX(d) + ", " + 0 + ")";
         });
 
-score.layout.selectAll(".letter")
+// show rehearsal letters
+score.layout.group
+    .append("g")
+    .selectAll("text")
     .data(score.rehearsalLetters)
     .enter()
     .append("text")
