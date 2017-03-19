@@ -15,7 +15,7 @@
  * x notehead
  * bartok pizz symbol
  * double bar
- * error-check if score height exceeds view
+ * error-check if score height exceeds view and/or auto-scale to fit
  * current bar indicator (not debug line)--similar to storyboard indicator?
  * also use flashing indicator when the piece is starting, to time the snap pizz
  */
@@ -92,22 +92,33 @@ score.layout.group
         })
         .classed("duration", 1)
         .attr("transform", function(d) {
-            return "translate(" + getBarlineX(d) + ", " + 0 + ")";
+            return "translate(" + getBarlineX(d) + ", " + unit + ")";
         });
 
 // show rehearsal letters
-score.layout.group
-    .append("g")
-    .selectAll("text")
+score.layout.letters = score.layout.group.append("g")
+    .selectAll("g")
     .data(score.rehearsalLetters)
     .enter()
-    .append("text")
+    .append("g")
+    .attr("transform", function(d) {
+        return "translate(" + getBarlineX(score.bars[d.index]) + ", " + (-unit * 2) + ")";
+    });
+score.layout.letters.each(function(d) {
+    var thisLetter = d3.select(this);
+
+    thisLetter.append("rect")
+        .attr("y", -15)
+        .attr("width", 20)
+        .attr("height", 20);
+
+    thisLetter.append("text")
         .text(function(d) {
             return d.letter;
         })
-        .attr("transform", function(d) {
-            return "translate(" + getBarlineX(score.bars[d.index]) + ", " + 20 + ")";
-        });
+        .attr("dx", "0.25em");
+});
+
 
 for (p = 0; p < numParts; p++) {
     var thisPart = parts[p];
@@ -185,7 +196,7 @@ function scrollScore(ndex, params) {
             // TODO calculate score vertical center positions on resize and store--don't calc on every scroll
             return "translate(" +
                 (view.center - getBarlineX(targetBar)) + "," +
-                ((view.height * 0.5) - scoreGroupHeight) +
+                ((view.height * 0.5) - scoreGroupHeight + (2 * unit)) +
                 ")";
         });
 }
