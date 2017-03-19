@@ -9,8 +9,6 @@
  * dynamics
  * articulation
  * allow option to show note names? or pitch classes?
- * rehearsal letters
- * show second ticks?
  * tie, ghost notes
  * x notehead
  * bartok pizz symbol
@@ -104,7 +102,7 @@ score.layout.letters = score.layout.group.append("g")
     .attr("transform", function(d) {
         return "translate(" + getBarlineX(score.bars[d.index]) + ", " + (-unit * 2) + ")";
     });
-score.layout.letters.each(function(d) {
+score.layout.letters.each(function() {
     var thisLetter = d3.select(this);
 
     thisLetter.append("rect")
@@ -166,19 +164,23 @@ for (p = 0; p < numParts; p++) {
                             }, 0);
                         return sum * unit;
                     });
-                // save this, could be an interesting setting to toggle
-                // .append("rect")
-                //     .attr("x", function(d, i) {
-                //         var upToI = durations.slice(0, i),
-                //             sum = upToI.reduce(function(a, b) {
-                //             return a + b + 1; // add padding between here
-                //         }, 0);
-                //
-                //         return sum * unit;
-                //     })
-                //     .attr("y", function(d, i) { return 0; })
-                //     .attr("width", function(d) { return d * unit; })
-                //     .attr("height", unit)
+            // // save this, could be an interesting setting to toggle
+            // d3.select(this).selectAll("rect") // TODO should selectAll text, although that is broken
+            //     .data(durations)
+            //     .enter()
+            //     .append("rect")
+            //         .attr("rx", 1)
+            //         .attr("x", function(d, i) {
+            //             var upToI = durations.slice(0, i),
+            //                 sum = upToI.reduce(function(a, b) {
+            //                 return a + b + 1; // add padding between here
+            //             }, 0);
+            //
+            //             return sum * unit;
+            //         })
+            //         .attr("y", function(d, i) { return 0; })
+            //         .attr("width", function(d) { return d * unit; })
+            //         .attr("height", unit)
         });
 }
 
@@ -219,6 +221,7 @@ VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, [300]); };
 {% include_relative _debug.js %}
 
 function resize() {
+    // TODO pause score if playing
     view.width = parseInt(d3.select("main").style("width"), 10);
     view.center = view.width * 0.5;
     view.height = parseInt(d3.select("main").style("height"), 10);
