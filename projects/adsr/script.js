@@ -52,6 +52,9 @@ var unit = 10,
 // generate score
 {% include_relative _score.js %}
 
+function getBarDuration(ndex) {
+    return score.bars[ndex + 1] - score.bars[ndex];
+}
 function getBarlineX(bar) {
     return (score.width * bar) / score.totalDuration;
 }
@@ -77,8 +80,11 @@ score.layout.selectAll("text")
     .data(score.bars)
     .enter()
     .append("text")
-        .text(function(d) { return decimalRound(d, 1) + "\u2033"; }) // &Prime;
-        // .text(function(d) { return Math.round(getBarlineX(d)) + "px"; }) // pixel position
+        .text(function(d, i) {
+            var dur = getBarDuration(i);
+            // do not display last bar's duration
+            return i < score.bars.length - 1 ? decimalRound(dur, 1) + "\u2033" : "";
+        })
     .attr("transform", function(d) {
         return "translate(" + getBarlineX(d) + ", " + 0 + ")";
     });
@@ -171,7 +177,7 @@ function scrollScore(ndex, params) {
 // VS.score.preroll = 600;
 
 for(i = 0; i < score.bars.length; i++) {
-    var duration = score.bars[i + 1] - score.bars[i];
+    var duration = getBarDuration(i);
     VS.score.add([ score.bars[i] * 1000, scrollScore, [duration * 1000, true] ]); // time, func, [duration, go to next bar]
 }
 
