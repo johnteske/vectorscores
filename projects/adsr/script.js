@@ -84,9 +84,10 @@ score.layout.selectAll("text")
             // do not display last bar's duration
             return i < score.bars.length - 1 ? decimalRound(dur, 1) + "\u2033" : "";
         })
-    .attr("transform", function(d) {
-        return "translate(" + getBarlineX(d) + ", " + 0 + ")";
-    });
+        .classed("duration", 1)
+        .attr("transform", function(d) {
+            return "translate(" + getBarlineX(d) + ", " + 0 + ")";
+        });
 
 score.layout.selectAll(".letter")
     .data(score.rehearsalLetters)

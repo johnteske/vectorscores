@@ -30,7 +30,9 @@ main, svg.main {
     }
     text {
         font-family: serif;
-        font-style: italic;
+        &.duration {
+            font-style: italic;
+        }
     }
 }
 
