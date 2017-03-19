@@ -23,6 +23,13 @@ main, svg.main {
     overflow-x: hidden;
 }
 
+.layout {
+    line {
+        stroke: black;
+        stroke-opacity: 0.25;
+    }
+}
+
 .pitch-range,
 .durations {
     font-family: 'Bravura';

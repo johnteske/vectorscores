@@ -22,11 +22,14 @@ var score = (function() {
         var svg = d3.select(".main")
             .attr("width", width);
         var group = svg.append("g");
+        var layout = group.append("g")
+            .classed("layout", 1); // to contain barlines, etc.
 
         return {
             width: width,
             svg: svg,
-            group: group
+            group: group,
+            layout: layout
         };
     })();
 
@@ -47,9 +50,12 @@ var unit = 10,
 // generate score
 {% include_relative _score.js %}
 
+function getBarlineX(bar) {
+    return (score.width * bar) / score.totalDuration;
+}
 
-// create placeholder barlines
-score.group.append("g").selectAll("line")
+// create barlines
+score.layout.selectAll("line")
     .data(score.bars)
     .enter()
     .append("line")
@@ -57,12 +63,17 @@ score.group.append("g").selectAll("line")
         .attr("y1", 3 * unit)
         .attr("x2", 0)
         .attr("y2", (numParts * 12 * unit) + (6 * unit))
-    .style("stroke", "black")
-    .style("stroke-opacity", "0.25")
     .attr("transform", function(d) {
-        var x = (score.width * d) / score.totalDuration,
-            y = 0;
-        return "translate(" + x + ", " + y + ")";
+        return "translate(" + getBarlineX(d) + ", " + 0 + ")";
+    });
+
+score.layout.selectAll("text")
+    .data(score.bars)
+    .enter()
+    .append("text")
+        .text(function(d) { return Math.round(getBarlineX(d)) + "px"; })
+    .attr("transform", function(d) {
+        return "translate(" + getBarlineX(d) + ", " + 0 + ")";
     });
 
 for (p = 0; p < numParts; p++) {
@@ -77,7 +88,7 @@ for (p = 0; p < numParts; p++) {
         .append("g")
         .attr("transform", function(d, i) {
             var timeDispersion = part[i].timeDispersion,
-                x = ((score.width * d) / score.totalDuration) + (VS.getItem([-1, 1]) * timeDispersion * unit), // TODO +/- timeDispersion
+                x = getBarlineX(d) + (VS.getItem([-1, 1]) * timeDispersion * unit), // TODO +/- timeDispersion
                 y = partYPos;
             return "translate(" + x + ", " + y + ")";
         })
@@ -136,7 +147,7 @@ function scrollScore(ndex, dur) {
         .duration(dur)
         // .ease("linear") // TODO setting this should make the score scroll evenly--check that the durations are correct
         .attr("transform", function() {
-            return "translate(" + (view.center + (-score.width * thisBar) / score.totalDuration) + "," +
+            return "translate(" + (view.center - getBarlineX(thisBar)) + "," +
                 ((view.height * 0.5) - scoreGroupHeight - (3 * unit))
                 + ")";
         });
