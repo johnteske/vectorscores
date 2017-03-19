@@ -3,6 +3,7 @@
 ---
 /**
  * TODO
+ * score.width can be 8000 but svg width does not need to be
  * display pitch and timbre inline--and only if there is a change (or make that optional)
  * bounding boxes for phrases? make optional setting?
  * dynamics
@@ -16,6 +17,7 @@
  * double bar
  * error-check if score height exceeds view
  * current bar indicator (not debug line)--similar to storyboard indicator?
+ * also use flashing indicator when the piece is starting, to time the snap pizz
  */
 var score = (function() {
         var width = 8000;
@@ -56,7 +58,7 @@ function getBarlineX(bar) {
 function decimalRound(number, precision) {
     var factor = Math.pow(10, precision);
     return Math.round(number * factor) / factor;
-};
+}
 
 // create barlines
 score.layout.selectAll("line")
@@ -143,29 +145,41 @@ for (p = 0; p < numParts; p++) {
         });
 }
 
-function scrollScore(ndex, dur) {
-    var thisBar = score.bars[ndex];
+function scrollScore(ndex, params) {
+    var dur = params[0];
+    var targetIndex = params[1] ? ndex + 1 : ndex; // true = proceed to next bar, false = go to this bar
+    var targetBar = score.bars[targetIndex];
     var scoreGroupHeight = score.group.node().getBBox().height * 0.5;
 
     score.group
         .transition()
         .duration(dur)
-        // .ease("linear") // TODO setting this should make the score scroll evenly--check that the durations are correct
+        .ease("linear")
         .attr("transform", function() {
-            return "translate(" + (view.center - getBarlineX(thisBar)) + "," +
-                ((view.height * 0.5) - scoreGroupHeight - (3 * unit))
-                + ")";
+            // TODO calculate score vertical center positions on resize and store--don't calc on every scroll
+            return "translate(" +
+                (view.center - getBarlineX(targetBar)) + "," +
+                ((view.height * 0.5) - scoreGroupHeight) +
+                ")";
         });
 }
-for(i = 0; i < score.bars.length; i++) {
-    VS.score.add([score.bars[i] * 1000, scrollScore, (score.bars[i + 1] - score.bars[i]) * 1000]); // time, func, duration
-}
-VS.score.stopCallback = function(){ scrollScore(0, 300); };
-VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300); };
 
-//
+/**
+ * Populate score
+ * Use a preroll so the score doesn't start scrolling immediately // TODO allow user to define this value
+ */
+// VS.score.preroll = 600;
+
+for(i = 0; i < score.bars.length; i++) {
+    var duration = score.bars[i + 1] - score.bars[i];
+    VS.score.add([ score.bars[i] * 1000, scrollScore, [duration * 1000, true] ]); // time, func, [duration, go to next bar]
+}
+
+VS.score.pauseCallback = function(){ scrollScore(VS.score.pointer, [300]); };
+VS.score.stopCallback = function(){ scrollScore(0, [300]); };
+VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, [300]); };
+
 {% include_relative _debug.js %}
-//
 
 function resize() {
     view.width = parseInt(d3.select("main").style("width"), 10);
@@ -176,7 +190,7 @@ function resize() {
 
     if(debug){ resizeDebug(); }
 
-    scrollScore(VS.score.pointer, 0);
+    scrollScore(VS.score.pointer, [0]);
 }
 
 resize();
