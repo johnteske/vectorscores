@@ -53,6 +53,10 @@ var unit = 10,
 function getBarlineX(bar) {
     return (score.width * bar) / score.totalDuration;
 }
+function decimalRound(number, precision) {
+    var factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
+};
 
 // create barlines
 score.layout.selectAll("line")
@@ -71,7 +75,8 @@ score.layout.selectAll("text")
     .data(score.bars)
     .enter()
     .append("text")
-        .text(function(d) { return Math.round(getBarlineX(d)) + "px"; })
+        .text(function(d) { return decimalRound(d, 1) + "\u2033"; }) // &Prime;
+        // .text(function(d) { return Math.round(getBarlineX(d)) + "px"; }) // pixel position
     .attr("transform", function(d) {
         return "translate(" + getBarlineX(d) + ", " + 0 + ")";
     });
