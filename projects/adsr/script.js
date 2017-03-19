@@ -9,7 +9,6 @@
  * dynamics
  * articulation
  * rehearsal letters
- * show bar lengths (times above barlines)?
  * show second ticks?
  * tie, ghost notes
  * x notehead
@@ -88,6 +87,17 @@ score.layout.selectAll("text")
     .attr("transform", function(d) {
         return "translate(" + getBarlineX(d) + ", " + 0 + ")";
     });
+
+score.layout.selectAll(".letter")
+    .data(score.rehearsalLetters)
+    .enter()
+    .append("text")
+        .text(function(d) {
+            return d.letter;
+        })
+        .attr("transform", function(d) {
+            return "translate(" + getBarlineX(score.bars[d.index]) + ", " + 20 + ")";
+        });
 
 for (p = 0; p < numParts; p++) {
     var thisPart = parts[p];

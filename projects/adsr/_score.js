@@ -31,6 +31,14 @@ score.bars = [ 0, 6.3858708756625, 10.33255612459, 16.718427000252, 27.050983124
  */
 score.structure = [0, 0.14586594177599999, 0.236029032, 0.381924, 0.618, 0.763970968, 1 ];
 
+score.rehearsalLetters = [
+    {letter: "A", index : 6},
+    {letter: "B", index : 12},
+    {letter: "C", index : 18},
+    {letter: "D", index : 24},
+    {letter: "E", index : 27}
+];
+
 var durations = [0.2, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6, 8];
 var timbres = ["bartok", "pizz.", "ghost", "rolling pizz.", "bow hair pull", "sul pont.", "flutter", "vib.", "ord.", "l.v."];
 
