@@ -3,6 +3,7 @@
  */
  var dumpster = (function() {
     var group = worldSVG.append("g")
+        .classed("dumpster", 1)
         .attr("transform", "translate(180, 180)");
     var back = group.append("g");
     var trash = group.append("g");

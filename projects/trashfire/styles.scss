@@ -1,14 +1,15 @@
 ---
 ---
-rect, path {
-    stroke: black;
-    fill-opacity: 0.6;
-}
+.dumpster {
+    rect, path {
+        stroke: black;
+        fill-opacity: 0.6;
+    }
+    .back {
+        fill: black;
+    }
 
-.back {
-    fill: black;
-}
-
-.front {
-    fill: white;
+    .front {
+        fill: white;
+    }
 }

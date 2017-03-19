@@ -7,6 +7,7 @@ var worldSVG = d3.select(".main")
 
 {% include_relative _dumpster.js %}
 {% include_relative _trash.js %}
+{% include_relative _bins.js %}
 
 var crumple = Trash(8);
 
@@ -15,14 +16,15 @@ crumple.selection = dumpster.trash.append("circle")
     .attr("cy", 60)
     .attr("r", crumple.size);
 
-function moveCrumple(i, params) {
-    var dur = params[0];
-    var y = params[1];
-    crumple.selection
-        .transition()
-        .duration(dur)
-        .attr("cy", y);
-}
+// NOTE currently score events are called with the event index as the first argument
+// I'm reluctant to keep this as it means every function that can be called needs
+// to accept this--which does not seem intuitive or flexbile
+//
+// VS.score.add([0, bins.add, crumple.selection]);
+// VS.score.add([4000, bins.remove, crumple.selection]);
 
-VS.score.add([0, moveCrumple, [1500, -60]]);
-VS.score.add([1500, moveCrumple, [1500, 60]]);
+bins.add(crumple.selection);
+
+window.setTimeout(function() {
+    bins.remove(crumple.selection);
+}, 3000);
