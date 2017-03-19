@@ -13,14 +13,13 @@
  * tie, ghost notes
  * x notehead
  * bartok pizz symbol
+ * double bar
+ * error-check if score height exceeds view
  */
-var scoreWidth = 8000,
-    height = 640,
+var score = {
+        width: 8000
+    },
     unit = 10,
-    timePoints = [ 0, 6.3858708756625, 10.33255612459, 16.718427000252, 27.050983124842, 37.383539249432, 43.769410125095, 47.716095374022, 50.155281000757, 54.101966249685, 60.487837125347, 66.873708001009, 70.820393249937, 77.206264125599, 81.152949374527, 87.538820250189, 97.871376374779, 108.20393249937, 114.58980337503, 124.92235949962, 131.30823037528, 141.64078649987, 158.35921350013, 175.07764050038, 185.41019662497, 195.74275274956, 212.46117974981, 229.17960675006, 239.51216287465, 245.89803375032, 256.23058987491, 262.61646075057, 272.94901687516, 283.28157299975, 289.66744387541, 293.61412912434, 300 ],
-    scoreLength = timePoints[timePoints.length - 1],
-    // for interpolating parameter envelopes, scaled to 1. originally in SuperCollider as durations, not points in time
-    structurePoints = [0, 0.14586594177599999, 0.236029032, 0.381924, 0.618, 0.763970968, 1 ],
     // calculated in resize()
     view = {
         width: 0,
@@ -38,7 +37,7 @@ var scoreWidth = 8000,
 {% include_relative _score.js %}
 
 var main = d3.select(".main")
-    .attr("width", scoreWidth);
+    .attr("width", score.width);
 
 var scoreGroup = main.append("g");
 
@@ -47,7 +46,7 @@ var scoreGroup = main.append("g");
 var layoutGroup = scoreGroup.append("g");
 
 layoutGroup.selectAll("line")
-    .data(timePoints)
+    .data(score.bars)
     .enter()
     .append("line")
         .attr("x1", 0)
@@ -57,7 +56,7 @@ layoutGroup.selectAll("line")
     .style("stroke", "black")
     .style("stroke-opacity", "0.25")
     .attr("transform", function(d) {
-        var x = (scoreWidth * d) / scoreLength,
+        var x = (score.width * d) / score.totalDuration,
             y = 0;
         return "translate(" + x + ", " + y + ")";
     });
@@ -69,12 +68,12 @@ for (p = 0; p < numParts; p++) {
 
     // for each phrase, create a group around a timePoint
     partGroup.selectAll("g")
-        .data(timePoints)
+        .data(score.bars)
         .enter()
         .append("g")
         .attr("transform", function(d, i) {
             var timeDispersion = part[i].timeDispersion,
-                x = ((scoreWidth * d) / scoreLength) + (VS.getItem([-1, 1]) * timeDispersion * unit), // TODO +/- timeDispersion
+                x = ((score.width * d) / score.totalDuration) + (VS.getItem([-1, 1]) * timeDispersion * unit), // TODO +/- timeDispersion
                 y = partYPos;
             return "translate(" + x + ", " + y + ")";
         })
@@ -125,18 +124,18 @@ for (p = 0; p < numParts; p++) {
 }
 
 function scrollScore(ndex, dur) {
-    var thisPoint = timePoints[ndex];
+    var thisBar = score.bars[ndex];
     scoreGroup
     .transition()
     .duration(dur)
     .attr("transform", function() {
-        return "translate(" + (view.center + (-scoreWidth * thisPoint) / scoreLength) + "," +
+        return "translate(" + (view.center + (-score.width * thisBar) / score.totalDuration) + "," +
             ((view.height * 0.5) - (scoreGroup.node().getBBox().height * 0.5) - (3 * unit))
             + ")";
     });
 }
-for(i = 0; i < timePoints.length; i++) {
-    VS.score.add([timePoints[i] * 1000, scrollScore, (timePoints[i + 1] - timePoints[i]) * 1000]); // time, func, duration
+for(i = 0; i < score.bars.length; i++) {
+    VS.score.add([score.bars[i] * 1000, scrollScore, (score.bars[i + 1] - score.bars[i]) * 1000]); // time, func, duration
 }
 VS.score.stopCallback = function(){ scrollScore(0, 300); };
 VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300); };
