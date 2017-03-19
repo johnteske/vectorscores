@@ -2,17 +2,13 @@
  * Draw front and back groups so objects can emerge between the layers
  */
  var dumpster = (function() {
-    var container = d3.select(".main")
-        .attr("width", 480)
-        .attr("height", 480);
-    var group = container.append("g")
+    var group = worldSVG.append("g")
         .attr("transform", "translate(180, 180)");
     var back = group.append("g");
     var trash = group.append("g");
     var front = group.append("g");
 
     return {
-        container: container,
         group: group,
         back: back,
         trash: trash,

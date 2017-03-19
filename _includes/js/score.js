@@ -22,7 +22,7 @@ VS.score = (function () {
     }
 
     return {
-        add: function(t){ this.events.push(t); },
+        add: function(t){ this.events.push(t); }, // TODO this should accept arguments (not an array) and push an array of those arguments to events
         events: [],
         getLength: function(){ return this.events.length; },
         playing: false,
