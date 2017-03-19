@@ -38,7 +38,6 @@ var scoreWidth = 8000,
 {% include_relative _score.js %}
 
 var main = d3.select(".main")
-    .attr("height", height)
     .attr("width", scoreWidth);
 
 var scoreGroup = main.append("g");
@@ -150,6 +149,8 @@ function resize() {
     view.width = parseInt(d3.select("main").style("width"), 10);
     view.center = view.width * 0.5;
     view.height = parseInt(d3.select("main").style("height"), 10);
+
+    main.attr("height", view.height);
 
     if(debug){ resizeDebug(); }
 
