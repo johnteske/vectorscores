@@ -27,5 +27,5 @@ window.setTimeout(function() {
     bins.add(crumple.selection);
 }, 1000);
 window.setTimeout(function() {
-    bins.remove(crumple.selection);
+    bins.remove(0);
 }, 4000);
