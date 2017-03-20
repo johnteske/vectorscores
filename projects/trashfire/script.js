@@ -9,12 +9,12 @@ var worldSVG = d3.select(".main")
 {% include_relative _trash.js %}
 {% include_relative _bins.js %}
 
-var crumple = Trash(8);
+var crumple = Trash(60, 60);
 
-crumple.selection = dumpster.trash.append("circle")
-    .attr("cx", 60)
-    .attr("cy", 60)
-    .attr("r", crumple.size);
+crumple.group.append("circle")
+    .attr("cx", crumple.center.x)
+    .attr("cy", crumple.center.y)
+    .attr("r", 8);
 
 // NOTE currently score events are called with the event index as the first argument
 // I'm reluctant to keep this as it means every function that can be called needs
@@ -24,8 +24,8 @@ crumple.selection = dumpster.trash.append("circle")
 // VS.score.add([4000, bins.remove, crumple.selection]);
 
 window.setTimeout(function() {
-    bins.add(crumple.selection);
-}, 1000);
+    bins.add(crumple);
+}, 0);
 window.setTimeout(function() {
     bins.remove(0);
 }, 4000);

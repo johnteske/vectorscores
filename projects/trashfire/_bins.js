@@ -2,42 +2,42 @@
  * Bins
  * These hold Trash--used to add layers for performers to choose from
  */
+
 // TODO center is set relative to dumpster--keep this for easy animation calculations?
 // TODO add() should allow bin position to be specified
 // TODO remove() should allow either bin index OR selection to be specified
 // TODO use brackets (Bravura font?), not boxes
+
 var bins = (function() {
     var _contents = [];
-    var _group = worldSVG.append("g");
+    var _group = dumpster.trash; // worldSVG.append("g");
     var center = {
-        x: 0,
-        y: -90
+        x: 30,
+        y: -120
     };
 
     function buglog() {
         console.log(_contents);
     }
 
-    function add(selection) {
+    function add(trash) {
         var thisBin = {
-            selection: selection,
-            box: _group.append("rect")
+            trash: trash,
+            box: trash.group.append("rect")
         };
         _contents.push(thisBin);
 
-        selection
+        trash.group
             .transition()
             .duration(2000)
-            .attr("cy", this.center.y)
+            .attr("transform", "translate(" + this.center.x + ","  + this.center.y + ")")
             .each("end", function() {
 
                 thisBin.box
-                    .attr("x", 210)
-                    .attr("y", 60)
                     .attr("fill", "none")
                     .attr("stroke", "grey")
-                    .attr("width", 60)
-                    .attr("height", 60)
+                    .attr("width", trash.width)
+                    .attr("height", trash.height)
                     .style("opacity", 0)
                     .transition()
                     .duration(150)
@@ -56,11 +56,13 @@ var bins = (function() {
             .style("opacity", 0)
             .remove();
 
-        thisBin.selection
+        thisBin.trash.group
             .transition()
             .duration(2000)
-            .attr("cy", 60) // back into g.trash, for demo
+            .attr("transform", "translate(" + this.center.x + ","  + 0 + ")")
             .remove();
+
+        // TODO elements removed but trash object remains
 
         _contents.splice(index, 1);
         // by selection/selector, remove all that match
