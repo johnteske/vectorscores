@@ -10,10 +10,15 @@ var worldSVG = d3.select(".main")
 {% include_relative _bins.js %}
 
 var crumple = Trash(60, 60);
-
 crumple.group.append("circle")
     .attr("cx", crumple.center.x)
     .attr("cy", crumple.center.y)
+    .attr("r", 8);
+
+var crumple2 = Trash(60, 60);
+crumple2.group.append("circle")
+    .attr("cx", crumple2.center.x)
+    .attr("cy", crumple2.center.y)
     .attr("r", 8);
 
 // NOTE currently score events are called with the event index as the first argument
@@ -27,5 +32,8 @@ window.setTimeout(function() {
     bins.add(crumple);
 }, 0);
 window.setTimeout(function() {
-    bins.remove(0);
-}, 4000);
+    bins.add(crumple2);
+}, 2000);
+// window.setTimeout(function() {
+//     bins.remove(0);
+// }, 4000);

@@ -11,8 +11,9 @@
 var bins = (function() {
     var _contents = [];
     var _group = dumpster.trash; // worldSVG.append("g");
+
     var center = {
-        x: 30,
+        x: dumpster.center.x,
         y: -120
     };
 
