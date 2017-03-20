@@ -23,8 +23,9 @@ crumple.selection = dumpster.trash.append("circle")
 // VS.score.add([0, bins.add, crumple.selection]);
 // VS.score.add([4000, bins.remove, crumple.selection]);
 
-bins.add(crumple.selection);
-
+window.setTimeout(function() {
+    bins.add(crumple.selection);
+}, 1000);
 window.setTimeout(function() {
     bins.remove(crumple.selection);
-}, 3000);
+}, 4000);
