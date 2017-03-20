@@ -59,7 +59,7 @@ var bins = (function() {
         thisBin.trash.group
             .transition()
             .duration(2000)
-            .attr("transform", "translate(" + this.center.x + ","  + 0 + ")")
+            .attr("transform", "translate(" + dumpster.center.x + ","  + dumpster.center.y + ")")
             .remove();
 
         // TODO elements removed but trash object remains

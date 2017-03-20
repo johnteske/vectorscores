@@ -9,11 +9,17 @@
     var trash = group.append("g");
     var front = group.append("g");
 
+    var center = {
+        x: 30,
+        y: 30
+    };
+
     return {
         group: group,
         back: back,
         trash: trash,
-        front: front
+        front: front,
+        center: center
     };
 })();
 
