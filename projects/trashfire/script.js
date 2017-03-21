@@ -21,6 +21,12 @@ crumple2.group.append("circle")
     .attr("cy", crumple2.center.y)
     .attr("r", 8);
 
+var crumple3 = Trash(60, 60);
+crumple3.group.append("circle")
+    .attr("cx", crumple3.center.x)
+    .attr("cy", crumple3.center.y)
+    .attr("r", 8);
+
 // NOTE currently score events are called with the event index as the first argument
 // I'm reluctant to keep this as it means every function that can be called needs
 // to accept this--which does not seem intuitive or flexbile
@@ -34,6 +40,9 @@ window.setTimeout(function() {
 window.setTimeout(function() {
     bins.add(crumple2);
 }, 2000);
+window.setTimeout(function() {
+    bins.add(crumple3);
+}, 4000);
 // window.setTimeout(function() {
 //     bins.remove(0);
 // }, 4000);

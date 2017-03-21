@@ -18,33 +18,66 @@ var bins = (function() {
     };
 
     function buglog() {
-        console.log(_contents);
+        // console.log(_contents);
+    }
+
+    function calcBinPositions() {
+        var spread = 30;
+        var nBins = _contents.length;
+        console.log('bins', nBins);
+        for (var i = 0; i < nBins; i++) {
+            // TODO the x left position is accurate
+            // need to offset/center by each bin
+            var x = center.x + ((i+1)  * spread) - (nBins * spread);
+            console.log(x);
+            _contents[i].x = x;
+            _contents[i].y = -120;
+        }
+    }
+
+    function translateBins() {
+        var nBins = _contents.length;
+        for (var i = 0; i < nBins; i++) {
+            var thisBin = _contents[i];
+            thisBin.trash.group
+                .transition()
+                .duration(2000)
+                .attr("transform", "translate(" + thisBin.x + ","  + thisBin.y + ")");
+        }
     }
 
     function add(trash) {
         var thisBin = {
             trash: trash,
-            box: trash.group.append("rect")
+            box: trash.group.append("rect"),
+            x: 0,
+            y: 0
         };
+        trash.group.classed("bin", 1); // for easy selection
         _contents.push(thisBin);
 
-        trash.group
-            .transition()
-            .duration(2000)
-            .attr("transform", "translate(" + this.center.x + ","  + this.center.y + ")")
-            .each("end", function() {
+        calcBinPositions();
 
-                thisBin.box
-                    .attr("fill", "none")
-                    .attr("stroke", "grey")
-                    .attr("width", trash.width)
-                    .attr("height", trash.height)
-                    .style("opacity", 0)
-                    .transition()
-                    .duration(150)
-                    .style("opacity", 1);
+        translateBins();
 
-            });
+        // for easy selection
+        // trash.group
+        //     .transition()
+        //     .duration(2000)
+        //     .attr("transform", "translate(" + thisBin.x + ","  + thisBin.y + ")")
+        //     .each("end", function() {
+        //
+        //         thisBin.box
+        //             .attr("fill", "none")
+        //             .attr("stroke", "grey")
+        //             .attr("width", trash.width)
+        //             .attr("height", trash.height)
+        //             .style("opacity", 0)
+        //             .transition()
+        //             .duration(150)
+        //             .style("opacity", 1);
+        //
+        //     });
         buglog();
     }
 
