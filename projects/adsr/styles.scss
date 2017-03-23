@@ -41,17 +41,20 @@ main, svg.main {
 }
 
 .pitch-range,
-.durations {
+.durations,
+.dynamics {
     font-family: 'Bravura';
 }
 
-.durations {
+.durations,
+.dynamics {
     font-size: 21px;
 }
 
 .timbre {
     font-family: serif;
     font-style: italic;
+    font-size: 15px;
 }
 
 line[class^="debug-center"] {

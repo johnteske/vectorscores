@@ -41,6 +41,7 @@ score.rehearsalLetters = [
 
 var durations = [0.2, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6, 8];
 var timbres = ["bartok", "pizz.", "ghost", "rolling pizz.", "bow hair pull", "sul pont.", "flutter", "vib.", "ord.", "l.v."];
+var dynamics = ["f", "mf", "mp", "p", "pp", "pp", "p", "mp", "mf", "f", "ff"];
 
 var envelopes = {
     phraseLength: [1, 1, 2, 3, 4, 1, 1],
@@ -67,6 +68,10 @@ for (var p = 0; p < numParts; p++) {
         phrase.timeDispersion = lerpEnvelope(envelopes.timeDispersion, iit);
 
         phrase.timbre = timbres[Math.round(lerpEnvelope(envelopes.timbre, iit))];
+
+        // also mapped to envelopes.timbre
+        // TODO also add dim. here if not single note, even "ghost"s
+        phrase.dynamics = dynamics[Math.round(lerpEnvelope(envelopes.timbre, iit))];
 
         phrase.pitch = {
             high: roundHalf(lerpEnvelope(envelopes.pitch.high, iit)),

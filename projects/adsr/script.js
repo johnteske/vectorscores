@@ -7,6 +7,7 @@
  * display pitch and timbre inline--and only if there is a change (or make that optional)
  * bounding boxes for phrases? make optional setting?
  * dynamics
+ * timeDispersion looks very quantized
  * articulation
  * allow option to show note names? or pitch classes?
  * tie, ghost notes
@@ -165,6 +166,7 @@ for (p = 0; p < numParts; p++) {
                         return sum * unit;
                     });
             // // save this, could be an interesting setting to toggle
+            // // also, modify box height by pitch range
             // d3.select(this).selectAll("rect") // TODO should selectAll text, although that is broken
             //     .data(durations)
             //     .enter()
@@ -180,7 +182,11 @@ for (p = 0; p < numParts; p++) {
             //         })
             //         .attr("y", function(d, i) { return 0; })
             //         .attr("width", function(d) { return d * unit; })
-            //         .attr("height", unit)
+            //         .attr("height", unit);
+            d3.select(this).append("text")
+                .text(dynamicsDict[thisPart[i].dynamics])
+                .classed("dynamics", true)
+                .attr("y", 4 * unit);
         });
 }
 
@@ -189,7 +195,7 @@ function scrollScore(ndex, params) {
     var targetIndex = params[1] ? ndex + 1 : ndex; // true = proceed to next bar, false = go to this bar
     var targetBar = score.bars[targetIndex];
     var scoreGroupHeight = score.group.node().getBBox().height * 0.5;
-
+    // TODO scoreGroupHeight changes height on first event--why?
     score.group
         .transition()
         .duration(dur)
