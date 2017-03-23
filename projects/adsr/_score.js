@@ -69,10 +69,6 @@ for (var p = 0; p < numParts; p++) {
 
         phrase.timbre = timbres[Math.round(lerpEnvelope(envelopes.timbre, iit))];
 
-        // also mapped to envelopes.timbre
-        // TODO also add dim. here if not single note, even "ghost"s
-        phrase.dynamics = dynamics[Math.round(lerpEnvelope(envelopes.timbre, iit))];
-
         phrase.pitch = {
             high: roundHalf(lerpEnvelope(envelopes.pitch.high, iit)),
             low: roundHalf(lerpEnvelope(envelopes.pitch.low, iit))
@@ -92,6 +88,16 @@ for (var p = 0; p < numParts; p++) {
             // and pick one of the two
             var thisDur = durations[VS.getItem(closeDurIndices)];
             phrase.durations.push(thisDur);
+        }
+
+        // also mapped to envelopes.timbre
+        // TODO also add dim. here if not single note, even "ghost"s
+        phrase.dynamics = dynamics[Math.round(lerpEnvelope(envelopes.timbre, iit))];
+
+        if (phraseLength > 1 && phrase.durations[0] > 0.75) {
+            phrase.articulations = [">"];
+        } else {
+            phrase.articulations = [];
         }
 
         part.push(phrase);

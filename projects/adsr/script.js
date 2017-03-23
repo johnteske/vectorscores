@@ -187,6 +187,10 @@ for (p = 0; p < numParts; p++) {
                 .text(dynamicsDict[thisPart[i].dynamics])
                 .classed("dynamics", true)
                 .attr("y", 4 * unit);
+            d3.select(this).append("text")
+                .text(artDict[thisPart[i].articulations[0]])
+                .classed("dynamics", true)
+                .attr("y", 3 * unit);
         });
 }
 
