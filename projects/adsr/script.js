@@ -247,6 +247,7 @@ VS.score.stopCallback = function(){ scrollScore(0, [300]); };
 VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, [300]); };
 
 {% include_relative _debug.js %}
+{% include_relative _settings.js %}
 
 function resize() {
     // TODO pause score if playing
