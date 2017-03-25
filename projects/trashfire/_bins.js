@@ -18,7 +18,7 @@ var bins = (function() {
     };
 
     function calcBinPositions() {
-        var spread = 30,
+        var spread = 75,
             nBins = _contents.length;
         for (var i = 0; i < nBins; i++) {
             var x = center.x + (i * spread) - ((nBins - 1) * spread * 0.5);
@@ -52,24 +52,14 @@ var bins = (function() {
 
         translateBins();
 
-        // for easy selection
-        // trash.group
-        //     .transition()
-        //     .duration(2000)
-        //     .attr("transform", "translate(" + thisBin.x + ","  + thisBin.y + ")")
-        //     .each("end", function() {
-        //
-        //         thisBin.box
-        //             .attr("fill", "none")
-        //             .attr("stroke", "grey")
-        //             .attr("width", trash.width)
-        //             .attr("height", trash.height)
-        //             .style("opacity", 0)
-        //             .transition()
-        //             .duration(150)
-        //             .style("opacity", 1);
-        //
-        //     });
+        thisBin.box
+            .attr("width", trash.width)
+            .attr("height", trash.height)
+            .style("opacity", 0)
+            .transition()
+            .delay(2000)
+            .duration(150)
+            .style("opacity", 1);
     }
 
     function remove(index) {
