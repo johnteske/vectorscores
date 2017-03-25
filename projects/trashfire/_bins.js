@@ -1,6 +1,6 @@
 /**
  * Bins
- * These hold Trash--used to add layers for performers to choose from
+ * These hold Trash--use to add layers for performers to choose from
  */
 
 // TODO center is set relative to dumpster--keep this for easy animation calculations?
@@ -46,10 +46,9 @@ var bins = (function() {
             y: 0
         };
         trash.group.classed("bin", 1); // for easy selection
+
         _contents.push(thisBin);
-
         calcBinPositions();
-
         translateBins();
 
         thisBin.box
@@ -65,12 +64,16 @@ var bins = (function() {
     function remove(index) {
         var thisBin = _contents[index];
 
+        _contents.splice(index, 1);
+        calcBinPositions();
+        translateBins();
+
         thisBin.box
             .transition()
             .duration(150)
-            .style("opacity", 0)
-            .remove();
+            .style("opacity", 0);
 
+        // no longer in bins--move this trash independently
         thisBin.trash.group
             .transition()
             .duration(2000)
@@ -79,15 +82,13 @@ var bins = (function() {
 
         // TODO elements removed but trash object remains
 
-        _contents.splice(index, 1);
-        // by selection/selector, remove all that match
+        // TODO by selection/selector, remove all that match
         // for (var i = 0; i < _contents.length; i++) {
         //     if (_contents[i].selection === selection) _contents.splice(i, 1);
         // }
     }
 
     return {
-        //    size: _contents.length,
         center: center,
         add: add,
         remove: remove

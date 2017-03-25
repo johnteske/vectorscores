@@ -43,6 +43,9 @@ window.setTimeout(function() {
 window.setTimeout(function() {
     bins.add(crumple3);
 }, 4000);
-// window.setTimeout(function() {
-//     bins.remove(0);
-// }, 4000);
+window.setTimeout(function() {
+    bins.remove(0);
+}, 6000);
+window.setTimeout(function() {
+    bins.remove(1);
+}, 8000);
