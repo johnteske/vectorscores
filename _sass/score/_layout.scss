@@ -58,7 +58,7 @@ footer {
 	border-top: $layout-border;
 }
 
-h1, #score-info {
+h1, #score-info-open {
     margin: 0;
     padding: 0;
     display: inline-block;
@@ -75,7 +75,7 @@ h1 {
     }
 }
 
-#score-info {
+#score-info-open {
     float: right;
     width: $unit * 2;
     height: $unit * 2;

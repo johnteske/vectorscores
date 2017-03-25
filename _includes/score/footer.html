@@ -1,6 +1,6 @@
 {% if page.footer %}
-<footer id="score-footer">
-    <button id="score-back">
+<footer id="score-footer"><!--
+ --><button id="score-back">
         <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <g id="back">
                 <path d="M87.6339768,2.29522716 C87.6339768,2.29522716 88.3049233,3.45724886 89.1309373,4.8878341 L141.567017,95.7026202 C142.393765,97.1344775 141.722084,98.2952272 140.070056,98.2952272 L35.1978974,98.2952272" transform="translate(87.634006, 51.054823) scale(-1, 1) rotate(-30.000000) translate(-87.634006, -51.054823) "></path>
@@ -32,9 +32,9 @@
             </g>
         </svg>
     </button><!--
- --><input id="score-pointer" type="number" value="0" pattern="\d*" readonly="true"/><!-- step="1" -->
-    {% comment %}<a href="#settings" class="modal-trig">
-        <div id="score-settings">+</div>
-    </a>{% endcomment %}
+ --><input id="score-pointer" type="number" value="0" pattern="\d*" readonly="true"/><!-- step="1" --><!--
+ --><button id="score-settings-open">
+        &#x2699;
+    </button>
 </footer>
 {% endif %}

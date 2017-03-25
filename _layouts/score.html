@@ -1,7 +1,6 @@
 ---
 layout: compress
 ---
-{% if page.info %}{% assign show_modal_info = true %}{% endif %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +19,7 @@ layout: compress
         {{ content }}
     </main>
     {% include score/footer.html %}
-    {% include score/modal.html %}
+    {% include score/modals.html %}
     {% include score/scripts.html %}
     <script src="script.js" charset="utf-8"></script>
 </body>
