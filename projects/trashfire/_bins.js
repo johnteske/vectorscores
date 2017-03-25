@@ -17,19 +17,11 @@ var bins = (function() {
         y: -120
     };
 
-    function buglog() {
-        // console.log(_contents);
-    }
-
     function calcBinPositions() {
-        var spread = 30;
-        var nBins = _contents.length;
-        console.log('bins', nBins);
+        var spread = 30,
+            nBins = _contents.length;
         for (var i = 0; i < nBins; i++) {
-            // TODO the x left position is accurate
-            // need to offset/center by each bin
-            var x = center.x + ((i+1)  * spread) - (nBins * spread);
-            console.log(x);
+            var x = center.x + (i * spread) - ((nBins - 1) * spread * 0.5);
             _contents[i].x = x;
             _contents[i].y = -120;
         }
@@ -78,7 +70,6 @@ var bins = (function() {
         //             .style("opacity", 1);
         //
         //     });
-        buglog();
     }
 
     function remove(index) {
@@ -103,8 +94,6 @@ var bins = (function() {
         // for (var i = 0; i < _contents.length; i++) {
         //     if (_contents[i].selection === selection) _contents.splice(i, 1);
         // }
-
-        buglog();
     }
 
     return {
