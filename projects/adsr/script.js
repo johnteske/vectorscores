@@ -138,6 +138,7 @@ for (p = 0; p < numParts; p++) {
         // add phrase content
         .each(function(d, i) {
             var durations = thisPart[i].durations;
+            var articulations = thisPart[i].articulations;
             d3.select(this).append("text")
                 .text(function() {
                     var lo = thisPart[i].pitch.low,
@@ -157,7 +158,7 @@ for (p = 0; p < numParts; p++) {
                     .text(function(d) { return durDict[d]; })
                     .classed("durations", true)
                     // TODO Make phrase spacing a named function, can be re-used.
-                    // Since "durations" us not accessible here, find a way to pass that value
+                    // Since "durations" is not accessible here, find a way to pass that value
                     .attr("x", function(d, i) {
                         var upToI = durations.slice(0, i),
                             sum = upToI.reduce(function(a, b) {
@@ -183,15 +184,32 @@ for (p = 0; p < numParts; p++) {
             //         .attr("y", function(d, i) { return 0; })
             //         .attr("width", function(d) { return d * unit; })
             //         .attr("height", unit);
+
+            // dynamics
             d3.select(this).append("text")
                 .text(dynamicsDict[thisPart[i].dynamics])
                 .classed("dynamics", true)
                 .attr("y", 4 * unit);
-            d3.select(this).append("text")
-                .text(artDict[thisPart[i].articulations[0]])
-                .classed("dynamics", true)
-                .attr("y", 3 * unit);
-        });
+
+            // articulations
+            d3.select(this).selectAll(".articulations")
+                .data(articulations)
+                .enter()
+                .append("text")
+                    .text(function(d) { return artDict[d] }) // return durDict[d];
+                    .classed("durations", true)
+                    // TODO Make phrase spacing a named function, can be re-used.
+                    // Since "durations" is not accessible here, find a way to pass that value
+                    .attr("y", 1.25 * unit)
+                    .attr("x", function(d, i) {
+                        var upToI = durations.slice(0, i),
+                            sum = upToI.reduce(function(a, b) {
+                                return a + b + 1; // add padding between here
+                            }, 0);
+                        return sum * unit;
+                    });
+
+        }); // .each()
 }
 
 function scrollScore(ndex, params) {

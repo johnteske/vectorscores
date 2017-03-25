@@ -94,11 +94,10 @@ for (var p = 0; p < numParts; p++) {
         // TODO also add dim. here if not single note, even "ghost"s
         phrase.dynamics = dynamics[Math.round(lerpEnvelope(envelopes.timbre, iit))];
 
-        if (phraseLength > 1 && phrase.durations[0] > 0.75) {
-            phrase.articulations = [">"];
-        } else {
-            phrase.articulations = [];
-        }
+        // TODO "let vibrate" as fourth articulation, "release"
+        phrase.articulations = []; // [">", "dim.", "-", "l.v."]
+        if (phraseLength > 1 && phrase.durations[0] > 0.75) { phrase.articulations[0] = ">"; }
+        if (phraseLength > 2 && phrase.durations[2] < 4) { phrase.articulations[2] = "-"; }
 
         part.push(phrase);
     }
