@@ -11,4 +11,4 @@ window.d3 || document.write('<script src="{{ site.baseurl }}/js/d3.v3.min.js" ch
 {% include js/layout.js %}
 {% include js/score.js %}
 {% include js/controls.js %}
-{% include js/modal.js %}
+{% include js/modals.js %}
