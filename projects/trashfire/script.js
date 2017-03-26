@@ -1,9 +1,9 @@
 ---
 ---
 
-var worldSVG = d3.select(".main")
-    .attr("width", 480)
-    .attr("height", 480);
+var TrashFire = {
+    world: d3.select(".main").attr("width", 480).attr("height", 480)
+};
 
 {% include_relative _dumpster.js %}
 {% include_relative _trash.js %}
@@ -35,17 +35,17 @@ crumple3.group.append("circle")
 // VS.score.add([4000, bins.remove, crumple.selection]);
 
 window.setTimeout(function() {
-    bins.add(crumple);
+    TrashFire.bins.add(crumple);
 }, 0);
 window.setTimeout(function() {
-    bins.add(crumple2);
+    TrashFire.bins.add(crumple2);
 }, 2000);
 window.setTimeout(function() {
-    bins.add(crumple3);
+    TrashFire.bins.add(crumple3);
 }, 4000);
 window.setTimeout(function() {
-    bins.remove(0);
+    TrashFire.bins.remove(0);
 }, 6000);
 window.setTimeout(function() {
-    bins.remove(1);
+    TrashFire.bins.remove(1);
 }, 8000);
