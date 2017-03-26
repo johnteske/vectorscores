@@ -13,7 +13,10 @@ TrashFire.Trash = function(width, height) {
         y: height * 0.5
     };
 
-    // TODO methods to add/remove from bins
+    // TODO methods to add/remove from bins -- as prototype?
+    trash.addToBins = function() {
+        TrashFire.bins.add(trash);
+    };
 
     return trash;
 };

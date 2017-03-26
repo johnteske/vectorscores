@@ -9,19 +9,19 @@ var TrashFire = {
 {% include_relative _trash.js %}
 {% include_relative _bins.js %}
 
-var crumple = Trash(60, 60);
+var crumple = TrashFire.Trash(60, 60);
 crumple.group.append("circle")
     .attr("cx", crumple.center.x)
     .attr("cy", crumple.center.y)
     .attr("r", 8);
 
-var crumple2 = Trash(60, 60);
+var crumple2 = TrashFire.Trash(60, 60);
 crumple2.group.append("circle")
     .attr("cx", crumple2.center.x)
     .attr("cy", crumple2.center.y)
     .attr("r", 8);
 
-var crumple3 = Trash(60, 60);
+var crumple3 = TrashFire.Trash(60, 60);
 crumple3.group.append("circle")
     .attr("cx", crumple3.center.x)
     .attr("cy", crumple3.center.y)
@@ -35,7 +35,7 @@ crumple3.group.append("circle")
 // VS.score.add([4000, bins.remove, crumple.selection]);
 
 window.setTimeout(function() {
-    TrashFire.bins.add(crumple);
+    crumple.addToBins();
 }, 0);
 window.setTimeout(function() {
     TrashFire.bins.add(crumple2);
