@@ -3,7 +3,6 @@ TrashFire.Trash = function(width, height) {
         dumpster = TrashFire.dumpster;
 
     trash.group = dumpster.trash.append("g")
-        // TODO create at dumpster center
         .attr("transform", "translate(" + dumpster.center.x + ","  + dumpster.center.y + ")");
 
     trash.width = width;

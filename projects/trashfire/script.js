@@ -7,7 +7,9 @@ var TrashFire = {
 
 {% include_relative _dumpster.js %}
 {% include_relative _trash.js %}
+{% include_relative _trash.js %}
 {% include_relative _bins.js %}
+{% include_relative _spike.js %}
 
 var crumple = TrashFire.Trash(60, 60);
 crumple.group.append("circle")
@@ -26,6 +28,8 @@ crumple3.group.append("circle")
     .attr("cx", crumple3.center.x)
     .attr("cy", crumple3.center.y)
     .attr("r", 8);
+
+var spike = TrashFire.Spike();
 
 // NOTE currently score events are called with the event index as the first argument
 // I'm reluctant to keep this as it means every function that can be called needs
@@ -49,3 +53,12 @@ window.setTimeout(function() {
 window.setTimeout(function() {
     TrashFire.bins.remove(1);
 }, 8000);
+window.setTimeout(function() {
+    TrashFire.bins.remove(0);
+}, 10000);
+window.setTimeout(function() {
+    spike.appear();
+}, 10000);
+window.setTimeout(function() {
+    spike.hit();
+}, 15123);
