@@ -77,21 +77,26 @@ for (var p = 0; p < numParts; p++) {
         var phraseLength = Math.round(lerpEnvelope(envelopes.phraseLength, iit));
         phrase.durations = [];
 
-        for (var j = 0; j < phraseLength; j++) {
-            var highDur = lerpEnvelope(envelopes.duration.high, iit);
-            var lowDur = lerpEnvelope(envelopes.duration.low, iit);
+        if (i > 0) { // if not the first bar, calculate note durations
+            for (var j = 0; j < phraseLength; j++) {
+                var highDur = lerpEnvelope(envelopes.duration.high, iit);
+                var lowDur = lerpEnvelope(envelopes.duration.low, iit);
 
-            // find a (random) duration between these envelopes
-            var randDur = VS.getRandExcl(lowDur, highDur);
-            // match that to the closest durations
-            var closeDurIndices = getPrevNextIndices(durations, randDur);
-            // and pick one of the two
-            var thisDur = durations[VS.getItem(closeDurIndices)];
-            phrase.durations.push(thisDur);
+                // find a (random) duration between these envelopes
+                var randDur = VS.getRandExcl(lowDur, highDur);
+                // match that to the closest durations
+                var closeDurIndices = getPrevNextIndices(durations, randDur);
+                // and pick one of the two
+                var thisDur = durations[VS.getItem(closeDurIndices)];
+                phrase.durations.push(thisDur);
+            }
+        } else { // if first bar, force x notehead
+            phrase.durations.push(0);
         }
 
         // also mapped to envelopes.timbre
-        // TODO also add dim. here if not single note, even "ghost"s
+        // TODO also add dim. to "ghost"s
+        // TODO these values are very strict--add variation, like original score
         phrase.dynamics = [];
         phrase.dynamics[0] = dynamics[Math.round(lerpEnvelope(envelopes.timbre, iit))];
         if (phraseLength > 1) { phrase.dynamics[1] = "dim."; }

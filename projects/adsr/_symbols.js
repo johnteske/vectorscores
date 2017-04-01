@@ -14,7 +14,9 @@ var pitchDict = {
 var _dot = "\u2009\uf477"; // &thinsp; + Bravura dot
 var durDict = {
     // noteheads and flags (no stems)
-    "0.2":  "\uea57",        // small 5 (test, will be replaced)
+    "0":    "\ue0a9",        // x
+    // "0.2":  "\uea57",        // small 5 (test, will be replaced)
+    "0.2":  "\uf48d",        // using sixteenth flag
     "0.25": "\uf48d",        // sixteenth flag
     "0.5":  "\uf48b",        // eighth flag
     "0.75": "\uf48b" + _dot, // , dot
