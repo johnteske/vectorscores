@@ -138,7 +138,17 @@ for (p = 0; p < numParts; p++) {
         // add phrase content
         .each(function(d, i) {
             var durations = thisPart[i].durations;
+            var dynamics = thisPart[i].dynamics;
             var articulations = thisPart[i].articulations;
+
+            function phraseSpacing(d, i) {
+                var upToI = durations.slice(0, i),
+                    sum = upToI.reduce(function(a, b) {
+                        return a + b + 1; // add padding between here
+                    }, 0);
+                return sum * unit;
+            };
+
             d3.select(this).append("text")
                 .text(function() {
                     var lo = thisPart[i].pitch.low,
@@ -151,63 +161,46 @@ for (p = 0; p < numParts; p++) {
                 .text(thisPart[i].timbre)
                 .classed("timbre", true)
                 .attr("y", -5 * unit);
-            d3.select(this).selectAll("rect") // TODO should selectAll text, although that is broken
+            d3.select(this).selectAll(".durations")
                 .data(durations)
                 .enter()
                 .append("text")
                     .text(function(d) { return durDict[d]; })
                     .classed("durations", true)
-                    // TODO Make phrase spacing a named function, can be re-used.
-                    // Since "durations" is not accessible here, find a way to pass that value
-                    .attr("x", function(d, i) {
-                        var upToI = durations.slice(0, i),
-                            sum = upToI.reduce(function(a, b) {
-                                return a + b + 1; // add padding between here
-                            }, 0);
-                        return sum * unit;
-                    });
+                    .attr("x", phraseSpacing);
             // // save this, could be an interesting setting to toggle
             // // also, modify box height by pitch range
-            // d3.select(this).selectAll("rect") // TODO should selectAll text, although that is broken
+            // d3.select(this).selectAll(".durations")
             //     .data(durations)
             //     .enter()
             //     .append("rect")
             //         .attr("rx", 1)
-            //         .attr("x", function(d, i) {
-            //             var upToI = durations.slice(0, i),
-            //                 sum = upToI.reduce(function(a, b) {
-            //                 return a + b + 1; // add padding between here
-            //             }, 0);
-            //
-            //             return sum * unit;
-            //         })
+            //         .attr("x", phraseSpacing)
             //         .attr("y", function(d, i) { return 0; })
             //         .attr("width", function(d) { return d * unit; })
             //         .attr("height", unit);
 
             // dynamics
-            d3.select(this).append("text")
-                .text(dynamicsDict[thisPart[i].dynamics])
-                .classed("dynamics", true)
-                .attr("y", 4 * unit);
+            d3.select(this).selectAll(".dynamics")
+                .data(dynamics)
+                .enter()
+                .append("text")
+                    .text(function(d) { return dynamicsDict[d] })
+                    .attr("class", function(d, i) {
+                        return i ? "timbre" : "dynamics";
+                    })
+                    .attr("y", 3.5 * unit)
+                    .attr("x", phraseSpacing);
 
             // articulations
             d3.select(this).selectAll(".articulations")
                 .data(articulations)
                 .enter()
                 .append("text")
-                    .text(function(d) { return artDict[d] }) // return durDict[d];
+                    .text(function(d) { return artDict[d] })
                     .classed("durations", true)
-                    // TODO Make phrase spacing a named function, can be re-used.
-                    // Since "durations" is not accessible here, find a way to pass that value
                     .attr("y", 1.25 * unit)
-                    .attr("x", function(d, i) {
-                        var upToI = durations.slice(0, i),
-                            sum = upToI.reduce(function(a, b) {
-                                return a + b + 1; // add padding between here
-                            }, 0);
-                        return sum * unit;
-                    });
+                    .attr("x", phraseSpacing);
 
         }); // .each()
 }

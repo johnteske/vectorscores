@@ -36,7 +36,9 @@ var dynamicsDict = {
     "mf":   "\ue52d",
     "f":    "\ue522",
     "ff":   "\ue52f",
-    "fff":  "\ue530"
+    "fff":  "\ue530",
+    "dim.": "dim."
+    // "dim.": "\ue53f" // hairpin
 };
 
 var artDict = {
