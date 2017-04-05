@@ -99,12 +99,20 @@ for (var p = 0; p < numParts; p++) {
         // TODO these values are very strict--add variation, like original score
         phrase.dynamics = [];
         phrase.dynamics[0] = dynamics[Math.round(lerpEnvelope(envelopes.timbre, iit))];
-        if (phraseLength > 1) { phrase.dynamics[1] = "dim."; }
+        if (phraseLength > 1) {
+            if (phrase.durations[0] < 1) {
+                phrase.dynamics[1] = ">";
+            } else {
+                phrase.dynamics[1] = "dim.";
+            }
+        }
 
         // TODO "let vibrate" as fourth articulation, "release"
+        // TODO "l.v." is not being set as a timbre value
         phrase.articulations = []; // [">", /*dim.*/, "-", "l.v."]
         if (phraseLength > 1 && phrase.durations[0] > 0.75) { phrase.articulations[0] = ">"; }
         if (phraseLength > 2 && phrase.durations[2] < 4) { phrase.articulations[2] = "-"; }
+        if (phrase.timbre === "l.v.") { phrase.articulations[3] = "l.v."; }
 
         part.push(phrase);
     }

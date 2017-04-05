@@ -147,7 +147,7 @@ for (p = 0; p < numParts; p++) {
                         return a + b + 1; // add padding between here
                     }, 0);
                 return sum * unit;
-            };
+            }
 
             d3.select(this).append("text")
                 .text(function() {
@@ -171,7 +171,7 @@ for (p = 0; p < numParts; p++) {
                     .classed("durations", true)
                     // if flag without notehead, offset y position
                     // TODO do not offset dot?
-                    .attr("y", function(d, i) { return (d > 0 && d < 1) ? -0.5 * unit : 0})
+                    .attr("y", function(d) { return (d > 0 && d < 1) ? -0.5 * unit : 0; })
                     .attr("x", phraseSpacing);
             // // save this, could be an interesting setting to toggle
             // // also, modify box height by pitch range
@@ -190,9 +190,9 @@ for (p = 0; p < numParts; p++) {
                 .data(dynamics)
                 .enter()
                 .append("text")
-                    .text(function(d) { return dynamicsDict[d] })
-                    .attr("class", function(d, i) {
-                        return i ? "timbre" : "dynamics";
+                    .text(function(d) { return dynamicsDict[d]; })
+                    .attr("class", function(d) {
+                        return d === "dim." ? "timbre" : "dynamics";
                     })
                     .attr("y", 3.5 * unit)
                     .attr("x", phraseSpacing);
@@ -202,7 +202,7 @@ for (p = 0; p < numParts; p++) {
                 .data(articulations)
                 .enter()
                 .append("text")
-                    .text(function(d) { return artDict[d] })
+                    .text(function(d) { return artDict[d]; })
                     .classed("durations", true)
                     .attr("y", 1.25 * unit)
                     .attr("x", phraseSpacing);
