@@ -56,6 +56,8 @@ var score = (function() {
         },
         barDurations: unit
     };
+    // rehearsalLetters = unit * 2
+    _score.height = (unit * 2) + _score.layoutLayersY.barlines.y2;
     // offset to start first part
     _score.layoutHeight = 12 * unit;
 
@@ -234,8 +236,7 @@ function scrollScore(ndex, params) {
     var dur = params[0];
     var targetIndex = params[1] ? ndex + 1 : ndex; // true = proceed to next bar, false = go to this bar
     var targetBar = score.bars[targetIndex];
-    var scoreGroupHeight = score.group.node().getBBox().height * 0.5;
-    // TODO scoreGroupHeight changes height on first event--why?
+    var scoreGroupHeight = score.height * 0.5;
     score.group
         .transition()
         .duration(dur)
@@ -244,7 +245,7 @@ function scrollScore(ndex, params) {
             // TODO calculate score vertical center positions on resize and store--don't calc on every scroll
             return "translate(" +
                 (view.center - getBarlineX(targetBar)) + "," +
-                ((view.height * 0.5) - scoreGroupHeight + (2 * unit)) +
+                ((view.height * 0.5) - scoreGroupHeight) +
                 ")";
         });
 }
