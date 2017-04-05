@@ -18,32 +18,49 @@
  * current bar indicator (not debug line)--similar to storyboard indicator?
  * also use flashing indicator when the piece is starting, to time the snap pizz
  */
+ var unit = 10,
+     // calculated in resize()
+     view = {
+         width: 0,
+         height: 0,
+         center: 0
+     },
+     numParts = +VS.getQueryString("parts") || 4,
+     debug = false;
+
 var score = (function() {
-        var width = 8000;
-        var svg = d3.select(".main").attr("width", width);
-        var group = svg.append("g");
-        var layout = {
-            group: group.append("g").classed("layout", 1)
-        };
+    var _score = {};
 
-        return {
-            width: width,
-            svg: svg,
-            group: group,
-            layout: layout
-        };
-    })();
+    _score.width = 8000;
+    _score.svg = d3.select(".main").attr("width", _score.width);
+    _score.group = _score.svg.append("g");
+    _score.layout = {
+        group: _score.group.append("g").attr("class", "layout")
+    };
+    // to help track overall part height
+    _score.partLayersY = {
+        timbre: -5 * unit,
+        pitch: -3 * unit,
+        durations: function(d) { return (d > 0 && d < 1) ? -0.5 * unit : 0; },
+        articulations: 1.25 * unit,
+        dynamics: 3.5 * unit
+    };
+    // calculated from above/rendered
+    _score.partHeight = 12 * unit;
 
-var unit = 10,
-    // calculated in resize()
-    view = {
-        width: 0,
-        height: 0,
-        center: 0
-    },
-    // TODO allow numParts to be set from settings
-    numParts = +VS.getQueryString("parts") || 4,
-    debug = false;
+    _score.layoutLayersY = {
+        rehearsalLetters: unit * -2,
+        barlines: {
+            y1: 3 * unit,
+            y2: (numParts * _score.partHeight) + (6 * unit)
+        },
+        barDurations: unit
+    };
+    // offset to start first part
+    _score.layoutHeight = 12 * unit;
+
+    return _score;
+})();
 
 // symbol dictionary
 {% include_relative _symbols.js %}
@@ -70,9 +87,9 @@ score.layout.group
     .enter()
     .append("line")
         .attr("x1", 0)
-        .attr("y1", 3 * unit)
+        .attr("y1", score.layoutLayersY.barlines.y1)
         .attr("x2", 0)
-        .attr("y2", (numParts * 12 * unit) + (6 * unit))
+        .attr("y2", score.layoutLayersY.barlines.y2)
     .attr("transform", function(d) {
         return "translate(" + getBarlineX(d) + ", " + 0 + ")";
     });
@@ -91,7 +108,7 @@ score.layout.group
         })
         .classed("duration", 1)
         .attr("transform", function(d) {
-            return "translate(" + getBarlineX(d) + ", " + unit + ")";
+            return "translate(" + getBarlineX(d) + ", " + score.layoutLayersY.barDurations + ")";
         });
 
 // show rehearsal letters
@@ -101,7 +118,7 @@ score.layout.letters = score.layout.group.append("g")
     .enter()
     .append("g")
     .attr("transform", function(d) {
-        return "translate(" + getBarlineX(score.bars[d.index]) + ", " + (-unit * 2) + ")";
+        return "translate(" + getBarlineX(score.bars[d.index]) + ", " + score.layoutLayersY.rehearsalLetters + ")";
     });
 score.layout.letters.each(function() {
     var thisLetter = d3.select(this);
@@ -118,11 +135,15 @@ score.layout.letters.each(function() {
         .attr("dx", "0.25em");
 });
 
-
+/**
+ * Draw parts
+ */
 for (p = 0; p < numParts; p++) {
-    var thisPart = parts[p];
-    var partGroup = score.group.append("g"); // part group
-    var partYPos = (p + 1) * 12 * unit;
+    var thisPart = parts[p],
+        partYPos = score.layoutHeight + (p * score.partHeight),
+        partGroup = score.group.append("g");
+
+    partGroup.attr("transform", "translate(0, " + partYPos + ")");
 
     // for each phrase, create a group around a barline
     partGroup.selectAll("g")
@@ -131,15 +152,15 @@ for (p = 0; p < numParts; p++) {
         .append("g")
         .attr("transform", function(d, i) {
             var timeDispersion = part[i].timeDispersion,
-                x = getBarlineX(d) + (VS.getItem([-1, 1]) * timeDispersion * unit), // TODO +/- timeDispersion
-                y = partYPos;
-            return "translate(" + x + ", " + y + ")";
+                x = getBarlineX(d) + (VS.getItem([-1, 1]) * timeDispersion * unit); // TODO +/- timeDispersion
+            return "translate(" + x + ", " + 0 + ")";
         })
         // add phrase content
         .each(function(d, i) {
             var durations = thisPart[i].durations;
             var dynamics = thisPart[i].dynamics;
             var articulations = thisPart[i].articulations;
+            var layersY = score.partLayersY;
 
             function phraseSpacing(d, i) {
                 var upToI = durations.slice(0, i),
@@ -150,18 +171,18 @@ for (p = 0; p < numParts; p++) {
             }
 
             d3.select(this).append("text")
+                .text(thisPart[i].timbre)
+                .classed("timbre", true)
+                .attr("y", layersY.timbre);
+
+            d3.select(this).append("text")
                 .text(function() {
                     var lo = thisPart[i].pitch.low,
                         hi = thisPart[i].pitch.high;
                     return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : "" ) + " \uec83";
                 })
                 .classed("pitch-range", true)
-                .attr("y", -3 * unit);
-
-            d3.select(this).append("text")
-                .text(thisPart[i].timbre)
-                .classed("timbre", true)
-                .attr("y", -5 * unit);
+                .attr("y", layersY.pitch);
 
             d3.select(this).selectAll(".durations")
                 .data(durations)
@@ -171,7 +192,7 @@ for (p = 0; p < numParts; p++) {
                     .classed("durations", true)
                     // if flag without notehead, offset y position
                     // TODO do not offset dot?
-                    .attr("y", function(d) { return (d > 0 && d < 1) ? -0.5 * unit : 0; })
+                    .attr("y", layersY.durations)
                     .attr("x", phraseSpacing);
             // // save this, could be an interesting setting to toggle
             // // also, modify box height by pitch range
@@ -185,6 +206,16 @@ for (p = 0; p < numParts; p++) {
             //         .attr("width", function(d) { return d * unit; })
             //         .attr("height", unit);
 
+            // articulations
+            d3.select(this).selectAll(".articulations")
+                .data(articulations)
+                .enter()
+                .append("text")
+                    .text(function(d) { return artDict[d]; })
+                    .classed("durations", true)
+                    .attr("y", layersY.articulations)
+                    .attr("x", phraseSpacing);
+
             // dynamics
             d3.select(this).selectAll(".dynamics")
                 .data(dynamics)
@@ -194,19 +225,8 @@ for (p = 0; p < numParts; p++) {
                     .attr("class", function(d) {
                         return d === "dim." ? "timbre" : "dynamics";
                     })
-                    .attr("y", 3.5 * unit)
+                    .attr("y", layersY.dynamics)
                     .attr("x", phraseSpacing);
-
-            // articulations
-            d3.select(this).selectAll(".articulations")
-                .data(articulations)
-                .enter()
-                .append("text")
-                    .text(function(d) { return artDict[d]; })
-                    .classed("durations", true)
-                    .attr("y", 1.25 * unit)
-                    .attr("x", phraseSpacing);
-
         }); // .each()
 }
 
