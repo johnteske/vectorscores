@@ -172,19 +172,34 @@ for (p = 0; p < numParts; p++) {
                 return sum * unit;
             }
 
-            d3.select(this).append("text")
-                .text(thisPart[i].timbre)
-                .classed("timbre", true)
-                .attr("y", layersY.timbre);
+            function getNestedProp(prop, obj) {
+                return prop.split('.').reduce(function(prev, curr) {
+                    return prev[curr];
+                }, obj || this );
+            }
 
-            d3.select(this).append("text")
-                .text(function() {
-                    var lo = thisPart[i].pitch.low,
-                        hi = thisPart[i].pitch.high;
-                    return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : "" ) + " \uec83";
-                })
-                .classed("pitch-range", true)
-                .attr("y", layersY.pitch);
+            function hasNewValues(prop) {
+                // TODO allow settings to show all (per property? showAll.indexOf(prop))
+                return i === 0 || getNestedProp(prop, thisPart[i]) !== getNestedProp(prop, thisPart[i - 1]);
+            }
+
+            if(hasNewValues('timbre')) {
+                d3.select(this).append("text")
+                    .text(thisPart[i].timbre)
+                    .classed("timbre", true)
+                    .attr("y", layersY.timbre);
+            }
+
+            if(hasNewValues('pitch.low') && hasNewValues('pitch.high')) {
+                d3.select(this).append("text")
+                    .text(function() {
+                        var lo = thisPart[i].pitch.low,
+                            hi = thisPart[i].pitch.high;
+                        return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : "" ) + " \uec83";
+                    })
+                    .classed("pitch-range", true)
+                    .attr("y", layersY.pitch);
+            }
 
             d3.select(this).selectAll(".durations")
                 .data(durations)
@@ -219,16 +234,18 @@ for (p = 0; p < numParts; p++) {
                     .attr("x", phraseSpacing);
 
             // dynamics
-            d3.select(this).selectAll(".dynamics")
-                .data(dynamics)
-                .enter()
-                .append("text")
-                    .text(function(d) { return dynamicsDict[d]; })
-                    .attr("class", function(d) {
-                        return d === "dim." ? "timbre" : "dynamics";
-                    })
-                    .attr("y", layersY.dynamics)
-                    .attr("x", phraseSpacing);
+            if(durations.length > 1 || hasNewValues('dynamics.0')) {
+                d3.select(this).selectAll(".dynamics")
+                    .data(dynamics)
+                    .enter()
+                    .append("text")
+                        .text(function(d) { return dynamicsDict[d]; })
+                        .attr("class", function(d) {
+                            return d === "dim." ? "timbre" : "dynamics";
+                        })
+                        .attr("y", layersY.dynamics)
+                        .attr("x", phraseSpacing);
+            }
         }); // .each()
 }
 
