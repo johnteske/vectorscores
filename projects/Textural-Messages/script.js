@@ -110,10 +110,10 @@ function scrollWrapper(dur) {
 // d3.select("main").on("click", function() { texturalMsg(); });
 
 for(var i = 0; i < 16; i++) {
-    VS.score.add([
+    VS.score.add(
         (i * 1000) + (500 * Math.random()),
         texturalMsg
-    ]);
+    );
 }
 
 texturalMsg(); // create the first message

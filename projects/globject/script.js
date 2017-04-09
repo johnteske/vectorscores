@@ -209,10 +209,10 @@ function refreshGlobject() {
 
 // populate score
 for(var i = 0; i < 10; i++) {
-    VS.score.add([
+    VS.score.add(
         (i * 2000) + (1000 * Math.random()),
         refreshGlobject
-    ]);
+    );
 }
 
 {% include_relative _debug.js %}

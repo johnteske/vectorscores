@@ -1,28 +1,30 @@
 VS.score = (function () {
 
-    function schedule(time, fn, params) {
+    function schedule(time, func, params) {
         // allTimeouts.push( setTimeout(fn, time, params) ); // not <IE9
-        VS.score.allTimeouts.push( setTimeout(function(){ fn(params); }, time) ); // IE fix?
+        VS.score.allTimeouts.push( setTimeout(function(){ func(params); }, time) ); // IE fix?
     }
 
-    function playEvent(ndex) {
-        updatePointer(ndex); // should be part of VS, not global
+    function playEvent(index) {
+        updatePointer(index); // should be part of VS, not global
 
-        var thisEvent = VS.score.funcAt(ndex);
-        thisEvent(ndex, VS.score.paramsAt(ndex));
+        var thisFunc = VS.score.funcAt(index);
+        thisFunc.apply(null, VS.score.paramsAt(index));
+        // thisFunc(index, VS.score.paramsAt(index)); // TODO don't force first argument to be index
 
         // schedule next event
-        if (ndex < VS.score.getLength() - 1) {
-            var id = VS.score.timeAt(ndex),
-                diff = VS.score.timeAt(ndex + 1) - id;
-            schedule(diff, playEvent, ndex + 1);
+        if (index < VS.score.getLength() - 1) {
+            var timeToNext = VS.score.timeAt(index + 1) - VS.score.timeAt(index);
+            schedule(timeToNext, playEvent, index + 1);
         } else {
             VS.score.stop();
         }
     }
 
     return {
-        add: function(t){ this.events.push(t); }, // TODO this should accept arguments (not an array) and push an array of those arguments to events
+        add: function(time, func, params){
+            this.events.push([time, func, params]);
+        },
         events: [],
         getLength: function(){ return this.events.length; },
         playing: false,

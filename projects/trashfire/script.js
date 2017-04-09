@@ -7,9 +7,9 @@ var TrashFire = {
 
 {% include_relative _dumpster.js %}
 {% include_relative _trash.js %}
-{% include_relative _trash.js %}
 {% include_relative _bins.js %}
 {% include_relative _spike.js %}
+{% include_relative _score.js %}
 
 var crumple = TrashFire.Trash(60, 60);
 crumple.group.append("circle")
@@ -31,34 +31,12 @@ crumple3.group.append("circle")
 
 var spike = TrashFire.Spike();
 
-// NOTE currently score events are called with the event index as the first argument
-// I'm reluctant to keep this as it means every function that can be called needs
-// to accept this--which does not seem intuitive or flexbile
-//
-// VS.score.add([0, bins.add, crumple.selection]);
-// VS.score.add([4000, bins.remove, crumple.selection]);
-
-window.setTimeout(function() {
-    crumple.addToBins();
-}, 0);
-window.setTimeout(function() {
-    TrashFire.bins.add(crumple2);
-}, 2000);
-window.setTimeout(function() {
-    TrashFire.bins.add(crumple3);
-}, 4000);
-window.setTimeout(function() {
-    TrashFire.bins.remove(0);
-}, 6000);
-window.setTimeout(function() {
-    TrashFire.bins.remove(1);
-}, 8000);
-window.setTimeout(function() {
-    TrashFire.bins.remove(0);
-}, 10000);
-window.setTimeout(function() {
-    spike.appear();
-}, 10000);
-window.setTimeout(function() {
-    spike.hit();
-}, 15123);
+// manual test score
+VS.score.add(0, crumple.addToBins);
+VS.score.add(2000, TrashFire.bins.add, [crumple2]);
+VS.score.add(4000, TrashFire.bins.add, [crumple3]);
+VS.score.add(6000, TrashFire.bins.remove, [0]);
+VS.score.add(8000, TrashFire.bins.remove, [1]);
+VS.score.add(10000, TrashFire.bins.remove, [0]);
+VS.score.add(10000, spike.appear);
+VS.score.add(15123, spike.hit);

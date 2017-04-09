@@ -249,10 +249,9 @@ for (p = 0; p < numParts; p++) {
         }); // .each()
 }
 
-function scrollScore(ndex, params) {
-    var dur = params[0];
-    var targetIndex = params[1] ? ndex + 1 : ndex; // true = proceed to next bar, false = go to this bar
-    var targetBar = score.bars[targetIndex];
+function scrollScore(ndex, dur, goToNextBar) {
+    var targetIndex = goToNextBar ? ndex + 1 : ndex, // true = proceed to next bar, false = go to this bar
+        targetBar = score.bars[targetIndex];
     var scoreGroupHeight = score.height * 0.5;
     score.group
         .transition()
@@ -275,12 +274,12 @@ function scrollScore(ndex, params) {
 
 for(i = 0; i < score.bars.length; i++) {
     var duration = getBarDuration(i);
-    VS.score.add([ score.bars[i] * 1000, scrollScore, [duration * 1000, true] ]); // time, func, [duration, go to next bar]
+    VS.score.add(score.bars[i] * 1000, scrollScore, [i, duration * 1000, true]);
 }
 
-VS.score.pauseCallback = function(){ scrollScore(VS.score.pointer, [300]); };
-VS.score.stopCallback = function(){ scrollScore(0, [300]); };
-VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, [300]); };
+VS.score.pauseCallback = function(){ scrollScore(VS.score.pointer, 300, false); };
+VS.score.stopCallback = function(){ scrollScore(0, 300, false); };
+VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300, false); };
 
 {% include_relative _debug.js %}
 {% include_relative _settings.js %}

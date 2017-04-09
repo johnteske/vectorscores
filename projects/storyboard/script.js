@@ -151,10 +151,10 @@ function updateCardIndicator(pointer) {
 
 // create score events from card times
 for(var i = 0; i < cardList.length; i++) {
-    VS.score.add([cardList[i].time, goToCard]);
+    VS.score.add(cardList[i].time, goToCard, [i]);
 }
 // and final noop 3 seconds after last card
-VS.score.add([cardList[cardList.length - 1].time + 3000, VS.noop]);
+VS.score.add(cardList[cardList.length - 1].time + 3000, VS.noop);
 
 VS.score.stepCallback = goToCard;
 // VS.score.pauseCallback = updateCardTimer;

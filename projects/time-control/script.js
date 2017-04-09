@@ -1,12 +1,10 @@
 d3.select("svg").remove(); // svg not used in test
 
-function userEvent(ndex, params) {
-    var id = params[0],
-        boxClass = params[1] ? " box" : "";
+function userEvent(ndex, id, box) {
+    var boxClass = box ? " box" : "";
     document.getElementById(id).setAttribute("class", "event-span active" + boxClass);
 }
-function objEvent(ndex, params) {
-    var id = params.time;
+function objEvent(ndex, id) {
     document.getElementById(id).setAttribute("class", "event-span other");
 }
 
@@ -25,9 +23,9 @@ function createEvent(eventTime) {
     var coinFlip = VS.getItem([0, 1]),
         isBox = VS.getItem([0, 1, 1]);
     if(coinFlip){
-        VS.score.add([eventTime, userEvent, [eventTime, isBox]]); // scoreEvent -- [time, function, params]
+        VS.score.add(eventTime, userEvent, [i, eventTime, isBox]); // scoreEvent -- [time, function, params]
     } else {
-        VS.score.add([eventTime, objEvent, {time: eventTime, box: isBox}]); // scoreEvent -- [time, function, params]
+        VS.score.add(eventTime, objEvent, [i, eventTime]); // scoreEvent -- [time, function, params]
     }
     createSpan(eventTime);
 }

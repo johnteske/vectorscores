@@ -41,7 +41,7 @@ glob.pitchSet = main.append("text")
     .classed("pc-set", 1)
     .style("opacity", "0"); // init value
 
-glob.move = function(eventIndex, dur) {
+glob.move = function(dur) {
     var newPitchClassSet = "[0, " + VS.getItem([1, 2, 3]) + ", " + VS.getItem([4, 5, 6]) + "]";
 
     d3.select(".pc-set")
@@ -67,15 +67,15 @@ glob.move = function(eventIndex, dur) {
 };
 
 for(var i = 0; i < scoreLength; i++) {
-    VS.score.add([i * transitionTime.long, glob.move, transitionTime.long]);
+    VS.score.add(i * transitionTime.long, glob.move, [transitionTime.long]);
 }
 // final event
-VS.score.add([scoreLength * transitionTime.long, function() {
+VS.score.add(scoreLength * transitionTime.long, function() {
     d3.select(".pc-set")
         .transition()
         .duration(transitionTime.short)
         .style("opacity", "0");
-}]);
+});
 
 VS.score.stepCallback = function() {
     glob.move(null, transitionTime.short);
