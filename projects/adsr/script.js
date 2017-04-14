@@ -159,9 +159,11 @@ for (p = 0; p < numParts; p++) {
         })
         // add phrase content
         .each(function(d, i) {
-            var durations = thisPart[i].durations;
-            var dynamics = thisPart[i].dynamics;
-            var articulations = thisPart[i].articulations;
+            var thisPhrase = thisPart[i];
+            var prevPhrase = thisPart[i - 1];
+            var durations = thisPhrase.durations;
+            var dynamics = thisPhrase.dynamics;
+            var articulations = thisPhrase.articulations;
             var layersY = score.partLayersY;
 
             function phraseSpacing(d, i) {
@@ -180,21 +182,21 @@ for (p = 0; p < numParts; p++) {
 
             function hasNewValues(prop) {
                 // TODO allow settings to show all (per property? showAll.indexOf(prop))
-                return i === 0 || getNestedProp(prop, thisPart[i]) !== getNestedProp(prop, thisPart[i - 1]);
+                return i === 0 || getNestedProp(prop, thisPhrase) !== getNestedProp(prop, prevPhrase);
             }
 
             if(hasNewValues('timbre')) {
                 d3.select(this).append("text")
-                    .text(thisPart[i].timbre)
+                    .text(thisPhrase.timbre)
                     .classed("timbre", true)
                     .attr("y", layersY.timbre);
             }
 
-            if(hasNewValues('pitch.low') && hasNewValues('pitch.high')) {
+            if(hasNewValues('pitch.low') || hasNewValues('pitch.high')) {
                 d3.select(this).append("text")
                     .text(function() {
-                        var lo = thisPart[i].pitch.low,
-                            hi = thisPart[i].pitch.high;
+                        var lo = thisPhrase.pitch.low,
+                            hi = thisPhrase.pitch.high;
                         return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : "" ) + " \uec83";
                     })
                     .classed("pitch-range", true)
@@ -231,7 +233,8 @@ for (p = 0; p < numParts; p++) {
                     .text(function(d) { return artDict[d]; })
                     .classed("durations", true)
                     .attr("y", layersY.articulations)
-                    .attr("x", phraseSpacing);
+                    .attr("x", phraseSpacing)
+                    .attr("dx", function(d) { return d === "l.v." ? unit : 0; });
 
             // dynamics
             if(durations.length > 1 || hasNewValues('dynamics.0')) {

@@ -8,15 +8,18 @@ function getPrevNextIndices(array, val) {
         }
     }
 }
-function getPrevNextIndicesAndT(array, val) {
-    var indices = getPrevNextIndices(array, val);
-    return [indices[0], indices[1], val - array[indices[0]]];
-}
-function roundHalf(num) {
-    return Math.round(num * 2) / 2;
+function getPrevNextIndicesAndT(array, time) {
+    var indices = getPrevNextIndices(array, time),
+        v0 = array[indices[0]],
+        v1 = array[indices[1]],
+        t = (time - v0) / (v1 - v0);
+    return [indices[0], indices[1], t];
 }
 function lerpEnvelope(env, iit) {
     return lerp(env[iit[0]], env[iit[1]], iit[2]);
+}
+function roundHalf(num) {
+    return Math.round(num * 2) / 2;
 }
 
 /**
@@ -112,7 +115,7 @@ for (var p = 0; p < numParts; p++) {
         phrase.articulations = []; // [">", /*dim.*/, "-", "l.v."]
         if (phraseLength > 1 && phrase.durations[0] > 0.75) { phrase.articulations[0] = ">"; }
         if (phraseLength > 2 && phrase.durations[2] < 4) { phrase.articulations[2] = "-"; }
-        if (phrase.timbre === "l.v.") { phrase.articulations[3] = "l.v."; }
+        if (phrase.timbre === "l.v.") { phrase.articulations[phrase.durations.length - 1] = "l.v."; }
 
         part.push(phrase);
     }
