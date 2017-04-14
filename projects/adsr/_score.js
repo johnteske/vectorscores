@@ -21,6 +21,9 @@ function lerpEnvelope(env, iit) {
 function roundHalf(num) {
     return Math.round(num * 2) / 2;
 }
+function clamp(val, min, max) {
+    return Math.min(Math.max(val, min), max);
+}
 
 /**
  * While scalable, the original work was timed at 300 seconds (5 minutes)
@@ -75,10 +78,18 @@ for (var p = 0; p < numParts; p++) {
         timbreIndex = VS.getWeightedItem([timbreIndex, timbreIndex + 1], [2, 1]);
         phrase.timbre = timbres[timbreIndex];
 
-        phrase.pitch = {
-            high: roundHalf(lerpEnvelope(envelopes.pitch.high, iit)),
-            low: roundHalf(lerpEnvelope(envelopes.pitch.low, iit))
-        };
+
+        if (i > 0) { // if not the first bar, calculate pitch range
+            phrase.pitch = {
+                high: clamp(roundHalf(lerpEnvelope(envelopes.pitch.high, iit) + VS.getRandExcl(-0.5, 0.5)), 0, 2),
+                low: clamp(roundHalf(lerpEnvelope(envelopes.pitch.low, iit) + VS.getRandExcl(-0.5, 0.5)), -2, 0)
+            };
+        } else { // if first bar, force natural
+            phrase.pitch = {
+                high: 0,
+                low: 0
+            };
+        }
 
         var phraseLength = Math.round(lerpEnvelope(envelopes.phraseLength, iit));
         phrase.durations = [];
