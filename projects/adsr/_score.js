@@ -70,7 +70,10 @@ for (var p = 0; p < numParts; p++) {
 
         phrase.timeDispersion = lerpEnvelope(envelopes.timeDispersion, iit);
 
-        phrase.timbre = timbres[Math.round(lerpEnvelope(envelopes.timbre, iit))];
+        // 1/3 chance to anticipate next timbre (and thus dynamic)
+        var timbreIndex = Math.round(lerpEnvelope(envelopes.timbre, iit));
+        timbreIndex = VS.getWeightedItem([timbreIndex, timbreIndex + 1], [2, 1]);
+        phrase.timbre = timbres[timbreIndex];
 
         phrase.pitch = {
             high: roundHalf(lerpEnvelope(envelopes.pitch.high, iit)),
@@ -101,7 +104,7 @@ for (var p = 0; p < numParts; p++) {
         // TODO also add dim. to "ghost"s
         // TODO these values are very strict--add variation, like original score
         phrase.dynamics = [];
-        phrase.dynamics[0] = dynamics[Math.round(lerpEnvelope(envelopes.timbre, iit))];
+        phrase.dynamics[0] = dynamics[timbreIndex];
         if (phraseLength > 1) {
             if (phrase.durations[0] < 1) {
                 phrase.dynamics[1] = ">";
