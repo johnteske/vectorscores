@@ -39,8 +39,8 @@ var score = (function() {
     };
     // to help track overall part height
     _score.partLayersY = {
-        timbre: -5 * unit,
-        pitch: -3 * unit,
+        timbre: -4.5 * unit,
+        pitch: -2.5 * unit,
         durations: function(d) { return (d > 0 && d < 1) ? -0.5 * unit : 0; },
         articulations: 1.25 * unit,
         dynamics: 3.5 * unit
@@ -197,7 +197,7 @@ for (p = 0; p < numParts; p++) {
                     .text(function() {
                         var lo = thisPhrase.pitch.low,
                             hi = thisPhrase.pitch.high;
-                        return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" – " + pitchDict[hi]) : "" ) + " \uec83";
+                        return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" \uf479 " + pitchDict[hi]) : "" ) + " \uec83"; // tenuto as endash
                     })
                     .classed("pitch-range", true)
                     .attr("y", layersY.pitch);
@@ -234,7 +234,8 @@ for (p = 0; p < numParts; p++) {
                     .classed("durations", true)
                     .attr("y", layersY.articulations)
                     .attr("x", phraseSpacing)
-                    .attr("dx", function(d) { return d === "l.v." ? unit : 0; });
+                    .attr("dx", function(d) { return d === "l.v." ? unit : 0; })
+                    .attr("dy", function(d) { return d === "l.v." ? unit * -0.5 : 0; });
 
             // dynamics
             if(durations.length > 1 || hasNewValues('dynamics.0')) {
