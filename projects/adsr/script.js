@@ -185,11 +185,20 @@ for (p = 0; p < numParts; p++) {
                 return i === 0 || getNestedProp(prop, thisPhrase) !== getNestedProp(prop, prevPhrase);
             }
 
-            if(hasNewValues('timbre')) {
+            if (thisPhrase.timbre !== "bartok" && thisPhrase.timbre !== "ghost") {
+                if(hasNewValues('timbre')) {
+                    d3.select(this).append("text")
+                        .text(thisPhrase.timbre)
+                        .attr("class", "timbre")
+                        .attr("y", layersY.timbre);
+                }
+            } else if (thisPhrase.timbre === "bartok") {
                 d3.select(this).append("text")
-                    .text(thisPhrase.timbre)
-                    .classed("timbre", true)
+                    .text(artDict["bartok"])
+                    .attr("class", "dynamics")
                     .attr("y", layersY.timbre);
+            } else {
+                console.log("\uD83D\uDC7B");
             }
 
             if(hasNewValues('pitch.low') || hasNewValues('pitch.high')) {

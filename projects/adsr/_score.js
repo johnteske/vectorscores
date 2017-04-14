@@ -76,8 +76,8 @@ for (var p = 0; p < numParts; p++) {
         // 1/3 chance to anticipate next timbre (and thus dynamic)
         var timbreIndex = Math.round(lerpEnvelope(envelopes.timbre, iit));
         timbreIndex = VS.getWeightedItem([timbreIndex, timbreIndex + 1], [2, 1]);
+        if (i === 0) { timbreIndex = 0; } // force bartok, forte on first note
         phrase.timbre = timbres[timbreIndex];
-
 
         if (i > 0) { // if not the first bar, calculate pitch range
             phrase.pitch = {
