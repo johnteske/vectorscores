@@ -198,7 +198,32 @@ for (p = 0; p < numParts; p++) {
                     .attr("class", "dynamics")
                     .attr("y", layersY.timbre);
             } else {
-                console.log("\uD83D\uDC7B");
+                // ghost attacks
+                // TODO add tie (in which case, should this block be moved to articulations?)
+                var firstDur = durations[0] * unit, // get the duration of the note "ghost" is tied to
+                    x1 = firstDur + unit,
+                    attackScale = 0.5,
+                    attackNum = VS.getItem([7, 8, 9]);
+                function ghostAttackSpacing(d, i) {
+                    return x1 + (unit * i * attackScale);
+                }
+
+                d3.select(this)
+                    .append("line")
+                        .attr("class", "ghost-beam")
+                        .attr("x1", x1)
+                        .attr("y1", 0)
+                        .attr("x2", x1 + (unit * attackNum * attackScale))
+                        .attr("y2", 0);
+                d3.select(this).selectAll(".ghost-attack")
+                    .data(d3.range(attackNum))
+                    .enter()
+                    .append("line")
+                        .attr("class", "ghost-attack")
+                        .attr("x1", ghostAttackSpacing)
+                        .attr("y1", 0)
+                        .attr("x2", ghostAttackSpacing)
+                        .attr("y2", unit);
             }
 
             if(hasNewValues('pitch.low') || hasNewValues('pitch.high')) {

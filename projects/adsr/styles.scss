@@ -57,6 +57,15 @@ main, svg.main {
     font-size: 15px;
 }
 
+.ghost-beam, .ghost-attack {
+    shape-rendering: crispEdges;
+    // shape-rendering: geometricPrecision;
+    stroke: #333333;
+}
+.ghost-beam {
+    stroke-width: 2;
+}
+
 line[class^="debug-center"] {
     stroke: red;
 }
