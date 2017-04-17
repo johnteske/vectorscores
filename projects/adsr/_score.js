@@ -110,13 +110,14 @@ for (var p = 0; p < numParts; p++) {
         } else { // if first bar, force x notehead
             phrase.durations.push(0);
         }
+        if(phrase.timbre === "ghost") {
+            phrase.durations.push(-1);
+        }
 
         // also mapped to envelopes.timbre
-        // TODO also add dim. to "ghost"s
-        // TODO these values are very strict--add variation, like original score
         phrase.dynamics = [];
         phrase.dynamics[0] = dynamics[timbreIndex];
-        if (phraseLength > 1) {
+        if (phrase.durations.length > 1) {
             if (phrase.durations[0] < 1) {
                 phrase.dynamics[1] = ">";
             } else {

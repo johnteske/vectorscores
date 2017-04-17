@@ -197,34 +197,6 @@ for (p = 0; p < numParts; p++) {
                     .text(artDict["bartok"])
                     .attr("class", "dynamics")
                     .attr("y", layersY.timbre);
-            } else {
-                // ghost attacks
-                // TODO add a "ghost" duration, say -1,
-                // so it can be easily positioned and have an attached dim.
-                var firstDur = durations[0] * unit, // get the duration of the note "ghost" is tied to
-                    x1 = firstDur + unit,
-                    attackScale = 0.5,
-                    attackNum = VS.getItem([7, 8, 9]);
-                function ghostAttackSpacing(d, i) {
-                    return x1 + (unit * i * attackScale);
-                }
-
-                d3.select(this)
-                    .append("line")
-                        .attr("class", "ghost-beam")
-                        .attr("x1", x1)
-                        .attr("y1", 0)
-                        .attr("x2", x1 + (unit * attackNum * attackScale))
-                        .attr("y2", 0);
-                d3.select(this).selectAll(".ghost-attack")
-                    .data(d3.range(attackNum))
-                    .enter()
-                    .append("line")
-                        .attr("class", "ghost-attack")
-                        .attr("x1", ghostAttackSpacing)
-                        .attr("y1", 0)
-                        .attr("x2", ghostAttackSpacing)
-                        .attr("y2", unit);
             }
 
             if(hasNewValues('pitch.low') || hasNewValues('pitch.high')) {
@@ -259,6 +231,32 @@ for (p = 0; p < numParts; p++) {
             //         .attr("y", function(d, i) { return 0; })
             //         .attr("width", function(d) { return d * unit; })
             //         .attr("height", unit);
+            if (thisPhrase.timbre === "ghost") {
+                var firstDur = durations[0] * unit, // get the duration of the note "ghost" is tied to
+                    x1 = firstDur + unit,
+                    attackScale = 0.5,
+                    attackNum = VS.getItem([7, 8, 9]);
+                function ghostAttackSpacing(d, i) {
+                    return x1 + (unit * i * attackScale);
+                }
+
+                d3.select(this)
+                    .append("line")
+                        .attr("class", "ghost-beam")
+                        .attr("x1", x1)
+                        .attr("y1", 0)
+                        .attr("x2", x1 + (unit * attackNum * attackScale))
+                        .attr("y2", 0);
+                d3.select(this).selectAll(".ghost-attack")
+                    .data(d3.range(attackNum))
+                    .enter()
+                    .append("line")
+                        .attr("class", "ghost-attack")
+                        .attr("x1", ghostAttackSpacing)
+                        .attr("y1", 0)
+                        .attr("x2", ghostAttackSpacing)
+                        .attr("y2", unit);
+            }
 
             // articulations
             d3.select(this).selectAll(".articulations")
