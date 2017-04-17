@@ -50,7 +50,7 @@ var artDict = {
     // ".":    "\uf478",
     "-":    "\uf479",
     // "-":    "\uf47a",
-    // "l.v.": "\ue550",
+    "tie": "\ue550",
     // "l.v.": "\ue551", // longer
     "l.v.": "\ue552", // longerer
     "bartok": "\ue630"

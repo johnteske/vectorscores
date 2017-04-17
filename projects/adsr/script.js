@@ -199,7 +199,8 @@ for (p = 0; p < numParts; p++) {
                     .attr("y", layersY.timbre);
             } else {
                 // ghost attacks
-                // TODO add tie (in which case, should this block be moved to articulations?)
+                // TODO add a "ghost" duration, say -1,
+                // so it can be easily positioned and have an attached dim.
                 var firstDur = durations[0] * unit, // get the duration of the note "ghost" is tied to
                     x1 = firstDur + unit,
                     attackScale = 0.5,
@@ -268,8 +269,14 @@ for (p = 0; p < numParts; p++) {
                     .classed("durations", true)
                     .attr("y", layersY.articulations)
                     .attr("x", phraseSpacing)
-                    .attr("dx", function(d) { return d === "l.v." ? unit : 0; })
-                    .attr("dy", function(d) { return d === "l.v." ? unit * -0.5 : 0; });
+                    .attr("dx", function(d) {
+                        var tieOrLV = (d === "tie" || d === "l.v.");
+                        return tieOrLV ? unit : 0;
+                    })
+                    .attr("dy", function(d) {
+                        var tieOrLV = (d === "tie" || d === "l.v.");
+                        return tieOrLV ? unit * -0.5 : 0;
+                    });
 
             // dynamics
             if(durations.length > 1 || hasNewValues('dynamics.0')) {

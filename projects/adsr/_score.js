@@ -124,9 +124,8 @@ for (var p = 0; p < numParts; p++) {
             }
         }
 
-        // TODO "let vibrate" as fourth articulation, "release"
-        // TODO "l.v." is not being set as a timbre value
         phrase.articulations = []; // [">", /*dim.*/, "-", "l.v."]
+        if (phrase.timbre === "ghost") { phrase.articulations[0] = "tie"; }
         if (phraseLength > 1 && phrase.durations[0] > 0.75) { phrase.articulations[0] = ">"; }
         if (phraseLength > 2 && phrase.durations[2] < 4) { phrase.articulations[2] = "-"; }
         if (phrase.timbre === "l.v.") { phrase.articulations[phrase.durations.length - 1] = "l.v."; }
