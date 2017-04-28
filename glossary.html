@@ -1,0 +1,16 @@
+---
+layout: page
+title: Glossary
+permalink: /glossary/
+---
+<!-- any ensemble timbres
+generalized
+not all possibilities are listed
+interpret to the bet of your ability analogous timbres
+allowing flexibility to help blend well an an ensemble -->
+<dl>
+{% for term in site.data.glossary %}
+    <dt id="{{ term.name | slugify }}">{{ term.name }}</dt>
+    <dd>{{ term.description }}</dd>
+{% endfor %}
+</dl>

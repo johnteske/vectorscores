@@ -1,7 +1,7 @@
-{% if page.info or page.settings %}
+{% if page.info or page.info_file or page.settings %}
 <div id="score-modal-overlay" class="modal-overlay">
 
-{% if page.info %}
+{% if page.info or page.info_file %}
     <div id="score-info-modal" class="modal-content">
         <span id="score-info-close" class="modal-close">×</span>
         <h2>{{ page.title }}</h2>
@@ -9,13 +9,14 @@
             {{ page.composer }}
             {% if page.publish_date %}({{ page.publish_date}}){% endif %}
         </p>
+        {% if page.info %}
         <div>
             {{ page.info }}
         </div>
-        <!--<a href="#">Play tutorial</a>-->
-        <p style="margin-top: 2em">
-            <a href="{{ site.baseurl }}/projects">Browse projects</a>
-        </p>
+        {% else if page.info_file %}
+            {% capture info_include %}{% include_relative {{ page.info_file }} %}{% endcapture %}
+            {{ info_include | markdownify }}
+        {% endif %}
     </div>
 {% endif %}
 

@@ -46,7 +46,7 @@ score.rehearsalLetters = [
 ];
 
 var durations = [0.2, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6, 8];
-var timbres = ["bartok", "pizz.", "ghost", "rolling pizz.", "bow hair pull", "sul pont.", "flutter", "vib.", "ord.", "l.v."];
+var timbres = ["bartok", "(pizz.)", "ghost", "rolling (pizz.)", "rolling, glassy", "glassy", "flutter", "vib.", "ord.", "l.v."];
 var dynamics = ["f", "mf", "mp", "p", "pp", "pp", "p", "mp", "mf", "f", "ff"];
 
 var envelopes = {

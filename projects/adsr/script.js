@@ -6,7 +6,8 @@
  * score.width can be 8000 but svg width does not need to be
  * display pitch and timbre inline--and only if there is a change (or make that optional)
  * bounding boxes for phrases? make optional setting?
- * dynamics
+ * dynamics: first note forte
+ * text shadows
  * timeDispersion looks very quantized
  * articulation
  * allow option to show note names? or pitch classes?

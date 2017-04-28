@@ -69,3 +69,29 @@ main, svg.main {
 line[class^="debug-center"] {
     stroke: red;
 }
+
+//
+// _info
+//
+.modal-content a[target="_blank"],
+.modal-content a[target="VS_glossary"] {
+    padding-right: 0.4em;
+    &::after {
+        content: '°';
+        position: absolute;
+    }
+}
+.modal-content .symbol {
+    font-family: 'Bravura';
+    line-height: 1;
+    position: relative;
+    top: -4px;
+    // display: inline-block;
+    width: 1em;
+}
+.info-ghost {
+    width: 20px;
+    height: 20px;
+}
+
+@import "description-list";
