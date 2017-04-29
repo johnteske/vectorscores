@@ -89,9 +89,11 @@ line[class^="debug-center"] {
     // display: inline-block;
     width: 1em;
 }
-.info-ghost {
-    width: 20px;
-    height: 20px;
-}
 
+.modal-content {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+}
 @import "description-list";

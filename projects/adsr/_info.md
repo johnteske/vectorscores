@@ -15,8 +15,8 @@ Above each bar is its duration in seconds. <!--smaller ticks indicated seconds.-
         <span class="symbol">&#xe0a9;</span> ghost note : muted, pitch deemphasized
     </li>
     <li>
-    <!-- <svg class="info-ghost"></svg> -->
-        beamed notes: after initial impulse, rapidly {% include glossary/term_link.html name="hammer-on" %} additional notes
+        <svg class="info-ghost"></svg>
+        beams: after initial attack, rapidly {% include glossary/term_link.html name="hammer-on" %} additional notes
     </li>
 </ul>
 

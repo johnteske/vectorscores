@@ -12,8 +12,6 @@
  * articulation
  * allow option to show note names? or pitch classes?
  * tie, ghost notes
- * x notehead
- * bartok pizz symbol
  * double bar
  * error-check if score height exceeds view and/or auto-scale to fit
  * current bar indicator (not debug line)--similar to storyboard indicator?
@@ -139,6 +137,36 @@ score.layout.letters.each(function() {
 });
 
 /**
+ * Ghost beams, for use in score and in performance notes
+ */
+function makeGhost(firstDur) {
+    firstDur = firstDur * unit; // duration of the note the "ghost" is tied to
+    var x1 = firstDur + unit,
+        attackScale = 0.5,
+        attackNum = VS.getItem([7, 8, 9]);
+    function ghostAttackSpacing(d, i) {
+        return x1 + (unit * i * attackScale);
+    }
+
+    d3.select(this)
+        .append("line")
+            .attr("class", "ghost-beam")
+            .attr("x1", x1)
+            .attr("y1", 0)
+            .attr("x2", x1 + (unit * attackNum * attackScale))
+            .attr("y2", 0);
+    d3.select(this).selectAll(".ghost-attack")
+        .data(d3.range(attackNum))
+        .enter()
+        .append("line")
+            .attr("class", "ghost-attack")
+            .attr("x1", ghostAttackSpacing)
+            .attr("y1", 0)
+            .attr("x2", ghostAttackSpacing)
+            .attr("y2", unit);
+}
+
+/**
  * Draw parts
  */
 for (p = 0; p < numParts; p++) {
@@ -232,31 +260,9 @@ for (p = 0; p < numParts; p++) {
             //         .attr("y", function(d, i) { return 0; })
             //         .attr("width", function(d) { return d * unit; })
             //         .attr("height", unit);
-            if (thisPhrase.timbre === "ghost") {
-                var firstDur = durations[0] * unit, // get the duration of the note "ghost" is tied to
-                    x1 = firstDur + unit,
-                    attackScale = 0.5,
-                    attackNum = VS.getItem([7, 8, 9]);
-                function ghostAttackSpacing(d, i) {
-                    return x1 + (unit * i * attackScale);
-                }
 
-                d3.select(this)
-                    .append("line")
-                        .attr("class", "ghost-beam")
-                        .attr("x1", x1)
-                        .attr("y1", 0)
-                        .attr("x2", x1 + (unit * attackNum * attackScale))
-                        .attr("y2", 0);
-                d3.select(this).selectAll(".ghost-attack")
-                    .data(d3.range(attackNum))
-                    .enter()
-                    .append("line")
-                        .attr("class", "ghost-attack")
-                        .attr("x1", ghostAttackSpacing)
-                        .attr("y1", 0)
-                        .attr("x2", ghostAttackSpacing)
-                        .attr("y2", unit);
+            if (thisPhrase.timbre === "ghost") {
+                makeGhost.call(this, durations[0]);
             }
 
             // articulations
@@ -344,3 +350,15 @@ function resize() {
 resize();
 
 d3.select(window).on("resize", resize);
+
+/**
+ * Performance notes
+ */
+var infoGhost = d3.select(".info-ghost")
+    .attr("width", 50)
+    .attr("height", 10)
+    .append("g");
+// infoGhost.append("text")
+//     .attr("class", "durations")
+//     .text(artDict["tie"]);
+makeGhost.call(infoGhost.node(), 0);
