@@ -1,5 +1,3 @@
-for Friction Quartet
-
 ### Notation
 Time is written proportionally.
 Durations are indicated by standard flags, stemless noteheads, and dotted values at 60 beats per minute.
