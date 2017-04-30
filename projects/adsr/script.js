@@ -137,22 +137,30 @@ score.layout.letters.each(function() {
  * Ghost beams, for use in score and in performance notes
  */
 function makeGhost(firstDur) {
-    firstDur = firstDur * unit; // duration of the note the "ghost" is tied to
-    var x1 = firstDur + unit,
+    firstDur = firstDur * unit + 5; // duration of the note the "ghost" is tied to, with 5px offset
+    var x1 = 10, // offset to tie
         attackScale = 0.5,
         attackNum = VS.getItem([7, 8, 9]);
     function ghostAttackSpacing(d, i) {
         return x1 + (unit * i * attackScale);
     }
 
-    d3.select(this)
+    var ghostGroup = d3.select(this).append("g")
+        .attr("transform", "translate(" + firstDur + ", 0)");
+
+    ghostGroup
+        .append("text")
+            .text(artDict["tie"])
+            .classed("durations", true)
+            .attr("y", score.partLayersY.articulations);
+    ghostGroup
         .append("line")
             .attr("class", "ghost-beam")
             .attr("x1", x1)
             .attr("y1", 0)
             .attr("x2", x1 + (unit * attackNum * attackScale))
             .attr("y2", 0);
-    d3.select(this).selectAll(".ghost-attack")
+    ghostGroup.selectAll(".ghost-attack")
         .data(d3.range(attackNum))
         .enter()
         .append("line")
@@ -271,12 +279,10 @@ for (p = 0; p < numParts; p++) {
                     .attr("y", layersY.articulations)
                     .attr("x", phraseSpacing)
                     .attr("dx", function(d) {
-                        var tieOrLV = (d === "tie" || d === "l.v.");
-                        return tieOrLV ? unit : 0;
+                        return d === "l.v." ? unit : 0;
                     })
                     .attr("dy", function(d) {
-                        var tieOrLV = (d === "tie" || d === "l.v.");
-                        return tieOrLV ? unit * -0.5 : 0;
+                        return d === "l.v." ? unit * -0.5 : 0;
                     });
 
             // dynamics
@@ -351,8 +357,8 @@ d3.select(window).on("resize", resize);
  * Performance notes
  */
 var infoGhost = d3.select(".info-ghost")
-    .attr("width", 50)
-    .attr("height", 10)
+    .attr("width", 60)
+    .attr("height", 20)
     .append("g");
 // infoGhost.append("text")
 //     .attr("class", "durations")
