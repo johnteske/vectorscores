@@ -1,6 +1,6 @@
 ### Notation
 Time is written proportionally.
-Durations are indicated by standard flags, stemless noteheads, and dotted values at 60 beats per minute.
+Durations are indicated by standard flags and stemless noteheads, including dotted values, at 60 beats per minute.
 Above each bar is its duration in seconds. <!--smaller ticks indicated seconds.-->
 <!--<p>
     Boxes indciate groups of notes for phrasing and to help visualize durations.
@@ -19,11 +19,20 @@ Above each bar is its duration in seconds. <!--smaller ticks indicated seconds.-
 </ul>
 
 ### Pitch
-As an ensemble, pick a pitch center&mdash;if the same pitch is not possible, octave transposition is allowed.
-All pitch is relative to the chosen pitch center (notated as a natural sign).
-Per each note in a group (or single note), you may choose a quarter-tone pitch from the given range of accidentals, relative to the pitch center.
-For example, if the pitch center is D and the given range is quarter-flat to sharp,
-for each note in the group you may choose C quarter-sharp, D natural, D quarter-sharp, or D-sharp.
+As an ensemble, agree on a pitch center.
+If the same pitch is not possible on all instruments, octave transposition is allowed.
+All pitch is relative to the chosen pitch center (notated as <i class="symbol">&#xe261;</i>).
+
+Per each note in a group (or single attack), a performer may choose a quarter-tone pitch from the given range of accidentals, relative to the pitch center.
+
+For example, if the pitch center is
+D<i class="symbol">&#xe261;</i> and the given range is
+<i class="symbol">[ &#xe280; – &#xe262; ]</i>,
+for each note in the group a performer may choose
+C<i class="symbol">&#xe282;</i>/D<i class="symbol">&#xe280;</i>,
+D<i class="symbol">&#xe261;</i>,
+D<i class="symbol">&#xe282;</i>, or
+D<i class="symbol">&#xe262;</i>.
 
 ### Timbre and Techniques
 <dl>
