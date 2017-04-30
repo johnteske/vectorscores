@@ -228,7 +228,7 @@ for (p = 0; p < numParts; p++) {
             } else if (thisPhrase.timbre === "bartok") {
                 d3.select(this).append("text")
                     .text(artDict["bartok"])
-                    .attr("class", "dynamics")
+                    .attr("class", "bartok")
                     .attr("y", layersY.timbre);
             }
 

@@ -44,8 +44,12 @@ main, svg.main {
 
 .pitch-range,
 .durations,
-.dynamics {
+.dynamics,
+.bartok {
     font-family: 'Bravura';
+}
+.bartok {
+    font-size: 21px;
 }
 
 .timbre,
