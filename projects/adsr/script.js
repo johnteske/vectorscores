@@ -6,10 +6,7 @@
  * score.width can be 8000 but svg width does not need to be
  * display pitch and timbre inline--and only if there is a change (or make that optional)
  * bounding boxes for phrases? make optional setting?
- * dynamics: first note forte
- * articulation
  * allow option to show note names? or pitch classes?
- * tie, ghost notes
  * double bar
  * error-check if score height exceeds view and/or auto-scale to fit
  * current bar indicator (not debug line)--similar to storyboard indicator?
