@@ -8,3 +8,11 @@
     -ms-user-select: none; // IE 10+
     user-select: none;
 }
+
+@mixin textShadowOutline() {
+    text-shadow:
+        0 -1px 1px white,
+        1px 0 1px white,
+        0 1px 1px white,
+        -1px 0 1px white;
+}

@@ -55,8 +55,7 @@ var score = (function() {
         },
         barDurations: unit
     };
-    // rehearsalLetters = unit * 2
-    _score.height = (unit * 2) + _score.layoutLayersY.barlines.y2;
+    _score.height = _score.layoutLayersY.rehearsalLetters + _score.layoutLayersY.barlines.y2;
     // offset to start first part
     _score.layoutHeight = 12 * unit;
 

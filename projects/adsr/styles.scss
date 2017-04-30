@@ -1,5 +1,7 @@
 ---
 ---
+@import "mixins";
+
 @font-face {
     font-family: Bravura;
     src: url(../../fonts/Bravura.woff);
@@ -44,6 +46,11 @@ main, svg.main {
 .durations,
 .dynamics {
     font-family: 'Bravura';
+}
+
+.timbre,
+.pitch-range {
+    @include textShadowOutline();
 }
 
 .durations,
