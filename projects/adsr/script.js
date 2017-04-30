@@ -7,8 +7,6 @@
  * display pitch and timbre inline--and only if there is a change (or make that optional)
  * bounding boxes for phrases? make optional setting?
  * dynamics: first note forte
- * text shadows
- * timeDispersion looks very quantized
  * articulation
  * allow option to show note names? or pitch classes?
  * tie, ghost notes
@@ -181,8 +179,7 @@ for (p = 0; p < numParts; p++) {
         .enter()
         .append("g")
         .attr("transform", function(d, i) {
-            var timeDispersion = part[i].timeDispersion,
-                x = getBarlineX(d) + (VS.getItem([-1, 1]) * timeDispersion * unit); // TODO +/- timeDispersion
+            var x = getBarlineX(d) + (thisPart[i].timeDispersion * unit * 2.5); // scale dispersion
             return "translate(" + x + ", " + 0 + ")";
         })
         // add phrase content

@@ -71,7 +71,8 @@ for (var p = 0; p < numParts; p++) {
             iit = getPrevNextIndicesAndT(score.structure, now),
             phrase = {};
 
-        phrase.timeDispersion = lerpEnvelope(envelopes.timeDispersion, iit);
+        var dispersion = lerpEnvelope(envelopes.timeDispersion, iit);
+        phrase.timeDispersion = VS.getRandExcl(-dispersion, dispersion);
 
         // 1/3 chance to anticipate next timbre (and thus dynamic)
         var timbreIndex = Math.round(lerpEnvelope(envelopes.timbre, iit));
