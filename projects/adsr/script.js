@@ -204,7 +204,7 @@ for (p = 0; p < numParts; p++) {
             }
 
             function getNestedProp(prop, obj) {
-                return prop.split('.').reduce(function(prev, curr) {
+                return prop.split(".").reduce(function(prev, curr) {
                     return prev[curr];
                 }, obj || this );
             }
@@ -215,7 +215,7 @@ for (p = 0; p < numParts; p++) {
             }
 
             if (thisPhrase.timbre !== "bartok" && thisPhrase.timbre !== "ghost") {
-                if(hasNewValues('timbre')) {
+                if(hasNewValues("timbre")) {
                     d3.select(this).append("text")
                         .text(thisPhrase.timbre)
                         .attr("class", "timbre")
@@ -228,7 +228,7 @@ for (p = 0; p < numParts; p++) {
                     .attr("y", layersY.timbre);
             }
 
-            if(hasNewValues('pitch.low') || hasNewValues('pitch.high')) {
+            if(hasNewValues("pitch.low") || hasNewValues("pitch.high")) {
                 d3.select(this).append("text")
                     .text(function() {
                         var lo = thisPhrase.pitch.low,
@@ -284,7 +284,7 @@ for (p = 0; p < numParts; p++) {
                     });
 
             // dynamics
-            if(durations.length > 1 || hasNewValues('dynamics.0')) {
+            if(durations.length > 1 || hasNewValues("dynamics.0")) {
                 d3.select(this).selectAll(".dynamics")
                     .data(dynamics)
                     .enter()
