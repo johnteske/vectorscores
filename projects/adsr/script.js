@@ -135,6 +135,9 @@ score.layout.letters.each(function() {
  */
 {% include components/cue.js %}
 var cueIndicator = cueTriangle(score.svg);
+function cueBlink() {
+    cueIndicator.blink(1, 0.25, 0.5);
+}
 
 /**
  * Ghost beams, for use in score and in performance notes
@@ -304,9 +307,16 @@ for (p = 0; p < numParts; p++) {
         }); // .each()
 }
 
-function scrollScore(ndex, dur, goToNextBar) {
-    var targetIndex = goToNextBar ? ndex + 1 : ndex, // true = proceed to next bar, false = go to this bar
+function scrollScore(index, dur, goToNextBar) {
+    var targetIndex = goToNextBar ? index + 1 : index, // true = proceed to next bar, false = go to this bar
         targetBar = score.bars[targetIndex];
+
+    if(goToNextBar && index < 6) { // opening section, up to and including arrival at A
+        var cardDuration = VS.score.timeAt(index + 1) - VS.score.timeAt(index),
+            indicatorTime = cardDuration - 3000;
+
+        VS.score.schedule(indicatorTime, cueBlink);
+    }
 
     score.group
         .transition()
@@ -319,7 +329,7 @@ function scrollScore(ndex, dur, goToNextBar) {
 
 /**
  * Populate score
- * Use a preroll so the score doesn't start scrolling immediately // TODO allow user to define this value
+ * Use a preroll so the score doesn't start scrolling immediately // TODO allow user to define this value? min 3 seconds
  */
 
 for(i = 0; i < score.bars.length; i++) {
@@ -328,7 +338,7 @@ for(i = 0; i < score.bars.length; i++) {
 }
 
 VS.score.preroll = 3000;
-VS.score.playCallback = function() { cueIndicator.blink(1, 0.25, 0.5) };
+VS.score.playCallback = cueBlink;
 VS.score.pauseCallback = function(){ scrollScore(VS.score.pointer, 300, false); };
 VS.score.stopCallback = function(){ scrollScore(0, 300, false); };
 VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300, false); };
