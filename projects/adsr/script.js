@@ -321,13 +321,14 @@ function scrollScore(ndex, dur, goToNextBar) {
  * Populate score
  * Use a preroll so the score doesn't start scrolling immediately // TODO allow user to define this value
  */
-// VS.score.preroll = 600;
 
 for(i = 0; i < score.bars.length; i++) {
     var duration = getBarDuration(i);
     VS.score.add(score.bars[i] * 1000, scrollScore, [i, duration * 1000, true]);
 }
 
+VS.score.preroll = 3000;
+VS.score.playCallback = function() { cueIndicator.blink(1, 0.25, 0.5) };
 VS.score.pauseCallback = function(){ scrollScore(VS.score.pointer, 300, false); };
 VS.score.stopCallback = function(){ scrollScore(0, 300, false); };
 VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300, false); };
@@ -349,7 +350,8 @@ function resize() {
     cueIndicator.selection
         .attr("transform", "translate(" +
            (view.center - 6) + "," +
-           (view.scoreY - (unit * 6)) + ")");
+           (view.scoreY - (unit * 6)) + ")")
+        .style("opacity", 0.5);
 
     scrollScore(VS.score.pointer, [0]);
 }

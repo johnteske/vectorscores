@@ -1,7 +1,7 @@
 function cueTriangle(parent) {
     var cue = {};
-    var onTime = 25,
-        fadeTime = 725;
+    var onTime = 50,
+        fadeTime = 700;
 
     cue.selection = parent.append("path")
         .attr("class", "indicator")
@@ -10,22 +10,33 @@ function cueTriangle(parent) {
         .style("stroke-width", "1")
         .style("fill", "none");
 
-    cue.blink = function() {
+    // TODO allow custom opacities AND timing
+    // opacities: { on:, off:, end: }
+    // times: { on:, off: }
+    cue.blink = function(onOpacity, offOpacity, endOpacity) {
+        onOpacity = onOpacity || 1;
+        offOpacity = offOpacity || 0.25;
+        endOpacity = endOpacity || 0;
         cue.selection
             .transition().duration(onTime)
-            .style("opacity", "1")
+            .style("opacity", onOpacity)
             .transition().delay(onTime).duration(fadeTime)
-            .style("opacity", "0")
+            .style("opacity", offOpacity)
 
             .transition().delay(1000).duration(onTime)
-            .style("opacity", "1")
+            .style("opacity", onOpacity)
             .transition().delay(1000 + onTime).duration(fadeTime)
-            .style("opacity", "0")
+            .style("opacity", offOpacity)
 
             .transition().delay(2000).duration(onTime)
-            .style("opacity", "1")
+            .style("opacity", onOpacity)
             .transition().delay(2000 + onTime).duration(fadeTime)
-            .style("opacity", "0");
+            .style("opacity", offOpacity)
+
+            .transition().delay(3000).duration(onTime)
+            .style("opacity", onOpacity)
+            .transition().delay(3000 + onTime).duration(fadeTime)
+            .style("opacity", endOpacity);
     };
 
     return cue;
