@@ -131,6 +131,12 @@ score.layout.letters.each(function() {
 });
 
 /**
+ * Score pointer/cue aid
+ */
+{% include components/cue.js %}
+var cueIndicator = cueTriangle(score.svg);
+
+/**
  * Ghost beams, for use in score and in performance notes
  */
 function makeGhost(firstDur) {
@@ -301,18 +307,14 @@ for (p = 0; p < numParts; p++) {
 function scrollScore(ndex, dur, goToNextBar) {
     var targetIndex = goToNextBar ? ndex + 1 : ndex, // true = proceed to next bar, false = go to this bar
         targetBar = score.bars[targetIndex];
-    var scoreGroupHeight = score.height * 0.5;
+
     score.group
         .transition()
         .duration(dur)
         .ease("linear")
-        .attr("transform", function() {
-            // TODO calculate score vertical center positions on resize and store--don't calc on every scroll
-            return "translate(" +
-                (view.center - getBarlineX(targetBar)) + "," +
-                ((view.height * 0.5) - scoreGroupHeight) +
-                ")";
-        });
+        .attr("transform",
+             "translate(" + (view.center - getBarlineX(targetBar)) + "," + view.scoreY + ")"
+        );
 }
 
 /**
@@ -338,10 +340,16 @@ function resize() {
     view.width = parseInt(d3.select("main").style("width"), 10);
     view.center = view.width * 0.5;
     view.height = parseInt(d3.select("main").style("height"), 10);
+    view.scoreY = (view.height * 0.5) - (score.height * 0.5);
 
     score.svg.attr("height", view.height);
 
     if(debug){ resizeDebug(); }
+
+    cueIndicator.selection
+        .attr("transform", "translate(" +
+           (view.center - 6) + "," +
+           (view.scoreY - (unit * 6)) + ")");
 
     scrollScore(VS.score.pointer, [0]);
 }
