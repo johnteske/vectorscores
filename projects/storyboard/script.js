@@ -23,12 +23,15 @@ function newPoint(spread) {
         y: Math.sin(angle) * spread.y * VS.getRandExcl(-1, 1)
     };
 }
+function cardX(index) {
+    return offset + (index * (cardWidth + cardPadding));
+}
 
 // create cards
 var cards = main.selectAll("g")
     .data(cardList)
     .enter().append("g")
-    .attr("transform", function(d, i) { var pos = offset + (i * (cardWidth + cardPadding)); return "translate(" + pos + ", 100)"; })
+    .attr("transform", function(d, i) { return "translate(" + cardX(i) + ", 100)"; })
     .classed("card", 1)
     .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
@@ -69,10 +72,11 @@ cards.each(function(d) {
 
 });
 
-cards.append("path")
-    .attr("class", function(d, i) { return "indicator indicator--" + i; })
-    .attr("d", "M0,0 L12,0 L6,12 L0,0")
-    .attr("transform", "translate(0, -42)");
+{% include components/cue.js %}
+var cueIndicator = cueTriangle(main);
+cueIndicator.selection
+    .attr("transform", "translate(" + cardX(1) + ", 50)") // put at right card position
+    .style("opacity", "0");
 
 // cards.append("rect")
 //     .classed("timer", 1)
@@ -85,9 +89,9 @@ function goToCard(eventIndex, dur) {
     dur = dur || 325;
     cards.transition()
         .attr("transform", function(d, i) {
+            // TODO move all cards in a group, not individual cards?
             var pos =
-                offset +
-                (i * (cardWidth + cardPadding)) -
+                cardX(i) -
                 (offset * pointer) - // move by pointer
                 (cardPadding * pointer); // also move by spacing
             return "translate(" + pos + ", 100)";
@@ -109,22 +113,9 @@ function goToCard(eventIndex, dur) {
 
 function updateCardIndicator(pointer) {
     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
-        indicatorTime = cardDuration - 3000, // start flashing 3 seconds before next card
-        onTime = 25,
-        fadeTime = 725;
-    d3.select(".indicator--" + (pointer + 1))
-        .transition().delay(indicatorTime).duration(onTime)
-        .style("opacity", "1")
-        .transition().delay(indicatorTime + onTime).duration(fadeTime)
-        .style("opacity", "0")
-        .transition().delay(indicatorTime + 1000).duration(onTime)
-        .style("opacity", "1")
-        .transition().delay(indicatorTime + 1000 + onTime).duration(fadeTime)
-        .style("opacity", "0")
-        .transition().delay(indicatorTime + 2000).duration(onTime)
-        .style("opacity", "1")
-        .transition().delay(indicatorTime + 2000 + onTime).duration(fadeTime)
-        .style("opacity", "0");
+        indicatorTime = cardDuration - 3000; // start blinking 3 seconds before next card
+
+    VS.score.schedule(indicatorTime, cueIndicator.blink);
 }
 
 // function updateCardTimer(pointer) {
