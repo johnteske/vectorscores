@@ -3,7 +3,7 @@ title: vectorscores
 email: john@johnteskemusic.com
 description: >
     A series of new compositions built on the web.
-baseurl: "/vectorscores" # the subpath of your site, e.g. /blog
+baseurl: "/vectorscores"
 url: "http://vectorscores.org"
 twitter_username: johnteske
 github_username:  johnteske/vectorscores
