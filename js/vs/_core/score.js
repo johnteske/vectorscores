@@ -17,6 +17,7 @@ VS.score = (function () {
             var timeToNext = VS.score.timeAt(index + 1) - VS.score.timeAt(index);
             schedule(timeToNext, playEvent, index + 1);
         } else {
+            // TODO should the score automatically stop? or should the composer call this when ready?
             VS.score.stop();
         }
     }

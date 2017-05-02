@@ -9,6 +9,7 @@
  * allow option to show note names? or pitch classes?
  * double bar
  * error-check if score height exceeds view and/or auto-scale to fit
+ * have scores use parts as data, not simple bar index, then fetching parts
  */
  var unit = 10,
      // calculated in resize()
@@ -308,6 +309,7 @@ for (p = 0; p < numParts; p++) {
 }
 
 function scrollScore(index, dur, goToNextBar) {
+    var playLastBar = goToNextBar && (index === score.bars.length - 2);
     var targetIndex = goToNextBar ? index + 1 : index, // true = proceed to next bar, false = go to this bar
         targetBar = score.bars[targetIndex];
 
@@ -324,7 +326,9 @@ function scrollScore(index, dur, goToNextBar) {
         .ease("linear")
         .attr("transform",
              "translate(" + (view.center - getBarlineX(targetBar)) + "," + view.scoreY + ")"
-        );
+        )
+        // fade if playing last bar
+        .style("opacity", playLastBar ? 0 : 1);
 }
 
 /**
@@ -332,16 +336,29 @@ function scrollScore(index, dur, goToNextBar) {
  * Use a preroll so the score doesn't start scrolling immediately // TODO allow user to define this value? min 3 seconds
  */
 
-for(i = 0; i < score.bars.length; i++) {
-    var duration = getBarDuration(i);
-    VS.score.add(score.bars[i] * 1000, scrollScore, [i, duration * 1000, true]);
+// add final event 30 seconds after last bar, for playback
+score.bars.push(score.bars[score.bars.length - 1] + 30);
+
+for(var i = 0, len = score.bars.length; i < len; i++) {
+    VS.score.add(
+        score.bars[i] * 1000,
+        (i < len - 1) ? scrollScore : VS.noop,
+        [i, getBarDuration(i) * 1000, true]);
 }
 
 VS.score.preroll = 3000;
 VS.score.playCallback = cueBlink;
-VS.score.pauseCallback = function(){ scrollScore(VS.score.pointer, 300, false); };
-VS.score.stopCallback = function(){ scrollScore(0, 300, false); };
-VS.score.stepCallback = function(){ scrollScore(VS.score.pointer, 300, false); };
+
+function scrollCallback() {
+    var pointer = VS.score.pointer;
+    if (pointer < score.bars.length - 1) {
+        scrollScore(VS.score.pointer, 300, false);
+    }
+    // TODO else: set pointer back a step
+}
+VS.score.pauseCallback = scrollCallback;
+VS.score.stopCallback = scrollCallback;
+VS.score.stepCallback = scrollCallback;
 
 {% include_relative _debug.js %}
 {% include_relative _settings.js %}
