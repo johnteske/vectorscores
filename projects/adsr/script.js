@@ -9,8 +9,6 @@
  * allow option to show note names? or pitch classes?
  * double bar
  * error-check if score height exceeds view and/or auto-scale to fit
- * current bar indicator (not debug line)--similar to storyboard indicator?
- * also use flashing indicator when the piece is starting, to time the snap pizz
  */
  var unit = 10,
      // calculated in resize()
@@ -221,12 +219,15 @@ for (p = 0; p < numParts; p++) {
                 return i === 0 || getNestedProp(prop, thisPhrase) !== getNestedProp(prop, prevPhrase);
             }
 
+            var hasNewPitch = hasNewValues("pitch.low") || hasNewValues("pitch.high");
+
             if (thisPhrase.timbre !== "bartok" && thisPhrase.timbre !== "ghost") {
                 if(hasNewValues("timbre")) {
                     d3.select(this).append("text")
                         .text(thisPhrase.timbre)
                         .attr("class", "timbre")
-                        .attr("y", layersY.timbre);
+                        // stack if both pitch and timbre, otherwise save vertical space
+                        .attr("y", hasNewPitch ? layersY.timbre : layersY.pitch + 3);
                 }
             } else if (thisPhrase.timbre === "bartok") {
                 d3.select(this).append("text")
@@ -235,7 +236,7 @@ for (p = 0; p < numParts; p++) {
                     .attr("y", layersY.timbre);
             }
 
-            if(hasNewValues("pitch.low") || hasNewValues("pitch.high")) {
+            if(hasNewPitch) {
                 d3.select(this).append("text")
                     .text(function() {
                         var lo = thisPhrase.pitch.low,
