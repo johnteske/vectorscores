@@ -177,6 +177,19 @@ function makeGhost(firstDur) {
             .attr("y2", unit);
 }
 
+function xByDuration(selection, durations, spacingUnit, padding) {
+    var unit = spacingUnit || 10,
+        pad = padding || 1;
+
+    selection.attr("x", function (d, i) {
+        var upToI = durations.slice(0, i),
+            sum = upToI.reduce(function(a, b) {
+                return a + b + pad;
+            }, 0);
+        return sum * unit;
+    });
+}
+
 /**
  * Draw parts
  */
@@ -205,12 +218,9 @@ for (p = 0; p < numParts; p++) {
             var articulations = thisPhrase.articulations;
             var layersY = score.partLayersY;
 
-            function phraseSpacing(d, i) {
-                var upToI = durations.slice(0, i),
-                    sum = upToI.reduce(function(a, b) {
-                        return a + b + 1; // add padding between here
-                    }, 0);
-                return sum * unit;
+            // wrapper to pass phrase durations and use consistent units
+            function phraseSpacing(selection) {
+                return xByDuration(selection, durations, unit, 1);
             }
 
             function getNestedProp(prop, obj) {
@@ -258,7 +268,7 @@ for (p = 0; p < numParts; p++) {
                     // if flag without notehead, offset y position
                     // TODO do not offset dot?
                     .attr("y", layersY.durations)
-                    .attr("x", phraseSpacing);
+                    .call(phraseSpacing);
             // // save this, could be an interesting setting to toggle
             // // also, modify box height by pitch range
             // d3.select(this).selectAll(".durations")
@@ -266,7 +276,7 @@ for (p = 0; p < numParts; p++) {
             //     .enter()
             //     .append("rect")
             //         .attr("rx", 1)
-            //         .attr("x", phraseSpacing)
+            //         .call(phraseSpacing)
             //         .attr("y", function(d, i) { return 0; })
             //         .attr("width", function(d) { return d * unit; })
             //         .attr("height", unit);
@@ -283,7 +293,7 @@ for (p = 0; p < numParts; p++) {
                     .text(function(d) { return artDict[d]; })
                     .classed("durations", true)
                     .attr("y", layersY.articulations)
-                    .attr("x", phraseSpacing)
+                    .call(phraseSpacing)
                     .attr("dx", function(d) {
                         return d === "l.v." ? unit : 0;
                     })
@@ -302,7 +312,7 @@ for (p = 0; p < numParts; p++) {
                             return d === "dim." ? "timbre" : "dynamics";
                         })
                         .attr("y", layersY.dynamics)
-                        .attr("x", phraseSpacing);
+                        .call(phraseSpacing);
             }
         }); // .each()
 }
