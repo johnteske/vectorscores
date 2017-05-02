@@ -34,7 +34,9 @@ var score = (function() {
     _score.partLayersY = {
         timbre: -4.5 * unit,
         pitch: -2.5 * unit,
-        durations: function(d) { return (d > 0 && d < 1) ? -0.5 * unit : 0; },
+        // if flag without notehead, offset y position
+        // TODO do not offset dot?
+        durations: function(d) { return (0 < d && d < 1) ? -0.5 * unit : 0; },
         articulations: 1.25 * unit,
         dynamics: 3.5 * unit
     };
@@ -57,8 +59,15 @@ var score = (function() {
 })();
 
 // symbol dictionary
-{% include_relative _symbols.js %}
-var dynamicsDict = VS.dictionary.Bravura.dynamics;
+var dict = (function() {
+    var db = VS.dictionary.Bravura;
+    return {
+        acc: db.accidentals,
+        art: db.articulations,
+        dur: db.durations.stemless,
+        dyn: db.dynamics
+    };
+})();
 
 // generate score
 {% include_relative _score.js %}
@@ -155,7 +164,7 @@ function makeGhost(firstDur) {
 
     ghostGroup
         .append("text")
-            .text(artDict["tie"])
+            .text(dict.art["tie"])
             .classed("durations", true)
             .attr("y", score.partLayersY.articulations);
     ghostGroup
@@ -232,7 +241,7 @@ for (p = 0; p < numParts; p++) {
                 }
             } else if (thisPhrase.timbre === "bartok") {
                 d3.select(this).append("text")
-                    .text(artDict["bartok"])
+                    .text(dict.art["bartok"])
                     .attr("class", "bartok")
                     .attr("y", layersY.timbre);
             }
@@ -242,7 +251,7 @@ for (p = 0; p < numParts; p++) {
                     .text(function() {
                         var lo = thisPhrase.pitch.low,
                             hi = thisPhrase.pitch.high;
-                        return "\uec82 " + pitchDict[lo] + ( (lo !== hi) ? (" \uf479 " + pitchDict[hi]) : "" ) + " \uec83"; // tenuto as endash
+                        return "\uec82 " + dict.acc[lo] + ( (lo !== hi) ? (" \uf479 " + dict.acc[hi]) : "" ) + " \uec83"; // tenuto as endash
                     })
                     .classed("pitch-range", true)
                     .attr("y", layersY.pitch);
@@ -252,10 +261,11 @@ for (p = 0; p < numParts; p++) {
                 .data(durations)
                 .enter()
                 .append("text")
-                    .text(function(d) { return durDict[d]; })
+                    .text(function(d) {
+                        // x notehead is an articulation, not a duration
+                        return d ? dict.dur[d] : dict.art["x"];
+                    })
                     .classed("durations", true)
-                    // if flag without notehead, offset y position
-                    // TODO do not offset dot?
                     .attr("y", layersY.durations)
                     .call(phraseSpacing);
             // // save this, could be an interesting setting to toggle
@@ -279,7 +289,7 @@ for (p = 0; p < numParts; p++) {
                 .data(articulations)
                 .enter()
                 .append("text")
-                    .text(function(d) { return artDict[d]; })
+                    .text(function(d) { return dict.art[d]; })
                     .classed("durations", true)
                     .attr("y", layersY.articulations)
                     .call(phraseSpacing)
@@ -297,7 +307,7 @@ for (p = 0; p < numParts; p++) {
                     .enter()
                     .append("text")
                         .text(function(d) {
-                            return d === "dim." ? "dim." : dynamicsDict[d];
+                            return d === "dim." ? "dim." : dict.dyn[d];
                         })
                         .attr("class", function(d) {
                             return d === "dim." ? "timbre" : "dynamics";
@@ -396,5 +406,5 @@ var infoGhost = d3.select(".info-ghost")
     .append("g");
 // infoGhost.append("text")
 //     .attr("class", "durations")
-//     .text(artDict["tie"]);
+//     .text(dict.art["tie"]);
 makeGhost.call(infoGhost.node(), 0);
