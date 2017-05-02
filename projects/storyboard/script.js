@@ -3,7 +3,8 @@
 var cardTypes, cardList;
 
 {% include_relative _score.js %}
-{% include_relative _symbols.js %}
+
+var dynamicsDict = VS.dictionary.Bravura.dynamics;
 
 // display
 var cardWidth = 120,

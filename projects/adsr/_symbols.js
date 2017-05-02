@@ -29,20 +29,6 @@ var durDict = {
     "8":    "\uf467"         // double whole note
 };
 
-var dynamicsDict = {
-    "n":    "\ue526",
-    "ppp":  "\ue52a",
-    "pp":   "\ue52b",
-    "p":    "\ue520",
-    "mp":   "\ue52c",
-    "mf":   "\ue52d",
-    "f":    "\ue522",
-    "ff":   "\ue52f",
-    "fff":  "\ue530",
-    "dim.": "dim.",
-    ">":    "\ue53f" // hairpin
-};
-
 var artDict = {
     ">":    "\uf475",
     // ">":    "\uf476",

@@ -59,6 +59,7 @@ var score = (function() {
 
 // symbol dictionary
 {% include_relative _symbols.js %}
+var dynamicsDict = VS.dictionary.Bravura.dynamics;
 
 // generate score
 {% include_relative _score.js %}
@@ -293,7 +294,9 @@ for (p = 0; p < numParts; p++) {
                     .data(dynamics)
                     .enter()
                     .append("text")
-                        .text(function(d) { return dynamicsDict[d]; })
+                        .text(function(d) {
+                            return d === "dim." ? "dim." : dynamicsDict[d];
+                        })
                         .attr("class", function(d) {
                             return d === "dim." ? "timbre" : "dynamics";
                         })
