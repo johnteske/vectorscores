@@ -140,6 +140,11 @@ function cueBlink() {
 }
 
 /**
+ * xByDuration
+ */
+{% include components/xByDuration.js %}
+
+/**
  * Ghost beams, for use in score and in performance notes
  */
 function makeGhost(firstDur) {
@@ -175,19 +180,6 @@ function makeGhost(firstDur) {
             .attr("y1", 0)
             .attr("x2", ghostAttackSpacing)
             .attr("y2", unit);
-}
-
-function xByDuration(selection, durations, spacingUnit, padding) {
-    var unit = spacingUnit || 10,
-        pad = padding || 1;
-
-    selection.attr("x", function (d, i) {
-        var upToI = durations.slice(0, i),
-            sum = upToI.reduce(function(a, b) {
-                return a + b + pad;
-            }, 0);
-        return sum * unit;
-    });
 }
 
 /**
