@@ -133,16 +133,10 @@ score.layout.letters.each(function() {
 /**
  * Score pointer/cue aid
  */
-{% include components/cue.js %}
-var cueIndicator = cueTriangle(score.svg);
+var cueIndicator = VS.cueTriangle(score.svg);
 function cueBlink() {
     cueIndicator.blink(1, 0.25, 0.5);
 }
-
-/**
- * xByDuration
- */
-{% include components/xByDuration.js %}
 
 /**
  * Ghost beams, for use in score and in performance notes
@@ -212,7 +206,7 @@ for (p = 0; p < numParts; p++) {
 
             // wrapper to pass phrase durations and use consistent units
             function phraseSpacing(selection) {
-                return xByDuration(selection, durations, unit, 1);
+                return VS.xByDuration(selection, durations, unit, 1);
             }
 
             function getNestedProp(prop, obj) {

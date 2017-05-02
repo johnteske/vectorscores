@@ -6,7 +6,7 @@
  * @param {Float} padding - space between items, in px
  * @returns {D3Selection}
  */
-function xByDuration(selection, durations, spacingUnit, padding) {
+VS.xByDuration = function(selection, durations, spacingUnit, padding) {
     var unit = spacingUnit || 10,
         pad = padding || 1;
 
@@ -17,4 +17,4 @@ function xByDuration(selection, durations, spacingUnit, padding) {
             }, 0);
         return sum * unit;
     });
-}
+};

@@ -5,3 +5,6 @@
 {% endif %}
 
 <script src="{{ site.baseurl }}/js/vectorscores.js" charset="utf-8"></script>
+{% for module in page.vs_modules %}
+<script src="{{ site.baseurl }}/js/vs/modules/{{ module }}.js" charset="utf-8"></script>
+{% endfor %}

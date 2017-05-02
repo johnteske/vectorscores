@@ -1,4 +1,4 @@
-function cueTriangle(parent) {
+VS.cueTriangle = function(parent) {
     var cue = {};
     var onTime = 50,
         fadeTime = 700;
@@ -40,4 +40,4 @@ function cueTriangle(parent) {
     };
 
     return cue;
-}
+};

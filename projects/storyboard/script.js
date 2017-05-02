@@ -72,8 +72,7 @@ cards.each(function(d) {
 
 });
 
-{% include components/cue.js %}
-var cueIndicator = cueTriangle(main);
+var cueIndicator = VS.cueTriangle(main);
 cueIndicator.selection
     .attr("transform", "translate(" + cardX(1) + ", 50)") // put at right card position
     .style("opacity", "0");
