@@ -53,7 +53,7 @@ var score = (function() {
     };
     _score.height = _score.layoutLayersY.rehearsalLetters + _score.layoutLayersY.barlines.y2;
     // offset to start first part
-    _score.layoutHeight = 12 * unit;
+    _score.layoutHeight = 11 * unit;
 
     return _score;
 })();
@@ -378,7 +378,7 @@ function resize() {
     view.width = parseInt(d3.select("main").style("width"), 10);
     view.center = view.width * 0.5;
     view.height = parseInt(d3.select("main").style("height"), 10);
-    view.scoreY = (view.height * 0.5) - (score.height * 0.5);
+    view.scoreY = (view.height * 0.5) - ((score.height - (4 * unit)) * 0.5);
 
     score.svg.attr("height", view.height);
 
@@ -387,7 +387,7 @@ function resize() {
     cueIndicator.selection
         .attr("transform", "translate(" +
            (view.center - 6) + "," +
-           (view.scoreY - (unit * 6)) + ")")
+           (view.scoreY - (6 * unit)) + ")")
         .style("opacity", 0.5);
 
     scrollScore(VS.score.pointer, [0]);
