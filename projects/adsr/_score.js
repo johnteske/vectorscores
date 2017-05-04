@@ -76,7 +76,11 @@ for (var p = 0; p < numParts; p++) {
             var lastIndex = i - 1,
                 lastPhraseDuration = part[lastIndex].durations.reduce(function (a, b) { return a + b; }, 0);
             // TODO last dur is not incuded in sum?
-            var lastDur = part[lastIndex].durations[part[lastIndex].durations.length - 1];
+            // var lastDur = part[lastIndex].durations[part[lastIndex].durations.length - 1];
+            var lastDur = 0;
+            if (part[lastIndex].durations.length > 1) {
+                lastDur = part[lastIndex].durations[part[lastIndex].durations.length - 1];
+            }
             endLastPhrase = part[lastIndex].startTime + lastPhraseDuration + lastDur;
         }
 
@@ -123,7 +127,7 @@ for (var p = 0; p < numParts; p++) {
             phrase.durations.push(0);
         }
         if(phrase.timbre === "ghost") {
-            phrase.durations.push(-1);
+            phrase.durations.push(1.1); // to help space startTime, avoiding overlap
         }
 
         // also mapped to envelopes.timbre

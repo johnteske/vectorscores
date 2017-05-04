@@ -11,6 +11,7 @@
  * error-check if score height exceeds view and/or auto-scale to fit
  * have scores use parts as data, not simple bar index, then fetching parts
  * disambiguate score (svg, display) vs. score (musical data)--also clean up global vars in _score.js
+ * fix phrase overlap issues (last phrase duration not being full calculated--or phrases not being rendered in correct scale)
  */
 var scaleX = 2,
     unitX = 10 * scaleX,
@@ -151,7 +152,7 @@ function cueBlink() {
 function makeGhost(firstDur) {
     firstDur = firstDur * unitX; // duration of the note the "ghost" is tied to
     var x1 = 10, // offset to tie
-        attackScale = 0.2,
+        attackScale = 0.15,
         attackNum = VS.getItem([7, 8, 9]);
     function ghostAttackSpacing(d, i) {
         return x1 + (unitX * i * attackScale);
@@ -260,8 +261,14 @@ for (p = 0; p < numParts; p++) {
                 .enter()
                 .append("text")
                     .text(function(d) {
-                        // x notehead is an articulation, not a duration
-                        return d ? dict.dur[d] : dict.art["x"];
+                        if (!d) {
+                            return dict.art["x"]; // x notehead is an articulation, not a duration
+                        } else if (d === 1.1) {
+                            return '';
+                        } else {
+                            return dict.dur[d];
+                        }
+                        // return d && d!== 1.1 ? dict.dur[d] : dict.art["x"];
                     })
                     .classed("durations", true)
                     .attr("y", layersY.durations)
