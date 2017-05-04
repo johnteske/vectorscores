@@ -10,21 +10,19 @@
  * double bar
  * error-check if score height exceeds view and/or auto-scale to fit
  * have scores use parts as data, not simple bar index, then fetching parts
+ * disambiguate score (svg, display) vs. score (musical data)--also clean up global vars in _score.js
  */
- var unit = 10,
-     // calculated in resize()
-     view = {
-         width: 0,
-         height: 0,
-         center: 0
-     },
-     numParts = +VS.getQueryString("parts") || 4,
-     debug = false;
+var scaleX = 2,
+    unitX = 10 * scaleX,
+    unitY = 10,
+    view = {},
+    numParts = +VS.getQueryString("parts") || 4,
+    debug = false;
 
 var score = (function() {
     var _score = {};
 
-    _score.width = 8000;
+    _score.width = 300 * unitX; // total score duration
     _score.svg = d3.select(".main").attr("width", _score.width);
     _score.group = _score.svg.append("g");
     _score.layout = {
@@ -32,28 +30,28 @@ var score = (function() {
     };
     // to help track overall part height
     _score.partLayersY = {
-        timbre: -4.5 * unit,
-        pitch: -2.5 * unit,
+        timbre: -4.5 * unitY,
+        pitch: -2.5 * unitY,
         // if flag without notehead, offset y position
         // TODO do not offset dot?
-        durations: function(d) { return (0 < d && d < 1) ? -0.5 * unit : 0; },
-        articulations: 1.25 * unit,
-        dynamics: 3.5 * unit
+        durations: function(d) { return (0 < d && d < 1) ? -0.5 * unitY : 0; },
+        articulations: 1.25 * unitY,
+        dynamics: 3.5 * unitY
     };
     // calculated from above/rendered
-    _score.partHeight = 12 * unit;
+    _score.partHeight = 12 * unitY;
 
     _score.layoutLayersY = {
-        rehearsalLetters: unit * -2,
+        rehearsalLetters: unitY * -2,
         barlines: {
-            y1: 3 * unit,
-            y2: (numParts * _score.partHeight) + (6 * unit)
+            y1: 3 * unitY,
+            y2: (numParts * _score.partHeight) + (6 * unitY)
         },
-        barDurations: unit
+        barDurations: unitY
     };
     _score.height = _score.layoutLayersY.rehearsalLetters + _score.layoutLayersY.barlines.y2;
     // offset to start first part
-    _score.layoutHeight = 11 * unit;
+    _score.layoutHeight = 11 * unitY;
 
     return _score;
 })();
@@ -151,12 +149,12 @@ function cueBlink() {
  * Ghost beams, for use in score and in performance notes
  */
 function makeGhost(firstDur) {
-    firstDur = firstDur * unit + 5; // duration of the note the "ghost" is tied to, with 5px offset
+    firstDur = firstDur * unitX; // duration of the note the "ghost" is tied to
     var x1 = 10, // offset to tie
-        attackScale = 0.5,
+        attackScale = 0.25,
         attackNum = VS.getItem([7, 8, 9]);
     function ghostAttackSpacing(d, i) {
-        return x1 + (unit * i * attackScale);
+        return x1 + (unitX * i * attackScale);
     }
 
     var ghostGroup = d3.select(this).append("g")
@@ -172,7 +170,7 @@ function makeGhost(firstDur) {
             .attr("class", "ghost-beam")
             .attr("x1", x1)
             .attr("y1", 0)
-            .attr("x2", x1 + (unit * attackNum * attackScale))
+            .attr("x2", x1 + (unitX * attackNum * attackScale))
             .attr("y2", 0);
     ghostGroup.selectAll(".ghost-attack")
         .data(d3.range(attackNum))
@@ -182,7 +180,7 @@ function makeGhost(firstDur) {
             .attr("x1", ghostAttackSpacing)
             .attr("y1", 0)
             .attr("x2", ghostAttackSpacing)
-            .attr("y2", unit);
+            .attr("y2", unitY);
 }
 
 /**
@@ -201,7 +199,7 @@ for (p = 0; p < numParts; p++) {
         .enter()
         .append("g")
         .attr("transform", function(d, i) {
-            var x = getBarlineX(d) + (thisPart[i].timeDispersion * unit * 2.5); // scale dispersion
+            var x = getBarlineX(d) + (thisPart[i].timeDispersion * unitX * 2.5); // scale dispersion
             return "translate(" + x + ", " + 0 + ")";
         })
         // add phrase content
@@ -215,7 +213,7 @@ for (p = 0; p < numParts; p++) {
 
             // wrapper to pass phrase durations and use consistent units
             function phraseSpacing(selection) {
-                return VS.xByDuration(selection, durations, unit, 1);
+                return VS.xByDuration(selection, durations, unitX, 0); // 1px for rect, not noteheads
             }
 
             function getNestedProp(prop, obj) {
@@ -294,10 +292,10 @@ for (p = 0; p < numParts; p++) {
                     .attr("y", layersY.articulations)
                     .call(phraseSpacing)
                     .attr("dx", function(d) {
-                        return d === "l.v." ? unit : 0;
+                        return d === "l.v." ? unitX : 0;
                     })
                     .attr("dy", function(d) {
-                        return d === "l.v." ? unit * -0.5 : 0;
+                        return d === "l.v." ? unitY * -0.5 : 0;
                     });
 
             // dynamics
@@ -378,7 +376,7 @@ function resize() {
     view.width = parseInt(d3.select("main").style("width"), 10);
     view.center = view.width * 0.5;
     view.height = parseInt(d3.select("main").style("height"), 10);
-    view.scoreY = (view.height * 0.5) - ((score.height - (4 * unit)) * 0.5);
+    view.scoreY = (view.height * 0.5) - ((score.height - (4 * unitY)) * 0.5);
 
     score.svg.attr("height", view.height);
 
@@ -387,7 +385,7 @@ function resize() {
     cueIndicator.selection
         .attr("transform", "translate(" +
            (view.center - 6) + "," +
-           (view.scoreY - (6 * unit)) + ")")
+           (view.scoreY - (6 * unitY)) + ")")
         .style("opacity", 0.5);
 
     scrollScore(VS.score.pointer, [0]);
