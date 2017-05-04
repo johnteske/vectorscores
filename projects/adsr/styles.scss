@@ -32,7 +32,7 @@ main, svg.main {
     }
     text {
         font-family: serif;
-        &.duration {
+        &.bar-duration {
             font-style: italic;
         }
     }
@@ -43,13 +43,14 @@ main, svg.main {
 }
 
 .pitch-range,
+.articulations,
 .durations,
 .dynamics,
 .bartok {
     font-family: 'Bravura';
 }
 .bartok {
-    font-size: 21px;
+    font-size: 26px;
 }
 
 .timbre,
@@ -57,6 +58,7 @@ main, svg.main {
     @include textShadowOutline();
 }
 
+.articulations,
 .durations,
 .dynamics {
     font-size: 21px;

@@ -108,7 +108,7 @@ score.layout.group
             // do not display last bar's duration
             return i < score.bars.length - 1 ? decimalRound(dur, 1) + "\u2033" : "";
         })
-        .classed("duration", 1)
+        .classed("bar-duration", 1)
         .attr("transform", function(d) {
             return "translate(" + getBarlineX(d) + ", " + score.layoutLayersY.barDurations + ")";
         });
@@ -147,9 +147,10 @@ function cueBlink() {
 
 /**
  * Ghost beams, for use in score and in performance notes
+ * Positioning of group depends on noteheads, not unitX or first note duration
  */
 function makeGhost(firstDur) {
-    firstDur = firstDur * unitX; // duration of the note the "ghost" is tied to
+
     var x1 = 10, // offset to tie
         attackScale = 0.15,
         attackNum = VS.getItem([7, 8, 9]);
@@ -158,7 +159,7 @@ function makeGhost(firstDur) {
     }
 
     var ghostGroup = d3.select(this).append("g")
-        .attr("transform", "translate(" + firstDur + ", 0)");
+        .attr("transform", "translate(" + 10 + ", 0)");
 
     ghostGroup
         .append("text")
@@ -294,7 +295,7 @@ for (p = 0; p < numParts; p++) {
                 .enter()
                 .append("text")
                     .text(function(d) { return dict.art[d]; })
-                    .classed("durations", true)
+                    .classed("articulations", true)
                     .attr("y", layersY.articulations)
                     .call(phraseSpacing)
                     .attr("dx", function(d) {
