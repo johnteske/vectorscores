@@ -151,7 +151,7 @@ function cueBlink() {
 function makeGhost(firstDur) {
     firstDur = firstDur * unitX; // duration of the note the "ghost" is tied to
     var x1 = 10, // offset to tie
-        attackScale = 0.25,
+        attackScale = 0.2,
         attackNum = VS.getItem([7, 8, 9]);
     function ghostAttackSpacing(d, i) {
         return x1 + (unitX * i * attackScale);
@@ -199,7 +199,7 @@ for (p = 0; p < numParts; p++) {
         .enter()
         .append("g")
         .attr("transform", function(d, i) {
-            var x = getBarlineX(d) + (thisPart[i].timeDispersion * unitX * 2.5); // scale dispersion
+            var x = thisPart[i].startTime * unitX;
             return "translate(" + x + ", " + 0 + ")";
         })
         // add phrase content

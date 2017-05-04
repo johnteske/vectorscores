@@ -71,8 +71,19 @@ for (var p = 0; p < numParts; p++) {
             iit = getPrevNextIndicesAndT(score.structure, now),
             phrase = {};
 
+        var endLastPhrase = 0;
+        if (i > 0) {
+            var lastIndex = i - 1,
+                lastPhraseDuration = part[lastIndex].durations.reduce(function (a, b) { return a + b; }, 0);
+            // TODO last dur is not incuded in sum?
+            var lastDur = part[lastIndex].durations[part[lastIndex].durations.length - 1];
+            endLastPhrase = part[lastIndex].startTime + lastPhraseDuration + lastDur;
+        }
+
         var dispersion = lerpEnvelope(envelopes.timeDispersion, iit);
-        phrase.timeDispersion = VS.getRandExcl(-dispersion, dispersion);
+        dispersion = VS.getRandExcl(-dispersion, dispersion);
+
+        phrase.startTime = Math.max(score.bars[i] + dispersion, endLastPhrase);
 
         // 1/3 chance to anticipate next timbre (and thus dynamic)
         var timbreIndex = Math.round(lerpEnvelope(envelopes.timbre, iit));
