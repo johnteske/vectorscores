@@ -11,9 +11,8 @@
  * error-check if score height exceeds view and/or auto-scale to fit
  * have scores use parts as data, not simple bar index, then fetching parts
  * disambiguate score (svg, display) vs. score (musical data)--also clean up global vars in _score.js
- * fix phrase overlap issues (last phrase duration not being full calculated--or phrases not being rendered in correct scale)
  */
-var scaleX = 2,
+var scaleX = 3,
     unitX = 10 * scaleX,
     unitY = 10,
     view = {},

@@ -7,14 +7,13 @@
  * @returns {D3Selection}
  */
 VS.xByDuration = function(selection, durations, spacingUnit, padding) {
-    var unit = spacingUnit || 10,
-        pad = padding || 1;
-
+    var unit = spacingUnit || 10;
+    // var pad = padding || 0;
     selection.attr("x", function (d, i) {
         var upToI = durations.slice(0, i),
             sum = upToI.reduce(function(a, b) {
-                return a + b + pad;
+                return a + b;
             }, 0);
-        return sum * unit;
+        return sum * unit; // + upToI.length * unit * pad
     });
 };
