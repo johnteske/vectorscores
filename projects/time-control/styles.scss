@@ -27,8 +27,6 @@ main {
 	transition: border-color $t-time;
 }
 
-.ws {
-	h3, div {
-		font-family: Courier;
-	}
+.ws, .ws h3 {
+	font-family: Courier;
 }
