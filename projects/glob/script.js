@@ -77,7 +77,7 @@ VS.score.add(scoreLength * transitionTime.long, function() {
         .style("opacity", "0");
 });
 
-VS.score.stepCallback = function() {
+VS.control.stepCallback = function() {
     glob.move(null, transitionTime.short);
 };
 

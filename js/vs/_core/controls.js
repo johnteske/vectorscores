@@ -33,7 +33,6 @@ if (VS.page.footer) {
                 updatePointer(Math.min(Math.max(VS.score.pointer + num, 0), VS.score.getLength() - 1)); // TODO VS clamp helper
                 VS.control.updateStepButtons();
                 VS.control.stepCallback();
-                VS.score.stepCallback(); // TODO remove
             }
         }
 

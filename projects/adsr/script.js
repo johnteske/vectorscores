@@ -373,7 +373,7 @@ function scrollCallback() {
 }
 VS.score.pauseCallback = scrollCallback;
 VS.score.stopCallback = scrollCallback;
-VS.score.stepCallback = scrollCallback;
+VS.control.stepCallback = scrollCallback;
 
 {% include_relative _debug.js %}
 {% include_relative _settings.js %}
