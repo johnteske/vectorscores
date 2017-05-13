@@ -26,3 +26,9 @@ main {
 	border-color: rgba(0, 0, 255, 0.75);
 	transition: border-color $t-time;
 }
+
+.ws {
+	h3, div {
+		font-family: Courier;
+	}
+}

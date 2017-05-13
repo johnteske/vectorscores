@@ -13,7 +13,32 @@ if (VS.page.footer) {
             this.element.disabled = true;
         };
 
-        var play = new ScoreControl("score-play", VS.score.playPause);
+        function playPause() {
+            if(!VS.score.playing){
+                VS.score.play();
+                VS.control.playCallback();
+            } else {
+                VS.score.pause();
+                VS.control.pauseCallback();
+            }
+        }
+
+        function stop () {
+            VS.score.stop();
+            VS.control.stopCallback();
+        }
+
+        function stepPointer(num){
+            if(!VS.score.playing) { // don't allow skip while playing, for now
+                updatePointer(Math.min(Math.max(VS.score.pointer + num, 0), VS.score.getLength() - 1)); // TODO VS clamp helper
+                VS.control.updateStepButtons();
+                VS.control.stepCallback();
+                VS.score.stepCallback(); // TODO remove
+            }
+        }
+
+        var play = new ScoreControl("score-play", playPause);
+
         play.setPlay = function() {
             d3.select("g#play").classed("hide", 0);
             d3.select("g#pause").classed("hide", 1);
@@ -35,7 +60,7 @@ if (VS.page.footer) {
             switch (keyPressed) {
             case " ":
             case 32:
-                VS.score.playPause();
+                playPause();
                 break;
             case "ArrowLeft":
             case 37:
@@ -47,7 +72,7 @@ if (VS.page.footer) {
                 break;
             case "Escape":
             case 27:
-                VS.score.stop();
+                stop();
                 break;
             // case "/":
             // case 191:
@@ -60,8 +85,12 @@ if (VS.page.footer) {
         };
 
         return {
+            playCallback: VS.noop,
+            pauseCallback: VS.noop,
+            stopCallback: VS.noop,
+            stepCallback: VS.noop,
             play: play,
-            stop: new ScoreControl("score-stop", VS.score.stop),
+            stop: new ScoreControl("score-stop", stop),
             fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
             back: new ScoreControl("score-back", function(){ stepPointer(-1); }),
             pointer: new ScoreControl("score-pointer", VS.score.pause),
@@ -87,15 +116,7 @@ if (VS.page.footer) {
     window.addEventListener("keydown", VS.control.keydownListener, true);
 }
 
-function updatePointer(ndex){ // score, control // should be part of VS, not global
+function updatePointer(ndex){ // score, control // TODO should be part of VS, not global
     VS.score.pointer = ndex;
     VS.control.pointer.element.value = ndex;
-}
-
-function stepPointer(num){ // score, control // should be part of VS, not global
-    if(!VS.score.playing) { // don't allow skip while playing, for now
-        updatePointer(Math.min(Math.max(VS.score.pointer + num, 0), VS.score.getLength() - 1));
-        VS.control.updateStepButtons();
-        VS.score.stepCallback();
-    }
 }

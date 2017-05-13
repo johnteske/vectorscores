@@ -44,7 +44,7 @@ VS.score = (function () {
         playCallback: VS.noop,
         pauseCallback: VS.noop,
         stopCallback: VS.noop,
-        stepCallback: VS.noop,
+        stepCallback: VS.noop, // TODO remove here and in other projects, in favor of VS.control.stepCallback
         play: function() {
             VS.score.playing = true;
             VS.control.play.setPause();
@@ -63,13 +63,13 @@ VS.score = (function () {
             VS.page.showLayout();
             VS.score.pauseCallback();
         },
-        playPause: function() {
-            if(!VS.score.playing){
-                VS.score.play();
-            } else {
-                VS.score.pause();
-            }
-        },
+        // playPause: function() {
+        //     if(!VS.score.playing){
+        //         VS.score.play();
+        //     } else {
+        //         VS.score.pause();
+        //     }
+        // },
         stop: function() {
             VS.score.playing = false;
             updatePointer(0);

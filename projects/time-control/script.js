@@ -1,3 +1,5 @@
+---
+---
 d3.select("svg").remove(); // svg not used in test
 
 function userEvent(ndex, id, box) {
@@ -35,8 +37,4 @@ for (var i = 0; i < numvents; i++) { // create remaining events
     createEvent(eventTime);
 }
 
-// VS.score.stepCallback = function() {};
-
-VS.score.stopCallback = function() {
-    d3.selectAll(".event-span").attr("class", "event-span"); // force this class only
-};
+{% include_relative _websockets.js %}
