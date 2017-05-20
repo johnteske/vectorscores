@@ -3,9 +3,13 @@ Time is written proportionally.
 Durations are indicated by standard flags and stemless noteheads, including dotted values, at 60 beats per minute.
 Above each bar is its duration in seconds. <!--smaller ticks indicated seconds.-->
 <!--<p>
-    Boxes indciate groups of notes for phrasing and to help visualize durations.
+    Boxes indicate groups of notes for phrasing and to help visualize durations.
 </p>-->
 <ul>
+    <li>
+        <svg class="info-cue"></svg>
+        Ensemble leader should cue bars marked with this symbol. On these bars, musicians should play off the leader's cue—not the score pointer.
+    </li>
     <li>
         <span class="symbol">&#xe630;</span> {% include glossary/term_link.html name="snap" %} : {{ glossary_term.description }}
     </li>

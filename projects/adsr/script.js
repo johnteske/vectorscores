@@ -413,11 +413,10 @@ d3.select(window).on("resize", resize);
 /**
  * Performance notes
  */
+VS.cueTriangle(d3.select(".info-cue").attr("width", 12).attr("height", 12));
+
 var infoGhost = d3.select(".info-ghost")
     .attr("width", 60)
     .attr("height", 20)
     .append("g");
-// infoGhost.append("text")
-//     .attr("class", "durations")
-//     .text(dict.art["tie"]);
 makeGhost.call(infoGhost.node(), 0);
