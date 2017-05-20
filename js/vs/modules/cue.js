@@ -8,35 +8,31 @@ VS.cueTriangle = function(parent) {
         .attr("d", "M0,0 L6,2 12,0 6,12 0,0")
         .style("stroke", "black")
         .style("stroke-width", "1")
-        .style("fill", "none");
+        .style("fill", "black")
+        .style("fill-opacity", "0");
 
-    // TODO allow custom opacities AND timing
-    // opacities: { on:, off:, end: }
-    // times: { on:, off: }
+    function blinkFn(opacity) {
+        return function(selection) { selection.style("fill-opacity", opacity); };
+    }
+
+    // TODO allow custom options: opacities, timing, blink fn (other than fill-opacity?), etc.
     cue.blink = function(onOpacity, offOpacity, endOpacity) {
-        onOpacity = onOpacity || 1;
-        offOpacity = offOpacity || 0.25;
-        endOpacity = endOpacity || 0;
+        var blinkOn = blinkFn(onOpacity || 1),
+            blinkOff = blinkFn(offOpacity || 0),
+            blinkEnd = blinkFn(endOpacity || 0);
+
+        function blinkCycle(selection, delay, end) {
+            selection.transition().delay(delay).duration(onTime)
+                .call(blinkOn)
+                .transition().delay(delay + onTime).duration(fadeTime)
+                .call(end ? blinkEnd : blinkOff);
+        }
+
         cue.selection
-            .transition().duration(onTime)
-            .style("opacity", onOpacity)
-            .transition().delay(onTime).duration(fadeTime)
-            .style("opacity", offOpacity)
-
-            .transition().delay(1000).duration(onTime)
-            .style("opacity", onOpacity)
-            .transition().delay(1000 + onTime).duration(fadeTime)
-            .style("opacity", offOpacity)
-
-            .transition().delay(2000).duration(onTime)
-            .style("opacity", onOpacity)
-            .transition().delay(2000 + onTime).duration(fadeTime)
-            .style("opacity", offOpacity)
-
-            .transition().delay(3000).duration(onTime)
-            .style("opacity", onOpacity)
-            .transition().delay(3000 + onTime).duration(fadeTime)
-            .style("opacity", endOpacity);
+            .call(blinkCycle, 0)
+            .call(blinkCycle, 1000)
+            .call(blinkCycle, 2000)
+            .call(blinkCycle, 3000, true);
     };
 
     return cue;

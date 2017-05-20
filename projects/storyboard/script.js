@@ -76,7 +76,8 @@ cards.each(function(d) {
 var cueIndicator = VS.cueTriangle(main);
 cueIndicator.selection
     .attr("transform", "translate(" + cardX(1) + ", 50)") // put at right card position
-    .style("opacity", "0");
+    // .style("opacity", "0");
+    ;
 
 // cards.append("rect")
 //     .classed("timer", 1)

@@ -142,7 +142,16 @@ score.layout.letters.each(function() {
  */
 var cueIndicator = VS.cueTriangle(score.svg);
 function cueBlink() {
-    cueIndicator.blink(1, 0.25, 0.5);
+    cueIndicator.blink(1, 0, 0);
+}
+for (var i = 0; i < 7; i++) {
+    VS.cueTriangle(score.layout.group).selection
+        .attr("transform", "translate(" +
+            (getBarlineX(score.bars[i]) - 6) + ", " +
+            -6 * unitY +
+            // (view.scoreY - (6 * unitY)) +
+            ")")
+        .style("opacity", 0.5);
 }
 
 /**
@@ -328,12 +337,11 @@ function scrollScore(index, dur, goToNextBar) {
     var targetIndex = goToNextBar ? index + 1 : index, // true = proceed to next bar, false = go to this bar
         targetBar = score.bars[targetIndex];
 
-    if(goToNextBar && index < 6) { // opening section, up to and including arrival at A
-        var cardDuration = VS.score.timeAt(index + 1) - VS.score.timeAt(index),
-            indicatorTime = cardDuration - 3000;
-
-        VS.score.schedule(indicatorTime, cueBlink);
-    }
+    // if(goToNextBar && index < 6) { // opening section, up to and including arrival at A
+    //     var cardDuration = VS.score.timeAt(index + 1) - VS.score.timeAt(index),
+    //         indicatorTime = cardDuration - 3000;
+    //     VS.score.schedule(indicatorTime, cueBlink);
+    // }
 
     score.group
         .transition()
@@ -392,8 +400,8 @@ function resize() {
     cueIndicator.selection
         .attr("transform", "translate(" +
            (view.center - 6) + "," +
-           (view.scoreY - (6 * unitY)) + ")")
-        .style("opacity", 0.5);
+           (view.scoreY - (6 * unitY)) + ")");
+        // .style("opacity", 0.5);
 
     scrollScore(VS.score.pointer, [0]);
 }
