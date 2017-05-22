@@ -37,4 +37,6 @@ for (var i = 0; i < numvents; i++) { // create remaining events
     createEvent(eventTime);
 }
 
-{% include_relative _websockets.js %}
+VS.score.stopCallback = function() {
+    d3.selectAll(".event-span").attr("class", "event-span"); // force this class only
+}
