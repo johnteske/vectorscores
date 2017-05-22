@@ -8,7 +8,11 @@ Above each bar is its duration in seconds. <!--smaller ticks indicated seconds.-
 <ul>
     <li>
         <svg class="info-cue"></svg>
-        Ensemble leader should cue bars marked with this symbol. On these bars, musicians should play off the leader's cue—not the score pointer.
+        Playing the score from any bar starts with a pre-roll of 3 seconds.
+        For ensemble accuracy, a leader should cue the start of the work.
+        The leader should also cue bars marked with the arrow symbol.
+        When starting the work or when cueing bars, musicians should play off the leader's cue and not the score pointer.
+        After section A, the timing is left to each performer.
     </li>
     <li>
         <span class="symbol">&#xe630;</span> {% include glossary/term_link.html name="snap" %} : {{ glossary_term.description }}
