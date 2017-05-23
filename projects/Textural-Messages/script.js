@@ -45,7 +45,7 @@ function texturalMsg() {
         .append("g")
         .attr("transform", function() {
             // calc on maxwidth, is scaled later
-            var x = ( relPos == 0 ? margin : (maxwidth - txtWidth - margin) ),
+            var x = ( relPos === 0 ? margin : (maxwidth - txtWidth - margin) ),
                 y = (ypointer * txtHeight) + margin;
             return "translate(" + x + ", " + y + ")";
         });

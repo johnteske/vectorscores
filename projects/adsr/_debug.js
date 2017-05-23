@@ -1,4 +1,4 @@
-debug = VS.getQueryString("debug") == 1 ||  false;
+debug = +VS.getQueryString("debug") === 1 ||  false;
 
 if(debug) {
     score.svg.append("line")

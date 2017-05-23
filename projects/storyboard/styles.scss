@@ -1,9 +1,8 @@
 ---
 ---
-@font-face {
-    font-family: Bravura;
-    src: url(../../fonts/Bravura.woff);
-}
+
+@import "mixins";
+@include BravuraFont();
 
 .card rect {
   fill: none;

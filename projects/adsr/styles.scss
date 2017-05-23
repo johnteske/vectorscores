@@ -1,11 +1,8 @@
 ---
 ---
-@import "mixins";
 
-@font-face {
-    font-family: Bravura;
-    src: url(../../fonts/Bravura.woff);
-}
+@import "mixins";
+@include BravuraFont();
 
 html {
     height: 100%;

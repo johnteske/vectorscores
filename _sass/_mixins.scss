@@ -16,3 +16,10 @@
         0 1px 1px white,
         -1px 0 1px white;
 }
+
+@mixin BravuraFont() {
+    @font-face {
+        font-family: Bravura;
+        src: url(../../fonts/Bravura.woff) format('woff');
+    }
+}

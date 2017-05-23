@@ -1,7 +1,8 @@
-@font-face {
-    font-family: Bravura;
-    src: url(../../fonts/Bravura.woff);
-}
+---
+---
+
+@import "mixins";
+@include BravuraFont();
 
 main {
     -webkit-user-select: inherit; // Chrome, Safari
@@ -9,7 +10,8 @@ main {
     -ms-user-select: inherit; // IE 10+
     user-select: inherit;
 }
-div.codepoint {
+
+.codepoint {
     display: inline-block;
     padding: 12px;
     width: 120px;

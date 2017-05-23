@@ -41,7 +41,7 @@ function makeCards(nCards) {
         // set unique type
         do {
             thisCard.type = VS.getItem(Object.keys(cardTypes)); // TODO what is the support of Object.keys?
-        } while (thisCard.type == prevCard.type);
+        } while (thisCard.type === prevCard.type);
 
         thisCardType = cardTypes[thisCard.type];
 

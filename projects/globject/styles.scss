@@ -1,9 +1,8 @@
 ---
 ---
-@font-face {
-    font-family: Bravura;
-    src: url(../../fonts/Bravura.woff);
-}
+
+@import "mixins";
+@include BravuraFont();
 
 text {
     font-family: 'Monaco', Courier, sans-serif;
