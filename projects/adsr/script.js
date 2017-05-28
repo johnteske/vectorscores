@@ -198,10 +198,10 @@ function makeGhost(firstDur) {
  */
 for (p = 0; p < numParts; p++) {
     var thisPart = parts[p],
-        partYPos = score.layoutHeight + (p * score.partHeight),
-        partGroup = score.group.append("g");
+        partYPos = score.layoutHeight + (p * score.partHeight);
 
-    partGroup.attr("transform", "translate(0, " + partYPos + ")");
+    var partGroup = score.group.append("g")
+        .attr("transform", "translate(0, " + partYPos + ")")
 
     // for each phrase, create a group around a barline
     partGroup.selectAll("g")
@@ -214,6 +214,7 @@ for (p = 0; p < numParts; p++) {
         })
         // add phrase content
         .each(function(d, i) {
+            var thisPartGroup = d3.select(this);
             var thisPhrase = thisPart[i];
             var prevPhrase = thisPart[i - 1];
             var durations = thisPhrase.durations;
@@ -241,21 +242,21 @@ for (p = 0; p < numParts; p++) {
 
             if (thisPhrase.timbre !== "bartok" && thisPhrase.timbre !== "ghost") {
                 if(hasNewValues("timbre")) {
-                    d3.select(this).append("text")
+                    thisPartGroup.append("text")
                         .text(thisPhrase.timbre)
                         .attr("class", "timbre")
                         // stack if both pitch and timbre, otherwise save vertical space
                         .attr("y", hasNewPitch ? layersY.timbre : layersY.pitch + 3);
                 }
             } else if (thisPhrase.timbre === "bartok") {
-                d3.select(this).append("text")
+                thisPartGroup.append("text")
                     .text(dict.art["bartok"])
                     .attr("class", "bartok")
                     .attr("y", layersY.timbre);
             }
 
             if(hasNewPitch) {
-                d3.select(this).append("text")
+                thisPartGroup.append("text")
                     .text(function() {
                         var lo = thisPhrase.pitch.low,
                             hi = thisPhrase.pitch.high;
@@ -265,7 +266,7 @@ for (p = 0; p < numParts; p++) {
                     .attr("y", layersY.pitch);
             }
 
-            d3.select(this).selectAll(".durations")
+            thisPartGroup.selectAll(".durations")
                 .data(durations)
                 .enter()
                 .append("text")
@@ -277,29 +278,31 @@ for (p = 0; p < numParts; p++) {
                         } else {
                             return dict.dur[d];
                         }
-                        // return d && d!== 1.1 ? dict.dur[d] : dict.art["x"];
                     })
-                    .classed("durations", true)
+                    .attr("class", "durations")
                     .attr("y", layersY.durations)
                     .call(phraseSpacing);
-            // // save this, could be an interesting setting to toggle
-            // // also, modify box height by pitch range
-            // d3.select(this).selectAll(".durations")
+            // save this, could be an interesting setting to toggle
+            // also, modify box height by pitch range
+            // thisPartGroup.selectAll(".durations-rect")
             //     .data(durations)
             //     .enter()
             //     .append("rect")
             //         .attr("rx", 1)
             //         .call(phraseSpacing)
-            //         .attr("y", function(d, i) { return 0; })
-            //         .attr("width", function(d) { return d * unit; })
-            //         .attr("height", unit);
+            //         .attr("class", "durations-rect")
+            //         .attr("y", 0)
+            //         .attr("width", function(d) { return d * unitX; })
+            //         .attr("height", unitY)
+            //         .attr("fill", "#eee")
+            //         .attr("fill-opacity", 0.5);
 
             if (thisPhrase.timbre === "ghost") {
                 makeGhost.call(this, durations[0]);
             }
 
             // articulations
-            d3.select(this).selectAll(".articulations")
+            thisPartGroup.selectAll(".articulations")
                 .data(articulations)
                 .enter()
                 .append("text")
@@ -316,7 +319,7 @@ for (p = 0; p < numParts; p++) {
 
             // dynamics
             if(durations.length > 1 || hasNewValues("dynamics.0")) {
-                d3.select(this).selectAll(".dynamics")
+                thisPartGroup.selectAll(".dynamics")
                     .data(dynamics)
                     .enter()
                     .append("text")
