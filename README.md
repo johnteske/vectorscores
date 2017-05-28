@@ -1,4 +1,4 @@
-# vector scores
+# vectorscores
 
 A series of new works to be viewed and performed via a lightweight website. The works will be algorithmically generated so that each score and each performance is unique and customized while still being shaped by the composition's parameters.
 
@@ -35,18 +35,18 @@ A series of new works to be viewed and performed via a lightweight website. The 
 
 
 ## Support
-*vector scores* is supported by the Seattle Office of Arts & Culture.
+*vectorscores* is supported by the Seattle Office of Arts & Culture.
 
 <p align="center"><img src="https://cdn.rawgit.com/johnteske/vectorscores/a2fa6bd7cabaeddcadd3386e1361f43d97237e16/_includes/icons-logos/SOAC-logo-grey.svg" width="128px" /></p>
 
 
 ## Licenses
-*vector scores* is released under the [MIT License](http://opensource.org/licenses/MIT). Compositions resulting from my code and parameters are copyright John Teske.
+*vectorscores* is released under the [MIT License](http://opensource.org/licenses/MIT). Compositions resulting from my code and parameters are copyright John Teske.
 
 
 ## Contributing
-- **Performances**. Perform works created with *vector scores*. Contact me and I'll list performances here along with links to any audio and video documentation.
-- **Compositions**. Use *vector scores* to create your own works. You are welcome to use my works and code as a starting point—but please make them your own!
+- **Performances**. Perform works created with *vectorscores*. Contact me and I'll list performances here along with links to any audio and video documentation.
+- **Compositions**. Use *vectorscores* to create your own works. You are welcome to use my works and code as a starting point—but please make them your own!
 - **Repository**. I encourage feedback and contributions to this project. Feel free to submit issues and pull requests! [Read more about contributing](https://github.com/johnteske/vectorscores/blob/gh-pages/CONTRIBUTING.md).
 
 
