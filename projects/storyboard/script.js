@@ -3,6 +3,7 @@
 var cardTypes, cardList;
 
 {% include_relative _score.js %}
+{% include_relative _settings.js %}
 
 var dynamicsDict = VS.dictionary.Bravura.dynamics;
 
@@ -61,7 +62,12 @@ cards.each(function(d) {
 
     thisCard.append("text")
         .attr("dy", "-1em")
-        .text("[" + d.pcSet.join(", ") + "]")
+        .text(function(d) {
+            var pcSet = d.pcSet.map(function(pc) {
+                return pcFormat(pc, scoreSettings.pcFormat);
+            });
+            return "[" + pcSet.join(", ") + "]";
+        })
         .classed("pitch-class-set", 1);
 
     thisCard.append("text")

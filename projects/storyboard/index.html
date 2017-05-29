@@ -2,5 +2,10 @@
 layout: score
 title: Storyboard
 footer: true
-vs_modules: [cue, dictionary.bravura]
+settings: >
+    Display pitch classes as:
+    <input type="radio" name="settings-pc-display" value="integer" checked> Integers<br>
+    <input type="radio" name="settings-pc-display" value="name"> Note names<br>
+    <button id="settings-generate">Generate new score</button>
+vs_modules: [cue, dictionary.bravura, pitchClassFormat]
 ---
