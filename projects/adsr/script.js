@@ -22,9 +22,12 @@ var scaleX = 3,
 var score = (function() {
     var _score = {};
 
+    _score.scale = 1;
     _score.width = 300 * unitX; // total score duration
     _score.svg = d3.select(".main").attr("width", _score.width);
-    _score.group = _score.svg.append("g");
+    _score.wrapper = _score.svg.append("g")
+        .attr("transform", "scale(" + _score.scale + "," + _score.scale + ")");
+    _score.group = _score.wrapper.append("g");
     _score.layout = {
         group: _score.group.append("g").attr("class", "layout")
     };
@@ -140,7 +143,7 @@ score.layout.letters.each(function() {
 /**
  * Score pointer/cue aid
  */
-var cueIndicator = VS.cueTriangle(score.svg);
+var cueIndicator = VS.cueTriangle(score.wrapper);
 function cueBlink() {
     cueIndicator.blink(1, 0, 0);
 }
@@ -351,7 +354,7 @@ function scrollScore(index, dur, goToNextBar) {
         .duration(dur)
         .ease("linear")
         .attr("transform",
-             "translate(" + (view.center - getBarlineX(targetBar)) + "," + view.scoreY + ")"
+            "translate(" + (view.center - getBarlineX(targetBar)) + "," + view.scoreY + ")"
         )
         // fade if playing last bar
         .style("opacity", playLastBar ? 0 : 1);
@@ -394,12 +397,16 @@ VS.control.stepCallback = function() {
 
 function resize() {
     // TODO pause score if playing
+    // TODO fix hard-coded Y spacing values
     view.width = parseInt(d3.select("main").style("width"), 10);
-    view.center = view.width * 0.5;
     view.height = parseInt(d3.select("main").style("height"), 10);
-    view.scoreY = (view.height * 0.5) - ((score.height - (4 * unitY)) * 0.5);
+    score.scale = clamp(view.height / ((score.partHeight * numParts) + (14 * unitY)), 0.1, 2);
 
     score.svg.attr("height", view.height);
+    score.wrapper.attr("transform", "scale(" + score.scale + "," + score.scale + ")");
+
+    view.center = (view.width / score.scale) * 0.5;
+    view.scoreY = ((view.height / score.scale) * 0.5) - ((score.height - (4 * unitY)) * 0.5);
 
     if(debug){ resizeDebug(); }
 
