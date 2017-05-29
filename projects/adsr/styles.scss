@@ -99,12 +99,16 @@ line[class^="debug-center"] {
     // display: inline-block;
     width: 1em;
     font-style: normal;
+    font-size: 150%;
 }
 
 .modal-content {
     ul {
         list-style: none;
         padding: 0;
+    }
+    li {
+        padding-bottom: 1em;
     }
 }
 @import "description-list";
