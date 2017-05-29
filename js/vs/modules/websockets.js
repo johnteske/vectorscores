@@ -1,6 +1,6 @@
 var socket,
     cid, // client id
-    host = "ws://" + location.hostname + ":4001";
+    host = (location.protocol === "https:" ? "wss://" : "ws://") + location.hostname + ":4001";
 
 function connect() {
     try {
