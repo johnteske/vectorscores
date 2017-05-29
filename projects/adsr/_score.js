@@ -133,12 +133,8 @@ for (var p = 0; p < numParts; p++) {
         // also mapped to envelopes.timbre
         phrase.dynamics = [];
         phrase.dynamics[0] = dynamics[timbreIndex];
-        if (phrase.durations.length > 1) {
-            if (phrase.durations[0] < 1) {
-                phrase.dynamics[1] = ">";
-            } else {
-                phrase.dynamics[1] = "dim.";
-            }
+        if (phrase.durations.length > 1 && phrase.timbre !== "ghost") {
+            phrase.dynamics[1] = (phrase.durations[0] < 1) ? ">" : "dim.";
         }
 
         phrase.articulations = []; // [">", /*dim.*/, "-", "l.v."]

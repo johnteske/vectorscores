@@ -185,6 +185,13 @@ function makeGhost(firstDur) {
             .attr("y1", 0)
             .attr("x2", x1 + (unitX * attackNum * attackScale))
             .attr("y2", 0);
+    ghostGroup
+        .append("text")
+            .text(dict.dyn[">"])
+            .attr("class", "dynamics")
+            .attr("x", x1)
+            .attr("y", score.partLayersY.dynamics);
+
     ghostGroup.selectAll(".ghost-attack")
         .data(d3.range(attackNum))
         .enter()
