@@ -1,7 +1,13 @@
 function flatten(array) {
     return array.reduce(function(a, b) { return a.concat(b); }, []);
 };
-
+function makePoint(array) {
+    return {
+         x: array[0],
+         y: array[1],
+         z: array[2]
+     };
+}
 function render() {
     // remove existing elements, if any
     score.container.selectAll(".rendered").remove();
@@ -14,7 +20,7 @@ function render() {
         var a = score.obj[i]; // the 3D point to be projected
         var c = [0, 0, 5]; // 3D point representing the camera
         var theta = [Math.PI, 0, 0]; // orientation of the camera (Tait–Bryan angles)
-        var e = [0, 0, 50]; // viewer's position relative to display surface which goes through point c
+        // var e = [0, 0, 50]; // viewer's position relative to display surface which goes through point c
 
         var xMatrix = (function() {
             var Ox = theta[0], // px(theta)
@@ -53,11 +59,17 @@ function render() {
         ];
 
         var d = multiplyMatrices(multiplyMatrices(multiplyMatrices(xMatrix, yMatrix), zMatrix), aMinusCMatrix);
-        d = flatten(d);
+        d = makePoint(flatten(d));
 
+        // var b = {
+        //     x: ((pz(e) / pz(d)) * px(d)) - px(e),
+        //     y: ((pz(e) / pz(d)) * py(d)) - py(e)
+        // };
+        var s = { x: 640, y: 640 }; // display size
+        var r = { x: 640, y: 640, z: 64 }; // recording surface, distance
         var b = {
-            x: ((pz(e) / pz(d)) * px(d)) - px(e),
-            y: ((pz(e) / pz(d)) * py(d)) - py(e)
+            x: (d.x * s.x) / (d.z * r.x) * r.z,
+            y: (d.y * s.y) / (d.z * r.y) * r.z
         };
         console.log(b);
 
