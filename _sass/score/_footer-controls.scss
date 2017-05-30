@@ -39,6 +39,11 @@
             }
         }
     }
+    #score-pointer {
+        @media (max-width: $footer-height * 6) {
+            display: none;
+        }
+    }
 }
 input {
     text-align: center;

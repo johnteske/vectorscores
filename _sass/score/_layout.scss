@@ -53,7 +53,7 @@ header {
 }
 
 footer {
-    padding: 0 $unit;
+    padding: 0; // $unit;
     bottom: 0;
 	border-top: $layout-border;
 }
