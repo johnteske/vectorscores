@@ -1,4 +1,4 @@
-{% if page.info or page.info_file or page.settings %}
+{% if page.info or page.info_file or page.settings or page.settings_file %}
 <div id="score-modal-overlay" class="modal-overlay">
 
 {% if page.info or page.info_file %}
@@ -23,13 +23,16 @@
     </div>
 {% endif %}
 
-{% if page.settings %}
+{% if page.settings or page.settings_file%}
     <div id="score-settings-modal" class="modal-content">
         <span id="score-settings-close" class="modal-close">×</span>
         <h2>Settings</h2>
-        <p>
+        {% if page.settings %}
             {{ page.settings }}
-        </p>
+        {% else if page.settings_file %}
+            {% capture settings_include %}{% include_relative {{ page.settings_file }} %}{% endcapture %}
+            {{ settings_include | markdownify }}
+        {% endif %}
     </div>
 {% endif %}
 

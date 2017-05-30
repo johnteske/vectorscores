@@ -33,7 +33,7 @@
         </svg>
     </button><!--
  --><input id="score-pointer" type="number" value="0" pattern="\d*" readonly="true" title="Score pointer" /><!-- step="1" --><!--
- -->{% if page.settings %}<button id="score-settings-open" title="Settings">
+ -->{% if page.settings or page.settings_file %}<button id="score-settings-open" title="Settings">
          <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
              <g id="settings">
                  <path d="M17,10 L17,118.57"></path>
