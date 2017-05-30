@@ -2,13 +2,17 @@
 ---
 // generate (placeholder) score
 {% include_relative _score.js %}
+{% include_relative _matrices.js %}
 
 var colors = ["black", "blue", "purple"];
 
 var score = {
     width: VS.getItem([3, 4, 5]),
     height: VS.getItem([3, 4, 5]),
-    container: d3.select(".main").append("g")
+    container: d3.select(".main")
+        .attr("width", 640)
+        .attr("height", 640)
+        .append("g")
 };
 score.center = {
     x: score.width * 0.5 - 0.5,
@@ -16,8 +20,6 @@ score.center = {
 };
 score.radius = Math.sqrt( Math.pow(score.width, 2) + Math.pow(score.height, 2) ); // distance of player from center of score
 score.obj = createScore(score.width, score.height);
-
-d3.select("main").insert("h3", ":first-child").text("Not quite 3D--but something");
 
 /**
  * setAngle accepts degrees, saves value as radians
@@ -59,8 +61,7 @@ var performer = new Performer;
 // also update query string so bookmarks/share/reloads retain current settings
 performer.setAngle(45);
 
-{% include_relative _indicator.js %}
-{% include_relative _mini-score.js %}
+{% comment %}{% include_relative _indicator.js %}{% endcomment %}
 
 {% include_relative _render.js %}
 render();

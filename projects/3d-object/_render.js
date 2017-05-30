@@ -1,60 +1,75 @@
-function render() {
+function flatten(array) {
+    return array.reduce(function(a, b) { return a.concat(b); }, []);
+};
 
+function render() {
     // remove existing elements, if any
     score.container.selectAll(".rendered").remove();
 
-    var _points = [];
-    var _performer = performer.get();
+    for (var i = 0; i < score.obj.length; i++) {
+        function px(point) { return point[0]; }
+        function py(point) { return point[1]; }
+        function pz(point) { return point[2]; }
 
-    for (var row = 0; row < score.height; row++) {
-        for (var col = 0; col < score.width; col++) {
-            var value = score.obj[row][col],
-                testScale = 42, // use this for simple TEST
-                a = col - _performer.x,
-                b = row - _performer.y,
-                z = Math.sqrt( Math.pow(a, 2) + Math.pow(b, 2) ),
-                // "Oblique projection"
-                // (x,y) = (x + zcos0,y + zsin0)
-                // TODO y does not factor in -- perhaps here y is actually the z value
-                cos = Math.cos(_performer.angle),
-                sin = Math.sin(_performer.angle),
-                x = col + (z * cos),
-                y = row + (z * sin);
+        var a = score.obj[i]; // the 3D point to be projected
+        var c = [0, 0, 5]; // 3D point representing the camera
+        var theta = [Math.PI, 0, 0]; // orientation of the camera (Tait–Bryan angles)
+        var e = [0, 0, 50]; // viewer's position relative to display surface which goes through point c
 
-                x = _performer.y >= 0 ? x - _performer.x : _performer.x - x;
-                // y = _performer.y = 0 ? y - _performer.y : _performer.y - y;
+        var xMatrix = (function() {
+            var Ox = theta[0], // px(theta)
+                cosOx = Math.cos(Ox),
+                sinOx = Math.sin(Ox);
+            return [
+                [1, 0, 0],
+                [0, cosOx, sinOx],
+                [0, -sinOx, cosOx]
+            ];
+        })();
+        var yMatrix = (function() {
+            var Oy = theta[1], // py(theta)
+                cosOy = Math.cos(Oy),
+                sinOy = Math.sin(Oy);
+            return [
+                [cosOy, 0, -sinOy],
+                [0, 1, 0],
+                [sinOy, 0, cosOy]
+            ];
+        })();
+        var zMatrix = (function() {
+            var Oz = theta[2], // pz(theta)
+                cosOz = Math.cos(Oz),
+                sinOz = Math.sin(Oz);
+            return [
+                [cosOz, sinOz, 0],
+                [-sinOz, cosOz, 0],
+                [0, 0, 1]
+            ];
+        })();
+        var aMinusCMatrix = [
+            [a[0] - c[0]],
+            [a[1] - c[1]],
+            [a[2] - c[2]]
+        ];
 
-            _points.push({
-                x: x,
-                y: y,
-                z: z,
-                value: value
-            });
-        }
-    }
+        var d = multiplyMatrices(multiplyMatrices(multiplyMatrices(xMatrix, yMatrix), zMatrix), aMinusCMatrix);
+        d = flatten(d);
 
-    _points.sort(function (a, b) {
-        return b.z - a.z;
-    });
+        var b = {
+            x: ((pz(e) / pz(d)) * px(d)) - px(e),
+            y: ((pz(e) / pz(d)) * py(d)) - py(e)
+        };
+        console.log(b);
 
-    // var z1 = _points[0].z;
-    var closest_z = _points[_points.length - 1].z;
-
-    for (var i = 0; i < _points.length; i++) {
-        var point = _points[i];
-        console.log(closest_z, point.z, closest_z / point.z);
         score.container.append("circle")
             .classed("rendered", 1)
-            .attr("r", 6 * (closest_z / point.z)) // prevent divide by 0
+            .attr("r", 1)
             .style("stroke", "none")
-            .style("fill", function() { return colors[point.value]; })
-            // .style("opacity", (closest_z / point.z))
-            .attr("cx", point.x * testScale)
-            // TODO need to factor in y coordinate as well
-            // y display would be more for height, layer
-            .attr("cy", -point.z * 6); // yes, dots should be in perspective, not flat
+            .style("fill", "black")
+            .attr("cx", b.x)
+            .attr("cy", b.y);
     }
 
-    score.container.attr("transform", "translate (150, 90)"); // TEST
+    score.container.attr("transform", "translate (150, 90)"); // TODO for testing
 
 }
