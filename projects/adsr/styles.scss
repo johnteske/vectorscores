@@ -111,4 +111,20 @@ line[class^="debug-center"] {
         padding-bottom: 1em;
     }
 }
+#score-settings-modal {
+    #settings-parts {
+        width: 2em;
+        height: 2em;
+        border: 1px solid #888;
+        background: transparent;
+    }
+    // TODO make global settings modal styles?
+    button {
+        font-family: "Inconsolata", "Courier New", Courier, monospace;
+        margin: 0;
+        padding: 0.5em;
+        border: 1px solid #888;
+        background: transparent;
+    }
+}
 @import "description-list";
