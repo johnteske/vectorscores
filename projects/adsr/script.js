@@ -16,7 +16,8 @@ var scaleX = 3,
     unitX = 10 * scaleX,
     unitY = 10,
     view = {},
-    numParts = +VS.getQueryString("parts") || 4,
+    // 16 parts is an arbitrary max, ideally large ensembles read from parts
+    numParts = clamp(+VS.getQueryString("parts") || 4, 1, 16),
     debug = false;
 
 var score = (function() {
