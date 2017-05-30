@@ -86,6 +86,7 @@ function makeGlobject() {
             x: (Math.random() * globSlice + (i * globSlice)),
             y: (Math.random() * 127)
         };
+        // TODO add stemmed notes to dictionary
         if (note.y > 64) {
             note.head =
                 String.fromCharCode( VS.getItem([57814, 57816]) ) +
@@ -164,7 +165,13 @@ function drawGlobject(){
             return theGlob.pitches.times[i] * theGlob.width;
         })
         .attr("y", 127 + 24)
-        .text(function(d) { return "[" + d + "]"; });
+        .text(function(d) {
+            var pcSet = d.map(function(pc) {
+                return pcFormat(pc, ""); // scoreSettings.pcFormat
+                // return pcFormat(pc, "name"); // scoreSettings.pcFormat
+            });
+            return "[" + pcSet.join(", ") + "]";
+        })
 
     theGlob.dynamicsGroup = globGroup.append("g");
 
@@ -214,5 +221,6 @@ for(var i = 0; i < 10; i++) {
         refreshGlobject
     );
 }
+VS.control.stepCallback = refreshGlobject;
 
 {% include_relative _debug.js %}
