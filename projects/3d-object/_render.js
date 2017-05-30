@@ -1,6 +1,7 @@
 function flatten(array) {
     return array.reduce(function(a, b) { return a.concat(b); }, []);
-};
+}
+
 function makePoint(array) {
     return {
          x: array[0],
@@ -8,70 +9,63 @@ function makePoint(array) {
          z: array[2]
      };
 }
+
 function render() {
     // remove existing elements, if any
     score.container.selectAll(".rendered").remove();
 
+    var c = makePoint([0, 0, 5]); // 3D point representing the camera
+    var theta = makePoint([Math.PI, 0, 0]); // orientation of the camera (Tait–Bryan angles)
+
+    var xMatrix = (function() {
+        var cosOx = Math.cos(theta.x),
+            sinOx = Math.sin(theta.x);
+        return [
+            [1, 0, 0],
+            [0, cosOx, sinOx],
+            [0, -sinOx, cosOx]
+        ];
+    })();
+    var yMatrix = (function() {
+        var cosOy = Math.cos(theta.y),
+            sinOy = Math.sin(theta.y);
+        return [
+            [cosOy, 0, -sinOy],
+            [0, 1, 0],
+            [sinOy, 0, cosOy]
+        ];
+    })();
+    var zMatrix = (function() {
+        var cosOz = Math.cos(theta.z),
+            sinOz = Math.sin(theta.z);
+        return [
+            [cosOz, sinOz, 0],
+            [-sinOz, cosOz, 0],
+            [0, 0, 1]
+        ];
+    })();
+
+    var cameraRotationMatrix = multiplyMatrices(multiplyMatrices(xMatrix, yMatrix), zMatrix);
+
+    var rz = 100; // distance from the recording surface to the camera center
+
     for (var i = 0; i < score.obj.length; i++) {
-        function px(point) { return point[0]; }
-        function py(point) { return point[1]; }
-        function pz(point) { return point[2]; }
 
-        var a = score.obj[i]; // the 3D point to be projected
-        var c = [0, 0, 5]; // 3D point representing the camera
-        var theta = [Math.PI, 0, 0]; // orientation of the camera (Tait–Bryan angles)
-        // var e = [0, 0, 50]; // viewer's position relative to display surface which goes through point c
+        var a = makePoint(score.obj[i]); // the 3D point to be projected
 
-        var xMatrix = (function() {
-            var Ox = theta[0], // px(theta)
-                cosOx = Math.cos(Ox),
-                sinOx = Math.sin(Ox);
-            return [
-                [1, 0, 0],
-                [0, cosOx, sinOx],
-                [0, -sinOx, cosOx]
-            ];
-        })();
-        var yMatrix = (function() {
-            var Oy = theta[1], // py(theta)
-                cosOy = Math.cos(Oy),
-                sinOy = Math.sin(Oy);
-            return [
-                [cosOy, 0, -sinOy],
-                [0, 1, 0],
-                [sinOy, 0, cosOy]
-            ];
-        })();
-        var zMatrix = (function() {
-            var Oz = theta[2], // pz(theta)
-                cosOz = Math.cos(Oz),
-                sinOz = Math.sin(Oz);
-            return [
-                [cosOz, sinOz, 0],
-                [-sinOz, cosOz, 0],
-                [0, 0, 1]
-            ];
-        })();
         var aMinusCMatrix = [
-            [a[0] - c[0]],
-            [a[1] - c[1]],
-            [a[2] - c[2]]
+            [a.x - c.x],
+            [a.y - c.y],
+            [a.z - c.z]
         ];
 
-        var d = multiplyMatrices(multiplyMatrices(multiplyMatrices(xMatrix, yMatrix), zMatrix), aMinusCMatrix);
+        var d = multiplyMatrices(cameraRotationMatrix, aMinusCMatrix);
         d = makePoint(flatten(d));
 
-        // var b = {
-        //     x: ((pz(e) / pz(d)) * px(d)) - px(e),
-        //     y: ((pz(e) / pz(d)) * py(d)) - py(e)
-        // };
-        var s = { x: 640, y: 640 }; // display size
-        var r = { x: 640, y: 640, z: 64 }; // recording surface, distance
         var b = {
-            x: (d.x * s.x) / (d.z * r.x) * r.z,
-            y: (d.y * s.y) / (d.z * r.y) * r.z
+            x: (d.x / d.z) * rz,
+            y: (d.y / d.z) * rz
         };
-        console.log(b);
 
         score.container.append("circle")
             .classed("rendered", 1)
@@ -83,5 +77,4 @@ function render() {
     }
 
     score.container.attr("transform", "translate (150, 90)"); // TODO for testing
-
 }
