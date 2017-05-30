@@ -7,11 +7,11 @@ function connect() {
         socket = new WebSocket(host);
 
         socket.onopen = function() {
-            addMessage("Socket Status: " + socket.readyState + " (open)");
+            addMessage("Open");
         };
 
         socket.onclose = function() {
-            addMessage("Socket Status: " + socket.readyState + " (closed)");
+            addMessage("Closed");
         };
 
         socket.onmessage = function(msg) {
@@ -42,7 +42,6 @@ function connect() {
             catch (err) {
                 console.log(err);
             }
-            addMessage("Received: " + msg.data);
         };
     } catch(exception) {
         addMessage("Error: " + exception);
@@ -50,18 +49,14 @@ function connect() {
 }
 
 function addMessage(msg) {
-    // console.log(msg);
-    // document.getElementById("ws-log").innerHTML = msg;
+    document.getElementById("ws-log").innerHTML = msg;
 }
 
 function send(data) {
     try {
         socket.send(JSON.stringify(data));
-        // console.log(data);
-        // addMessage("Sent: " + text)
     } catch(err) {
         console.log(err);
-        // addMessage("Failed To Send")
     }
 }
 

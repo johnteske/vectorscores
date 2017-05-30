@@ -3,12 +3,10 @@
 ---
 /**
  * TODO
- * score.width can be 8000 but svg width does not need to be
  * display pitch and timbre inline--and only if there is a change (or make that optional)
  * bounding boxes for phrases? make optional setting?
- * allow option to show note names? or pitch classes?
+ * allow option to show note names? or pitch classes? (provided a pitch center)
  * double bar
- * error-check if score height exceeds view and/or auto-scale to fit
  * have scores use parts as data, not simple bar index, then fetching parts
  * disambiguate score (svg, display) vs. score (musical data)--also clean up global vars in _score.js
  */
@@ -37,7 +35,7 @@ var score = (function() {
         timbre: -4.5 * unitY,
         pitch: -2.5 * unitY,
         // if flag without notehead, offset y position
-        // TODO do not offset dot?
+        // TODO do not offset dot? would require a separate text element for the dot
         durations: function(d) { return (0 < d && d < 1) ? -0.5 * unitY : 0; },
         articulations: 1.25 * unitY,
         dynamics: 3.5 * unitY
