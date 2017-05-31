@@ -127,13 +127,14 @@ function drawGlobject(){
 
     function phraseSpacing(selection) {
         var durations = theGlob.phraseTexture;
-        return VS.xByDuration(selection, durations, 18  , 0) + 64;
+        return VS.xByDuration(selection, durations, 18, 0) + 64;
     }
 
-    for (var i = 0, phrases = 16, slice = theGlob.width / phrases; i < phrases; i++) {
+    for (var i = 0, phrases = 16; i < phrases; i++) {
         theGlob.globStuff.append("g")
             .attr("transform", function() {
-                return "translate(" + (slice * i) + "," + (Math.random() * 127) + ")"
+                var y = (127 / phrases) * i;
+                return "translate(" + Math.random() * theGlob.width + "," + y + ")"
             })
             .selectAll("text")
             .data(theGlob.phraseTexture)
