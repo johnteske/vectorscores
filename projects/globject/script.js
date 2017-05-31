@@ -12,6 +12,8 @@ var main = d3.select(".main")
     .style("width", boxwidth + "px")
     .style("height", boxwidth + "px");
 
+var noteheads = VS.dictionary.Bravura.durations.stemless;
+
 {% include_relative _globject.js %}
 var theGlob = new Globject(150);
 
@@ -78,28 +80,13 @@ function makeGlobject() {
 
     theGlob.setDynamics(newDynamics, [0, 0.5, 1]);
 
-    theGlob.noteTexture = [];
-    var noteCount = 12,
-        globSlice = (theGlob.width / noteCount);
-    for (var i = 0; i < noteCount; i++) {
-        var note = {
-            x: (Math.random() * globSlice + (i * globSlice)),
-            y: (Math.random() * 127)
-        };
-        // TODO add stemmed notes to dictionary
-        if (note.y > 64) {
-            note.head =
-                String.fromCharCode( VS.getItem([57814, 57816]) ) +
-                " " +
-                String.fromCharCode( VS.getItem([57814, 57816]) );
-        } else {
-            note.head =
-                String.fromCharCode( VS.getItem([57813, 57817]) ) +
-                " " +
-                String.fromCharCode( VS.getItem([57813, 57817]) );
-        }
-        theGlob.noteTexture.push(note);
-    }
+    var durs = [0.5, 1, 1.5, 2];
+
+    theGlob.phraseTexture = [
+        VS.getItem(durs),
+        VS.getItem(durs),
+        VS.getItem(durs)
+    ];
 
     return theGlob;
 }
@@ -138,15 +125,25 @@ function drawGlobject(){
     .classed("globstuff", 1)
     .attr("clip-path", "url(#glob-clip)");
 
-    theGlob.globStuff.selectAll("text")
-        .data(theGlob.noteTexture)
-        .enter()
-        .append("text")
-        .text(function(d) {return d.head;})
-        .attr("transform",
-            function(d) {
-                return "translate(" + d.x + ", " + d.y + ")";
-            });
+    function phraseSpacing(selection) {
+        var durations = theGlob.phraseTexture;
+        return VS.xByDuration(selection, durations, 18  , 0) + 64;
+    }
+
+    for (var i = 0, phrases = 16, slice = theGlob.width / phrases; i < phrases; i++) {
+        theGlob.globStuff.append("g")
+            .attr("transform", function() {
+                return "translate(" + (slice * i) + "," + (Math.random() * 127) + ")"
+            })
+            .selectAll("text")
+            .data(theGlob.phraseTexture)
+            .enter()
+            .append("text")
+            .text(function(d) {
+                return noteheads[d];
+            })
+            .call(phraseSpacing);
+    }
 
     theGlob.rangePath =
     globGroup.append("path")
