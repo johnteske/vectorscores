@@ -5,6 +5,7 @@
 <div style="margin-bottom: 1em">
     <label>Show all parameters:</label>
     <input id="settings-showall" type="checkbox">
+    (always "true" for Northminster Church performance)
 </div>
 <div>
     <button id="settings-generate">Generate new score</button>

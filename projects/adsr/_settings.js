@@ -8,8 +8,9 @@ scoreSettings.parts.value = numParts;
 // TODO clean up
 (function() {
     var showAll = document.getElementById("settings-showall"),
-        checked = showAll.checked = +VS.getQueryString("showall");
+        checked = showAll.checked = true;
 
+    showAll.disabled = true;
     scoreSettings.showAll = checked;
 })();
 
