@@ -325,7 +325,7 @@ for (p = 0; p < numParts; p++) {
                     .attr("y", layersY.articulations)
                     .call(phraseSpacing)
                     .attr("dx", function(d) {
-                        return d === "l.v." ? unitX : 0;
+                        return d === "l.v." ? 12 : 0;
                     })
                     .attr("dy", function(d) {
                         return d === "l.v." ? unitY * -0.5 : 0;
