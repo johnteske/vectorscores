@@ -18,6 +18,8 @@ var scaleX = 3,
     numParts = clamp(+VS.getQueryString("parts") || 4, 1, 16),
     debug = false;
 
+{% include_relative _settings.js %}
+
 var score = (function() {
     var _score = {};
 
@@ -243,8 +245,10 @@ for (p = 0; p < numParts; p++) {
             }
 
             function hasNewValues(prop) {
-                // TODO allow settings to show all (per property? showAll.indexOf(prop))
-                return i === 0 || getNestedProp(prop, thisPhrase) !== getNestedProp(prop, prevPhrase);
+                // TODO provide controls to show all
+                // TODO starting ghost notes do not have dynamics?
+                var showValues = (i === 0) || scoreSettings.showAll;
+                return showValues || getNestedProp(prop, thisPhrase) !== getNestedProp(prop, prevPhrase);
             }
 
             var hasNewPitch = hasNewValues("pitch.low") || hasNewValues("pitch.high");
@@ -399,7 +403,6 @@ VS.control.stepCallback = function() {
 }
 
 {% include_relative _debug.js %}
-{% include_relative _settings.js %}
 
 function resize() {
     // TODO pause score if playing
