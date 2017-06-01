@@ -73,7 +73,7 @@ var envelopes = {
 var parts = [];
 for (var p = 0; p < numParts; p++) {
     var part = [];
-    for (var i = 0; i < score.bars.length; i++) {
+    for (var i = 0, nBars = score.bars.length, lastBar = nBars - 1; i < nBars; i++) {
         var now = score.bars[i] / score.totalDuration,
             iit = getPrevNextIndicesAndT(score.structure, now),
             phrase = {};
@@ -96,21 +96,32 @@ for (var p = 0; p < numParts; p++) {
 
         phrase.startTime = Math.max(score.bars[i] + dispersion, endLastPhrase);
 
-        // 1/3 chance to anticipate next timbre (and thus dynamic)
-        var timbreIndex = Math.round(lerpEnvelope(envelopes.timbre, iit));
-        timbreIndex = VS.getWeightedItem([timbreIndex, timbreIndex + 1], [2, 1]);
-        if (i === 0) { timbreIndex = 0; } // force bartok, forte on first note
+        var timbreIndex = 0;
+        if (i === 0) {
+            timbreIndex = 0; // bartok
+        } else if (i === lastBar) {
+            timbreIndex = 9; // l.v.
+        } else {
+            // 1/3 chance to anticipate next timbre (and thus dynamic)
+            timbreIndex = Math.round(lerpEnvelope(envelopes.timbre, iit));
+            timbreIndex = VS.getWeightedItem([timbreIndex, timbreIndex + 1], [2, 1]);
+        }
         phrase.timbre = timbres[timbreIndex];
 
-        if (i > 0) { // if not the first bar, calculate pitch range
+        if (i === 0) {
+            phrase.pitch = { // pitch center
+                high: 0,
+                low: 0
+            };
+        } else if (i === lastBar) {
+            phrase.pitch = { // full range
+                high: 2,
+                low: -2
+            };
+        } else {
             phrase.pitch = {
                 high: clamp(roundHalf(lerpEnvelope(envelopes.pitch.high, iit) + VS.getRandExcl(-0.5, 0.5)), 0, 2),
                 low: clamp(roundHalf(lerpEnvelope(envelopes.pitch.low, iit) + VS.getRandExcl(-0.5, 0.5)), -2, 0)
-            };
-        } else { // if first bar, force natural
-            phrase.pitch = {
-                high: 0,
-                low: 0
             };
         }
 
@@ -140,6 +151,10 @@ for (var p = 0; p < numParts; p++) {
         // also mapped to envelopes.timbre
         phrase.dynamics = [];
         phrase.dynamics[0] = dynamics[timbreIndex];
+        if (i === lastBar) {
+            phrase.dynamics[0] = "ff";
+        }
+
         if (phrase.durations.length > 1 && phrase.timbre !== "ghost") {
             phrase.dynamics[1] = (phrase.durations[0] < 1) ? ">" : "dim.";
         }
