@@ -23,7 +23,7 @@ var scaleX = 3,
 var score = (function() {
     var _score = {};
 
-    _score.totalDuration = 300;
+    _score.totalDuration = 360;
     _score.scale = 1;
     _score.width = _score.totalDuration * unitX; // total score duration
     _score.svg = d3.select(".main").attr("width", _score.width);
