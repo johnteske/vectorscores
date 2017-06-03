@@ -1,7 +1,15 @@
+<ul>
+{% for project in site.html_pages %}
+    {% if project.layout == 'score' and project.status == 'published' %}
+        <li><a href="{{ project.url | prepend: site.baseurl }}">{{ project.title }}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>
+
 <h3>Works in progress</h3>
 <ul>
 {% for project in site.html_pages %}
-    {% if project.layout == 'score' and project.status != 'unlisted' and project.status != 'test'%}
+    {% if project.layout == 'score' and project.status == 'wip' %}
         <li><a href="{{ project.url | prepend: site.baseurl }}">{{ project.title }}</a></li>
     {% endif %}
 {% endfor %}
@@ -10,7 +18,7 @@
 <h3>Examples and tests</h3>
 <ul>
 {% for project in site.html_pages %}
-    {% if project.layout == 'score' and project.status != 'unlisted'and project.status == 'test' %}
+    {% if project.layout == 'score' and project.status == 'test' %}
         <li><a href="{{ project.url | prepend: site.baseurl }}">{{ project.title }}</a></li>
     {% endif %}
 {% endfor %}
