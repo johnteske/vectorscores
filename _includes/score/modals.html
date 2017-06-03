@@ -7,11 +7,10 @@
         <h2>{{ page.title }}</h2>
         <p>
             {{ page.composer }}
-            {% if page.publish_date %}({{ page.publish_date}}){% endif %}
+            {% if page.publish_date %}({{ page.publish_date }}){% endif %}
         </p>
-        <p>
-            {{ page.dedication }}
-        </p>
+        {% if page.instrumentation %}<p>for {{ page.instrumentation }}</p>{% endif %}
+        <p>{{ page.dedication }}</p>
         {% if page.info %}
         <div>
             {{ page.info }}
