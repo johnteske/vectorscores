@@ -1,15 +1,16 @@
 # vectorscores
 
-A series of new works to be viewed and performed via a lightweight website. The works will be algorithmically generated so that each score and each performance is unique and customized while still being shaped by the composition's parameters.
+A series of new compositions built on the web.
+The works are algorithmically generated so that each score and each performance is unique while still being shaped by the composition's parameters.
 
 ## Advantages over traditional scores
-- easily accessible and widely compatible
-- reliable use of color
+- online access to scores via web browser
 - use of animation
 - built-in tutorial function
 (for education and to reduce rehearsal time—useful when dealing with complex music, tight timelines and budgets, or the absence of the composer)
 - unique musical possibilities (parts generated based on input, collaboration, realtime generation of musical material, etc.)
-- vector graphics are widely compatible and can be scaled and manipulated without loss of quality
+- vector graphics can be scaled and manipulated without loss of quality
+- reliable use of color
 
 
 <!--
@@ -20,17 +21,17 @@ A series of new works to be viewed and performed via a lightweight website. The 
 
 
 ## Work concepts
-- [*Textural Messages*]. Call and response between ensembles performing graphic/textural/musical content being generated in realtime.
-- topographic scores. Microcosms of sound, possibly based on data from a user's location. Displayed as: isometric? revealed through time? warped fabric?
-- Musically interpreting 3D objects. Any number of musicians are positioned equidistant from a phantom central object, their parts are generated based on the ensemble size. Designed to explore how we use technology to relate to abstract ideas, sometimes referring to physical objects, sometimes not.
-- Music formatted as [storyboard frames], transitioning between frames using animation. This could allow for performance of complex moments, allowing musicians to focus on one frame at a time.
+- [*Textural Messages*]. Call and response between ensembles performing graphic/textural/musical content, generated in realtime.
+- Topographic scores. Microcosms of sound, possibly based on data from the performers' location. Possible display options include: isometric projection, revealed through time or position ("fog of war"), or warped fabric?
+- Interpreting 3D graphic scores. Musicians sit around a phantom central object, parts are generated based on their position.
+- Music formatted as a [storyboard]. A "scenes" of music displays, giving a preview of the next scene and transitioning using animation.
 - Open form/mobile movements, generated in realtime.
-- Greater control over musical texture and density. From core musical concepts, generate parts based on ensemble size. A logical next step in algorithmically generated music and music using open instrumentation.
+- Greater control over musical texture and density in open instrumentation works. From core musical concepts, generate parts based on ensemble size and registers.
 - [Morphing clouds] of sound, like the murmuration of birds.
 - Clustering and group dynamics. Control orchestration through use of motion in score.
-- [Decision Tree]. At each section, performer is given a choice between two cells of music, all branching from a single source to many possibilities. Animated similar to storyboard.
+- [Decision Tree]. At each section, performers are given a choice between two cells of music. Decisions shape the direction of the work over time.
 - Cantus firmus/drone works.
-- "Loading GIF" as timing—speed of information is increasing but so is complexity and file size.
+- "Loading GIF" as timing—musical textures interrupted by technology.
 - More to be developed as project takes shape.
 
 
@@ -41,7 +42,7 @@ A series of new works to be viewed and performed via a lightweight website. The 
 
 
 ## Licenses
-*vectorscores* is released under the [MIT License](http://opensource.org/licenses/MIT). Compositions resulting from my code and parameters are copyright John Teske.
+The *vectorscores* framework is released under the [MIT License](http://opensource.org/licenses/MIT). Copyright of compositions resulting from code and parameters using the framework belong to the composer.
 
 
 ## Contributing
@@ -53,7 +54,7 @@ A series of new works to be viewed and performed via a lightweight website. The 
 ## Roadmap
 
 ### Scope
-The current scope of this project is to require as few dependencies as possible for ease of set up for performances and contribution. Future iterations or other projects may involve servers or other technologies.
+The current scope of this project is to require as few dependencies as possible for ease of performances and contribution.
 
 ### Public access to works
 - viewing and contribution via GitHub
@@ -66,7 +67,7 @@ The current scope of this project is to require as few dependencies as possible 
 shareable links. option to include parameters (with query string?)
 -->
 
-[*Textural Messages*]: http://vectorscor.es/projects/Textural-Messages/
-[storyboard frames]: http://vectorscor.es/projects/storyboard/
-[Morphing clouds]: http://vectorscor.es/projects/glob/
-[Decision Tree]: http://vectorscor.es/projects/decision-tree/
+[*Textural Messages*]: http://vectorscores.org/scores/Textural-Messages/
+[storyboard]: http://vectorscores.org/scores/storyboard/
+[Morphing clouds]: http://vectorscores.org/scores/glob/
+[Decision Tree]: http://vectorscores.org/scores/decision-tree/
