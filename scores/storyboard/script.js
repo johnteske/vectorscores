@@ -31,11 +31,11 @@ function cardX(index) {
 }
 
 // create cards
-var cards = main.selectAll("g")
+var cards = main.selectAll(".card")
     .data(cardList)
     .enter().append("g")
-    .attr("transform", function(d, i) { return "translate(" + cardX(i) + ", 100)"; })
     .classed("card", 1)
+    .attr("transform", function(d, i) { return "translate(" + cardX(i) + ", 100)"; })
     .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
 cards.append("rect")
