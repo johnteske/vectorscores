@@ -60,7 +60,7 @@ The current scope of this project is to require as few dependencies as possible 
 - viewing and contribution via GitHub
 - download generated vector files and pdfs of scores
 - download pre-selected vector files and pdfs of scores
-- download local copy of repository and works to run on local machine or LAN/darknet
+- clone or download repository to run on local machine or WLAN
 - documentation of premiere performances and other performances as available
 
 <!--
