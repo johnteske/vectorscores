@@ -5,7 +5,8 @@ var cardTypes, cardList;
 {% include_relative _score.js %}
 {% include_relative _settings.js %}
 
-var dynamicsDict = VS.dictionary.Bravura.dynamics;
+var dynamicsDict = VS.dictionary.Bravura.dynamics,
+    durationDict = VS.dictionary.Bravura.durations.stemless;
 
 // display
 var cardWidth = 120,
@@ -44,21 +45,17 @@ cards.append("rect")
 cards.each(function(d) {
     var thisCard = d3.select(this);
 
-    thisCard.selectAll("ellipse")
+    thisCard.selectAll(".duration")
         .data(d.nNotes).enter()
-        .append("ellipse")
-            .attr("cx", 5)
-            .attr("cy", 5)
-            .attr("rx", 4)
-            .attr("ry", 5)
-            .attr("transform",
-                function() {
-                    var point = newPoint(d.spread);
-                    return "translate(" +
-                        (point.x + (cardWidth * 0.5)) + ", " +
-                        (point.y + (cardWidth * 0.5) - 5) + ") " + "rotate(60)"; // offset y by 5px note height
-                }
-            );
+        .append("text")
+            .attr("class", "duration")
+            .text(durationDict["1"])
+            .attr("transform", function() {
+                var point = newPoint(d.spread);
+                return "translate(" +
+                    (point.x + (cardWidth * 0.5)) + ", " +
+                    (point.y + (cardWidth * 0.5)) + ")";
+            });
 
     thisCard.append("text")
         .attr("dy", "-1em")
@@ -85,16 +82,11 @@ cueIndicator.selection
     // .style("opacity", "0");
     ;
 
-// cards.append("rect")
-//     .classed("timer", 1)
-//     .attr("y", cardWidth)
-//     .attr("width", 0)
-//     .attr("height", 1);
-
 function goToCard(eventIndex, dur) {
     var pointer = eventIndex || VS.score.pointer;
     dur = dur || 325;
     cards.transition()
+        .duration(dur)
         .attr("transform", function(d, i) {
             // TODO move all cards in a group, not individual cards?
             var pos =
@@ -103,19 +95,17 @@ function goToCard(eventIndex, dur) {
                 (cardPadding * pointer); // also move by spacing
             return "translate(" + pos + ", 100)";
         })
-    .duration(dur)
-    .style("opacity", function(d, i) {
-        if(pointer > i ){
-            return 0;
-        }
-        else {
-            return (0.5 * (pointer - i)) + 1;
-        }
-    });
+        .style("opacity", function(d, i) {
+            if(pointer > i ){
+                return 0;
+            }
+            else {
+                return (0.5 * (pointer - i)) + 1;
+            }
+        });
 
     // if playing and not skipping, stopping
     if(typeof eventIndex !== "undefined") { updateCardIndicator(eventIndex); }
-    // updateCardTimer(eventIndex);
 }
 
 function updateCardIndicator(pointer) {
@@ -125,28 +115,6 @@ function updateCardIndicator(pointer) {
     VS.score.schedule(indicatorTime, cueIndicator.blink);
 }
 
-// function updateCardTimer(pointer) {
-//     d3.selectAll(".timer")
-//         .transition()
-//         .ease("linear")
-//         .duration(function(d, i) {
-//             if(pointer == i ) {
-//                 return VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer);
-//             }
-//             else {
-//                 return 50;
-//             }
-//         })
-//         .attr("width", function(d, i) {
-//             if(pointer == i ) {
-//                 return cardWidth - 1;
-//             }
-//             else {
-//                 return 0;
-//             }
-//         });
-// }
-
 // create score events from card times
 for(var i = 0; i < cardList.length; i++) {
     VS.score.add(cardList[i].time, goToCard, [i]);
@@ -155,5 +123,4 @@ for(var i = 0; i < cardList.length; i++) {
 VS.score.add(cardList[cardList.length - 1].time + 3000, VS.noop);
 
 VS.control.stepCallback = goToCard;
-// VS.score.pauseCallback = updateCardTimer;
 VS.score.stopCallback = goToCard;

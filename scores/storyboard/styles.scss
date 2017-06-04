@@ -13,7 +13,7 @@
 }
 
 .card text {
-    fill: #444;
+    fill: #111;
 }
 
 .card text.pitch-class-set {
@@ -22,6 +22,11 @@
 }
 
 .card text.dynamics {
-  font-size: 24px;
-  font-family: Bravura;
+    font-size: 24px;
+    font-family: Bravura;
+}
+
+.card text.duration {
+    font-size: 24px;
+    font-family: Bravura;
 }
