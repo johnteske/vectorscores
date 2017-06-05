@@ -1,32 +1,38 @@
 var scoreSettings = (function() {
-    var pcDisplayRadios = document.getElementsByName("settings-pc-display"),
-        generateButton = document.getElementById("settings-generate");
+    var generateButton = document.getElementById("settings-generate");
 
-    function getRadioValue(elements) {
-        for (var i = 0, length = elements.length; i < length; i++) {
-            var thisElement = elements[i];
-            if (thisElement.checked) {
-                return thisElement.value;
+    var radioSetting = (function (elements) {
+        var radio = {};
+
+        radio.getValue = function() {
+            for (var i = 0, length = elements.length; i < length; i++) {
+                var thisElement = elements[i];
+                if (thisElement.checked) {
+                    return thisElement.value;
+                }
             }
-        }
-    }
-    function setRadioValue(elements, value) {
-        for (var i = 0, length = elements.length; i < length; i++) {
-            var thisElement = elements[i];
-            if (thisElement.value === value) {
-                thisElement.checked = true;
-                break;
+        };
+
+        radio.setValue = function(value) {
+            for (var i = 0, length = elements.length; i < length; i++) {
+                var thisElement = elements[i];
+                if (thisElement.value === value) {
+                    thisElement.checked = true;
+                    break;
+                }
             }
-        }
-    }
+        };
+
+        return radio;
+    })(document.getElementsByName("settings-pc-display"));
 
     var settings = {};
 
     settings.pcFormat = VS.getQueryString("pcs") || "";
-    setRadioValue(pcDisplayRadios, settings.pcFormat);
+    radioSetting.setValue(settings.pcFormat);
 
     settings.generate = function() {
-        document.location.href = "?pcs=" + getRadioValue(pcDisplayRadios);
+        document.location.href = "?pcs=" + radioSetting.getValue();
     };
     generateButton.addEventListener("click", settings.generate);
 
