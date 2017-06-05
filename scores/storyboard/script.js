@@ -11,6 +11,7 @@ var dynamicsDict = VS.dictionary.Bravura.dynamics,
 // display
 var cardWidth = 120,
     cardPadding = 10,
+    cardTransTime = 600,
     offset = cardWidth,
     width = (cardWidth * 4) + (cardPadding * 2),
     height = cardWidth * 3;
@@ -27,11 +28,13 @@ function newPoint(spread) {
     };
 }
 function cardX(index) {
-    return offset + (index * (cardWidth + cardPadding));
+    return index * (cardWidth + cardPadding);
 }
 
 // create cards
-var cards = main.selectAll(".card")
+var cardGroup = main.append("g")
+    .attr("transform", "translate(" + offset + ", 0)");
+var cards = cardGroup.selectAll(".card")
     .data(cardList)
     .enter().append("g")
     .classed("card", 1)
@@ -78,23 +81,21 @@ cards.each(function(d) {
 
 var cueIndicator = VS.cueTriangle(main);
 cueIndicator.selection
-    .attr("transform", "translate(" + cardX(1) + ", 50)") // put at right card position
-    // .style("opacity", "0");
-    ;
+    .attr("transform", "translate(" + (cardX(1) + offset) + ", 50)") // put at right card position
+    .style("opacity", "0");
 
 function goToCard(eventIndex, dur) {
     var pointer = eventIndex || VS.score.pointer;
-    dur = dur || 325;
+    dur = dur || cardTransTime;
+    cardGroup.transition()
+        .duration(dur)
+        .attr("transform", function() {
+            var x = offset - cardX(pointer);
+            return "translate(" + x + ", 0)";
+        });
+
     cards.transition()
         .duration(dur)
-        .attr("transform", function(d, i) {
-            // TODO move all cards in a group, not individual cards?
-            var pos =
-                cardX(i) -
-                (offset * pointer) - // move by pointer
-                (cardPadding * pointer); // also move by spacing
-            return "translate(" + pos + ", 100)";
-        })
         .style("opacity", function(d, i) {
             if(pointer > i ){
                 return 0;
@@ -110,9 +111,18 @@ function goToCard(eventIndex, dur) {
 
 function updateCardIndicator(pointer) {
     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
-        indicatorTime = cardDuration - 3000; // start blinking 3 seconds before next card
+        blinkDuration = 3000,
+        indicatorTime = cardDuration - blinkDuration;
 
-    VS.score.schedule(indicatorTime, cueIndicator.blink);
+    VS.score.schedule(indicatorTime, function() {
+        cueIndicator.blink();
+        cueIndicator.selection
+            .style("opacity", "1")
+            .transition()
+            .delay(blinkDuration)
+            .duration(cardTransTime)
+            .style("opacity", "0");
+    });
 }
 
 // create score events from card times
