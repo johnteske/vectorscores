@@ -18,6 +18,7 @@ var radius = 48, // relative to glob.width?
     main = d3.select(".main");
 
 {% include_relative _glob.js %}
+{% include_relative _settings.js %}
 
 function newPoint() {
     var angle = Math.random() * Math.PI * 2,
@@ -42,8 +43,6 @@ glob.pitchSet = main.append("text")
     .style("opacity", "0"); // init value
 
 glob.move = function(dur) {
-    var newPitchClassSet = "[0, " + VS.getItem([1, 2, 3]) + ", " + VS.getItem([4, 5, 6]) + "]";
-
     d3.select(".pc-set")
         .transition(dur)
         .style("opacity", 0)
@@ -53,7 +52,12 @@ glob.move = function(dur) {
         .style("opacity", 0)
         .attr("x", canvas.center)
         .attr("y", canvas.width - textoffset)
-        .text(newPitchClassSet)
+        .text(function() {
+            var pcSet = [0, VS.getItem([1, 2, 3]), VS.getItem([4, 5, 6])].map(function(pc) {
+                return pcFormat(pc, scoreSettings.pcFormat);
+            });
+            return "[" + pcSet.join(", ") + "]";
+        })
         .transition(dur)
         .style("opacity", 1);
 
