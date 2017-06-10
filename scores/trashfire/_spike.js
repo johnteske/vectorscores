@@ -23,20 +23,20 @@ TrashFire.Spike = function() {
             .transition()
             .duration(600)
             .ease("elastic")
-            .attr("transform", "translate(" + center + ","  + 90 + ")");
+            .attr("transform", "translate(" + center + ","  + 105 + ")");
 
-        // TODO shake dumpster?
-        // var dumpsterPosition = dumpster.group.node().getBBox();
-        // dumpster.group
-        //     .transition()
-        //     // .delay(600)
-        //     .duration(300)
-        //     .ease("elastic")
-        //     .attr("transform", "translate(" + (180) + "," + (180 + 10) + ")")
-        //     .transition()
-        //     .duration(300)
-        //     .ease("bounce")
-        //     .attr("transform", "translate(" + (180) + "," + (180) + ")");
+    // TODO shake dumpster?
+    // var dumpsterPosition = dumpster.group.node().getBBox();
+    dumpster.group
+        .transition()
+        // .delay(600)
+        .duration(300)
+        .ease("elastic")
+        .attr("transform", "translate(" + (180) + "," + (150 + 10) + ")")
+        .transition()
+        .duration(300)
+        .ease("bounce")
+        .attr("transform", "translate(" + (180) + "," + (150) + ")");
 };
 
     return spike;
