@@ -14,7 +14,7 @@ TrashFire.Spike = function() {
         spike.group
             .style("opacity", 0)
             .transition()
-            .duration(4000)
+            .duration(3000)
             .style("opacity", 1);
     };
 

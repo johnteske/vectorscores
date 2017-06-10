@@ -14,7 +14,7 @@ var TrashFire = {
 var crumple = TrashFire.Trash(60, 60);
 crumple.makeCircle();
 
-var crumple2 = TrashFire.Trash(60, 60);
+var crumple2 = TrashFire.Trash(60, 60); // TODO allow diff sizes
 crumple2.makeCircle();
 
 var crumple3 = TrashFire.Trash(60, 60);
@@ -30,4 +30,4 @@ VS.score.add(6000, TrashFire.bins.remove, [0]);
 VS.score.add(8000, TrashFire.bins.remove, [1]);
 VS.score.add(10000, TrashFire.bins.remove, [0]);
 VS.score.add(10000, spike.appear);
-VS.score.add(15123, spike.hit);
+VS.score.add(14000, spike.hit);
