@@ -17,7 +17,7 @@ var TrashFire = (function() {
 })();
 
 {% include_relative _dumpster.js %}
-{%comment%}{% include_relative _trash.js %}{%endcomment%}
+{% include_relative _trash.js %}
 {%comment%}{% include_relative _bins.js %}{%endcomment%}
 {%comment%}{% include_relative _spike.js %}{%endcomment%}
 {%comment%}{% include_relative _score.js %}{%endcomment%}
