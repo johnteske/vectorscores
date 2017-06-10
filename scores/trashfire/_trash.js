@@ -17,5 +17,12 @@ TrashFire.Trash = function(width, height) {
         TrashFire.bins.add(trash);
     };
 
+    trash.makeCircle = function() {
+        trash.group.append("circle")
+            .attr("cx", trash.center.x)
+            .attr("cy", trash.center.y)
+            .attr("r", 8);
+    };
+
     return trash;
 };

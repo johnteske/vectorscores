@@ -12,22 +12,13 @@ var TrashFire = {
 {% include_relative _score.js %}
 
 var crumple = TrashFire.Trash(60, 60);
-crumple.group.append("circle")
-    .attr("cx", crumple.center.x)
-    .attr("cy", crumple.center.y)
-    .attr("r", 8);
+crumple.makeCircle();
 
 var crumple2 = TrashFire.Trash(60, 60);
-crumple2.group.append("circle")
-    .attr("cx", crumple2.center.x)
-    .attr("cy", crumple2.center.y)
-    .attr("r", 8);
+crumple2.makeCircle();
 
 var crumple3 = TrashFire.Trash(60, 60);
-crumple3.group.append("circle")
-    .attr("cx", crumple3.center.x)
-    .attr("cy", crumple3.center.y)
-    .attr("r", 8);
+crumple3.makeCircle();
 
 var spike = TrashFire.Spike();
 
