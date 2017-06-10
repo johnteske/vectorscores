@@ -31,36 +31,25 @@ function cardX(index) {
     return index * (cardWidth + cardPadding);
 }
 
-// create cards
-var cardGroup = main.append("g")
-    .attr("transform", "translate(" + offset + ", 0)");
-var cards = cardGroup.selectAll(".card")
-    .data(cardList)
-    .enter().append("g")
-    .classed("card", 1)
-    .attr("transform", function(d, i) { return "translate(" + cardX(i) + ", 100)"; })
-    .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
+function makeCard(selection) {
 
-cards.append("rect")
+    selection.append("rect")
         .attr("width", cardWidth - 1)
         .attr("height", cardWidth - 1);
 
-cards.each(function(d) {
-    var thisCard = d3.select(this);
-
-    thisCard.selectAll(".duration")
-        .data(d.nNotes).enter()
-        .append("text")
-            .attr("class", "duration")
+    selection.selectAll(".duration")
+        .data(selection.datum().notes)
+        .enter()
+        .append("text").attr("class", "duration")
             .text(durationDict["1"])
-            .attr("transform", function() {
-                var point = newPoint(d.spread);
+            .attr("transform", function(d) {
+                var point = newPoint(selection.datum().spread);
                 return "translate(" +
                     (point.x + (cardWidth * 0.5)) + ", " +
                     (point.y + (cardWidth * 0.5)) + ")";
             });
 
-    thisCard.append("text")
+    selection.append("text")
         .attr("dy", "-1em")
         .text(function(d) {
             var pcSet = d.pcSet.map(function(pc) {
@@ -70,14 +59,24 @@ cards.each(function(d) {
         })
         .classed("pitch-class-set", 1);
 
-    thisCard.append("text")
+    selection.append("text")
         .attr("y", cardWidth)
         .attr("dx", "0.125em")
         .attr("dy", "1em")
-        .text(dynamicsDict[d.dynamic])
+        .text(function(d) { return dynamicsDict[d.dynamic]; })
         .classed("dynamics", 1);
-
-});
+}
+// create cards
+var cardGroup = main.append("g")
+    .attr("transform", "translate(" + offset + ", 0)");
+var cards = cardGroup.selectAll(".card")
+    .data(cardList)
+    .enter()
+    .append("g")
+    .classed("card", 1)
+    .call(makeCard)
+    .attr("transform", function(d, i) { return "translate(" + cardX(i) + ", 100)"; })
+    .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
 var cueIndicator = VS.cueTriangle(main);
 cueIndicator.selection
