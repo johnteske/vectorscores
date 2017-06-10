@@ -5,27 +5,19 @@ TrashFire.dumpster = (function(TF) {
 
     var group = TF.world.append("g")
         .classed("dumpster", 1)
-        .attr("transform", "translate(180, 180)");
+        .attr("transform", "translate(180, 150)");
 
     var back = group.append("g")
         .classed("back", 1)
-        .attr("transform", "translate(10, -10)");
-    back.append("rect")
-        .attr("width", 120)
-        .attr("height", 120);
-    back.append("path")
-        .attr("d", "M0,0 L-20,20 L-20,140 L0,120");
+        .attr("transform", "translate(-92, 0)");
+    back.append("use").attr("xlink:href", "dumpster.svg#back");
 
     var trash = group.append("g");
 
     var front = group.append("g")
         .classed("front", 1)
-        .attr("transform", "translate(-10, 10)");
-    front.append("rect")
-        .attr("width", 120)
-        .attr("height", 120);
-    front.append("path")
-        .attr("d", "M120,120 L140,100 L140,-20 L120,0");
+        .attr("transform", "translate(-92, 0)");
+    front.append("use").attr("xlink:href", "dumpster.svg#front");
 
     var center = {
         x: 30,
