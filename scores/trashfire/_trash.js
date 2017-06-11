@@ -12,22 +12,21 @@ function makeCircle(selection) {
 }
 
 function updateTrash() {
+    var offset = 10;
     var trashWidths = trash.map(function(t) {
         return t.size;
     });
     var trashWidthSum = trashWidths.reduce(function(a, b) {
         return a + b;
-    }, 0);
+    }, (trashWidths.length - 1) * offset);
 
     function trashPosition (d, i) {
         var upToI = trashWidths.slice(0, i),
             sum = upToI.reduce(function(a, b) {
                 return a + b;
             }, 0),
-            // - (trashWidths.length - 1 * 10) // TODO offset by spacing
             x = (TrashFire.trashOrigin.x - (trashWidthSum * 0.5)) +
-                // (trashWidths.length - 1 * 10) +
-                (sum + (i * 10));
+                (sum + (i * offset));
         return "translate(" + x + "," + (d.size * -0.5) + ")";
     }
 
