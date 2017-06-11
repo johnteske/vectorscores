@@ -39,7 +39,8 @@ VS.score.add(0, function() {
     trash = [1, 2, 3, 4].map(function() {
         return {
             size: VS.getRandExcl(25, 75),
-            active: true
+            active: true,
+            type: VS.getItem(["circle", "rect"])
         };
     });
     updateTrash();
@@ -52,7 +53,7 @@ VS.score.add(2000, function() {
 });
 
 VS.score.add(4000, function() {
-    var newTrash = { active: true, size: VS.getRandExcl(25, 75) };
+    var newTrash = { active: true, size: VS.getRandExcl(25, 75), type: "rect" };
     trash.push(newTrash);
     updateTrash();
 });

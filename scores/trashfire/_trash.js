@@ -3,12 +3,26 @@
  */
 var trash = [];
 
+function makeTrash(selection) {
+    selection.filter(function(d) { return d.type === "circle"; })
+        .call(makeCircle);
+    selection.filter(function(d) { return d.type === "rect"; })
+        .call(makeRect);
+}
 function makeCircle(selection) {
     selection.append("circle")
         .attr("fill-opacity", "0.5")
         .attr("cx", function(d) { return d.size * 0.5; })
         .attr("cy", function(d) { return d.size * 0.5; })
         .attr("r", function(d) { return d.size * 0.5 - 5; });
+}
+function makeRect(selection) {
+    selection.append("rect")
+        .attr("fill-opacity", "0.5")
+        .attr("x", 5)
+        .attr("y", 5)
+        .attr("width", function(d) { return d.size - 10; })
+        .attr("height", function(d) { return d.size - 10; });
 }
 
 function updateTrash() {
@@ -67,5 +81,6 @@ function updateTrash() {
         })
         .transition().duration(1000)
         .style("opacity", 1);
-    trashes.call(makeCircle);
+
+    trashes.call(makeTrash);
 }
