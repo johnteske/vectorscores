@@ -1,9 +1,9 @@
 /**
  * Generate test trash
  */
-var trash = [30, 45, 70, 85].map(function(size) {
+var trash = [1, 2, 3, 4].map(function() {
     return {
-        size: size,
+        size: VS.getRandExcl(25, 75),
         active: true
     };
 });
@@ -17,6 +17,25 @@ function makeCircle(selection) {
 }
 
 function updateTrash() {
+    var trashWidths = trash.map(function(t) {
+        return t.size;
+    });
+    var trashWidthSum = trashWidths.reduce(function(a, b) {
+        return a + b;
+    }, 0);
+
+    function trashPosition (d, i) {
+        var upToI = trashWidths.slice(0, i),
+            sum = upToI.reduce(function(a, b) {
+                return a + b;
+            }, 0),
+            // - (trashWidths.length - 1 * 10) // TODO offset by spacing
+            x = (TrashFire.trashOrigin.x - (trashWidthSum * 0.5)) +
+                // (trashWidths.length - 1 * 10) +
+                (sum + (i * 10));
+        return "translate(" + x + "," + (d.size * -0.5) + ")";
+    }
+
     var trashSelection = trashContainer.selectAll(".trash")
         .data(trash);
 
@@ -32,9 +51,7 @@ function updateTrash() {
     // UPDATE
     trashSelection
         .transition().duration(1000)
-        .attr("transform", function (d, i) {
-            return "translate(" + i * 90 + "," + (d.size * -0.5) + ")";
-        });
+        .attr("transform", trashPosition);
 
     // ENTER
     var trashes = trashSelection.enter()
@@ -43,9 +60,7 @@ function updateTrash() {
                 return "translate(" + TrashFire.trashOrigin.x + "," + TrashFire.trashOrigin.y + ")";
             });
     trashes.transition().duration(1000)
-    .attr("transform", function (d, i) {
-        return "translate(" + i * 90 + "," + (d.size * -0.5) + ")";
-    });
+    .attr("transform", trashPosition);
 
     trashes.append("path")
         .style("opacity", 0)
@@ -65,11 +80,12 @@ updateTrash();
 
 window.setTimeout(function() {
     trash.pop();
+    trash.pop();
     updateTrash();
 }, 2000);
 
 window.setTimeout(function() {
-    var newTrash = { active: true, size:66 };
+    var newTrash = { active: true, size: VS.getRandExcl(25, 75) };
     trash.push(newTrash);
     updateTrash();
 }, 4000);
