@@ -1,12 +1,7 @@
 /**
  * Generate test trash
  */
-var trash = [1, 2, 3, 4].map(function() {
-    return {
-        size: VS.getRandExcl(25, 75),
-        active: true
-    };
-});
+var trash = [];
 
 function makeCircle(selection) {
     selection.append("circle")
@@ -76,19 +71,6 @@ function updateTrash() {
     trashes.call(makeCircle);
 
 }
-updateTrash();
-
-window.setTimeout(function() {
-    trash.pop();
-    trash.pop();
-    updateTrash();
-}, 2000);
-
-window.setTimeout(function() {
-    var newTrash = { active: true, size: VS.getRandExcl(25, 75) };
-    trash.push(newTrash);
-    updateTrash();
-}, 4000);
 
 // TrashFire.Trash = function(width, height) {
 //     var trash = {},
