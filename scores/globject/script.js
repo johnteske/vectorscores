@@ -6,9 +6,10 @@ var width = 480,
     boxwidth = width + (margin * 2),
     center = boxwidth * 0.5,
     globLeft = 5,
-    debug = false;
+    debug = +VS.getQueryString("debug") === 1 || false;
 
 var main = d3.select(".main")
+    .classed("debug", debug)
     .style("width", boxwidth + "px")
     .style("height", boxwidth + "px");
 
@@ -140,8 +141,6 @@ function resize() {
         .style("width", boxwidth + "px")
         .style("height", boxwidth + "px");
     transformGlob();
-
-    if(debug){ resizeDebug(width, center); }
 }
 resize();
 
@@ -159,5 +158,3 @@ for(var i = 0; i < 10; i++) {
     );
 }
 VS.control.stepCallback = refreshGlobject;
-
-{% include_relative _debug.js %}
