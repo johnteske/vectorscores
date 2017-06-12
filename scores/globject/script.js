@@ -74,11 +74,15 @@ function drawGlobject(d, i){
         return VS.xByDuration(selection, durations, 18, 0) + 64;
     }
 
-    for (var i = 0, phrases = 16; i < phrases; i++) {
+    // 127 / ~10px notehead height = 13 y layers
+    for (var i = 0, phrases = 13; i < phrases; i++) {
         content.append("g")
             .attr("transform", function() {
-                var y = (127 / phrases) * i;
-                return "translate(" + Math.random() * width + "," + y + ")"
+                var halfWidth = width * 0.5,
+                    // x = Math.random() * width,
+                    x = Math.random() * halfWidth + (halfWidth * (i % 2)),
+                    y = (127 / phrases) * i;
+                return "translate(" + x + "," + y + ")"
             })
             .selectAll("text")
             .data(d.phraseTexture)
