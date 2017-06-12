@@ -15,9 +15,6 @@ var main = d3.select(".main")
 
 var noteheads = VS.dictionary.Bravura.durations.stemless;
 
-{% include_relative _globject.js %}
-var theGlob = new Globject(150);
-
 {% include_relative _rangeGen.js %}
 {% include_relative _score.js %}
 
@@ -25,12 +22,13 @@ var theGlob = new Globject(150);
 
 var globGroup;// = main.append("g");
 
-function transformGlob() {
-    globGroup
-        .attr("transform", "translate(" +
-            (center - (theGlob.width * 0.5)) + "," +
-            (center - (120 * 0.5)) + ")");
-}
+// center globject
+// function transformGlob() {
+//     globGroup
+//         .attr("transform", "translate(" +
+//             (center - (theGlob.width * 0.5)) + "," +
+//             (center - (120 * 0.5)) + ")");
+// }
 
 function drawGlobject(){
     var lineData = [],
@@ -57,7 +55,6 @@ function drawGlobject(){
         .attr("id", "glob-clip")
         .append("path")
         .attr("transform", "translate(" + globLeft + "," + 0 + ")")
-        //  .transition(300)
         .attr("d", lineFunction(datLine));
 
     theGlob.globStuff =
@@ -90,7 +87,6 @@ function drawGlobject(){
     globGroup.append("path")
          .attr("transform", "translate(" + globLeft + "," + 0 + ")")
          .classed("globject", 1)
-         //  .transition(300)
          .attr("d", lineFunction(datLine));
 
     theGlob.pitchClassGroup = globGroup.append("g");
@@ -123,14 +119,14 @@ function drawGlobject(){
         .attr("y", 127 + 42)
         .text(function(d) { return d; });
 
-    transformGlob();
+    // transformGlob();
 }
 drawGlobject();
 
-// resize
 
-d3.select(window).on("resize", resize);
-
+/**
+ * Resize
+ */
 function resize() {
     // update width
     boxwidth = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
@@ -140,21 +136,24 @@ function resize() {
     main
         .style("width", boxwidth + "px")
         .style("height", boxwidth + "px");
-    transformGlob();
+    // transformGlob();
 }
+
 resize();
 
-function refreshGlobject() {
-    globGroup.remove();
-    makeGlobject();
-    drawGlobject();
-}
+d3.select(window).on("resize", resize);
 
-// populate score
-for(var i = 0; i < 10; i++) {
-    VS.score.add(
-        (i * 2000) + (1000 * Math.random()),
-        refreshGlobject
-    );
-}
-VS.control.stepCallback = refreshGlobject;
+// function refreshGlobject() {
+//     globGroup.remove();
+//     makeGlobject();
+//     drawGlobject();
+// }
+
+// // populate score
+// for(var i = 0; i < 10; i++) {
+//     VS.score.add(
+//         (i * 2000) + (1000 * Math.random()),
+//         refreshGlobject
+//     );
+// }
+// VS.control.stepCallback = refreshGlobject;

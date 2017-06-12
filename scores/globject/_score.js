@@ -3,33 +3,34 @@ function randRangeGenerator() {
 }
 
 function makeGlobject() {
-    var hiRangeGen = randRangeGenerator(),
+    var globject = {},
+        hiRangeGen = randRangeGenerator(),
         loRangeGen = randRangeGenerator(),
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
         newDynamics = ["", "", ""];
 
-    theGlob.width = Math.round(VS.getRandExcl(100, 200));
+    globject.width = Math.round(VS.getRandExcl(100, 200));
 
-    theGlob.setRangeEnvelopes(
-        "midi",
-        hiRangeGen(4, 64, 127),
-        loRangeGen(4, 0, 63),
-        [0, 0.3, 0.5, 1]
-    );
+    globject.rangeEnvelope = {
+        type: "midi",
+        hi: hiRangeGen(4, 64, 127),
+        lo: loRangeGen(4, 0, 63),
+        times: [0, 0.3, 0.5, 1]
+    };
 
-    theGlob.setPitchClassSets(
-        [
+    globject.pitches = {
+        classes: [
             [ 0, Math.round(VS.getRandExcl(1, 3)) ],
             [ 0, Math.round(VS.getRandExcl(1, 3)), Math.round(VS.getRandExcl(4, 7)) ]
         ],
-        [0, (Math.random() * 0.2) + 0.4]
-    );
+        times: [0, (Math.random() * 0.2) + 0.4]
+    };
 
-    // theGlob.duration = {
+    // globject.duration = {
     //     values: [0.5, 0.75, 1],
     //     weights: [0.5, 0.25, 0.25]
     // };
-    // theGlob.articulation = {
+    // globject.articulation = {
     //     values: [">", "_", "."],
     //     weights: [0.5, 0.25, 0.25]
     // };
@@ -45,16 +46,19 @@ function makeGlobject() {
         newDynamics[2] = "";
     }
 
-    theGlob.setDynamics(newDynamics, [0, 0.5, 1]);
+    globject.dynamics = {
+        values: newDynamics,
+        times: [0, 0.5, 1]
+    };
 
     var durs = [0.5, 1, 1.5, 2];
 
-    theGlob.phraseTexture = [
+    globject.phraseTexture = [
         VS.getItem(durs),
         VS.getItem(durs),
         VS.getItem(durs)
     ];
 
-    return theGlob;
+    return globject;
 }
-makeGlobject();
+var theGlob = makeGlobject();
