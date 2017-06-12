@@ -38,21 +38,21 @@ function makeGlobject() {
     //     weights: [0.5, 0.25, 0.25]
     // };
 
-    // newDynamics[0] = VS.getItem(dynamics);
-    // newDynamics[2] = VS.getItem(dynamics);
-    // if(dynamics.indexOf(newDynamics[0]) > dynamics.indexOf(newDynamics[2])) {
-    //     newDynamics[1] = "dim.";
-    // } else if (dynamics.indexOf(newDynamics[0]) < dynamics.indexOf(newDynamics[2])) {
-    //     newDynamics[1] = "cres.";
-    // } else {
-    //     newDynamics[1] = "subito " + VS.getItem(dynamics);
-    //     newDynamics[2] = "";
-    // }
+    newDynamics[0] = VS.getItem(dynamics);
+    newDynamics[2] = VS.getItem(dynamics);
+    if(dynamics.indexOf(newDynamics[0]) > dynamics.indexOf(newDynamics[2])) {
+        newDynamics[1] = "dim.";
+    } else if (dynamics.indexOf(newDynamics[0]) < dynamics.indexOf(newDynamics[2])) {
+        newDynamics[1] = "cres.";
+    } else {
+        newDynamics[1] = "subito " + VS.getItem(dynamics);
+        newDynamics[2] = "";
+    }
 
     globject.dynamics = [
-        { value: VS.getItem(dynamics), time: 0 },
-        { value: VS.getItem(dynamics), time: 0.5 },
-        { value: VS.getItem(dynamics), time: 1 }
+        { value: newDynamics[0], time: 0 },
+        { value: newDynamics[1], time: 0.5 },
+        { value: newDynamics[2], time: 1 }
     ];
 
     var durs = [0.5, 1, 1.5, 2];
