@@ -24,17 +24,19 @@ var globjects = globjectContainer.selectAll(".globject")
     .data(score)
     .enter()
     .append("g").attr("class", "globject")
-    .call(drawGlobject);
+    .each(drawGlobject);
 
-function centerGlobject(selection) {
-    selection.attr("transform", "translate(" +
-        (center - (selection.datum().width * 0.5)) + "," +
+function centerGlobject(d, i) {
+    d3.select(this).attr("transform", "translate(" +
+        (center - (d.width * 0.5)) + "," +
         (center - (120 * 0.5)) + ")");
 }
 
-function drawGlobject(selection){
-    var datum = selection.datum(),
-        rangeEnvelope = datum.rangeEnvelope,
+function drawGlobject(d, i){
+    var selection = d3.select(this),
+        width = d.width;
+
+    var rangeEnvelope = d.rangeEnvelope,
         hiRangePoints = [],
         loRangePoints = [];
 
@@ -46,23 +48,23 @@ function drawGlobject(selection){
     var rangeLine = hiRangePoints.concat(loRangePoints.reverse());
 
     var lineFunction = d3.svg.line()
-         .x(function(d) { return d.x * datum.width; })
+         .x(function(d) { return d.x * width; })
          .y(function(d) { return 127 - d.y; }) // pitch is bottom-up, not pixel top2bottom
          .tension(0.8)
          .interpolate("cardinal-closed");
 
     selection.append("clipPath")
-        .attr("id", "globject-clip")
+        .attr("id", "globject-clip-" + i)
         .append("path")
         .attr("transform", "translate(" + globLeft + "," + 0 + ")")
         .attr("d", lineFunction(rangeLine));
 
     var content = selection.append("g")
         .attr("class", "globstuff")
-        .attr("clip-path", "url(#globject-clip)");
+        .attr("clip-path", "url(#globject-clip-" + i + ")");
 
     function phraseSpacing(selection) {
-        var durations = datum.phraseTexture;
+        var durations = d.phraseTexture;
         return VS.xByDuration(selection, durations, 18, 0) + 64;
     }
 
@@ -70,10 +72,10 @@ function drawGlobject(selection){
         content.append("g")
             .attr("transform", function() {
                 var y = (127 / phrases) * i;
-                return "translate(" + Math.random() * datum.width + "," + y + ")"
+                return "translate(" + Math.random() * width + "," + y + ")"
             })
             .selectAll("text")
-            .data(datum.phraseTexture)
+            .data(d.phraseTexture)
             .enter()
             .append("text")
             .text(function(d) {
@@ -89,11 +91,11 @@ function drawGlobject(selection){
 
     selection.append("g")
         .selectAll("text")
-        .data(datum.pitches)
+        .data(d.pitches)
         .enter()
         .append("text")
         .attr("x", function(d) {
-            return d.time * datum.width;
+            return d.time * width;
         })
         .attr("y", 127 + 24)
         .text(function(d) {
@@ -106,16 +108,14 @@ function drawGlobject(selection){
 
     selection.append("g")
         .selectAll("text")
-        .data(datum.dynamics)
+        .data(d.dynamics)
         .enter()
         .append("text")
         .attr("x", function(d, i) {
-            return d.time * datum.width;
+            return d.time * width;
         })
         .attr("y", 127 + 42)
         .text(function(d) { return d.value; });
-
-    selection.call(centerGlobject);
 }
 
 /**
@@ -130,7 +130,8 @@ function resize() {
     main
         .style("width", boxwidth + "px")
         .style("height", boxwidth + "px");
-    d3.select(".globject").call(centerGlobject);
+
+    d3.selectAll(".globject").each(centerGlobject);
 }
 
 resize();

@@ -67,3 +67,4 @@ function makeGlobject() {
 }
 
 var score = [makeGlobject()];
+// score.push(makeGlobject());
