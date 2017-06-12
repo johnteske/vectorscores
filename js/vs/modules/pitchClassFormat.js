@@ -1,3 +1,6 @@
+---
+layout: compress-js
+---
 /**
  * @param {Integer} integer - pitch class
  * @param {String} format - display format
