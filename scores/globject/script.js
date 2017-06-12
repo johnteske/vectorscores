@@ -20,11 +20,18 @@ var main = d3.select(".main")
 
 var globjectContainer = main.append("g").attr("class", "globjects");
 
-var globjects = globjectContainer.selectAll(".globject")
-    .data(score)
-    .enter()
-    .append("g").attr("class", "globject")
-    .each(drawGlobject);
+function update(index) {
+    d3.selectAll(".globject").remove();
+
+    globjectContainer.selectAll(".globject")
+        .data(score[index])
+        .enter()
+        .append("g").attr("class", "globject")
+        .style("opacity", 1)
+        .each(drawGlobject)
+        .each(centerGlobject);
+}
+update(0);
 
 function centerGlobject(d, i) {
     d3.select(this).attr("transform", "translate(" +
@@ -138,17 +145,15 @@ resize();
 
 d3.select(window).on("resize", resize);
 
-// function refreshGlobject() {
-//     globGroup.remove();
-//     makeGlobject();
-//     drawGlobject();
-// }
+/**
+ * Populate score
+ */
+for (var i = 0; i < score.length; i++) {
+    VS.score.add(i * 2000, update, [i]);
+}
 
-// // populate score
-// for(var i = 0; i < 10; i++) {
-//     VS.score.add(
-//         (i * 2000) + (1000 * Math.random()),
-//         refreshGlobject
-//     );
-// }
-// VS.control.stepCallback = refreshGlobject;
+/**
+ * Score controls
+ */
+VS.control.stopCallback = function() { update(0); }
+VS.control.stepCallback = function() { update(VS.score.pointer); }

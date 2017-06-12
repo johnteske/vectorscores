@@ -66,5 +66,8 @@ function makeGlobject() {
     return globject;
 }
 
-var score = [makeGlobject()];
-// score.push(makeGlobject());
+var score = [];
+for (var i = 0; i < 10; i++) {
+    score.push([makeGlobject()]);
+}
+// score.push([makeGlobject(), makeGlobject()]);
