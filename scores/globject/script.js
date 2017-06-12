@@ -31,7 +31,6 @@ function update(index) {
         .each(drawGlobject)
         .each(centerGlobject);
 }
-update(0);
 
 function centerGlobject(d, i) {
     d3.select(this).attr("transform", "translate(" +
@@ -151,6 +150,11 @@ d3.select(window).on("resize", resize);
 for (var i = 0; i < score.length; i++) {
     VS.score.add(i * 2000, update, [i]);
 }
+
+/**
+ * Initialize score
+ */
+update(0);
 
 /**
  * Score controls
