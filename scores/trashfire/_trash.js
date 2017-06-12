@@ -68,7 +68,7 @@ function updateTrash() {
                 return "translate(" + TrashFire.trashOrigin.x + "," + TrashFire.trashOrigin.y + ")";
             });
     trashes.transition().duration(1000)
-    .attr("transform", trashPosition);
+        .attr("transform", trashPosition);
 
     trashes.append("path")
         .style("opacity", 0)

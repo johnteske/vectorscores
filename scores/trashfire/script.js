@@ -18,20 +18,9 @@ var TrashFire = (function() {
 
 {% include_relative _dumpster.js %}
 {% include_relative _trash.js %}
-{%comment%}{% include_relative _bins.js %}{%endcomment%}
-{%comment%}{% include_relative _spike.js %}{%endcomment%}
+{% include_relative _spike.js %}
 {%comment%}{% include_relative _score.js %}{%endcomment%}
 
-// var crumple = TrashFire.Trash(60, 60);
-// crumple.makeCircle();
-//
-// var crumple2 = TrashFire.Trash(60, 60); // TODO allow diff sizes
-// crumple2.makeCircle();
-//
-// var crumple3 = TrashFire.Trash(60, 60);
-// crumple3.makeCircle();
-//
-// var spike = TrashFire.Spike();
 
 // manual test score
 
@@ -58,7 +47,15 @@ VS.score.add(4000, function() {
     updateTrash();
 });
 
-VS.score.add(6000, VS.noop);
+VS.score.add(6000, makeSpike);
+
+VS.score.add(8000, function() {
+    trash = [];
+    updateTrash();
+    hitSpike();
+});
+
+VS.score.add(10000, VS.noop);
 
 VS.score.stopCallback = function() {
     trash = [];
