@@ -8,73 +8,72 @@ var width = 480,
     globLeft = 5,
     debug = +VS.getQueryString("debug") === 1 || false;
 
-var main = d3.select(".main")
-    .classed("debug", debug)
-    .style("width", boxwidth + "px")
-    .style("height", boxwidth + "px");
-
 var noteheads = VS.dictionary.Bravura.durations.stemless;
 
 {% include_relative _rangeGen.js %}
 {% include_relative _score.js %}
 
-// make Globject
+var main = d3.select(".main")
+    .classed("debug", debug)
+    .style("width", boxwidth + "px")
+    .style("height", boxwidth + "px");
 
-var globGroup;// = main.append("g");
+var globjectContainer = main.append("g").attr("class", "globjects");
 
-// center globject
-// function transformGlob() {
-//     globGroup
-//         .attr("transform", "translate(" +
-//             (center - (theGlob.width * 0.5)) + "," +
-//             (center - (120 * 0.5)) + ")");
-// }
+var globjects = globjectContainer.selectAll(".globject")
+    .data(score)
+    .enter()
+    .append("g").attr("class", "globject")
+    .call(drawGlobject);
 
-function drawGlobject(){
-    var lineData = [],
-        lowData = [];
+function centerGlobject(selection) {
+    selection.attr("transform", "translate(" +
+        (center - (selection.datum().width * 0.5)) + "," +
+        (center - (120 * 0.5)) + ")");
+}
 
-    globGroup = main.append("g");
+function drawGlobject(selection){
+    var datum = selection.datum(),
+        rangeEnvelope = datum.rangeEnvelope,
+        hiRangePoints = [],
+        loRangePoints = [];
 
-    for (var i = 0; i < theGlob.rangeEnvelope.times.length; i++) {
-        lineData.push({ "x": theGlob.rangeEnvelope.times[i], "y": theGlob.rangeEnvelope.hi[i]});
-        lowData.push({ "x": theGlob.rangeEnvelope.times[i], "y": theGlob.rangeEnvelope.lo[i]});
+    for (var t = 0; t < rangeEnvelope.times.length; t++) {
+        hiRangePoints.push({ "x": rangeEnvelope.times[t], "y": rangeEnvelope.hi[t]});
+        loRangePoints.push({ "x": rangeEnvelope.times[t], "y": rangeEnvelope.lo[t]});
     }
-
     // draw the top, back around the bottom, then connect back to the first point
-    var datLine = lineData.concat(lowData.reverse());
+    var rangeLine = hiRangePoints.concat(loRangePoints.reverse());
 
     var lineFunction = d3.svg.line()
-         .x(function(d) { return d.x * theGlob.width; })
+         .x(function(d) { return d.x * datum.width; })
          .y(function(d) { return 127 - d.y; }) // pitch is bottom-up, not pixel top2bottom
          .tension(0.8)
          .interpolate("cardinal-closed");
 
-    theGlob.rangeClip =
-    globGroup.append("clipPath")
-        .attr("id", "glob-clip")
+    selection.append("clipPath")
+        .attr("id", "globject-clip")
         .append("path")
         .attr("transform", "translate(" + globLeft + "," + 0 + ")")
-        .attr("d", lineFunction(datLine));
+        .attr("d", lineFunction(rangeLine));
 
-    theGlob.globStuff =
-    globGroup.append("g")
-    .classed("globstuff", 1)
-    .attr("clip-path", "url(#glob-clip)");
+    var content = selection.append("g")
+        .attr("class", "globstuff")
+        .attr("clip-path", "url(#globject-clip)");
 
     function phraseSpacing(selection) {
-        var durations = theGlob.phraseTexture;
+        var durations = datum.phraseTexture;
         return VS.xByDuration(selection, durations, 18, 0) + 64;
     }
 
     for (var i = 0, phrases = 16; i < phrases; i++) {
-        theGlob.globStuff.append("g")
+        content.append("g")
             .attr("transform", function() {
                 var y = (127 / phrases) * i;
-                return "translate(" + Math.random() * theGlob.width + "," + y + ")"
+                return "translate(" + Math.random() * datum.width + "," + y + ")"
             })
             .selectAll("text")
-            .data(theGlob.phraseTexture)
+            .data(datum.phraseTexture)
             .enter()
             .append("text")
             .text(function(d) {
@@ -83,46 +82,41 @@ function drawGlobject(){
             .call(phraseSpacing);
     }
 
-    theGlob.rangePath =
-    globGroup.append("path")
+    selection.append("path")
          .attr("transform", "translate(" + globLeft + "," + 0 + ")")
-         .classed("globject", 1)
-         .attr("d", lineFunction(datLine));
+         .attr("class", "rangePath")
+         .attr("d", lineFunction(rangeLine));
 
-    theGlob.pitchClassGroup = globGroup.append("g");
-
-    theGlob.pitchClassGroup.selectAll("text")
-        .data(theGlob.pitches.classes)
+    selection.append("g")
+        .selectAll("text")
+        .data(datum.pitches)
         .enter()
         .append("text")
-        .attr("x", function(d, i) {
-            return theGlob.pitches.times[i] * theGlob.width;
+        .attr("x", function(d) {
+            return d.time * datum.width;
         })
         .attr("y", 127 + 24)
         .text(function(d) {
-            var pcSet = d.map(function(pc) {
+            var pcSet = d.classes.map(function(pc) {
                 return pcFormat(pc, ""); // scoreSettings.pcFormat
                 // return pcFormat(pc, "name"); // scoreSettings.pcFormat
             });
             return "[" + pcSet.join(", ") + "]";
         })
 
-    theGlob.dynamicsGroup = globGroup.append("g");
-
-    theGlob.dynamicsGroup.selectAll("text")
-        .data(theGlob.dynamics.values)
+    selection.append("g")
+        .selectAll("text")
+        .data(datum.dynamics)
         .enter()
         .append("text")
         .attr("x", function(d, i) {
-            return theGlob.dynamics.times[i] * theGlob.width;
+            return d.time * datum.width;
         })
         .attr("y", 127 + 42)
-        .text(function(d) { return d; });
+        .text(function(d) { return d.value; });
 
-    // transformGlob();
+    selection.call(centerGlobject);
 }
-drawGlobject();
-
 
 /**
  * Resize
@@ -136,7 +130,7 @@ function resize() {
     main
         .style("width", boxwidth + "px")
         .style("height", boxwidth + "px");
-    // transformGlob();
+    d3.select(".globject").call(centerGlobject);
 }
 
 resize();
