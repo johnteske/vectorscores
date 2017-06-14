@@ -14,20 +14,11 @@ text {
     .rangePath {
         stroke: #888;
         stroke-width: 1;
+        stroke-dasharray: 5,5;
         fill: none;
     }
     .globstuff text {
         font-family: Bravura;
         font-size: 24px;
     }
-}
-
-.debug g {
-    outline: 1px dotted red;
-}
-
-/*debug*/
-.debug rect, .debug circle {
-    stroke: pink;
-    fill-opacity: 0;
 }
