@@ -42,6 +42,13 @@ function texturalMsg() {
         })
         .each(drawGlobject);
 
+    newTxt.selectAll(".globstuff")
+        .insert("rect", ":first-child")
+            .attr("fill", "#eee")
+            .attr("x", -20)
+            .attr("width", 120 + 40)
+            .attr("height", 127);
+
     ypointer++;
     scrollWrapper(transDur);
 }
