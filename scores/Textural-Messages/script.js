@@ -3,7 +3,7 @@
 var width = 480,
     height = width,
     txtWidth = width * 0.3, // remain fixed
-    txtHeight = txtWidth * 0.75,
+    txtHeight = 180, // 220px from inspector
     margin = 12,
     transDur = 300,
     maxwidth = 480;
@@ -20,20 +20,18 @@ var txtWrapper = main.append("g") // for easy scrolling
 
 var noteheads = VS.dictionary.Bravura.durations.stemless;
 
-var ypointer = 0;
+var ypointer = 0; // TODO ypointer should refer to current y position, not score index--use VS.score.pointer for that
 
-// function pointDisp() {
-//     return Math.floor((Math.random() * 10) - (Math.random() * 10));
-// }
-
-function texturalMsg() {
-    var relPos = (ypointer % 2); // simple way to alternate left/right, for now
+function texturalMsg(position) {
+    var relPos = position === 'left' ? 0 : 1;
+    // (ypointer % 2); // simple way to alternate left/right, for now
 
     var newTxt = txtWrapper.append("g").selectAll(".globject")
         .data([makeGlobject()])
         .enter()
         .append("g")
         .attr("class", "globject")
+        .style('opacity', 0) // fade
         .attr("transform", function() {
             // calc on maxwidth, is scaled later
             var x = ( relPos === 0 ? margin : (maxwidth - txtWidth - margin) ),
@@ -49,7 +47,11 @@ function texturalMsg() {
             .attr("width", 120 + 40)
             .attr("height", 127);
 
+    newTxt.transition().duration(300)
+        .style('opacity', 1); // fade
+
     ypointer++;
+    lastPos = relPos;
     scrollWrapper(transDur);
 }
 
@@ -69,14 +71,15 @@ function scrollWrapper(dur) {
     }
 }
 
+var lastPos = ''; // TODO make these calculations in score
 for(var i = 0; i < 16; i++) {
+    lastPos = VS.getWeightedItem([lastPos, lastPos === 'left' ? 'right' : 'left'], [0.2, 0.8]);
     VS.score.add(
         (i * 1000) + (500 * Math.random()),
-        texturalMsg
+        texturalMsg,
+        [lastPos]
     );
 }
-
-texturalMsg(); // create the first message
 
 
 /**
