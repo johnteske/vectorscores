@@ -1,7 +1,14 @@
-function rangeGen(length, min, max) {
-    var pcs = [];
+function stepRangeGen(length, min, max) {
+    var pcs = [], thispc, lmax, lmin,
+        disp = 10;
+    min += disp;
+    max -= disp;
+    thispc = Math.floor(Math.random() * (max - min)) + min; // initial selection
     for (var i = 0; i < length; i++) {
-        pcs.push(Math.floor(Math.random() * (max - min)) + min);
+        lmax = Math.min(thispc + disp, max);
+        lmin = Math.max(thispc - disp, min);
+        thispc = Math.floor(Math.random() * (lmax - lmin)) + lmin;
+        pcs.push(thispc);
     }
     return pcs;
 }
@@ -13,11 +20,18 @@ function makeGlobject() {
 
     globject.width = 120;
 
+    var rangeFilter = VS.getRandExcl(0.5, 1);
+    var rangeTimes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+        .filter(function(t) {
+            var coin = Math.random() > rangeFilter;
+            return coin || t === 0 || t === 1;
+        });
+
     globject.rangeEnvelope = {
         type: "midi",
-        hi: rangeGen(4, 64, 127),
-        lo: rangeGen(4, 0, 63),
-        times: [0, 0.3, 0.5, 1]
+        hi: stepRangeGen(rangeTimes.length, 85, 127),
+        lo: stepRangeGen(rangeTimes.length, 0, 42),
+        times: rangeTimes
     };
 
     globject.pitches = [
