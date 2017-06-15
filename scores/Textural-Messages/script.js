@@ -54,13 +54,12 @@ function texturalMsg() {
 }
 
 function scrollWrapper(dur) {
-    var maxheight = maxwidth; //
     if ((ypointer * txtHeight) > (height - margin)) {
         txtWrapper
             .transition()
             .attr("transform", function() {
                 var x = 0,
-                    y = maxheight - (ypointer * txtHeight) - txtHeight;
+                    y = height - (ypointer * txtHeight) - txtHeight;
                 return "scale(" + (width / maxwidth) + "," + (width / maxwidth) + ")" +
                     "translate(" + x + ", " + y + ")";
             })
@@ -85,10 +84,11 @@ texturalMsg(); // create the first message
  */
 function resize() {
     width = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
+    height = parseInt(d3.select("main").style("height"), 10);
 
     main
         .style("width", width + "px")
-        .style("height", width + "px");
+        .style("height", height + "px");
     scrollWrapper(0);
 }
 

@@ -4,6 +4,14 @@
 @import "mixins";
 @include BravuraFont();
 
+main {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
 text {
     font-family: 'Monaco', Courier, sans-serif;
     font-size: 12px;
