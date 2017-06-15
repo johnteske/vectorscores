@@ -20,7 +20,7 @@ function makeGlobject() {
 
     globject.width = 120;
 
-    var rangeFilter = VS.getRandExcl(0.5, 1);
+    var rangeFilter = VS.getRandExcl(0.67, 1);
     var rangeTimes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         .filter(function(t) {
             var coin = Math.random() > rangeFilter;
