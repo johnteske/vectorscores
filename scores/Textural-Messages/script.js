@@ -5,7 +5,7 @@ var width = 480,
     txtWidth = width * 0.3, // remain fixed
     txtHeight = 180, // 220px from inspector
     margin = 12,
-    transDur = 300,
+    transDur = 600,
     maxwidth = 480;
 
 var main = d3.select(".main")
@@ -75,7 +75,7 @@ var lastPos = ''; // TODO make these calculations in score
 for(var i = 0; i < 16; i++) {
     lastPos = VS.getWeightedItem([lastPos, lastPos === 'left' ? 'right' : 'left'], [0.2, 0.8]);
     VS.score.add(
-        (i * 1000) + (500 * Math.random()),
+        (i * 8000) + (4000 * Math.random()),
         texturalMsg,
         [lastPos]
     );
