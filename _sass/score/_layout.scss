@@ -47,9 +47,6 @@ header {
     padding: $unit;
     top: 0;
 	border-bottom: $layout-border;
-    h1 {
-        font-weight: 400;
-    }
 }
 
 footer {
@@ -73,6 +70,13 @@ h1 {
     @media (max-width: 599px) {
         font-size: $unit;
     }
+}
+
+.score-title,
+.modal-content .score-title {
+    font-family: $layout-header-font-stack;
+    font-style: italic;
+    font-weight: bold;
 }
 
 #score-info-open {

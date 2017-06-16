@@ -4,7 +4,7 @@
 {% if page.info or page.info_file %}
     <div id="score-info-modal" class="modal-content">
         <span id="score-info-close" class="modal-close">×</span>
-        <h2>{{ page.title }}</h2>
+        <h2 class="score-title">{{ page.title }}</h2>
         <p>
             {{ page.composer }}
             {% if page.publish_date %}({{ page.publish_date }}){% endif %}

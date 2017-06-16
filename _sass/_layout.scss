@@ -11,7 +11,8 @@
 
 .site-title {
     font-size: 26px;
-    // font-weight: 300;
+    font-weight: bold;
+    font-style: italic;
     font-family: $head-font-family;
     line-height: 56px;
     // letter-spacing: -1px;
@@ -20,7 +21,7 @@
 
     &,
     &:visited {
-        color: $grey-color-dark;
+        color: $text-color;
     }
 }
 
@@ -115,6 +116,8 @@ div.noscript {
 
 .footer-heading {
     font-size: 15px;
+    font-style: italic;
+    letter-spacing: 0.5px;
     margin-bottom: 0;//$spacing-unit / 2;
 }
 
