@@ -5,11 +5,13 @@
 
 
 // Our variables
+$font-size-scale:  1.250;
+
 $base-font-family: Courier, monospace;
 $head-font-family: 'Times New Roman', serif;
 $base-font-size:   15px; //16px;
 $base-font-weight: 400;
-$small-font-size:  $base-font-size * 0.875;
+$small-font-size:  $base-font-size / $font-size-scale;
 $base-line-height: 1.5;
 
 $spacing-unit:     30px;

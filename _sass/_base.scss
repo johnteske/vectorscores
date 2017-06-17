@@ -86,7 +86,18 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.5px;
 }
 
-
+h4 {
+    font-size: 1em * $font-size-scale;
+}
+h3 {
+    font-size: 1em * $font-size-scale * $font-size-scale;
+}
+h2 {
+    font-size: 1em * $font-size-scale * $font-size-scale * $font-size-scale;
+}
+h1 {
+    font-size: 1em * $font-size-scale * $font-size-scale * $font-size-scale * $font-size-scale;
+}
 
 /**
  * Links
