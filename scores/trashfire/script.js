@@ -13,6 +13,10 @@ var TrashFire = (function() {
         .attr("width", tf.view.width)
         .attr("height", tf.view.height);
 
+    tf.dumpster = {
+        y: 200
+    };
+
     return tf;
 })();
 

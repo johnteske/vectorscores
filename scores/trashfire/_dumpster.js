@@ -12,7 +12,7 @@ var dumpster = TrashFire.svg.append("g")
     .attr("class", "dumpster")
     .attr("transform", function() {
         var x = (TrashFire.view.width - 312) * 0.5;
-        return "translate(" + x + ", 150)";
+        return "translate(" + x + ", " + TrashFire.dumpster.y + ")";
     });
 
 dumpster.append("g")

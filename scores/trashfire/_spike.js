@@ -17,7 +17,7 @@ function hitSpike() {
         .transition()
         .duration(600)
         .ease("elastic")
-        .attr("transform", "translate(" + ((TrashFire.view.width - 30) * 0.5) + ","  + 120 + ")")
+        .attr("transform", "translate(" + ((TrashFire.view.width - 30) * 0.5) + ","  + (TrashFire.dumpster.y - 45) + ")")
         .transition()
         .duration(300)
         .ease("linear")
@@ -30,13 +30,13 @@ function hitSpike() {
         .ease("elastic")
         .attr("transform", function() {
             var x = (TrashFire.view.width - 312) * 0.5;
-            return "translate(" + x + ", " + (150 + 10) + ")";
+            return "translate(" + x + ", " + (TrashFire.dumpster.y + 10) + ")";
         })
         .transition()
         .duration(300)
         .ease("bounce")
         .attr("transform", function() {
             var x = (TrashFire.view.width - 312) * 0.5;
-            return "translate(" + x + ", " + (150) + ")";
+            return "translate(" + x + ", " + TrashFire.dumpster.y + ")";
         });
 }
