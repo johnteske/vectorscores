@@ -53,11 +53,11 @@ VS.score.add(8000, function() {
 });
 
 VS.score.add(10000, function() {
-    TrashFire.noiseLayer.selectAll(".noise")
-        .transition()
-        .duration(1000)
-        .delay(function(d, i) { return i * 5; })
-        .style("opacity", 1);
+    addNoise(666);
+});
+
+VS.score.add(14000, function() {
+    removeNoise();
 });
 
 VS.score.add(18000, VS.noop);
@@ -65,5 +65,5 @@ VS.score.add(18000, VS.noop);
 VS.score.stopCallback = function() {
     trash = [];
     updateTrash();
-    TrashFire.noiseLayer.selectAll(".noise").style("opacity", 0);
+    TrashFire.noiseLayer.selectAll(".noise").remove();
 };
