@@ -4,26 +4,56 @@
 var trash = [];
 
 function makeTrash(selection) {
-    selection.filter(function(d) { return d.type === "circle"; })
-        .call(makeCircle);
-    selection.filter(function(d) { return d.type === "rect"; })
-        .call(makeRect);
+    selection.filter(function(d) { return d.type === "path"; })
+        .call(makePath);
+    // selection.filter(function(d) { return d.type === "circle"; })
+    //     .call(makeCircle);
+    // selection.filter(function(d) { return d.type === "rect"; })
+    //     .call(makeRect);
 }
-function makeCircle(selection) {
-    selection.append("circle")
-        .attr("fill-opacity", "0.5")
-        .attr("cx", function(d) { return d.size * 0.5; })
-        .attr("cy", function(d) { return d.size * 0.5; })
-        .attr("r", function(d) { return d.size * 0.5 - 5; });
+var lineGenerator = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; });
+    // .interpolate("basis");
+function makePath(selection) {
+    selection.each(function(d) {
+        var nPoints = 60,
+            slice = (d.size - 20) / (nPoints + 1);
+
+        d.pathPoints = [];
+
+        for (var j = 0; j < nPoints; j++) {
+            d.pathPoints.push([
+                10 + (j * slice),
+                (d.size * 0.5 - 5) + Math.random() * 10
+            ]);
+        }
+    });
+
+    selection.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-width", 2)
+        .style("opacity", 0.5)
+        .attr("d", function(d) {
+            return lineGenerator(d.pathPoints);
+        });
 }
-function makeRect(selection) {
-    selection.append("rect")
-        .attr("fill-opacity", "0.5")
-        .attr("x", 5)
-        .attr("y", 5)
-        .attr("width", function(d) { return d.size - 10; })
-        .attr("height", function(d) { return d.size - 10; });
-}
+// function makeCircle(selection) {
+//     selection.append("circle")
+//         .attr("fill-opacity", "0.5")
+//         .attr("cx", function(d) { return d.size * 0.5; })
+//         .attr("cy", function(d) { return d.size * 0.5; })
+//         .attr("r", function(d) { return d.size * 0.5 - 5; });
+// }
+// function makeRect(selection) {
+//     selection.append("rect")
+//         .attr("fill-opacity", "0.5")
+//         .attr("x", 5)
+//         .attr("y", 5)
+//         .attr("width", function(d) { return d.size - 10; })
+//         .attr("height", function(d) { return d.size - 10; });
+// }
 
 function updateTrash() {
     var offset = 10;
@@ -40,8 +70,9 @@ function updateTrash() {
                 return a + b;
             }, 0),
             x = (TrashFire.trashOrigin.x - (trashWidthSum * 0.5)) +
-                (sum + (i * offset));
-        return "translate(" + x + "," + (d.size * -0.5) + ")";
+                (sum + (i * offset)),
+            y = d.size * -0.5 - 50;
+        return "translate(" + x + "," + y + ")";
     }
 
     var trashSelection = trashContainer.selectAll(".trash")

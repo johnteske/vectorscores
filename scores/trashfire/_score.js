@@ -5,7 +5,7 @@ function addTrash(n) {
         trash.push({
             active: true,
             size: VS.getRandExcl(25, 75),
-            type: VS.getItem(["circle", "rect"])
+            type: "path" // VS.getItem(["circle", "rect", "path"])
         });
      }
 }
