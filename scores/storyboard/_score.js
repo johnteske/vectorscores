@@ -32,7 +32,9 @@ cardTypes = {
 };
 
 function makeCards(nCards) {
-    var _cards = [];
+    var _cards = [],
+        _cardTypeKeys = ["A", "B", "C", "D", "E"]; // Object.keys(cardTypes);
+
     for (var i = 0; i < nCards; i++) {
         var thisCard = {},
             thisCardType,
@@ -40,7 +42,7 @@ function makeCards(nCards) {
 
         // set unique type
         do {
-            thisCard.type = VS.getItem(Object.keys(cardTypes)); // TODO what is the support of Object.keys?
+            thisCard.type = VS.getItem(_cardTypeKeys);
         } while (thisCard.type === prevCard.type);
 
         thisCardType = cardTypes[thisCard.type];
@@ -49,9 +51,9 @@ function makeCards(nCards) {
         thisCard.time = prevCard.time + VS.getRandExcl(5000, 8000);
         // thisCard.duration // could also/instead set duration for each card
 
-        thisCard.notes = d3.range(Math.floor(VS.getRandExcl(
+        thisCard.nnotes = Math.floor(VS.getRandExcl(
             thisCardType.numberOfNotes[0], thisCardType.numberOfNotes[1]
-        )));
+        ));
 
         thisCard.spread = thisCardType.spread;
 

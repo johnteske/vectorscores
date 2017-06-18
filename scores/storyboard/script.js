@@ -32,22 +32,27 @@ function cardX(index) {
 }
 
 function makeCard(selection) {
-
     selection.append("rect")
         .attr("width", cardWidth - 1)
         .attr("height", cardWidth - 1);
 
-    selection.selectAll(".duration")
-        .data(selection.datum().notes)
-        .enter()
-        .append("text").attr("class", "duration")
+    selection.each(function(d, i) {
+        var nnotes = d.nnotes,
+            spread = d.spread;
+
+        d3.select(this).selectAll(".duration")
+            .data(d3.range(0, nnotes))
+            .enter()
+            .append("text")
+            .attr("class", "duration")
             .text(durationDict["1"])
-            .attr("transform", function(d) {
-                var point = newPoint(selection.datum().spread);
+            .attr("transform", function() {
+                var point = newPoint(spread);
                 return "translate(" +
                     (point.x + (cardWidth * 0.5)) + ", " +
                     (point.y + (cardWidth * 0.5)) + ")";
             });
+    });
 
     selection.append("text")
         .attr("dy", "-1em")
