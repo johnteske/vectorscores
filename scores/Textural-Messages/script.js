@@ -31,7 +31,9 @@ function texturalMsg(position) {
         ypointer += txtHeight * 0.5;
     }
 
-    var newTxt = txtWrapper.append("g").selectAll(".globject")
+    // TODO remove need for g.wrapper
+    var newTxt = txtWrapper.append("g").attr("class", "wrapper")
+        .selectAll(".globject")
         .data([makeGlobject()])
         .enter()
         .append("g")
