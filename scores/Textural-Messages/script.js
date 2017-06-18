@@ -72,16 +72,6 @@ function scrollWrapper(dur) {
     }
 }
 
-var lastPos = ''; // TODO make these calculations in score
-for(var i = 0; i < 16; i++) {
-    lastPos = VS.getWeightedItem([lastPos, lastPos === 'left' ? 'right' : 'left'], [0.2, 0.8]);
-    VS.score.add(
-        (i * 8000) + (4000 * Math.random()),
-        texturalMsg,
-        [lastPos]
-    );
-}
-
 
 /**
  * Resize
@@ -99,3 +89,20 @@ function resize() {
 resize();
 
 d3.select(window).on("resize", resize);
+
+
+/**
+ * Populate score
+ */
+var lastPos = ''; // TODO make these calculations in score
+
+for(var i = 0; i < 16; i++) {
+    lastPos = VS.getWeightedItem([lastPos, lastPos === 'left' ? 'right' : 'left'], [0.2, 0.8]);
+    VS.score.add(
+        (i * 8000) + (4000 * Math.random()),
+        texturalMsg,
+        [lastPos]
+    );
+}
+
+VS.score.preroll = 1000;
