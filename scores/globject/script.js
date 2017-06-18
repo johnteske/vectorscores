@@ -62,7 +62,7 @@ d3.select(window).on("resize", resize);
  * Populate score
  */
 for (var i = 0; i < score.length; i++) {
-    VS.score.add(i * 2000, update, [i]);
+    VS.score.add(i * (16000 + VS.getRandExcl(-2000, 2000)), update, [i]);
 }
 
 /**
