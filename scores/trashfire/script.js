@@ -23,6 +23,7 @@ var TrashFire = (function() {
 {% include_relative _dumpster.js %}
 {% include_relative _trash.js %}
 {% include_relative _spike.js %}
+{% include_relative _noise.js %}
 {% include_relative _score.js %}
 
 // manual test score
@@ -51,9 +52,18 @@ VS.score.add(8000, function() {
     hitSpike();
 });
 
-VS.score.add(10000, VS.noop);
+VS.score.add(10000, function() {
+    TrashFire.noiseLayer.selectAll(".noise")
+        .transition()
+        .duration(1000)
+        .delay(function(d, i) { return i * 5; })
+        .style("opacity", 1);
+});
+
+VS.score.add(18000, VS.noop);
 
 VS.score.stopCallback = function() {
     trash = [];
     updateTrash();
+    TrashFire.noiseLayer.selectAll(".noise").style("opacity", 0);
 };

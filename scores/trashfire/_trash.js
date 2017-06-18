@@ -34,7 +34,7 @@ function makePath(selection) {
         .attr("fill", "none")
         .attr("stroke", "black")
         .attr("stroke-width", 2)
-        .style("opacity", 0.5)
+        // .style("opacity", 0.5)
         .attr("d", function(d) {
             return lineGenerator(d.pathPoints);
         });
@@ -102,6 +102,7 @@ function updateTrash(duration) {
     trashes.transition().duration(dur)
         .attr("transform", trashPosition);
 
+    // make brackets
     trashes.append("path")
         .style("opacity", 0)
         .attr("stroke", "grey")
