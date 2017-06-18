@@ -1,6 +1,6 @@
-function stepRangeGen(length, min, max) {
-    var pcs = [], thispc, lmax, lmin,
-        disp = 10;
+function stepRangeGen(length, min, max, disp) {
+    var pcs = [], thispc, lmax, lmin;
+    disp = disp || 10;
     min += disp;
     max -= disp;
     thispc = Math.floor(Math.random() * (max - min)) + min; // initial selection
@@ -16,7 +16,7 @@ function stepRangeGen(length, min, max) {
 function makeGlobject() {
     var globject = {},
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
-        newDynamics = ["", "", ""];
+        globjectType = VS.getWeightedItem(["globject", "cluster"], [3, 1]);
 
     globject.width = 120;
 
@@ -27,10 +27,19 @@ function makeGlobject() {
             return coin || t === 0 || t === 1;
         });
 
+    var hiRange,
+        loRange;
+    if (globjectType === "globject") {
+        hiRange = stepRangeGen(rangeTimes.length, 85, 127, 10);
+        loRange = stepRangeGen(rangeTimes.length, 0, 42, 10);
+    } else {
+        hiRange = stepRangeGen(rangeTimes.length, 81, 86, 1);
+        loRange = stepRangeGen(rangeTimes.length, 37, 42, 1);
+    }
     globject.rangeEnvelope = {
         type: "midi",
-        hi: stepRangeGen(rangeTimes.length, 85, 127),
-        lo: stepRangeGen(rangeTimes.length, 0, 42),
+        hi: hiRange,
+        lo: loRange,
         times: rangeTimes
     };
 
@@ -41,39 +50,22 @@ function makeGlobject() {
         }
     ];
 
-    // globject.duration = {
-    //     values: [0.5, 0.75, 1],
-    //     weights: [0.5, 0.25, 0.25]
-    // };
-    // globject.articulation = {
-    //     values: [">", "_", "."],
-    //     weights: [0.5, 0.25, 0.25]
-    // };
-
-    newDynamics[0] = VS.getItem(dynamics);
-    // newDynamics[2] = VS.getItem(dynamics);
-    // if(dynamics.indexOf(newDynamics[0]) > dynamics.indexOf(newDynamics[2])) {
-    //     newDynamics[1] = "dim.";
-    // } else if (dynamics.indexOf(newDynamics[0]) < dynamics.indexOf(newDynamics[2])) {
-    //     newDynamics[1] = "cres.";
-    // } else {
-    //     newDynamics[1] = "subito " + VS.getItem(dynamics);
-    //     newDynamics[2] = "";
-    // }
-
     globject.dynamics = [
-        { value: newDynamics[0], time: 0 },
-        // { value: newDynamics[1], time: 0.5 },
-        // { value: newDynamics[2], time: 1 }
+        { value: VS.getItem(dynamics), time: 0 }
     ];
 
     var durs = [0.5, 1, 1.5, 2];
 
-    globject.phraseTexture = [
-        VS.getItem(durs),
-        VS.getItem(durs),
-        VS.getItem(durs)
-    ];
+    if (globjectType !== "cluster") {
+        globject.phraseTexture = [
+            VS.getItem(durs),
+            VS.getItem(durs),
+            VS.getItem(durs)
+        ];
+    } else {
+        // TODO fix bug: if phraseTexture is empty [], range path is mutated to match next globject's range path
+        globject.phraseTexture = [4];
+    }
 
     return globject;
 }

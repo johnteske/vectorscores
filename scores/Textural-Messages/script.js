@@ -49,7 +49,7 @@ function texturalMsg(position) {
 
     newTxt.selectAll(".globstuff")
         .insert("rect", ":first-child")
-            .attr("fill", "#eee")
+            .attr("fill", function(d) { return d.phraseTexture.length > 1 ? "#eee" : "#111"; })
             .attr("x", -20)
             .attr("width", 120 + 40)
             .attr("height", 127);
