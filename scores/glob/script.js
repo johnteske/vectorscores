@@ -11,7 +11,7 @@ var canvas = {
         long: 5000,
         short: 600
     },
-    scoreLength = 10,
+    scoreLength = 12,
     textoffset = 5,
     debug = VS.getQueryString("debug") == 1 || false,
     main = d3.select(".main");
