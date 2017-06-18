@@ -24,7 +24,7 @@ var noteheads = VS.dictionary.Bravura.durations.stemless;
 var ypointer = 0; // TODO ypointer should refer to current y position, not score index--use VS.score.pointer for that
 
 function texturalMsg(position) {
-    var relPos = position === 'left' ? 0 : 1;
+    var relPos = position === "left" ? 0 : 1;
     // (ypointer % 2); // simple way to alternate left/right, for now
 
     var newTxt = txtWrapper.append("g").selectAll(".globject")
@@ -32,7 +32,7 @@ function texturalMsg(position) {
         .enter()
         .append("g")
         .attr("class", "globject")
-        .style('opacity', 0) // fade
+        .style("opacity", 0) // fade
         .attr("transform", function() {
             // calc on maxwidth, is scaled later
             var x = ( relPos === 0 ? margin : (maxwidth - txtWidth - margin) ),
@@ -49,7 +49,7 @@ function texturalMsg(position) {
             .attr("height", 127);
 
     newTxt.transition().duration(300)
-        .style('opacity', 1); // fade
+        .style("opacity", 1); // fade
 
     ypointer++;
     lastPos = relPos;
@@ -77,7 +77,7 @@ function scrollWrapper(dur) {
  * Resize
  */
 function resize() {
-    width = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
+    width = Math.min(parseInt(d3.select("main").style("width"), 10), maxwidth);
     height = parseInt(d3.select("main").style("height"), 10);
 
     main
@@ -94,10 +94,10 @@ d3.select(window).on("resize", resize);
 /**
  * Populate score
  */
-var lastPos = ''; // TODO make these calculations in score
+var lastPos = ""; // TODO make these calculations in score
 
 for(var i = 0; i < 16; i++) {
-    lastPos = VS.getWeightedItem([lastPos, lastPos === 'left' ? 'right' : 'left'], [0.2, 0.8]);
+    lastPos = VS.getWeightedItem([lastPos, lastPos === "left" ? "right" : "left"], [0.2, 0.8]);
     VS.score.add(
         (i * 8000) + (4000 * Math.random()),
         texturalMsg,
