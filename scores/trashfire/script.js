@@ -47,7 +47,7 @@ VS.score.add(6000, makeSpike);
 
 VS.score.add(8000, function() {
     trash = [];
-    updateTrash();
+    updateTrash(300);
     hitSpike();
 });
 
