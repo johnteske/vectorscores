@@ -1,15 +1,14 @@
 ---
 layout: compress-js
 ---
-var radius = 48, // relative to glob.width?
-    canvas = {
+var canvas = {
         margins: 20,
         maxWidth: 400,
         width: null,
         center: null
     },
     transitionTime = {
-        long: 3000,
+        long: 5000,
         short: 600
     },
     scoreLength = 10,
@@ -21,7 +20,8 @@ var radius = 48, // relative to glob.width?
 {% include_relative _settings.js %}
 
 function newPoint() {
-    var angle = Math.random() * Math.PI * 2,
+    var radius = VS.getRandExcl(1, 96),
+        angle = Math.random() * Math.PI * 2,
         dist = Math.random() - Math.random();
     return {
         x: Math.cos(angle) * radius * dist,
@@ -43,13 +43,7 @@ glob.pitchSet = main.append("text")
     .style("opacity", "0"); // init value
 
 glob.move = function(dur) {
-    d3.select(".pc-set")
-        .transition(dur)
-        .style("opacity", 0)
-        .remove();
-    main.append("text")
-        .classed("pc-set", 1)
-        .style("opacity", 0)
+    glob.pitchSet
         .attr("x", canvas.center)
         .attr("y", canvas.width - textoffset)
         .text(function() {
@@ -58,12 +52,12 @@ glob.move = function(dur) {
             });
             return "[" + pcSet.join(", ") + "]";
         })
-        .transition(dur)
-        .style("opacity", 1);
+        // fade in if needed
+        .transition().duration(transitionTime.short)
+        .style("opacity", "1");
 
     glob.children
-        .transition()
-        .duration(dur)
+        .transition().duration(dur)
         .attr("transform", function() {
             var point = newPoint();
             return "translate(" + point.x + ", " + point.y + ")";
@@ -76,23 +70,22 @@ for(var i = 0; i < scoreLength; i++) {
 // final event
 VS.score.add(scoreLength * transitionTime.long, function() {
     d3.select(".pc-set")
-        .transition()
-        .duration(transitionTime.short)
+        .transition().duration(transitionTime.short)
         .style("opacity", "0");
 });
+
+VS.score.preroll = 1000;
 
 VS.control.stepCallback = function() {
     glob.move(null, transitionTime.short);
 };
 
 VS.score.stopCallback = function() {
-    d3.select(".pc-set")
-        .transition(transitionTime.short)
-        .style("opacity", "0")
-        .remove();
+    glob.pitchSet
+        .transition().duration(transitionTime.short)
+        .style("opacity", "0");
     glob.children
-        .transition()
-        .duration(transitionTime.short)
+        .transition().duration(transitionTime.short)
         .attr("transform", "translate(0, 0)");
 };
 
