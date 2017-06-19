@@ -4,7 +4,7 @@ var scoreSettings = (function() {
 
     var settings = {};
 
-    settings.pcFormat = VS.getQueryString("pcs") || "";
+    settings.pcFormat = "name"; // VS.getQueryString("pcs") || "";
     radioSetting.setValue(settings.pcFormat);
 
     settings.generate = function() {

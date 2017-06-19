@@ -75,8 +75,8 @@ function drawGlobject(d, i){
         .attr("y", 127 + 24)
         .text(function(d) {
             var pcSet = d.classes.map(function(pc) {
-                return pcFormat(pc, ""); // scoreSettings.pcFormat
-                // return pcFormat(pc, "name"); // scoreSettings.pcFormat
+                // return pcFormat(pc, ""); // scoreSettings.pcFormat
+                return pcFormat(pc, "name"); // scoreSettings.pcFormat
             });
             return "[" + pcSet.join(", ") + "]";
         })
