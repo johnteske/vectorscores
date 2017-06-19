@@ -1,3 +1,6 @@
+---
+layout: compress-js
+---
 VS.cueTriangle = function(parent) {
     var cue = {};
     var onTime = 50,
