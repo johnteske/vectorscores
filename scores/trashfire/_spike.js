@@ -27,19 +27,5 @@ function hitSpike() {
         .style("opacity", 0)
         .remove();
 
-    dumpster
-        .transition()
-        .duration(300)
-        .ease("elastic")
-        .attr("transform", function() {
-            var x = (TrashFire.view.width - 312) * 0.5;
-            return "translate(" + x + ", " + (TrashFire.dumpster.y + 10) + ")";
-        })
-        .transition()
-        .duration(300)
-        .ease("bounce")
-        .attr("transform", function() {
-            var x = (TrashFire.view.width - 312) * 0.5;
-            return "translate(" + x + ", " + TrashFire.dumpster.y + ")";
-        });
+    dumpsterShake();
 }

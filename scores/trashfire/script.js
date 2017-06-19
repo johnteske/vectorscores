@@ -87,4 +87,5 @@ VS.score.stopCallback = function() {
     trash = [];
     updateTrash();
     TrashFire.noiseLayer.selectAll(".noise").remove();
+    dumpsterShake();
 };
