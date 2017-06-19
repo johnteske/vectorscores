@@ -59,7 +59,7 @@ function makeCards(nCards) {
 
         thisCard.dynamic = VS.getItem(thisCardType.dynamics);
 
-        thisCard.pcSet = thisCardType.pcSet;
+        thisCard.pcSet = pcsetTranspose(thisCardType.pcSet, "random");
 
         _cards.push(thisCard); // console.log(thisCard);
     }
