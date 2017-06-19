@@ -7,7 +7,14 @@ function addTrash(n) {
             size: VS.getRandExcl(25, 75),
             type: "path" // VS.getItem(["circle", "rect", "path"])
         });
-     }
+    }
+    updateTrash();
+}
+function removeTrash(n) {
+    for (var i = 0; i < n; i++) {
+        trash.pop();
+    }
+    updateTrash();
 }
 
 // function fireCycle() {

@@ -13,6 +13,9 @@ function makeSpike() {
 }
 
 function hitSpike() {
+    trash = [];
+    updateTrash(300);
+
     d3.select(".spike")
         .transition()
         .duration(600)
