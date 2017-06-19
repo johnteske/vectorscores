@@ -34,11 +34,11 @@ VS.score.add(0, function() {
     addTrash(VS.getItem([3, 4]));
 });
 for (var i = 0; i < 6; i++) {
-    var time = (i * 10000) + (Math.random() * 5000);
-    VS.score.add(time, function() {
+    var time = i * 10000;
+    VS.score.add(time + (Math.random() * 5000), function() {
         addTrash(VS.getItem([1, 2, 3, 4]));
     });
-    VS.score.add(time + (Math.random() * 5000), function() {
+    VS.score.add(time + 5000 + (Math.random() * 5000), function() {
         removeTrash(VS.getItem([1, 2]));
     });
 }
@@ -48,7 +48,7 @@ for (var i = 0; i < 6; i++) {
  * One cycle per 20 s interval,
  */
 for (var i = 0; i < 3; i++) {
-    var time = (i * 20000) + (Math.random() * 20000);
+    var time = (i * 20000) + (Math.random() * 17000);
     VS.score.add(time, function() {
         makeSpike();
     });
@@ -62,7 +62,7 @@ for (var i = 0; i < 3; i++) {
  * One cycle per 30 s interval,
  */
 for (var i = 0; i < 2; i++) {
-    var time = (i * 30000) + (Math.random() * 30000);
+    var time = (i * 30000) + (Math.random() * 27000);
     VS.score.add(time, function() {
         addNoise(200);
     });

@@ -8,7 +8,7 @@ function addNoise(nElements) {
         .append("rect")
             .attr("class", "noise")
             .style("opacity", 0)
-            .attr("fill", function() { return VS.getItem(["grey", "white"]); })
+            .attr("fill", function() { return VS.getItem(["#eeeeee", "white"]); })
             .attr("x", function() { return (Math.random() * TrashFire.view.width) - (TrashFire.view.width * 0.25); })
             .attr("y", function() { return Math.random() * TrashFire.view.height; })
             .attr("width", function() { return Math.random() * TrashFire.view.width; })
@@ -23,6 +23,8 @@ function addNoise(nElements) {
 function removeNoise() {
     TrashFire.noiseLayer
         .selectAll(".noise")
-        .remove();
+            .transition().duration(0)
+            .delay(function(d, i) { return i * 1; })
+            .remove();
     updateTrash();
 }
