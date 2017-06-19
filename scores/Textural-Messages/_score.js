@@ -43,9 +43,15 @@ function makeGlobject() {
         times: rangeTimes
     };
 
+    var pcset;
+    if (globjectType === "globject") {
+        pcset = VS.getItem(trichords.slice(5, 6));
+    } else {
+        pcset = VS.getItem(trichords.slice(0, 2));
+    }
     globject.pitches = [
         {
-            classes: [ 0, Math.round(VS.getRandExcl(1, 3)), Math.round(VS.getRandExcl(4, 7)) ],
+            classes: pcsetTranspose(pcset, "random"),
             time: 0
         }
     ];
