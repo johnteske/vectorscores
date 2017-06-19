@@ -19,3 +19,10 @@ var pcFormat = (function() {
         }
     };
 })();
+
+var pcsetTranspose = function(pcset, transpose) {
+    var t = transpose !== "random" ? transpose : Math.floor(Math.random() * 12);
+    return pcset.map(function(pc) {
+        return (pc + t) % 12;
+    })
+}

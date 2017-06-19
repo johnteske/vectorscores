@@ -43,13 +43,14 @@ glob.pitchSet = main.append("text")
     .style("opacity", "0"); // init value
 
 glob.move = function(dur) {
+    var pcSet = pcsetTranspose(VS.getItem(trichords), "random").map(function(pc) {
+        return pcFormat(pc, scoreSettings.pcFormat);
+    });
+
     glob.pitchSet
         .attr("x", canvas.center)
         .attr("y", canvas.width - textoffset)
         .text(function() {
-            var pcSet = [0, VS.getItem([1, 2, 3]), VS.getItem([4, 5, 6])].map(function(pc) {
-                return pcFormat(pc, scoreSettings.pcFormat);
-            });
             return "[" + pcSet.join(", ") + "]";
         })
         // fade in if needed

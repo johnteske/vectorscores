@@ -1,3 +1,6 @@
+---
+layout: compress-js
+---
 function RadioSetting(elements) {
     if (!(this instanceof RadioSetting)) {
         return new RadioSetting(elements);
