@@ -3,14 +3,6 @@
  */
 var trash = [];
 
-function makeTrash(selection) {
-    selection.filter(function(d) { return d.type === "path"; })
-        .call(makePath);
-    // selection.filter(function(d) { return d.type === "circle"; })
-    //     .call(makeCircle);
-    // selection.filter(function(d) { return d.type === "rect"; })
-    //     .call(makeRect);
-}
 var lineGenerator = d3.svg.line()
     .x(function(d) { return d[0]; })
     .y(function(d) { return d[1]; });
@@ -18,42 +10,48 @@ var lineGenerator = d3.svg.line()
 function makePath(selection) {
     selection.each(function(d) {
         var nPoints = 60,
-            slice = (d.size - 20) / (nPoints + 1);
+            margin = 10,
+            slice = (d.size - (margin * 2)) / (nPoints + 1),
+            height;
+
+        if (d.type === "blaze") {
+            height = d.size * 0.67;
+        } else {
+            height = 3;
+        }
 
         d.pathPoints = [];
 
-        for (var j = 0; j < nPoints; j++) {
-            d.pathPoints.push([
-                10 + (j * slice),
-                (d.size * 0.5 - 5) + Math.random() * 10
-            ]);
+        var j;
+
+        if (d.type !== "embers") {
+            for (j = 0; j < nPoints; j++) {
+                d.pathPoints.push([
+                    margin + (j * slice),
+                    (d.size * 0.5 - (height * 0.5)) + (Math.random() * height)
+                ]);
+            }
+        } else {
+            for (j = 0; j < nPoints; j++) {
+                d.pathPoints.push([
+                    margin + (j * slice),
+                    d.size - margin - (j * slice) + (Math.random() * height)
+                ]);
+            }
         }
     });
 
     selection.append("path")
         .attr("fill", "none")
         .attr("stroke", "black")
-        .attr("stroke-width", 2)
-        // .style("opacity", 0.5)
+        .attr("stroke-width", function(d) { return d.type !== "embers" ? 2 : 1; })
+        .style("opacity", function(d) {
+            return d.type === "blaze" || d.type === "scrape" ? 1 : 0.5;
+        })
         .attr("d", function(d) {
             return lineGenerator(d.pathPoints);
         });
 }
-// function makeCircle(selection) {
-//     selection.append("circle")
-//         .attr("fill-opacity", "0.5")
-//         .attr("cx", function(d) { return d.size * 0.5; })
-//         .attr("cy", function(d) { return d.size * 0.5; })
-//         .attr("r", function(d) { return d.size * 0.5 - 5; });
-// }
-// function makeRect(selection) {
-//     selection.append("rect")
-//         .attr("fill-opacity", "0.5")
-//         .attr("x", 5)
-//         .attr("y", 5)
-//         .attr("width", function(d) { return d.size - 10; })
-//         .attr("height", function(d) { return d.size - 10; });
-// }
 
 function updateTrash(duration) {
     var dur = duration || 1000;
@@ -115,5 +113,5 @@ function updateTrash(duration) {
         .transition().duration(dur)
         .style("opacity", 1);
 
-    trashes.call(makeTrash);
+    trashes.call(makePath);
 }

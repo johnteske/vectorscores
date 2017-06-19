@@ -27,14 +27,19 @@ var TrashFire = (function() {
 {% include_relative _score.js %}
 
 /**
+ * Create score from add/remove event cycles
+ */
+var time, i;
+
+/**
  * Trash
  * One cycle per 10 s interval, always at start
  */
 VS.score.add(0, function() {
     addTrash(VS.getItem([3, 4]));
 });
-for (var i = 0; i < 6; i++) {
-    var time = i * 10000;
+for (i = 0; i < 6; i++) {
+    time = i * 10000;
     VS.score.add(time + (Math.random() * 5000), function() {
         addTrash(VS.getItem([1, 2, 3, 4]));
     });
@@ -47,8 +52,8 @@ for (var i = 0; i < 6; i++) {
  * Spikes
  * One cycle per 20 s interval,
  */
-for (var i = 0; i < 3; i++) {
-    var time = (i * 20000) + (Math.random() * 17000);
+for (i = 0; i < 3; i++) {
+    time = (i * 20000) + (Math.random() * 17000);
     VS.score.add(time, function() {
         makeSpike();
     });
@@ -61,8 +66,8 @@ for (var i = 0; i < 3; i++) {
  * Noise
  * One cycle per 30 s interval,
  */
-for (var i = 0; i < 2; i++) {
-    var time = (i * 30000) + (Math.random() * 27000);
+for (i = 0; i < 2; i++) {
+    time = (i * 30000) + (Math.random() * 27000);
     VS.score.add(time, function() {
         addNoise(200);
     });

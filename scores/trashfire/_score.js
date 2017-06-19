@@ -2,10 +2,11 @@
 
 function addTrash(n) {
     for (var i = 0; i < n; i++) {
+        var type = VS.getItem(["embers", "crackle", "blaze", "scrape"]);
         trash.push({
             active: true,
             size: VS.getRandExcl(25, 75),
-            type: "path" // VS.getItem(["circle", "rect", "path"])
+            type: type
         });
     }
     updateTrash();
