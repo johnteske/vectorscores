@@ -18,13 +18,14 @@ function makeGlobject() {
         times: [0, 0.3, 0.5, 1]
     };
 
+    var pcset = pcsetTranspose(VS.getItem(trichords), "random");
     globject.pitches = [
         {
-            classes: [ 0, Math.round(VS.getRandExcl(1, 3)) ],
+            classes: pcset.slice(0, 2),
             time: 0
         },
         {
-            classes: [ 0, Math.round(VS.getRandExcl(1, 3)), Math.round(VS.getRandExcl(4, 7)) ],
+            classes: pcset,
             time: 0.5
         }
     ];
