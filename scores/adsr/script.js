@@ -15,7 +15,7 @@ var scaleX = 3,
     unitY = 10,
     view = {},
     // 16 parts is an arbitrary max, ideally large ensembles read from parts
-    numParts = clamp(+VS.getQueryString("parts") || 4, 1, 16),
+    numParts = clamp(+VS.getQueryString("parts") || 1, 1, 16),
     debug = false;
 
 {% include_relative _settings.js %}
@@ -23,7 +23,7 @@ var scaleX = 3,
 var score = (function() {
     var _score = {};
 
-    _score.totalDuration = 300;
+    _score.totalDuration = 330;
     _score.scale = 1;
     _score.width = _score.totalDuration * unitX; // total score duration
     _score.svg = d3.select(".main").attr("width", _score.width);
