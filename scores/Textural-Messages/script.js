@@ -24,12 +24,20 @@ var noteheads = VS.dictionary.Bravura.durations.stemless;
 var ypointer = 0; // latest y position (not score index)
 var lastPosition; // latest msg position
 
+function fadeMsgs() {
+    d3.selectAll(".wrapper")
+        .transition().duration(9000)
+        .style("opacity", 0.25);
+}
+
 function texturalMsg(position) {
     var relPos = position === "left" ? 0 : 1;
 
     if (relPos === lastPosition) {
         ypointer += txtHeight * 0.5;
     }
+
+    fadeMsgs();
 
     // TODO remove need for g.wrapper
     var newTxt = txtWrapper.append("g").attr("class", "wrapper")
@@ -54,7 +62,7 @@ function texturalMsg(position) {
             .attr("width", 120 + 40)
             .attr("height", 127);
 
-    newTxt.transition().duration(300)
+    newTxt.transition().duration(600)
         .style("opacity", 1); // fade
 
     ypointer += txtHeight * 0.5;
@@ -114,5 +122,9 @@ d3.select(window).on("resize", resize);
         );
     }
 })();
+
+var scoreLen = VS.score.events[VS.score.events.length - 1][0];
+VS.score.add(scoreLen, fadeMsgs);
+VS.score.add(scoreLen + 9000, VS.noop);
 
 VS.score.preroll = 1000;
