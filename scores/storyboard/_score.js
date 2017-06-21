@@ -48,7 +48,7 @@ function makeCards(nCards) {
         thisCardType = cardTypes[thisCard.type];
 
         // set card start time
-        thisCard.time = prevCard.time + VS.getRandExcl(5000, 8000);
+        thisCard.time = prevCard.time + VS.getRandExcl(12000, 15000);
         // thisCard.duration // could also/instead set duration for each card
 
         thisCard.nnotes = Math.floor(VS.getRandExcl(
@@ -65,4 +65,4 @@ function makeCards(nCards) {
     }
     return _cards;
 }
-cardList = makeCards(12);
+cardList = makeCards(10);

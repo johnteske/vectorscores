@@ -8,7 +8,7 @@ var canvas = {
         center: null
     },
     transitionTime = {
-        long: 5000,
+        long: 12000,
         short: 600
     },
     scoreLength = 12,
