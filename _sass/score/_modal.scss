@@ -17,9 +17,6 @@
     background: #ffffff;
     font-family: $layout-font-stack;
     font-weight: normal;
-    h1, h2, h3, h4, h5, h6 {
-        font-family: $layout-header-font-stack;
-    }
     padding: $unit;
     margin: 0 auto;
     margin-bottom: $footer-height * 2;
@@ -29,6 +26,26 @@
         margin-bottom: $footer-height * 2;
     }
     border: 1px solid #888;
+}
+
+$font-size-scale: 1.125;
+.modal-content {
+    h1, h2, h3, h4, h5, h6 {
+        font-family: $layout-header-font-stack;
+        letter-spacing: -0.25px;
+    }
+    h4 {
+        font-size: 1em * $font-size-scale;
+    }
+    h3 {
+        font-size: 1em * $font-size-scale * $font-size-scale;
+    }
+    h2 {
+        font-size: 1em * $font-size-scale * $font-size-scale * $font-size-scale;
+    }
+    h1 {
+        font-size: 1em * $font-size-scale * $font-size-scale * $font-size-scale * $font-size-scale;
+    }
 }
 
 .modal-close {
