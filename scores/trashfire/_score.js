@@ -2,12 +2,20 @@
 
 function addTrash(n) {
     for (var i = 0; i < n; i++) {
+        var type = VS.getItem(["embers", "crackle", "blaze", "scrape"]);
         trash.push({
             active: true,
             size: VS.getRandExcl(25, 75),
-            type: VS.getItem(["circle", "rect"])
+            type: type
         });
-     }
+    }
+    updateTrash();
+}
+function removeTrash(n) {
+    for (var i = 0; i < n; i++) {
+        trash.pop();
+    }
+    updateTrash();
 }
 
 // function fireCycle() {

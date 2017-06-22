@@ -1,5 +1,8 @@
+---
+layout: compress-js
+---
 /**
- * NOTE/TODO dependencies: [dictionary.bravura, xByDuration, pitchClassFormat]
+ * NOTE/TODO dependencies: [dictionary.bravura, xByDuration, pitchClass]
  * TODO rather than class (removed) or static function (present), perhaps this module is meant as a globject generator, like d3.svg.line()
  */
 function drawGlobject(d, i){

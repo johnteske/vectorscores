@@ -21,65 +21,63 @@ var txtWrapper = main.append("g") // for easy scrolling
 
 var noteheads = VS.dictionary.Bravura.durations.stemless;
 
-var ypointer = 0; // TODO ypointer should refer to current y position, not score index--use VS.score.pointer for that
+var ypointer = 0; // latest y position (not score index)
+var lastPosition; // latest msg position
 
 function texturalMsg(position) {
-    var relPos = position === 'left' ? 0 : 1;
-    // (ypointer % 2); // simple way to alternate left/right, for now
+    var relPos = position === "left" ? 0 : 1;
 
-    var newTxt = txtWrapper.append("g").selectAll(".globject")
+    if (relPos === lastPosition) {
+        ypointer += txtHeight * 0.5;
+    }
+
+    // TODO remove need for g.wrapper
+    var newTxt = txtWrapper.append("g").attr("class", "wrapper")
+        .selectAll(".globject")
         .data([makeGlobject()])
         .enter()
         .append("g")
         .attr("class", "globject")
-        .style('opacity', 0) // fade
+        .style("opacity", 0) // fade
         .attr("transform", function() {
             // calc on maxwidth, is scaled later
-            var x = ( relPos === 0 ? margin : (maxwidth - txtWidth - margin) ),
-                y = (ypointer * txtHeight) + margin;
+            var x = relPos === 0 ? margin : (maxwidth - txtWidth - margin),
+                y = ypointer + margin;
             return "translate(" + x + ", " + y + ")";
         })
         .each(drawGlobject);
 
     newTxt.selectAll(".globstuff")
         .insert("rect", ":first-child")
-            .attr("fill", "#eee")
+            .attr("fill", function(d) { return d.phraseTexture.length > 1 ? "#eee" : "#111"; })
             .attr("x", -20)
             .attr("width", 120 + 40)
             .attr("height", 127);
 
     newTxt.transition().duration(300)
-        .style('opacity', 1); // fade
+        .style("opacity", 1); // fade
 
-    ypointer++;
-    lastPos = relPos;
+    ypointer += txtHeight * 0.5;
+    lastPosition = relPos;
+
     scrollWrapper(transDur);
 }
 
 function scrollWrapper(dur) {
-    if ((ypointer * txtHeight) > (height - margin)) {
+    var scale = (width / maxwidth);
+    if ((ypointer + margin) > (height - margin)) {
         txtWrapper
             .transition()
             .attr("transform", function() {
                 var x = 0,
-                    y = height - (ypointer * txtHeight) - txtHeight;
-                return "scale(" + (width / maxwidth) + "," + (width / maxwidth) + ")" +
+                    y = height - ypointer - txtHeight;
+                return "scale(" + scale + "," + scale + ")" +
                     "translate(" + x + ", " + y + ")";
             })
             .duration(dur);
     } else {
-        txtWrapper.attr("transform", "scale(" + (width / maxwidth) + "," + (width / maxwidth) + ")" );
+        txtWrapper.attr("transform", "scale(" + scale + "," + scale + ")" );
     }
-}
-
-var lastPos = ''; // TODO make these calculations in score
-for(var i = 0; i < 16; i++) {
-    lastPos = VS.getWeightedItem([lastPos, lastPos === 'left' ? 'right' : 'left'], [0.2, 0.8]);
-    VS.score.add(
-        (i * 8000) + (4000 * Math.random()),
-        texturalMsg,
-        [lastPos]
-    );
 }
 
 
@@ -87,7 +85,7 @@ for(var i = 0; i < 16; i++) {
  * Resize
  */
 function resize() {
-    width = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
+    width = Math.min(parseInt(d3.select("main").style("width"), 10), maxwidth);
     height = parseInt(d3.select("main").style("height"), 10);
 
     main
@@ -99,3 +97,22 @@ function resize() {
 resize();
 
 d3.select(window).on("resize", resize);
+
+
+/**
+ * Populate score
+ */
+(function() {
+    var lastPos = ""; // TODO make these calculations in score
+
+    for(var i = 0; i < 16; i++) {
+        lastPos = VS.getWeightedItem([lastPos, lastPos === "left" ? "right" : "left"], [0.2, 0.8]);
+        VS.score.add(
+            (i * 8000) + (4000 * Math.random()),
+            texturalMsg,
+            [lastPos]
+        );
+    }
+})();
+
+VS.score.preroll = 1000;
