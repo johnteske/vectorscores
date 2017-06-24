@@ -109,11 +109,11 @@ h1 {
  * Links
  */
 a {
-    color: $brand-color;
+    color: #0000FF; // blue
     text-decoration: none;
 
     &:visited {
-        color: darken($brand-color, 15%);
+        color: #0000A0; // darkBlue
     }
 
     &:hover {
