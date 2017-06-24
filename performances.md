@@ -5,8 +5,7 @@ permalink: /performances/
 menu: true
 ---
 {% for perf in site.data.performances %}
-### [{{ perf.date }}]({{ perf.url }})
-#### {{ perf.title }}
+### [{{ perf.date }}]({{ perf.url }})<br />{{ perf.title }}
 {% for work in perf.works %}
 {% for pg in site.pages %}
 {% if pg.title == work %}
