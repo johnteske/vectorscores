@@ -33,7 +33,7 @@ $font-size-scale: 1.125;
     h1, h2, h3, h4, h5, h6 {
         font-family: $layout-header-font-stack;
         font-weight: normal;
-        letter-spacing: -0.25px;
+        // letter-spacing: -0.25px;
     }
     h4 {
         font-size: 1em * $font-size-scale;
