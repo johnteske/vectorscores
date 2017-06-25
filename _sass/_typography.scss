@@ -77,7 +77,7 @@ li {
  * Headings
  */
 h1, h2, h3, h4, h5, h6 {
-    // font-family: $head-font-family;
+    color: lighten($text-color, 5%);
     font-weight: normal;
 }
 
