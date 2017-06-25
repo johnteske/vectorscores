@@ -2,7 +2,7 @@
 <ul>
 {% for project in site.html_pages %}
     {% if project.layout == 'score' and project.status == 'published' %}
-    <li><a href="{{ project.url | prepend: site.baseurl }}">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
+    <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
     {% endif %}
 {% endfor %}
 </ul>
@@ -11,7 +11,7 @@
 <ul>
 {% for project in site.html_pages %}
     {% if project.layout == 'score' and project.status == 'wip' %}
-    <li><a href="{{ project.url | prepend: site.baseurl }}">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
+    <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
     {% endif %}
 {% endfor %}
 </ul>
@@ -20,7 +20,7 @@
 <ul>
 {% for project in site.html_pages %}
     {% if project.layout == 'score' and project.status == 'test' %}
-    <li><a href="{{ project.url | prepend: site.baseurl }}">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
+    <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
     {% endif %}
 {% endfor %}
 </ul>

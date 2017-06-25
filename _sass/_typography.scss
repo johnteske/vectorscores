@@ -1,0 +1,112 @@
+/**
+ * Basic styling
+ */
+body {
+    font: $base-font-weight #{$base-font-size}/#{$base-line-height} $base-font-family;
+    color: $text-color;
+    background-color: $background-color;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-feature-settings: "kern" 1;
+    -moz-font-feature-settings: "kern" 1;
+    -o-font-feature-settings: "kern" 1;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal;
+}
+
+
+
+.vectorscores {
+    font-family: $head-font-family;
+    font-weight: bold;
+    font-style: italic;
+    letter-spacing: 0.3px;
+}
+.site-header, .site-footer {
+    .vectorscores {
+        letter-spacing: normal;
+    }
+}
+
+.work-title {
+    font-family: $head-font-family;
+    font-style: italic;
+    letter-spacing: 0.3px;
+}
+
+
+
+/**
+ * Set `margin-bottom` to maintain vertical rhythm
+ */
+h1, h2, h3, h4, h5, h6,
+p, blockquote, pre,
+ul, ol, dl, figure,
+%vertical-rhythm {
+    margin-bottom: $spacing-unit / 2;
+}
+
+p, ul, ol, dl {
+    + h1, + h2, + h3, + h4, + h5, + h6 {
+        margin-top: $spacing-unit;
+    }
+}
+
+.perf-date {
+    margin-bottom: 0;
+}
+
+
+
+/**
+ * Lists
+ */
+ul, ol {
+    margin-left: $spacing-unit;
+}
+
+li {
+    > ul,
+    > ol {
+         margin-bottom: 0;
+    }
+}
+
+
+
+/**
+ * Headings
+ */
+h1, h2, h3, h4, h5, h6 {
+    // font-family: $head-font-family;
+    font-weight: normal;
+}
+
+h4 {
+    font-size: 1em * $font-size-scale;
+}
+h3 {
+    font-size: 1em * $font-size-scale * $font-size-scale;
+}
+h2 {
+    font-size: 1em * $font-size-scale * $font-size-scale * $font-size-scale;
+}
+h1 {
+    font-size: 1em * $font-size-scale * $font-size-scale * $font-size-scale * $font-size-scale;
+}
+
+/**
+ * Links
+ */
+a {
+    color: #0000FF; // blue
+    text-decoration: none;
+
+    &:visited {
+        color: #0000A0; // darkBlue
+    }
+
+    &:hover {
+        color: $text-color;
+        text-decoration: underline;
+    }
+}
