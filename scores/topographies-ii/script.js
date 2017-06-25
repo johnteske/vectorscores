@@ -3,17 +3,14 @@
 var main = d3.select(".main"),
     topo = main.append("g"),
     width = 480,
-    // height = 480,
-    // rows = 8,
-    // cols = 8,
-    tileWidthHalf = 16,
-    tileHeightHalf = 8,
+    tileWidthHalf = 32,
+    tileHeightHalf = tileWidthHalf * 0.5,
     topoScore,
-    symbols = {
-        0: ".",
-        1: ">",
-        2: "-"
-    };
+    testDur = [0.5, 1, 2],
+    testArt = [".", ">", "-"];
+
+var durations = VS.dictionary.Bravura.durations.stemless;
+var articulations = VS.dictionary.Bravura.articulations;
 
 main.style("width", width + "px")
     .style("height", width + "px");
@@ -28,8 +25,14 @@ function drawScore(scoreFragment, x, y) {
     for(var row = 0; row < rows; row++){
         for(var col = 0; col < cols; col++){
             d3.select(documentFragment).append("svg:text")
-            .text(function() {
-                return symbols[scoreFragment[row][col]];
+            .text(function(d, i) {
+                var symbol;
+                if (Math.random() > (col / cols)) {
+                    symbol = articulations[testArt[scoreFragment[row][col]]];
+                } else {
+                    symbol = durations[testDur[scoreFragment[row][col]]];
+                }
+                return symbol;
             })
             .attr("transform", function() {
                 return "translate(" +

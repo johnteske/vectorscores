@@ -1,8 +1,11 @@
 ---
 ---
-//@import "score/main";
+
+@import "mixins";
+@include BravuraFont();
 
 text {
+    font-family: 'Bravura';
+    font-size: 24px;
     fill: #111111;
-    font-size: 16px;
 }
