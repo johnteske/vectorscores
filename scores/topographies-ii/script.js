@@ -3,7 +3,7 @@
 var main = d3.select(".main"),
     topo = main.append("g"),
     width = 480,
-    tileWidthHalf = 32,
+    tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
     topoScore,
     testDur = [
