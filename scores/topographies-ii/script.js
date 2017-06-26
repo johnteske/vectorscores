@@ -6,8 +6,16 @@ var main = d3.select(".main"),
     tileWidthHalf = 32,
     tileHeightHalf = tileWidthHalf * 0.5,
     topoScore,
-    testDur = [0.5, 1, 2],
-    testArt = [".", ">", "-"];
+    testDur = [
+        { value: 0.5, offset: { x: -0.025, y: -0.25 } },
+        { value: 1, offset: { x: -0.175, y: 0 } },
+        { value: 2, offset: { x: -0.175, y: 0 } }
+    ],
+    testArt = [
+        { value: ".", offset: { x: -0.0625, y: 0.0625 } },
+        { value: ">", offset: { x: -0.1625, y: 0.125 } },
+        { value: "-", offset: { x: -0.1625, y: 0.03125 } }
+    ];
 
 var durations = VS.dictionary.Bravura.durations.stemless;
 var articulations = VS.dictionary.Bravura.articulations;
@@ -24,21 +32,38 @@ function drawScore(scoreFragment, x, y) {
 
     for(var row = 0; row < rows; row++){
         for(var col = 0; col < cols; col++){
+            var symbol, symbolText;
+
+            // to help center symbols with offsets
+            // d3.select(documentFragment).append("svg:path")
+            //     .attr("stroke", "red")
+            //     .attr("stroke-width", 1)
+            //     .attr("d", function() {
+            //         var px = ((x + (col - row)) * tileWidthHalf),
+            //             py = ((y + (col + row)) * tileHeightHalf)
+            //         return "M" + px + " " + (py - 5) +
+            //             " L" + px + " " + (py + 5) +
+            //             " M" + (px - 5) + " " + py +
+            //             " L" + (px + 5) + " " + py;
+            //     });
+
+            if (Math.random() > (col / cols)) {
+                symbol = testArt[scoreFragment[row][col]];
+                symbolText = articulations[symbol.value];
+            } else {
+                symbol = testDur[scoreFragment[row][col]];
+                symbolText = durations[symbol.value];
+            }
+
             d3.select(documentFragment).append("svg:text")
-            .text(function(d, i) {
-                var symbol;
-                if (Math.random() > (col / cols)) {
-                    symbol = articulations[testArt[scoreFragment[row][col]]];
-                } else {
-                    symbol = durations[testDur[scoreFragment[row][col]]];
-                }
-                return symbol;
-            })
-            .attr("transform", function() {
-                return "translate(" +
-                    ((x + (col - row)) * tileWidthHalf) + ", " +
-                    ((y + (col + row)) * tileHeightHalf) + ")";
-            });
+                .text(symbolText)
+                .attr("dx", symbol.offset.x + "em")
+                .attr("dy", symbol.offset.y + "em")
+                .attr("transform", function() {
+                    return "translate(" +
+                        ((x + (col - row)) * tileWidthHalf) + ", " +
+                        ((y + (col + row)) * tileHeightHalf) + ")";
+                });
         }
     }
 
