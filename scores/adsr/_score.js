@@ -28,6 +28,7 @@ function clamp(val, min, max) {
 /**
  * While scalable, the original work was timed at 300 seconds (5 minutes)
  */
+score.timeScale = (score.totalDuration / 300);
 
 score.bars = [0, 6.3858708756625, 10.33255612459, 16.718427000252, 27.050983124842, 37.383539249432,
     43.769410125095, 47.716095374022, 50.155281000757, 54.101966249685, 60.487837125347, 66.873708001009,
@@ -36,7 +37,7 @@ score.bars = [0, 6.3858708756625, 10.33255612459, 16.718427000252, 27.0509831248
     185.41019662497, 195.74275274956, 212.46117974981, 229.17960675006, 239.51216287465, 245.89803375032,
     256.23058987491, 262.61646075057, 272.94901687516, 283.28157299975, 289.66744387541, 293.61412912434,
     300].map(function(bar) {
-        return bar * (score.totalDuration / 300);
+        return bar * score.timeScale;
     });
 
 /**
@@ -93,6 +94,7 @@ for (var p = 0; p < numParts; p++) {
 
         var dispersion = lerpEnvelope(envelopes.timeDispersion, iit);
         dispersion = VS.getRandExcl(-dispersion, dispersion);
+        dispersion *= score.timeScale;
 
         phrase.startTime = Math.max(score.bars[i] + dispersion, endLastPhrase);
 
