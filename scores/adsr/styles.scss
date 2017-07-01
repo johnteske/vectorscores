@@ -45,13 +45,20 @@ main, svg.main {
 .dynamics,
 .bartok {
     font-family: 'Bravura';
+    font-size: 16px;
 }
 .bartok {
     font-size: 26px;
 }
 
+.pitch-range-numeric {
+    font-family: 'Courier', monospace;
+    font-size: 13px;
+}
+
 .timbre,
-.pitch-range {
+.pitch-range,
+.pitch-range-numeric {
     @include textShadowOutline();
 }
 

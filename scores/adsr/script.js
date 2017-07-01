@@ -268,14 +268,32 @@ for (p = 0; p < numParts; p++) {
                     .attr("y", layersY.timbre);
             }
 
+            var pitchDisplay, pitchDisplayClass;
+            if (scoreSettings.parts.pitchDisplay === "accidentals") {
+                pitchDisplay = function() {
+                    var lo = thisPhrase.pitch.low,
+                        hi = thisPhrase.pitch.high;
+                    return "\uec82 " + dict.acc[lo] + ( (lo !== hi) ? (" \uf479 " + dict.acc[hi]) : "" ) + " \uec83"; // tenuto as endash
+                }
+                pitchDisplayClass = "pitch-range";
+            } else {
+                pitchDisplay = function() {
+                    var lo = thisPhrase.pitch.low,
+                        hi = thisPhrase.pitch.high,
+                        range = lo;
+                    if (lo !== hi) {
+                        range += " – ";
+                        range += (hi === 0) ? hi : "+" + hi;
+                    }
+                    return "[" + range + "]";
+                }
+                pitchDisplayClass = "pitch-range-numeric";
+            }
+
             if(hasNewPitch) {
                 thisPartGroup.append("text")
-                    .text(function() {
-                        var lo = thisPhrase.pitch.low,
-                            hi = thisPhrase.pitch.high;
-                        return "\uec82 " + dict.acc[lo] + ( (lo !== hi) ? (" \uf479 " + dict.acc[hi]) : "" ) + " \uec83"; // tenuto as endash
-                    })
-                    .classed("pitch-range", true)
+                    .text(pitchDisplay)
+                    .attr("class", pitchDisplayClass)
                     .attr("y", layersY.pitch);
             }
 

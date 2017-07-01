@@ -4,6 +4,7 @@ var scoreSettings = {
 };
 
 scoreSettings.parts.value = numParts;
+scoreSettings.parts.pitchDisplay = "accidentals"; // "integers"
 
 // TODO clean up
 (function() {
