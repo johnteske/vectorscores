@@ -1,10 +1,8 @@
 ### Time
 Time is written proportionally.
-Durations are indicated by flags and stemless noteheads, including dotted values, at 60 beats per minute.
-Above each bar is its duration in seconds. <!--smaller ticks indicated seconds.-->
-<!--<p>
-    Boxes indicate groups of notes for phrasing and to help visualize durations.
-</p>-->
+<!--, including durations. The release of notes is not shown—musicians should release in time. Play duration/phrase only once, not repeated. -->
+Durations are indicated by note flags and stemless noteheads, including dotted values, at 60 beats per minute.
+Above each bar is its duration in seconds for reference.
 <ul>
     <li>
         <svg class="info-cue"></svg> score pointer and cues :

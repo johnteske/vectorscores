@@ -15,8 +15,7 @@ var scaleX = 3,
     unitY = 10,
     view = {},
     // 16 parts is an arbitrary max, ideally large ensembles read from parts
-    numParts = clamp(+VS.getQueryString("parts") || 4, 1, 16),
-    debug = false;
+    numParts = clamp(+VS.getQueryString("parts") || 4, 1, 16);
 
 {% include_relative _settings.js %}
 
@@ -403,8 +402,6 @@ VS.control.stepCallback = function() {
     scrollCallback();
 }
 
-{% include_relative _debug.js %}
-
 function resize() {
     // TODO pause score if playing
     // TODO fix hard-coded Y spacing values
@@ -417,8 +414,6 @@ function resize() {
 
     view.center = (view.width / score.scale) * 0.5;
     view.scoreY = ((view.height / score.scale) * 0.5) - ((score.height - (4 * unitY)) * 0.5);
-
-    if(debug){ resizeDebug(); }
 
     cueIndicator.selection
         .attr("transform", "translate(" +
