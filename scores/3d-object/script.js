@@ -51,7 +51,7 @@ function Performer() {
                 x: _position.x,
                 y: _position.y,
                 angle: _angle
-            }
+            };
         }
     };
 }

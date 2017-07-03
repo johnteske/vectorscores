@@ -39,4 +39,4 @@ for (var i = 0; i < numvents; i++) { // create remaining events
 
 VS.score.stopCallback = function() {
     d3.selectAll(".event-span").attr("class", "event-span"); // force this class only
-}
+};

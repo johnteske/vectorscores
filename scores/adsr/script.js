@@ -162,7 +162,7 @@ for (var i = 0; i < 7; i++) {
  * Ghost beams, for use in score and in performance notes
  * Positioning of group depends on noteheads, not unitX or first note duration
  */
-function makeGhost(firstDur) {
+function makeGhost() {
 
     var x1 = 10, // offset to tie
         attackScale = 0.15,
@@ -212,7 +212,7 @@ for (p = 0; p < numParts; p++) {
         partYPos = score.layoutHeight + (p * score.partHeight);
 
     var partGroup = score.group.append("g")
-        .attr("transform", "translate(0, " + partYPos + ")")
+        .attr("transform", "translate(0, " + partYPos + ")");
 
     // for each phrase, create a group around a barline
     partGroup.selectAll("g")
@@ -274,7 +274,7 @@ for (p = 0; p < numParts; p++) {
                     var lo = thisPhrase.pitch.low,
                         hi = thisPhrase.pitch.high;
                     return "\uec82 " + dict.acc[lo] + ( (lo !== hi) ? (" \uf479 " + dict.acc[hi]) : "" ) + " \uec83"; // tenuto as endash
-                }
+                };
                 pitchDisplayClass = "pitch-range";
             } else {
                 pitchDisplay = function() {
@@ -286,7 +286,7 @@ for (p = 0; p < numParts; p++) {
                         range += (hi === 0) ? hi : "+" + hi;
                     }
                     return "[" + range + "]";
-                }
+                };
                 pitchDisplayClass = "pitch-range-numeric";
             }
 
@@ -305,7 +305,7 @@ for (p = 0; p < numParts; p++) {
                         if (!d) {
                             return dict.art["x"]; // x notehead is an articulation, not a duration
                         } else if (d === 1.1) {
-                            return '';
+                            return "";
                         } else {
                             return dict.dur[d];
                         }
@@ -329,7 +329,7 @@ for (p = 0; p < numParts; p++) {
             //         .attr("fill-opacity", 0.5);
 
             if (thisPhrase.timbre === "ghost") {
-                makeGhost.call(this, durations[0]);
+                makeGhost.call(this);
             }
 
             // articulations
@@ -418,7 +418,7 @@ VS.score.stopCallback = scrollCallback;
 VS.control.stepCallback = function() {
     send({ cid: cid, scoreEvent: "step", pointer: VS.score.pointer }); // TODO hardcoded websocket send
     scrollCallback();
-}
+};
 
 function resize() {
     // TODO pause score if playing
@@ -455,4 +455,4 @@ var infoGhost = d3.select(".info-ghost")
     .attr("width", 60)
     .attr("height", 20)
     .append("g");
-makeGhost.call(infoGhost.node(), 0);
+makeGhost.call(infoGhost.node());

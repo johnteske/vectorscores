@@ -5,7 +5,7 @@ layout: compress-js
  * NOTE/TODO dependencies: [dictionary.bravura, xByDuration, pitchClass]
  * TODO rather than class (removed) or static function (present), perhaps this module is meant as a globject generator, like d3.svg.line()
  */
-function drawGlobject(d, i){
+function drawGlobject(d, i) {
     var selection = d3.select(this),
         width = d.width,
         globLeft = 5;
@@ -43,14 +43,14 @@ function drawGlobject(d, i){
     }
 
     // 127 / ~10px notehead height = 13 y layers
-    for (var i = 0, phrases = 13; i < phrases; i++) {
+    for (var phrase = 0, phrases = 13; phrase < phrases; phrase++) {
         content.append("g")
             .attr("transform", function() {
                 var halfWidth = width * 0.5,
                     // x = Math.random() * width,
-                    x = Math.random() * halfWidth + (halfWidth * (i % 2)),
-                    y = (127 / phrases) * i;
-                return "translate(" + x + "," + y + ")"
+                    x = Math.random() * halfWidth + (halfWidth * (phrase % 2)),
+                    y = (127 / phrases) * phrase;
+                return "translate(" + x + "," + y + ")";
             })
             .selectAll("text")
             .data(d.phraseTexture)
@@ -82,14 +82,14 @@ function drawGlobject(d, i){
                 // return pcFormat(pc, "name"); // scoreSettings.pcFormat
             });
             return "[" + pcSet.join(", ") + "]";
-        })
+        });
 
     selection.append("g")
         .selectAll("text")
         .data(d.dynamics)
         .enter()
         .append("text")
-        .attr("x", function(d, i) {
+        .attr("x", function(d) {
             return d.time * width;
         })
         .attr("y", 127 + 42)
