@@ -15,7 +15,10 @@ function render() {
     score.container.selectAll(".rendered").remove();
 
     var c = makePoint([0, 0, 5]); // 3D point representing the camera
-    var theta = makePoint([Math.PI, 0, 0]); // orientation of the camera (Tait–Bryan angles)
+    var theta = makePoint([0, 0, 0]); // orientation of the camera (Tait–Bryan angles)
+
+    // var c = makePoint([0, 0, -5]); // 3D point representing the camera
+    // var theta = makePoint([Math.PI, 0, Math.PI]); // orientation of the camera (Tait–Bryan angles) NOTE x, y, z?
 
     var xMatrix = (function() {
         var cosOx = Math.cos(theta.x),
