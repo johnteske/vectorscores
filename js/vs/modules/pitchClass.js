@@ -15,7 +15,7 @@ var pcFormat = (function() {
         if (format === "name") {
             return names[integer];
         } else {
-            return integer;
+            return integer.toString().replace("10", "T").replace("11", "E");
         }
     };
 })();
