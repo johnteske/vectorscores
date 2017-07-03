@@ -1,6 +1,7 @@
 ---
-# // adapted from original SuperCollider code
+layout: compress-js
 ---
+
 /**
  * TODO
  * display pitch and timbre inline--and only if there is a change (or make that optional)

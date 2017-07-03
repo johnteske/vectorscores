@@ -1,5 +1,7 @@
 ---
+layout: compress-js
 ---
+
 d3.select("svg").remove(); // svg not used in test
 
 function userEvent(ndex, id, box) {

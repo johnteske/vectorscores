@@ -1,6 +1,7 @@
 ---
 layout: compress-js
 ---
+
 var canvas = {
         margins: 20,
         maxWidth: 400,

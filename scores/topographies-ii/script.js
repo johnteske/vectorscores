@@ -1,5 +1,7 @@
 ---
+layout: compress-js
 ---
+
 var main = d3.select(".main"),
     topo = main.append("g"),
     width = 480,

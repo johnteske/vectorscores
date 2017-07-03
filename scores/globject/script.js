@@ -1,5 +1,7 @@
 ---
+layout: compress-js
 ---
+
 var width = 480,
     maxwidth = 480,
     margin = 20,

@@ -1,4 +1,5 @@
 ---
+layout: compress-js
 ---
 
 var TrashFire = (function() {

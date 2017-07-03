@@ -1,5 +1,7 @@
 ---
+layout: compress-js
 ---
+
 var cardTypes, cardList;
 
 {% include_relative _score.js %}

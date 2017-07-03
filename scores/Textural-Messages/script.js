@@ -1,5 +1,7 @@
 ---
+layout: compress-js
 ---
+
 var width = 480,
     height = width,
     txtWidth = width * 0.3, // remain fixed

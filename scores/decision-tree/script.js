@@ -1,3 +1,7 @@
+---
+layout: compress-js
+---
+
 d3.select("svg").remove();
 var group = d3.select("main").append("div");
 

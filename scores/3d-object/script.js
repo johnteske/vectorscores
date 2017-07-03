@@ -1,5 +1,7 @@
 ---
+layout: compress-js
 ---
+
 // generate (placeholder) score
 {% include_relative _score.js %}
 {% include_relative _matrices.js %}
