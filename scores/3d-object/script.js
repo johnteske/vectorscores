@@ -56,7 +56,7 @@ function Performer() {
     };
 }
 
-var performer = new Performer;
+var performer = new Performer();
 // TODO allow this to be set by query string on load,
 // also update query string so bookmarks/share/reloads retain current settings
 performer.setAngle(45);
