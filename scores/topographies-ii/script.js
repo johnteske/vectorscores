@@ -6,19 +6,16 @@ var main = d3.select(".main"),
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
     topoScore,
-    testDur = [
-        { value: 0.5, offset: { x: -0.025, y: -0.25 } },
-        { value: 1, offset: { x: -0.175, y: 0 } },
-        { value: 2, offset: { x: -0.175, y: 0 } }
-    ],
-    testArt = [
-        { value: ".", offset: { x: -0.0625, y: 0.0625 } },
-        { value: ">", offset: { x: -0.1625, y: 0.125 } },
-        { value: "-", offset: { x: -0.1625, y: 0.03125 } }
-    ];
+    symbolOffsets = {
+        0.5: { x: -0.025, y: -0.25 },
+        1: { x: -0.175, y: 0 },
+        2:  { x: -0.175, y: 0 },
+        ".": { x: -0.0625, y: 0.0625 },
+        ">": { x: -0.1625, y: 0.125 },
+        "-": { x: -0.1625, y: 0.03125 }
+    };
 
-var durations = VS.dictionary.Bravura.durations.stemless;
-var articulations = VS.dictionary.Bravura.articulations;
+var symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations);
 
 main.style("width", width + "px")
     .style("height", width + "px");
@@ -30,9 +27,9 @@ function drawScore(scoreFragment, x, y) {
         rows = scoreFragment.length,
         cols = scoreFragment[0].length;
 
-    for(var row = 0; row < rows; row++){
-        for(var col = 0; col < cols; col++){
-            var symbol, symbolText;
+    for (var row = 0; row < rows; row++) {
+        for (var col = 0; col < cols; col++) {
+            var symbolKey = scoreFragment[row][col];
 
             // to help center symbols with offsets
             // d3.select(documentFragment).append("svg:path")
@@ -47,18 +44,12 @@ function drawScore(scoreFragment, x, y) {
             //             " L" + (px + 5) + " " + py;
             //     });
 
-            if (Math.random() > (col / cols)) {
-                symbol = testArt[scoreFragment[row][col]];
-                symbolText = articulations[symbol.value];
-            } else {
-                symbol = testDur[scoreFragment[row][col]];
-                symbolText = durations[symbol.value];
-            }
+            var offsets = symbolOffsets[symbolKey];
 
             d3.select(documentFragment).append("svg:text")
-                .text(symbolText)
-                .attr("dx", symbol.offset.x + "em")
-                .attr("dy", symbol.offset.y + "em")
+                .text(symbols[symbolKey])
+                .attr("dx", offsets.x + "em")
+                .attr("dy", offsets.y + "em")
                 .attr("transform", function() {
                     return "translate(" +
                         ((x + (col - row)) * tileWidthHalf) + ", " +
@@ -69,8 +60,8 @@ function drawScore(scoreFragment, x, y) {
 
     topo.node().appendChild(documentFragment);
 }
-topoScore = createScoreFragment(8, 7);
+topoScore = createScoreFragment(8, 8);
 drawScore(topoScore, 0, 0);
-drawScore(createScoreFragment(8, 1), 7, 7);
+// drawScore(createScoreFragment(8, 1), 7, 7);
 
 topo.attr("transform", "translate(240,120)");
