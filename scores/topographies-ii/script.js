@@ -4,11 +4,12 @@ layout: compress-js
 
 var main = d3.select(".main"),
     topo = main.append("g"),
-    width = 480,
+    // width = 480,
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
     topoScore,
     symbolOffsets = {
+        0.25: { x: -0.025, y: -0.25 }, // TODO
         0.5: { x: -0.025, y: -0.25 },
         1: { x: -0.175, y: 0 },
         2:  { x: -0.175, y: 0 },
@@ -19,9 +20,10 @@ var main = d3.select(".main"),
 
 var symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations);
 
-main.style("width", width + "px")
-    .style("height", width + "px");
+main.style("width", 480 + "px")
+    .style("height", 480 + "px");
 
+{% include_relative _diamond-square.js %}
 {% include_relative _score.js %}
 
 function drawScore(scoreFragment, x, y) {
@@ -31,7 +33,8 @@ function drawScore(scoreFragment, x, y) {
 
     for (var row = 0; row < rows; row++) {
         for (var col = 0; col < cols; col++) {
-            var symbolKey = scoreFragment[row][col];
+            var symbolIndex = scoreFragment[row][col];
+            var symbolKey = ["-", "-", ">", ".", 2, 1, 0.5, 0.25][symbolIndex + 4];
 
             // to help center symbols with offsets
             // d3.select(documentFragment).append("svg:path")
@@ -47,8 +50,10 @@ function drawScore(scoreFragment, x, y) {
             //     });
 
             var offsets = symbolOffsets[symbolKey];
+            // var offsets = {x: 0, y: 0};
 
             d3.select(documentFragment).append("svg:text")
+                // .text(symbolKey)
                 .text(symbols[symbolKey])
                 .attr("dx", offsets.x + "em")
                 .attr("dy", offsets.y + "em")
