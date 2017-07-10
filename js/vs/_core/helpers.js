@@ -24,3 +24,7 @@ VS.getQueryString = function(field, url) {
         string = new RegExp( "[?&]" + field + "=([^&#]*)", "i" ).exec(href);
     return string ? string[1] : null;
 };
+
+VS.clamp = function(val, min, max) {
+    return Math.min(Math.max(val, min), max);
+};
