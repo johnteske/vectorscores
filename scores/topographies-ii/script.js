@@ -20,8 +20,8 @@ var main = d3.select(".main"),
 
 var symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations);
 
-main.style("width", 480 + "px")
-    .style("height", 480 + "px");
+main.style("width", 640 + "px")
+    .style("height", 640 + "px");
 
 {% include_relative _diamond-square.js %}
 {% include_relative _score.js %}
@@ -33,8 +33,8 @@ function drawScore(scoreFragment, x, y) {
 
     for (var row = 0; row < rows; row++) {
         for (var col = 0; col < cols; col++) {
-            var symbolIndex = scoreFragment[row][col];
-            var symbolKey = ["-", "-", ">", ".", 2, 1, 0.5, 0.25][symbolIndex + 4];
+            var symbolIndex = scoreFragment[row][col] + 4;
+            var symbolKey = ["-", "-", ">", ".", 2, 1, 0.5, 0.25][symbolIndex];
 
             // to help center symbols with offsets
             // d3.select(documentFragment).append("svg:path")
@@ -60,7 +60,7 @@ function drawScore(scoreFragment, x, y) {
                 .attr("transform", function() {
                     return "translate(" +
                         ((x + (col - row)) * tileWidthHalf) + ", " +
-                        ((y + (col + row)) * tileHeightHalf) + ")";
+                        ((y + (col + row)) * tileHeightHalf - (symbolIndex * 5)) + ")";
                 });
         }
     }
@@ -71,4 +71,4 @@ topoScore = createScoreFragment(8, 8);
 drawScore(topoScore, 0, 0);
 // drawScore(createScoreFragment(8, 1), 7, 7);
 
-topo.attr("transform", "translate(240,120)");
+topo.attr("transform", "translate(320,120)");
