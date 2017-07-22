@@ -4,13 +4,22 @@ layout: compress-js
 var score = {
     width: 320,
     height: 320,
+    cell: {
+        size: 60
+    },
     choices: {}
 };
 
 score.center = {
     x: score.width * 0.5,
     y: score.height * 0.5
-}
+};
+
+score.cell.halfSize = score.cell.size * 0.5;
+
+/**
+ * Symbols and choice
+ */
 
 var durations = VS.dictionary.Bravura.durations.stemless;
 
@@ -50,50 +59,60 @@ function makeChoice(position) {
         .text(durations[score.choices.bottom]);
 }
 
+
+/**
+ * Create cells
+ */
+
 score.svg = d3.select(".main")
     .attr("width", score.width)
     .attr("height", score.height);
 
 score.topGroup = score.svg.append("g")
     .attr("transform", "translate(" +
-        (score.center.x - 22) + ", " +
-        (score.center.y - 44 - 22) + ")")
+        (score.center.x - score.cell.halfSize) + ", " +
+        (score.center.y - score.cell.size - score.cell.halfSize) + ")")
     .on("click", function() {
-        makeChoice('top');
+        makeChoice("top");
     });
-score.topGroup.append("rect")
-    .attr("width", 44)
-    .attr("height", 44);
-
 score.bottomGroup = score.svg.append("g")
     .attr("transform", "translate(" +
-        (score.center.x - 22) + ", " +
-        (score.center.y + 22) + ")")
+        (score.center.x - score.cell.halfSize) + ", " +
+        (score.center.y + score.cell.halfSize) + ")")
     .on("click", function() {
-        makeChoice('bottom');
+        makeChoice("bottom");
     });
+
+score.topGroup.append("rect")
+    .attr("width", score.cell.size)
+    .attr("height", score.cell.size);
 score.bottomGroup.append("rect")
-    .attr("width", 44)
-    .attr("height", 44);
+    .attr("width", score.cell.size)
+    .attr("height", score.cell.size);
 
 score.topGroup.append("text")
-    .attr("x", 22)
-    .attr("y", 22);
+    .attr("x", score.cell.halfSize)
+    .attr("y", score.cell.halfSize);
 score.bottomGroup.append("text")
-    .attr("x", 22)
-    .attr("y", 22);
+    .attr("x", score.cell.halfSize)
+    .attr("y", score.cell.halfSize);
 
-makeChoice();
+makeChoice(); // initial choices
+
+
+/**
+ * Keyboard control
+ */
 
 function keydownListener(event) {
     if (event.defaultPrevented) { return; }
 
     switch (event.keyCode) {
     case 38:
-        makeChoice('top');
+        makeChoice("top");
         break;
     case 40:
-        makeChoice('bottom');
+        makeChoice("bottom");
         break;
     default:
         return;
