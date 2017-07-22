@@ -9,10 +9,13 @@ VS.enableModal = function(modalId, openId, closeId) {
         modal.style.display = "block";
         VS.page.headerClassed("show");
         VS.page.footerClassed("show");
-        if (VS.page.footer) { VS.score.pause(); }
+
+        if (VS.page.footer) {
+            VS.score.pause();
+            window.removeEventListener("keydown", VS.control.keydownListener, true);
+        }
 
         closeTrigger.addEventListener("click", closeModal, true);
-        window.removeEventListener("keydown", VS.control.keydownListener, true);
         window.addEventListener("click", clickListener, true);
         window.addEventListener("keydown", keydownListener, true);
     }
@@ -23,10 +26,13 @@ VS.enableModal = function(modalId, openId, closeId) {
         VS.page.headerClassed("");
         VS.page.footerClassed("");
 
+        if (VS.page.footer) {
+            window.addEventListener("keydown", VS.control.keydownListener, true);
+        }
+
         closeTrigger.removeEventListener("click", closeModal, true);
         window.removeEventListener("click", clickListener, true);
         window.removeEventListener("keydown", keydownListener, true);
-        window.addEventListener("keydown", VS.control.keydownListener, true);
     }
 
     function clickListener(event) {
