@@ -84,3 +84,20 @@ score.bottomGroup.append("text")
     .attr("y", 22);
 
 makeChoice();
+
+function keydownListener(event) {
+    if (event.defaultPrevented) { return; }
+
+    switch (event.keyCode) {
+    case 38:
+        makeChoice('top');
+        break;
+    case 40:
+        makeChoice('bottom');
+        break;
+    default:
+        return;
+    }
+    event.preventDefault();
+}
+window.addEventListener("keydown", keydownListener, true);
