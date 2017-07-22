@@ -1,59 +1,86 @@
 ---
 layout: compress-js
 ---
+var score = {
+    width: 320,
+    height: 320,
+    choices: {}
+};
 
-d3.select("svg").remove();
-var group = d3.select("main").append("div");
-
-// should these be paired? either as array or object?
-var list = [">", ".", "_", "'", "^"];
-var weight = [1, 1, 1, 1, 1]; // initial weights
-
-var choiceTop = group.append("p").classed("button", "true").on("click", function() { choiceMake(d3.select(this).data()); }); // potential to be modular?
-var choiceBot = group.append("p").classed("button", "true").on("click", function() { choiceMake(choiceBot.data()); }); // hard-coded
-
-// add bar chart visualization
-d3.select("main").append("p").classed("chart-info", true).text("Relative probability of symbol appearing:");
-d3.select("main").append("div").classed("chart-wrap", true);
-d3.select(".chart-wrap").append("div").classed("chart", true);
-
-d3.select(".chart").selectAll("div")
-    .data(weight)
-    .enter()
-    .append("div")
-    .text(function(d, i) { return list[i]; })
-    .style("display", "inline-block");
-
-function updateReadout() {
-    var y = d3.scale.linear()
-        .domain([0, d3.max(weight)])
-        .range([0, 40]);
-
-    d3.select(".chart").selectAll("div")
-        .data(weight)
-        // .text(function(d) { return d; })
-        .style("height", function(d) { return y(d) + "px"; });
+score.center = {
+    x: score.width * 0.5,
+    y: score.height * 0.5
 }
 
-function updateButtons() {
-    // generate another two options
-    var newTop = VS.getWeightedItem(list, weight);
-    choiceTop.data(newTop).text(newTop);
+var durations = VS.dictionary.Bravura.durations.stemless;
 
-    var newBot = VS.getWeightedItem(list, weight);
-    choiceBot.data(newBot).text(newBot);
+var symbols = [],
+    symbolWeights = [];
 
-    updateReadout();
+for (var prop in durations) {
+    if (durations.hasOwnProperty(prop)) {
+        symbols.push(prop);
+        symbolWeights.push(1);
+    }
 }
 
-function choiceMake(choice) {
-    // record choice and add to weight array
-    var choiceIndex = list.indexOf(choice[0]); // index 0 as data is array
-    // console.log(choice[0], choiceIndex);
-    weight[choiceIndex] += 1; // may lower the increment depending on how many choices are made--currently the direction is very easily influenced
-
-    updateButtons();
+function getSymbol() {
+    return VS.getWeightedItem(symbols, symbolWeights);
 }
 
-// set initial values
-updateButtons();
+function makeChoice(position) {
+    // update symbol weights
+    if (position) {
+        var choice = score.choices[position],
+            index = symbols.indexOf(choice);
+        symbolWeights[index] += 1;
+    }
+
+    // debug
+    console.log(symbols);
+    console.log(symbolWeights);
+
+    // make new choices
+    score.choices.top = getSymbol();
+    score.choices.bottom = getSymbol();
+
+    score.topGroup.select("text")
+        .text(durations[score.choices.top]);
+    score.bottomGroup.select("text")
+        .text(durations[score.choices.bottom]);
+}
+
+score.svg = d3.select(".main")
+    .attr("width", score.width)
+    .attr("height", score.height);
+
+score.topGroup = score.svg.append("g")
+    .attr("transform", "translate(" +
+        (score.center.x - 22) + ", " +
+        (score.center.y - 44 - 22) + ")")
+    .on("click", function() {
+        makeChoice('top');
+    });
+score.topGroup.append("rect")
+    .attr("width", 44)
+    .attr("height", 44);
+
+score.bottomGroup = score.svg.append("g")
+    .attr("transform", "translate(" +
+        (score.center.x - 22) + ", " +
+        (score.center.y + 22) + ")")
+    .on("click", function() {
+        makeChoice('bottom');
+    });
+score.bottomGroup.append("rect")
+    .attr("width", 44)
+    .attr("height", 44);
+
+score.topGroup.append("text")
+    .attr("x", 22)
+    .attr("y", 22);
+score.bottomGroup.append("text")
+    .attr("x", 22)
+    .attr("y", 22);
+
+makeChoice();

@@ -1,34 +1,22 @@
 ---
 ---
-main {
-    padding: 8px;
+@import "mixins";
+@include BravuraFont();
+
+g {
+    cursor: pointer;
 }
 
-p.button {
-    margin: 1em;
-    padding: 1em;
-    background: #eee;
-    -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none; -o-user-select:none;
-}
-p.button:hover {
-    background: #ddd;
-}
-p.button, div.chart div {
-    font-size: 1.5em;
-}
-$bar-width: 40px;
-
-p.button, .chart-info, .chart div {
-    font-family: monospace;
-    text-align: center;
+rect {
+    stroke: black;
+    stroke-width: 1px;
+    fill: white;
 }
 
-.chart {
-    margin: 0 auto;
-    width: ($bar-width + 2px) * 5;
-}
-.chart div {
-  background-color: #ddd;
-  width: $bar-width;
-  margin: 1px;
+text {
+    pointer-events: none; // prevent accidental click on line-height outside rect
+    font-family: Bravura;
+    font-size: 22px;
+    line-height: 22px;
+    text-anchor: middle;
 }
