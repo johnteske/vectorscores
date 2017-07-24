@@ -14,12 +14,12 @@ VS.cueTriangle = function(parent) {
         .style("fill", "black")
         .style("fill-opacity", "0");
 
-    function blinkFn(opacity) {
-        return function(selection) { selection.style("fill-opacity", opacity); };
-    }
-
     // TODO allow custom options: opacities, timing, blink fn (other than fill-opacity?), etc.
     cue.blink = function(onOpacity, offOpacity, endOpacity) {
+        function blinkFn(opacity) {
+            return function(selection) { selection.style("fill-opacity", opacity); };
+        }
+
         var blinkOn = blinkFn(onOpacity || 1),
             blinkOff = blinkFn(offOpacity || 0),
             blinkEnd = blinkFn(endOpacity || 0);
