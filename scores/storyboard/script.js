@@ -60,7 +60,7 @@ function makeCard(selection) {
         .attr("dy", "-1em")
         .text(function(d) {
             var pcSet = d.pcSet.map(function(pc) {
-                return pcFormat(pc, scoreSettings.pcFormat);
+                return VS.pitchClass.format(pc, scoreSettings.pcFormat);
             });
             return "[" + pcSet.join(", ") + "]";
         })

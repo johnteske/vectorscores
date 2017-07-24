@@ -51,7 +51,7 @@ function makeGlobject() {
     }
     globject.pitches = [
         {
-            classes: pcsetTranspose(pcset, "random"),
+            classes: VS.pitchClass.transpose(pcset, "random"),
             time: 0
         }
     ];
