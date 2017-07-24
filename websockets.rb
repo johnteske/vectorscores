@@ -12,6 +12,7 @@ EM.run {
       puts "#{cid} connected to #{handshake.path}."
       @clients << ws
       ws.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connected\" }"
+      puts "#{@clients.length} connections open"
     }
 
     ws.onclose {

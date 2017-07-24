@@ -1,78 +1,89 @@
-var socket,
-    cid, // client id
-    host = (location.protocol === "https:" ? "wss://" : "ws://") + location.hostname + ":4001";
+---
+layout: compress-js
+---
+VS.WebSocket = (function() {
+    var ws = {};
 
-function connect() {
-    try {
-        socket = new WebSocket(host);
+    var socket,
+        host = (location.protocol === "https:" ? "wss://" : "ws://") + location.hostname + ":4001";
 
-        socket.onopen = function() {
-            addMessage("Open");
-        };
+    function connect() {
+        try {
+            socket = new WebSocket(host);
 
-        socket.onclose = function() {
-            addMessage("Closed");
-        };
+            socket.onopen = function() {
+                logMessage("Open");
+            };
 
-        socket.onmessage = function(msg) {
-            try {
-                var data = JSON.parse(msg.data);
-                if (data.type === "ws" && data.content === "connected") {
-                    cid = data.cid;
-                }
-                // if not sent by self
-                if (data.cid !== cid) {
-                    switch(data.scoreEvent) {
-                        case "play":
-                            VS.score.play();
-                            break;
-                        case "pause":
-                            VS.score.pause();
-                            break;
-                        case "stop":
-                            VS.score.stop();
-                            break;
-                        case "step":
-                            updatePointer(data.pointer); // TODO add to VS, not global
-                            scrollCallback(); // TODO -- hardcoded for ad;sr currently
-                            break;
+            socket.onclose = function() {
+                logMessage("Closed");
+            };
+
+            socket.onmessage = function(msg) {
+                try {
+                    var data = JSON.parse(msg.data);
+                    if (data.type === "ws" && data.content === "connected") {
+                        ws.cid = data.cid;
+                    }
+                    // if not sent by self
+                    if (data.cid !== ws.cid) {
+                        switch(data.scoreEvent) {
+                            case "play":
+                                VS.score.play();
+                                break;
+                            case "pause":
+                                VS.score.pause();
+                                break;
+                            case "stop":
+                                VS.score.stop();
+                                break;
+                            case "step":
+                                updatePointer(data.pointer); // TODO add to VS, not global
+                                scrollCallback(); // TODO -- hardcoded for ad;sr currently
+                                break;
+                        }
                     }
                 }
-            }
-            catch (err) {
-                console.log(err);
-            }
+                catch (err) {
+                    logMessage("Receive error: " + err);
+                }
+            };
+
+        addControlCallbacks();
+
+        } catch(exception) {
+            logMessage("Connection error: " + exception);
+        }
+    }
+
+    function addControlCallbacks() {
+        VS.control.playCallback = function() {
+            VS.WebSocket.send({ cid: ws.cid, scoreEvent: "play", pointer: VS.score.pointer });
         };
-    } catch(exception) {
-        addMessage("Error: " + exception);
+        VS.control.pauseCallback = function() {
+            VS.WebSocket.send({ cid: ws.cid, scoreEvent: "pause", pointer: VS.score.pointer });
+        };
+        VS.control.stopCallback = function() {
+            VS.WebSocket.send({ cid: ws.cid, scoreEvent: "stop" });
+        };
+        VS.control.stepCallback = function() {
+            VS.WebSocket.send({ cid: ws.cid, scoreEvent: "step", pointer: VS.score.pointer });
+        };
     }
-}
 
-function addMessage(msg) {
-    document.getElementById("ws-log").innerHTML = msg;
-}
-
-function send(data) {
-    try {
-        socket.send(JSON.stringify(data));
-    } catch(err) {
-        console.log(err);
+    function logMessage(msg) {
+        document.getElementById("ws-log").innerHTML = msg; // TODO stash element
     }
-}
 
-connect();
+    ws.send = function(data) {
+        try {
+            socket.send(JSON.stringify(data));
+        } catch(err) {
+            logMessage("Send error: " + err);
+        }
+    };
 
-// socket.close(); // disconnect
+    connect();
 
-VS.control.playCallback = function() {
-    send({ cid: cid, scoreEvent: "play", pointer: VS.score.pointer });
-};
-VS.control.pauseCallback = function() {
-    send({ cid: cid, scoreEvent: "pause", pointer: VS.score.pointer });
-};
-VS.control.stopCallback = function() {
-    send({ cid: cid, scoreEvent: "stop" });
-};
-VS.control.stepCallback = function() {
-    send({ cid: cid, scoreEvent: "step", pointer: VS.score.pointer });
-};
+    return ws;
+})();
