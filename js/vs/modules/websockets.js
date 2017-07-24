@@ -5,7 +5,8 @@ VS.WebSocket = (function() {
     var ws = {};
 
     var socket,
-        host = (location.protocol === "https:" ? "wss://" : "ws://") + location.hostname + ":4001";
+        host = (location.protocol === "https:" ? "wss://" : "ws://") + location.hostname + ":4001",
+        logElement = document.getElementById("ws-log");
 
     function connect() {
         try {
@@ -15,8 +16,12 @@ VS.WebSocket = (function() {
                 logMessage("Open");
             };
 
-            socket.onclose = function() {
-                logMessage("Closed");
+            socket.onclose = function(e) {
+                if (e.code === 3001) {
+                    logMessage("Closed");
+                } else {
+                    logMessage("Not connected");
+                }
             };
 
             socket.onmessage = function(msg) {
@@ -72,7 +77,7 @@ VS.WebSocket = (function() {
     }
 
     function logMessage(msg) {
-        document.getElementById("ws-log").innerHTML = msg; // TODO stash element
+        logElement.innerHTML = msg;
     }
 
     ws.send = function(data) {
