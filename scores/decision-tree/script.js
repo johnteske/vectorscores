@@ -21,42 +21,44 @@ score.cell.halfSize = score.cell.size * 0.5;
  * Symbols and choice
  */
 
-var durations = VS.dictionary.Bravura.durations.stemless;
+{% include_relative _properties.js %}
 
-var symbols = [],
-    symbolWeights = [];
+var durations = makePropertyObj(VS.dictionary.Bravura.durations.stemless);
+var dynamics = makePropertyObj(VS.dictionary.Bravura.dynamics);
 
-for (var prop in durations) {
-    if (durations.hasOwnProperty(prop)) {
-        symbols.push(prop);
-        symbolWeights.push(1);
-    }
-}
-
-function getSymbol() {
-    return VS.getWeightedItem(symbols, symbolWeights);
+function createChoices() {
+    score.choices.top = {
+        duration: VS.getWeightedItem(durations.keys, durations.weights),
+        dynamic: VS.getWeightedItem(dynamics.keys, dynamics.weights)
+    };
+    score.choices.bottom = {
+        duration: VS.getWeightedItem(durations.keys, durations.weights),
+        dynamic: VS.getWeightedItem(dynamics.keys, dynamics.weights)
+    };
 }
 
 function makeChoice(position) {
     // update symbol weights
     if (position) {
-        var choice = score.choices[position],
-            index = symbols.indexOf(choice);
-        symbolWeights[index] += 1;
+        var choice = score.choices[position];
+        durations.weights[durations.keys.indexOf(choice.duration)] += 1;
+        dynamics.weights[dynamics.keys.indexOf(choice.dynamic)] += 1;
     }
 
     // debug
-    console.log(symbols);
-    console.log(symbolWeights);
+    console.log(durations.weights);
+    console.log(dynamics.weights);
 
-    // make new choices
-    score.choices.top = getSymbol();
-    score.choices.bottom = getSymbol();
+    createChoices();
 
-    score.topGroup.select("text")
-        .text(durations[score.choices.top]);
-    score.bottomGroup.select("text")
-        .text(durations[score.choices.bottom]);
+    score.topGroup.select(".duration")
+        .text(durations.symbols[score.choices.top.duration]);
+    score.topGroup.select(".dynamic")
+        .text(dynamics.symbols[score.choices.top.dynamic]);
+    score.bottomGroup.select(".duration")
+        .text(durations.symbols[score.choices.bottom.duration]);
+    score.bottomGroup.select(".dynamic")
+        .text(dynamics.symbols[score.choices.bottom.dynamic]);
 }
 
 
@@ -91,11 +93,21 @@ score.bottomGroup.append("rect")
     .attr("height", score.cell.size);
 
 score.topGroup.append("text")
+    .attr("class", "duration")
+    .attr("x", score.cell.halfSize)
+    .attr("y", score.cell.halfSize);
+score.topGroup.append("text")
+    .attr("class", "dynamic")
+    .attr("x", score.cell.halfSize)
+    .attr("y", score.cell.size - 5);
+score.bottomGroup.append("text")
+    .attr("class", "duration")
     .attr("x", score.cell.halfSize)
     .attr("y", score.cell.halfSize);
 score.bottomGroup.append("text")
+    .attr("class", "dynamic")
     .attr("x", score.cell.halfSize)
-    .attr("y", score.cell.halfSize);
+    .attr("y", score.cell.size - 5);
 
 makeChoice(); // initial choices
 
