@@ -416,10 +416,7 @@ function scrollCallback() {
 }
 VS.score.pauseCallback = scrollCallback;
 VS.score.stopCallback = scrollCallback;
-VS.control.stepCallback = function() {
-    VS.WebSocket.send({ scoreEvent: "step", pointer: VS.score.pointer }); // TODO hardcoded websocket send
-    scrollCallback();
-};
+VS.score.stepCallback = scrollCallback;
 
 function resize() {
     // TODO pause score if playing

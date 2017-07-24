@@ -118,4 +118,5 @@ if (VS.page.footer) {
 function updatePointer(ndex){ // score, control // TODO should be part of VS, not global
     VS.score.pointer = ndex;
     VS.control.pointer.element.value = ndex;
+    VS.score.stepCallback();
 }

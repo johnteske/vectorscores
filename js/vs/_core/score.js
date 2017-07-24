@@ -44,6 +44,7 @@ VS.score = (function () {
         playCallback: VS.noop,
         pauseCallback: VS.noop,
         stopCallback: VS.noop,
+        stepCallback: VS.noop,
         play: function() {
             VS.score.playing = true;
             VS.control.play.setPause();
