@@ -14,6 +14,7 @@ VS.WebSocket = (function() {
 
             socket.onopen = function() {
                 logMessage("Open");
+                addControlCallbacks();
             };
 
             socket.onclose = function(e) {
@@ -53,8 +54,6 @@ VS.WebSocket = (function() {
                     logMessage("Receive error: " + err);
                 }
             };
-
-        addControlCallbacks();
 
         } catch(exception) {
             logMessage("Connection error: " + exception);
