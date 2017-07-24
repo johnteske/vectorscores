@@ -5,8 +5,14 @@ VS.score = (function () {
         VS.score.allTimeouts.push( setTimeout(function(){ func(params); }, time) ); // IE fix?
     }
 
+    function updatePointer(index) {
+        VS.score.pointer = index;
+        VS.control.pointer.element.value = index;
+        VS.score.stepCallback();
+    }
+
     function playEvent(index) {
-        updatePointer(index); // should be part of VS, not global
+        VS.score.updatePointer(index);
 
         var thisFunc = VS.score.funcAt(index);
         thisFunc.apply(null, VS.score.paramsAt(index));
@@ -65,7 +71,7 @@ VS.score = (function () {
         },
         stop: function() {
             VS.score.playing = false;
-            updatePointer(0);
+            VS.score.updatePointer(0);
             VS.control.play.setPlay();
             VS.control.play.enable();
             VS.control.stop.disable();
@@ -74,7 +80,8 @@ VS.score = (function () {
             VS.page.showLayout();
             VS.score.stopCallback();
         },
-        schedule: schedule
+        schedule: schedule,
+        updatePointer: updatePointer
 
     };
 })();

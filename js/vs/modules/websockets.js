@@ -44,7 +44,7 @@ VS.WebSocket = (function() {
                                 VS.score.stop();
                                 break;
                             case "step":
-                                updatePointer(data.pointer); // TODO add to VS, not global
+                                VS.score.updatePointer(data.pointer);
                                 scrollCallback(); // TODO -- hardcoded for ad;sr currently
                                 break;
                         }

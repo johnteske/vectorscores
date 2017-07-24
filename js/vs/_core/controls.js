@@ -28,9 +28,9 @@ if (VS.page.footer) {
             VS.control.stopCallback();
         }
 
-        function stepPointer(num){
+        function stepPointer(steps) {
             if(!VS.score.playing) { // don't allow skip while playing, for now
-                updatePointer(Math.min(Math.max(VS.score.pointer + num, 0), VS.score.getLength() - 1)); // TODO VS clamp helper
+                VS.score.updatePointer(VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1));
                 VS.control.updateStepButtons();
                 VS.control.stepCallback();
             }
@@ -113,10 +113,4 @@ if (VS.page.footer) {
     VS.control.back.disable();
     VS.control.stop.disable();
     window.addEventListener("keydown", VS.control.keydownListener, true);
-}
-
-function updatePointer(ndex){ // score, control // TODO should be part of VS, not global
-    VS.score.pointer = ndex;
-    VS.control.pointer.element.value = ndex;
-    VS.score.stepCallback();
 }
