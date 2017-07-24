@@ -44,7 +44,8 @@ function drawScore(scoreFragment, x, y) {
 
     for (var row = 0; row < rows; row++) {
         for (var col = 0; col < cols; col++) {
-            var symbolIndex = scoreFragment[row][col] + 4;
+            var point = scoreFragment[row][col];
+            var symbolIndex = point.heightIndex + 4;
             // var symbolKey = ["-", "-", ">", ".", 2, 1, 0.5, 0.25][symbolIndex];
             var symbolKey = ["-2", "-1.5", "-1", "-0.5", "0", "-", ">", "."][symbolIndex];
 
@@ -64,14 +65,13 @@ function drawScore(scoreFragment, x, y) {
             var offsets = symbolOffsets[symbolKey];
 
             d3.select(documentFragment).append("svg:text")
-                // .text(symbolKey)
                 .text(symbols[symbolKey])
                 .attr("dx", offsets.x + "em")
                 .attr("dy", offsets.y + "em")
                 .attr("transform", function() {
                     return "translate(" +
                         ((x + (col - row)) * tileWidthHalf) + ", " +
-                        ((y + (col + row)) * tileHeightHalf - (symbolIndex * 5)) + ")";
+                        ((y + (col + row)) * tileHeightHalf - (point.height * 5)) + ")";
                 });
         }
     }

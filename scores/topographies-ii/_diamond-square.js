@@ -5,6 +5,7 @@ var height = 8;
 var featuresize = 8;
 var samplesize = featuresize;
 
+var initScale = 3;
 var scale = 3;
 
 function frand() {
@@ -23,12 +24,7 @@ function sample(x, y) {
 }
 
 function setSample(x, y, value) {
-    if (value > 0) {
-        value = Math.floor(value);
-    } else {
-        value = Math.ceil(value);
-    }
-    value = VS.clamp(value, -3, 3); // initial scale
+    value = VS.clamp(value, -initScale, initScale);
     values[(x & (width - 1)) + (y & (height - 1)) * width] = value;
 }
 
