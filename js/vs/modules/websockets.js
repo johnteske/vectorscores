@@ -62,16 +62,16 @@ VS.WebSocket = (function() {
 
     function addControlCallbacks() {
         VS.control.playCallback = function() {
-            VS.WebSocket.send({ cid: ws.cid, scoreEvent: "play", pointer: VS.score.pointer });
+            VS.WebSocket.send({ scoreEvent: "play", pointer: VS.score.pointer });
         };
         VS.control.pauseCallback = function() {
-            VS.WebSocket.send({ cid: ws.cid, scoreEvent: "pause", pointer: VS.score.pointer });
+            VS.WebSocket.send({ scoreEvent: "pause", pointer: VS.score.pointer });
         };
         VS.control.stopCallback = function() {
-            VS.WebSocket.send({ cid: ws.cid, scoreEvent: "stop" });
+            VS.WebSocket.send({ scoreEvent: "stop" });
         };
         VS.control.stepCallback = function() {
-            VS.WebSocket.send({ cid: ws.cid, scoreEvent: "step", pointer: VS.score.pointer });
+            VS.WebSocket.send({ scoreEvent: "step", pointer: VS.score.pointer });
         };
     }
 
@@ -80,6 +80,7 @@ VS.WebSocket = (function() {
     }
 
     ws.send = function(data) {
+        data.cid = ws.cid; // attach client ID to all
         try {
             socket.send(JSON.stringify(data));
         } catch(err) {
