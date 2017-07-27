@@ -270,7 +270,7 @@ for (p = 0; p < numParts; p++) {
             }
 
             var pitchDisplay, pitchDisplayClass;
-            if (scoreSettings.parts.pitchDisplay === "accidentals") {
+            if (scoreSettings.pitchDisplay === "accidentals") {
                 pitchDisplay = function() {
                     var lo = thisPhrase.pitch.low,
                         hi = thisPhrase.pitch.high;
@@ -405,7 +405,12 @@ for(var i = 0, len = score.bars.length; i < len; i++) {
 }
 
 VS.score.preroll = 3000;
-VS.score.playCallback = cueBlink;
+
+scoreSettings.preroll.value = (VS.score.preroll * 0.001);
+
+VS.score.playCallback = function() {
+    VS.score.schedule(VS.score.preroll - 3000, cueBlink);
+}
 
 function scrollCallback() {
     var pointer = VS.score.pointer;

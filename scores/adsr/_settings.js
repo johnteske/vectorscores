@@ -4,7 +4,26 @@ var scoreSettings = {
 };
 
 scoreSettings.parts.value = numParts;
-scoreSettings.parts.pitchDisplay = "accidentals"; // "integers"
+
+scoreSettings.preroll = (function() {
+    var preroll = document.getElementById("settings-preroll");
+
+    var _min = 3,
+        _max = 15;
+
+    preroll.min = _min;
+    preroll.max = _max;
+    preroll.step = 0.5;
+
+    preroll.addEventListener("change", function() {
+        this.value = VS.clamp(this.value, _min, _max);
+        VS.score.preroll = this.value * 1000;
+    }, false);
+
+    return preroll;
+})();
+
+scoreSettings.pitchDisplay = "accidentals"; // "integers"
 
 // TODO clean up
 (function() {

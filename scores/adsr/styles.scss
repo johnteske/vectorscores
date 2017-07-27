@@ -119,11 +119,14 @@ line[class^="debug-center"] {
     }
 }
 #score-settings-modal {
-    #settings-parts {
+    input[type="number"] {
         width: 2em;
         height: 2em;
         border: 1px solid #888;
         background: transparent;
+    }
+    #settings-preroll {
+        width: 3em;
     }
     // TODO make global settings modal styles?
     button {

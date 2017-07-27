@@ -6,9 +6,15 @@
     <label>Show all parameters:</label>
     <input id="settings-showall" type="checkbox">
 </div>
-<div>
+<div style="margin-bottom: 1em">
     <button id="settings-generate">Generate new score</button>
 </div>
+
+<div style="margin-bottom: 1em">
+    <label>Pre-roll (3–15 s):</label>
+    <input type="number" id="settings-preroll">
+</div>
+
 <div>
     <h4>WebSocket Connection:</h4>
     <p id="ws-log"></p>
