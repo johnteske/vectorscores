@@ -48,14 +48,12 @@ if (VS.page.footer) {
         };
 
         var keydownListener = function(event) {
-            if (event.defaultPrevented) {
+            if (event.defaultPrevented || event.metaKey) {
                 return;
             }
 
             var keyPressed = event.key || event.keyCode;
 
-            // event.key;
-            // event.keyCode; // deprecated but for Safari support
             switch (keyPressed) {
             case " ":
             case 32:
