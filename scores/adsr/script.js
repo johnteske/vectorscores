@@ -406,7 +406,7 @@ for(var i = 0, len = score.bars.length; i < len; i++) {
 
 VS.score.preroll = 3000;
 
-scoreSettings.preroll.value = (VS.score.preroll * 0.001);
+// scoreSettings.preroll.value = (VS.score.preroll * 0.001);
 
 VS.score.playCallback = function() {
     VS.score.schedule(VS.score.preroll - 3000, cueBlink);

@@ -9,12 +9,12 @@
 <div style="margin-bottom: 1em">
     <button id="settings-generate">Generate new score</button>
 </div>
-
+{% comment %}
 <div style="margin-bottom: 1em">
     <label>Pre-roll (3–15 s):</label>
     <input type="number" id="settings-preroll">
 </div>
-
+{% endcomment %}
 <div>
     <h4>WebSocket Connection:</h4>
     <p id="ws-log"></p>
