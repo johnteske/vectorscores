@@ -38,9 +38,6 @@ header, footer {
     &.show {
         opacity: 1;
     }
-    &:hover, &:active { // still needed? script handles hover for header/footer
-        opacity: 1;
-    }
 }
 
 header {

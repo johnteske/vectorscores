@@ -1,6 +1,7 @@
 VS.page = {
     header: document.getElementById("score-header"),
     footer: document.getElementById("score-footer"),
+
     headerClassed: function(newClass) {
         this.header.className = newClass;
     },
@@ -30,8 +31,7 @@ if (VS.page.footer) {
 }
 
 document.getElementsByTagName("main")[0].onclick = function() {
-    VS.page.headerClassed("hide");
-    VS.page.footerClassed("hide");
+    VS.page.hideLayout();
 };
 
 VS.page.header.addEventListener("mouseover", VS.page.showLayout, true);
