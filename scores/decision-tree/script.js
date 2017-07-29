@@ -7,7 +7,8 @@ var score = {
     cell: {
         size: 60
     },
-    choices: {}
+    choices: {},
+    selected: false
 };
 
 score.center = {
@@ -35,30 +36,54 @@ function createChoices() {
         duration: VS.getWeightedItem(durations.keys, durations.weights),
         dynamic: VS.getWeightedItem(dynamics.keys, dynamics.weights)
     };
-}
 
-function makeChoice(position) {
-    // update symbol weights
-    if (position) {
-        var choice = score.choices[position];
-        durations.weights[durations.keys.indexOf(choice.duration)] += 1;
-        dynamics.weights[dynamics.keys.indexOf(choice.dynamic)] += 1;
-    }
-
-    // debug
-    console.log(durations.weights);
-    console.log(dynamics.weights);
-
-    createChoices();
-
+    score.topGroup
+        .transition()
+        .duration(300)
+        .style("opacity", 1);
     score.topGroup.select(".duration")
         .text(durations.symbols[score.choices.top.duration]);
     score.topGroup.select(".dynamic")
         .text(dynamics.symbols[score.choices.top.dynamic]);
+
+    score.bottomGroup
+        .transition()
+        .duration(300)
+        .style("opacity", 1);
     score.bottomGroup.select(".duration")
         .text(durations.symbols[score.choices.bottom.duration]);
     score.bottomGroup.select(".dynamic")
         .text(dynamics.symbols[score.choices.bottom.dynamic]);
+
+    score.selected = false;
+}
+
+function makeChoice(position) {
+    if (!score.selected) {
+
+        score.selected = true; // disable selection until new choices
+
+        // update symbol weights
+        if (position) {
+            var choice = score.choices[position];
+            durations.weights[durations.keys.indexOf(choice.duration)] += 1;
+            dynamics.weights[dynamics.keys.indexOf(choice.dynamic)] += 1;
+        }
+
+        if (position === "top") {
+            score.bottomGroup
+                .transition()
+                .duration(300)
+                .style("opacity", 0);
+        } else {
+            score.topGroup
+                .transition()
+                .duration(300)
+                .style("opacity", 0);
+        }
+
+        VS.score.schedule(2000, createChoices);
+    }
 }
 
 
@@ -109,7 +134,7 @@ score.bottomGroup.append("text")
     .attr("x", score.cell.halfSize)
     .attr("y", score.cell.size - 5);
 
-makeChoice(); // initial choices
+createChoices(); // initial choices
 
 
 /**
