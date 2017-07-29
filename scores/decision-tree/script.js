@@ -24,18 +24,12 @@ score.cell.halfSize = score.cell.size * 0.5;
 
 {% include_relative _properties.js %}
 
-var durations = makePropertyObj(VS.dictionary.Bravura.durations.stemless);
-var dynamics = makePropertyObj(VS.dictionary.Bravura.dynamics);
+var durations = makePropertyObj('duration', VS.dictionary.Bravura.durations.stemless);
+var dynamics = makePropertyObj('dynamic', VS.dictionary.Bravura.dynamics);
 
-function createChoices() {
-    score.choices.top = {
-        duration: VS.getWeightedItem(durations.keys, durations.weights),
-        dynamic: VS.getWeightedItem(dynamics.keys, dynamics.weights)
-    };
-    score.choices.bottom = {
-        duration: VS.getWeightedItem(durations.keys, durations.weights),
-        dynamic: VS.getWeightedItem(dynamics.keys, dynamics.weights)
-    };
+function updateChoices() {
+    score.choices.top = createChoice();
+    score.choices.bottom = createChoice();
 
     score.topGroup
         .transition()
@@ -60,7 +54,7 @@ function createChoices() {
     score.selected = false;
 }
 
-function makeChoice(position) {
+function selectCell(position) {
     if (!score.selected) {
 
         score.selected = true; // disable selection until new choices
@@ -68,8 +62,7 @@ function makeChoice(position) {
         // update symbol weights
         if (position) {
             var choice = score.choices[position];
-            durations.weights[durations.keys.indexOf(choice.duration)] += 1;
-            dynamics.weights[dynamics.keys.indexOf(choice.dynamic)] += 1;
+            updateWeights(choice);
         }
 
         if (position === "top") {
@@ -92,7 +85,7 @@ function makeChoice(position) {
                 .style("opacity", 0);
         }
 
-        VS.score.schedule(2000, createChoices);
+        VS.score.schedule(2000, updateChoices);
     }
 }
 
@@ -125,12 +118,12 @@ score.svg = d3.select(".main")
 score.topGroup = score.svg.append("g")
     .attr("transform", translateTopCell)
     .on("click", function() {
-        makeChoice("top");
+        selectCell("top");
     });
 score.bottomGroup = score.svg.append("g")
     .attr("transform", translateBottomCell)
     .on("click", function() {
-        makeChoice("bottom");
+        selectCell("bottom");
     });
 
 score.topGroup.append("rect")
@@ -157,7 +150,7 @@ score.bottomGroup.append("text")
     .attr("x", score.cell.halfSize)
     .attr("y", score.cell.size - 5);
 
-createChoices(); // initial choices
+updateChoices(); // initial choices
 
 
 /**
@@ -169,10 +162,10 @@ function keydownListener(event) {
 
     switch (event.keyCode) {
     case 38:
-        makeChoice("top");
+        selectCell("top");
         break;
     case 40:
-        makeChoice("bottom");
+        selectCell("bottom");
         break;
     default:
         return;
