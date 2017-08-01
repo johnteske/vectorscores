@@ -12,7 +12,7 @@ var infoButton = document.querySelector("#score-info-open");
 var footerButtons = footer.querySelectorAll("button");
 var footerInput = footer.querySelector("input");
 
-function clearHighlights(index) {
+function clearHighlights() {
     header.className = "show";
     footer.className = "show";
     infoButton.className = "";

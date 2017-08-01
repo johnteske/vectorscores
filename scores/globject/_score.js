@@ -74,7 +74,11 @@ score = score.map(function(measure) {
     return measure.globjects;
 });
 {% endcomment %}
-var score = [];
-for (var i = 0; i < 8; i++) {
-    score.push([makeGlobject()]);
-}
+
+var score = (function() {
+    var _score = [];
+    for (var i = 0; i < 8; i++) {
+        _score.push([makeGlobject()]);
+    }
+    return _score;
+})();

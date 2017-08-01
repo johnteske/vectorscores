@@ -24,8 +24,8 @@ score.cell.halfSize = score.cell.size * 0.5;
 
 {% include_relative _properties.js %}
 
-var durations = makePropertyObj('duration', VS.dictionary.Bravura.durations.stemless);
-var dynamics = makePropertyObj('dynamic', VS.dictionary.Bravura.dynamics);
+var durations = makePropertyObj("duration", VS.dictionary.Bravura.durations.stemless);
+var dynamics = makePropertyObj("dynamic", VS.dictionary.Bravura.dynamics);
 
 function updateChoices() {
     score.choices.top = createChoice();

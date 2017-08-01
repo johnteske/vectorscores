@@ -410,7 +410,7 @@ VS.score.preroll = 3000;
 
 VS.score.playCallback = function() {
     VS.score.schedule(VS.score.preroll - 3000, cueBlink);
-}
+};
 
 function scrollCallback() {
     var pointer = VS.score.pointer;

@@ -38,7 +38,7 @@ function makeCard(selection) {
         .attr("width", cardWidth - 1)
         .attr("height", cardWidth - 1);
 
-    selection.each(function(d, i) {
+    selection.each(function(d) {
         var nnotes = d.nnotes,
             spread = d.spread;
 

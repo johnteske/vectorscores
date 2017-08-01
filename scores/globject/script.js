@@ -33,7 +33,7 @@ function update(index) {
         .each(centerGlobject);
 }
 
-function centerGlobject(d, i) {
+function centerGlobject(d) {
     d3.select(this).attr("transform", "translate(" +
         (center - (d.width * 0.5)) + "," +
         (center - (120 * 0.5)) + ")");
