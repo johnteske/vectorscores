@@ -14,10 +14,6 @@ VS.globject = function() {
                 left: 5
             };
 
-        selection.globject = {
-            width: width
-        };
-
         var rangeEnvelope = d.rangeEnvelope,
             hiRangePoints = [],
             loRangePoints = [];
