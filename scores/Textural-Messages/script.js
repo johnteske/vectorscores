@@ -21,7 +21,7 @@ var txtWrapper = main.append("g") // for easy scrolling
 {% include_relative _score.js %}
 {% comment %}{% include_relative _settings.js %}{% endcomment %}
 
-var noteheads = VS.dictionary.Bravura.durations.stemless;
+// var noteheads = VS.dictionary.Bravura.durations.stemless;
 
 var ypointer = 0; // latest y position (not score index)
 var lastPosition; // latest msg position
@@ -33,13 +33,17 @@ function texturalMsg(position) {
         ypointer += txtHeight * 0.5;
     }
 
+    var newGlobject = makeGlobject();
+    var globject = VS.globject()
+        .width(120)
+        .height(120);
+
     // TODO remove need for g.wrapper
     var newTxt = txtWrapper.append("g").attr("class", "wrapper")
         .selectAll(".globject")
-        .data([makeGlobject()])
+        .data([newGlobject])
         .enter()
         .append("g")
-        .attr("class", "globject")
         .style("opacity", 0) // fade
         .attr("transform", function() {
             // calc on maxwidth, is scaled later
@@ -47,9 +51,9 @@ function texturalMsg(position) {
                 y = ypointer + margin;
             return "translate(" + x + ", " + y + ")";
         })
-        .each(drawGlobject);
+        .each(globject);
 
-    newTxt.selectAll(".globstuff")
+    newTxt.selectAll(".globject-content")
         .insert("rect", ":first-child")
             .attr("fill", function(d) { return d.phraseTexture.length > 1 ? "#eee" : "#111"; })
             .attr("x", -20)
@@ -110,7 +114,7 @@ d3.select(window).on("resize", resize);
     for(var i = 0; i < 16; i++) {
         lastPos = VS.getWeightedItem([lastPos, lastPos === "left" ? "right" : "left"], [0.2, 0.8]);
         VS.score.add(
-            (i * 8000) + (4000 * Math.random()),
+            (i * 4000) + (2000 * Math.random()),
             texturalMsg,
             [lastPos]
         );
@@ -118,3 +122,6 @@ d3.select(window).on("resize", resize);
 })();
 
 VS.score.preroll = 1000;
+
+texturalMsg("left");
+texturalMsg("right");

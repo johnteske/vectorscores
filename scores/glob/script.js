@@ -44,7 +44,7 @@ glob.pitchSet = main.append("text")
     .style("opacity", "0"); // init value
 
 glob.move = function(dur) {
-    var pcSet = VS.pitchClass.transpose(VS.getItem(trichords), "random").map(function(pc) {
+    var pcSet = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random").map(function(pc) {
         return VS.pitchClass.format(pc, scoreSettings.pcFormat);
     });
 
