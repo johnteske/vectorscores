@@ -19,11 +19,11 @@ function hitSpike() {
     d3.select(".spike")
         .transition()
         .duration(600)
-        .ease("elastic")
+        .ease(d3.easeElastic)
         .attr("transform", "translate(" + ((TrashFire.view.width - 30) * 0.5) + ","  + (TrashFire.dumpster.y - 45) + ")")
         .transition()
         .duration(300)
-        .ease("linear")
+        .ease(d3.easeLinear)
         .style("opacity", 0)
         .remove();
 

@@ -3,7 +3,7 @@
  */
 var trash = [];
 
-var lineGenerator = d3.svg.line()
+var lineGenerator = d3.line()
     .x(function(d) { return d[0]; })
     .y(function(d) { return d[1]; });
     // .interpolate("basis");
