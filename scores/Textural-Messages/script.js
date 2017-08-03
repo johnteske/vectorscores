@@ -35,7 +35,8 @@ function texturalMsg(position) {
 
     var newGlobject = makeGlobject();
     var globject = VS.globject()
-        .width(120);
+        .width(120)
+        .height(120);
 
     // TODO remove need for g.wrapper
     var newTxt = txtWrapper.append("g").attr("class", "wrapper")

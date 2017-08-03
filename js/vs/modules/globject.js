@@ -5,11 +5,13 @@ layout: compress-js
 var VS = VS || {};
 
 VS.globject = function() {
-    var w = VS.constant(127);
+    var w = VS.constant(127),
+        h = VS.constant(127);
 
     function globject(d, i) {
         var selection = d3.select(this),
             width = w(d, i),
+            height = h(d, i),
             margin = {
                 left: 5
             };
@@ -27,7 +29,7 @@ VS.globject = function() {
 
         var lineFunction = d3.svg.line()
              .x(function(d) { return d.x * width; })
-             .y(function(d) { return 127 - d.y; }) // pitch is bottom-up, not pixel top2bottom
+             .y(function(d) { return (d.y / 127) * height; })
              .tension(0.8)
              .interpolate("cardinal-closed");
 
@@ -51,6 +53,10 @@ VS.globject = function() {
 
     globject.width = function(_) {
         return arguments.length ? (w = typeof _ === "function" ? _ : VS.constant(+_), globject) : w;
+    };
+
+    globject.height = function(_) {
+        return arguments.length ? (h = typeof _ === "function" ? _ : VS.constant(+_), globject) : h;
     };
 
     return globject;
