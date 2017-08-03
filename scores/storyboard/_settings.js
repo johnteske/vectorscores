@@ -1,6 +1,6 @@
 var scoreSettings = (function() {
     var generateButton = document.getElementById("settings-generate"),
-        radioSetting = new RadioSetting(document.getElementsByName("settings-pc-display"));
+        radioSetting = new VS.RadioSetting(document.getElementsByName("settings-pc-display"));
 
     var settings = {};
 

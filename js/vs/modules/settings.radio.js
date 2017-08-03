@@ -1,15 +1,15 @@
 ---
 layout: compress-js
 ---
-function RadioSetting(elements) {
-    if (!(this instanceof RadioSetting)) {
-        return new RadioSetting(elements);
+VS.RadioSetting = function(elements) {
+    if (!(this instanceof VS.RadioSetting)) {
+        return new VS.RadioSetting(elements);
     }
 
     this.elements = elements;
-}
+};
 
-RadioSetting.prototype.getValue = function() {
+VS.RadioSetting.prototype.getValue = function() {
     for (var i = 0, length = this.elements.length; i < length; i++) {
         var thisElement = this.elements[i];
         if (thisElement.checked) {
@@ -18,7 +18,7 @@ RadioSetting.prototype.getValue = function() {
     }
 };
 
-RadioSetting.prototype.setValue = function(value) {
+VS.RadioSetting.prototype.setValue = function(value) {
     for (var i = 0, length = this.elements.length; i < length; i++) {
         var thisElement = this.elements[i];
         if (thisElement.value === value) {
