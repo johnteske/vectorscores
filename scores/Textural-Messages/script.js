@@ -47,7 +47,7 @@ function texturalMsg(position) {
                 y = ypointer + margin;
             return "translate(" + x + ", " + y + ")";
         })
-        .each(drawGlobject);
+        .each(VS.globject);
 
     newTxt.selectAll(".globstuff")
         .insert("rect", ":first-child")

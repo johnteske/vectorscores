@@ -29,8 +29,71 @@ function update(index) {
         .enter()
         .append("g").attr("class", "globject")
         .style("opacity", 1)
-        .each(drawGlobject)
+        .each(VS.globject)
         .each(centerGlobject);
+
+    globjectContainer.selectAll(".globject-content").each(function(d) {
+        var selection = d3.select(this);
+
+        function phraseSpacing(selection) {
+            var durations = d.phraseTexture;
+            return VS.xByDuration(selection, durations, 18, 0) + 64;
+        }
+
+        // 127 / ~10px notehead height = 13 y layers
+        for (var phrase = 0, phrases = 13; phrase < phrases; phrase++) {
+            selection
+                .append("g")
+                .attr("transform", function() {
+                    var halfWidth = d.width * 0.5,
+                        x = Math.random() * halfWidth + (halfWidth * (phrase % 2)),
+                        y = (127 / phrases) * phrase;
+                    return "translate(" + x + "," + y + ")";
+                })
+                .selectAll("text")
+                .data(d.phraseTexture)
+                .enter()
+                .append("text")
+                .text(function(d) {
+                    return noteheads[d];
+                })
+                .call(phraseSpacing);
+        }
+    });
+
+    globjectContainer.selectAll(".globject").each(function(d) {
+        var selection = d3.select(this),
+            globjectWidth = d.width;
+
+        selection
+            .append("g")
+            .selectAll("text")
+            .data(function(d) { return d.pitches; })
+            .enter()
+            .append("text")
+            .attr("x", function(d) {
+                return d.time * globjectWidth;
+            })
+            .attr("y", 127 + 24)
+            .text(function(d) {
+                var pcSet = d.classes.map(function(pc) {
+                    return VS.pitchClass.format(pc);
+                });
+                return "[" + pcSet.join(", ") + "]";
+            });
+
+        selection.append("g")
+            .selectAll("text")
+            .data(d.dynamics)
+            .enter()
+            .append("text")
+            .attr("x", function(d) {
+                return d.time * globjectWidth;
+            })
+            .attr("y", 127 + 42)
+            .text(function(d) { return d.value; });
+    });
+
 }
 
 function centerGlobject(d) {
