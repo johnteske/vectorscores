@@ -17,17 +17,14 @@ VS.globject = function() {
             };
 
         var rangeEnvelope = d.rangeEnvelope,
-            hiRangePoints = [],
-            loRangePoints = [];
+            rangePoints = [];
 
         for (var t = 0; t < rangeEnvelope.times.length; t++) {
-            hiRangePoints.push({ "x": rangeEnvelope.times[t], "y": rangeEnvelope.hi[t]});
-            loRangePoints.push({ "x": rangeEnvelope.times[t], "y": rangeEnvelope.lo[t]});
+            rangePoints.push({ "x": rangeEnvelope.times[t], "y": rangeEnvelope.hi[t] });
+            rangePoints.unshift({ "x": rangeEnvelope.times[t], "y": rangeEnvelope.lo[t] });
         }
-        // draw the top, back around the bottom, then connect back to the first point
-        var rangeLine = hiRangePoints.concat(loRangePoints.reverse());
 
-        var lineFunction = d3.svg.line()
+        var line = d3.svg.line()
              .x(function(d) { return d.x * width; })
              .y(function(d) { return (d.y / 127) * height; })
              .tension(0.8)
@@ -39,7 +36,7 @@ VS.globject = function() {
             .attr("id", "globject-clip-" + i)
             .append("path")
                 .attr("transform", "translate(" + margin.left + "," + 0 + ")")
-                .attr("d", lineFunction(rangeLine));
+                .attr("d", line(rangePoints));
 
         selection.append("g")
             .attr("class", "globject-content")
@@ -48,7 +45,7 @@ VS.globject = function() {
         selection.append("path")
              .attr("transform", "translate(" + margin.left + "," + 0 + ")")
              .attr("class", "globject-path")
-             .attr("d", lineFunction(rangeLine));
+             .attr("d", line(rangePoints));
     }
 
     globject.width = function(_) {
