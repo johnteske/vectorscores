@@ -43,9 +43,9 @@ function makeGlobject() {
 
     var pcset;
     if (globjectType === "globject") {
-        pcset = VS.getItem(trichords.slice(5, 6));
+        pcset = VS.getItem(VS.trichords.slice(5, 6));
     } else {
-        pcset = VS.getItem(trichords.slice(0, 2));
+        pcset = VS.getItem(VS.trichords.slice(0, 2));
     }
     globject.pitches = [
         {

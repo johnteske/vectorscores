@@ -25,7 +25,7 @@ function update(index) {
     d3.selectAll(".globject").remove();
 
     var globject = VS.globject()
-        .width(function(d) { return d.width })
+        .width(function(d) { return d.width; })
         .height(127);
 
     globjectContainer.selectAll(".globject")

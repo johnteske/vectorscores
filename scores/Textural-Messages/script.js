@@ -21,7 +21,7 @@ var txtWrapper = main.append("g") // for easy scrolling
 {% include_relative _score.js %}
 {% comment %}{% include_relative _settings.js %}{% endcomment %}
 
-var noteheads = VS.dictionary.Bravura.durations.stemless;
+// var noteheads = VS.dictionary.Bravura.durations.stemless;
 
 var ypointer = 0; // latest y position (not score index)
 var lastPosition; // latest msg position

@@ -1,9 +1,6 @@
 ---
 layout: compress-js
 ---
-
-var VS = VS || {};
-
 VS.globject = function() {
     var w = VS.constant(127),
         h = VS.constant(127);

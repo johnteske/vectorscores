@@ -18,7 +18,7 @@ function makeGlobject() {
         times: [0, 0.3, 0.5, 1]
     };
 
-    var pcset = VS.pitchClass.transpose(VS.getItem(trichords), "random");
+    var pcset = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random");
 
     globject.pitches = [
         {
