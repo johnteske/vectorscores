@@ -21,11 +21,10 @@ VS.globject = function() {
             rangePoints.unshift({ "x": rangeEnvelope.times[t], "y": rangeEnvelope.lo[t] });
         }
 
-        var line = d3.svg.line()
+        var line = d3.line()
              .x(function(d) { return d.x * width; })
              .y(function(d) { return (d.y / 127) * height; })
-             .tension(0.8)
-             .interpolate("cardinal-closed");
+             .curve(d3.curveCardinalClosed.tension(0.8));
 
         selection.classed("globject", true);
 
