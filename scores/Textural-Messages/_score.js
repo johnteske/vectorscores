@@ -18,8 +18,6 @@ function makeGlobject() {
         dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
         globjectType = VS.getWeightedItem(["globject", "cluster"], [3, 1]);
 
-    globject.width = 120;
-
     var rangeFilter = VS.getRandExcl(0.67, 1);
     var rangeTimes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         .filter(function(t) {

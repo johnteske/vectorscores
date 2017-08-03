@@ -24,16 +24,19 @@ var globjectContainer = main.append("g").attr("class", "globjects");
 function update(index) {
     d3.selectAll(".globject").remove();
 
+    var globject = VS.globject()
+        .width(function(d) { return d.width });
+
     globjectContainer.selectAll(".globject")
         .data(score[index])
         .enter()
         .append("g")
-        .style("opacity", 1)
-        .each(VS.globject)
+        .each(globject)
         .each(centerGlobject);
 
     globjectContainer.selectAll(".globject-content").each(function(d) {
-        var selection = d3.select(this);
+        var selection = d3.select(this),
+            w = d.width;
 
         function phraseSpacing(selection) {
             var durations = d.phraseTexture;
@@ -45,7 +48,7 @@ function update(index) {
             selection
                 .append("g")
                 .attr("transform", function() {
-                    var halfWidth = d.width * 0.5,
+                    var halfWidth = w * 0.5,
                         x = Math.random() * halfWidth + (halfWidth * (phrase % 2)),
                         y = (127 / phrases) * phrase;
                     return "translate(" + x + "," + y + ")";
@@ -63,7 +66,7 @@ function update(index) {
 
     globjectContainer.selectAll(".globject").each(function(d) {
         var selection = d3.select(this),
-            globjectWidth = d.width;
+            w = d.width;
 
         selection
             .append("g")
@@ -72,7 +75,7 @@ function update(index) {
             .enter()
             .append("text")
             .attr("x", function(d) {
-                return d.time * globjectWidth;
+                return d.time * w;
             })
             .attr("y", 127 + 24)
             .text(function(d) {
@@ -88,7 +91,7 @@ function update(index) {
             .enter()
             .append("text")
             .attr("x", function(d) {
-                return d.time * globjectWidth;
+                return d.time * w;
             })
             .attr("y", 127 + 42)
             .text(function(d) { return d.value; });

@@ -28,3 +28,9 @@ VS.getQueryString = function(field, url) {
 VS.clamp = function(val, min, max) {
     return Math.min(Math.max(val, min), max);
 };
+
+VS.constant = function(v) {
+    return function constant() {
+        return v;
+    };
+};

@@ -34,6 +34,8 @@ function texturalMsg(position) {
     }
 
     var newGlobject = makeGlobject();
+    var globject = VS.globject()
+        .width(120);
 
     // TODO remove need for g.wrapper
     var newTxt = txtWrapper.append("g").attr("class", "wrapper")
@@ -48,7 +50,7 @@ function texturalMsg(position) {
                 y = ypointer + margin;
             return "translate(" + x + ", " + y + ")";
         })
-        .each(VS.globject);
+        .each(globject);
 
     newTxt.selectAll(".globject-content")
         .insert("rect", ":first-child")
