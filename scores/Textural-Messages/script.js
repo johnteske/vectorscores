@@ -121,3 +121,6 @@ d3.select(window).on("resize", resize);
 })();
 
 VS.score.preroll = 1000;
+
+texturalMsg("left");
+texturalMsg("right");
