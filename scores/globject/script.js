@@ -27,7 +27,7 @@ function update(index) {
     globjectContainer.selectAll(".globject")
         .data(score[index])
         .enter()
-        .append("g").attr("class", "globject")
+        .append("g")
         .style("opacity", 1)
         .each(VS.globject)
         .each(centerGlobject);

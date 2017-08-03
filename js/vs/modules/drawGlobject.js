@@ -26,6 +26,8 @@ VS.globject = function(d, i) {
          .tension(0.8)
          .interpolate("cardinal-closed");
 
+    selection.classed("globject", true);
+
     selection.append("clipPath")
         .attr("id", "globject-clip-" + i)
         .append("path")
