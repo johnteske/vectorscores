@@ -4,18 +4,14 @@ var properties = {
     terms: []
 };
 
-function makePropertyObj(key, symbols) {
+function makePropertyObj(key, keys) {
     var property = {
-        keys: [],
-        weights: [],
-        symbols: symbols
+        keys: keys,
+        weights: []
     };
 
-    for (var prop in symbols) {
-        if (symbols.hasOwnProperty(prop)) {
-            property.keys.push(prop);
-            property.weights.push(1);
-        }
+    for (var i = 0; i < keys.length; i++) {
+        property.weights.push(1);
     }
 
     properties.keys.push(key);

@@ -24,8 +24,11 @@ score.cell.halfSize = score.cell.size * 0.5;
 
 {% include_relative _properties.js %}
 
-var durations = makePropertyObj("duration", VS.dictionary.Bravura.durations.stemless);
-var dynamics = makePropertyObj("dynamic", VS.dictionary.Bravura.dynamics);
+var durations = VS.dictionary.Bravura.durations.stemless;
+var dynamics = VS.dictionary.Bravura.dynamics;
+
+makePropertyObj("duration", Object.keys(durations));
+makePropertyObj("dynamic", Object.keys(dynamics));
 
 function updateChoices() {
     score.choices.top = createChoice();
@@ -37,9 +40,9 @@ function updateChoices() {
         .style("opacity", 1)
         .attr("transform", translateTopCell);
     score.topGroup.select(".duration")
-        .text(durations.symbols[score.choices.top.duration]);
+        .text(durations[score.choices.top.duration]);
     score.topGroup.select(".dynamic")
-        .text(dynamics.symbols[score.choices.top.dynamic]);
+        .text(dynamics[score.choices.top.dynamic]);
 
     score.bottomGroup
         .transition()
@@ -47,9 +50,9 @@ function updateChoices() {
         .style("opacity", 1)
         .attr("transform", translateBottomCell);
     score.bottomGroup.select(".duration")
-        .text(durations.symbols[score.choices.bottom.duration]);
+        .text(durations[score.choices.bottom.duration]);
     score.bottomGroup.select(".dynamic")
-        .text(dynamics.symbols[score.choices.bottom.dynamic]);
+        .text(dynamics[score.choices.bottom.dynamic]);
 
     score.selected = false;
 }
