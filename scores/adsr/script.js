@@ -386,8 +386,8 @@ function scrollScore(index, dur, goToNextBar) {
 
     score.group
         .transition()
+        .ease(d3.easeLinear)
         .duration(dur)
-        .ease("linear")
         .attr("transform",
             "translate(" + (view.center - getBarlineX(targetBar)) + "," + view.scoreY + ")"
         )

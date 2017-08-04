@@ -27,7 +27,7 @@ VS.cueTriangle = function(parent) {
         function blinkCycle(selection, delay, end) {
             selection.transition().delay(delay).duration(onTime)
                 .call(blinkOn)
-                .transition().delay(delay + onTime).duration(fadeTime)
+                .transition().delay(onTime).duration(fadeTime)
                 .call(end ? blinkEnd : blinkOff);
         }
 

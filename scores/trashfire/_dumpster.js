@@ -29,14 +29,14 @@ function dumpsterShake() {
     dumpster
         .transition()
         .duration(300)
-        .ease("elastic")
+        .ease(d3.easeElastic)
         .attr("transform", function() {
             var x = (TrashFire.view.width - 312) * 0.5;
             return "translate(" + x + ", " + (TrashFire.dumpster.y + 10) + ")";
         })
         .transition()
         .duration(300)
-        .ease("bounce")
+        .ease(d3.easeBounce)
         .attr("transform", function() {
             var x = (TrashFire.view.width - 312) * 0.5;
             return "translate(" + x + ", " + TrashFire.dumpster.y + ")";
