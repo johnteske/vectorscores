@@ -1,4 +1,4 @@
-function createScore(cols, rows) {
+function createScore() {
     var score = [
         // cube, for testing
         [0, 0, 0],

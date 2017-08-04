@@ -6,8 +6,6 @@ layout: compress-js
 {% include_relative _score.js %}
 {% include_relative _matrices.js %}
 
-var colors = ["black", "blue", "purple"];
-
 var score = {
     width: VS.getItem([3, 4, 5]),
     height: VS.getItem([3, 4, 5]),
@@ -20,8 +18,8 @@ score.center = {
     x: score.width * 0.5 - 0.5,
     y: score.height * 0.5 - 0.5
 };
-score.radius = Math.sqrt( Math.pow(score.width, 2) + Math.pow(score.height, 2) ); // distance of player from center of score
-score.obj = createScore(score.width, score.height);
+score.radius = Math.sqrt(Math.pow(score.width, 2) + Math.pow(score.height, 2)); // distance of player from center of score
+score.obj = createScore();
 
 /**
  * setAngle accepts degrees, saves value as radians

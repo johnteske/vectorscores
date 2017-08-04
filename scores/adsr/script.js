@@ -146,18 +146,24 @@ score.layout.letters.each(function() {
  * Score pointer/cue aid
  */
 var cueIndicator = VS.cueTriangle(score.wrapper);
+
 function cueBlink() {
     cueIndicator.blink(1, 0, 0);
 }
-for (var i = 0; i < 7; i++) {
-    VS.cueTriangle(score.layout.group).selection
-        .attr("transform", "translate(" +
-            (getBarlineX(score.bars[i]) - 6) + ", " +
-            -6 * unitY +
-            // (view.scoreY - (6 * unitY)) +
-            ")")
-        .style("opacity", 0.5);
-}
+
+/**
+ * Cue indicators up to section A
+ */
+(function() {
+    var i, len = score.rehearsalLetters[0].index;
+    for (i = 0; i <= len; i++) {
+        VS.cueTriangle(score.layout.group).selection
+            .attr("transform", "translate(" +
+                (getBarlineX(score.bars[i]) - 6) + "," +
+                -6 * unitY + ")")
+            .style("opacity", 0.5);
+    }
+})();
 
 /**
  * Ghost beams, for use in score and in performance notes
@@ -397,12 +403,16 @@ function scrollScore(index, dur, goToNextBar) {
 // add final event 30 seconds after last bar, for playback
 score.bars.push(score.bars[score.bars.length - 1] + 30);
 
-for(var i = 0, len = score.bars.length; i < len; i++) {
-    VS.score.add(
-        score.bars[i] * 1000,
-        (i < len - 1) ? scrollScore : VS.noop,
-        [i, getBarDuration(i) * 1000, true]);
-}
+(function() {
+    var i, len = score.bars.length;
+
+    for (i = 0; i < len; i++) {
+        VS.score.add(
+            score.bars[i] * 1000,
+            (i < len - 1) ? scrollScore : VS.noop,
+            [i, getBarDuration(i) * 1000, true]);
+    }
+})();
 
 VS.score.preroll = 3000;
 
