@@ -29,6 +29,7 @@ var dynamics = VS.dictionary.Bravura.dynamics;
 
 makePropertyObj("duration", Object.keys(durations));
 makePropertyObj("dynamic", Object.keys(dynamics));
+makePropertyObj("pitchClasses", [[0, 3, 7], [0, 4, 7]]);
 
 function updateChoices() {
     score.choices.top = createChoice();
@@ -43,6 +44,8 @@ function updateChoices() {
         .text(durations[score.choices.top.duration]);
     score.topGroup.select(".dynamic")
         .text(dynamics[score.choices.top.dynamic]);
+    score.topGroup.select(".pitch-classes")
+        .text("{" + score.choices.top.pitchClasses + "}");
 
     score.bottomGroup
         .transition()
@@ -53,6 +56,8 @@ function updateChoices() {
         .text(durations[score.choices.bottom.duration]);
     score.bottomGroup.select(".dynamic")
         .text(dynamics[score.choices.bottom.dynamic]);
+    score.bottomGroup.select(".pitch-classes")
+        .text("{" + score.choices.bottom.pitchClasses + "}");
 
     score.selected = false;
 }
@@ -137,21 +142,29 @@ score.bottomGroup.append("rect")
     .attr("height", score.cell.size);
 
 score.topGroup.append("text")
-    .attr("class", "duration")
+    .attr("class", "duration bravura")
     .attr("x", score.cell.halfSize)
     .attr("y", score.cell.halfSize);
 score.topGroup.append("text")
-    .attr("class", "dynamic")
+    .attr("class", "dynamic bravura")
     .attr("x", score.cell.halfSize)
     .attr("y", score.cell.size - 5);
+score.topGroup.append("text")
+    .attr("class", "pitch-classes monospace")
+    .attr("x", 0)
+    .attr("y", -5);
 score.bottomGroup.append("text")
-    .attr("class", "duration")
+    .attr("class", "duration bravura")
     .attr("x", score.cell.halfSize)
     .attr("y", score.cell.halfSize);
 score.bottomGroup.append("text")
-    .attr("class", "dynamic")
+    .attr("class", "dynamic bravura")
     .attr("x", score.cell.halfSize)
     .attr("y", score.cell.size - 5);
+score.bottomGroup.append("text")
+    .attr("class", "pitch-classes monospace")
+    .attr("x", 0)
+    .attr("y", -5);
 
 updateChoices(); // initial choices
 

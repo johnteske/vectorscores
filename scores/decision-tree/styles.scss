@@ -15,8 +15,15 @@ rect {
 
 text {
     pointer-events: none; // prevent accidental click on line-height outside rect
+}
+.monospace {
+    font-family: Courier;
+    font-size: 12px;
+}
+
+.bravura {
+    text-anchor: middle;
     font-family: Bravura;
     font-size: 22px;
     line-height: 22px;
-    text-anchor: middle;
 }

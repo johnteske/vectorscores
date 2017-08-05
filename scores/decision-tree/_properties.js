@@ -6,11 +6,14 @@ var properties = {
 
 function makePropertyObj(key, keys) {
     var property = {
-        keys: keys,
+        keys: [],
         weights: []
     };
 
     for (var i = 0; i < keys.length; i++) {
+        var k = keys[i];
+
+        property.keys.push(k.toString());
         property.weights.push(1);
     }
 
