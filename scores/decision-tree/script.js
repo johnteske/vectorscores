@@ -32,8 +32,17 @@ makePropertyObj("dynamic", Object.keys(dynamics));
 makePropertyObj("pitchClasses", [[0, 3, 7], [0, 4, 7]]);
 
 function updateChoices() {
-    score.choices.top = createChoice();
-    score.choices.bottom = createChoice();
+    var PC = VS.pitchClass,
+        choices = score.choices;
+
+    choices.top = createChoice();
+    choices.bottom = createChoice();
+
+    function pcText(set) {
+        set = set.split(",");
+        set = PC.transpose(set, "random").sort(function(a, b) { return a - b; });
+        return "{" + PC.format(set) + "}";
+    }
 
     score.topGroup
         .transition()
@@ -41,11 +50,11 @@ function updateChoices() {
         .style("opacity", 1)
         .attr("transform", translateTopCell);
     score.topGroup.select(".duration")
-        .text(durations[score.choices.top.duration]);
+        .text(durations[choices.top.duration]);
     score.topGroup.select(".dynamic")
-        .text(dynamics[score.choices.top.dynamic]);
+        .text(dynamics[choices.top.dynamic]);
     score.topGroup.select(".pitch-classes")
-        .text("{" + score.choices.top.pitchClasses + "}");
+        .text(pcText(choices.top.pitchClasses));
 
     score.bottomGroup
         .transition()
@@ -53,11 +62,11 @@ function updateChoices() {
         .style("opacity", 1)
         .attr("transform", translateBottomCell);
     score.bottomGroup.select(".duration")
-        .text(durations[score.choices.bottom.duration]);
+        .text(durations[choices.bottom.duration]);
     score.bottomGroup.select(".dynamic")
-        .text(dynamics[score.choices.bottom.dynamic]);
+        .text(dynamics[choices.bottom.dynamic]);
     score.bottomGroup.select(".pitch-classes")
-        .text("{" + score.choices.bottom.pitchClasses + "}");
+        .text(pcText(choices.bottom.pitchClasses));
 
     score.selected = false;
 }
