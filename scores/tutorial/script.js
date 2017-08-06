@@ -30,79 +30,78 @@ function highlightByID(id) {
 /**
  * Create events
  */
-var score = [];
+var addEvent = (function() {
+    var time = 0;
 
-score.push(function() {
-    message.innerHTML = initialMessage;
-    // VS.score.schedule(1500, VS.score.pause);
-});
+    return function(fn, duration) {
+        VS.score.add(time, fn);
+        time += duration;
+    }
+})();
 
-score.push(function() {
-    message.innerHTML = "The header and footer of each score will disappear when playing and will reappear when paused or stopped.";
-});
-
-score.push(function() {
+addEvent(function() {
     clearHighlights();
-    footer.className = "show highlight";
-    message.innerHTML = "This is the footer.";
-});
+    message.innerHTML = initialMessage;
+}, 5000);
 
-score.push(function() {
+addEvent(function() {
+    clearHighlights();
+    message.innerHTML = "The header and footer of each score will disappear when playing and will reappear when paused or stopped.";
+    // VS.score.schedule(1, VS.score.pause);
+}, 5000);
+
+addEvent(function() {
     clearHighlights();
     highlightByID("score-back");
-    message.innerHTML = "score-back";
-});
+    message.innerHTML = "Step score back";
+}, 1000);
 
-score.push(function() {
+addEvent(function() {
     clearHighlights();
     highlightByID("score-play");
-    message.innerHTML = "score-play";
-});
+    message.innerHTML = "Play/pause score";
+}, 1000);
 
-score.push(function() {
+addEvent(function() {
     clearHighlights();
     highlightByID("score-stop");
-    message.innerHTML = "score-stop";
-});
+    message.innerHTML = "Stop score";
+}, 1000);
 
-score.push(function() {
+addEvent(function() {
     clearHighlights();
     highlightByID("score-fwd");
-    message.innerHTML = "score-fwd";
-});
+    message.innerHTML = "Step score forward";
+}, 1000);
 
-score.push(function() {
+addEvent(function() {
     clearHighlights();
     highlightByID("score-pointer");
-    message.innerHTML = "score-pointer";
-});
+    message.innerHTML = "Current score position";
+}, 1000);
 
-score.push(function() {
+addEvent(function() {
     clearHighlights();
     highlightByID("score-settings-open");
-    message.innerHTML = "score-settings-open";
-});
+    message.innerHTML = "Score settings";
+}, 1000);
 
-score.push(function() {
+addEvent(function() {
     clearHighlights();
     highlightByID("score-info-open");
-    message.innerHTML = "score-info-open";
-});
+    message.innerHTML = "Score information";
+}, 1000);
 
-score.push(function() {
+addEvent(function() {
     clearHighlights();
     message.innerHTML = "";
-});
+}, 1000);
 
 /**
- * Populate score
+ *
  */
-for (var i = 0; i < score.length; i++) {
-    VS.score.add(i * 5000, score[i]);
-}
-
 VS.score.stepCallback = function() {
-    score[VS.score.pointer]();
+    VS.score.funcAt(VS.score.pointer)();
 };
 
 VS.score.stopCallback = function() {

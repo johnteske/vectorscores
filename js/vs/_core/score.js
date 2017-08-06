@@ -37,6 +37,7 @@ VS.score = (function () {
         playing: false,
         pointer: 0,
         preroll: 0, // 300; // delay before play
+        // TODO make private? and/or make single eventAt, returning object: { time: 0, fn: fn, params: []}
         timeAt: function(i){ return this.events[i][0]; },
         funcAt: function(i){ return this.events[i][1]; },
         paramsAt: function(i){ return this.events[i][2]; },
