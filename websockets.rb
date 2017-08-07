@@ -1,6 +1,6 @@
 require 'em-websocket'
 
-# TODO use paths for each piece?
+# TODO use paths for each piece
 
 EM.run {
   @clients = []
@@ -13,6 +13,10 @@ EM.run {
       @clients << ws
       ws.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connected\" }"
       puts "#{@clients.length} connections open"
+      # Update all clients with number of total connections
+      @clients.each do |socket|
+        socket.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connections\", \"connections\":\"#{@clients.length}\" }"
+      end
     }
 
     ws.onclose {

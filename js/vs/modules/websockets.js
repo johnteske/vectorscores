@@ -1,35 +1,63 @@
 ---
 layout: compress-js
 ---
-VS.WebSocket = (function() {
+VS.WebSocket = (function () {
     var ws = {};
 
     var socket,
-        host = (location.protocol === "https:" ? "wss://" : "ws://") + location.hostname + ":4001",
-        logElement = document.getElementById("ws-log");
+        host = (location.protocol === "https:" ? "wss://" : "ws://") + location.hostname + ":4001";
 
-    function connect() {
+    var log = (function () {
+        var element = document.getElementById("ws-log");
+
+        return function (msg) {
+            element.innerHTML = msg;
+        };
+    })();
+
+    log("Not connected");
+
+    function addControlCallbacks() {
+        if (VS.control) {
+            VS.control.playCallback = function () {
+                VS.WebSocket.send({ scoreEvent: "play", pointer: VS.score.pointer });
+            };
+            VS.control.pauseCallback = function () {
+                VS.WebSocket.send({ scoreEvent: "pause", pointer: VS.score.pointer });
+            };
+            VS.control.stopCallback = function () {
+                VS.WebSocket.send({ scoreEvent: "stop" });
+            };
+            VS.control.stepCallback = function () {
+                VS.WebSocket.send({ scoreEvent: "step", pointer: VS.score.pointer });
+            };
+        }
+    }
+
+    ws.connect = function () {
         try {
             socket = new WebSocket(host);
 
-            socket.onopen = function() {
-                logMessage("Open");
+            socket.onopen = function () {
+                log("Open");
                 addControlCallbacks();
             };
 
-            socket.onclose = function(e) {
+            socket.onclose = function (e) {
                 if (e.code === 3001) {
-                    logMessage("Closed");
+                    log("Closed");
                 } else {
-                    logMessage("Not connected");
+                    log("Not connected");
                 }
             };
 
-            socket.onmessage = function(msg) {
+            socket.onmessage = function (msg) {
                 try {
                     var data = JSON.parse(msg.data);
                     if (data.type === "ws" && data.content === "connected") {
                         ws.cid = data.cid;
+                    } else if (data.type === "ws" && data.content === "connections") {
+                        log("Open, " + data.connections + " connection(s) total");
                     }
                     // if not sent by self
                     if (data.cid !== ws.cid) {
@@ -51,44 +79,23 @@ VS.WebSocket = (function() {
                     }
                 }
                 catch (err) {
-                    logMessage("Receive error: " + err);
+                    log("Receive error: " + err);
                 }
             };
 
-        } catch(exception) {
-            logMessage("Connection error: " + exception);
-        }
-    }
-
-    function addControlCallbacks() {
-        VS.control.playCallback = function() {
-            VS.WebSocket.send({ scoreEvent: "play", pointer: VS.score.pointer });
-        };
-        VS.control.pauseCallback = function() {
-            VS.WebSocket.send({ scoreEvent: "pause", pointer: VS.score.pointer });
-        };
-        VS.control.stopCallback = function() {
-            VS.WebSocket.send({ scoreEvent: "stop" });
-        };
-        VS.control.stepCallback = function() {
-            VS.WebSocket.send({ scoreEvent: "step", pointer: VS.score.pointer });
-        };
-    }
-
-    function logMessage(msg) {
-        logElement.innerHTML = msg;
-    }
-
-    ws.send = function(data) {
-        data.cid = ws.cid; // attach client ID to all
-        try {
-            socket.send(JSON.stringify(data));
-        } catch(err) {
-            logMessage("Send error: " + err);
+        } catch (err) {
+            log("Connection error: " + err);
         }
     };
 
-    connect();
+    ws.send = function (data) {
+        data.cid = ws.cid; // attach client ID to all
+        try {
+            socket.send(JSON.stringify(data));
+        } catch (err) {
+            log("Send error: " + err);
+        }
+    };
 
     return ws;
 })();

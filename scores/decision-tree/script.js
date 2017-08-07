@@ -177,6 +177,7 @@ score.bottomGroup.append("text")
 
 updateChoices(); // initial choices
 
+// VS.WebSocket.connect();
 
 /**
  * Keyboard control
