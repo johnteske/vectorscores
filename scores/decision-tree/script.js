@@ -8,7 +8,8 @@ var score = {
         size: 60
     },
     choices: {},
-    selected: false
+    selected: false,
+    interval: 10000
 };
 
 score.center = {
@@ -176,6 +177,10 @@ score.bottomGroup.append("text")
     .attr("y", -5);
 
 updateChoices(); // initial choices
+
+for (i = 0; i < 10; i++) {
+    VS.score.add(i * score.interval, updateChoices, []);
+}
 
 // VS.WebSocket.connect();
 
