@@ -34,6 +34,12 @@ VS.WebSocket = (function () {
         }
     }
 
+    ws.messageCallback = VS.noop;
+    ws.playCallback = VS.noop;
+    ws.pauseCallback = VS.noop;
+    ws.stopCallback = VS.noop;
+    ws.stepCallback = VS.noop;
+
     ws.connect = function () {
         try {
             socket = new WebSocket(host);
@@ -66,19 +72,24 @@ VS.WebSocket = (function () {
                         switch(data.scoreEvent) {
                             case "play":
                                 VS.score.play();
+                                ws.playCallback();
                                 break;
                             case "pause":
                                 VS.score.pause();
+                                ws.pauseCallback();
                                 break;
                             case "stop":
                                 VS.score.stop();
+                                ws.stopCallback();
                                 break;
                             case "step":
                                 VS.score.updatePointer(data.pointer);
-                                scrollCallback(); // TODO -- hardcoded for ad;sr currently
+                                ws.stepCallback();
                                 break;
                         }
                     }
+
+                    ws.messageCallback();
                 }
                 catch (err) {
                     log("Receive error: " + err);

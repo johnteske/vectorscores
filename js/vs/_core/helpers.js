@@ -1,5 +1,5 @@
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-// Returns a random number between min (inclusive) and max (exclusive)
+VS.noop = function() {};
+
 VS.getRandExcl = function(min, max) {
     return Math.random() * (max - min) + min;
 };
