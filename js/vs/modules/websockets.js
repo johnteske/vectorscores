@@ -89,7 +89,7 @@ VS.WebSocket = (function () {
                         }
                     }
 
-                    ws.messageCallback();
+                    ws.messageCallback(data);
                 }
                 catch (err) {
                     log("Receive error: " + err);

@@ -9,8 +9,11 @@ var score = {
     },
     choices: {},
     selected: false,
-    interval: 10000
+    interval: 10000,
+    weightScale: 1
 };
+
+score.partWeight = score.weightScale; // init
 
 score.center = {
     x: score.width * 0.5,
@@ -182,7 +185,13 @@ for (i = 0; i < 10; i++) {
     VS.score.add(i * score.interval, updateChoices, []);
 }
 
-// VS.WebSocket.connect();
+VS.WebSocket.messageCallback = function(data) {
+    if (data.type === "ws" && data.content === "connections") {
+        score.partWeight = (1 / data.connections) * score.weightScale;
+        console.log(score.partWeight);
+    }
+}
+VS.WebSocket.connect();
 
 /**
  * Keyboard control

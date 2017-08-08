@@ -38,6 +38,6 @@ function updateWeights(choice) {
     for (var i = 0; i < properties.keys.length; i++) {
         var key = properties.keys[i];
         var term = properties.terms[key];
-        term.weights[term.keys.indexOf(choice[key])] += 1;
+        term.weights[term.keys.indexOf(choice[key])] += score.partWeight;
     }
 }
