@@ -76,7 +76,7 @@ function updateChoices() {
 }
 
 function selectCell(position) {
-    if (!score.selected) {
+    if (!score.selected && VS.score.playing) {
 
         score.selected = true; // disable selection until new choices
 
@@ -106,7 +106,6 @@ function selectCell(position) {
                 .style("opacity", 0);
         }
 
-        VS.score.schedule(2000, updateChoices);
     }
 }
 
@@ -179,11 +178,37 @@ score.bottomGroup.append("text")
     .attr("x", 0)
     .attr("y", -5);
 
-updateChoices(); // initial choices
+function clearChoices() {
+    // TODO also clear choice weights
+
+    score.topGroup
+        .attr("transform", translateTopCell)
+        .style("opacity", 1);
+    score.topGroup.selectAll(".bravura").text("");
+    score.topGroup.select(".pitch-classes").text("a");
+
+    score.bottomGroup
+        .attr("transform", translateBottomCell)
+        .style("opacity", 1);
+    score.bottomGroup.selectAll(".bravura").text("");
+    score.bottomGroup.select(".pitch-classes").text("b");
+}
+
+clearChoices();
 
 for (i = 0; i < 10; i++) {
     VS.score.add(i * score.interval, updateChoices, []);
 }
+
+VS.score.stopCallback = clearChoices;
+
+VS.score.stepCallback = function () {
+    if (VS.score.pointer === 0) {
+        clearChoices();
+    } else if (VS.score.pointer < VS.score.getLength() - 1) {
+        updateChoices();
+    }
+};
 
 VS.WebSocket.messageCallback = function(data) {
     if (data.type === "ws" && data.content === "connections") {
