@@ -20,16 +20,16 @@ VS.WebSocket = (function () {
     function addControlCallbacks() {
         if (VS.control) {
             VS.control.playCallback = function () {
-                VS.WebSocket.send({ scoreEvent: "play", pointer: VS.score.pointer });
+                VS.WebSocket.send({ type: "score", scoreEvent: "play", pointer: VS.score.pointer });
             };
             VS.control.pauseCallback = function () {
-                VS.WebSocket.send({ scoreEvent: "pause", pointer: VS.score.pointer });
+                VS.WebSocket.send({ type: "score", scoreEvent: "pause", pointer: VS.score.pointer });
             };
             VS.control.stopCallback = function () {
-                VS.WebSocket.send({ scoreEvent: "stop" });
+                VS.WebSocket.send({ type: "score", scoreEvent: "stop" });
             };
             VS.control.stepCallback = function () {
-                VS.WebSocket.send({ scoreEvent: "step", pointer: VS.score.pointer });
+                VS.WebSocket.send({ type: "score", scoreEvent: "step", pointer: VS.score.pointer });
             };
         }
     }
@@ -54,13 +54,15 @@ VS.WebSocket = (function () {
             socket.onmessage = function (msg) {
                 try {
                     var data = JSON.parse(msg.data);
+
                     if (data.type === "ws" && data.content === "connected") {
                         ws.cid = data.cid;
                     } else if (data.type === "ws" && data.content === "connections") {
                         log("Open, " + data.connections + " connection(s) total");
                     }
+
                     // if not sent by self
-                    if (data.cid !== ws.cid) {
+                    if (data.type === "score" && data.cid !== ws.cid) {
                         switch(data.scoreEvent) {
                             case "play":
                                 VS.score.play();
