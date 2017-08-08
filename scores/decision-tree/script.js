@@ -5,12 +5,12 @@ var score = {
     width: 320,
     height: 320,
     cell: {
-        size: 60
+        size: 90
     },
     choices: {},
     selected: false,
     interval: 10000,
-    weightScale: 1
+    weightScale: 5 // TODO increase over time/score pointer?
 };
 
 score.partWeight = score.weightScale; // init
@@ -116,13 +116,13 @@ function selectCell(position) {
 function translateTopCell() {
     return "translate(" +
         (score.center.x - score.cell.halfSize) + ", " +
-        (score.center.y - score.cell.size - score.cell.halfSize) + ")";
+        (score.center.y - score.cell.size - (score.cell.halfSize * 0.5)) + ")";
 }
 
 function translateBottomCell() {
     return "translate(" +
         (score.center.x - score.cell.halfSize) + ", " +
-        (score.center.y + score.cell.halfSize) + ")";
+        (score.center.y + (score.cell.halfSize * 0.5)) + ")";
 }
 
 function translateSelectedCell() {
@@ -160,11 +160,11 @@ score.topGroup.append("text")
 score.topGroup.append("text")
     .attr("class", "dynamic bravura")
     .attr("x", score.cell.halfSize)
-    .attr("y", score.cell.size - 5);
+    .attr("y", score.cell.size - 5)
+    .attr("dy", -5);
 score.topGroup.append("text")
     .attr("class", "pitch-classes monospace")
-    .attr("x", 0)
-    .attr("y", -5);
+    .attr("dy", "-0.62em");
 score.bottomGroup.append("text")
     .attr("class", "duration bravura")
     .attr("x", score.cell.halfSize)
@@ -172,11 +172,11 @@ score.bottomGroup.append("text")
 score.bottomGroup.append("text")
     .attr("class", "dynamic bravura")
     .attr("x", score.cell.halfSize)
-    .attr("y", score.cell.size - 5);
+    .attr("y", score.cell.size - 5)
+    .attr("dy", -5);
 score.bottomGroup.append("text")
     .attr("class", "pitch-classes monospace")
-    .attr("x", 0)
-    .attr("y", -5);
+    .attr("dy", "-0.62em");
 
 function clearChoices() {
     // TODO also clear choice weights
@@ -196,7 +196,7 @@ function clearChoices() {
 
 clearChoices();
 
-for (i = 0; i < 10; i++) {
+for (i = 0; i < 9; i++) {
     VS.score.add(i * score.interval, updateChoices, []);
 }
 
