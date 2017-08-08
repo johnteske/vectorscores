@@ -188,7 +188,6 @@ for (i = 0; i < 10; i++) {
 VS.WebSocket.messageCallback = function(data) {
     if (data.type === "ws" && data.content === "connections") {
         score.partWeight = (1 / data.connections) * score.weightScale;
-        console.log(score.partWeight);
     }
 }
 VS.WebSocket.connect();
