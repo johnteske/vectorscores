@@ -1,3 +1,6 @@
+/**
+ * @returns {Array} - row-major order data
+ */
 function generateValues() {
     var values = [];
     var width = score.width;
@@ -77,4 +80,4 @@ function generateValues() {
     return values;
 }
 
-var values = generateValues();
+topoData = generateValues();

@@ -7,6 +7,7 @@ var main = d3.select(".main"),
     // width = 480,
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
+    topoData,
     topoScore,
     score = {
         width: 8 // currently used in creation, not display
@@ -81,7 +82,7 @@ function drawScore(scoreFragment, x, y) {
 
     topo.node().appendChild(documentFragment);
 }
-topoScore = createScoreFragment(8, 8, score.width);
+topoScore = createScoreFragment(topoData, score.width, 8, 8);
 drawScore(topoScore, 0, 0);
 // drawScore(createScoreFragment(8, 1, score.width), 7, 7); // needs offset to work properly
 

@@ -1,14 +1,22 @@
-function createScoreFragment(rows, cols, width) {
-    var _array = [];
-    for (var row = 0; row < rows; row++) {
-        _array[row] = [];
-        for (var col = 0; col < cols; col++) {
-            var height = values[col + row * width];
-            _array[row][col] = {
+/**
+ * Convert row-major order data in two-dimensional array
+ * and assign heightIndex for symbol matching
+ */
+function createScoreFragment(data, width, nRows, nCols) {
+    var grid = [];
+
+    for (var row = 0; row < nRows; row++) {
+        grid[row] = [];
+
+        for (var col = 0; col < nCols; col++) {
+            var height = data[col + row * width];
+
+            grid[row][col] = {
                 height: height,
-                heightIndex: height > 0 ? Math.floor(height) : Math.ceil(height)
+                heightIndex: ~~height // height > 0 ? Math.floor(height) : Math.ceil(height)
             };
         }
     }
-    return _array;
+
+    return grid;
 }
