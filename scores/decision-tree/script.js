@@ -196,7 +196,7 @@ function clearChoices() {
 
 clearChoices();
 
-for (i = 0; i < 9; i++) {
+for (var i = 0; i < 9; i++) {
     VS.score.add(i * score.interval, updateChoices, []);
 }
 
@@ -214,7 +214,7 @@ VS.WebSocket.messageCallback = function(data) {
     if (data.type === "ws" && data.content === "connections") {
         score.partWeight = (1 / data.connections) * score.weightScale;
     }
-}
+};
 VS.WebSocket.connect();
 
 /**

@@ -10,7 +10,7 @@ var main = d3.select(".main"),
     topoScore,
     score = {
         width: 8 // currently used in creation, not display
-    }
+    },
     symbolOffsets = {
         // 0.25: { x: -0.025, y: -0.25 }, // TODO
         // 0.5: { x: -0.025, y: -0.25 },

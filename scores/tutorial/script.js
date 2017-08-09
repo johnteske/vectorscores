@@ -1,6 +1,6 @@
-//---
-//#layout: compress-js
-//---
+---
+#layout: compress-js
+---
 
 d3.select("svg").remove();
 
@@ -36,7 +36,7 @@ var addEvent = (function() {
     return function(fn, duration) {
         VS.score.add(time, fn);
         time += duration;
-    }
+    };
 })();
 
 addEvent(function() {
