@@ -1,82 +1,80 @@
-var values = [];
-var width = 8;
-var height = 8;
+function generateValues() {
+    var values = [];
+    var width = score.width;
+    var height = score.width;
 
-var featuresize = 8;
-var samplesize = featuresize;
+    var featureSize = 8;
+    var sampleSize = featureSize;
 
-var initScale = 3;
-var scale = 3;
+    var initScale = 3;
+    var scale = 3;
 
-function frand() {
-    return (Math.random() * 2) - 1;
-}
-
-for (var y = 0; y < height; y += featuresize) {
-    for (var x = 0; x < width; x += featuresize)
-    {
-        setSample(x, y, frand() * scale);
+    function frand() {
+        return (Math.random() * 2) - 1;
     }
-}
 
-function sample(x, y) {
-    return values[(x & (width - 1)) + (y & (height - 1)) * width];
-}
-
-function setSample(x, y, value) {
-    value = VS.clamp(value, -initScale, initScale);
-    values[(x & (width - 1)) + (y & (height - 1)) * width] = value;
-}
-
-function sampleSquare(x, y, size, value) {
-    var hs = size / 2;
-
-    var a = sample(x - hs, y - hs);
-    var b = sample(x + hs, y - hs);
-    var c = sample(x - hs, y + hs);
-    var d = sample(x + hs, y + hs);
-
-    setSample(x, y, ((a + b + c + d) / 4.0) + value);
-}
-
-function sampleDiamond(x, y, size, value) {
-    var hs = size / 2;
-
-    var a = sample(x - hs, y);
-    var b = sample(x + hs, y);
-    var c = sample(x, y - hs);
-    var d = sample(x, y + hs);
-
-    setSample(x, y, ((a + b + c + d) / 4.0) + value);
-}
-
-function DiamondSquare(stepSize, scale) {
-    var x, y;
-    var halfstep = stepSize / 2;
-
-    for (y = halfstep; y < height + halfstep; y += stepSize)
-    {
-        for (x = halfstep; x < width + halfstep; x += stepSize)
-        {
-            sampleSquare(x, y, stepSize, frand() * scale);
+    for (var y = 0; y < height; y += featureSize) {
+        for (var x = 0; x < width; x += featureSize) {
+            setSample(x, y, frand() * scale);
         }
     }
 
-    for (y = 0; y < height; y += stepSize)
-    {
-        for (x = 0; x < width; x += stepSize)
-        {
-            sampleDiamond(x + halfstep, y, stepSize, frand() * scale);
-            sampleDiamond(x, y + halfstep, stepSize, frand() * scale);
+    function sample(x, y) {
+        return values[(x & (width - 1)) + (y & (height - 1)) * width];
+    }
+
+    function setSample(x, y, value) {
+        value = VS.clamp(value, -initScale, initScale);
+        values[(x & (width - 1)) + (y & (height - 1)) * width] = value;
+    }
+
+    function sampleSquare(x, y, size, value) {
+        var half = size / 2;
+
+        var a = sample(x - half, y - half);
+        var b = sample(x + half, y - half);
+        var c = sample(x - half, y + half);
+        var d = sample(x + half, y + half);
+
+        setSample(x, y, ((a + b + c + d) / 4.0) + value);
+    }
+
+    function sampleDiamond(x, y, size, value) {
+        var half = size / 2;
+
+        var a = sample(x - half, y);
+        var b = sample(x + half, y);
+        var c = sample(x, y - half);
+        var d = sample(x, y + half);
+
+        setSample(x, y, ((a + b + c + d) / 4.0) + value);
+    }
+
+    function diamondSquare(stepSize, scale) {
+        var x, y;
+        var halfStep = stepSize / 2;
+
+        for (y = halfStep; y < height + halfStep; y += stepSize) {
+            for (x = halfStep; x < width + halfStep; x += stepSize) {
+                sampleSquare(x, y, stepSize, frand() * scale);
+            }
+        }
+
+        for (y = 0; y < height; y += stepSize) {
+            for (x = 0; x < width; x += stepSize) {
+                sampleDiamond(x + halfStep, y, stepSize, frand() * scale);
+                sampleDiamond(x, y + halfStep, stepSize, frand() * scale);
+            }
         }
     }
 
+    while (sampleSize > 1) {
+        diamondSquare(sampleSize, scale);
+        sampleSize /= 2;
+        scale /= 2.0;
+    }
+
+    return values;
 }
 
-while (samplesize > 1) {
-
-    DiamondSquare(samplesize, scale);
-
-    samplesize /= 2;
-    scale /= 2.0;
-}
+var values = generateValues();

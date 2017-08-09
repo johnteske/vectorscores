@@ -8,6 +8,9 @@ var main = d3.select(".main"),
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
     topoScore,
+    score = {
+        width: 8 // currently used in creation, not display
+    }
     symbolOffsets = {
         // 0.25: { x: -0.025, y: -0.25 }, // TODO
         // 0.5: { x: -0.025, y: -0.25 },
@@ -26,7 +29,8 @@ var main = d3.select(".main"),
         // "1":    "\ue262", // sharp
         // "1.5":  "\ue283", // three-quarter sharp (three vertical strokes)
         // "2":    "\ue263"  // double sharp
-    };
+    },
+    symbolScale = ["-2", "-1.5", "-1", "-0.5", "0", "-", ">", "."]; // ["-", "-", ">", ".", 2, 1, 0.5, 0.25]
 
 // var symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations);
 var symbols = Object.assign(VS.dictionary.Bravura.accidentals, VS.dictionary.Bravura.articulations);
@@ -46,8 +50,7 @@ function drawScore(scoreFragment, x, y) {
         for (var col = 0; col < cols; col++) {
             var point = scoreFragment[row][col];
             var symbolIndex = point.heightIndex + 4;
-            // var symbolKey = ["-", "-", ">", ".", 2, 1, 0.5, 0.25][symbolIndex];
-            var symbolKey = ["-2", "-1.5", "-1", "-0.5", "0", "-", ">", "."][symbolIndex];
+            var symbolKey = symbolScale[symbolIndex];
 
             // to help center symbols with offsets
             // d3.select(documentFragment).append("svg:path")
@@ -78,8 +81,8 @@ function drawScore(scoreFragment, x, y) {
 
     topo.node().appendChild(documentFragment);
 }
-topoScore = createScoreFragment(8, 8);
+topoScore = createScoreFragment(8, 8, score.width);
 drawScore(topoScore, 0, 0);
-// drawScore(createScoreFragment(8, 1), 7, 7);
+// drawScore(createScoreFragment(8, 1, score.width), 7, 7); // needs offset to work properly
 
 topo.attr("transform", "translate(320,120)");

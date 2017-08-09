@@ -1,4 +1,4 @@
-function createScoreFragment(rows, cols) {
+function createScoreFragment(rows, cols, width) {
     var _array = [];
     for (var row = 0; row < rows; row++) {
         _array[row] = [];
