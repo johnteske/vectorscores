@@ -42,60 +42,75 @@ var addEvent = (function() {
 addEvent(function() {
     clearHighlights();
     message.innerHTML = initialMessage;
-}, 5000);
+}, 3000);
 
 addEvent(function() {
     clearHighlights();
-    message.innerHTML = "The header and footer of each score will disappear when playing and will reappear when paused or stopped.";
+    message.innerHTML = "The header and footer of a score will disappear when playing and will reappear when paused or stopped.";
     // VS.score.schedule(1, VS.score.pause);
 }, 5000);
 
 addEvent(function() {
     clearHighlights();
-    highlightByID("score-back");
-    message.innerHTML = "Step score back";
-}, 1000);
-
-addEvent(function() {
-    clearHighlights();
     highlightByID("score-play");
-    message.innerHTML = "Play/pause score";
-}, 1000);
+    message.innerHTML = "To start or pause score play, click the play/pause button or press the spacebar.";
+}, 3000);
 
 addEvent(function() {
     clearHighlights();
     highlightByID("score-stop");
-    message.innerHTML = "Stop score";
-}, 1000);
-
-addEvent(function() {
-    clearHighlights();
-    highlightByID("score-fwd");
-    message.innerHTML = "Step score forward";
-}, 1000);
+    message.innerHTML = "To stop score play, click the stop button or press the escape key.";
+}, 3000);
 
 addEvent(function() {
     clearHighlights();
     highlightByID("score-pointer");
-    message.innerHTML = "Current score position";
-}, 1000);
+    message.innerHTML = "The current score position is displayed here.";
+}, 3000);
 
 addEvent(function() {
     clearHighlights();
-    highlightByID("score-settings-open");
-    message.innerHTML = "Score settings";
-}, 1000);
+    highlightByID("score-back");
+    highlightByID("score-fwd");
+    message.innerHTML = "When a score is not playing, you can set the score position with the forward and back buttons or by using the left and right arrow keys.";
+}, 3000);
 
 addEvent(function() {
     clearHighlights();
     highlightByID("score-info-open");
-    message.innerHTML = "Score information";
-}, 1000);
+    message.innerHTML = "If a score has additional information such as performance notes, they can be displayed by clicking the info button.";
+}, 3000);
+
+// addEvent(function() {
+//     message.innerHTML = "Click the play button or press spacebar to continue.";
+//     // TODO use this until modals have a (public) method to open and close
+//     document.querySelector("#score-info-open").click();
+//     VS.score.schedule(1, function() {
+//         VS.score.pause;
+//         VS.score.updatePointer(VS.score.pointer + 1);
+//     });
+// }, 0);
+
+addEvent(function() {
+    clearHighlights();
+    highlightByID("score-settings-open");
+    message.innerHTML = "If a score has settings that can be set by performers, they can accessed by clicking the settings button.";
+}, 3000);
+
+// addEvent(function() {
+//     message.innerHTML = "Click the play button or press spacebar to continue.";
+//     // TODO use this until modals have a (public) method to open and close
+//     document.querySelector("#score-settings-open").click();
+//     VS.score.schedule(1, function() {
+//         VS.score.pause;
+//         VS.score.updatePointer(VS.score.pointer + 1);
+//     });
+// }, 0);
 
 addEvent(function() {
     clearHighlights();
     message.innerHTML = "";
-}, 1000);
+}, 3000);
 
 /**
  *
