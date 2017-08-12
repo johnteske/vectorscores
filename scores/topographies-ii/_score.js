@@ -1,4 +1,14 @@
 /**
+ *
+ */
+function getScoreRange(data) {
+    return {
+        min: Math.min.apply(null, data),
+        max: Math.max.apply(null, data)
+    }
+}
+
+/**
  * Assign properties to row-major order data
  */
 function createScoreFragment(data, width, nRows, nCols) {
@@ -11,7 +21,7 @@ function createScoreFragment(data, width, nRows, nCols) {
         }
     }
 
-    return rowMajorOrderToGrid(data, width, nRows, nCols);
+    return data;
 }
 
 /**

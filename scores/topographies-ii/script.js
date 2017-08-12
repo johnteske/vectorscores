@@ -42,6 +42,17 @@ main.style("width", 640 + "px")
 {% include_relative _diamond-square.js %}
 {% include_relative _score.js %}
 
+score.range = getScoreRange(topoData);
+topoData = createScoreFragment(topoData, score.width, 8, 8);
+
+/**
+ * Test to find/create unique points
+ */
+var unique = topoData.filter(function(d) {
+    return d.height === score.range.min || d.height === score.range.max;
+});
+unique[Math.floor(Math.random() * unique.length)].unique = true;
+
 function drawScore(scoreFragment, x, y) {
     var documentFragment = document.createDocumentFragment(),
         rows = scoreFragment.length,
@@ -70,6 +81,7 @@ function drawScore(scoreFragment, x, y) {
 
             d3.select(documentFragment).append("svg:text")
                 .text(symbols[symbolKey])
+                .style("fill", point.unique ? "blue" : "black")
                 .attr("dx", offsets.x + "em")
                 .attr("dy", offsets.y + "em")
                 .attr("transform", function() {
@@ -82,7 +94,8 @@ function drawScore(scoreFragment, x, y) {
 
     topo.node().appendChild(documentFragment);
 }
-topoScore = createScoreFragment(topoData, score.width, 8, 8);
+
+topoScore = rowMajorOrderToGrid(topoData, score.width, 8, 8);
 drawScore(topoScore, 0, 0);
 // drawScore(createScoreFragment(8, 1, score.width), 7, 7); // needs offset to work properly
 
