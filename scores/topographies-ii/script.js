@@ -87,55 +87,71 @@ topo.selectAll("text")
         var y = Math.floor(i / score.width);
         var x = i - (y * score.width)
         var yOffset = 0;
-        return ((yOffset + (x + y)) * tileHeightHalf - (d.height * 5));
+        return ((yOffset + (x + y)) * tileHeightHalf);
     })
     .text(function(d) {
         var symbolIndex = d.heightIndex + 4;
         var symbolKey = symbolScale[symbolIndex];
         return symbols[symbolKey];
     })
-    .style("fill", function(d) {
-        return d.revealed ? "blue" : "black";
-    });
+    .call(revealSymbols, 0);
 
 topo.attr("transform", "translate(320,120)");
 
 /**
- * Reveal test
+ * Reveal
  */
-
-// Gather revealed indices
-var revealedIndices = [];
-
-for (var i = 0; i < topoData.length; i++) {
-    if (topoData[i].revealed) {
-        revealedIndices.push(i);
-    }
-}
-
-function setRevealed(x, y) {
-    if (x > -1 && x < score.width && y > -1 && y < score.width) {
-        topoData[coordinatesToIndex(x, y)].revealed = true;
-    }
-}
-
-// Reveal surrounding indices
-for (var i = 0; i < revealedIndices.length; i++) {
-    var index = revealedIndices[i],
-        c = indexToCoordinates(index);
-
-    setRevealed(c.x, c.y - 1); // top
-    setRevealed(c.x + 1, c.y); // right
-    setRevealed(c.x, c.y + 1); // bottom
-    setRevealed(c.x - 1, c.y); // left
-
-    setRevealed(c.x - 1, c.y - 1); // top left
-    setRevealed(c.x + 1, c.y + 1); // bottom right
-}
-
-VS.score.schedule(3000, function() {
-    topo.selectAll("text")
-        .style("fill", function(d) {
-            return d.revealed ? "blue" : "black";
+function revealSymbols(selection, dur) {
+    selection.transition().duration(dur)
+        .attr("dy", function(d) {
+            return d.revealed ? d.height * -5 : d.height * -2.5;
+        })
+        .style("opacity", function(d) {
+            return d.revealed ? 1 : 0;
         });
-});
+}
+
+function revealNearby() {
+    // Gather revealed indices
+    var revealedIndices = [];
+
+    for (var i = 0; i < topoData.length; i++) {
+        if (topoData[i].revealed) {
+            revealedIndices.push(i);
+        }
+    }
+
+    function setRevealed(x, y) {
+        if (x > -1 && x < score.width && y > -1 && y < score.width) {
+            topoData[coordinatesToIndex(x, y)].revealed = true;
+        }
+    }
+
+    // Reveal surrounding indices
+    for (var i = 0; i < revealedIndices.length; i++) {
+        var index = revealedIndices[i],
+            c = indexToCoordinates(index);
+
+        setRevealed(c.x, c.y - 1); // top
+        setRevealed(c.x + 1, c.y); // right
+        setRevealed(c.x, c.y + 1); // bottom
+        setRevealed(c.x - 1, c.y); // left
+
+        setRevealed(c.x - 1, c.y - 1); // top left
+        setRevealed(c.x + 1, c.y + 1); // bottom right
+    }
+
+    // Update map
+    topo.selectAll("text").call(revealSymbols, 600);
+}
+
+VS.score.schedule(3000, revealNearby);
+VS.score.schedule(6000, revealNearby);
+VS.score.schedule(9000, revealNearby);
+VS.score.schedule(12000, revealNearby);
+VS.score.schedule(15000, revealNearby);
+VS.score.schedule(18000, revealNearby);
+VS.score.schedule(21000, revealNearby);
+VS.score.schedule(24000, revealNearby);
+VS.score.schedule(27000, revealNearby);
+VS.score.schedule(30000, revealNearby);
