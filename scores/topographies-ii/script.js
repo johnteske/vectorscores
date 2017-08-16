@@ -46,57 +46,96 @@ score.range = getScoreRange(topoData);
 topoData = createScoreFragment(topoData, score.width, 8, 8);
 
 /**
- * Test to find/create unique points
+ * Reveal a starting point
  */
-var unique = topoData.filter(function(d) {
+var extrema = topoData.filter(function(d) {
     return d.height === score.range.min || d.height === score.range.max;
 });
-unique[Math.floor(Math.random() * unique.length)].unique = true;
+extrema[Math.floor(Math.random() * extrema.length)].revealed = true;
 
-function drawScore(scoreFragment, x, y) {
-    var documentFragment = document.createDocumentFragment(),
-        rows = scoreFragment.length,
-        cols = scoreFragment[0].length;
+/**
+ * x, y from i of row-major order
+ */
+function indexToCoordinates(i) {
+    var y = Math.floor(i / score.width);
+    var x = i - (y * score.width);
 
-    for (var row = 0; row < rows; row++) {
-        for (var col = 0; col < cols; col++) {
-            var point = scoreFragment[row][col];
-            var symbolIndex = point.heightIndex + 4;
-            var symbolKey = symbolScale[symbolIndex];
-
-            // to help center symbols with offsets
-            // d3.select(documentFragment).append("svg:path")
-            //     .attr("stroke", "red")
-            //     .attr("stroke-width", 1)
-            //     .attr("d", function() {
-            //         var px = ((x + (col - row)) * tileWidthHalf),
-            //             py = ((y + (col + row)) * tileHeightHalf)
-            //         return "M" + px + " " + (py - 5) +
-            //             " L" + px + " " + (py + 5) +
-            //             " M" + (px - 5) + " " + py +
-            //             " L" + (px + 5) + " " + py;
-            //     });
-
-            var offsets = symbolOffsets[symbolKey];
-
-            d3.select(documentFragment).append("svg:text")
-                .text(symbols[symbolKey])
-                .style("fill", point.unique ? "blue" : "black")
-                .attr("dx", offsets.x + "em")
-                .attr("dy", offsets.y + "em")
-                .attr("transform", function() {
-                    return "translate(" +
-                        ((x + (col - row)) * tileWidthHalf) + ", " +
-                        ((y + (col + row)) * tileHeightHalf - (point.height * 5)) + ")";
-                });
-        }
+    return {
+        x: x,
+        y: y
     }
-
-    topo.node().appendChild(documentFragment);
 }
 
-topoScore = rowMajorOrderToGrid(topoData, score.width, 8, 8);
-drawScore(topoScore, 0, 0);
-// drawScore(createScoreFragment(8, 1, score.width), 7, 7); // needs offset to work properly
+function coordinatesToIndex(x, y) {
+    return (x & (score.width - 1)) + (y & (score.width - 1)) * score.width;
+}
+
+/**
+ * Render score directly from row-major order data
+ */
+topo.selectAll("text")
+    .data(topoData)
+    .enter()
+    .append("text")
+    .attr("x", function(d, i) {
+        var y = Math.floor(i / score.width);
+        var x = i - (y * score.width)
+        var xOffset = 0;
+        return ((xOffset + (x - y)) * tileWidthHalf);
+    })
+    .attr("y", function(d, i) {
+        var y = Math.floor(i / score.width);
+        var x = i - (y * score.width)
+        var yOffset = 0;
+        return ((yOffset + (x + y)) * tileHeightHalf - (d.height * 5));
+    })
+    .text(function(d) {
+        var symbolIndex = d.heightIndex + 4;
+        var symbolKey = symbolScale[symbolIndex];
+        return symbols[symbolKey];
+    })
+    .style("fill", function(d) {
+        return d.revealed ? "blue" : "black";
+    });
 
 topo.attr("transform", "translate(320,120)");
+
+/**
+ * Reveal test
+ */
+
+// Gather revealed indices
+var revealedIndices = [];
+
+for (var i = 0; i < topoData.length; i++) {
+    if (topoData[i].revealed) {
+        revealedIndices.push(i);
+    }
+}
+
+function setRevealed(x, y) {
+    if (x > -1 && x < score.width && y > -1 && y < score.width) {
+        topoData[coordinatesToIndex(x, y)].revealed = true;
+    }
+}
+
+// Reveal surrounding indices
+for (var i = 0; i < revealedIndices.length; i++) {
+    var index = revealedIndices[i],
+        c = indexToCoordinates(index);
+
+    setRevealed(c.x, c.y - 1); // top
+    setRevealed(c.x + 1, c.y); // right
+    setRevealed(c.x, c.y + 1); // bottom
+    setRevealed(c.x - 1, c.y); // left
+
+    setRevealed(c.x - 1, c.y - 1); // top left
+    setRevealed(c.x + 1, c.y + 1); // bottom right
+}
+
+VS.score.schedule(3000, function() {
+    topo.selectAll("text")
+        .style("fill", function(d) {
+            return d.revealed ? "blue" : "black";
+        });
+});
