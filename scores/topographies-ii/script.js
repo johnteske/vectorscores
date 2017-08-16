@@ -46,14 +46,6 @@ score.range = getScoreRange(topoData);
 topoData = createScoreFragment(topoData, score.width, 8, 8);
 
 /**
- * Reveal a starting point
- */
-var extrema = topoData.filter(function(d) {
-    return d.height === score.range.min || d.height === score.range.max;
-});
-extrema[Math.floor(Math.random() * extrema.length)].revealed = true;
-
-/**
  * x, y from i of row-major order
  */
 function indexToCoordinates(i) {
@@ -145,13 +137,36 @@ function revealNearby() {
     topo.selectAll("text").call(revealSymbols, 600);
 }
 
-VS.score.schedule(3000, revealNearby);
-VS.score.schedule(6000, revealNearby);
-VS.score.schedule(9000, revealNearby);
-VS.score.schedule(12000, revealNearby);
-VS.score.schedule(15000, revealNearby);
-VS.score.schedule(18000, revealNearby);
-VS.score.schedule(21000, revealNearby);
-VS.score.schedule(24000, revealNearby);
-VS.score.schedule(27000, revealNearby);
-VS.score.schedule(30000, revealNearby);
+/**
+ * Populate score
+ */
+VS.score.preroll = 1000;
+
+var addEvent = (function() {
+    var time = 0;
+
+    return function(fn, duration) {
+        VS.score.add(time, fn);
+        time += duration;
+    };
+})();
+
+function randDuration() {
+    return 1000; // + (Math.random() * 3000);
+}
+/**
+ * Reveal a starting point
+ */
+addEvent(function() {
+    var extrema = topoData.filter(function(d) {
+        return d.height === score.range.min || d.height === score.range.max;
+    });
+
+    extrema[Math.floor(Math.random() * extrema.length)].revealed = true;
+
+    topo.selectAll("text").call(revealSymbols, 600);
+}, randDuration());
+
+for (var i = 0; i < 11; i++) {
+    addEvent(revealNearby, randDuration());
+}
