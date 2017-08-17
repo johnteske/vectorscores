@@ -140,6 +140,11 @@ function moveWalker() {
     checkNearby(c.x - 1, c.y - 1, "topLeft");
     checkNearby(c.x + 1, c.y + 1, "bottomRight");
 
+    /**
+     * Make two moves in the same direction, if possible, or
+     * move to a position not yet walked on, or
+     * move to any available position
+     */
     if (notWalked.indexOf(walker.lastDir) !== -1 || available.indexOf(walker.lastDir) !== -1) {
         // console.log('last');
         dir = walker.lastDir;
@@ -185,11 +190,10 @@ function moveWalker() {
 }
 
 function revealNearby() {
-    // Gather revealed indices
-    var revealedIndices = [walker.index];
+    // Chance nearby symbols will be revealed
     var chance = 0.2;
 
-    // var revealedIndices = [];
+    var revealedIndices = [walker.index];
 
     // for (var i = 0; i < topoData.length; i++) {
     //     if (topoData[i].revealed) {
