@@ -10,7 +10,11 @@ var main = d3.select(".main"),
     topoData,
     topoScore,
     score = {
-        width: 8 // currently used in creation, not display
+        width: 8, // currently used in creation, not display
+    },
+    walker = {
+        index: -1,
+        lastDir: ""
     },
     symbolOffsets = {
         // 0.25: { x: -0.025, y: -0.25 }, // TODO
@@ -98,23 +102,103 @@ function revealSymbols(selection, dur) {
         .attr("dy", function(d) {
             return d.revealed ? d.height * -5 : d.height * -2.5;
         })
+        .style("fill", function(d) {
+            var fill = "black";
+            // if (d.walker) {
+            //     fill = "blue";
+            // } else if (d.walked) {
+            //     fill = "red";
+            // }
+            return fill;
+        })
         .style("opacity", function(d) {
             return d.revealed ? 1 : 0;
         });
 }
 
-function revealNearby() {
-    // Gather revealed indices
-    var revealedIndices = [];
+function moveWalker() {
+    var c = indexToCoordinates(walker.index);
+    var notWalked = [];
+    var available = [];
+    var dir = "";
 
-    for (var i = 0; i < topoData.length; i++) {
-        if (topoData[i].revealed) {
-            revealedIndices.push(i);
+    function checkNearby(x, y, dir) {
+        if (x > -1 && x < score.width && y > -1 && y < score.width) {
+            if (!topoData[coordinatesToIndex(x, y)].walked) {
+                notWalked.push(dir)
+            } else {
+                available.push(dir);
+            };
         }
     }
 
+    checkNearby(c.x, c.y - 1, "top");
+    checkNearby(c.x + 1, c.y, "right");
+    checkNearby(c.x, c.y + 1, "bottom");
+    checkNearby(c.x - 1, c.y, "left");
+
+    checkNearby(c.x - 1, c.y - 1, "topLeft");
+    checkNearby(c.x + 1, c.y + 1, "bottomRight");
+
+    if (notWalked.indexOf(walker.lastDir) !== -1 || available.indexOf(walker.lastDir) !== -1) {
+        // console.log('last');
+        dir = walker.lastDir;
+        walker.lastDir = "";
+    } else if (notWalked.length) {
+        dir = VS.getItem(notWalked);
+        walker.lastDir = dir;
+    } else {
+        dir = VS.getItem(available);
+        walker.lastDir = dir;
+    }
+
+    topoData[walker.index].walker = false;
+
+    switch (dir) {
+    case "top":
+        walker.index = coordinatesToIndex(c.x, c.y - 1);
+        break;
+    case "right":
+        walker.index = coordinatesToIndex(c.x + 1, c.y);
+        break;
+    case "bottom":
+        walker.index = coordinatesToIndex(c.x, c.y + 1);
+        break;
+    case "left":
+        walker.index = coordinatesToIndex(c.x - 1, c.y);
+        break;
+    case "topLeft":
+        walker.index = coordinatesToIndex(c.x - 1, c.y - 1);
+        break;
+    case "bottomRight":
+        walker.index = coordinatesToIndex(c.x + 1, c.y + 1);
+        break;
+    default:
+        break;
+    }
+
+    topoData[walker.index].walker = true;
+    topoData[walker.index].walked = true;
+    topoData[walker.index].revealed = true;
+
+    revealNearby();
+}
+
+function revealNearby() {
+    // Gather revealed indices
+    var revealedIndices = [walker.index];
+    var chance = 0.2;
+
+    // var revealedIndices = [];
+
+    // for (var i = 0; i < topoData.length; i++) {
+    //     if (topoData[i].revealed) {
+    //         revealedIndices.push(i);
+    //     }
+    // }
+
     function setRevealed(x, y) {
-        if (x > -1 && x < score.width && y > -1 && y < score.width) {
+        if (Math.random() < chance && x > -1 && x < score.width && y > -1 && y < score.width) {
             topoData[coordinatesToIndex(x, y)].revealed = true;
         }
     }
@@ -152,21 +236,30 @@ var addEvent = (function() {
 })();
 
 function randDuration() {
-    return 1000; // + (Math.random() * 3000);
+    return 600 + (Math.random() * 600);
 }
 /**
  * Reveal a starting point
  */
 addEvent(function() {
-    var extrema = topoData.filter(function(d) {
-        return d.height === score.range.min || d.height === score.range.max;
-    });
+    var extremaIndices = [];
 
-    extrema[Math.floor(Math.random() * extrema.length)].revealed = true;
+    for (var i = 0; i < topoData.length; i++) {
+        var d = topoData[i];
+        if (d.height === score.range.min || d.height === score.range.max) {
+            extremaIndices.push(i);
+        }
+    }
+
+    var startIndex = walker.index = VS.getItem(extremaIndices);
+
+    topoData[startIndex].revealed = true;
+    topoData[walker.index].walker = true;
+    topoData[walker.index].walked = true;
 
     topo.selectAll("text").call(revealSymbols, 600);
 }, randDuration());
 
-for (var i = 0; i < 11; i++) {
-    addEvent(revealNearby, randDuration());
+for (var i = 0; i < 100; i++) {
+    addEvent(moveWalker, randDuration());
 }
