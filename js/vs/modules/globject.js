@@ -5,6 +5,14 @@ VS.globject = function() {
     var w = VS.constant(127),
         h = VS.constant(127);
 
+    function yMIDI(d) {
+        return (1 - (d.y / 127));
+    }
+
+    function yNormalized(d) {
+        return 1 - d.y;
+    }
+
     function globject(d, i) {
         var selection = d3.select(this),
             width = w(d, i),
@@ -13,12 +21,20 @@ VS.globject = function() {
                 left: 5
             };
 
-        var rangeEnvelope = d.rangeEnvelope,
-            rangePoints = [];
+        var rangeEnv = d.rangeEnvelope,
+            rangePoints = [],
+            rangeType = rangeEnv.type.toLowerCase(),
+            scaleY;
 
-        for (var t = 0; t < rangeEnvelope.times.length; t++) {
-            rangePoints.push({ "x": rangeEnvelope.times[t], "y": rangeEnvelope.hi[t] });
-            rangePoints.unshift({ "x": rangeEnvelope.times[t], "y": rangeEnvelope.lo[t] });
+        for (var t = 0; t < rangeEnv.times.length; t++) {
+            rangePoints.push({ "x": rangeEnv.times[t], "y": rangeEnv.hi[t] });
+            rangePoints.unshift({ "x": rangeEnv.times[t], "y": rangeEnv.lo[t] });
+        }
+
+        if (rangeType === "midi") {
+            scaleY = yMIDI;
+        } else if (rangeType === "normalized") {
+            scaleY = yNormalized;
         }
 
         var line = d3.line()
@@ -26,7 +42,7 @@ VS.globject = function() {
                  return d.x * width;
              })
              .y(function(d) {
-                 return (1 - (d.y / 127)) * height;
+                 return scaleY(d) * height;
              })
              .curve(d3.curveCardinalClosed.tension(0.8));
 

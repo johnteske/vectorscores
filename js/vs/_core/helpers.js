@@ -29,6 +29,10 @@ VS.clamp = function(val, min, max) {
     return Math.min(Math.max(val, min), max);
 };
 
+VS.normalize = function(val, min, max) {
+    return (val - min) / (max - min);
+};
+
 VS.constant = function(v) {
     return function constant() {
         return v;
