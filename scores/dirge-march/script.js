@@ -20,6 +20,29 @@ var main = d3.select(".main")
 
 var globjectContainer = main.append("g").attr("class", "globjects");
 
+/**
+ * Rhythm test
+ */
+var rhythmContainer = main.append("g").attr("class", "rhythms");
+
+var rhythmCell = rhythmContainer.append("g")
+    .attr("transform", "translate(" + (center - 45) + "," + (center + 45) + ")");
+
+rhythmCell.append("rect")
+    .attr("width", 90)
+    .attr("height", 45)
+    .attr("stroke", "#888")
+    .attr("fill", "none");
+
+rhythmCell.append("text")
+    .attr("x", 45)
+    .attr("y", 20)
+    .attr("text-anchor", "middle")
+    .text(noteheads["1"] + " " + noteheads["0.5"] + " " + noteheads["0.5"]);
+
+/**
+ *
+ */
 function update(index) {
     var h = 90;
 

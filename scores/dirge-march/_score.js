@@ -1,4 +1,4 @@
-var score = {% include_relative _score.json %};
+var score = {% include_relative _phrases.json %};
 
 score = score.map(function(mm) {
     for (var i = 0; i < mm.globjects.length; i++) {
@@ -34,8 +34,6 @@ score = score.map(function(mm) {
             currentTime += o.duration / totalDuration;
             return o;
         });
-
-        console.log(globject);
     }
 
     return mm.globjects;

@@ -1,10 +1,18 @@
 ---
 ---
 
+@import "mixins";
+@include BravuraFont();
+
 .globject {
     .globject-path {
         stroke: #888;
         stroke-width: 1;
         fill: none;
     }
+}
+
+.rhythms text {
+    font-family: Bravura;
+    font-size: 24px;
 }
