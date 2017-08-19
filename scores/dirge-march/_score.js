@@ -22,14 +22,16 @@ score = score.map(function(mm) {
         currentTime = 0;
         globject.rangeEnvelope.hi = highs.map(function(o) {
             o.value = VS.normalize(o.value, extent[0], extent[1]);
-            o.time = currentTime += o.duration / totalDuration;
+            o.time = currentTime;
+            currentTime += o.duration / totalDuration;
             return o;
         });
 
         currentTime = 0;
         globject.rangeEnvelope.lo = lows.map(function(o) {
             o.value = VS.normalize(o.value, extent[0], extent[1]);
-            o.time = currentTime += o.duration / totalDuration;
+            o.time = currentTime;
+            currentTime += o.duration / totalDuration;
             return o;
         });
 
