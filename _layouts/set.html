@@ -1,0 +1,38 @@
+---
+layout: compress
+---
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+    <link rel="stylesheet" href="{{ "/css/score.css" | prepend: site.baseurl }}">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body>
+    {% include score/header.html %}
+    <main>
+        {{ content }}
+
+        {% assign set_path = page.path | remove: page.name %}
+
+        {% assign scores_sets = '' | split: '' %}
+        {% for html_page in site.html_pages %}
+            {% if html_page.layout == 'movement' and html_page.path contains set_path %}
+            {% assign scores_sets = scores_sets | push: html_page %}
+            {% endif %}
+        {% endfor %}
+
+        <ul>
+        {% for project in scores_sets %}
+            <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
+        {% endfor %}
+        </ul>
+    </main>
+    {% comment %}{% include score/footer.html %}{% endcomment %}
+    {% include score/modals.html %}
+    {% include score/scripts.html %}
+    <!-- <script src="script.js" charset="utf-8"></script> -->
+</body>
+</html>

@@ -20,6 +20,6 @@
 @mixin BravuraFont() {
     @font-face {
         font-family: Bravura;
-        src: url(../../fonts/Bravura.woff) format('woff');
+        src: url('/vectorscores/fonts/Bravura.woff') format('woff');
     }
 }

@@ -1,7 +1,14 @@
+{% assign scores_sets = '' | split: '' %}
+{% for html_page in site.html_pages %}
+    {% if html_page.layout == 'score' or html_page.layout == 'set' %}
+    {% assign scores_sets = scores_sets | push: html_page %}
+    {% endif %}
+{% endfor %}
+
 <h3>Published</h3>
 <ul>
-{% for project in site.html_pages %}
-    {% if project.layout == 'score' and project.status == 'published' %}
+{% for project in scores_sets %}
+    {% if project.status == 'published' %}
     <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
     {% endif %}
 {% endfor %}
@@ -9,8 +16,8 @@
 
 <h3>Works in progress</h3>
 <ul>
-{% for project in site.html_pages %}
-    {% if project.layout == 'score' and project.status == 'wip' %}
+{% for project in scores_sets %}
+    {% if project.status == 'wip' %}
     <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
     {% endif %}
 {% endfor %}
@@ -18,8 +25,8 @@
 
 <h3>Examples and tests</h3>
 <ul>
-{% for project in site.html_pages %}
-    {% if project.layout == 'score' and project.status == 'test' %}
+{% for project in scores_sets %}
+    {% if project.status == 'test' %}
     <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
     {% endif %}
 {% endfor %}
