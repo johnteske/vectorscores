@@ -26,9 +26,27 @@ VS.globject = function() {
             rangeType = rangeEnv.type.toLowerCase(),
             scaleY;
 
-        for (var t = 0; t < rangeEnv.times.length; t++) {
-            rangePoints.push({ "x": rangeEnv.times[t], "y": rangeEnv.hi[t] });
-            rangePoints.unshift({ "x": rangeEnv.times[t], "y": rangeEnv.lo[t] });
+        // old model, range points matching every time point
+        if (rangeEnv.times) {
+            for (var t = 0; t < rangeEnv.times.length; t++) {
+                rangePoints.push({ "x": rangeEnv.times[t], "y": rangeEnv.hi[t] });
+                rangePoints.unshift({ "x": rangeEnv.times[t], "y": rangeEnv.lo[t] });
+            }
+        // new model, range points paired with time
+        } else {
+            rangePoints = rangeEnv.lo.map(function(o) {
+                return {
+                    "x": o.time,
+                    "y": o.value
+                };
+            }).reverse();
+
+            rangePoints = rangePoints.concat(rangeEnv.hi.map(function(o) {
+                return {
+                    "x": o.time,
+                    "y": o.value
+                };
+            }));
         }
 
         if (rangeType === "midi") {
