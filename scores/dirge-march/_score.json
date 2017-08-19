@@ -1,0 +1,19 @@
+[
+    {
+        "measure": 1,
+        "globjects": [
+            {
+                "width": 180,
+                "rangeEnvelope": {
+                    "type": "normalized",
+                    "hi": [3, 3, 3, 2.5, 2, 1.6, 1.2, 0.8, 0.4, 0],
+                    "lo": [3, 2, 1, 0, -1, -2, -1.5, -1, -0.5, 0],
+                    "durations": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+                },
+                "pitches": [],
+                "dynamics": [],
+                "phraseTexture": []
+            }
+        ]
+    }
+]
