@@ -22,8 +22,12 @@ VS.globject = function() {
         }
 
         var line = d3.line()
-             .x(function(d) { return d.x * width; })
-             .y(function(d) { return (d.y / 127) * height; })
+             .x(function(d) {
+                 return d.x * width;
+             })
+             .y(function(d) {
+                 return (1 - (d.y / 127)) * height;
+             })
              .curve(d3.curveCardinalClosed.tension(0.8));
 
         selection.classed("globject", true);
