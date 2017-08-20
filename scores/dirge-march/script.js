@@ -25,17 +25,19 @@ var globjectContainer = main.append("g").attr("class", "globjects");
  */
 var rhythmContainer = main.append("g").attr("class", "rhythms");
 
+var rhythmWidth = 180;
+
 var rhythmCell = rhythmContainer.append("g")
-    .attr("transform", "translate(" + (center - 45) + "," + (center + 45) + ")");
+    .attr("transform", "translate(" + (center - (rhythmWidth * 0.5)) + "," + (center + 45) + ")");
 
 rhythmCell.append("rect")
-    .attr("width", 90)
+    .attr("width", rhythmWidth)
     .attr("height", 45)
     .attr("stroke", "#888")
     .attr("fill", "none");
 
 rhythmCell.append("text")
-    .attr("x", 45)
+    .attr("x", rhythmWidth * 0.5)
     .attr("y", 30)
     .attr("text-anchor", "middle");
 
