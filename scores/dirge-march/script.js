@@ -9,7 +9,7 @@ var width = 480,
     center = boxwidth * 0.5,
     debug = +VS.getQueryString("debug") === 1 || false;
 
-var noteheads = VS.dictionary.Bravura.durations.stemless;
+{% include_relative _rhythms.js %}
 
 {% include_relative _score.js %}
 
@@ -36,9 +36,8 @@ rhythmCell.append("rect")
 
 rhythmCell.append("text")
     .attr("x", 45)
-    .attr("y", 20)
-    .attr("text-anchor", "middle")
-    .text(noteheads["1"] + " " + noteheads["0.5"] + " " + noteheads["0.5"]);
+    .attr("y", 30)
+    .attr("text-anchor", "middle");
 
 /**
  *
@@ -58,6 +57,16 @@ function update(index) {
         .append("g")
         .each(globject)
         .each(centerGlobject);
+
+    rhythmContainer.selectAll("text")
+        .text(function() {
+            var randRhythm = VS.getItem(rhythms);
+            var symbols = randRhythm.split(",");
+
+            return symbols.map(function(s) {
+                return stemmed[s];
+            }).join("");
+        });
 }
 
 function centerGlobject(d) {
@@ -91,7 +100,7 @@ d3.select(window).on("resize", resize);
  * Populate score
  */
 for (var i = 0; i < score.length; i++) {
-    VS.score.add(i * (16000 + VS.getRandExcl(-2000, 2000)), update, [i]);
+    VS.score.add(i * 1000, update, [i]);
 }
 
 /**
