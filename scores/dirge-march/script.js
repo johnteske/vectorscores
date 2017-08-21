@@ -61,13 +61,23 @@ function update(index) {
         .each(centerGlobject);
 
     rhythmContainer.selectAll("text")
-        .text(function() {
+        .each(function() {
+            var selection = d3.select(this);
+
+            selection.selectAll("tspan").remove();
+
             var randRhythm = VS.getItem(rhythms);
             var symbols = randRhythm.split(",");
 
-            return symbols.map(function(s) {
-                return stemmed[s];
-            }).join("");
+            for (var i = 0; i < symbols.length; i++) {
+                var symbol = symbols[i],
+                    dy = symbol === "r0.5" || symbol === "r0.5." ? 0.4 : 0;
+
+                selection.append("tspan")
+                    .style("baseline-shift", dy + "em")
+                    // .attr("dy", thisDy + "em") // requires relative positioning of all following elements
+                    .text(stemmed[symbol]);
+            }
         });
 }
 
