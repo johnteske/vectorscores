@@ -8,7 +8,6 @@ var main = d3.select(".main"),
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
     topoData,
-    topoScore,
     score = {
         width: 8, // currently used in creation, not display
     },
@@ -47,7 +46,7 @@ main.style("width", 640 + "px")
 {% include_relative _score.js %}
 
 score.range = getScoreRange(topoData);
-topoData = createScoreFragment(topoData, score.width, 8, 8);
+topoData = createScoreFragment(topoData);
 
 /**
  * x, y from i of row-major order
@@ -59,7 +58,7 @@ function indexToCoordinates(i) {
     return {
         x: x,
         y: y
-    }
+    };
 }
 
 function coordinatesToIndex(x, y) {
@@ -75,13 +74,13 @@ topo.selectAll("text")
     .append("text")
     .attr("x", function(d, i) {
         var y = Math.floor(i / score.width);
-        var x = i - (y * score.width)
+        var x = i - (y * score.width);
         var xOffset = 0;
         return ((xOffset + (x - y)) * tileWidthHalf);
     })
     .attr("y", function(d, i) {
         var y = Math.floor(i / score.width);
-        var x = i - (y * score.width)
+        var x = i - (y * score.width);
         var yOffset = 0;
         return ((yOffset + (x + y)) * tileHeightHalf);
     })
@@ -102,7 +101,7 @@ function revealSymbols(selection, dur) {
         .attr("dy", function(d) {
             return d.revealed ? d.height * -5 : d.height * -2.5;
         })
-        .style("fill", function(d) {
+        .style("fill", function() {
             var fill = "black";
             // if (d.walker) {
             //     fill = "blue";
@@ -125,10 +124,10 @@ function moveWalker() {
     function checkNearby(x, y, dir) {
         if (x > -1 && x < score.width && y > -1 && y < score.width) {
             if (!topoData[coordinatesToIndex(x, y)].walked) {
-                notWalked.push(dir)
+                notWalked.push(dir);
             } else {
                 available.push(dir);
-            };
+            }
         }
     }
 
