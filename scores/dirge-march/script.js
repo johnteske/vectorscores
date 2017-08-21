@@ -7,7 +7,14 @@ var width = 480,
     margin = 20,
     boxwidth = width + (margin * 2),
     center = boxwidth * 0.5,
-    debug = +VS.getQueryString("debug") === 1 || false;
+    debug = +VS.getQueryString("debug") === 1 || false,
+    layout = {
+        perc: {
+            x: center - 90 - 22,
+            y1: center + 90,
+            y2: center + 150
+        },
+    };
 
 {% include_relative _rhythms.js %}
 
@@ -23,23 +30,34 @@ var globjectContainer = main.append("g").attr("class", "globjects");
 /**
  * Rhythm test
  */
-var rhythmContainer = main.append("g").attr("class", "rhythms");
+var percussionParts = main.append("g")
+    .attr("class", "percussion-parts");
 
-var rhythmWidth = 180;
+percussionParts.append("g")
+    .attr("transform", "translate(" + layout.perc.x + "," + layout.perc.y1 + ")");
 
-var rhythmCell = rhythmContainer.append("g")
-    .attr("transform", "translate(" + (center - (rhythmWidth * 0.5)) + "," + (center + 45) + ")");
+percussionParts.append("g")
+    .attr("transform", "translate(" + layout.perc.x + "," + layout.perc.y2 + ")");
 
-rhythmCell.append("rect")
-    .attr("width", rhythmWidth)
-    .attr("height", 45)
-    .attr("stroke", "#888")
-    .attr("fill", "none");
+percussionParts.selectAll("g").call(function(selection) {
+    selection.append("text")
+        .style("font-family", "Bravura")
+        .attr("y", 22)
+        .text("\ue069");
 
-rhythmCell.append("text")
-    .attr("x", rhythmWidth * 0.5)
-    .attr("y", 30)
-    .attr("text-anchor", "middle");
+    var rhythmCell = selection.append("g")
+        .attr("transform", "translate(" + 22 + "," + 0 + ")")
+        .attr("class", "rhythm");
+
+    rhythmCell.append("rect")
+        .attr("height", 45)
+        .attr("stroke", "#888")
+        .attr("fill", "none");
+
+    rhythmCell.append("text")
+        .attr("dx", 11)
+        .attr("y", 30);
+});
 
 /**
  *
@@ -60,11 +78,12 @@ function update(index) {
         .each(globject)
         .each(centerGlobject);
 
-    rhythmContainer.selectAll("text")
+    percussionParts.selectAll(".rhythm")
         .each(function() {
-            var selection = d3.select(this);
+            var selection = d3.select(this),
+                textEl = selection.select("text");
 
-            selection.selectAll("tspan").remove();
+            textEl.selectAll("tspan").remove();
 
             var randRhythm = VS.getItem(rhythms);
             var symbols = randRhythm.split(",");
@@ -73,11 +92,14 @@ function update(index) {
                 var symbol = symbols[i],
                     dy = symbol === "r0.5" || symbol === "r0.5." ? 0.4 : 0;
 
-                selection.append("tspan")
+                textEl.append("tspan")
                     .style("baseline-shift", dy + "em")
-                    // .attr("dy", thisDy + "em") // requires relative positioning of all following elements
                     .text(stemmed[symbol]);
             }
+
+            var textWidth = textEl.node().getBBox().width + 22;
+
+            selection.select("rect").attr("width", textWidth);
         });
 }
 
@@ -118,7 +140,9 @@ for (var i = 0; i < score.length; i++) {
 /**
  * Initialize score
  */
-update(0);
+d3.select(window).on("load", function () {
+    update(0);
+});
 
 /**
  * Score controls
