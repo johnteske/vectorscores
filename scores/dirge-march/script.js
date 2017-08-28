@@ -33,10 +33,10 @@ var globjectContainer = main.append("g").attr("class", "globjects");
 var percussionParts = main.append("g")
     .attr("class", "percussion-parts");
 
-percussionParts.append("g")
+var perc1 = percussionParts.append("g")
     .attr("transform", "translate(" + layout.perc.x + "," + layout.perc.y1 + ")");
 
-percussionParts.append("g")
+var perc2 = percussionParts.append("g")
     .attr("transform", "translate(" + layout.perc.x + "," + layout.perc.y2 + ")");
 
 percussionParts.selectAll("g").call(function(selection) {
@@ -55,6 +55,19 @@ percussionParts.selectAll("g").call(function(selection) {
         .attr("fill", "none");
 
     rhythmCell.append("text")
+        .attr("dx", 11)
+        .attr("y", 30);
+
+    var rhythmCell2 = selection.append("g")
+        .attr("transform", "translate(" + 22 + "," + 0 + ")")
+        .attr("class", "rhythm");
+
+    rhythmCell2.append("rect")
+        .attr("height", 45)
+        .attr("stroke", "#888")
+        .attr("fill", "none");
+
+    rhythmCell2.append("text")
         .attr("dx", 11)
         .attr("y", 30);
 });
@@ -97,10 +110,31 @@ function update(index) {
                     .text(stemmed[symbol]);
             }
 
-            var textWidth = textEl.node().getBBox().width + 22;
+            var textWidth = textEl.node().getBBox().width;
+            // TODO set d.width
 
-            selection.select("rect").attr("width", textWidth);
+            selection.select("rect").attr("width", textWidth + 22);
         });
+
+    function spacePerc(d, i) {
+        var selection = d3.select(this);
+
+        var width = selection.node().getBBox().width;
+        var xOffset = percPos + (i * 11);
+        percPos += width;
+        // TODO get d.width
+
+        selection.attr("transform", "translate(" + (22 + xOffset)+ "," + 0 + ")");
+    }
+
+    var percPos = 0;
+    perc1.selectAll(".rhythm")
+        .each(spacePerc);
+
+    percPos = 0;
+    perc2.selectAll(".rhythm")
+        .each(spacePerc);
+
 }
 
 function centerGlobject(d) {
