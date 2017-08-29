@@ -35,6 +35,21 @@ makePropertyObj("duration", Object.keys(durations));
 makePropertyObj("dynamic", Object.keys(dynamics));
 makePropertyObj("pitchClasses", [[0, 3, 7], [0, 4, 7]]);
 
+function transformCell(selection, position, selected) {
+    var opacity = (typeof selected !== "undefined" && !selected) ? 0 : 1;
+
+    var translateFn;
+    if (selected) {
+        translateFn = translateSelectedCell;
+    } else {
+        translateFn = position === "top" ? translateTopCell : translateBottomCell;
+    }
+
+    selection.transition().duration(300)
+        .style("opacity", opacity)
+        .attr("transform", translateFn);
+}
+
 function updateChoices() {
     var PC = VS.pitchClass,
         choices = score.choices;
@@ -48,11 +63,7 @@ function updateChoices() {
         return "{" + PC.format(set) + "}";
     }
 
-    score.topGroup
-        .transition()
-        .duration(300)
-        .style("opacity", 1)
-        .attr("transform", translateTopCell);
+    score.topGroup.call(transformCell, "top");
     score.topGroup.select(".duration")
         .text(durations[choices.top.duration]);
     score.topGroup.select(".dynamic")
@@ -60,11 +71,7 @@ function updateChoices() {
     score.topGroup.select(".pitch-classes")
         .text(pcText(choices.top.pitchClasses));
 
-    score.bottomGroup
-        .transition()
-        .duration(300)
-        .style("opacity", 1)
-        .attr("transform", translateBottomCell);
+    score.bottomGroup.call(transformCell, "bottom");
     score.bottomGroup.select(".duration")
         .text(durations[choices.bottom.duration]);
     score.bottomGroup.select(".dynamic")
@@ -81,31 +88,11 @@ function selectCell(position) {
         score.selected = true; // disable selection until new choices
 
         // update symbol weights
-        if (position) {
-            var choice = score.choices[position];
-            updateWeights(choice);
-        }
+        var choice = score.choices[position];
+        updateWeights(choice);
 
-        if (position === "top") {
-            score.topGroup
-                .transition()
-                .duration(300)
-                .attr("transform", translateSelectedCell);
-            score.bottomGroup
-                .transition()
-                .duration(300)
-                .style("opacity", 0);
-        } else {
-            score.bottomGroup
-                .transition()
-                .duration(300)
-                .attr("transform", translateSelectedCell);
-            score.topGroup
-                .transition()
-                .duration(300)
-                .style("opacity", 0);
-        }
-
+        score.topGroup.call(transformCell, "bottom", position === "top");
+        score.bottomGroup.call(transformCell, "bottom", position === "bottom");
     }
 }
 
@@ -136,12 +123,12 @@ score.svg = d3.select(".main")
     .attr("height", score.height);
 
 score.topGroup = score.svg.append("g")
-    .attr("transform", translateTopCell)
+    .attr("transform", translateSelectedCell)
     .on("click", function() {
         selectCell("top");
     });
 score.bottomGroup = score.svg.append("g")
-    .attr("transform", translateBottomCell)
+    .attr("transform", translateSelectedCell)
     .on("click", function() {
         selectCell("bottom");
     });
@@ -181,15 +168,11 @@ score.bottomGroup.append("text")
 function clearChoices() {
     // TODO also clear choice weights
 
-    score.topGroup
-        .attr("transform", translateTopCell)
-        .style("opacity", 1);
+    score.topGroup.call(transformCell, "top");
     score.topGroup.selectAll(".bravura").text("");
     score.topGroup.select(".pitch-classes").text("a");
 
-    score.bottomGroup
-        .attr("transform", translateBottomCell)
-        .style("opacity", 1);
+    score.bottomGroup.call(transformCell, "bottom");
     score.bottomGroup.selectAll(".bravura").text("");
     score.bottomGroup.select(".pitch-classes").text("b");
 }
