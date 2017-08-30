@@ -5,6 +5,15 @@ require 'em-websocket'
 EM.run {
   @clients = []
 
+  # Update all clients with number of total connections
+  def sendNConnections(cid)
+      puts "#{@clients.length} connections open"
+      @clients.each do |socket|
+        socket.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connections\", \"connections\":\"#{@clients.length}\" }"
+      end
+
+  end
+
   EM::WebSocket.start(:host => '0.0.0.0', :port => '4001') do |ws|
     ws.onopen { |handshake|
       puts "WebSocket connection open"
@@ -12,17 +21,14 @@ EM.run {
       puts "#{cid} connected to #{handshake.path}."
       @clients << ws
       ws.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connected\" }"
-      puts "#{@clients.length} connections open"
-      # Update all clients with number of total connections
-      @clients.each do |socket|
-        socket.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connections\", \"connections\":\"#{@clients.length}\" }"
-      end
+      sendNConnections(cid)
     }
 
     ws.onclose {
       puts "Closed."
       ws.send "Closed."
       @clients.delete ws
+      sendNConnections("null")
     }
 
     ws.onmessage { |msg|
