@@ -9,7 +9,9 @@ var score = {
     },
     nEvents: 8,
     interval: 10000,
-    weightScale: 5 // TODO increase over time/score pointer?
+    // TODO increase over time/score pointer?
+    // TODO scale according to number of choices per param?
+    weightScale: 5
 };
 
 score.center = {
@@ -35,7 +37,7 @@ var dynamics = VS.dictionary.Bravura.dynamics;
 
 params.add("duration", Object.keys(durations));
 params.add("dynamic", Object.keys(dynamics));
-params.add("pitchClasses", [[0, 3, 7], [0, 4, 7]]);
+params.add("pitchClasses", [[0, 1, 2], [0, 4, 7]]);
 
 function transformCell(selection, position, selected) {
     var opacity = (typeof selected !== "undefined" && !selected) ? 0 : 1;
@@ -91,13 +93,29 @@ function selectCell(position) {
 
         // update symbol weights
         var choice = score.choices[position];
-        params.updateWeights(choice);
+        params.updateWeights(choice, score.partWeight);
 
         score.topGroup.call(transformCell, "bottom", position === "top");
         score.bottomGroup.call(transformCell, "bottom", position === "bottom");
+
+        VS.WebSocket.send({
+            type: "choice",
+            content: choice
+        });
+
+        debugChoices();
     }
 }
 
+debugChoices = (function () {
+    var debug = VS.getQueryString("debug") == 1 || false,
+        el = document.getElementsByClassName("debug")[0];
+
+    return debug ? function() {
+        el.innerHTML = "weight :" + score.partWeight + "<br />" +
+            params.getWeights().split("\n").join("<br />");
+    } : VS.noop;
+})();
 
 /**
  * Create cells
@@ -198,8 +216,13 @@ VS.score.stepCallback = function () {
 VS.WebSocket.messageCallback = function(data) {
     if (data.type === "ws" && data.content === "connections") {
         score.partWeight = (1 / data.connections) * score.weightScale;
+        debugChoices();
+    } else if (data.type === "choice" && data.cid !== VS.WebSocket.cid) {
+        params.updateWeights(data.content, score.partWeight);
+        debugChoices();
     }
 };
+
 VS.WebSocket.connect();
 
 /**

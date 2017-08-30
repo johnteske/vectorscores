@@ -35,12 +35,25 @@ var params = (function() {
         return choice;
     };
 
-    params.updateWeights = function(choice) {
+    params.updateWeights = function(choice, increment) {
         for (var i = 0; i < params.keys.length; i++) {
             var key = params.keys[i];
             var term = params.terms[key];
-            term.weights[term.keys.indexOf(choice[key])] += score.partWeight;
+            term.weights[term.keys.indexOf(choice[key])] += increment;
         }
+    };
+
+    params.getWeights = function() {
+        var weights = "";
+
+        for (var i = 0; i < params.keys.length; i++) {
+            var key = params.keys[i];
+            var term = params.terms[key];
+
+            weights += key + ": " + term.weights + "\n";
+        }
+
+        return weights;
     };
 
     return params;
