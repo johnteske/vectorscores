@@ -112,13 +112,5 @@ VS.WebSocket = (function () {
         }
     };
 
-    /**
-     * Use to reload all scores
-     * TODO make available instead as command for websocket server
-     */
-    ws.reload = function (data) {
-        ws.send({ type: "ws", content: "reload" });
-    };
-
     return ws;
 })();
