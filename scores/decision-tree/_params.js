@@ -1,0 +1,47 @@
+// TODO rename terms
+var params = (function() {
+    var params = {
+        keys: [],
+        terms: []
+    };
+
+    params.add = function(key, keys) {
+        var property = {
+            keys: [],
+            weights: []
+        };
+
+        for (var i = 0; i < keys.length; i++) {
+            var k = keys[i];
+
+            property.keys.push(k.toString());
+            property.weights.push(1);
+        }
+
+        params.keys.push(key);
+        params.terms[key] = property;
+
+        return property;
+    };
+
+    params.createChoice = function() {
+        var choice = {};
+
+        for (var i = 0; i < params.keys.length; i++) {
+            var key = params.keys[i];
+            choice[key] = VS.getWeightedItem(params.terms[key].keys, params.terms[key].weights);
+        }
+
+        return choice;
+    };
+
+    params.updateWeights = function(choice) {
+        for (var i = 0; i < params.keys.length; i++) {
+            var key = params.keys[i];
+            var term = params.terms[key];
+            term.weights[term.keys.indexOf(choice[key])] += score.partWeight;
+        }
+    };
+
+    return params;
+})();

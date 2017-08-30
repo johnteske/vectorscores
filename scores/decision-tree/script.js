@@ -26,14 +26,14 @@ score.cell.halfSize = score.cell.size * 0.5;
  * Symbols and choice
  */
 
-{% include_relative _properties.js %}
+{% include_relative _params.js %}
 
 var durations = VS.dictionary.Bravura.durations.stemless;
 var dynamics = VS.dictionary.Bravura.dynamics;
 
-makePropertyObj("duration", Object.keys(durations));
-makePropertyObj("dynamic", Object.keys(dynamics));
-makePropertyObj("pitchClasses", [[0, 3, 7], [0, 4, 7]]);
+params.add("duration", Object.keys(durations));
+params.add("dynamic", Object.keys(dynamics));
+params.add("pitchClasses", [[0, 3, 7], [0, 4, 7]]);
 
 function transformCell(selection, position, selected) {
     var opacity = (typeof selected !== "undefined" && !selected) ? 0 : 1;
@@ -54,8 +54,8 @@ function updateChoices() {
     var PC = VS.pitchClass,
         choices = score.choices;
 
-    choices.top = createChoice();
-    choices.bottom = createChoice();
+    choices.top = params.createChoice();
+    choices.bottom = params.createChoice();
 
     function pcText(set) {
         set = set.split(",");
@@ -89,7 +89,7 @@ function selectCell(position) {
 
         // update symbol weights
         var choice = score.choices[position];
-        updateWeights(choice);
+        params.updateWeights(choice);
 
         score.topGroup.call(transformCell, "bottom", position === "top");
         score.bottomGroup.call(transformCell, "bottom", position === "bottom");
