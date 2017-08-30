@@ -7,13 +7,10 @@ var score = {
     cell: {
         size: 90
     },
-    choices: {},
-    selected: false,
+    nEvents: 8,
     interval: 10000,
     weightScale: 5 // TODO increase over time/score pointer?
 };
-
-score.partWeight = score.weightScale; // init
 
 score.center = {
     x: score.width * 0.5,
@@ -21,6 +18,11 @@ score.center = {
 };
 
 score.cell.halfSize = score.cell.size * 0.5;
+
+score.partWeight = score.weightScale; // init
+
+score.choices = {};
+// score.selected = false;
 
 /**
  * Symbols and choice
@@ -179,7 +181,7 @@ function clearChoices() {
 
 clearChoices();
 
-for (var i = 0; i < 9; i++) {
+for (var i = 0; i < score.nEvents + 1; i++) {
     VS.score.add(i * score.interval, updateChoices, []);
 }
 
