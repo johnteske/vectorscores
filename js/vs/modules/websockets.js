@@ -65,6 +65,8 @@ VS.WebSocket = (function () {
                         ws.cid = data.cid;
                     } else if (data.type === "ws" && data.content === "connections") {
                         log("Open, " + data.connections + " connection(s) total");
+                    } else if (data.type === "ws" && data.content === "reload") {
+                        window.location.reload(true);
                     }
 
                     // if not sent by self
@@ -108,6 +110,14 @@ VS.WebSocket = (function () {
         } catch (err) {
             log("Send error: " + err);
         }
+    };
+
+    /**
+     * Use to reload all scores
+     * TODO make available instead as command for websocket server
+     */
+    ws.reload = function (data) {
+        ws.send({ type: "ws", content: "reload" });
     };
 
     return ws;
