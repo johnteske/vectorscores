@@ -69,9 +69,9 @@ glob.move = function(dur, type) {
         .attr("transform", function() {
             var point = newPoint();
             if (type === "chord") {
-                point.y = 0;
+                point.x = 0; // VS.getItem([0, 40, -40]); // multiple chords
             } else if (type === "rhythm") {
-                point.x = 0;
+                point.y = 0;
             }
             return "translate(" + point.x + ", " + point.y + ")";
         });
