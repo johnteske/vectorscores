@@ -52,7 +52,7 @@ glob.move = function(dur) {
         .attr("x", canvas.center)
         .attr("y", canvas.width - textoffset)
         .text(function() {
-            return "[" + pcSet.join(", ") + "]";
+            return "{" + pcSet.join(", ") + "}";
         })
         // fade in if needed
         .transition().duration(transitionTime.short)

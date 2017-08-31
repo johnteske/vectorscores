@@ -26,7 +26,7 @@ Per each note in a phrase or single attack, a performer may choose a quarter-ton
 
 For example, if the pitch center is
 D<i class="symbol">&#xe261;</i> and the given range is
-<i class="symbol">[ &#xe280; – &#xe262; ]</i>,
+<i class="symbol">[ &#xe280;, &#xe262; ]</i>,
 a musician may choose from
 C<i class="symbol">&#xe282;</i>/D<i class="symbol">&#xe280;</i>,
 D<i class="symbol">&#xe261;</i>,
