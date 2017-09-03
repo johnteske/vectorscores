@@ -1,6 +1,7 @@
 ---
 layout: compress-js
 ---
+
 VS.dictionary = VS.dictionary || {};
 
 VS.dictionary.Bravura = (function() {
@@ -59,7 +60,9 @@ VS.dictionary.Bravura = (function() {
         "f":    "\ue522",
         "ff":   "\ue52f",
         "fff":  "\ue530",
-        ">":    "\ue53f" // hairpin
+        "<":    "\ue53e",
+        ">":    "\ue53f"
+        // "<>":   "\ue540" // hairpin
     };
 
     return dict;
