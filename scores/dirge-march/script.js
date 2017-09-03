@@ -91,30 +91,34 @@ function update(index) {
         .each(globject)
         .each(centerGlobject);
 
-    percussionParts.selectAll(".rhythm")
-        .each(function() {
-            var selection = d3.select(this),
-                textEl = selection.select("text");
+    function createRhythm() {
+        var selection = d3.select(this),
+            textEl = selection.select("text");
 
-            textEl.selectAll("tspan").remove();
+        textEl.selectAll("tspan").remove();
 
-            var randRhythm = VS.getItem(rhythms);
-            var symbols = randRhythm.split(",");
+        var randRhythm = VS.getItem(rhythms.filter(function(r) {
+            return r !== percRhythm; // prevent duplicates within each part
+        }));
 
-            for (var i = 0; i < symbols.length; i++) {
-                var symbol = symbols[i],
-                    dy = symbol === "r0.5" || symbol === "r0.5." ? 0.4 : 0;
+        percRhythm = randRhythm;
 
-                textEl.append("tspan")
-                    .style("baseline-shift", dy + "em")
-                    .text(stemmed[symbol]);
-            }
+        var symbols = randRhythm.split(",");
 
-            var textWidth = textEl.node().getBBox().width;
-            // TODO set d.width
+        for (var i = 0; i < symbols.length; i++) {
+            var symbol = symbols[i],
+                dy = symbol === "r0.5" || symbol === "r0.5." ? 0.4 : 0;
 
-            selection.select("rect").attr("width", textWidth + 22);
-        });
+            textEl.append("tspan")
+                .style("baseline-shift", dy + "em")
+                .text(stemmed[symbol]);
+        }
+
+        var textWidth = textEl.node().getBBox().width;
+        // TODO set d.width
+
+        selection.select("rect").attr("width", textWidth + 22);
+    }
 
     function spacePerc(d, i) {
         var selection = d3.select(this);
@@ -128,11 +132,15 @@ function update(index) {
     }
 
     var percPos = 0;
+    var percRhythm = "";
     perc1.selectAll(".rhythm")
+        .each(createRhythm)
         .each(spacePerc);
 
     percPos = 0;
+    percRhythm = "";
     perc2.selectAll(".rhythm")
+        .each(createRhythm)
         .each(spacePerc);
 
 }
