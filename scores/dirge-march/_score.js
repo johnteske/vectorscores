@@ -1,40 +1,40 @@
-var score = {% include_relative _phrases.json %};
+/**
+ * TODO proto globjects are combined into phrases, not directly used
+ */
+var globjects = {% include_relative _globjects.json %};
 
-score = score.map(function(mm) {
-    for (var i = 0; i < mm.globjects.length; i++) {
-        var globject = mm.globjects[i];
+var score = globjects.map(function(globject) {
+    var highs = globject.rangeEnvelope.hi,
+        lows = globject.rangeEnvelope.lo;
 
-        var highs = globject.rangeEnvelope.hi,
-            lows = globject.rangeEnvelope.lo;
+    // TODO hi and lo totalDurations should match
+    var totalDuration = highs.reduce(function(a, o) {
+        return a + o.duration;
+    }, 0);
 
-        // TODO hi and lo totalDurations should match
-        var totalDuration = highs.reduce(function(a, o) {
-            return a + o.duration;
-        }, 0);
+    var currentTime;
 
-        var currentTime;
+    /**
+     * Normalize range values
+     */
+    var extent = d3.extent(highs.concat(lows), function(d) { return d.value; });
 
-        /**
-         * Normalize range values
-         */
-        var extent = d3.extent(highs.concat(lows), function(d) { return d.value; });
+    currentTime = 0;
+    globject.rangeEnvelope.hi = highs.map(function(o) {
+        o.value = VS.normalize(o.value, extent[0], extent[1]);
+        o.time = currentTime;
+        currentTime += o.duration / totalDuration;
+        return o;
+    });
 
-        currentTime = 0;
-        globject.rangeEnvelope.hi = highs.map(function(o) {
-            o.value = VS.normalize(o.value, extent[0], extent[1]);
-            o.time = currentTime;
-            currentTime += o.duration / totalDuration;
-            return o;
-        });
+    currentTime = 0;
+    globject.rangeEnvelope.lo = lows.map(function(o) {
+        o.value = VS.normalize(o.value, extent[0], extent[1]);
+        o.time = currentTime;
+        currentTime += o.duration / totalDuration;
+        return o;
+    });
 
-        currentTime = 0;
-        globject.rangeEnvelope.lo = lows.map(function(o) {
-            o.value = VS.normalize(o.value, extent[0], extent[1]);
-            o.time = currentTime;
-            currentTime += o.duration / totalDuration;
-            return o;
-        });
-    }
-
-    return mm.globjects;
+    return globject;
 });
+console.log(score);

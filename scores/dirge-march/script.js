@@ -78,7 +78,7 @@ function update(index) {
         .height(h);
 
     globjectContainer.selectAll(".globject")
-        .data(score[index])
+        .data([score[index]]) // phrase as one globject currently
         .enter()
         .append("g")
         .each(globject)
