@@ -3,7 +3,7 @@
         "phrase": 1,
         "globjects": [
             {
-                "width": 180,
+                "width": 240,
                 "rangeEnvelope": {
                     "type": "normalized",
                     "hi": [
@@ -30,7 +30,7 @@
         "phrase": 2,
         "globjects": [
             {
-                "width": 180,
+                "width": 240,
                 "rangeEnvelope": {
                     "type": "normalized",
                     "hi": [
@@ -56,7 +56,7 @@
         "phrase": 3,
         "globjects": [
             {
-                "width": 180,
+                "width": 240,
                 "rangeEnvelope": {
                     "type": "normalized",
                     "hi": [
@@ -82,7 +82,7 @@
         "phrase": 4,
         "globjects": [
             {
-                "width": 180,
+                "width": 240,
                 "rangeEnvelope": {
                     "type": "normalized",
                     "hi": [
@@ -111,7 +111,7 @@
         "phrase": 5,
         "globjects": [
             {
-                "width": 180,
+                "width": 240,
                 "rangeEnvelope": {
                     "type": "normalized",
                     "hi": [

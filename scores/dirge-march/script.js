@@ -10,9 +10,9 @@ var width = 480,
     debug = +VS.getQueryString("debug") === 1 || false,
     layout = {
         perc: {
-            x: center - 90 - 22,
-            y1: center + 90,
-            y2: center + 150
+            x: 60, // center - 90 - 22,
+            y1: center,
+            y2: center + 60
         },
     };
 
@@ -45,8 +45,8 @@ percussionParts.selectAll("g").call(function(selection) {
         .attr("y", 22)
         .text("\ue069");
 
-    function createRhythmCell(_) {
-        var cell = _.append("g")
+    function createRhythmCell(g) {
+        var cell = g.append("g")
             .attr("transform", "translate(" + 22 + "," + 0 + ")")
             .attr("class", "rhythm");
 
@@ -141,7 +141,8 @@ function update(index) {
 function centerGlobject(d) {
     d3.select(this).attr("transform", "translate(" +
         (center - (d.width * 0.5)) + "," +
-        (center - (120 * 0.5)) + ")");
+        120 + ")");
+        // (center - (120 * 0.5)) + ")");
 }
 
 
