@@ -175,7 +175,9 @@ score.svg = d3.select(".main")
     .attr("height", score.height);
 
 function createCell(selection) {
-    selection.attr("transform", translateSelectedCell);
+    selection
+        .attr("transform", translateSelectedCell)
+        .style("opacity", 0);
 
     selection.append("rect")
         .attr("class", "phrase-container")
