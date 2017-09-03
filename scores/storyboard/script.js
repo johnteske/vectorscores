@@ -62,7 +62,7 @@ function makeCard(selection) {
             var pcSet = d.pcSet.map(function(pc) {
                 return VS.pitchClass.format(pc, scoreSettings.pcFormat);
             });
-            return "[" + pcSet.join(", ") + "]";
+            return "{" + pcSet.join(", ") + "}";
         })
         .classed("pitch-class-set", 1);
 

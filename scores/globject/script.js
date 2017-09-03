@@ -83,7 +83,7 @@ function update(index) {
                 var pcSet = d.classes.map(function(pc) {
                     return VS.pitchClass.format(pc);
                 });
-                return "[" + pcSet.join(", ") + "]";
+                return "{" + pcSet.join(", ") + "}";
             });
 
         selection.append("g")

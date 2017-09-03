@@ -65,6 +65,8 @@ VS.WebSocket = (function () {
                         ws.cid = data.cid;
                     } else if (data.type === "ws" && data.content === "connections") {
                         log("Open, " + data.connections + " connection(s) total");
+                    } else if (data.type === "ws" && data.content === "reload") {
+                        window.location.reload(true);
                     }
 
                     // if not sent by self

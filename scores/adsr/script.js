@@ -280,7 +280,7 @@ for (p = 0; p < numParts; p++) {
                 pitchDisplay = function() {
                     var lo = thisPhrase.pitch.low,
                         hi = thisPhrase.pitch.high;
-                    return "\uec82 " + dict.acc[lo] + ( (lo !== hi) ? (" \uf479 " + dict.acc[hi]) : "" ) + " \uec83"; // tenuto as endash
+                    return "\uec82 " + dict.acc[lo] + ( (lo !== hi) ? ("\u2009,\u2002" + dict.acc[hi]) : "" ) + " \uec83"; // tenuto as endash
                 };
                 pitchDisplayClass = "pitch-range";
             } else {
@@ -289,7 +289,7 @@ for (p = 0; p < numParts; p++) {
                         hi = thisPhrase.pitch.high,
                         range = lo;
                     if (lo !== hi) {
-                        range += " – ";
+                        range += ", ";
                         range += (hi === 0) ? hi : "+" + hi;
                     }
                     return "[" + range + "]";

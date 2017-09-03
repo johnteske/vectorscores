@@ -1,7 +1,6 @@
 # *vectorscores*
 
-A series of new compositions built on the web.
-The works are algorithmically generated so that each score and each performance is unique while still being shaped by the composition's parameters.
+<span class="vectorscores">*vectorscores*</span> is a new series of dynamic compositions. The scores are written algorithmically so the works as a whole are crafted but the details are unique for each performance.
 
 ## Advantages over traditional scores
 - online access to scores via web browser

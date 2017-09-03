@@ -7,13 +7,12 @@ var score = {
     cell: {
         size: 90
     },
-    choices: {},
-    selected: false,
+    nEvents: 8,
     interval: 10000,
-    weightScale: 5 // TODO increase over time/score pointer?
+    // TODO increase over time/score pointer?
+    // TODO scale according to number of choices per param?
+    weightScale: 5
 };
-
-score.partWeight = score.weightScale; // init
 
 score.center = {
     x: score.width * 0.5,
@@ -22,25 +21,48 @@ score.center = {
 
 score.cell.halfSize = score.cell.size * 0.5;
 
+score.partWeight = score.weightScale; // init
+
+score.choices = {};
+score.selected = false;
+
 /**
  * Symbols and choice
  */
 
-{% include_relative _properties.js %}
+{% include_relative _params.js %}
 
 var durations = VS.dictionary.Bravura.durations.stemless;
 var dynamics = VS.dictionary.Bravura.dynamics;
 
-makePropertyObj("duration", Object.keys(durations));
-makePropertyObj("dynamic", Object.keys(dynamics));
-makePropertyObj("pitchClasses", [[0, 3, 7], [0, 4, 7]]);
+params.add("duration", Object.keys(durations));
+params.add("dynamic", Object.keys(dynamics));
+params.add("pitchClasses", [[0, 1, 2], [0, 4, 7]]);
+// params.add("intervalClasses", [1, 2, 3, 4, 5, 6]);
+
+function transformCell(selection, position, selected) {
+    var opacity = (typeof selected !== "undefined" && !selected) ? 0 : 1;
+
+    var translateFn;
+    if (selected) {
+        translateFn = translateSelectedCell;
+    } else {
+        translateFn = position === "top" ? translateTopCell : translateBottomCell;
+    }
+
+    selection.transition().duration(300)
+        .style("opacity", opacity)
+        .attr("transform", translateFn);
+        // .transition()
+        // .style("cursor", selected ? "default" : "pointer");
+}
 
 function updateChoices() {
     var PC = VS.pitchClass,
         choices = score.choices;
 
-    choices.top = createChoice();
-    choices.bottom = createChoice();
+    choices.top = params.createChoice();
+    choices.bottom = params.createChoice();
 
     function pcText(set) {
         set = set.split(",");
@@ -48,11 +70,7 @@ function updateChoices() {
         return "{" + PC.format(set) + "}";
     }
 
-    score.topGroup
-        .transition()
-        .duration(300)
-        .style("opacity", 1)
-        .attr("transform", translateTopCell);
+    score.topGroup.call(transformCell, "top");
     score.topGroup.select(".duration")
         .text(durations[choices.top.duration]);
     score.topGroup.select(".dynamic")
@@ -60,11 +78,7 @@ function updateChoices() {
     score.topGroup.select(".pitch-classes")
         .text(pcText(choices.top.pitchClasses));
 
-    score.bottomGroup
-        .transition()
-        .duration(300)
-        .style("opacity", 1)
-        .attr("transform", translateBottomCell);
+    score.bottomGroup.call(transformCell, "bottom");
     score.bottomGroup.select(".duration")
         .text(durations[choices.bottom.duration]);
     score.bottomGroup.select(".dynamic")
@@ -81,34 +95,30 @@ function selectCell(position) {
         score.selected = true; // disable selection until new choices
 
         // update symbol weights
-        if (position) {
-            var choice = score.choices[position];
-            updateWeights(choice);
-        }
+        var choice = score.choices[position];
+        params.updateWeights(choice, score.partWeight);
 
-        if (position === "top") {
-            score.topGroup
-                .transition()
-                .duration(300)
-                .attr("transform", translateSelectedCell);
-            score.bottomGroup
-                .transition()
-                .duration(300)
-                .style("opacity", 0);
-        } else {
-            score.bottomGroup
-                .transition()
-                .duration(300)
-                .attr("transform", translateSelectedCell);
-            score.topGroup
-                .transition()
-                .duration(300)
-                .style("opacity", 0);
-        }
+        score.topGroup.call(transformCell, "bottom", position === "top");
+        score.bottomGroup.call(transformCell, "bottom", position === "bottom");
 
+        VS.WebSocket.send({
+            type: "choice",
+            content: choice
+        });
+
+        debugChoices();
     }
 }
 
+var debugChoices = (function () {
+    var debug = VS.getQueryString("debug") == 1 || false,
+        el = document.getElementsByClassName("debug")[0];
+
+    return debug ? function() {
+        el.innerHTML = "weight: " + score.partWeight + "<br />" +
+            params.getWeights().split("\n").join("<br />");
+    } : VS.noop;
+})();
 
 /**
  * Create cells
@@ -136,12 +146,12 @@ score.svg = d3.select(".main")
     .attr("height", score.height);
 
 score.topGroup = score.svg.append("g")
-    .attr("transform", translateTopCell)
+    .attr("transform", translateSelectedCell)
     .on("click", function() {
         selectCell("top");
     });
 score.bottomGroup = score.svg.append("g")
-    .attr("transform", translateBottomCell)
+    .attr("transform", translateSelectedCell)
     .on("click", function() {
         selectCell("bottom");
     });
@@ -181,59 +191,19 @@ score.bottomGroup.append("text")
 function clearChoices() {
     // TODO also clear choice weights
 
-    score.topGroup
-        .attr("transform", translateTopCell)
-        .style("opacity", 1);
+    score.topGroup.call(transformCell, "top");
     score.topGroup.selectAll(".bravura").text("");
     score.topGroup.select(".pitch-classes").text("a");
 
-    score.bottomGroup
-        .attr("transform", translateBottomCell)
-        .style("opacity", 1);
+    score.bottomGroup.call(transformCell, "bottom");
     score.bottomGroup.selectAll(".bravura").text("");
     score.bottomGroup.select(".pitch-classes").text("b");
 }
 
 clearChoices();
 
-for (var i = 0; i < 9; i++) {
+for (var i = 0; i < score.nEvents + 1; i++) {
     VS.score.add(i * score.interval, updateChoices, []);
 }
 
-VS.score.stopCallback = clearChoices;
-
-VS.score.stepCallback = function () {
-    if (VS.score.pointer === 0) {
-        clearChoices();
-    } else if (VS.score.pointer < VS.score.getLength() - 1) {
-        updateChoices();
-    }
-};
-
-VS.WebSocket.messageCallback = function(data) {
-    if (data.type === "ws" && data.content === "connections") {
-        score.partWeight = (1 / data.connections) * score.weightScale;
-    }
-};
-VS.WebSocket.connect();
-
-/**
- * Keyboard control
- */
-
-function keydownListener(event) {
-    if (event.defaultPrevented) { return; }
-
-    switch (event.keyCode) {
-    case 38:
-        selectCell("top");
-        break;
-    case 40:
-        selectCell("bottom");
-        break;
-    default:
-        return;
-    }
-    event.preventDefault();
-}
-window.addEventListener("keydown", keydownListener, true);
+{% include_relative _controls.js %}

@@ -1,9 +1,33 @@
+# TODO use paths for each piece
+
 require 'em-websocket'
 
-# TODO use paths for each piece
+module MyKeyboardHandler
+  include EM::Protocols::LineText2
+
+  def initialize(c)
+    @clients = c
+  end
+
+  def receive_line data
+      if data =~ /reload/i
+          @clients.each do |socket|
+            socket.send "{ \"type\":\"ws\", \"content\":\"reload\" }"
+          end
+      end
+  end
+end
 
 EM.run {
   @clients = []
+
+  # Update all clients with number of total connections
+  def sendNConnections(cid = nil)
+      puts "#{@clients.length} connections open"
+      @clients.each do |socket|
+        socket.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connections\", \"connections\":\"#{@clients.length}\" }"
+      end
+  end
 
   EM::WebSocket.start(:host => '0.0.0.0', :port => '4001') do |ws|
     ws.onopen { |handshake|
@@ -12,17 +36,14 @@ EM.run {
       puts "#{cid} connected to #{handshake.path}."
       @clients << ws
       ws.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connected\" }"
-      puts "#{@clients.length} connections open"
-      # Update all clients with number of total connections
-      @clients.each do |socket|
-        socket.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connections\", \"connections\":\"#{@clients.length}\" }"
-      end
+      sendNConnections(cid)
     }
 
     ws.onclose {
       puts "Closed."
       ws.send "Closed."
       @clients.delete ws
+      sendNConnections()
     }
 
     ws.onmessage { |msg|
@@ -32,6 +53,8 @@ EM.run {
       end
     }
   end
+
+  EM.open_keyboard(MyKeyboardHandler, @clients)
 
   puts "WebSocket server running... press ctrl-c to stop."
 }

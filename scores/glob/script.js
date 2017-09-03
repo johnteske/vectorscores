@@ -20,6 +20,8 @@ var canvas = {
 {% include_relative _glob.js %}
 {% include_relative _settings.js %}
 
+var durationDict = VS.dictionary.Bravura.durations.stemless;
+
 function newPoint() {
     var radius = VS.getRandExcl(1, 96),
         angle = Math.random() * Math.PI * 2,
@@ -36,14 +38,16 @@ glob.group.selectAll("text")
     .data(glob.data).enter()
     .append("text")
     .classed("glob-child", 1)
-    .text(function() { return VS.getItem(["\uf46a", "\uf46a\u2009\uf477", "\uf469"]); });
+    .text(function() {
+        return durationDict[VS.getItem([1, 1.5, 2, 3, 4])];
+    });
 glob.children = d3.selectAll("text");
 
 glob.pitchSet = main.append("text")
     .classed("pc-set", 1)
     .style("opacity", "0"); // init value
 
-glob.move = function(dur) {
+glob.move = function(dur, type) {
     var pcSet = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random").map(function(pc) {
         return VS.pitchClass.format(pc, scoreSettings.pcFormat);
     });
@@ -52,7 +56,7 @@ glob.move = function(dur) {
         .attr("x", canvas.center)
         .attr("y", canvas.width - textoffset)
         .text(function() {
-            return "[" + pcSet.join(", ") + "]";
+            return "{" + pcSet.join(", ") + "}";
         })
         // fade in if needed
         .transition().duration(transitionTime.short)
@@ -60,14 +64,21 @@ glob.move = function(dur) {
 
     glob.children
         .transition().duration(dur)
+        // .attr("text-anchor", type === "chord" ? "start" : "middle")
+        .attr("text-anchor", "start")
         .attr("transform", function() {
             var point = newPoint();
+            if (type === "chord") {
+                point.x = 0; // VS.getItem([0, 40, -40]); // multiple chords
+            } else if (type === "rhythm") {
+                point.y = 0;
+            }
             return "translate(" + point.x + ", " + point.y + ")";
         });
 };
 
 for(var i = 0; i < scoreLength; i++) {
-    VS.score.add(i * transitionTime.long, glob.move, [transitionTime.long]);
+    VS.score.add(i * transitionTime.long, glob.move, [transitionTime.long, VS.getItem(["glob", "chord", "rhythm"])]);
 }
 // final event
 VS.score.add(scoreLength * transitionTime.long, function() {
@@ -79,7 +90,7 @@ VS.score.add(scoreLength * transitionTime.long, function() {
 VS.score.preroll = 1000;
 
 VS.control.stepCallback = function() {
-    glob.move(null, transitionTime.short);
+    glob.move(transitionTime.short);
 };
 
 VS.score.stopCallback = function() {

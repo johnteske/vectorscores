@@ -1,38 +1,30 @@
-VS.page = {
-    header: document.getElementById("score-header"),
-    footer: document.getElementById("score-footer"),
+VS.page = (function() {
+    var page = {};
 
-    headerClassed: function(newClass) {
-        this.header.className = newClass;
-    },
-    footerClassed: function(newClass) {
-        if (this.footer) { this.footer.className = newClass; }
-    },
-    showLayout: function() {
-        VS.page.headerClassed("show");
-        VS.page.footerClassed("show");
-    },
-    hideLayout: function() {
-        VS.page.headerClassed("hide");
-        VS.page.footerClassed("hide");
-    }
-};
+    page.header = document.getElementById("score-header");
+    page.footer = document.getElementById("score-footer");
 
-VS.page.header.onclick = function() {
-    VS.page.showLayout();
-};
-
-if (VS.page.footer) {
-    VS.page.footer.onclick = function() {
-        VS.page.showLayout();
+    page.layoutClassed = function(c) {
+        page.header.className = c;
+        if (page.footer) { page.footer.className = c; }
     };
-    VS.page.footer.addEventListener("mouseover", VS.page.showLayout, true);
-    VS.page.footer.addEventListener("mouseout", VS.page.hideLayout, true);
-}
+    page.showLayout = function() {
+        page.layoutClassed("show");
+    };
+    page.hideLayout = function() {
+        page.layoutClassed("hide");
+    };
 
-document.getElementsByTagName("main")[0].onclick = function() {
-    VS.page.hideLayout();
-};
+    function addLayoutInteraction(el) {
+        el.addEventListener("click", page.showLayout, false);
+        el.addEventListener("mouseover", page.showLayout, false);
+        el.addEventListener("mouseout", page.hideLayout, false);
+    }
 
-VS.page.header.addEventListener("mouseover", VS.page.showLayout, true);
-VS.page.header.addEventListener("mouseout", VS.page.hideLayout, true);
+    addLayoutInteraction(page.header);
+    if (page.footer) { addLayoutInteraction(page.footer); }
+
+    return page;
+})();
+
+document.getElementsByTagName("main")[0].onclick = VS.page.hideLayout;
