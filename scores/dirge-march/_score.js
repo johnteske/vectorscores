@@ -3,7 +3,7 @@
  */
 var globjects = {% include_relative _globjects.json %};
 
-var score = globjects.map(function(globject) {
+globjects = globjects.map(function(globject) {
     var highs = globject.rangeEnvelope.hi,
         lows = globject.rangeEnvelope.lo;
 
@@ -37,3 +37,33 @@ var score = globjects.map(function(globject) {
 
     return globject;
 });
+
+/**
+ * TODO Invert globjects for march section
+ */
+// var invertedGlobjects = globjects.map(function(globject) {
+// });
+
+/**
+ *
+ */
+var score = [];
+
+// dirge
+for (var i = 0; i < 3; i++) {
+    var desc = VS.getItem(globjects.filter(function(g) {
+        return g.contour === "descending";
+    }));
+
+    score.push(desc);
+}
+
+//
+score.push(VS.getItem(globjects.filter(function(g) {
+    return g.contour === "ascending";
+})));
+
+// march
+for (var i = 0; i < 3; i++) {
+    score.push(VS.getItem(globjects));
+}
