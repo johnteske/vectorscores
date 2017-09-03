@@ -45,31 +45,24 @@ percussionParts.selectAll("g").call(function(selection) {
         .attr("y", 22)
         .text("\ue069");
 
-    var rhythmCell = selection.append("g")
-        .attr("transform", "translate(" + 22 + "," + 0 + ")")
-        .attr("class", "rhythm");
+    function createRhythmCell(_) {
+        var cell = _.append("g")
+            .attr("transform", "translate(" + 22 + "," + 0 + ")")
+            .attr("class", "rhythm");
 
-    rhythmCell.append("rect")
-        .attr("height", 45)
-        .attr("stroke", "#888")
-        .attr("fill", "none");
+        cell.append("rect")
+            .attr("height", 45)
+            .attr("stroke", "#888")
+            .attr("fill", "none");
 
-    rhythmCell.append("text")
-        .attr("dx", 11)
-        .attr("y", 30);
+        cell.append("text")
+            .attr("dx", 11)
+            .attr("y", 30);
+    }
 
-    var rhythmCell2 = selection.append("g")
-        .attr("transform", "translate(" + 22 + "," + 0 + ")")
-        .attr("class", "rhythm");
-
-    rhythmCell2.append("rect")
-        .attr("height", 45)
-        .attr("stroke", "#888")
-        .attr("fill", "none");
-
-    rhythmCell2.append("text")
-        .attr("dx", 11)
-        .attr("y", 30);
+    // create two rhythm cells
+    selection.call(createRhythmCell);
+    selection.call(createRhythmCell);
 });
 
 /**
