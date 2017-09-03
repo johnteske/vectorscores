@@ -38,6 +38,7 @@ var dynamics = VS.dictionary.Bravura.dynamics;
 params.add("duration", Object.keys(durations));
 params.add("dynamic", Object.keys(dynamics));
 params.add("pitchClasses", [[0, 1, 2], [0, 4, 7]]);
+// params.add("intervalClasses", [1, 2, 3, 4, 5, 6]);
 
 function transformCell(selection, position, selected) {
     var opacity = (typeof selected !== "undefined" && !selected) ? 0 : 1;
@@ -114,7 +115,7 @@ var debugChoices = (function () {
         el = document.getElementsByClassName("debug")[0];
 
     return debug ? function() {
-        el.innerHTML = "weight :" + score.partWeight + "<br />" +
+        el.innerHTML = "weight: " + score.partWeight + "<br />" +
             params.getWeights().split("\n").join("<br />");
     } : VS.noop;
 })();
