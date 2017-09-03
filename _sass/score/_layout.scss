@@ -99,4 +99,22 @@ h1 {
     }
 }
 
+/**
+ * Set layout
+ */
+.work-list {
+    a {
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.work-title {
+    font-family: $layout-header-font-stack;
+    font-style: italic;
+    letter-spacing: 0.3px;
+}
+
 @import "score/footer-controls";
