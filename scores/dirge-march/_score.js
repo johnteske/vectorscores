@@ -37,4 +37,3 @@ var score = globjects.map(function(globject) {
 
     return globject;
 });
-console.log(score);

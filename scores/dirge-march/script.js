@@ -121,7 +121,7 @@ function update(index) {
         percPos += width;
         // TODO get d.width
 
-        selection.attr("transform", "translate(" + (22 + xOffset)+ "," + 0 + ")");
+        selection.attr("transform", "translate(" + (22 + xOffset) + "," + 0 + ")");
     }
 
     var percPos = 0;
@@ -135,14 +135,12 @@ function update(index) {
     perc2.selectAll(".rhythm")
         .each(createRhythm)
         .each(spacePerc);
-
 }
 
 function centerGlobject(d) {
     d3.select(this).attr("transform", "translate(" +
         (center - (d.width * 0.5)) + "," +
         120 + ")");
-        // (center - (120 * 0.5)) + ")");
 }
 
 
