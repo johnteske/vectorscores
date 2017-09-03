@@ -1,8 +1,7 @@
-// TODO rename terms
 var params = (function() {
     var params = {
         keys: [],
-        terms: []
+        data: []
     };
 
     params.add = function(key, keys) {
@@ -19,7 +18,7 @@ var params = (function() {
         }
 
         params.keys.push(key);
-        params.terms[key] = property;
+        params.data[key] = property;
 
         return property;
     };
@@ -29,7 +28,7 @@ var params = (function() {
 
         for (var i = 0; i < params.keys.length; i++) {
             var key = params.keys[i];
-            choice[key] = VS.getWeightedItem(params.terms[key].keys, params.terms[key].weights);
+            choice[key] = VS.getWeightedItem(params.data[key].keys, params.data[key].weights);
         }
 
         return choice;
@@ -38,7 +37,7 @@ var params = (function() {
     params.updateWeights = function(choice, increment) {
         for (var i = 0; i < params.keys.length; i++) {
             var key = params.keys[i];
-            var term = params.terms[key];
+            var term = params.data[key];
             term.weights[term.keys.indexOf(choice[key])] += increment;
         }
     };
@@ -48,7 +47,7 @@ var params = (function() {
 
         for (var i = 0; i < params.keys.length; i++) {
             var key = params.keys[i];
-            var term = params.terms[key];
+            var term = params.data[key];
 
             weights += key + ": " + term.weights + "\n";
         }

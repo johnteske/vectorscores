@@ -24,7 +24,7 @@ score.cell.halfSize = score.cell.size * 0.5;
 score.partWeight = score.weightScale; // init
 
 score.choices = {};
-// score.selected = false;
+score.selected = false;
 
 /**
  * Symbols and choice
@@ -52,6 +52,8 @@ function transformCell(selection, position, selected) {
     selection.transition().duration(300)
         .style("opacity", opacity)
         .attr("transform", translateFn);
+        // .transition()
+        // .style("cursor", selected ? "default" : "pointer");
 }
 
 function updateChoices() {
@@ -107,7 +109,7 @@ function selectCell(position) {
     }
 }
 
-debugChoices = (function () {
+var debugChoices = (function () {
     var debug = VS.getQueryString("debug") == 1 || false,
         el = document.getElementsByClassName("debug")[0];
 
@@ -203,45 +205,4 @@ for (var i = 0; i < score.nEvents + 1; i++) {
     VS.score.add(i * score.interval, updateChoices, []);
 }
 
-VS.score.stopCallback = clearChoices;
-
-VS.score.stepCallback = function () {
-    if (VS.score.pointer === 0) {
-        clearChoices();
-    } else if (VS.score.pointer < VS.score.getLength() - 1) {
-        updateChoices();
-    }
-};
-
-VS.WebSocket.messageCallback = function(data) {
-    if (data.type === "ws" && data.content === "connections") {
-        score.partWeight = (1 / data.connections) * score.weightScale;
-        debugChoices();
-    } else if (data.type === "choice" && data.cid !== VS.WebSocket.cid) {
-        params.updateWeights(data.content, score.partWeight);
-        debugChoices();
-    }
-};
-
-VS.WebSocket.connect();
-
-/**
- * Keyboard control
- */
-
-function keydownListener(event) {
-    if (event.defaultPrevented) { return; }
-
-    switch (event.keyCode) {
-    case 38:
-        selectCell("top");
-        break;
-    case 40:
-        selectCell("bottom");
-        break;
-    default:
-        return;
-    }
-    event.preventDefault();
-}
-window.addEventListener("keydown", keydownListener, true);
+{% include_relative _controls.js %}
