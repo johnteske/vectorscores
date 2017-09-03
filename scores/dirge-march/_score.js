@@ -39,10 +39,29 @@ globjects = globjects.map(function(globject) {
 });
 
 /**
- * TODO Invert globjects for march section
+ * TODO retrograde globjects for march section
  */
-// var invertedGlobjects = globjects.map(function(globject) {
-// });
+var retrogradeGlobjects = globjects.map(function(globject) {
+    function mapTime(o) {
+        var mapped = {
+            value: o.value,
+            time: 1 - o.time
+        };
+        return mapped;
+    }
+
+    var retrograde = {
+        width: globject.width
+    };
+
+    retrograde.rangeEnvelope = {
+        type: globject.rangeEnvelope.type,
+        hi: globject.rangeEnvelope.hi.map(mapTime),
+        lo: globject.rangeEnvelope.lo.map(mapTime)
+    };
+
+    return retrograde;
+});
 
 /**
  *
@@ -64,6 +83,7 @@ score.push(VS.getItem(globjects.filter(function(g) {
 })));
 
 // march
-for (var i = 0; i < 3; i++) {
-    score.push(VS.getItem(globjects));
+// TODO select multiple (will need to pass all score events as array)
+for (var i = 0; i < 6; i++) {
+    score.push(VS.getItem(globjects.concat(retrogradeGlobjects)));
 }
