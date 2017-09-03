@@ -3,9 +3,10 @@ layout: compress-js
 ---
 var score = {
     width: 320,
-    height: 320,
+    height: 480,
     cell: {
-        size: 90
+        size: 90,
+        buffer: 30
     },
     nEvents: 8,
     interval: 10000,
@@ -34,10 +35,20 @@ score.selected = false;
 
 var durations = VS.dictionary.Bravura.durations.stemless;
 var dynamics = VS.dictionary.Bravura.dynamics;
+var phrases = [
+    durations["1"],
+    durations["1"] + " " + durations["1"],
+    durations["1"] + " " + durations["1"] + " " + durations["1"],
+    durations["1"] + " " + durations["1"] + " " + durations["1"] + " " + durations["1"],
+    "rest" // "\ue4e5"
+];
 
 params.add("duration", Object.keys(durations));
-params.add("dynamic", Object.keys(dynamics));
-params.add("pitchClasses", [[0, 1, 2], [0, 4, 7]]);
+params.add("dynamic", Object.keys(dynamics).filter(function(k) {
+    return k !== "n";
+}));
+params.add("pitchClasses", VS.trichords);
+params.add("phrase", phrases);
 // params.add("intervalClasses", [1, 2, 3, 4, 5, 6]);
 
 function transformCell(selection, position, selected) {
@@ -57,34 +68,52 @@ function transformCell(selection, position, selected) {
         // .style("cursor", selected ? "default" : "pointer");
 }
 
-function updateChoices() {
+function formatPCSet(setString) {
     var PC = VS.pitchClass,
-        choices = score.choices;
+        formatted = "";
+
+    if (setString) {
+        var set = setString.split(",");
+        set = PC.transpose(setString.split(","), "random").sort(function(a, b) { return a - b; });
+        formatted = "{" + PC.format(set) + "}";
+    }
+
+    return formatted;
+}
+
+function updateChoices() {
+    var choices = score.choices;
 
     choices.top = params.createChoice();
     choices.bottom = params.createChoice();
 
-    function pcText(set) {
-        set = set.split(",");
-        set = PC.transpose(set, "random").sort(function(a, b) { return a - b; });
-        return "{" + PC.format(set) + "}";
+    function updateCell(selection, choice) {
+        var isRest = choice.phrase === "rest";
+
+        if (isRest) {
+            choice.pitchClasses = "";
+            choice.duration = "";
+            // choice.phrase = "rest";
+            choice.dynamic = "";
+        }
+
+        selection.select(".pitch-classes")
+            .text(formatPCSet(choice.pitchClasses));
+        selection.select("circle")
+            .style("opacity", isRest ? 0 : 1)
+        selection.select(".duration")
+            .text(durations[choice.duration]);
+        selection.select(".phrase")
+            .text(isRest ? "\ue4e5" : choice.phrase);
+        selection.select(".dynamic")
+            .text(dynamics[choice.dynamic]);
     }
 
     score.topGroup.call(transformCell, "top");
-    score.topGroup.select(".duration")
-        .text(durations[choices.top.duration]);
-    score.topGroup.select(".dynamic")
-        .text(dynamics[choices.top.dynamic]);
-    score.topGroup.select(".pitch-classes")
-        .text(pcText(choices.top.pitchClasses));
+    score.topGroup.call(updateCell, choices.top);
 
     score.bottomGroup.call(transformCell, "bottom");
-    score.bottomGroup.select(".duration")
-        .text(durations[choices.bottom.duration]);
-    score.bottomGroup.select(".dynamic")
-        .text(dynamics[choices.bottom.dynamic]);
-    score.bottomGroup.select(".pitch-classes")
-        .text(pcText(choices.bottom.pitchClasses));
+    score.bottomGroup.call(updateCell, choices.bottom);
 
     score.selected = false;
 }
@@ -126,13 +155,13 @@ var debugChoices = (function () {
 function translateTopCell() {
     return "translate(" +
         (score.center.x - score.cell.halfSize) + ", " +
-        (score.center.y - score.cell.size - (score.cell.halfSize * 0.5)) + ")";
+        (score.center.y - score.cell.size - score.cell.buffer) + ")";
 }
 
 function translateBottomCell() {
     return "translate(" +
         (score.center.x - score.cell.halfSize) + ", " +
-        (score.center.y + (score.cell.halfSize * 0.5)) + ")";
+        (score.center.y + score.cell.buffer) + ")";
 }
 
 function translateSelectedCell() {
@@ -145,59 +174,66 @@ score.svg = d3.select(".main")
     .attr("width", score.width)
     .attr("height", score.height);
 
+function createCell(selection) {
+    selection.attr("transform", translateSelectedCell);
+
+    selection.append("rect")
+        .attr("class", "phrase-container")
+        .attr("width", score.cell.size)
+        .attr("height", score.cell.size);
+
+    selection.append("text")
+        .attr("class", "pitch-classes monospace")
+        .attr("dy", "-1em");
+
+    var r = (22 * 1.5) / 2;
+    selection.append("circle")
+        .attr("cx", score.cell.size - r)
+        .attr("cy", -1.5 * r)
+        .attr("r", r)
+        .attr("stroke", "black")
+        .attr("fill", "none");
+    selection.append("text")
+        .attr("class", "duration bravura")
+        .attr("text-anchor", "middle")
+        .attr("x", score.cell.size - r)
+        .attr("y", -0.5 * r)
+        .attr("dy", "-1em");
+
+    selection.append("text")
+        .attr("class", "phrase bravura")
+        .attr("x", score.cell.halfSize)
+        .attr("y", score.cell.halfSize);
+
+    selection.append("text")
+        .attr("class", "dynamic bravura")
+        .attr("x", score.cell.halfSize)
+        .attr("y", score.cell.size - 5)
+        .attr("dy", -5);
+}
+
 score.topGroup = score.svg.append("g")
-    .attr("transform", translateSelectedCell)
+    .call(createCell)
     .on("click", function() {
         selectCell("top");
     });
+
 score.bottomGroup = score.svg.append("g")
-    .attr("transform", translateSelectedCell)
+    .call(createCell)
     .on("click", function() {
         selectCell("bottom");
     });
-
-score.topGroup.append("rect")
-    .attr("width", score.cell.size)
-    .attr("height", score.cell.size);
-score.bottomGroup.append("rect")
-    .attr("width", score.cell.size)
-    .attr("height", score.cell.size);
-
-score.topGroup.append("text")
-    .attr("class", "duration bravura")
-    .attr("x", score.cell.halfSize)
-    .attr("y", score.cell.halfSize);
-score.topGroup.append("text")
-    .attr("class", "dynamic bravura")
-    .attr("x", score.cell.halfSize)
-    .attr("y", score.cell.size - 5)
-    .attr("dy", -5);
-score.topGroup.append("text")
-    .attr("class", "pitch-classes monospace")
-    .attr("dy", "-0.62em");
-score.bottomGroup.append("text")
-    .attr("class", "duration bravura")
-    .attr("x", score.cell.halfSize)
-    .attr("y", score.cell.halfSize);
-score.bottomGroup.append("text")
-    .attr("class", "dynamic bravura")
-    .attr("x", score.cell.halfSize)
-    .attr("y", score.cell.size - 5)
-    .attr("dy", -5);
-score.bottomGroup.append("text")
-    .attr("class", "pitch-classes monospace")
-    .attr("dy", "-0.62em");
 
 function clearChoices() {
     // TODO also clear choice weights
 
     score.topGroup.call(transformCell, "top");
     score.topGroup.selectAll(".bravura").text("");
-    score.topGroup.select(".pitch-classes").text("a");
+    score.topGroup.select(".pitch-classes").text("{}");
 
     score.bottomGroup.call(transformCell, "bottom");
     score.bottomGroup.selectAll(".bravura").text("");
-    score.bottomGroup.select(".pitch-classes").text("b");
+    score.bottomGroup.select(".pitch-classes").text("{}");
 }
 
 clearChoices();

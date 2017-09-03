@@ -7,7 +7,7 @@ g {
     cursor: pointer;
 }
 
-rect {
+.phrase-container {
     stroke: black;
     stroke-width: 1px;
     fill: white;
@@ -22,8 +22,11 @@ text {
 }
 
 .bravura {
-    text-anchor: middle;
     font-family: Bravura;
     font-size: 22px;
     line-height: 22px;
+}
+
+.phrase, .dynamic {
+    text-anchor: middle;
 }

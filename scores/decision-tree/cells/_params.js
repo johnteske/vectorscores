@@ -37,8 +37,10 @@ var params = (function() {
     params.updateWeights = function(choice, increment) {
         for (var i = 0; i < params.keys.length; i++) {
             var key = params.keys[i];
-            var term = params.data[key];
-            term.weights[term.keys.indexOf(choice[key])] += increment;
+            var data = params.data[key];
+            if (choice[key]) {
+                data.weights[data.keys.indexOf(choice[key])] += increment;
+            }
         }
     };
 
@@ -47,9 +49,9 @@ var params = (function() {
 
         for (var i = 0; i < params.keys.length; i++) {
             var key = params.keys[i];
-            var term = params.data[key];
+            var data = params.data[key];
 
-            weights += key + ": " + term.weights + "\n";
+            weights += key + ": " + data.weights + "\n";
         }
 
         return weights;
