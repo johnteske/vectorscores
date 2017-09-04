@@ -14,6 +14,8 @@ safe: true
 markdown: kramdown
 sass:
     style: compressed
+include: ["_pages"]
+exclude: ["websockets.rb"]
 
 # Compression settings
 compress_html:
