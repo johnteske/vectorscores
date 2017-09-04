@@ -17,10 +17,7 @@ VS.globject = function() {
     function globject(d, i) {
         var selection = d3.select(this),
             width = w(d, i),
-            height = h(d, i),
-            margin = {
-                left: 5
-            };
+            height = h(d, i);
 
         var rangeEnv = d.rangeEnvelope,
             rangePoints = [],
@@ -70,7 +67,6 @@ VS.globject = function() {
         selection.append("clipPath")
             .attr("id", "globject-clip-" + i)
             .append("path")
-                .attr("transform", "translate(" + margin.left + "," + 0 + ")")
                 .attr("d", line(rangePoints));
 
         selection.append("g")
@@ -78,7 +74,6 @@ VS.globject = function() {
             .attr("clip-path", "url(#globject-clip-" + i + ")");
 
         selection.append("path")
-             .attr("transform", "translate(" + margin.left + "," + 0 + ")")
              .attr("class", "globject-path")
              .attr("d", line(rangePoints));
     }
