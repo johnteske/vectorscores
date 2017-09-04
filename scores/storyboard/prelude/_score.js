@@ -41,21 +41,16 @@ function lnp(selection) {
  * TODO pass in margin to prevent overlap with LNP
  */
 function lines(selection, args) {
-    selection.selectAll(".line")
-        .data(d3.range(args.n))
-        .enter()
-        .append("line")
-        .attr("class", "line")
-        .attr("stroke", "black")
-        .each(function() {
-            var line = d3.select(this),
-                y = Math.random() * cardWidth;
+    var lineCloud = VS.lineCloud()
+        .width(cardWidth)
+        .height(cardWidth);
 
-            line.attr("x1", VS.getRandExcl(0, cardWidth * 0.5))
-                .attr("x2", VS.getRandExcl(cardWidth * 0.5, cardWidth))
-                .attr("y1", y)
-                .attr("y2", y);
-        });
+    selection.call(lineCloud, { n: args.n });
+
+    // test styling
+    selection.selectAll(".line-cloud-path")
+        .attr("stroke", "black")
+        .attr("fill", "none");
 }
 
 cardList = [
