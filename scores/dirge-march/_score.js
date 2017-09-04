@@ -1,89 +1,41 @@
 /**
  * TODO proto globjects are combined into phrases, not directly used
  */
-var globjects = {% include_relative _globjects.json %};
-
-globjects = globjects.map(function(globject) {
-    var highs = globject.rangeEnvelope.hi,
-        lows = globject.rangeEnvelope.lo;
-
-    // TODO hi and lo totalDurations should match
-    var totalDuration = highs.reduce(function(a, o) {
-        return a + o.duration;
-    }, 0);
-
-    var currentTime;
+var score = (function(score) {
+    var selected;
 
     /**
-     * Normalize range values
+     * dirge
      */
-    var extent = d3.extent(highs.concat(lows), function(d) { return d.value; });
-
-    currentTime = 0;
-    globject.rangeEnvelope.hi = highs.map(function(o) {
-        o.value = VS.normalize(o.value, extent[0], extent[1]);
-        o.time = currentTime;
-        currentTime += o.duration / totalDuration;
-        return o;
+    var descending = globjects.filter(function(g) {
+        return g.contour === "descending";
     });
 
-    currentTime = 0;
-    globject.rangeEnvelope.lo = lows.map(function(o) {
-        o.value = VS.normalize(o.value, extent[0], extent[1]);
-        o.time = currentTime;
-        currentTime += o.duration / totalDuration;
-        return o;
-    });
-
-    return globject;
-});
-
-/**
- * TODO retrograde globjects for march section
- */
-var retrogradeGlobjects = globjects.map(function(globject) {
-    function mapTime(o) {
-        var mapped = {
-            value: o.value,
-            time: 1 - o.time
-        };
-        return mapped;
+    for (var i = 0; i < 3; i++) {
+        selected = [VS.getItem(descending)];
+        score.push(selected);
     }
 
-    var retrograde = {
-        width: globject.width
-    };
+    /**
+     *
+     */
+    var ascending = globjects.filter(function(g) {
+        return g.contour === "ascending";
+    });
 
-    retrograde.rangeEnvelope = {
-        type: globject.rangeEnvelope.type,
-        hi: globject.rangeEnvelope.hi.map(mapTime),
-        lo: globject.rangeEnvelope.lo.map(mapTime)
-    };
+    selected = [VS.getItem(ascending)];
+    score.push(selected);
 
-    return retrograde;
-});
+    /**
+     * march
+     * TODO select multiple (will need to pass all score events as array)
+     */
+    var allGlobjects = globjects.concat(retrogradeGlobjects);
 
-/**
- *
- */
-var score = [];
+    for (i = 0; i < 6; i++) {
+        selected = [VS.getItem(allGlobjects)];
+        score.push(selected);
+    }
 
-// dirge
-for (i = 0; i < 3; i++) {
-    var desc = VS.getItem(globjects.filter(function(g) {
-        return g.contour === "descending";
-    }));
-
-    score.push(desc);
-}
-
-//
-score.push(VS.getItem(globjects.filter(function(g) {
-    return g.contour === "ascending";
-})));
-
-// march
-// TODO select multiple (will need to pass all score events as array)
-for (i = 0; i < 6; i++) {
-    score.push(VS.getItem(globjects.concat(retrogradeGlobjects)));
-}
+    return score;
+})([]);

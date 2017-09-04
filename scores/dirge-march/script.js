@@ -16,10 +16,8 @@ var width = 480,
         },
     };
 
-var i;
-
+{% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
-
 {% include_relative _score.js %}
 
 var main = d3.select(".main")
@@ -80,7 +78,7 @@ function update(index) {
         .height(h);
 
     globjectContainer.selectAll(".globject")
-        .data([score[index]]) // phrase as one globject currently
+        .data(score[index])
         .enter()
         .append("g")
         .each(globject)
@@ -169,7 +167,7 @@ d3.select(window).on("resize", resize);
 /**
  * Populate score
  */
-for (i = 0; i < score.length; i++) {
+for (var i = 0; i < score.length; i++) {
     VS.score.add(i * 1000, update, [i]);
 }
 
