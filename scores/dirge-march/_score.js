@@ -17,8 +17,9 @@ var score = (function(score) {
     for (var i = 0; i < 3; i++) {
         selected = [VS.getItem(descending)];
         score.push({
-            tempo: tempo,
-            globjects: selected
+            duration: 3,
+            globjects: selected,
+            tempo: tempo
         });
     }
 
@@ -33,8 +34,9 @@ var score = (function(score) {
 
     selected = [VS.getItem(ascending)];
     score.push({
-        tempo: tempo,
-        globjects: selected
+        duration: 6,
+        globjects: selected,
+        tempo: tempo
     });
 
     /**
@@ -48,8 +50,9 @@ var score = (function(score) {
     for (i = 0; i < 6; i++) {
         selected = [VS.getItem(allGlobjects)];
         score.push({
-            tempo: tempo,
-            globjects: selected
+            duration: 3,
+            globjects: selected,
+            tempo: tempo
         });
     }
 

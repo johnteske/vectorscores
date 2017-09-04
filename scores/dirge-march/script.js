@@ -10,7 +10,7 @@ var width = 480,
     debug = +VS.getQueryString("debug") === 1 || false,
     layout = {
         perc: {
-            x: 60 + 22,
+            x: 60 + 22, // TODO make this the score left margin
             y: center,
             y1: 16,
             y2: 60 + 16
@@ -26,7 +26,13 @@ var main = d3.select(".main")
     .style("width", boxwidth + "px")
     .style("height", boxwidth + "px");
 
-var globjectContainer = main.append("g").attr("class", "globjects");
+var globjectContainer = main.append("g")
+    .attr("class", "globjects")
+    .attr("transform", "translate(" + 0 + "," + 90 + ")")
+
+var durationText = globjectContainer.append("text")
+    .attr("class", "duration-text")
+    .attr("transform", "translate(" + layout.perc.x + "," + 0 + ")");
 
 /**
  * Rhythm test
@@ -96,6 +102,8 @@ function update(index) {
         .append("g")
         .each(globject)
         .each(centerGlobject);
+
+    durationText.text(score[index].duration + "\u2033");// "\u2033"
 
     /**
      * Tempo
@@ -174,9 +182,7 @@ function update(index) {
 }
 
 function centerGlobject(d) {
-    d3.select(this).attr("transform", "translate(" +
-        (center - (d.width * 0.5)) + "," +
-        120 + ")");
+    d3.select(this).attr("transform", "translate(" + layout.perc.x + "," + 16 + ")");
 }
 
 
@@ -203,8 +209,17 @@ d3.select(window).on("resize", resize);
 /**
  * Populate score
  */
+var addEvent = (function() {
+    var time = 0;
+
+    return function(fn, duration, args) {
+        VS.score.add(time, fn, args);
+        time += duration;
+    };
+})();
+
 for (var i = 0; i < score.length; i++) {
-    VS.score.add(i * 1000, update, [i]);
+    addEvent(update, score[i].duration * 1000, [i])
 }
 
 /**
