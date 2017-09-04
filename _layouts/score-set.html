@@ -17,17 +17,8 @@ layout: compress
 
         {% assign set_path = page.path | remove: page.name %}
 
-        {% assign scores_sets = '' | split: '' %}
-        {% for html_page in site.html_pages %}
-            {% if html_page.layout == 'movement' and html_page.path contains set_path %}
-            {% assign scores_sets = scores_sets | push: html_page %}
-            {% endif %}
-        {% endfor %}
-
         <ul class="work-list">
-        {% for project in scores_sets %}
-        {% include work-list-li.html project=project %}
-        {% endfor %}
+        {% include work-list-loop.html layout='movement' filter_by='path' filter_value=set_path %}
         </ul>
     </main>
     {% comment %}{% include score/footer.html %}{% endcomment %}

@@ -1,33 +1,14 @@
-{% assign scores_sets = '' | split: '' %}
-{% for html_page in site.html_pages %}
-    {% if html_page.layout == 'score' or html_page.layout == 'set' %}
-    {% assign scores_sets = scores_sets | push: html_page %}
-    {% endif %}
-{% endfor %}
-
 <h3>Published</h3>
 <ul>
-{% for project in scores_sets %}
-    {% if project.status == 'published' %}
-    {% include work-list-li.html project=project %}
-    {% endif %}
-{% endfor %}
+{% include work-list-loop.html filter_by='status' filter_value='published' %}
 </ul>
 
 <h3>Works in progress</h3>
 <ul>
-{% for project in scores_sets %}
-    {% if project.status == 'wip' %}
-    {% include work-list-li.html project=project %}
-    {% endif %}
-{% endfor %}
+{% include work-list-loop.html filter_by='status' filter_value='wip' %}
 </ul>
 
 <h3>Examples and tests</h3>
 <ul>
-{% for project in scores_sets %}
-    {% if project.status == 'test' %}
-    {% include work-list-li.html project=project %}
-    {% endif %}
-{% endfor %}
+{% include work-list-loop.html filter_by='status' filter_value='test' %}
 </ul>

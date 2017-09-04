@@ -1,0 +1,13 @@
+{% assign layout = include.layout | default: 'score' %}
+{% assign scores = '' | split: '' %}
+{% for html_page in site.html_pages %}
+    {% if html_page.layout contains layout %}
+    {% assign scores = scores | push: html_page %}
+    {% endif %}
+{% endfor %}
+
+{% for score in scores %}
+    {% if score[include.filter_by] == include.filter_value or score[include.filter_by] contains include.filter_value %}
+    {% include work-list-li.html project=score %}
+    {% endif %}
+{% endfor %}
