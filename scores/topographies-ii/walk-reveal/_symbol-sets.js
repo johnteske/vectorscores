@@ -2,7 +2,7 @@ var symbols = {},
     symbolOffsets = {},
     symbolScale = [];
 
-switch (Math.floor(VS.getRandExcl(0, 4))) {
+switch (Math.ceil(VS.getRandExcl(0, 4))) {
     case 1:
         symbols = Object.assign(VS.dictionary.Bravura.accidentals, VS.dictionary.Bravura.articulations);
         symbolOffsets = {
@@ -32,6 +32,20 @@ switch (Math.floor(VS.getRandExcl(0, 4))) {
             "2": { x: -0.125, y: 0 }  // double sharp
         };
         symbolScale = ["-2", "-1.5", "-1", "-0.5", "0", "0.5", "1", "1.5"];
+        break;
+    case 3:
+        symbols = Object.assign(VS.dictionary.Bravura.dynamics);
+        symbolOffsets = {
+            "ppp": { x: -0.5, y: 0.0625 },
+            "pp": { x: -0.325, y: 0.0625 },
+            "p": { x: -0.135, y: 0.0625 },
+            "mp": { x: -0.45, y: 0.0625 },
+            "mf": { x: -0.45, y: 0.0625 },
+            "f": { x: -0.1, y: 0.125 },
+            "ff": { x: -0.225, y: 0.125 },
+            "fff": { x: -0.225, y: 0.125 }
+        };
+        symbolScale = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"];
         break;
     default:
         symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations);
