@@ -10,9 +10,10 @@ var width = 480,
     debug = +VS.getQueryString("debug") === 1 || false,
     layout = {
         perc: {
-            x: 60, // center - 90 - 22,
-            y1: center,
-            y2: center + 60
+            x: 60 + 22,
+            y: center,
+            y1: 16,
+            y2: 60 + 16
         },
     };
 
@@ -31,23 +32,31 @@ var globjectContainer = main.append("g").attr("class", "globjects");
  * Rhythm test
  */
 var percussionParts = main.append("g")
+    .attr("transform", "translate(" + layout.perc.x + "," + layout.perc.y + ")")
     .attr("class", "percussion-parts");
 
+var tempoText = percussionParts.append("text")
+    .attr("class", "tempo-text");
+
+tempoText.append("tspan")
+    .text(stemmed["1"]);
+
 var perc1 = percussionParts.append("g")
-    .attr("transform", "translate(" + layout.perc.x + "," + layout.perc.y1 + ")");
+    .attr("transform", "translate(" + 0 + "," + layout.perc.y1 + ")");
 
 var perc2 = percussionParts.append("g")
-    .attr("transform", "translate(" + layout.perc.x + "," + layout.perc.y2 + ")");
+    .attr("transform", "translate(" + 0 + "," + layout.perc.y2 + ")");
 
 percussionParts.selectAll("g").call(function(selection) {
     selection.append("text")
         .style("font-family", "Bravura")
+        .attr("x", -22)
         .attr("y", 22)
         .text("\ue069");
 
     function createRhythmCell(g) {
         var cell = g.append("g")
-            .attr("transform", "translate(" + 22 + "," + 0 + ")")
+            // .attr("transform", "translate(" + 22 + "," + 0 + ")")
             .attr("class", "rhythm");
 
         cell.append("rect")
@@ -69,6 +78,10 @@ percussionParts.selectAll("g").call(function(selection) {
  *
  */
 function update(index) {
+    /**
+     * Globjects
+     * TODO stash globect generator elsewhere?
+     */
     var h = 90;
 
     d3.selectAll(".globject").remove();
@@ -78,17 +91,40 @@ function update(index) {
         .height(h);
 
     globjectContainer.selectAll(".globject")
-        .data(score[index])
+        .data(score[index].globjects)
         .enter()
         .append("g")
         .each(globject)
         .each(centerGlobject);
 
+    /**
+     * Tempo
+     */
+    var tempo = score[index].tempo;
+
+    tempoText.select(".bpm").remove();
+
+    tempoText.append("tspan")
+        .attr("class", "bpm")
+        .text(" = " + tempo);
+
+    percussionParts
+        // .transition().duration(300) // TODO fade in/out as part of event, not on start of event
+        .style("opacity", tempo ? 1: 0);
+
+    /**
+     * Rhythms
+     * TODO stash creation functions elsewhere?
+     */
     function createRhythm() {
         var selection = d3.select(this),
             textEl = selection.select("text");
 
         textEl.selectAll("tspan").remove();
+
+        if (!tempo) {
+            return;
+        }
 
         var randRhythm = VS.getItem(rhythms.filter(function(r) {
             return r !== percRhythm; // prevent duplicates within each part
@@ -121,7 +157,7 @@ function update(index) {
         percPos += width;
         // TODO get d.width
 
-        selection.attr("transform", "translate(" + (22 + xOffset) + "," + 0 + ")");
+        selection.attr("transform", "translate(" + xOffset + "," + 0 + ")");
     }
 
     var percPos = 0;

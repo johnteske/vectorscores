@@ -16,3 +16,11 @@
     font-family: Bravura;
     font-size: 24px;
 }
+
+.tempo-text tspan {
+    font-size: 16px;
+
+    &.bpm {
+        font-family: monospace;
+    }
+}
