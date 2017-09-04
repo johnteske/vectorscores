@@ -1,14 +1,14 @@
 <h3>Published</h3>
 <ul>
-{% include work-list-loop.html filter_by='status' filter_value='published' %}
+{% include work-list-loop.html filter_by='status' filter_equals='published' %}
 </ul>
 
 <h3>Works in progress</h3>
 <ul>
-{% include work-list-loop.html filter_by='status' filter_value='wip' %}
+{% include work-list-loop.html filter_by='status' filter_equals='wip' %}
 </ul>
 
 <h3>Examples and tests</h3>
 <ul>
-{% include work-list-loop.html filter_by='status' filter_value='test' %}
+{% include work-list-loop.html filter_by='status' filter_equals='test' %}
 </ul>

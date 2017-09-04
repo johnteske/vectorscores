@@ -18,7 +18,7 @@ layout: compress
         {% assign set_path = page.path | remove: page.name %}
 
         <ul class="work-list">
-        {% include work-list-loop.html layout='movement' filter_by='path' filter_value=set_path %}
+        {% include work-list-loop.html layout='movement' filter_by='path' filter_contains=set_path %}
         </ul>
     </main>
     {% comment %}{% include score/footer.html %}{% endcomment %}
