@@ -32,6 +32,13 @@ globjects = globjects.map(function(globject) {
         return o;
     });
 
+    /**
+     * Remove duplicate points for smooth globject curve
+     * In this case, both the hi and lo ranges match on start and end
+     */
+    globject.rangeEnvelope.lo.shift();
+    globject.rangeEnvelope.lo.pop();
+
     return globject;
 });
 

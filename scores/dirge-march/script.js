@@ -80,21 +80,19 @@ percussionParts.selectAll("g").call(function(selection) {
     selection.call(createRhythmCell);
 });
 
+var globject = VS.globject()
+    .width(function(d) { return d.width; })
+    .height(90)
+    .curve(d3.curveCardinalClosed.tension(0.3));
+
 /**
  *
  */
 function update(index) {
     /**
      * Globjects
-     * TODO stash globect generator elsewhere?
      */
-    var h = 90;
-
     d3.selectAll(".globject").remove();
-
-    var globject = VS.globject()
-        .width(function(d) { return d.width; })
-        .height(h);
 
     globjectContainer.selectAll(".globject")
         .data(score[index].globjects)

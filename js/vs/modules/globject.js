@@ -3,7 +3,8 @@ layout: compress-js
 ---
 VS.globject = function() {
     var w = VS.constant(127),
-        h = VS.constant(127);
+        h = VS.constant(127),
+        c = d3.curveCardinalClosed.tension(0.5);
 
     function yMIDI(d) {
         return (1 - (d.y / 127));
@@ -62,7 +63,7 @@ VS.globject = function() {
              .y(function(d) {
                  return scaleY(d) * height;
              })
-             .curve(d3.curveCardinalClosed.tension(0.8));
+             .curve(c);
 
         selection.classed("globject", true);
 
@@ -88,6 +89,10 @@ VS.globject = function() {
 
     globject.height = function(_) {
         return arguments.length ? (h = typeof _ === "function" ? _ : VS.constant(+_), globject) : h;
+    };
+
+    globject.curve = function(_) {
+        return arguments.length ? (c = typeof _ === "function" ? _ : c, globject) : c;
     };
 
     return globject;
