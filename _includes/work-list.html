@@ -9,7 +9,7 @@
 <ul>
 {% for project in scores_sets %}
     {% if project.status == 'published' %}
-    <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
+    {% include work-list-li.html project=project %}
     {% endif %}
 {% endfor %}
 </ul>
@@ -18,7 +18,7 @@
 <ul>
 {% for project in scores_sets %}
     {% if project.status == 'wip' %}
-    <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
+    {% include work-list-li.html project=project %}
     {% endif %}
 {% endfor %}
 </ul>
@@ -27,7 +27,7 @@
 <ul>
 {% for project in scores_sets %}
     {% if project.status == 'test' %}
-    <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
+    {% include work-list-li.html project=project %}
     {% endif %}
 {% endfor %}
 </ul>

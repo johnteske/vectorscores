@@ -26,7 +26,7 @@ layout: compress
 
         <ul class="work-list">
         {% for project in scores_sets %}
-            <li><a href="{{ project.url | prepend: site.baseurl }}" class="work-title">{{ project.title }}</a>{% if project.instrumentation %}, for {{ project.instrumentation }}{% endif %}</li>
+        {% include work-list-li.html project=project %}
         {% endfor %}
         </ul>
     </main>
