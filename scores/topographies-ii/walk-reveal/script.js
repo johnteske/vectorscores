@@ -18,30 +18,9 @@ var main = d3.select(".main"),
     walker = {
         index: -1,
         lastDir: ""
-    },
-    symbolOffsets = {
-        // 0.25: { x: -0.025, y: -0.25 }, // TODO
-        // 0.5: { x: -0.025, y: -0.25 },
-        // 1: { x: -0.175, y: 0 },
-        // 2:  { x: -0.175, y: 0 },
-        ".": { x: -0.0625, y: 0.0625 },
-        ">": { x: -0.1625, y: 0.125 },
-        "-": { x: -0.1625, y: 0.03125 },
-        //
-        "-2": { x: -0.2, y: 0 }, // double flat
-        "-1.5": { x: -0.225, y: 0 }, // three-quarter flat (backwards, forwards)
-        "-1": { x: -0.1, y: 0 }, // flat
-        "-0.5": { x: -0.1325, y: 0 }, // quarter flat (backwards)
-        "0": { x: -0.0875, y: 0 }, // natural
-        // "0.5":  "\ue282", // quarter sharp (single vertical stroke)
-        // "1":    "\ue262", // sharp
-        // "1.5":  "\ue283", // three-quarter sharp (three vertical strokes)
-        // "2":    "\ue263"  // double sharp
-    },
-    symbolScale = ["-2", "-1.5", "-1", "-0.5", "0", "-", ">", "."]; // ["-", "-", ">", ".", 2, 1, 0.5, 0.25]
+    };
 
-// var symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations);
-var symbols = Object.assign(VS.dictionary.Bravura.accidentals, VS.dictionary.Bravura.articulations);
+{% include_relative _symbol-sets.js %}
 
 main.style("width", 640 + "px")
     .style("height", 640 + "px");
@@ -67,6 +46,31 @@ function indexToCoordinates(i) {
 
 function coordinatesToIndex(x, y) {
     return (x & (score.width - 1)) + (y & (score.width - 1)) * score.width;
+}
+
+/**
+ * Debug symbol offsets
+ */
+if (+VS.getQueryString("debug") === 1) {
+    heightScale.revealed = 0;
+    heightScale.hidden = 0;
+
+    topo.selectAll(".plus")
+        .data(topoData)
+        .enter()
+        .append("path")
+        .attr("stroke", "red")
+        .attr("stroke-width", 1)
+        .attr("d", function(d, i) {
+            var c = indexToCoordinates(i),
+                px = (c.x - c.y) * tileWidthHalf,
+                py = (c.x + c.y) * tileHeightHalf;
+
+            return "M" + px + " " + (py - 5) +
+                " L" + px + " " + (py + 5) +
+                " M" + (px - 5) + " " + py +
+                " L" + (px + 5) + " " + py;
+        });
 }
 
 /**
