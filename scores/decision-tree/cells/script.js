@@ -100,7 +100,7 @@ function updateChoices() {
         selection.select(".pitch-classes")
             .text(formatPCSet(choice.pitchClasses));
         selection.select("circle")
-            .style("opacity", isRest ? 0 : 1)
+            .style("opacity", isRest ? 0 : 1);
         selection.select(".duration")
             .text(durations[choice.duration]);
         selection.select(".phrase")

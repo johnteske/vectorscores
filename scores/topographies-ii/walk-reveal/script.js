@@ -7,6 +7,10 @@ var main = d3.select(".main"),
     // width = 480,
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
+    heightScale = {
+        revealed: 5,
+        hidden: 2.5
+    },
     topoData,
     score = {
         width: 8, // currently used in creation, not display
@@ -73,21 +77,18 @@ topo.selectAll("text")
     .enter()
     .append("text")
     .attr("x", function(d, i) {
-        var y = Math.floor(i / score.width);
-        var x = i - (y * score.width);
-        var xOffset = 0;
-        return ((xOffset + (x - y)) * tileWidthHalf);
+        var c = indexToCoordinates(i);
+        return (c.x - c.y) * tileWidthHalf;
     })
-    .attr("y", function(d, i) {
-        var y = Math.floor(i / score.width);
-        var x = i - (y * score.width);
-        var yOffset = 0;
-        return ((yOffset + (x + y)) * tileHeightHalf);
-    })
-    .text(function(d) {
+    .each(function(d) {
+        var selection = d3.select(this);
         var symbolIndex = d.heightIndex + 4;
         var symbolKey = symbolScale[symbolIndex];
-        return symbols[symbolKey];
+        var offsets = symbolOffsets[symbolKey];
+
+        selection.text(symbols[symbolKey])
+            .attr("dx", offsets.x + "em")
+            .attr("dy", offsets.y + "em");
     })
     .call(revealSymbols, 0);
 
@@ -98,8 +99,11 @@ topo.attr("transform", "translate(320,120)");
  */
 function revealSymbols(selection, dur) {
     selection.transition().duration(dur)
-        .attr("dy", function(d) {
-            return d.revealed ? d.height * -5 : d.height * -2.5;
+        .attr("y", function(d, i) {
+            var c = indexToCoordinates(i),
+                hScale = d.revealed ? heightScale.revealed : heightScale.hidden;
+
+            return ((c.x + c.y) * tileHeightHalf) - (d.height * hScale);
         })
         .style("fill", function() {
             var fill = "black";

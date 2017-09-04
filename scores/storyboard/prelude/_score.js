@@ -16,7 +16,7 @@ function chord(selection, args) {
         .text(chords.join(" "));
 }
 
-function lnp(selection, args) {
+function lnp(selection) {
     var margin = 11;
 
     selection.append("text")

@@ -23,21 +23,3 @@ function createScoreFragment(data) {
 
     return data;
 }
-
-/**
- * Convert row-major order data in two-dimensional array
- * and assign heightIndex for symbol matching
- */
-function rowMajorOrderToGrid(data, width, nRows, nCols) {
-    var grid = [];
-
-    for (var row = 0; row < nRows; row++) {
-        grid[row] = [];
-
-        for (var col = 0; col < nCols; col++) {
-            grid[row][col] = data[col + row * width];
-        }
-    }
-
-    return grid;
-}

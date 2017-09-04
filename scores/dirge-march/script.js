@@ -16,6 +16,8 @@ var width = 480,
         },
     };
 
+var i;
+
 {% include_relative _rhythms.js %}
 
 {% include_relative _score.js %}
@@ -98,8 +100,8 @@ function update(index) {
 
         var symbols = randRhythm.split(",");
 
-        for (var i = 0; i < symbols.length; i++) {
-            var symbol = symbols[i],
+        for (var si = 0; si < symbols.length; si++) {
+            var symbol = symbols[si],
                 dy = symbol === "r0.5" || symbol === "r0.5." ? 0.4 : 0;
 
             textEl.append("tspan")
@@ -167,7 +169,7 @@ d3.select(window).on("resize", resize);
 /**
  * Populate score
  */
-for (var i = 0; i < score.length; i++) {
+for (i = 0; i < score.length; i++) {
     VS.score.add(i * 1000, update, [i]);
 }
 

@@ -31,4 +31,5 @@ and point your mobile device to your computer's private IP address, port 4000.
 
 `npm install -g eslint`
 
-`eslint _site`
+`eslint _site` or
+`eslint -f codeframe _site/` to help trace errors to source files

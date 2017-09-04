@@ -69,7 +69,7 @@ var retrogradeGlobjects = globjects.map(function(globject) {
 var score = [];
 
 // dirge
-for (var i = 0; i < 3; i++) {
+for (i = 0; i < 3; i++) {
     var desc = VS.getItem(globjects.filter(function(g) {
         return g.contour === "descending";
     }));
@@ -84,6 +84,6 @@ score.push(VS.getItem(globjects.filter(function(g) {
 
 // march
 // TODO select multiple (will need to pass all score events as array)
-for (var i = 0; i < 6; i++) {
+for (i = 0; i < 6; i++) {
     score.push(VS.getItem(globjects.concat(retrogradeGlobjects)));
 }
