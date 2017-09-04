@@ -49,7 +49,7 @@ function lines(selection, args) {
 
     // test styling
     selection.selectAll(".line-cloud-path")
-        .attr("stroke", "black")
+        .attr("stroke", "grey")
         .attr("fill", "none");
 }
 

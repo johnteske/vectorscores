@@ -4,7 +4,11 @@ layout: compress-js
 VS.lineCloud = function() {
     var w = VS.constant(127),
         h = VS.constant(127),
+        l = VS.constant([{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }]), // TODO pitch === relative
         c = d3.curveLinear;
+
+    // TODO how to handle last duration?
+    // if last dur !== 0, duplicate pitch with 0 dur
 
     function pitchDurationToXY(points) {
         var totalDuration = points.reduce(function(a, o) {
@@ -39,34 +43,10 @@ VS.lineCloud = function() {
         var width = w(), // w(d, i),
             height = h(); // h(d, i);
 
-        // pitch === relative
-        var testLine = [
-            {
-                pitch: 0,
-                duration: 1
-            },
-            {
-                pitch: 3,
-                duration: 2
-            },
-            {
-                pitch: -2,
-                duration: 1
-            },
-            // TODO how to handle last duration?
-            // if last dur !== 0, duplicate pitch with 0 dur
-            {
-                pitch: -2,
-                duration: 0
-            }
-        ];
-
         var data = [];
-        var points;
 
         for (var i = 0; i < (n + 1); i++) {
-            points = pitchDurationToXY(testLine);
-            data.push(points);
+            data.push(pitchDurationToXY(l()));
         }
 
         var line = d3.line()
@@ -92,6 +72,11 @@ VS.lineCloud = function() {
 
     lineCloud.height = function(_) {
         return arguments.length ? (h = typeof _ === "function" ? _ : VS.constant(+_), lineCloud) : h;
+    };
+
+    // not line, as replacing d3.line may an option in the future
+    lineCloud.l = function(_) {
+        return arguments.length ? (l = typeof _ === "function" ? _ : VS.constant(_), lineCloud) : l;
     };
 
     lineCloud.curve = function(_) {
