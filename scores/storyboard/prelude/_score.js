@@ -109,6 +109,7 @@ var cardList = [
     // TODO start without card, cue into start
     {
         duration: 0,
+        cue: true,
         dynamics: [],
         pcSet: [],
         content: []
@@ -116,6 +117,7 @@ var cardList = [
     //
     {
         duration: 2,
+        cue: true,
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -129,6 +131,7 @@ var cardList = [
     },
     {
         duration: 11,
+        cue: true,
         dynamics: [
             { time: 0, value: "n" },
             { time: 0.5, value: "<"}
@@ -143,6 +146,7 @@ var cardList = [
     },
     {
         duration: 3,
+        cue: true,
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -156,6 +160,7 @@ var cardList = [
     },
     {
         duration: 16,
+        cue: true,
         dynamics: [
             { time: 0, value: "n" },
             { time: 0.5, value: "<" }
@@ -170,6 +175,7 @@ var cardList = [
     },
     {
         duration: 2,
+        cue: true,
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -183,6 +189,7 @@ var cardList = [
     },
     {
         duration: 23,
+        cue: true,
         dynamics: [
             { time: 0, value: "mp" }
         ],
@@ -195,11 +202,71 @@ var cardList = [
         ]
     },
     {
-        duration: 103,
+        duration: 25.75,
+        cue: true,
         dynamics: [
             { time: 0, value: "n" },
-            { time: 0.25, value: "<" },
-            { time: 0.75, value: ">" },
+            { time: 0.5, value: "<" },
+            { time: 1, value: "p" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: lnp,
+                args: {}
+            },
+            {
+                type: lines,
+                args: { n: 10 }
+            }
+        ]
+    },
+    {
+        duration: 25.75,
+        cue: false,
+        dynamics: [
+            { time: 0, value: "p" },
+            { time: 0.5, value: "<" },
+            { time: 1, value: "mf" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: lnp,
+                args: {}
+            },
+            {
+                type: lines,
+                args: { n: 10 }
+            }
+        ]
+    },
+    {
+        duration: 25.75,
+        cue: false,
+        dynamics: [
+            { time: 0, value: "mf" },
+            { time: 0.5, value: ">" },
+            { time: 1, value: "p" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: lnp,
+                args: {}
+            },
+            {
+                type: lines,
+                args: { n: 10 }
+            }
+        ]
+    },
+    {
+        duration: 25.75,
+        cue: false,
+        dynamics: [
+            { time: 0, value: "p" },
+            { time: 0.5, value: ">" },
             { time: 1, value: "n" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
@@ -216,6 +283,7 @@ var cardList = [
     },
     {
         duration: 3,
+        cue: true,
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -229,9 +297,11 @@ var cardList = [
     },
     {
         duration: 56.5,
+        cue: true,
         dynamics: [
             { time: 0, value: "n" },
-            { time: 0.5, value: "<" }
+            { time: 0.5, value: "<" },
+            { time: 1, value: "mf" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         content: [
@@ -242,10 +312,28 @@ var cardList = [
         ]
     },
     {
-        duration: 76.5,
+        duration: 76.5 * (3/7),
+        cue: false,
         dynamics: [
-            { time: 0, value: ">" },
-            { time: 0.5, value: "n" }
+            { time: 0, value: "mf" },
+            { time: 0.5, value: ">" },
+            { time: 1, value: "p" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: lines,
+                args: { n: 10 }
+            }
+        ]
+    },
+    {
+        duration: 76.5 * (4/7),
+        cue: false,
+        dynamics: [
+            { time: 0, value: "p" },
+            { time: 0.5, value: ">" },
+            { time: 1, value: "n" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         content: [
@@ -257,6 +345,7 @@ var cardList = [
     },
     {
         duration: 2,
+        cue: true,
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -270,9 +359,27 @@ var cardList = [
         ]
     },
     {
-        duration: 180,
+        duration: 180 * (3/7),
+        cue: true,
         dynamics: [
             { time: 0, value: "mp" },
+            { time: 0.5, value: ">" },
+            { time: 1, value: "pp" }
+        ],
+        pcSet: [0, 1, 4, 6],
+        // pcSet: [0, 1, 3, 7]
+        content: [
+            {
+                type: lines,
+                args: { n: 10 }
+            }
+        ]
+    },
+    {
+        duration: 180 * (4/7),
+        cue: false,
+        dynamics: [
+            { time: 0, value: "pp" },
             { time: 0.5, value: ">" },
             { time: 1, value: "n" }
         ],
