@@ -4,13 +4,13 @@ layout: compress-js
 VS.lineCloud = function() {
     var w = VS.constant(127),
         h = VS.constant(127),
-        l = VS.constant([{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }]), // TODO pitch === relative
-        c = d3.curveLinear;
+        phrase = VS.constant([{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }]), // TODO pitch === relative
+        curve = d3.curveLinear;
 
     // TODO how to handle last duration?
     // if last dur !== 0, duplicate pitch with 0 dur
 
-    function pitchDurationToXY(points) {
+    function phraseToPoints(points) {
         var totalDuration = points.reduce(function(a, o) {
             return a + o.duration;
         }, 0);
@@ -46,7 +46,7 @@ VS.lineCloud = function() {
         var data = [];
 
         for (var i = 0; i < (n + 1); i++) {
-            data.push(pitchDurationToXY(l()));
+            data.push(phraseToPoints(phrase()));
         }
 
         var line = d3.line()
@@ -56,7 +56,7 @@ VS.lineCloud = function() {
             .y(function(d) {
                 return midiToY(d.y) * height;
             })
-            .curve(c);
+            .curve(curve);
 
         selection.selectAll(".line-cloud-path")
             .data(data)
@@ -74,13 +74,12 @@ VS.lineCloud = function() {
         return arguments.length ? (h = typeof _ === "function" ? _ : VS.constant(+_), lineCloud) : h;
     };
 
-    // not line, as replacing d3.line may an option in the future
-    lineCloud.l = function(_) {
-        return arguments.length ? (l = typeof _ === "function" ? _ : VS.constant(_), lineCloud) : l;
+    lineCloud.phrase = function(_) {
+        return arguments.length ? (phrase = typeof _ === "function" ? _ : VS.constant(_), lineCloud) : phrase;
     };
 
     lineCloud.curve = function(_) {
-        return arguments.length ? (c = typeof _ === "function" ? _ : c, lineCloud) : c;
+        return arguments.length ? (curve = typeof _ === "function" ? _ : curve, lineCloud) : curve;
     };
 
     return lineCloud;

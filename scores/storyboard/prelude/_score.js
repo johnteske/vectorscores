@@ -37,7 +37,6 @@ function lnp(selection) {
 }
 
 /**
- * TODO allow control over line type, density, etc.
  * TODO pass in margin to prevent overlap with LNP
  */
 function lines(selection, args) {
