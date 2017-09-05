@@ -92,6 +92,7 @@ function lnp(selection) {
  */
 function lines(selection, args) {
     var lineCloud = VS.lineCloud()
+        .duration(args.duration || 1)
         .width(cardWidth)
         .height(cardWidth);
 
@@ -217,7 +218,10 @@ var cardList = [
             },
             {
                 type: lines,
-                args: { n: 10 }
+                args: {
+                    n: 6,
+                    duration: 1
+                }
             }
         ]
     },
@@ -237,7 +241,10 @@ var cardList = [
             },
             {
                 type: lines,
-                args: { n: 10 }
+                args: {
+                    n: 18,
+                    duration: 3
+                }
             }
         ]
     },
@@ -257,7 +264,10 @@ var cardList = [
             },
             {
                 type: lines,
-                args: { n: 10 }
+                args: {
+                    n: 18,
+                    duration: 3
+                }
             }
         ]
     },
@@ -277,7 +287,10 @@ var cardList = [
             },
             {
                 type: lines,
-                args: { n: 10 }
+                args: {
+                    n: 18,
+                    duration: 3
+                }
             }
         ]
     },
@@ -307,7 +320,10 @@ var cardList = [
         content: [
             {
                 type: lines,
-                args: { n: 10 }
+                args: {
+                    n: 6,
+                    duration: 1
+                }
             }
         ]
     },
@@ -323,7 +339,10 @@ var cardList = [
         content: [
             {
                 type: lines,
-                args: { n: 10 }
+                args: {
+                    n: 18,
+                    duration: 3
+                }
             }
         ]
     },
@@ -339,7 +358,10 @@ var cardList = [
         content: [
             {
                 type: lines,
-                args: { n: 10 }
+                args: {
+                    n: 18,
+                    duration: 3
+                }
             }
         ]
     },
@@ -371,7 +393,10 @@ var cardList = [
         content: [
             {
                 type: lines,
-                args: { n: 10 }
+                args: {
+                    n: 12,
+                    duration: 2
+                }
             }
         ]
     },
@@ -388,7 +413,10 @@ var cardList = [
         content: [
             {
                 type: lines,
-                args: { n: 10 }
+                args: {
+                    n: 6,
+                    duration: 1
+                }
             }
         ]
     }
