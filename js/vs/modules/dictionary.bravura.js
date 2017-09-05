@@ -36,7 +36,7 @@ VS.dictionary.Bravura = (function() {
         var _dot = "\u2009\uf477"; // &thinsp; + Bravura dot
 
         return {
-            "0.2":  "\uf48d",        // using sixteenth flag
+            "0.2":  "\uf48d",        // TODO using sixteenth flag, for ad;sr only
             "0.25": "\uf48d",        // sixteenth flag
             "0.5":  "\uf48b",        // eighth flag
             "0.75": "\uf48b" + _dot, // , dot

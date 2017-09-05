@@ -1,20 +1,68 @@
-/**
- * TODO display chord as number of pitch classes, not cluster, with sixteenth flag
- * TODO add accents
- */
-function chord(selection, args) {
-    var chords = [];
+var chord = (function() {
+    function makeChord(selection, args, x) {
+        var range = [0, 1, 2, 3, 4, 5],
+            rangeHalf = range.length * 0.5,
+            notehead = args.sustain ? "\uf468" : "\uf46a";
 
-    for (var i = 0; i < args.n; i++) {
-        chords.push("\ue123");
+        function y(d) {
+            return (cardWidth * 0.5) + ((d - rangeHalf) * 10) + 5;
+        }
+
+        if (args.sustain) {
+            // fermata
+            selection.append("text")
+                .attr("class", "chord-fermata")
+                .attr("x", x)
+                .attr("y", y(0))
+                .attr("dy", -15)
+                .text("\ue4c6");
+        } else {
+            // flag
+            selection.append("text")
+                .attr("class", "chord-flag")
+                .attr("text-anchor", "start")
+                .attr("x", x + 3.125)
+                .attr("y", y(0) - 24)
+                .text("\uf48d");
+
+            // stem
+            selection.append("line")
+                .attr("stroke", "black")
+                .attr("x1", x + 3.625)
+                .attr("y1", y(5))
+                .attr("x2", x + 3.625)
+                .attr("y2", y(0) - 20);
+
+            // accent
+            selection.append("text")
+                .attr("class", "chord-fermata")
+                .attr("x", x)
+                .attr("y", y(5))
+                .attr("dy", 15)
+                .text("\uf475");
+        }
+
+        var text = selection.append("text")
+            .attr("class", "chord");
+
+        text.selectAll("tspan")
+            .data(range)
+            .enter()
+            .append("tspan")
+                .attr("x", x)
+                .attr("y", y)
+                .text(notehead);
     }
 
-    selection.append("text")
-        .attr("class", "chord")
-        .attr("x", cardWidth * 0.5)
-        .attr("y", cardWidth * 0.5)
-        .text(chords.join(" "));
-}
+    return function(selection, args) {
+        var center = cardWidth * 0.5,
+            spacing = cardWidth * 0.25;
+
+        for (var i = 0; i < args.n; i++) {
+            selection.call(makeChord, args, center + (i - ((args.n - 1) * 0.5)) * spacing);
+        }
+    };
+})();
 
 function lnp(selection) {
     var margin = 11;
@@ -52,47 +100,94 @@ function lines(selection, args) {
         .attr("fill", "none");
 }
 
-cardList = [
+VS.score.preroll = 3000;
+
+var cardList = [
+    // TODO start without card, cue into start
     {
-        duration: 14,
+        duration: 0,
+        dynamics: [],
+        pcSet: [],
+        content: []
+    },
+    //
+    {
+        duration: 1,
         dynamics: [
-            { time: 0, value: "ff" },
-            { time: 0.25, value: "n" },
+            { time: 0, value: "ff" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: chord,
+                args: { n: 1 }
+            }
+        ]
+    },
+    {
+        duration: 13,
+        dynamics: [
+            { time: 0, value: "n" },
             { time: 0.5, value: "<"}
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         content: [
             {
-                renderer: chord,
-                args: { n: 1 }
+                type: chord,
+                args: { n: 1, sustain: true }
             }
         ]
     },
     {
-        duration: 19,
+        duration: 2,
         dynamics: [
-            { time: 0, value: "ff" },
-            { time: 0.5, value: "<" }
+            { time: 0, value: "ff" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         content: [
             {
-                renderer: chord,
+                type: chord,
                 args: { n: 2 }
             }
         ]
     },
     {
-        duration: 25,
+        duration: 17,
         dynamics: [
-            { time: 0, value: "ff" },
-            { time: 0.5, value: "mp" }
+            { time: 0, value: "n" },
+            { time: 0.5, value: "<" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         content: [
             {
-                renderer: chord,
+                type: chord,
+                args: { n: 1, sustain: true }
+            }
+        ]
+    },
+    {
+        duration: 1,
+        dynamics: [
+            { time: 0, value: "ff" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: chord,
                 args: { n: 1 }
+            }
+        ]
+    },
+    {
+        duration: 24,
+        dynamics: [
+            { time: 0, value: "mp" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: chord,
+                args: { n: 1, sustain: true }
             }
         ]
     },
@@ -107,53 +202,70 @@ cardList = [
         pcSet: [0, 1, 2, 4, 7, 8],
         content: [
             {
-                renderer: lnp,
+                type: lnp,
                 args: {}
             },
             {
-                renderer: lines,
+                type: lines,
                 args: { n: 10 }
             }
         ]
     },
     {
-        duration: 137,
+        duration: 1,
         dynamics: [
-            { time: 0, value: "ff" },
-            { time: 0.2, value: "n" },
-            { time: 0.4, value: "<" },
-            { time: 0.8, value: ">" },
+            { time: 0, value: "ff" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: chord,
+                args: { n: 2 }
+            }
+        ]
+    },
+    {
+        duration: 136,
+        dynamics: [
+            { time: 0, value: "n" },
+            { time: 0.25, value: "<" },
+            { time: 0.5, value: ">" },
             { time: 1, value: "n" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         content: [
             {
-                renderer: chord,
-                args: { n: 2 }
-            },
-            {
-                renderer: lines,
+                type: lines,
                 args: { n: 10 }
             }
         ]
     },
     {
-        duration: 183,
+        duration: 1,
         dynamics: [
-            { time: 0, value: "ff" },
-            { time: 0.25, value: "mp" },
-            { time: 0.75, value: ">" },
+            { time: 0, value: "ff" }
+        ],
+        pcSet: [0, 1, 4, 6],
+        // pcSet: [0, 1, 3, 7]
+        content: [
+            {
+                type: chord,
+                args: { n: 1 }
+            }
+        ]
+    },
+    {
+        duration: 182,
+        dynamics: [
+            { time: 0, value: "mp" },
+            { time: 0.5, value: ">" },
             { time: 1, value: "n" }
         ],
         pcSet: [0, 1, 4, 6],
         // pcSet: [0, 1, 3, 7]
         content: [
             {
-                renderer: chord,
-                args: { n: 1 }
-            },
-            {
-                renderer: lines,
+                type: lines,
                 args: { n: 10 }
             }
         ]

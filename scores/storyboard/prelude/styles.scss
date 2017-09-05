@@ -31,8 +31,13 @@
     font-family: Bravura;
 }
 
-.card .chord {
+.card .chord,
+.card .chord-fermata, {
     text-anchor: middle;
+    font-size: 24px;
+    font-family: Bravura;
+}
+.card .chord-flag {
     font-size: 24px;
     font-family: Bravura;
 }

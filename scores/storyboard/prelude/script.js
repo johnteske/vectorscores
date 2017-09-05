@@ -3,9 +3,8 @@ layout: compress-js
 ---
 
 var score = {
-    totalDuration: 120 // originally timed for 481 s
+    totalDuration: 481 // originally timed for 481 s // TODO do not scale chord hits (keep at 1–2 s)
 };
-var cardList;
 
 {% include_relative _score.js %}
 {% include_relative _settings.js %}
@@ -49,7 +48,7 @@ function makeCard(data) {
 
     for (var ci = 0; ci < data.content.length; ci++) {
         var content = data.content[ci];
-        card.call(content.renderer, content.args);
+        card.call(content.type, content.args);
     }
 
     selection.append("g")
