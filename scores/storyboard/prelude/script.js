@@ -3,7 +3,7 @@ layout: compress-js
 ---
 
 var score = {
-    totalDuration: 481 // originally timed for 481 s // TODO do not scale chord hits (keep at 1–2 s)
+    totalDuration: 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
 };
 
 {% include_relative _score.js %}
@@ -136,11 +136,19 @@ var addEvent = (function() {
     };
 })();
 
-// create score events from card durations
-for(var i = 0; i < cardList.length; i++) {
-    var scaledDuration = cardList[i].duration * 1000 * (score.totalDuration / 481);
+var scaleDuration = (function() {
+    var scale = score.totalDuration / 481;
 
-    addEvent(goToCard, scaledDuration, [i]);
+    return function(i) {
+        var dur = cardList[i].duration;
+        // do not scale chords (2-3 s)
+        return dur < 4 ? dur * 1000 : dur * scale * 1000;
+    }
+})();
+
+// create score events from card durations
+for (var i = 0; i < cardList.length; i++) {
+    addEvent(goToCard, scaleDuration(i), [i]);
 }
 // and final noop after last card
 addEvent(VS.noop);
