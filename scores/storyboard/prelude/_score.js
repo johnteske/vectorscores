@@ -17,14 +17,6 @@ var chord = (function() {
                 .attr("dy", -15)
                 .text("\ue4c6");
         } else {
-            // flag
-            selection.append("text")
-                .attr("class", "chord-flag")
-                .attr("text-anchor", "start")
-                .attr("x", x + 3.125)
-                .attr("y", y(0) - 24)
-                .text("\uf48d");
-
             // stem
             selection.append("line")
                 .attr("stroke", "black")
@@ -42,6 +34,17 @@ var chord = (function() {
                 .text("\uf475");
         }
 
+        // TODO 1.5 duration should have dots
+        if (!args.sustain && args.duration !== 1.5) {
+            // flag
+            selection.append("text")
+                .attr("class", "chord-flag")
+                .attr("text-anchor", "start")
+                .attr("x", x + 3.125)
+                .attr("y", y(0) - 24)
+                .text("\uf48d");
+        }
+
         var text = selection.append("text")
             .attr("class", "chord");
 
@@ -56,7 +59,7 @@ var chord = (function() {
 
     return function(selection, args) {
         var center = cardWidth * 0.5,
-            spacing = cardWidth * 0.25;
+            spacing = cardWidth * 0.2;
 
         for (var i = 0; i < args.n; i++) {
             selection.call(makeChord, args, center + (i - ((args.n - 1) * 0.5)) * spacing);
@@ -112,7 +115,7 @@ var cardList = [
     },
     //
     {
-        duration: 1,
+        duration: 2,
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -125,10 +128,37 @@ var cardList = [
         ]
     },
     {
-        duration: 13,
+        duration: 11,
         dynamics: [
             { time: 0, value: "n" },
             { time: 0.5, value: "<"}
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: chord,
+                args: { n: 1, sustain: true }
+            }
+        ]
+    },
+    {
+        duration: 3,
+        dynamics: [
+            { time: 0, value: "ff" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: chord,
+                args: { n: 2 }
+            }
+        ]
+    },
+    {
+        duration: 16,
+        dynamics: [
+            { time: 0, value: "n" },
+            { time: 0.5, value: "<" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         content: [
@@ -147,39 +177,12 @@ var cardList = [
         content: [
             {
                 type: chord,
-                args: { n: 2 }
+                args: { n: 1, duration: 1.5 }
             }
         ]
     },
     {
-        duration: 17,
-        dynamics: [
-            { time: 0, value: "n" },
-            { time: 0.5, value: "<" }
-        ],
-        pcSet: [0, 1, 2, 4, 7, 8],
-        content: [
-            {
-                type: chord,
-                args: { n: 1, sustain: true }
-            }
-        ]
-    },
-    {
-        duration: 1,
-        dynamics: [
-            { time: 0, value: "ff" }
-        ],
-        pcSet: [0, 1, 2, 4, 7, 8],
-        content: [
-            {
-                type: chord,
-                args: { n: 1 }
-            }
-        ]
-    },
-    {
-        duration: 24,
+        duration: 23,
         dynamics: [
             { time: 0, value: "mp" }
         ],
@@ -212,7 +215,7 @@ var cardList = [
         ]
     },
     {
-        duration: 1,
+        duration: 3,
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -225,12 +228,10 @@ var cardList = [
         ]
     },
     {
-        duration: 136,
+        duration: 56.5,
         dynamics: [
             { time: 0, value: "n" },
-            { time: 0.25, value: "<" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "n" }
+            { time: 0.5, value: "<" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         content: [
@@ -241,7 +242,21 @@ var cardList = [
         ]
     },
     {
-        duration: 1,
+        duration: 76.5,
+        dynamics: [
+            { time: 0, value: ">" },
+            { time: 0.5, value: "n" }
+        ],
+        pcSet: [0, 1, 2, 4, 7, 8],
+        content: [
+            {
+                type: lines,
+                args: { n: 10 }
+            }
+        ]
+    },
+    {
+        duration: 2,
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -250,12 +265,12 @@ var cardList = [
         content: [
             {
                 type: chord,
-                args: { n: 1 }
+                args: { n: 1, duration: 1.5 }
             }
         ]
     },
     {
-        duration: 182,
+        duration: 180,
         dynamics: [
             { time: 0, value: "mp" },
             { time: 0.5, value: ">" },
