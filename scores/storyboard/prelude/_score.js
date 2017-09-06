@@ -93,8 +93,10 @@ function lnp(selection) {
 function lines(selection, args) {
     var lineCloud = VS.lineCloud()
         .duration(args.duration || 1)
+        .phrase(args.phrase || [{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }])
+        .curve(args.curve || d3.curveLinear)
         .width(cardWidth)
-        .height(cardWidth);
+        .height(cardWidth - (args.bottomMargin || 0));
 
     selection.call(lineCloud, { n: args.n });
 
@@ -102,6 +104,63 @@ function lines(selection, args) {
     selection.selectAll(".line-cloud-path")
         .attr("stroke", "grey")
         .attr("fill", "none");
+}
+
+function microMelodyPhrase() {
+    var notes = [
+        { pitch: 0, duration: 1 },
+        { pitch: 0, duration: 0 }
+    ];
+
+    var dir = VS.getItem([-1, 1]);
+
+    notes.push({ pitch: 2 * dir, duration: 1 });
+    notes.push({ pitch: 2 * dir, duration: 0 });
+
+    dir = dir === -1 ? 1 : -1;
+
+    notes.push({ pitch: 2 * dir, duration: 1 });
+    notes.push({ pitch: 2 * dir, duration: 0 });
+
+    return notes;
+}
+
+function melodyPhrase() {
+    var notes = [
+        { pitch: 0, duration: 1 },
+        { pitch: 0, duration: 0 }
+    ];
+
+    function addNote() {
+        var dir = VS.getItem([-1, 1]);
+        notes.push({ pitch: 2 * dir, duration: 1 });
+        notes.push({ pitch: 2 * dir, duration: 0 });
+    }
+
+    for (var i = 0; i < 5; i++) {
+        addNote();
+    }
+
+    return notes;
+}
+
+function microtonalPhrase() {
+    var notes = [
+        { pitch: 0, duration: 1 }
+    ];
+
+    function addNote() {
+        var dir = VS.getItem([-1, 1]);
+        notes.push({ pitch: dir, duration: 1 });
+    }
+
+    for (var i = 0; i < 5; i++) {
+        addNote();
+    }
+
+    notes.push({ pitch: 0, duration: 0 });
+
+    return notes;
 }
 
 VS.score.preroll = 3000;
@@ -202,6 +261,9 @@ var cardList = [
             }
         ]
     },
+    /**
+     * A
+     */
     {
         duration: 25.75,
         cue: true,
@@ -220,7 +282,8 @@ var cardList = [
                 type: lines,
                 args: {
                     n: 6,
-                    duration: 1
+                    duration: 1,
+                    bottomMargin: 25
                 }
             }
         ]
@@ -243,7 +306,8 @@ var cardList = [
                 type: lines,
                 args: {
                     n: 18,
-                    duration: 3
+                    duration: 3,
+                    bottomMargin: 25
                 }
             }
         ]
@@ -266,7 +330,9 @@ var cardList = [
                 type: lines,
                 args: {
                     n: 18,
-                    duration: 3
+                    duration: 9,
+                    phrase: microMelodyPhrase,
+                    bottomMargin: 25
                 }
             }
         ]
@@ -289,11 +355,16 @@ var cardList = [
                 type: lines,
                 args: {
                     n: 18,
-                    duration: 3
+                    duration: 9,
+                    phrase: melodyPhrase,
+                    bottomMargin: 25
                 }
             }
         ]
     },
+    /**
+     * B
+     */
     {
         duration: 3,
         cue: true,
@@ -341,7 +412,8 @@ var cardList = [
                 type: lines,
                 args: {
                     n: 18,
-                    duration: 3
+                    duration: 9,
+                    phrase: microMelodyPhrase
                 }
             }
         ]
@@ -360,11 +432,16 @@ var cardList = [
                 type: lines,
                 args: {
                     n: 18,
-                    duration: 3
+                    duration: 15,
+                    phrase: microtonalPhrase,
+                    curve: d3.curveCardinal.tension(0)
                 }
             }
         ]
     },
+    /**
+     * C
+     */
     {
         duration: 2,
         cue: true,
@@ -395,7 +472,9 @@ var cardList = [
                 type: lines,
                 args: {
                     n: 12,
-                    duration: 2
+                    duration: 6,
+                    phrase: microtonalPhrase,
+                    curve: d3.curveCardinal.tension(0)
                 }
             }
         ]
