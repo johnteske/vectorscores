@@ -26,12 +26,27 @@ var main = d3.select(".main")
     .attr("width", width)
     .attr("height", height);
 
+var scaleDuration = (function() {
+    var scale = score.totalDuration / 481;
+
+    return function(i) {
+        var dur = cardList[i].duration;
+        // do not scale chords (2-3 s)
+        return dur < 4 ? dur : dur * scale;
+    }
+})();
+
 function cardX(index) {
     return index * (cardWidth + cardPadding);
 }
 
-function makeCard(data) {
+function makeCard(data, index) {
     var selection = d3.select(this);
+
+    selection.append("text")
+        .attr("class", "card-duration")
+        .attr("dy", "-2.5em")
+        .text(scaleDuration(index).toFixed(1) + "\u2033");
 
     selection.append("text")
         .attr("dy", "-1em")
@@ -86,7 +101,7 @@ var cards = cardGroup.selectAll(".card")
 
 var cueIndicator = VS.cueTriangle(main);
 cueIndicator.selection
-    .attr("transform", "translate(" + (cardX(1) + offset) + ", 50)")
+    .attr("transform", "translate(" + (cardX(1) + offset) + ", 36)")
     .style("opacity", "0");
 
 function goToCard(index, control) {
@@ -150,19 +165,9 @@ var addEvent = (function() {
     };
 })();
 
-var scaleDuration = (function() {
-    var scale = score.totalDuration / 481;
-
-    return function(i) {
-        var dur = cardList[i].duration;
-        // do not scale chords (2-3 s)
-        return dur < 4 ? dur * 1000 : dur * scale * 1000;
-    }
-})();
-
 // create score events from card durations
 for (var i = 0; i < cardList.length; i++) {
-    addEvent(goToCard, scaleDuration(i), [i, "score"]);
+    addEvent(goToCard, scaleDuration(i) * 1000, [i, "score"]);
 }
 // and final noop after last card
 addEvent(VS.noop);
