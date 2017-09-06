@@ -3,8 +3,11 @@ layout: compress-js
 ---
 
 var score = {
-    totalDuration: 300 // 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
+    totalDuration: 300, // 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
+    cueBlinks: 2
 };
+
+score.cueDuration = score.cueBlinks * 1000 // NOTE also changes preroll timing
 
 {% include_relative _score.js %}
 {% include_relative _settings.js %}
@@ -87,7 +90,7 @@ cueIndicator.selection
     .style("opacity", "0");
 
 function goToCard(index, control) {
-    var pointer = index || VS.score.pointer;
+    var pointer = (typeof index !== "undefined") ? index : VS.score.pointer;
     var dur = cardTransTime;
     cardGroup.transition()
         .duration(dur)
@@ -115,11 +118,11 @@ function goToCard(index, control) {
 }
 
 function cueBlink() {
-    cueIndicator.blink();
+    cueIndicator.blink(1, 0, 0, score.cueBlinks);
     cueIndicator.selection
         .style("opacity", "1")
         .transition()
-        .delay(3000)
+        .delay(score.cueDuration)
         .duration(cardTransTime)
         .style("opacity", "0");
 }
@@ -132,7 +135,7 @@ function cueCancel() {
 
 function updateCardIndicator(pointer) {
     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
-        blinkDuration = 3000,
+        blinkDuration = score.cueDuration,
         indicatorTime = cardDuration - blinkDuration;
 
     VS.score.schedule(indicatorTime, cueBlink);
@@ -164,11 +167,11 @@ for (var i = 0; i < cardList.length; i++) {
 // and final noop after last card
 addEvent(VS.noop);
 
-VS.score.preroll = 3000 + cardTransTime;
+VS.score.preroll = score.cueDuration; // cardTransTime;
 
 VS.score.playCallback = function() {
     goToCard(VS.score.pointer - 1, "play");
-    VS.score.schedule(VS.score.preroll - 3000, cueBlink);
+    VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
 }
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {

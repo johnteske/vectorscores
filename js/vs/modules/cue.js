@@ -18,27 +18,22 @@ VS.cueTriangle = function(parent) {
         .style("fill-opacity", "0");
 
     // TODO allow custom options: opacities, timing, blink fn (other than fill-opacity?), etc.
-    cue.blink = function(onOpacity, offOpacity, endOpacity) {
-        function blinkFn(opacity) {
-            return function(selection) { selection.style("fill-opacity", opacity); };
-        }
+    cue.blink = function(onOpacity, offOpacity, endOpacity, times) {
+        var on = onOpacity || 1;
+            off = offOpacity || 0,
+            end = endOpacity || 0,
+            n = times || 3;
 
-        var blinkOn = blinkFn(onOpacity || 1),
-            blinkOff = blinkFn(offOpacity || 0),
-            blinkEnd = blinkFn(endOpacity || 0);
-
-        function blinkCycle(selection, delay, end) {
+        function blinkCycle(selection, delay, isEnd) {
             selection.transition().delay(delay).duration(onTime)
-                .call(blinkOn)
+                .style("fill-opacity", on)
                 .transition().delay(onTime).duration(fadeTime)
-                .call(end ? blinkEnd : blinkOff);
+                .style("fill-opacity", isEnd ? end : off);
         }
 
-        cue.selection
-            .call(blinkCycle, 0)
-            .call(blinkCycle, 1000)
-            .call(blinkCycle, 2000)
-            .call(blinkCycle, 3000, true);
+        for (var i = 0; i < (n + 1); i++) {
+            cue.selection.call(blinkCycle, i * 1000, i === n)
+        }
     };
 
     // TODO assuming 0 offOpacity until refactored
