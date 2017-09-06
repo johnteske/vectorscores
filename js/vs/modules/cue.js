@@ -1,6 +1,9 @@
 ---
 layout: compress-js
 ---
+/**
+ * TODO refactor as module (not as a generator but with prototype space)
+ */
 VS.cueTriangle = function(parent) {
     var cue = {};
     var onTime = 50,
@@ -37,6 +40,13 @@ VS.cueTriangle = function(parent) {
             .call(blinkCycle, 2000)
             .call(blinkCycle, 3000, true);
     };
+
+    // TODO assuming 0 offOpacity until refactored
+    cue.cancel = function() {
+        cue.selection
+            .transition()
+            .style("fill-opacity", 0);
+    }
 
     return cue;
 };

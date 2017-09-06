@@ -163,18 +163,7 @@ function microtonalPhrase() {
     return notes;
 }
 
-VS.score.preroll = 3000;
-
 var cardList = [
-    // TODO start without card, cue into start
-    {
-        duration: 0,
-        cue: true,
-        dynamics: [],
-        pcSet: [],
-        content: []
-    },
-    //
     {
         duration: 2,
         cue: true,

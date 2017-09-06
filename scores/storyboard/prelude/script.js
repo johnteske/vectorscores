@@ -3,7 +3,7 @@ layout: compress-js
 ---
 
 var score = {
-    totalDuration: 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
+    totalDuration: 300 // 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
 };
 
 {% include_relative _score.js %}
@@ -83,12 +83,12 @@ var cards = cardGroup.selectAll(".card")
 
 var cueIndicator = VS.cueTriangle(main);
 cueIndicator.selection
-    .attr("transform", "translate(" + (cardX(1) + offset) + ", 50)") // put at right card position
+    .attr("transform", "translate(" + (cardX(1) + offset) + ", 50)")
     .style("opacity", "0");
 
-function goToCard(eventIndex, dur) {
-    var pointer = eventIndex || VS.score.pointer;
-    dur = dur || cardTransTime;
+function goToCard(index, control) {
+    var pointer = index || VS.score.pointer;
+    var dur = cardTransTime;
     cardGroup.transition()
         .duration(dur)
         .attr("transform", function() {
@@ -99,7 +99,10 @@ function goToCard(eventIndex, dur) {
     cards.transition()
         .duration(dur)
         .style("opacity", function(d, i) {
-            if(pointer > i ){
+            // if rolling back to begin play, hide previous cards
+            var p = control === "play" ? pointer + 1 : pointer;
+
+            if(p > i ){
                 return 0;
             }
             else {
@@ -108,7 +111,23 @@ function goToCard(eventIndex, dur) {
         });
 
     // if playing and not skipping, stopping
-    if(typeof eventIndex !== "undefined") { updateCardIndicator(eventIndex); }
+    if(control === "score" && cardList[pointer + 1].cue) { updateCardIndicator(index); }
+}
+
+function cueBlink() {
+    cueIndicator.blink();
+    cueIndicator.selection
+        .style("opacity", "1")
+        .transition()
+        .delay(3000)
+        .duration(cardTransTime)
+        .style("opacity", "0");
+}
+function cueCancel() {
+    // cueIndicator.cancel();
+    cueIndicator.selection
+        .transition()
+        .style("opacity", "0");
 }
 
 function updateCardIndicator(pointer) {
@@ -116,15 +135,7 @@ function updateCardIndicator(pointer) {
         blinkDuration = 3000,
         indicatorTime = cardDuration - blinkDuration;
 
-    VS.score.schedule(indicatorTime, function() {
-        cueIndicator.blink();
-        cueIndicator.selection
-            .style("opacity", "1")
-            .transition()
-            .delay(blinkDuration)
-            .duration(cardTransTime)
-            .style("opacity", "0");
-    });
+    VS.score.schedule(indicatorTime, cueBlink);
 }
 
 var addEvent = (function() {
@@ -148,10 +159,21 @@ var scaleDuration = (function() {
 
 // create score events from card durations
 for (var i = 0; i < cardList.length; i++) {
-    addEvent(goToCard, scaleDuration(i), [i]);
+    addEvent(goToCard, scaleDuration(i), [i, "score"]);
 }
 // and final noop after last card
 addEvent(VS.noop);
 
+VS.score.preroll = 3000 + cardTransTime;
+
+VS.score.playCallback = function() {
+    goToCard(VS.score.pointer - 1, "play");
+    VS.score.schedule(VS.score.preroll - 3000, cueBlink);
+}
+
+VS.score.pauseCallback = VS.score.stopCallback = function() {
+    goToCard();
+    cueCancel();
+};
+
 VS.control.stepCallback = goToCard;
-VS.score.stopCallback = goToCard;
