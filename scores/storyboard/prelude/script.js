@@ -16,7 +16,7 @@ var dynamicsDict = VS.dictionary.Bravura.dynamics;
 
 // display
 var cardWidth = 120,
-    cardPadding = 12,
+    cardPadding = 24,
     cardTransTime = 600,
     offset = cardWidth,
     width = (cardWidth * 4) + (cardPadding * 2),
