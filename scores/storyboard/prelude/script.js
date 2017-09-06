@@ -100,9 +100,7 @@ var cards = cardGroup.selectAll(".card")
     .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
 var cueIndicator = VS.cueTriangle(main);
-cueIndicator.selection
-    .attr("transform", "translate(" + (cardX(1) + offset) + ", 36)")
-    .style("opacity", "0");
+cueIndicator.selection.style("opacity", "0");
 
 function goToCard(index, control) {
     var pointer = (typeof index !== "undefined") ? index : VS.score.pointer;
@@ -135,10 +133,12 @@ function goToCard(index, control) {
 function cueBlink() {
     cueIndicator.blink(1, 0, 0, score.cueBlinks);
     cueIndicator.selection
+        .attr("transform", "translate(" + (cardX(1) + offset) + ", 36)")
         .style("opacity", "1")
         .transition()
         .delay(score.cueDuration)
         .duration(cardTransTime)
+        .attr("transform", "translate(" + (cardX(0) + offset) + ", 36)")
         .style("opacity", "0");
 }
 function cueCancel() {
