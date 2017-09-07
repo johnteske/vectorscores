@@ -17,6 +17,10 @@ var width = 480,
         },
     };
 
+// TODO a temporary solution to update rhythms within bars--eventually add specific rhythm selections/option to score
+var updateTimeout;
+var updateInterval = 8000;
+
 {% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
 {% include_relative _score.js %}
@@ -88,7 +92,7 @@ var globject = VS.globject()
 /**
  *
  */
-function update(index) {
+function update(index, isControlEvent) {
     /**
      * Globjects
      */
@@ -211,6 +215,13 @@ function update(index) {
     perc2.selectAll(".rhythm")
         .each(createRhythm)
         .each(spacePerc);
+
+    // TODO
+    if (!isControlEvent) {
+        updateTimeout = window.setTimeout(function() { update(index) }, updateInterval);
+    } else {
+        window.clearTimeout(updateTimeout);
+    }
 }
 
 function centerGlobject() {
@@ -259,11 +270,15 @@ for (var i = 0; i < score.length; i++) {
  * Initialize score
  */
 d3.select(window).on("load", function () {
-    update(0);
+    update(0, true);
 });
 
 /**
  * Score controls
  */
-VS.control.stopCallback = function() { update(0); };
-VS.control.stepCallback = function() { update(VS.score.pointer); };
+VS.control.stopCallback = function() {
+    update(0, true);
+};
+VS.control.pauseCallback = VS.control.stepCallback = function() {
+    update(VS.score.pointer, true);
+};
