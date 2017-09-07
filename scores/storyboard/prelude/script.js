@@ -1,7 +1,7 @@
 ---
 layout: compress-js
 ---
-
+// TODO put time signatures above cued chord cards? or, don't use cards and simply display time sig with accurate notation
 var score = {
     totalDuration: 300, // 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
     cueBlinks: 2
@@ -79,10 +79,22 @@ function makeCard(data, index) {
         .enter()
         .append("text")
         .attr("x", function(d) {
-            // TODO better handle dynamics at time: 1
-            return d.time * (cardWidth - 11);
+            return d.time * cardWidth;
         })
-        .attr("dx", "0.125em")
+        .attr("text-anchor", function (d) {
+            var anchor = "start";
+
+            if (d.time == 0.5) {
+                anchor = "middle";
+            } else if (d.time === 1) {
+                anchor = "end";
+            }
+
+            return anchor;
+        })
+        .attr("dx", function (d) {
+            return d.time === 0 ? "0.125em" : 0;
+        })
         .attr("dy", "1em")
         .text(function(d) { return dynamicsDict[d.value]; });
 }
