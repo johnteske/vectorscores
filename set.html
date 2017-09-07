@@ -1,0 +1,22 @@
+---
+layout: page
+title: Set
+permalink: /set/
+menu: true
+set:
+    - ad;sr
+    - glob
+    - dirge,,march
+    - trashfire
+    - walk reveal
+    - cells
+    - prelude
+---
+<ol>
+{% for title in page.set %}
+{% include work-list-loop.html filter_by='title' filter_equals=title %}
+{% endfor %}
+{% for title in page.set %}
+{% include work-list-loop.html layout_contains='movement' filter_by='title' filter_equals=title %}
+{% endfor %}
+</ol>
