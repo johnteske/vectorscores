@@ -241,17 +241,18 @@ d3.select(window).on("resize", resize);
 /**
  * Populate score
  */
-var addEvent = (function() {
-    var time = 0;
-
-    return function(fn, duration, args) {
-        VS.score.add(time, fn, args);
-        time += duration;
-    };
-})();
+// var addEvent = (function() {
+//     var time = 0;
+//
+//     return function(fn, duration, args) {
+//         VS.score.add(time, fn, args);
+//         time += duration;
+//     };
+// })();
 
 for (var i = 0; i < score.length; i++) {
-    addEvent(update, score[i].duration * 1000, [i]);
+    VS.score.add(score[i].time * 1000, update, [i]);
+    // addEvent(update, score[i].duration * 1000, [i]);
 }
 
 /**

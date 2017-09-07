@@ -9,46 +9,74 @@ var score = (function(score) {
         return g.contour === "descending";
     });
 
-    for (var i = 0; i < 3; i++) {
-        score.push({
-            duration: 3,
-            globjects: [VS.getItem(descending)],
-            pitch: [
-                [
-                    {
-                        time: 0,
-                        classes: [0],
-                        modifier: "-"
-                    },
-                    {
-                        time: 1,
-                        classes: [0, 3],
-                        modifier: ""
-                    }
-                ],
-                [
-                    {
-                        time: 0,
-                        classes: [0, 3],
-                        modifier: "-"
-                    },
-                    {
-                        time: 1,
-                        classes: [0, 3, 7],
-                        modifier: ""
-                    }
-                ],
-                [
-                    {
-                        time: 0,
-                        classes: [0, 3, 7],
-                        modifier: "v"
-                    }
-                ],
-            ][i],
-            tempo: 60
-        });
+    function clone(o) {
+        return JSON.parse(JSON.stringify(o));
     }
+
+    // TODO stashing is a quick fix--create independent layers
+    var stashedEvent = {
+        time: 0,
+        duration: 46.67,
+        globjects: [VS.getItem(descending)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0],
+                modifier: "-"
+            },
+            {
+                time: 1,
+                classes: [0, 3],
+                modifier: ""
+            }
+        ],
+        tempo: 0
+    };
+    score.push(stashedEvent);
+
+    stashedEvent = clone(stashedEvent);
+    stashedEvent.time = 16;
+    stashedEvent.tempo = 60;
+    score.push(stashedEvent);
+
+    score.push({
+        time: 46.667,
+        duration: 46.67,
+        globjects: [VS.getItem(descending)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0, 3],
+                modifier: "-"
+            },
+            {
+                time: 1,
+                classes: [0, 3, 7],
+                modifier: ""
+            }
+        ],
+        tempo: 60
+    });
+
+    stashedEvent = {
+        time: 85.333,
+        duration: 46.67,
+        globjects: [VS.getItem(descending)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0, 3, 7],
+                modifier: "v"
+            }
+        ],
+        tempo: 60
+    };
+    score.push(stashedEvent);
+
+    stashedEvent = clone(stashedEvent);
+    stashedEvent.time = 112;
+    stashedEvent.tempo = 0;
+    score.push(stashedEvent);
 
     /**
      *
@@ -57,8 +85,9 @@ var score = (function(score) {
         return g.contour === "ascending";
     });
 
-    score.push({
-        duration: 6,
+    stashedEvent = {
+        time: 144,
+        duration: 96,
         globjects: [VS.getItem(ascending)],
         pitch: [
             {
@@ -78,7 +107,13 @@ var score = (function(score) {
             }
         ],
         tempo: 0
-    });
+    };
+    score.push(stashedEvent);
+
+    stashedEvent = clone(stashedEvent);
+    stashedEvent.time = 208;
+    stashedEvent.tempo = 120;
+    score.push(stashedEvent);
 
     /**
      * march
@@ -86,46 +121,82 @@ var score = (function(score) {
      */
     var allGlobjects = globjects.concat(retrogradeGlobjects);
 
-    for (i = 0; i < 3; i++) {
-        score.push({
-            duration: 3,
-            globjects: [VS.getItem(allGlobjects)],
-            pitch: [
-                [
-                    {
-                        time: 0,
-                        classes: [0],
-                        modifier: "<"
-                    },
-                    {
-                        time: 1,
-                        classes: [0, 3],
-                        modifier: ""
-                    }
-                ],
-                [
-                    {
-                        time: 0,
-                        classes: [0, 3],
-                        modifier: "<"
-                    },
-                    {
-                        time: 1,
-                        classes: [0, 3, 7],
-                        modifier: ""
-                    }
-                ],
-                [
-                    {
-                        time: 0,
-                        classes: [0, 3, 7],
-                        modifier: ""
-                    }
-                ],
-            ][i],
-            tempo: 120
-        });
-    }
+    score.push({
+        time: 240,
+        duration: 24,
+        globjects: [VS.getItem(allGlobjects)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0],
+                modifier: "<"
+            },
+            {
+                time: 1,
+                classes: [0, 3],
+                modifier: ""
+            }
+        ],
+        tempo: 120
+    });
+
+    score.push({
+        time: 264,
+        duration: 24,
+        globjects: [VS.getItem(allGlobjects)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0, 3],
+                modifier: "<"
+            },
+            {
+                time: 1,
+                classes: [0, 3, 7],
+                modifier: ""
+            }
+        ],
+        tempo: 120
+    });
+
+    stashedEvent = {
+        time: 288,
+        duration: 24,
+        globjects: [VS.getItem(allGlobjects)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0, 3],
+                modifier: "<"
+            },
+            {
+                time: 1,
+                classes: [0, 3, 7],
+                modifier: ""
+            }
+        ],
+        tempo: 120
+    };
+    score.push(stashedEvent);
+
+    stashedEvent = clone(stashedEvent);
+    stashedEvent.time = 304;
+    stashedEvent.tempo = 0;
+    score.push(stashedEvent);
+
+    score.push({
+        time: 312,
+        duration: 24,
+        globjects: [VS.getItem(allGlobjects)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0, 3, 7],
+                modifier: ""
+            }
+        ],
+        tempo: 0
+    });
 
     return score;
 })([]);
