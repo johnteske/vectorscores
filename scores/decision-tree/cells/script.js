@@ -73,8 +73,7 @@ function formatPCSet(setString) {
         formatted = "";
 
     if (setString) {
-        var set = setString.split(",");
-        set = PC.transpose(setString.split(","), "random").sort(function(a, b) { return a - b; });
+        var set = PC.transpose(setString.split(","), "random").sort(function(a, b) { return a - b; });
         formatted = "{" + PC.format(set) + "}";
     }
 

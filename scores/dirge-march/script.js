@@ -8,6 +8,7 @@ var width = 480,
     boxwidth = width + (margin * 2),
     center = boxwidth * 0.5,
     debug = +VS.getQueryString("debug") === 1 || false,
+    transposeBy = 2,
     layout = {
         perc: {
             x: 60 + 22, // TODO make this the score left margin
@@ -129,9 +130,12 @@ function update(index, isControlEvent) {
                     .attr("x", pitch[i].time * d.width)
                     .attr("text-anchor", anchor[pitch[i].time]);
 
+                var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy);
+                var formatted = "{" + VS.pitchClass.format(set) + "}";
+
                 text.append("tspan")
                     .attr("class", "pitch-class")
-                    .text("{" + pitch[i].classes.join(",") + "}");
+                    .text(formatted);
                 text.append("tspan")
                     .attr("class", "modifier")
                     .text(modifiers[pitch[i].modifier]);
