@@ -1,10 +1,10 @@
-{% assign layout = include.layout | default: 'score' %}
+{% assign layout_contains = include.layout_contains | default: 'score' %}
 {% assign filter_equals = include.filter_equals | default: '' %}
 {% assign filter_contains = include.filter_contains | default: 'non_matching' %}
 
 {% assign scores = '' | split: '' %}
 {% for html_page in site.html_pages %}
-    {% if html_page.layout contains layout %}
+    {% if html_page.layout contains layout_contains %}
     {% assign scores = scores | push: html_page %}
     {% endif %}
 {% endfor %}
