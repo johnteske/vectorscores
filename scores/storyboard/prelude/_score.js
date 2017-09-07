@@ -171,6 +171,7 @@ var cardList = [
             { time: 0, value: "ff" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: 0,
         content: [
             {
                 type: chord,
@@ -186,6 +187,7 @@ var cardList = [
             { time: 0.5, value: "<"}
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: 0,
         content: [
             {
                 type: chord,
@@ -200,6 +202,7 @@ var cardList = [
             { time: 0, value: "ff" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: 0,
         content: [
             {
                 type: chord,
@@ -215,6 +218,7 @@ var cardList = [
             { time: 0.5, value: "<" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: 0,
         content: [
             {
                 type: chord,
@@ -229,6 +233,7 @@ var cardList = [
             { time: 0, value: "ff" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: 0,
         content: [
             {
                 type: chord,
@@ -243,6 +248,7 @@ var cardList = [
             { time: 0, value: "mp" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: 0,
         content: [
             {
                 type: chord,
@@ -361,6 +367,7 @@ var cardList = [
             { time: 0, value: "ff" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: 0,
         content: [
             {
                 type: chord,
@@ -438,6 +445,7 @@ var cardList = [
             { time: 0, value: "ff" }
         ],
         pcSet: [0, 1, 4, 6],
+        transpose: 0,
         // pcSet: [0, 1, 3, 7]
         content: [
             {

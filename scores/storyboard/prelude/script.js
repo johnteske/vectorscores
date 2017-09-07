@@ -4,7 +4,8 @@ layout: compress-js
 // TODO put time signatures above cued chord cards? or, don't use cards and simply display time sig with accurate notation
 var score = {
     totalDuration: 300, // 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
-    cueBlinks: 2
+    cueBlinks: 2,
+    transposeBy: 3
 };
 
 score.cueDuration = score.cueBlinks * 1000 // NOTE also changes preroll timing
@@ -51,9 +52,13 @@ function makeCard(data, index) {
     selection.append("text")
         .attr("dy", "-1em")
         .text(function(d) {
-            var pcSet = d.pcSet.map(function(pc) {
+            var transpose = (typeof d.transpose !== "undefined") ? (d.transpose + score.transposeBy) : "random";
+            var pcSet = VS.pitchClass.transpose(d.pcSet, transpose);
+
+            pcSet = pcSet.map(function(pc) {
                 return VS.pitchClass.format(pc, scoreSettings.pcFormat);
             });
+
             return "{" + pcSet.join(",") + "}";
         })
         .classed("pitch-class-set", 1);
