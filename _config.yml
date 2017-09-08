@@ -15,7 +15,7 @@ markdown: kramdown
 sass:
     style: compressed
 include: ["_pages"]
-exclude: ["websockets.rb"]
+exclude: ["bin"]
 
 # Compression settings
 compress_html:
