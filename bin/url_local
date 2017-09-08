@@ -9,4 +9,5 @@ def first_private_ipv4
 end
 
 ip = first_private_ipv4.ip_address unless first_private_ipv4.nil?
-puts 'http://' + ip + ':4000'
+
+puts 'http://' + (ip ? ip : 'localhost') + ':4000'
