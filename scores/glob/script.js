@@ -17,6 +17,8 @@ var canvas = {
     debug = VS.getQueryString("debug") == 1 || false,
     main = d3.select(".main");
 
+var globInterval = transitionTime.long * 3;
+
 {% include_relative _glob.js %}
 {% include_relative _settings.js %}
 
@@ -78,7 +80,7 @@ glob.move = function(dur, type) {
 };
 
 for(var i = 0; i < scoreLength; i++) {
-    VS.score.add(i * transitionTime.long, glob.move, [transitionTime.long, VS.getItem(["glob", "chord", "rhythm"])]);
+    VS.score.add(i * globInterval, glob.move, [transitionTime.long, VS.getItem(["glob", "chord", "rhythm"])]);
 }
 // final event
 VS.score.add(scoreLength * transitionTime.long, function() {
