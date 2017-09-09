@@ -15,7 +15,7 @@ markdown: kramdown
 sass:
     style: compressed
 include: ["_pages"]
-exclude: ["bin"]
+exclude: ["bin", "docs/README.md"]
 
 # Compression settings
 compress_html:
