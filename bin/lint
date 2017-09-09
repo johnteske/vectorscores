@@ -1,5 +1,0 @@
-#!/bin/bash
-#
-# Line built Javascript files, formatted to help trace back to source files
-
-eslint -f codeframe _site/
