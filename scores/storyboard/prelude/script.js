@@ -82,6 +82,15 @@ function makeCard(data, index) {
         .attr("dy", "-2.5em")
         .text(scaleDuration(index).toFixed(1) + "\u2033");
 
+    if (data.timbre) {
+        selection.append("text")
+            .attr("class", "card-timbre")
+            .attr("x", cardWidth)
+            .attr("dy", "-2.5em")
+            .style("text-anchor", "end")
+            .text(data.timbre);
+    }
+
     selection.append("text")
         .attr("dy", "-1em")
         .text(function(d) {

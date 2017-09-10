@@ -308,6 +308,7 @@ var cardList = [
         duration: 180 * (3 / 7),
         cue: 2,
         type: "card",
+        timbre: "glassy",
         dynamics: [
             { time: 0, value: "mp" },
             { time: 0.5, value: ">" },
@@ -331,6 +332,7 @@ var cardList = [
         duration: 180 * (4 / 7),
         cue: 1,
         type: "card",
+        timbre: "glassy",
         dynamics: [
             { time: 0, value: "pp" },
             { time: 0.5, value: ">" },

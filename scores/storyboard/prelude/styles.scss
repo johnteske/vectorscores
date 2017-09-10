@@ -39,6 +39,11 @@
         @extend .monospace;
     }
 
+    .card-timbre, {
+        @extend .monospace;
+        font-style: italic;
+    }
+
     .pitch-class-set {
         @extend .monospace;
     }
@@ -74,3 +79,26 @@
         text-anchor: middle;
     }
 }
+
+//
+// _info
+//
+.modal-content a[target="_blank"],
+.modal-content a[target="VS_glossary"] {
+    padding-right: 0.4em;
+    &::after {
+        content: '°';
+        position: absolute;
+    }
+}
+
+.modal-content {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        padding-bottom: 1em;
+    }
+}
+@import "description-list";
