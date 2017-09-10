@@ -159,7 +159,9 @@ var cards = cardGroup.selectAll(".card")
     .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
 // create cues
-cardGroup.selectAll(".cue")
+cardGroup.append("g")
+    .attr("class", "cues")
+    .selectAll(".cue")
     .data(cardList)
     .enter()
     .append("text")
@@ -173,6 +175,15 @@ function showNextCue(selection, pointer, dur) {
         .style("opacity", function(d, i) {
             return i === (pointer + 1) ? 1 : 0;
         });
+}
+
+function fadePenultimateScene(active, dur) {
+    cards.filter(function(d, i) {
+        return i === (cardList.length - 1);
+    })
+    .style("opacity", 1)
+    .transition().duration(dur)
+    .style("opacity", active ? 0 : 1);
 }
 
 // var cueIndicator = VS.cueTriangle(main);
@@ -196,18 +207,24 @@ function goToCard(index, control) {
             // if rolling back to begin play, hide previous cards
             var p = control === "play" ? pointer + 1 : pointer;
 
-            if(p > i ){
+            if (p > i) {
                 return 0;
             }
             else {
                 return (0.5 * (pointer - i)) + 1;
             }
+        })
+        .on("end", function() {
+            // if penultimate scene, fade
+            if (VS.score.pointer === (VS.score.getLength() - 2) && control === "score") {
+                fadePenultimateScene(true, (scaleDuration(pointer) * 1000) - dur);
+            }
         });
 
     // if playing and not skipping, stopping
-    // if(control === "score") { updateCardIndicator(index); } // cue all
-    // if(control === "score" && cardList[pointer + 1].cue) { updateCardIndicator(index); } // only cue if set in score
-    if(control === "score") { scheduleCue(index); }
+    // if (control === "score") { updateCardIndicator(index); } // cue all
+    // if (control === "score" && cardList[pointer + 1].cue) { updateCardIndicator(index); } // only cue if set in score
+    if (control === "score") { scheduleCue(index); }
 }
 
 // function cueBlink() {
@@ -285,6 +302,7 @@ VS.score.playCallback = function() {
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {
     cueCancel2();
+    fadePenultimateScene(false, 0);
     goToCard();
     // cueCancel();
 };
