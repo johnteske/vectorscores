@@ -39,7 +39,7 @@ glob.group.selectAll("text")
     .append("text")
     .classed("glob-child", 1)
     .text(function() {
-        return durationDict[VS.getItem([1, 1.5, 2, 3, 4])];
+        return durationDict[VS.getItem([1, 2, 4])];
     });
 glob.children = d3.selectAll("text");
 
