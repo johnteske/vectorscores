@@ -20,17 +20,29 @@ glob.move(0, score[0]);
 /**
  * Controls
  */
- VS.score.preroll = 1000;
+VS.score.preroll = 1000;
 
- VS.control.stepCallback = function() {
-     glob.move(transitionTime.short, score[VS.score.pointer]);
- };
+VS.control.stepCallback = function() {
+    glob.move(transitionTime.short, score[VS.score.pointer]);
+};
 
- VS.score.stopCallback = function() {
-     glob.pitchSet
-         .transition().duration(transitionTime.short)
-         .style("opacity", "0");
-     glob.children
-         .transition().duration(transitionTime.short)
-         .attr("transform", "translate(0, 0)");
- };
+VS.score.playCallback = function() {
+    glob.pitchSet
+        .transition().duration(transitionTime.short)
+        .style("opacity", 1);
+    glob.children
+        .transition().duration(transitionTime.short)
+        .style("opacity", 1);
+};
+
+VS.score.stopCallback = function() {
+    glob.pitchSet
+        .transition().duration(transitionTime.short)
+        .style("opacity", "0");
+    glob.children
+        .transition().duration(transitionTime.short)
+        .style("opacity", "0")
+        .on("end", function() {
+            glob.move(0, score[0]);
+        });
+};

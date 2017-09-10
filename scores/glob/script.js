@@ -57,10 +57,7 @@ glob.move = function(dur, type) {
         .attr("y", canvas.width - textoffset)
         .text(function() {
             return "{" + pcSet.join(", ") + "}";
-        })
-        // fade in if needed
-        .transition().duration(transitionTime.short)
-        .style("opacity", "1");
+        });
 
     glob.children
         .transition().duration(dur)
@@ -85,7 +82,7 @@ d3.select(window).on("resize", resize);
 
 function resize() {
     // update width
-    canvas.width = Math.min( parseInt(d3.select("main").style("width"), 10), canvas.maxWidth);
+    canvas.width = Math.min(parseInt(d3.select("main").style("width"), 10), canvas.maxWidth);
     canvas.center = canvas.width * 0.5;
     var innerwidth = canvas.width - (canvas.margins * 2);
 
