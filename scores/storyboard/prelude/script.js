@@ -48,7 +48,7 @@ function cardX(index) {
     return index * (cardWidth + cardPadding);
 }
 
-function makeCard(data, index) {
+function makeCue(data, index) {
     var selection = d3.select(this);
 
     // \ue890 // cue
@@ -58,14 +58,19 @@ function makeCard(data, index) {
     // \ue896 // 4 beat
     // \ue89a // free
 
-    var cue = selection.append("text")
-        .attr("class", "bravura")
+    selection
+        .attr("class", "cue bravura")
+        .attr("transform", "translate(" + cardX(index) + ", 100)")
         .attr("dy", "-2em")
         .style("text-anchor", data.cue ? "start" : "middle")
         .style("fill", "#888")
         .text(data.cue ? "\ue894" : "\ue893");
 
-    cues[index] = new CueSymbol(cue);
+    cues[index] = new CueSymbol(selection);
+}
+
+function makeCard(data, index) {
+    var selection = d3.select(this);
 
     selection.append("text")
         .attr("class", "card-duration")
@@ -148,6 +153,22 @@ var cards = cardGroup.selectAll(".card")
     .attr("transform", function(d, i) { return "translate(" + cardX(i) + ", 100)"; })
     .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
+// create cues
+cardGroup.selectAll(".cue")
+    .data(cardList)
+    .enter()
+    .append("text")
+    .each(makeCue);
+
+function showNextCue(selection, pointer, dur) {
+    selection
+        .transition()
+        .duration(dur)
+        .style("opacity", function(d, i) {
+            return i === (pointer + 1) ? 1 : 0;
+        });
+}
+
 // var cueIndicator = VS.cueTriangle(main);
 // cueIndicator.selection.style("opacity", "0");
 
@@ -160,6 +181,8 @@ function goToCard(index, control) {
             var x = offset - cardX(pointer);
             return "translate(" + x + ", 0)";
         });
+
+    d3.selectAll(".cue").call(showNextCue, pointer, dur);
 
     cards.transition()
         .duration(dur)
@@ -250,9 +273,9 @@ VS.score.playCallback = function() {
 };
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {
+    cueCancel2();
     goToCard();
     // cueCancel();
-    cueCancel2();
 };
 
 VS.control.stepCallback = goToCard;

@@ -43,5 +43,6 @@ CueSymbol.prototype.blink = function(nTimes) {
 CueSymbol.prototype.cancel = function() {
     this.selection
         .transition()
+        .style("fill", "#888")
         .style("opacity", this.opacities.end);
 };
