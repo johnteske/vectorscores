@@ -14,6 +14,10 @@ score.cueDuration = score.cueBlinks * 1000; // NOTE also changes preroll timing
 
 {% include_relative _card-content.js %}
 {% include_relative _score.js %}
+
+var cues = [];
+{% include_relative _cue.js %}
+
 {% include_relative _settings.js %}
 
 var dynamicsDict = VS.dictionary.Bravura.dynamics;
@@ -46,6 +50,22 @@ function cardX(index) {
 
 function makeCard(data, index) {
     var selection = d3.select(this);
+
+    // \ue890 // cue
+    // \ue893 // weak cue
+    // \ue894 // 2 beat
+    // \ue895 // 3 beat
+    // \ue896 // 4 beat
+    // \ue89a // free
+
+    var cue = selection.append("text")
+        .attr("class", "bravura")
+        .attr("dy", "-2em")
+        .style("text-anchor", data.cue ? "start" : "middle")
+        .style("fill", "#888")
+        .text(data.cue ? "\ue894" : "\ue893");
+
+    cues[index] = new CueSymbol(cue);
 
     selection.append("text")
         .attr("class", "card-duration")
@@ -128,8 +148,8 @@ var cards = cardGroup.selectAll(".card")
     .attr("transform", function(d, i) { return "translate(" + cardX(i) + ", 100)"; })
     .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
-var cueIndicator = VS.cueTriangle(main);
-cueIndicator.selection.style("opacity", "0");
+// var cueIndicator = VS.cueTriangle(main);
+// cueIndicator.selection.style("opacity", "0");
 
 function goToCard(index, control) {
     var pointer = (typeof index !== "undefined") ? index : VS.score.pointer;
@@ -156,34 +176,53 @@ function goToCard(index, control) {
         });
 
     // if playing and not skipping, stopping
-    if(control === "score") { updateCardIndicator(index); } // cue all
+    // if(control === "score") { updateCardIndicator(index); } // cue all
     // if(control === "score" && cardList[pointer + 1].cue) { updateCardIndicator(index); } // only cue if set in score
+    if(control === "score") { scheduleCue(index); }
 }
 
-function cueBlink() {
-    cueIndicator.blink(1, 0, 0, score.cueBlinks);
-    cueIndicator.selection
-        .attr("transform", "translate(" + (cardX(1) + offset) + ", 36)")
-        .style("opacity", "1")
-        .transition()
-        .delay(score.cueDuration)
-        .duration(cardTransTime)
-        .attr("transform", "translate(" + (cardX(0) + offset) + ", 36)")
-        .style("opacity", "0");
-}
-function cueCancel() {
-    // cueIndicator.cancel();
-    cueIndicator.selection
-        .transition()
-        .style("opacity", "0");
+// function cueBlink() {
+//     cueIndicator.blink(1, 0, 0, score.cueBlinks);
+//     cueIndicator.selection
+//         .attr("transform", "translate(" + (cardX(1) + offset) + ", 36)")
+//         .style("opacity", "1")
+//         .transition()
+//         .delay(score.cueDuration)
+//         .duration(cardTransTime)
+//         .attr("transform", "translate(" + (cardX(0) + offset) + ", 36)")
+//         .style("opacity", "0");
+// }
+// function cueCancel() {
+//     // cueIndicator.cancel();
+//     cueIndicator.selection
+//         .transition()
+//         .style("opacity", "0");
+// }
+
+// function updateCardIndicator(pointer) {
+//     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
+//         blinkDuration = score.cueDuration,
+//         indicatorTime = cardDuration - blinkDuration;
+//
+//     VS.score.schedule(indicatorTime, cueBlink);
+// }
+
+function cueBlink2(pointer) {
+    cues[pointer + 1].blink(2);
 }
 
-function updateCardIndicator(pointer) {
+function cueCancel2() {
+    for (var i = 0; i < cues.length; i++) {
+        cues[i].cancel();
+    }
+}
+
+function scheduleCue(pointer) {
     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
         blinkDuration = score.cueDuration,
         indicatorTime = cardDuration - blinkDuration;
 
-    VS.score.schedule(indicatorTime, cueBlink);
+    VS.score.schedule(indicatorTime, cueBlink2, pointer);
 }
 
 var addEvent = (function() {
@@ -206,12 +245,14 @@ VS.score.preroll = score.cueDuration; // cardTransTime;
 
 VS.score.playCallback = function() {
     goToCard(VS.score.pointer - 1, "play");
-    VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
+    // VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
+    VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink2, VS.score.pointer - 1);
 };
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {
     goToCard();
-    cueCancel();
+    // cueCancel();
+    cueCancel2();
 };
 
 VS.control.stepCallback = goToCard;
