@@ -11,7 +11,7 @@ VS.cueTriangle = function(parent) {
 
     cue.selection = parent.append("path")
         .attr("class", "indicator")
-        .attr("d", "M0,0 L6,2 12,0 6,12 0,0")
+        .attr("d", "M-6.928,0 L0,2 6.928,0 0,12 Z")
         .style("stroke", "black")
         .style("stroke-width", "1")
         .style("fill", "black")

@@ -156,7 +156,8 @@ function goToCard(index, control) {
         });
 
     // if playing and not skipping, stopping
-    if(control === "score" && cardList[pointer + 1].cue) { updateCardIndicator(index); }
+    if(control === "score") { updateCardIndicator(index); } // cue all
+    // if(control === "score" && cardList[pointer + 1].cue) { updateCardIndicator(index); } // only cue if set in score
 }
 
 function cueBlink() {

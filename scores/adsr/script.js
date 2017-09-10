@@ -157,11 +157,12 @@ function cueBlink() {
 (function() {
     var i, len = score.rehearsalLetters[0].index;
     for (i = 0; i <= len; i++) {
-        VS.cueTriangle(score.layout.group).selection
-            .attr("transform", "translate(" +
-                (getBarlineX(score.bars[i]) - 6) + "," +
-                -6 * unitY + ")")
-            .style("opacity", 0.5);
+        score.layout.group.append("text")
+            .style("font-family", "Bravura")
+            .style("text-anchor", "middle")
+            .attr("x", getBarlineX(score.bars[i]))
+            .attr("y", -48)
+            .text("\ue890");
     }
 })();
 
@@ -448,7 +449,7 @@ function resize() {
 
     cueIndicator.selection
         .attr("transform", "translate(" +
-           (view.center - 6) + "," +
+           view.center + "," +
            (view.scoreY - (6 * unitY)) + ")");
         // .style("opacity", 0.5);
 
