@@ -10,7 +10,7 @@ var score = {
     transposeBy: 3
 };
 
-score.cueDuration = score.cueBlinks * 1000; // NOTE also changes preroll timing
+score.cueDuration = 3000; // NOTE this is the max cue timing
 
 {% include_relative _card-content.js %}
 {% include_relative _score.js %}
@@ -51,12 +51,14 @@ function cardX(index) {
 function makeCue(data, index) {
     var selection = d3.select(this);
 
-    // \ue890 // cue
-    // \ue893 // weak cue
-    // \ue894 // 2 beat
-    // \ue895 // 3 beat
-    // \ue896 // 4 beat
-    // \ue89a // free
+    var symbols = {
+        // \ue890 // cue
+        1: "\ue893", // weak cue
+        2: "\ue894", // 2 beat
+        3: "\ue895" // 3 beat
+        // \ue896 // 4 beat
+        // \ue89a // free
+    };
 
     selection
         .attr("class", "cue bravura")
@@ -64,9 +66,12 @@ function makeCue(data, index) {
         .attr("dy", "-2em")
         .style("text-anchor", data.cue ? "start" : "middle")
         .style("fill", "#888")
-        .text(data.cue ? "\ue894" : "\ue893");
+        .text(symbols[data.cue]);
 
-    cues[index] = new CueSymbol(selection);
+    cues[index] = new CueSymbol(selection, {
+        beats: data.cue,
+        interval: 1000
+    });
 }
 
 function makeCard(data, index) {
@@ -158,7 +163,8 @@ cardGroup.selectAll(".cue")
     .data(cardList)
     .enter()
     .append("text")
-    .each(makeCue);
+    .each(makeCue)
+    .call(showNextCue, 0, 0);
 
 function showNextCue(selection, pointer, dur) {
     selection
@@ -231,7 +237,7 @@ function goToCard(index, control) {
 // }
 
 function cueBlink2(pointer) {
-    cues[pointer + 1].blink(2);
+    cues[pointer + 1].blink();
 }
 
 function cueCancel2() {
@@ -241,11 +247,16 @@ function cueCancel2() {
 }
 
 function scheduleCue(pointer) {
-    var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
-        blinkDuration = score.cueDuration,
-        indicatorTime = cardDuration - blinkDuration;
+    // do not schedule if penultimate scene
+    if (VS.score.pointer === (VS.score.getLength() - 2)) {
+        return;
+    }
 
-    VS.score.schedule(indicatorTime, cueBlink2, pointer);
+    var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
+        nextCue = cues[pointer + 1],
+        cueDelay = cardDuration - nextCue.duration;
+
+    VS.score.schedule(cueDelay, cueBlink2, pointer);
 }
 
 var addEvent = (function() {
@@ -269,7 +280,7 @@ VS.score.preroll = score.cueDuration; // cardTransTime;
 VS.score.playCallback = function() {
     goToCard(VS.score.pointer - 1, "play");
     // VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
-    VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink2, VS.score.pointer - 1);
+    VS.score.schedule(VS.score.preroll - cues[VS.score.pointer].duration, cueBlink2, VS.score.pointer - 1);
 };
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {

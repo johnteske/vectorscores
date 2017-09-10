@@ -1,7 +1,7 @@
 var cardList = [
     {
         duration: 2,
-        cue: true,
+        cue: 2,
         type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
@@ -17,7 +17,7 @@ var cardList = [
     },
     {
         duration: 11,
-        cue: true,
+        cue: 2,
         type: "card",
         dynamics: [
             { time: 0, value: "n" },
@@ -34,7 +34,7 @@ var cardList = [
     },
     {
         duration: 3,
-        cue: true,
+        cue: 3,
         type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
@@ -50,7 +50,7 @@ var cardList = [
     },
     {
         duration: 16,
-        cue: true,
+        cue: 3,
         type: "card",
         dynamics: [
             { time: 0, value: "n" },
@@ -67,7 +67,7 @@ var cardList = [
     },
     {
         duration: 2,
-        cue: true,
+        cue: 2,
         type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
@@ -83,7 +83,7 @@ var cardList = [
     },
     {
         duration: 23,
-        cue: true,
+        cue: 2,
         type: "card",
         dynamics: [
             { time: 0, value: "mp" }
@@ -102,7 +102,7 @@ var cardList = [
      */
     {
         duration: 25.75,
-        cue: true,
+        cue: 3,
         type: "card",
         dynamics: [
             { time: 0, value: "n" },
@@ -127,7 +127,7 @@ var cardList = [
     },
     {
         duration: 25.75,
-        cue: false,
+        cue: 1,
         type: "card",
         dynamics: [
             { time: 0, value: "p" },
@@ -152,7 +152,7 @@ var cardList = [
     },
     {
         duration: 25.75,
-        cue: false,
+        cue: 1,
         type: "card",
         dynamics: [
             { time: 0, value: "mf" },
@@ -178,7 +178,7 @@ var cardList = [
     },
     {
         duration: 25.75,
-        cue: false,
+        cue: 1,
         type: "card",
         dynamics: [
             { time: 0, value: "p" },
@@ -207,7 +207,7 @@ var cardList = [
      */
     {
         duration: 3,
-        cue: true,
+        cue: 3,
         type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
@@ -223,7 +223,7 @@ var cardList = [
     },
     {
         duration: 56.5,
-        cue: true,
+        cue: 3,
         type: "card",
         dynamics: [
             { time: 0, value: "n" },
@@ -243,7 +243,7 @@ var cardList = [
     },
     {
         duration: 76.5 * (3 / 7),
-        cue: false,
+        cue: 1,
         type: "card",
         dynamics: [
             { time: 0, value: "mf" },
@@ -264,7 +264,7 @@ var cardList = [
     },
     {
         duration: 76.5 * (4 / 7),
-        cue: false,
+        cue: 1,
         type: "card",
         dynamics: [
             { time: 0, value: "p" },
@@ -289,7 +289,7 @@ var cardList = [
      */
     {
         duration: 2,
-        cue: true,
+        cue: 2,
         type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
@@ -306,7 +306,7 @@ var cardList = [
     },
     {
         duration: 180 * (3 / 7),
-        cue: true,
+        cue: 2,
         type: "card",
         dynamics: [
             { time: 0, value: "mp" },
@@ -329,7 +329,7 @@ var cardList = [
     },
     {
         duration: 180 * (4 / 7),
-        cue: false,
+        cue: 1,
         type: "card",
         dynamics: [
             { time: 0, value: "pp" },

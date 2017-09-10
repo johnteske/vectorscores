@@ -4,12 +4,20 @@
  * re-consider end function, perhaps as .on("end") -- currently is included in blink so last/end transition does not cancel previous
  * set nBlinks on init
  */
-function CueSymbol(selection) {
+function CueSymbol(selection, args) {
     if (!(this instanceof CueSymbol)) {
         return new CueSymbol();
     }
 
     this.selection = selection;
+
+    if (args) {
+        this.beats = args.beats;
+        this.interval = args.interval;
+    }
+
+    // total duration
+    this.duration = this.beats * this.interval;
 
     this.time = {
         on: 50,
@@ -23,9 +31,9 @@ function CueSymbol(selection) {
     };
 }
 
-CueSymbol.prototype.blink = function(nTimes) {
+CueSymbol.prototype.blink = function() {
     var self = this,
-        n = nTimes || 1;
+        n = this.beats || 1;
 
     function blink(selection, delay, isLast) {
         self.selection.transition().delay(delay).duration(self.time.on)
@@ -36,13 +44,13 @@ CueSymbol.prototype.blink = function(nTimes) {
     }
 
     for (var i = 0; i < (n + 1); i++) {
-        this.selection.call(blink, i * 1000, i === n);
+        this.selection.call(blink, i * this.interval, i === n);
     }
 };
 
 CueSymbol.prototype.cancel = function() {
     this.selection
-        .transition()
         .style("fill", "#888")
+        .transition()
         .style("opacity", this.opacities.end);
 };
