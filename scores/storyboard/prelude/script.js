@@ -1,15 +1,18 @@
 ---
 layout: compress-js
 ---
-// TODO put time signatures above cued chord cards? or, don't use cards and simply display time sig with accurate notation
+
+// TODO since scenes can be cards or not cards, rename variables and CSS classes to match
+
 var score = {
     totalDuration: 300, // 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
     cueBlinks: 2,
     transposeBy: 3
 };
 
-score.cueDuration = score.cueBlinks * 1000 // NOTE also changes preroll timing
+score.cueDuration = score.cueBlinks * 1000; // NOTE also changes preroll timing
 
+{% include_relative _card-content.js %}
 {% include_relative _score.js %}
 {% include_relative _settings.js %}
 
@@ -34,7 +37,7 @@ var scaleDuration = (function() {
         var dur = cardList[i].duration;
         // do not scale chords (2-3 s)
         return dur < 4 ? dur : dur * scale;
-    }
+    };
 })();
 
 function cardX(index) {
@@ -65,9 +68,18 @@ function makeCard(data, index) {
 
     var card = selection.append("g");
 
-    card.append("rect")
-        .attr("width", cardWidth)
-        .attr("height", cardWidth);
+    if (data.type === "card") {
+        card.append("rect")
+            .attr("width", cardWidth)
+            .attr("height", cardWidth);
+    } else {
+        card.append("line")
+            .attr("class", "barline")
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", 0)
+            .attr("y2", cardWidth);
+    }
 
     for (var ci = 0; ci < data.content.length; ci++) {
         var content = data.content[ci];
@@ -89,7 +101,7 @@ function makeCard(data, index) {
         .attr("text-anchor", function (d) {
             var anchor = "start";
 
-            if (d.time == 0.5) {
+            if (d.time === 0.5) {
                 anchor = "middle";
             } else if (d.time === 1) {
                 anchor = "end";
@@ -194,7 +206,7 @@ VS.score.preroll = score.cueDuration; // cardTransTime;
 VS.score.playCallback = function() {
     goToCard(VS.score.pointer - 1, "play");
     VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
-}
+};
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {
     goToCard();

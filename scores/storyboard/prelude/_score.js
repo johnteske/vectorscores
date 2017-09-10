@@ -1,172 +1,8 @@
-var chord = (function() {
-    function makeChord(selection, args, x) {
-        var range = [0, 1, 2, 3, 4, 5],
-            rangeHalf = range.length * 0.5,
-            notehead = args.sustain ? "\uf468" : "\uf46a";
-
-        function y(d) {
-            return (cardWidth * 0.5) + ((d - rangeHalf) * 10) + 5;
-        }
-
-        if (args.sustain) {
-            // fermata
-            selection.append("text")
-                .attr("class", "chord-fermata")
-                .attr("x", x)
-                .attr("y", y(0))
-                .attr("dy", -15)
-                .text("\ue4c6");
-        } else {
-            // stem
-            selection.append("line")
-                .attr("stroke", "black")
-                .attr("x1", x + 3.625)
-                .attr("y1", y(5))
-                .attr("x2", x + 3.625)
-                .attr("y2", y(0) - 20);
-
-            // accent
-            selection.append("text")
-                .attr("class", "chord-fermata")
-                .attr("x", x)
-                .attr("y", y(5))
-                .attr("dy", 15)
-                .text("\uf475");
-        }
-
-        // TODO 1.5 duration should have dots
-        if (!args.sustain && args.duration !== 1.5) {
-            // flag
-            selection.append("text")
-                .attr("class", "chord-flag")
-                .attr("text-anchor", "start")
-                .attr("x", x + 3.125)
-                .attr("y", y(0) - 24)
-                .text("\uf48d");
-        }
-
-        var text = selection.append("text")
-            .attr("class", "chord");
-
-        text.selectAll("tspan")
-            .data(range)
-            .enter()
-            .append("tspan")
-                .attr("x", x)
-                .attr("y", y)
-                .text(notehead);
-    }
-
-    return function(selection, args) {
-        var center = cardWidth * 0.5,
-            spacing = cardWidth * 0.2;
-
-        for (var i = 0; i < args.n; i++) {
-            selection.call(makeChord, args, center + (i - ((args.n - 1) * 0.5)) * spacing);
-        }
-    };
-})();
-
-function lnp(selection) {
-    var margin = 11;
-
-    selection.append("text")
-        .attr("class", "lnp")
-        .attr("x", 0)
-        .attr("y", cardWidth)
-        .attr("dx", margin)
-        .attr("dy", -margin)
-        .text("\ue0f4");
-
-    selection.append("line")
-        .attr("stroke", "black")
-        .attr("stroke-width", "2")
-        .attr("x1", margin + 4)
-        .attr("x2", cardWidth - margin)
-        .attr("y1", cardWidth - margin - 2)
-        .attr("y2", cardWidth - margin - 2);
-}
-
-/**
- * TODO pass in margin to prevent overlap with LNP
- */
-function lines(selection, args) {
-    var lineCloud = VS.lineCloud()
-        .duration(args.duration || 1)
-        .phrase(args.phrase || [{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }])
-        .curve(args.curve || d3.curveLinear)
-        .width(cardWidth)
-        .height(cardWidth - (args.bottomMargin || 0));
-
-    selection.call(lineCloud, { n: args.n });
-
-    // test styling
-    selection.selectAll(".line-cloud-path")
-        .attr("stroke", "grey")
-        .attr("fill", "none");
-}
-
-function microMelodyPhrase() {
-    var notes = [
-        { pitch: 0, duration: 1 },
-        { pitch: 0, duration: 0 }
-    ];
-
-    var dir = VS.getItem([-1, 1]);
-
-    notes.push({ pitch: 2 * dir, duration: 1 });
-    notes.push({ pitch: 2 * dir, duration: 0 });
-
-    dir = dir === -1 ? 1 : -1;
-
-    notes.push({ pitch: 2 * dir, duration: 1 });
-    notes.push({ pitch: 2 * dir, duration: 0 });
-
-    return notes;
-}
-
-function melodyPhrase() {
-    var notes = [
-        { pitch: 0, duration: 1 },
-        { pitch: 0, duration: 0 }
-    ];
-
-    function addNote() {
-        var dir = VS.getItem([-1, 1]);
-        notes.push({ pitch: 2 * dir, duration: 1 });
-        notes.push({ pitch: 2 * dir, duration: 0 });
-    }
-
-    for (var i = 0; i < 5; i++) {
-        addNote();
-    }
-
-    return notes;
-}
-
-function microtonalPhrase() {
-    var notes = [
-        { pitch: 0, duration: 1 }
-    ];
-
-    function addNote() {
-        var dir = VS.getItem([-1, 1]);
-        notes.push({ pitch: dir, duration: 1 });
-    }
-
-    for (var i = 0; i < 5; i++) {
-        addNote();
-    }
-
-    notes.push({ pitch: 0, duration: 0 });
-
-    return notes;
-}
-
 var cardList = [
     {
         duration: 2,
         cue: true,
+        type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -175,13 +11,14 @@ var cardList = [
         content: [
             {
                 type: chord,
-                args: { n: 1 }
+                args: { n: 1, timeSig: "2/4" }
             }
         ]
     },
     {
         duration: 11,
         cue: true,
+        type: "card",
         dynamics: [
             { time: 0, value: "n" },
             { time: 0.5, value: "<"}
@@ -198,6 +35,7 @@ var cardList = [
     {
         duration: 3,
         cue: true,
+        type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -206,13 +44,14 @@ var cardList = [
         content: [
             {
                 type: chord,
-                args: { n: 2 }
+                args: { n: 2, timeSig: "3/4" }
             }
         ]
     },
     {
         duration: 16,
         cue: true,
+        type: "card",
         dynamics: [
             { time: 0, value: "n" },
             { time: 0.5, value: "<" }
@@ -229,6 +68,7 @@ var cardList = [
     {
         duration: 2,
         cue: true,
+        type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -237,13 +77,14 @@ var cardList = [
         content: [
             {
                 type: chord,
-                args: { n: 1, duration: 1.5 }
+                args: { n: 1, duration: 1.5, timeSig: "2/4" }
             }
         ]
     },
     {
         duration: 23,
         cue: true,
+        type: "card",
         dynamics: [
             { time: 0, value: "mp" }
         ],
@@ -262,6 +103,7 @@ var cardList = [
     {
         duration: 25.75,
         cue: true,
+        type: "card",
         dynamics: [
             { time: 0, value: "n" },
             { time: 0.5, value: "<" },
@@ -286,6 +128,7 @@ var cardList = [
     {
         duration: 25.75,
         cue: false,
+        type: "card",
         dynamics: [
             { time: 0, value: "p" },
             { time: 0.5, value: "<" },
@@ -310,6 +153,7 @@ var cardList = [
     {
         duration: 25.75,
         cue: false,
+        type: "card",
         dynamics: [
             { time: 0, value: "mf" },
             { time: 0.5, value: ">" },
@@ -335,6 +179,7 @@ var cardList = [
     {
         duration: 25.75,
         cue: false,
+        type: "card",
         dynamics: [
             { time: 0, value: "p" },
             { time: 0.5, value: ">" },
@@ -363,6 +208,7 @@ var cardList = [
     {
         duration: 3,
         cue: true,
+        type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -371,13 +217,14 @@ var cardList = [
         content: [
             {
                 type: chord,
-                args: { n: 2 }
+                args: { n: 2, timeSig: "3/4" }
             }
         ]
     },
     {
         duration: 56.5,
         cue: true,
+        type: "card",
         dynamics: [
             { time: 0, value: "n" },
             { time: 0.5, value: "<" },
@@ -395,8 +242,9 @@ var cardList = [
         ]
     },
     {
-        duration: 76.5 * (3/7),
+        duration: 76.5 * (3 / 7),
         cue: false,
+        type: "card",
         dynamics: [
             { time: 0, value: "mf" },
             { time: 0.5, value: ">" },
@@ -415,8 +263,9 @@ var cardList = [
         ]
     },
     {
-        duration: 76.5 * (4/7),
+        duration: 76.5 * (4 / 7),
         cue: false,
+        type: "card",
         dynamics: [
             { time: 0, value: "p" },
             { time: 0.5, value: ">" },
@@ -441,6 +290,7 @@ var cardList = [
     {
         duration: 2,
         cue: true,
+        type: "bar",
         dynamics: [
             { time: 0, value: "ff" }
         ],
@@ -450,13 +300,14 @@ var cardList = [
         content: [
             {
                 type: chord,
-                args: { n: 1, duration: 1.5 }
+                args: { n: 1, duration: 1.5, timeSig: "2/4" }
             }
         ]
     },
     {
-        duration: 180 * (3/7),
+        duration: 180 * (3 / 7),
         cue: true,
+        type: "card",
         dynamics: [
             { time: 0, value: "mp" },
             { time: 0.5, value: ">" },
@@ -477,8 +328,9 @@ var cardList = [
         ]
     },
     {
-        duration: 180 * (4/7),
+        duration: 180 * (4 / 7),
         cue: false,
+        type: "card",
         dynamics: [
             { time: 0, value: "pp" },
             { time: 0.5, value: ">" },

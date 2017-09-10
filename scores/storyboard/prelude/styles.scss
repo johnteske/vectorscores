@@ -4,50 +4,73 @@
 @import "mixins";
 @include BravuraFont();
 
-.card rect {
-  fill: none;
-  stroke: #888;
-  stroke-width: 1px;
-  /*shape-rendering: geometricPrecision;*/
-  /*shape-rendering: crispEdges;*/
+/**
+ * Cards
+ */
+.card {
+    rect {
+      fill: none;
+      stroke: #888;
+      stroke-width: 1px;
+      /*shape-rendering: geometricPrecision;*/
+      /*shape-rendering: crispEdges;*/
+    }
+
+    .barline {
+      stroke: #888;
+      stroke-width: 1px;
+    }
+
+    text {
+        fill: #111;
+    }
 }
 
-.card text {
-    fill: #111;
-}
-
-.card text.card-duration {
-    font-size: 12px;
+/**
+ * Card meta
+ */
+.monospace {
     font-family: monospace;
-}
-
-.card text.pitch-class-set {
     font-size: 12px;
-    font-family: monospace;
 }
 
-.card .dynamics text {
-    font-size: 24px;
-    font-family: Bravura;
+.card {
+    .card-duration, {
+        @extend .monospace;
+    }
+
+    .pitch-class-set {
+        @extend .monospace;
+    }
 }
 
-.card text.duration {
-    font-size: 24px;
-    font-family: Bravura;
-}
-
-.card .chord,
-.card .chord-fermata, {
-    text-anchor: middle;
-    font-size: 24px;
-    font-family: Bravura;
-}
-.card .chord-flag {
+/**
+ * Card content
+ */
+.bravura {
     font-size: 24px;
     font-family: Bravura;
 }
 
-.card .lnp {
-    font-size: 24px;
-    font-family: Bravura;
+.card {
+    .dynamics text {
+        @extend .bravura;
+    }
+
+    .duration {
+        @extend .bravura;
+    }
+
+    .chord,
+    .chord-flag,
+    .chord-art,
+    .time-sig,
+    .lnp {
+        @extend .bravura;
+    }
+
+    .chord-fermata {
+        @extend .bravura;
+        text-anchor: middle;
+    }
 }
