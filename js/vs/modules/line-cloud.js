@@ -11,7 +11,8 @@ VS.lineCloud = function() {
     // TODO how to handle last duration?
     // if last dur !== 0, duplicate pitch with 0 dur
 
-    function phraseToPoints(points) {
+    // NOTE pos is currently used to ensure x values are evenly distributed in card
+    function phraseToPoints(points, pos) {
         var phraseDuration = points.reduce(function(a, o) {
             return a + o.duration;
         }, 0);
@@ -20,7 +21,7 @@ VS.lineCloud = function() {
 
         var currentTime = 0;
 
-        var xOffset = VS.getRandExcl(0, 1 - durationScale);
+        var xOffset = pos * (1 - durationScale); // VS.getRandExcl(0, 1 - durationScale);
         var yOffset = Math.floor(VS.getRandExcl(0, 128));
 
         return points.map(function(o) {
@@ -51,7 +52,8 @@ VS.lineCloud = function() {
         var data = [];
 
         for (var i = 0; i < n; i++) {
-            data.push(phraseToPoints(phrase()));
+            // NOTE pos is currently used to ensure x values are evenly distributed in card
+            data.push(phraseToPoints(phrase(), i / (n - 1)));
         }
 
         var line = d3.line()
