@@ -36,7 +36,7 @@ CueSymbol.prototype.blink = function(nTimes) {
     }
 
     for (var i = 0; i < (n + 1); i++) {
-        this.selection.call(blink, i * 1000, i === n)
+        this.selection.call(blink, i * 1000, i === n);
     }
 };
 
@@ -44,4 +44,4 @@ CueSymbol.prototype.cancel = function() {
     this.selection
         .transition()
         .style("opacity", this.opacities.end);
-}
+};
