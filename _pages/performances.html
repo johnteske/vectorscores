@@ -21,7 +21,7 @@ menu: true
 </p>
 
 <p>{{ perf.address }}</p>
-<p>{{ perf.time }}, {{ perf.price }}</p>
+<p>{{ perf.time }}{% if perf.price %}, {{ perf.price }}{% endif %}</p>
 {% endfor %}
 
 <h2>Past</h2>

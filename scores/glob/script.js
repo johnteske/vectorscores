@@ -79,31 +79,7 @@ glob.move = function(dur, type) {
         });
 };
 
-for(var i = 0; i < scoreLength; i++) {
-    VS.score.add(i * globInterval, glob.move, [transitionTime.long, VS.getItem(["glob", "chord", "rhythm"])]);
-}
-// final event
-VS.score.add(scoreLength * transitionTime.long, function() {
-    d3.select(".pc-set")
-        .transition().duration(transitionTime.short)
-        .style("opacity", "0");
-});
-
-VS.score.preroll = 1000;
-
-VS.control.stepCallback = function() {
-    glob.move(transitionTime.short);
-};
-
-VS.score.stopCallback = function() {
-    glob.pitchSet
-        .transition().duration(transitionTime.short)
-        .style("opacity", "0");
-    glob.children
-        .transition().duration(transitionTime.short)
-        .attr("transform", "translate(0, 0)");
-};
-
+{% include_relative _score.js %}
 
 // resize
 

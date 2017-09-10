@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# Lint built Javascript files
+
+rake -f bin/Rakefile eslint

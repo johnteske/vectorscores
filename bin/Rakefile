@@ -1,0 +1,51 @@
+require 'eslintrb/eslinttask'
+
+options = {
+  'extends': 'eslint:recommended',
+  rules: {
+    # Best Practices
+    'eqeqeq': 'error',
+
+    # Stylistic Issues
+    'comma-spacing': [
+      'warn',
+      { 'before': false, 'after': true }
+    ],
+    'linebreak-style': [
+      'error',
+      'unix'
+    ],
+    'no-unneeded-ternary': 'warn',
+    'operator-linebreak': [
+      'warn',
+      'after'
+    ],
+    'semi': 'warn',
+    'space-infix-ops': 'warn',
+    'quotes': [
+      'warn',
+      'double'
+    ],
+
+    # Variables
+    'no-undef': 'error',
+    # 'no-use-before-define': 'warn'
+  },
+  env: {
+    'browser': true
+  },
+  globals: {
+    'd3': false,
+    'VS': false
+  }
+}
+
+Eslintrb::EslintTask.new :eslint do |t|
+  paths = [
+    'js/vectorscores',
+    'js/vs/',
+    'scores/'
+    ].join(',')
+  t.pattern = '_site/{' + paths + '}**/*.js'
+  t.options = options
+end

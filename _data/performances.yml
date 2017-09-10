@@ -19,6 +19,14 @@ upcoming:
             Seattle, WA
         price: $5–15 suggested donation
         url: "http://waywardmusic.org"
+    -
+        date_start: 2017-10-07
+        title: Sean Hamilton and vectorscores
+        address: >
+            Selectors' Records<br />
+            8 E. Pender St.<br />
+            Vancouver BC, Canada
+        url: "http://www.selectorsrecords.com"
 past:
     -
         date_start: 2017-06-02

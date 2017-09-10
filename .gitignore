@@ -4,8 +4,6 @@
 # local development
 _workspace/
 Gemfile.lock
-.eslintrc.js
-.eslintignore
 
 # Jekyll
 _site/
