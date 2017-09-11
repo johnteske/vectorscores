@@ -23,8 +23,8 @@ var width = 480,
     };
 
 // TODO a temporary solution to update rhythms within bars--eventually add specific rhythm selections/option to score
-var updateTimeout;
-var updateInterval = 8000;
+// var updateTimeout;
+// var updateInterval = 8000;
 
 {% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
@@ -99,6 +99,43 @@ var globject = VS.globject()
 /**
  *
  */
+function makePhrase(type, set) {
+    function coin(prob) {
+        return Math.random() < (prob || 0.5);
+    }
+
+    return function() {
+        var notes = [],
+            pc1, pc2;
+
+        if (!type) {
+            pc1 = VS.getItem(set) + transposeBy;
+            notes.push({ pitch: pc1, duration: VS.getRandExcl(8, 12) });
+            notes.push({ pitch: pc1, duration: 0 });
+        } else if (type === "descending" || type === "ascending") {
+            pc1 = VS.getItem(set) + transposeBy;
+            pc2 = VS.getItem(set) + transposeBy + (type === "descending" ? -12 : 12);
+            notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
+            if (coin(0.33)) {
+                notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
+            }
+            if (coin(0.33)) {
+                notes.push({ pitch: pc2, duration: VS.getRandExcl(4, 6) });
+            }
+            notes.push({ pitch: pc2, duration: 0 });
+        } else if (type === "both") {
+            notes.push({ pitch: VS.getItem(set) + transposeBy, duration: VS.getRandExcl(4, 6) });
+            notes.push({ pitch: VS.getItem(set) + transposeBy + (coin() ? 12 : 0), duration: VS.getRandExcl(4, 6) });
+            notes.push({ pitch: VS.getItem(set) + transposeBy + (coin() ? 12 : 0), duration: 0 });
+        }
+
+        return notes;
+    }
+}
+
+/**
+ *
+ */
 function update(index, isControlEvent) {
     /**
      * Globjects
@@ -110,6 +147,25 @@ function update(index, isControlEvent) {
         .enter()
         .append("g")
         .each(globject)
+        .each(function(d) {
+            var content = d3.select(this).select(".globject-content");
+            var bar = score[index];
+
+            var lineCloud = VS.lineCloud()
+                .duration(bar.duration)
+                // TODO shape over time for each PC set, not by last set
+                .phrase(makePhrase(bar.phraseType, bar.pitch[bar.pitch.length - 1].classes))
+                .transposition("octave")
+                .curve(d3.curveCardinal)
+                .width(d.width)
+                .height(90);
+
+            content.call(lineCloud, { n: Math.floor(bar.duration) });
+
+            content.selectAll(".line-cloud-path")
+                .attr("stroke", "grey")
+                .attr("fill", "none");
+        })
         .each(function(d) {
             var selection = d3.select(this);
 
@@ -123,13 +179,6 @@ function update(index, isControlEvent) {
                 "1": "end"
             };
 
-            var modifiers = {
-                "^": " \ueb61", // up, right
-                "-": " \ueb62", // right
-                "v": " \ueb63", // down, right
-                "<": " \ueb61, \ueb63"
-            };
-
             for (var i = 0; i < pitch.length; i++) {
                 text = g.append("text")
                     .attr("dy", "2em")
@@ -141,12 +190,8 @@ function update(index, isControlEvent) {
                 });
                 var formatted = "{" + set + "}";
 
-                text.append("tspan")
-                    .attr("class", "pitch-class")
-                    .text(formatted);
-                text.append("tspan")
-                    .attr("class", "modifier")
-                    .text(modifiers[pitch[i].modifier]);
+                text.text(formatted)
+                    .attr("class", "pitch-class");
             }
         });
 
@@ -227,12 +272,12 @@ function update(index, isControlEvent) {
         .each(createRhythm)
         .each(spacePerc);
 
-    // TODO
-    if (!isControlEvent) {
-        updateTimeout = window.setTimeout(function() { update(index); }, updateInterval);
-    } else {
-        window.clearTimeout(updateTimeout);
-    }
+    // // TODO
+    // if (!isControlEvent) {
+    //     updateTimeout = window.setTimeout(function() { update(index); }, updateInterval);
+    // } else {
+    //     window.clearTimeout(updateTimeout);
+    // }
 }
 
 /**

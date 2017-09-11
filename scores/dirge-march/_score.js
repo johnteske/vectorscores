@@ -21,15 +21,14 @@ var score = (function(score) {
         pitch: [
             {
                 time: 0,
-                classes: [0],
-                modifier: "-"
+                classes: [0]
             },
             {
                 time: 1,
-                classes: [0, 3],
-                modifier: ""
+                classes: [0, 3]
             }
         ],
+        phraseType: "",
         tempo: 0
     };
     score.push(stashedEvent);
@@ -46,15 +45,14 @@ var score = (function(score) {
         pitch: [
             {
                 time: 0,
-                classes: [0, 3],
-                modifier: "-"
+                classes: [0, 3]
             },
             {
                 time: 1,
-                classes: [0, 3, 7],
-                modifier: ""
+                classes: [0, 3, 7]
             }
         ],
+        phraseType: "",
         tempo: 60
     });
 
@@ -65,10 +63,10 @@ var score = (function(score) {
         pitch: [
             {
                 time: 0,
-                classes: [0, 3, 7],
-                modifier: "v"
+                classes: [0, 3, 7]
             }
         ],
+        phraseType: "descending",
         tempo: 60
     };
     score.push(stashedEvent);
@@ -92,20 +90,18 @@ var score = (function(score) {
         pitch: [
             {
                 time: 0,
-                classes: [5],
-                modifier: "^"
+                classes: [5]
             },
             {
                 time: 0.5,
-                classes: [5, 9],
-                modifier: "^"
+                classes: [5, 9]
             },
             {
                 time: 1,
-                classes: [5, 9, 0],
-                modifier: ""
+                classes: [5, 9, 0]
             }
         ],
+        phraseType: "ascending",
         tempo: 0
     };
     score.push(stashedEvent);
@@ -128,15 +124,14 @@ var score = (function(score) {
         pitch: [
             {
                 time: 0,
-                classes: [0],
-                modifier: "<"
+                classes: [0]
             },
             {
                 time: 1,
-                classes: [0, 3],
-                modifier: ""
+                classes: [0, 3]
             }
         ],
+        phraseType: "both",
         tempo: 120
     });
 
@@ -147,15 +142,14 @@ var score = (function(score) {
         pitch: [
             {
                 time: 0,
-                classes: [0, 3],
-                modifier: "<"
+                classes: [0, 3]
             },
             {
                 time: 1,
-                classes: [0, 3, 7],
-                modifier: ""
+                classes: [0, 3, 7]
             }
         ],
+        phraseType: "both",
         tempo: 120
     });
 
@@ -166,15 +160,14 @@ var score = (function(score) {
         pitch: [
             {
                 time: 0,
-                classes: [0, 3],
-                modifier: "<"
+                classes: [0, 3]
             },
             {
                 time: 1,
-                classes: [0, 3, 7],
-                modifier: ""
+                classes: [0, 3, 7]
             }
         ],
+        phraseType: "both",
         tempo: 120
     };
     score.push(stashedEvent);
@@ -191,10 +184,10 @@ var score = (function(score) {
         pitch: [
             {
                 time: 0,
-                classes: [0, 3, 7],
-                modifier: ""
+                classes: [0, 3, 7]
             }
         ],
+        phraseType: "both",
         tempo: 0
     });
 
