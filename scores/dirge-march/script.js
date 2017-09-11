@@ -164,6 +164,7 @@ function update(index, isControlEvent) {
 
             content.selectAll(".line-cloud-path")
                 .attr("stroke", "grey")
+                .attr("stroke-dasharray", bar.phraseType === "ascending" ? "1" : "none")
                 .attr("fill", "none");
         })
         .each(function(d) {
