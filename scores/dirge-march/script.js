@@ -246,7 +246,7 @@ function resize() {
 
     layout.scale = Math.min(scaleX, scaleY);
 
-    layout.margin.left = (w * 0.5) - 150;
+    layout.margin.left = (w * 0.5) - (120 * layout.scale);
     layout.margin.top = (h * 0.5) - ((height * 0.5 - 72) * layout.scale);
 
     wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
