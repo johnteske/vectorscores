@@ -29,6 +29,7 @@ var updateInterval = 8000;
 {% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
 {% include_relative _score.js %}
+{% include_relative _settings.js %}
 
 var wrapper = d3.select("svg")
     .append("g")
@@ -135,8 +136,10 @@ function update(index, isControlEvent) {
                     .attr("x", pitch[i].time * d.width)
                     .attr("text-anchor", anchor[pitch[i].time]);
 
-                var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy);
-                var formatted = "{" + VS.pitchClass.format(set) + "}";
+                var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy).map(function(pc) {
+                    return VS.pitchClass.format(pc, scoreSettings.pcFormat);
+                });
+                var formatted = "{" + set + "}";
 
                 text.append("tspan")
                     .attr("class", "pitch-class")
