@@ -337,6 +337,7 @@ function resize() {
 
     score.scale = Math.min(scaleX, scaleY);
     offset = (w * 0.5) - (cardWidth * score.scale);
+    offsetY = (h * 0.5) - (190 * score.scale);
 
     cardGroup.attr("transform", translateCardGroup);
 }
