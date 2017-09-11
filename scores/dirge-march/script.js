@@ -3,16 +3,20 @@ layout: compress-js
 ---
 
 var width = 480,
-    maxwidth = 480,
-    margin = 20,
-    boxwidth = width + (margin * 2),
-    center = boxwidth * 0.5,
+    height = 480,
     debug = +VS.getQueryString("debug") === 1 || false,
     transposeBy = 2,
     layout = {
+        scale: 1,
+        margin: {
+            left: 0,
+            top: 0
+        },
+        globjects: {
+            top: 16
+        },
         perc: {
-            x: 60 + 22, // TODO make this the score left margin
-            y: center,
+            y: 190,
             y1: 16,
             y2: 60 + 16
         },
@@ -26,24 +30,25 @@ var updateInterval = 8000;
 {% include_relative _rhythms.js %}
 {% include_relative _score.js %}
 
-var main = d3.select(".main")
-    .classed("debug", debug)
-    .style("width", boxwidth + "px")
-    .style("height", boxwidth + "px");
+var wrapper = d3.select("svg")
+    .append("g")
+    .attr("class", "wrapper")
+    .classed("debug", debug);
+    // .attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ")");
 
-var globjectContainer = main.append("g")
+var globjectContainer = wrapper.append("g")
     .attr("class", "globjects")
-    .attr("transform", "translate(" + 0 + "," + 90 + ")");
+    .attr("transform", "translate(0," + layout.globjects.top + ")");
 
 var durationText = globjectContainer.append("text")
     .attr("class", "duration-text")
-    .attr("transform", "translate(" + layout.perc.x + "," + 0 + ")");
+    .attr("dy", -layout.globjects.top);
 
 /**
  * Rhythm test
  */
-var percussionParts = main.append("g")
-    .attr("transform", "translate(" + layout.perc.x + "," + layout.perc.y + ")")
+var percussionParts = wrapper.append("g")
+    .attr("transform", "translate(" + 0 + "," + layout.perc.y + ")")
     .attr("class", "percussion-parts");
 
 var tempoText = percussionParts.append("text")
@@ -140,8 +145,7 @@ function update(index, isControlEvent) {
                     .attr("class", "modifier")
                     .text(modifiers[pitch[i].modifier]);
             }
-        })
-        .each(centerGlobject);
+        });
 
     durationText.text(score[index].duration + "\u2033");
 
@@ -222,58 +226,46 @@ function update(index, isControlEvent) {
 
     // TODO
     if (!isControlEvent) {
-        updateTimeout = window.setTimeout(function() { update(index) }, updateInterval);
+        updateTimeout = window.setTimeout(function() { update(index); }, updateInterval);
     } else {
         window.clearTimeout(updateTimeout);
     }
 }
 
-function centerGlobject() {
-    d3.select(this).attr("transform", "translate(" + layout.perc.x + "," + 16 + ")");
-}
-
-
 /**
  * Resize
  */
 function resize() {
-    // update width
-    boxwidth = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
-    center = boxwidth * 0.5;
-    width = boxwidth - (margin * 2);
+    var main = d3.select("main");
 
-    main
-        .style("width", boxwidth + "px")
-        .style("height", boxwidth + "px");
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
 
-    d3.selectAll(".globject").each(centerGlobject);
+    var scaleX = VS.clamp(w / width, 0.25, 2);
+    var scaleY = VS.clamp(h / height, 0.25, 2);
+
+    layout.scale = Math.min(scaleX, scaleY);
+
+    layout.margin.left = (w * 0.5) - 150;
+    layout.margin.top = (h * 0.5) - ((height * 0.5 - 72) * layout.scale);
+
+    wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
 }
-
-resize();
 
 d3.select(window).on("resize", resize);
 
 /**
  * Populate score
  */
-// var addEvent = (function() {
-//     var time = 0;
-//
-//     return function(fn, duration, args) {
-//         VS.score.add(time, fn, args);
-//         time += duration;
-//     };
-// })();
-
 for (var i = 0; i < score.length; i++) {
     VS.score.add(score[i].time * 1000, update, [i]);
-    // addEvent(update, score[i].duration * 1000, [i]);
 }
 
 /**
  * Initialize score
  */
 d3.select(window).on("load", function () {
+    resize();
     update(0, true);
 });
 

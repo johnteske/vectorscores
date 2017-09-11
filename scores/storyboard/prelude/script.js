@@ -210,7 +210,7 @@ function goToCard(index, control) {
     cardGroup.transition()
         .duration(dur)
         .attr("transform", function() {
-            return translateCardGroup(pointer)
+            return translateCardGroup(pointer);
         });
 
     d3.selectAll(".cue").call(showNextCue, pointer, dur);
