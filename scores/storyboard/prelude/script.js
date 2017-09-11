@@ -11,6 +11,7 @@ var score = {
 };
 
 score.cueDuration = 3000; // NOTE this is the max cue timing
+score.scale = 1;
 
 {% include_relative _card-content.js %}
 {% include_relative _score.js %}
@@ -27,12 +28,11 @@ var cardWidth = 120,
     cardPadding = 24,
     cardTransTime = 600,
     offset = cardWidth,
+    offsetY = 105,
     width = (cardWidth * 4) + (cardPadding * 2),
-    height = cardWidth * 3;
+    height = width; // cardWidth * 3;
 
-var main = d3.select(".main")
-    .attr("width", width)
-    .attr("height", height);
+var svg = d3.select(".main");
 
 var scaleDuration = (function() {
     var scale = score.totalDuration / 481;
@@ -45,7 +45,7 @@ var scaleDuration = (function() {
 })();
 
 function cardX(index) {
-    return index * (cardWidth + cardPadding);
+    return index * (cardWidth + cardPadding) * score.scale;
 }
 
 function makeCue(data, index) {
@@ -156,8 +156,14 @@ function makeCard(data, index) {
 }
 
 // create cards
-var cardGroup = main.append("g")
-    .attr("transform", "translate(" + offset + ", 0)");
+function translateCardGroup(pointer) {
+    var i = pointer || 0;
+    return "translate(" + (offset - cardX(i)) + ", " + offsetY + ") scale(" + score.scale + "," + score.scale + ")";
+}
+
+var cardGroup = svg.append("g")
+    .attr("transform", translateCardGroup);
+
 var cards = cardGroup.selectAll(".card")
     .data(cardList)
     .enter()
@@ -204,8 +210,7 @@ function goToCard(index, control) {
     cardGroup.transition()
         .duration(dur)
         .attr("transform", function() {
-            var x = offset - cardX(pointer);
-            return "translate(" + x + ", 0)";
+            return translateCardGroup(pointer)
         });
 
     d3.selectAll(".cue").call(showNextCue, pointer, dur);
@@ -317,3 +322,25 @@ VS.score.pauseCallback = VS.score.stopCallback = function() {
 };
 
 VS.control.stepCallback = goToCard;
+
+/**
+ * Resize
+ */
+function resize() {
+    var main = d3.select("main");
+
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
+
+    var scaleX = VS.clamp(w / width, 0.25, 2);
+    var scaleY = VS.clamp(h / height, 0.25, 2);
+
+    score.scale = Math.min(scaleX, scaleY);
+    offset = (w * 0.5) - (cardWidth * score.scale);
+
+    cardGroup.attr("transform", translateCardGroup);
+}
+
+resize();
+
+d3.select(window).on("resize", resize);
