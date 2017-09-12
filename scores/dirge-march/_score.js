@@ -7,6 +7,11 @@ var score = (function(score) {
         return JSON.parse(JSON.stringify(o));
     }
 
+    function getUniqueGlobject(array) {
+        var i = Math.floor(VS.getRandExcl(0, array.length));
+        return array.splice(i, 1);
+    }
+
     /**
      * dirge
      */
@@ -20,7 +25,7 @@ var score = (function(score) {
     stashedEvent.time = 0;
     stashedEvent.pitched = {
         duration: 46.67,
-        globjects: [VS.getItem(descending)],
+        globjects: getUniqueGlobject(descending),
         pitch: [
             {
                 time: 0,
@@ -64,7 +69,7 @@ var score = (function(score) {
     stashedEvent.time = 46.667;
     stashedEvent.pitched =  {
         duration: 46.67,
-        globjects: [VS.getItem(descending)],
+        globjects: getUniqueGlobject(descending),
         pitch: [
             {
                 time: 0,
@@ -119,7 +124,7 @@ var score = (function(score) {
     stashedEvent.time = 85.333,
     stashedEvent.pitched =  {
         duration: 46.67,
-        globjects: [VS.getItem(descending)],
+        globjects: getUniqueGlobject(descending),
         pitch: [
             {
                 time: 0,
@@ -229,7 +234,7 @@ var score = (function(score) {
     stashedEvent.time = 240 + rest;
     stashedEvent.pitched = {
         duration: 24,
-        globjects: [VS.getItem(allGlobjects)],
+        globjects: getUniqueGlobject(allGlobjects),
         pitch: [
             {
                 time: 0,
@@ -265,7 +270,7 @@ var score = (function(score) {
     stashedEvent.time = 264 + rest;
     stashedEvent.pitched =  {
         duration: 24,
-        globjects: [VS.getItem(allGlobjects)],
+        globjects: getUniqueGlobject(allGlobjects),
         pitch: [
             {
                 time: 0,
@@ -304,7 +309,7 @@ var score = (function(score) {
     stashedEvent.time = 288 + rest;
     stashedEvent.pitched =  {
         duration: 24,
-        globjects: [VS.getItem(allGlobjects)],
+        globjects: getUniqueGlobject(allGlobjects),
         pitch: [
             {
                 time: 0,
@@ -337,7 +342,7 @@ var score = (function(score) {
     stashedEvent.time = 312 + rest;
     stashedEvent.pitched = {
         duration: 24,
-        globjects: [VS.getItem(allGlobjects)],
+        globjects: getUniqueGlobject(allGlobjects),
         pitch: [
             {
                 time: 0,
