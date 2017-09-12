@@ -93,7 +93,7 @@ percussionParts.selectAll("g").call(function(selection) {
 
         cell.append("text")
             .attr("dx", 11)
-            .attr("y", 30);
+            .attr("y", 35);
     }
 
     // create two rhythm cells
@@ -319,9 +319,17 @@ function update(index, isControlEvent) {
 
         for (var si = 0; si < symbols.length; si++) {
             var symbol = symbols[si],
+                spacing = 0,
                 dy = symbol === "r0.5" || symbol === "r0.5." ? 0.4 : 0;
 
+            if (symbol === "trip") {
+                spacing = -6;
+            } else if (symbol === "1.") {
+                spacing = -5;
+            }
+
             textEl.append("tspan")
+                .style("letter-spacing", spacing)
                 .style("baseline-shift", dy + "em")
                 .text(stemmed[symbol]);
         }
