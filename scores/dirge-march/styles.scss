@@ -42,9 +42,18 @@ svg {
     }
 }
 
-.percussion-parts text {
+.bravura {
     font-family: Bravura;
     font-size: 24px;
+}
+
+.rest {
+    @extend .bravura;
+    text-anchor: middle;
+}
+
+.percussion-parts text {
+    @extend .bravura;
 }
 
 .duration-text {

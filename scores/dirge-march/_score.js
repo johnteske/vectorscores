@@ -76,6 +76,18 @@ var score = (function(score) {
     stashedEvent.tempo = 0;
     score.push(stashedEvent);
 
+    // rest
+    // TODO display rest
+    var rest = 3;
+    score.push({
+        time: 144,
+        duration: rest,
+        globjects: [],
+        pitch: [],
+        phraseType: "rest",
+        tempo: ""
+    });
+
     /**
      *
      */
@@ -84,7 +96,7 @@ var score = (function(score) {
     });
 
     stashedEvent = {
-        time: 144,
+        time: 144 + rest,
         duration: 96,
         globjects: [VS.getItem(ascending)],
         pitch: [
@@ -118,7 +130,7 @@ var score = (function(score) {
     var allGlobjects = globjects.concat(retrogradeGlobjects);
 
     score.push({
-        time: 240,
+        time: 240 + rest,
         duration: 24,
         globjects: [VS.getItem(allGlobjects)],
         pitch: [
@@ -136,7 +148,7 @@ var score = (function(score) {
     });
 
     score.push({
-        time: 264,
+        time: 264 + rest,
         duration: 24,
         globjects: [VS.getItem(allGlobjects)],
         pitch: [
@@ -154,7 +166,7 @@ var score = (function(score) {
     });
 
     stashedEvent = {
-        time: 288,
+        time: 288 + rest,
         duration: 24,
         globjects: [VS.getItem(allGlobjects)],
         pitch: [
@@ -178,7 +190,7 @@ var score = (function(score) {
     score.push(stashedEvent);
 
     score.push({
-        time: 312,
+        time: 312 + rest,
         duration: 24,
         globjects: [VS.getItem(allGlobjects)],
         pitch: [

@@ -4,6 +4,8 @@ layout: compress-js
 
 var width = 480,
     height = 480,
+    globjectWidth = 240,
+    globjectHeight = 90,
     debug = +VS.getQueryString("debug") === 1 || false,
     transposeBy = 2,
     layout = {
@@ -31,8 +33,9 @@ var width = 480,
 {% include_relative _score.js %}
 {% include_relative _settings.js %}
 
-var wrapper = d3.select("svg")
-    .append("g")
+var svg = d3.select("svg");
+
+var wrapper = svg.append("g")
     .attr("class", "wrapper")
     .classed("debug", debug);
     // .attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ")");
@@ -92,8 +95,8 @@ percussionParts.selectAll("g").call(function(selection) {
 });
 
 var globject = VS.globject()
-    .width(function(d) { return d.width; })
-    .height(90)
+    .width(globjectWidth)
+    .height(globjectHeight)
     .curve(d3.curveCardinalClosed.tension(0.3));
 
 /**
@@ -133,23 +136,42 @@ function makePhrase(type, set) {
     }
 }
 
+var pattern = svg.append("defs")
+    .append("pattern")
+    .attr("id", "ascending-fill")
+    .attr("width", 2)
+    .attr("height", 2)
+    .attr("patternUnits", "userSpaceOnUse");
+
+pattern.append("circle")
+    .attr("fill", "#eee")
+    .attr("r", 1);
+
 /**
  *
  */
 function update(index, isControlEvent) {
+    var bar = score[index];
+
     /**
      * Globjects
      */
     d3.selectAll(".globject").remove();
 
     globjectContainer.selectAll(".globject")
-        .data(score[index].globjects)
+        .data(bar.globjects)
         .enter()
         .append("g")
         .each(globject)
         .each(function(d) {
             var content = d3.select(this).select(".globject-content");
-            var bar = score[index];
+
+            if (bar.phraseType === "ascending") {
+                content.append("rect")
+                    .attr("width", d.width)
+                    .attr("height", globjectHeight + 10)
+                    .attr("fill", "url(#ascending-fill)");
+            }
 
             var lineCloud = VS.lineCloud()
                 .duration(bar.duration)
@@ -158,7 +180,7 @@ function update(index, isControlEvent) {
                 .transposition("octave")
                 .curve(d3.curveCardinal)
                 .width(d.width)
-                .height(90);
+                .height(globjectHeight);
 
             content.call(lineCloud, { n: Math.floor(bar.duration) });
 
@@ -170,8 +192,8 @@ function update(index, isControlEvent) {
         .each(function(d) {
             var selection = d3.select(this);
 
-            var g = selection.append("g").attr("transform", "translate(0, 90)"),
-                pitch = score[index].pitch,
+            var g = selection.append("g").attr("transform", "translate(0, " + globjectHeight + ")"),
+                pitch = bar.pitch,
                 text;
 
             var anchor = {
@@ -196,12 +218,33 @@ function update(index, isControlEvent) {
             }
         });
 
-    durationText.text(score[index].duration + "\u2033");
+    /**
+     * Duration
+     */
+    durationText.text(bar.duration + "\u2033");
+
+    /**
+     * Rest
+     */
+    var rest = d3.select(".rest").remove();
+
+    if (bar.phraseType === "rest") {
+        rest = globjectContainer.append("text")
+            .attr("class", "rest");
+        rest.append("tspan")
+            .attr("x", globjectWidth * 0.5)
+            .attr("y", (globjectHeight * 0.5) - 20)
+            .text("\ue4c6");
+        rest.append("tspan")
+            .attr("x", globjectWidth * 0.5)
+            .attr("y", globjectHeight * 0.5)
+            .text("\ue4e5");
+    }
 
     /**
      * Tempo
      */
-    var tempo = score[index].tempo;
+    var tempo = bar.tempo;
 
     tempoText.select(".bpm").remove();
 
