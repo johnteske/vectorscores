@@ -20,13 +20,16 @@ var width = 480,
         perc: {
             y: 190,
             y1: 16,
-            y2: 60 + 16
+            y2: 60 + 16,
+            dynamics: 60 + 60 + 24
         },
     };
 
 // TODO a temporary solution to update rhythms within bars--eventually add specific rhythm selections/option to score
 // var updateTimeout;
 // var updateInterval = 8000;
+
+var dynamics = VS.dictionary.Bravura.dynamics;
 
 {% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
@@ -93,6 +96,21 @@ percussionParts.selectAll("g").call(function(selection) {
     selection.call(createRhythmCell);
     selection.call(createRhythmCell);
 });
+
+var percDynamics = percussionParts.append("g")
+    .attr("transform", "translate(0," + layout.perc.dynamics + ")");
+
+function textAnchor(t) {
+    var a = "middle";
+
+    if (t === 0) {
+        a = "start";
+    } else if (t === 1) {
+        a = "end";
+    }
+
+    return a;
+}
 
 var globject = VS.globject()
     .width(globjectWidth)
@@ -196,17 +214,11 @@ function update(index, isControlEvent) {
                 pitch = bar.pitch,
                 text;
 
-            var anchor = {
-                "0": "start",
-                "0.5": "middle",
-                "1": "end"
-            };
-
             for (var i = 0; i < pitch.length; i++) {
                 text = g.append("text")
                     .attr("dy", "2em")
                     .attr("x", pitch[i].time * d.width)
-                    .attr("text-anchor", anchor[pitch[i].time]);
+                    .attr("text-anchor", textAnchor(pitch[i].time));
 
                 var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy).map(function(pc) {
                     return VS.pitchClass.format(pc, scoreSettings.pcFormat);
@@ -244,7 +256,7 @@ function update(index, isControlEvent) {
     /**
      * Tempo
      */
-    var tempo = bar.tempo;
+    var tempo = bar.percussion.tempo;
 
     tempoText.select(".bpm").remove();
 
@@ -316,6 +328,28 @@ function update(index, isControlEvent) {
         .each(createRhythm)
         .each(spacePerc);
 
+    /**
+     * Percussion dynamics
+     */
+    percDynamics.selectAll(".dynamic").remove();
+
+    if (bar.percussion.dynamics) {
+        percDynamics.selectAll(".dynamic")
+            .data(bar.percussion.dynamics)
+            .enter()
+            .append("text")
+                .attr("class", "dynamic")
+                .attr("x", function(d, i) {
+                    return globjectWidth * d.time;
+                })
+                .attr("text-anchor", function(d) {
+                    return textAnchor(d.time);
+                })
+                .text(function(d) {
+                    return dynamics[d.value];
+                });
+    }
+
     // // TODO
     // if (!isControlEvent) {
     //     updateTimeout = window.setTimeout(function() { update(index); }, updateInterval);
@@ -368,5 +402,6 @@ VS.control.stopCallback = function() {
     update(0, true);
 };
 VS.control.pauseCallback = VS.control.stepCallback = function() {
+    console.log("mm. " + (VS.score.pointer + 1));
     update(VS.score.pointer, true);
 };
