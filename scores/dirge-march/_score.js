@@ -50,6 +50,7 @@ var score = (function(score) {
     stashedEvent.time = 16;
     stashedEvent.percussion = {
         tempo: 60,
+        rhythmRange: [0, 1],
         dynamics: [
             { time: 0, value: "n" },
             { time: 0.5, value: "<" },
@@ -90,6 +91,7 @@ var score = (function(score) {
     stashedEvent.time = 48;
     stashedEvent.percussion = {
         tempo: 60,
+        rhythmRange: [0, 3],
         dynamics: [
             { time: 0, value: "ppp" },
             { time: 0.5, value: "<" },
@@ -103,6 +105,7 @@ var score = (function(score) {
     stashedEvent.time = 80;
     stashedEvent.percussion = {
         tempo: 60,
+        rhythmRange: [0, 4],
         dynamics: [
             { time: 0, value: "p" },
             { time: 0.5, value: "<" },
@@ -210,6 +213,7 @@ var score = (function(score) {
     stashedEvent.time = 208;
     stashedEvent.percussion = {
         tempo: 120,
+        rhythmRange: [5, 8],
         dynamics: [
             { time: 0, value: "mf" },
             { time: 0.5, value: "<" },
@@ -245,6 +249,7 @@ var score = (function(score) {
     };
     stashedEvent.percussion = {
         tempo: 120,
+        rhythmRange: [5, 10],
         dynamics: [
             { time: 0, value: "f" },
             { time: 0.25, value: "<" },
@@ -285,6 +290,7 @@ var score = (function(score) {
     stashedEvent.time = 272 + rest;
     stashedEvent.percussion = {
         tempo: 120,
+        rhythmRange: [0, 10],
         dynamics: [
             { time: 0, value: "f" },
             { time: 0.5, value: ">" },

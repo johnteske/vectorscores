@@ -298,6 +298,7 @@ function update(index, isControlEvent) {
     /**
      * Rhythms
      * TODO stash creation functions elsewhere?
+     * NOTE tempo and bar are in update scope
      */
     function createRhythm() {
         var selection = d3.select(this),
@@ -309,8 +310,10 @@ function update(index, isControlEvent) {
             return;
         }
 
-        var randRhythm = VS.getItem(rhythms.filter(function(r) {
-            return r !== percRhythm; // prevent duplicates within each part
+        var extent = bar.percussion.rhythmRange;
+        var randRhythm = VS.getItem(rhythms.filter(function(r, i) {
+            var inRange = extent[0] <= i && i <= extent[1];
+            return r !== percRhythm && inRange; // prevent duplicates within each part
         }));
 
         percRhythm = randRhythm;
@@ -437,6 +440,6 @@ VS.control.stopCallback = function() {
     update(0, true);
 };
 VS.control.pauseCallback = VS.control.stepCallback = function() {
-    console.log("mm. " + (VS.score.pointer + 1));
+    // console.log("mm. " + (VS.score.pointer + 1));
     update(VS.score.pointer, true);
 };
