@@ -16,8 +16,9 @@ var score = (function(score) {
 
     // A
     // mm 1
-    var stashedEvent = {
-        time: 0,
+    var stashedEvent = {}
+    stashedEvent.time = 0;
+    stashedEvent.pitched = {
         duration: 46.67,
         globjects: [VS.getItem(descending)],
         pitch: [
@@ -31,9 +32,16 @@ var score = (function(score) {
             }
         ],
         phraseType: "",
-        percussion: {
-            tempo: 0
-        }
+        dynamics: [
+            { time: 0, value: "pp" },
+            { time: 0.25, value: "<" },
+            { time: 0.5, value: "p" },
+            { time: 0.75, value: ">" },
+            { time: 1, value: "pp" }
+        ]
+    };
+    stashedEvent.percussion = {
+        tempo: 0
     };
     score.push(stashedEvent);
 
@@ -53,19 +61,28 @@ var score = (function(score) {
     // mm 3
     stashedEvent = clone(stashedEvent);
     stashedEvent.time = 46.667;
-    stashedEvent.duration = 46.67,
-    stashedEvent.globjects = [VS.getItem(descending)],
-    stashedEvent.pitch = [
-        {
-            time: 0,
-            classes: [0, 3]
-        },
-        {
-            time: 1,
-            classes: [0, 3, 7]
-        }
-    ],
-    stashedEvent.phraseType = "";
+    stashedEvent.pitched =  {
+        duration: 46.67,
+        globjects: [VS.getItem(descending)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0, 3]
+            },
+            {
+                time: 1,
+                classes: [0, 3, 7]
+            }
+        ],
+        phraseType: "",
+        dynamics: [
+            { time: 0, value: "p" },
+            { time: 0.25, value: "<" },
+            { time: 0.5, value: "pp" },
+            { time: 0.75, value: ">" },
+            { time: 1, value: "p" }
+        ]
+    };
     score.push(stashedEvent);
 
     // mm 4
@@ -97,15 +114,24 @@ var score = (function(score) {
     // mm 6
     stashedEvent = clone(stashedEvent);
     stashedEvent.time = 85.333,
-    stashedEvent.duration = 46.67,
-    stashedEvent.globjects = [VS.getItem(descending)];
-    stashedEvent.pitch = [
-        {
-            time: 0,
-            classes: [0, 3, 7]
-        }
-    ];
-    stashedEvent.phraseType = "descending";
+    stashedEvent.pitched =  {
+        duration: 46.67,
+        globjects: [VS.getItem(descending)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0, 3, 7]
+            }
+        ],
+        phraseType: "descending",
+        dynamics: [
+            { time: 0, value: "mp" },
+            { time: 0.25, value: "<" },
+            { time: 0.5, value: "mf" },
+            { time: 0.75, value: ">" },
+            { time: 1, value: "pp" }
+        ]
+    };
     score.push(stashedEvent);
 
     // B
@@ -119,16 +145,18 @@ var score = (function(score) {
 
     // mm 8
     var rest = 3;
-    score.push({
-        time: 144,
+    stashedEvent = {}
+    stashedEvent.time = 144;
+    stashedEvent.pitched = {
         duration: rest,
         globjects: [],
         pitch: [],
-        phraseType: "rest",
-        percussion: {
-            tempo: 0
-        }
-    });
+        phraseType: "rest"
+    };
+    stashedEvent.percussion = {
+        tempo: 0
+    };
+    score.push(stashedEvent);
 
     /**
      *
@@ -138,8 +166,9 @@ var score = (function(score) {
     });
 
     // mm 9
-    stashedEvent = {
-        time: 144 + rest,
+    stashedEvent = {};
+    stashedEvent.time = 144 + rest;
+    stashedEvent.pitched = {
         duration: 96,
         globjects: [VS.getItem(ascending)],
         pitch: [
@@ -157,9 +186,16 @@ var score = (function(score) {
             }
         ],
         phraseType: "ascending",
-        percussion: {
-            tempo: 0
-        }
+        dynamics: [
+            { time: 0, value: "n" },
+            { time: 0.25, value: "<" },
+            { time: 0.5, value: "p" },
+            { time: 0.75, value: ">" },
+            { time: 1, value: "n" }
+        ]
+    };
+    stashedEvent.percussion = {
+        tempo: 0
     };
     score.push(stashedEvent);
 
@@ -185,8 +221,9 @@ var score = (function(score) {
     var allGlobjects = globjects.concat(retrogradeGlobjects);
 
     // mm 11
-    stashedEvent = {
-        time: 240 + rest,
+    stashedEvent = {};
+    stashedEvent.time = 240 + rest;
+    stashedEvent.pitched = {
         duration: 24,
         globjects: [VS.getItem(allGlobjects)],
         pitch: [
@@ -200,35 +237,47 @@ var score = (function(score) {
             }
         ],
         phraseType: "both",
-        percussion: {
-            tempo: 120,
-            dynamics: [
-                { time: 0, value: "f" },
-                { time: 0.25, value: "<" },
-                { time: 0.5, value: "ff" },
-                { time: 0.75, value: ">" },
-                { time: 1, value: "ff" }
-            ]
-        }
+        dynamics: [
+            { time: 0, value: "mf" },
+            { time: 0.5, value: ">" },
+            { time: 1, value: "p" }
+        ]
+    };
+    stashedEvent.percussion = {
+        tempo: 120,
+        dynamics: [
+            { time: 0, value: "f" },
+            { time: 0.25, value: "<" },
+            { time: 0.5, value: "ff" },
+            { time: 0.75, value: ">" },
+            { time: 1, value: "ff" }
+        ]
     };
     score.push(stashedEvent);
 
     // mm 12
     stashedEvent = clone(stashedEvent);
     stashedEvent.time = 264 + rest;
-    stashedEvent.duration = 24;
-    stashedEvent.globjects = [VS.getItem(allGlobjects)];
-    stashedEvent.pitch = [
-        {
-            time: 0,
-            classes: [0, 3]
-        },
-        {
-            time: 1,
-            classes: [0, 3, 7]
-        }
-    ];
-    stashedEvent.phraseType = "both";
+    stashedEvent.pitched =  {
+        duration: 24,
+        globjects: [VS.getItem(allGlobjects)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0, 3]
+            },
+            {
+                time: 1,
+                classes: [0, 3, 7]
+            }
+        ],
+        phraseType: "both",
+        dynamics: [
+            { time: 0, value: "f" },
+            { time: 0.5, value: ">" },
+            { time: 1, value: "mp" }
+        ]
+    };
     score.push(stashedEvent);
 
     // mm 13
@@ -247,19 +296,26 @@ var score = (function(score) {
     // mm 14
     stashedEvent = clone(stashedEvent);
     stashedEvent.time = 288 + rest;
-    stashedEvent.duration = 24;
-    stashedEvent.globjects = [VS.getItem(allGlobjects)];
-    stashedEvent.pitch = [
-        {
-            time: 0,
-            classes: [0, 3]
-        },
-        {
-            time: 1,
-            classes: [0, 3, 7]
-        }
-    ];
-    stashedEvent.phraseType = "both";
+    stashedEvent.pitched =  {
+        duration: 24,
+        globjects: [VS.getItem(allGlobjects)],
+        pitch: [
+            {
+                time: 0,
+                classes: [0, 3]
+            },
+            {
+                time: 1,
+                classes: [0, 3, 7]
+            }
+        ],
+        phraseType: "both",
+        dynamics: [
+            { time: 0, value: "f" },
+            { time: 0.5, value: ">" },
+            { time: 1, value: "mf" }
+        ]
+    };
     score.push(stashedEvent);
 
     // mm 15
@@ -271,8 +327,9 @@ var score = (function(score) {
     score.push(stashedEvent);
 
     // mm 16
-    score.push({
-        time: 312 + rest,
+    stashedEvent = {};
+    stashedEvent.time = 312 + rest;
+    stashedEvent.pitched = {
         duration: 24,
         globjects: [VS.getItem(allGlobjects)],
         pitch: [
@@ -282,10 +339,16 @@ var score = (function(score) {
             }
         ],
         phraseType: "both",
-        percussion: {
-            tempo: 0
-        }
-    });
+        dynamics: [
+            { time: 0, value: "mf" },
+            { time: 0.5, value: ">" },
+            { time: 1, value: "n" }
+        ]
+    };
+    stashedEvent.percussion = {
+        tempo: 0
+    };
+    score.push(stashedEvent);
 
     return score;
 })([]);

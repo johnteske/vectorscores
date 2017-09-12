@@ -2,6 +2,10 @@
 layout: compress-js
 ---
 
+// TODO scroll globject layer (and percussion dynamics) to show duration of phrases and transformation over time
+// rhythms would be still be generated in boxes but could be cued in and out CueSymbol#blink
+// may also solve issues of multiple globjects, timing, transitions
+
 var width = 480,
     height = 480,
     globjectWidth = 240,
@@ -18,7 +22,7 @@ var width = 480,
             top: 16
         },
         perc: {
-            y: 190,
+            y: 220,
             y1: 16,
             y2: 60 + 16,
             dynamics: 60 + 60 + 24
@@ -49,7 +53,7 @@ var globjectContainer = wrapper.append("g")
 
 var durationText = globjectContainer.append("text")
     .attr("class", "duration-text")
-    .attr("dy", -layout.globjects.top);
+    .attr("dy", "-3em");
 
 /**
  * Rhythm test
@@ -177,14 +181,14 @@ function update(index, isControlEvent) {
     d3.selectAll(".globject").remove();
 
     globjectContainer.selectAll(".globject")
-        .data(bar.globjects)
+        .data(bar.pitched.globjects)
         .enter()
         .append("g")
         .each(globject)
         .each(function(d) {
             var content = d3.select(this).select(".globject-content");
 
-            if (bar.phraseType === "ascending") {
+            if (bar.pitched.phraseType === "ascending") {
                 content.append("rect")
                     .attr("width", d.width)
                     .attr("height", globjectHeight + 10)
@@ -192,31 +196,31 @@ function update(index, isControlEvent) {
             }
 
             var lineCloud = VS.lineCloud()
-                .duration(bar.duration)
+                .duration(bar.pitched.duration)
                 // TODO shape over time for each PC set, not by last set
-                .phrase(makePhrase(bar.phraseType, bar.pitch[bar.pitch.length - 1].classes))
+                .phrase(makePhrase(bar.pitched.phraseType, bar.pitched.pitch[bar.pitched.pitch.length - 1].classes))
                 .transposition("octave")
                 .curve(d3.curveCardinal)
                 .width(d.width)
                 .height(globjectHeight);
 
-            content.call(lineCloud, { n: Math.floor(bar.duration) });
+            content.call(lineCloud, { n: Math.floor(bar.pitched.duration) });
 
             content.selectAll(".line-cloud-path")
                 .attr("stroke", "grey")
-                .attr("stroke-dasharray", bar.phraseType === "ascending" ? "1" : "none")
+                .attr("stroke-dasharray", bar.pitched.phraseType === "ascending" ? "1" : "none")
                 .attr("fill", "none");
         })
         .each(function(d) {
             var selection = d3.select(this);
 
-            var g = selection.append("g").attr("transform", "translate(0, " + globjectHeight + ")"),
-                pitch = bar.pitch,
+            var g = selection.append("g"),
+                pitch = bar.pitched.pitch,
                 text;
 
             for (var i = 0; i < pitch.length; i++) {
                 text = g.append("text")
-                    .attr("dy", "2em")
+                    .attr("dy", "-1.5em")
                     .attr("x", pitch[i].time * d.width)
                     .attr("text-anchor", textAnchor(pitch[i].time));
 
@@ -228,19 +232,42 @@ function update(index, isControlEvent) {
                 text.text(formatted)
                     .attr("class", "pitch-class");
             }
+
+            /**
+             * Dynamics
+             */
+            if (bar.pitched.dynamics) {
+                selection.append("g")
+                    .attr("transform", "translate(0," + globjectHeight + ")")
+                    .selectAll(".dynamic")
+                    .data(bar.pitched.dynamics)
+                    .enter()
+                    .append("text")
+                        .attr("class", "dynamic")
+                        .attr("x", function(d, i) {
+                            return globjectWidth * d.time;
+                        })
+                        .attr("dy", "1em")
+                        .attr("text-anchor", function(d) {
+                            return textAnchor(d.time);
+                        })
+                        .text(function(d) {
+                            return dynamics[d.value];
+                        });
+            }
         });
 
     /**
      * Duration
      */
-    durationText.text(bar.duration + "\u2033");
+    durationText.text(bar.pitched.duration + "\u2033");
 
     /**
      * Rest
      */
     var rest = d3.select(".rest").remove();
 
-    if (bar.phraseType === "rest") {
+    if (bar.pitched.phraseType === "rest") {
         rest = globjectContainer.append("text")
             .attr("class", "rest");
         rest.append("tspan")
