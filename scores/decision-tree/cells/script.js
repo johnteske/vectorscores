@@ -9,7 +9,7 @@ var score = {
         buffer: 30
     },
     nEvents: 8,
-    interval: 10000,
+    interval: 30000,
     // TODO increase over time/score pointer?
     // TODO scale according to number of choices per param?
     weightScale: 5
@@ -35,13 +35,7 @@ score.selected = false;
 
 var durations = VS.dictionary.Bravura.durations.stemless;
 var dynamics = VS.dictionary.Bravura.dynamics;
-var phrases = [
-    durations["1"],
-    durations["1"] + " " + durations["1"],
-    durations["1"] + " " + durations["1"] + " " + durations["1"],
-    durations["1"] + " " + durations["1"] + " " + durations["1"] + " " + durations["1"],
-    "rest" // "\ue4e5"
-];
+var phrases = [0, 1, 2, 3, 4];
 
 params.add("duration", Object.keys(durations));
 params.add("dynamic", Object.keys(dynamics).filter(function(k) {
@@ -87,23 +81,28 @@ function updateChoices() {
     choices.bottom = params.createChoice();
 
     function updateCell(selection, choice) {
-        var isRest = choice.phrase === "rest";
+        var isRest = +choice.phrase === 0,
+            phrase = [];
 
         if (isRest) {
             choice.pitchClasses = "";
             choice.duration = "";
-            // choice.phrase = "rest";
+            phrase.push("\ue4e5");
             choice.dynamic = "";
+        } else {
+            for (var i = 0; i < +choice.phrase; i++) {
+                phrase.push(durations[choice.duration]);
+            }
         }
 
         selection.select(".pitch-classes")
             .text(formatPCSet(choice.pitchClasses));
-        selection.select("circle")
-            .style("opacity", isRest ? 0 : 1);
-        selection.select(".duration")
-            .text(durations[choice.duration]);
+        // selection.select("circle")
+            // .style("opacity", isRest ? 0 : 1);
+        // selection.select(".duration")
+        //     .text(durations[choice.duration]);
         selection.select(".phrase")
-            .text(isRest ? "\ue4e5" : choice.phrase);
+            .text(phrase.join(" "));
         selection.select(".dynamic")
             .text(dynamics[choice.dynamic]);
     }
@@ -188,18 +187,18 @@ function createCell(selection) {
         .attr("dy", "-1em");
 
     var r = (22 * 1.5) / 2;
-    selection.append("circle")
-        .attr("cx", score.cell.size - r)
-        .attr("cy", -1.5 * r)
-        .attr("r", r)
-        .attr("stroke", "black")
-        .attr("fill", "none");
-    selection.append("text")
-        .attr("class", "duration bravura")
-        .attr("text-anchor", "middle")
-        .attr("x", score.cell.size - r)
-        .attr("y", -0.5 * r)
-        .attr("dy", "-1em");
+    // selection.append("circle")
+    //     .attr("cx", score.cell.size - r)
+    //     .attr("cy", -1.5 * r)
+    //     .attr("r", r)
+    //     .attr("stroke", "black")
+    //     .attr("fill", "none");
+    // selection.append("text")
+    //     .attr("class", "duration bravura")
+    //     .attr("text-anchor", "middle")
+    //     .attr("x", score.cell.size - r)
+    //     .attr("y", -0.5 * r)
+    //     .attr("dy", "-1em");
 
     selection.append("text")
         .attr("class", "phrase bravura")
