@@ -3,7 +3,7 @@ layout: compress-js
 ---
 var score = {
     width: 320,
-    height: 480,
+    height: 320,
     cell: {
         size: 90,
         buffer: 30
@@ -13,6 +13,10 @@ var score = {
     // TODO increase over time/score pointer?
     // TODO scale according to number of choices per param?
     weightScale: 5
+};
+
+var layout = {
+    margin: {}
 };
 
 score.center = {
@@ -175,9 +179,9 @@ function translateSelectedCell() {
         (score.center.y - score.cell.halfSize) + ")";
 }
 
-score.svg = d3.select(".main")
-    .attr("width", score.width)
-    .attr("height", score.height);
+score.svg = d3.select(".main");
+
+score.wrapper = score.svg.append("g");
 
 function createCell(selection) {
     selection
@@ -219,13 +223,13 @@ function createCell(selection) {
         .attr("dy", -5);
 }
 
-score.topGroup = score.svg.append("g")
+score.topGroup = score.wrapper.append("g")
     .call(createCell)
     .on("click", function() {
         selectCell("top");
     });
 
-score.bottomGroup = score.svg.append("g")
+score.bottomGroup = score.wrapper.append("g")
     .call(createCell)
     .on("click", function() {
         selectCell("bottom");
@@ -244,6 +248,31 @@ function clearChoices() {
 }
 
 clearChoices();
+
+/**
+ * Resize
+ */
+function resize() {
+    var main = d3.select("main");
+
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
+
+    var scaleX = VS.clamp(w / score.width, 0.25, 2);
+    var scaleY = VS.clamp(h / score.height, 0.25, 2);
+
+    layout.scale = Math.min(scaleX, scaleY);
+
+    layout.margin.left = (w * 0.5) - ((score.width * 0.5) * layout.scale);
+    layout.margin.top = (h * 0.5) - ((score.height * 0.5) * layout.scale);
+
+    score.wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
+}
+
+d3.select(window).on("resize", resize);
+
+d3.select(window).on("load", resize);
+
 
 for (var i = 0; i < score.nEvents + 1; i++) {
     VS.score.add(i * score.interval, updateChoices, []);
