@@ -27,6 +27,8 @@ score.partWeight = score.weightScale; // init
 score.choices = {};
 score.selected = false;
 
+{% include_relative _settings.js %}
+
 /**
  * Symbols and choice
  */
@@ -95,8 +97,13 @@ function updateChoices() {
             }
         }
 
+        var set = choice.pitchClasses.split(",");
+        var formatted = VS.pitchClass.transpose(set, "random").map(function(pc) {
+            return VS.pitchClass.format(pc, scoreSettings.pcFormat);
+        });
+
         selection.select(".pitch-classes")
-            .text(formatPCSet(choice.pitchClasses));
+            .text("{" + formatted + "}");
         // selection.select("circle")
             // .style("opacity", isRest ? 0 : 1);
         // selection.select(".duration")
