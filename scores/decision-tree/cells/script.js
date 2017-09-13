@@ -84,7 +84,7 @@ function updateChoices() {
     var choices = score.choices;
 
     choices.top = params.createChoice();
-    choices.bottom = params.createChoice();
+    choices.bottom = params.createChoice(+choices.top.phrase === 0);
 
     function updateCell(selection, choice) {
         var isRest = +choice.phrase === 0,
