@@ -20,11 +20,14 @@ var main = d3.select(".main"),
         lastDir: ""
     };
 
+var layout = {
+    width: 400,
+    height: 300,
+    scale: 1,
+    margin: {}
+};
+
 {% include_relative _symbol-sets.js %}
-
-main.style("width", 640 + "px")
-    .style("height", 640 + "px");
-
 {% include_relative _diamond-square.js %}
 {% include_relative _score.js %}
 
@@ -96,7 +99,7 @@ topo.selectAll("text")
     })
     .call(revealSymbols, 0);
 
-topo.attr("transform", "translate(320,120)");
+// topo.attr("transform", "translate(320,120)");
 
 /**
  * Reveal
@@ -119,7 +122,8 @@ function revealSymbols(selection, dur) {
             return fill;
         })
         .style("opacity", function(d) {
-            return d.revealed ? 1 : 0;
+            return 1;
+            // return d.revealed ? 1 : 0;
         });
 }
 
@@ -274,3 +278,27 @@ addEvent(function() {
 for (var i = 0; i < 100; i++) {
     addEvent(moveWalker, randDuration());
 }
+
+/**
+ * Resize
+ */
+function resize() {
+    var main = d3.select("main");
+
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
+
+    var scaleX = VS.clamp(w / layout.width, 0.25, 2);
+    var scaleY = VS.clamp(h / layout.height, 0.25, 2);
+
+    layout.scale = Math.min(scaleX, scaleY);
+
+    layout.margin.left = w * 0.5;
+    layout.margin.top = (h * 0.5) - ((layout.height * 0.25) * layout.scale);
+
+    topo.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
+}
+
+d3.select(window).on("resize", resize);
+
+d3.select(window).on("load", resize);
