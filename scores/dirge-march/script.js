@@ -155,7 +155,7 @@ function makePhrase(type, set) {
         }
 
         return notes;
-    }
+    };
 }
 
 var pattern = svg.append("defs")

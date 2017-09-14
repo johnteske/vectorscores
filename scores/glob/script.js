@@ -14,7 +14,7 @@ var canvas = {
     },
     scoreLength = 12,
     textoffset = 5,
-    debug = VS.getQueryString("debug") == 1 || false,
+    debug = +VS.getQueryString("debug") === 1 || false,
     main = d3.select(".main");
 
 {% include_relative _glob.js %}

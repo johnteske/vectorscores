@@ -4,16 +4,16 @@
 @import "mixins";
 @include BravuraFont();
 
-/*debug*/
-/*rect, circle {
-    stroke: pink;
-    fill-opacity: 0;
-}*/
-
-/*path {
-    fill: #111;
-    stroke: #111;
-}*/
+.debug {
+    rect, circle {
+        stroke: pink;
+        fill-opacity: 0;
+    }
+    path {
+        fill: #111;
+        stroke: #111;
+    }
+}
 
 .glob-child {
     font-family: Bravura;

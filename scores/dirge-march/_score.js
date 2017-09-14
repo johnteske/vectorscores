@@ -21,7 +21,7 @@ var score = (function(score) {
 
     // A
     // mm 1
-    var stashedEvent = {}
+    var stashedEvent = {};
     stashedEvent.time = 0;
     stashedEvent.pitched = {
         duration: 46.67,
@@ -153,7 +153,7 @@ var score = (function(score) {
 
     // mm 8
     var rest = 3;
-    stashedEvent = {}
+    stashedEvent = {};
     stashedEvent.time = 144;
     stashedEvent.pitched = {
         duration: rest,

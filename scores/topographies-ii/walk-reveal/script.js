@@ -122,8 +122,7 @@ function revealSymbols(selection, dur) {
             return fill;
         })
         .style("opacity", function(d) {
-            return 1;
-            // return d.revealed ? 1 : 0;
+            return d.revealed ? 1 : 0;
         });
 }
 

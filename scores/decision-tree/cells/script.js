@@ -149,7 +149,7 @@ function selectCell(position) {
 }
 
 var debugChoices = (function () {
-    var debug = VS.getQueryString("debug") == 1 || false,
+    var debug = +VS.getQueryString("debug") === 1 || false,
         el = document.getElementsByClassName("debug")[0];
 
     return debug ? function() {
