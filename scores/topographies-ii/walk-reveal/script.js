@@ -18,7 +18,10 @@ var main = d3.select(".main"),
     walker = {
         index: -1,
         lastDir: ""
-    };
+    },
+    revealFactor = 62,
+    nearbyRevealFactor = 38,
+    nEvents = 100;
 
 var layout = {
     width: 400,
@@ -122,7 +125,10 @@ function revealSymbols(selection, dur) {
             return fill;
         })
         .style("opacity", function(d) {
-            return d.revealed ? 1 : 0;
+            if (d.revealed > 0) {
+                d.revealed--;
+            }
+            return d.revealed / revealFactor;
         });
 }
 
@@ -194,7 +200,7 @@ function moveWalker() {
 
     topoData[walker.index].walker = true;
     topoData[walker.index].walked = true;
-    topoData[walker.index].revealed = true;
+    topoData[walker.index].revealed = revealFactor;
 
     revealNearby();
 }
@@ -213,7 +219,7 @@ function revealNearby() {
 
     function setRevealed(x, y) {
         if (Math.random() < chance && x > -1 && x < score.width && y > -1 && y < score.width) {
-            topoData[coordinatesToIndex(x, y)].revealed = true;
+            topoData[coordinatesToIndex(x, y)].revealed = Math.min(topoData[coordinatesToIndex(x, y)].revealed + nearbyRevealFactor, revealFactor);
         }
     }
 
@@ -250,7 +256,7 @@ var addEvent = (function() {
 })();
 
 function randDuration() {
-    return 600 + (Math.random() * 600);
+    return 1200; // 600 + (Math.random() * 600);
 }
 /**
  * Reveal a starting point
@@ -267,14 +273,14 @@ addEvent(function() {
 
     var startIndex = walker.index = VS.getItem(extremaIndices);
 
-    topoData[startIndex].revealed = true;
+    topoData[startIndex].revealed = revealFactor;
     topoData[walker.index].walker = true;
     topoData[walker.index].walked = true;
 
     topo.selectAll("text").call(revealSymbols, 600);
 }, randDuration());
 
-for (var i = 0; i < 100; i++) {
+for (var i = 0; i < nEvents; i++) {
     addEvent(moveWalker, randDuration());
 }
 
