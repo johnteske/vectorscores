@@ -6,7 +6,7 @@ function generateValues() {
     var width = score.width;
     var height = score.width;
 
-    var featureSize = 8;
+    var featureSize = 4;
     var sampleSize = featureSize;
 
     var initScale = 3;
