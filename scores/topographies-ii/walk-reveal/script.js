@@ -29,6 +29,7 @@ var layout = {
     scale: 1,
     margin: {}
 };
+var debug = +VS.getQueryString("debug") === 1;
 
 {% include_relative _symbol-sets.js %}
 {% include_relative _diamond-square.js %}
@@ -57,7 +58,7 @@ function coordinatesToIndex(x, y) {
 /**
  * Debug symbol offsets
  */
-if (+VS.getQueryString("debug") === 1) {
+if (debug) {
     heightScale.revealed = 0;
     heightScale.hidden = 0;
 
@@ -91,18 +92,26 @@ topo.selectAll("text")
         return (c.x - c.y) * tileWidthHalf;
     })
     .each(function(d) {
-        var selection = d3.select(this);
-        var symbolIndex = d.heightIndex + 4;
-        var symbolKey = symbolScale[symbolIndex];
+        var symbolIndex = d.heightIndex + 4,
+            symbolKey;
+
+        // if (d.height === score.range.max || symbolIndex > (symbolScale.length - 1)) {
+        if (symbolIndex > (symbolScale.length - 1)) {
+            symbolKey = "max";
+        // else if (d.height === score.range.min || symbolIndex < 0) {
+        } else if (symbolIndex < 0) {
+            symbolKey = "min";
+        } else {
+            symbolKey = symbolScale[symbolIndex];
+        }
+
         var offsets = symbolOffsets[symbolKey];
 
-        selection.text(symbols[symbolKey])
+        d3.select(this).text(symbols[symbolKey])
             .attr("dx", offsets.x + "em")
             .attr("dy", offsets.y + "em");
     })
     .call(revealSymbols, 0);
-
-// topo.attr("transform", "translate(320,120)");
 
 /**
  * Reveal
@@ -111,9 +120,16 @@ function revealSymbols(selection, dur) {
     selection.transition().duration(dur)
         .attr("y", function(d, i) {
             var c = indexToCoordinates(i),
-                hScale = d.revealed ? heightScale.revealed : heightScale.hidden;
+                hScale = d.revealed ? heightScale.revealed : heightScale.hidden,
+                scaledHeight;
 
-            return ((c.x + c.y) * tileHeightHalf) - (d.height * hScale);
+            if (debug) {
+                scaledHeight = 0;
+            } else {
+                scaledHeight = d.height * hScale;
+            }
+
+            return ((c.x + c.y) * tileHeightHalf) - scaledHeight;
         })
         .style("fill", function() {
             var fill = "black";
@@ -128,7 +144,7 @@ function revealSymbols(selection, dur) {
             if (d.revealed > 0) {
                 d.revealed--;
             }
-            return d.revealed / revealFactor;
+            return debug ? 1 : (d.revealed / revealFactor);
         });
 }
 
