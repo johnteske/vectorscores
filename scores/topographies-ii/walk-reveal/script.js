@@ -8,7 +8,7 @@ var main = d3.select(".main"),
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
     heightScale = {
-        revealed: 3,
+        revealed: 2.5,
         hidden: 1
     },
     topoData,
