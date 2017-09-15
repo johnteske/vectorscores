@@ -90,7 +90,7 @@ function resize() {
         .style("width", canvas.width + "px")
         .style("height", canvas.width + "px");
     glob.group.attr("transform",
-        "translate(" + canvas.center + ", " + canvas.center + ")" +
+        "translate(" + (canvas.center - 12) + ", " + canvas.center + ")" + // offset by ~half font size
         "scale(" + (canvas.width / glob.width) + "," + (canvas.width / glob.width) + ")"
         );
     glob.pitchSet
