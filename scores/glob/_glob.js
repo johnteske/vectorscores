@@ -35,7 +35,7 @@ function Glob(parent, args) {
 Glob.prototype.move = function(dur, data) {
     var self = this,
         type = data.type,
-        t = d3.transition().duration(dur);
+        t = d3.transition().duration(dur).ease(d3.easeCubic);
 
     // this.data = data;
 
@@ -43,7 +43,7 @@ Glob.prototype.move = function(dur, data) {
         return JSON.parse(JSON.stringify(o));
     }
 
-    oldCenter = clone(this.center);
+    var oldCenter = clone(this.center);
 
     this.center = {
         x: VS.getRandExcl(-radius, radius),

@@ -41,7 +41,7 @@ var glob2 = new Glob(wrapper);
 {% include_relative _meta.js %}
 
 function update(dur, bar) {
-    var pcSet = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random");
+    var pcSet = VS.pitchClass.transpose(bar.pitch.set, bar.pitch.transpose);
     pitchClassSet.update(pcSet);
 
     glob0.move(dur, bar.globs[0]);
