@@ -39,6 +39,12 @@ Glob.prototype.move = function(dur, data) {
 
     // this.data = data;
 
+    function clone(o) {
+        return JSON.parse(JSON.stringify(o));
+    }
+
+    oldCenter = clone(this.center);
+
     this.center = {
         x: VS.getRandExcl(-radius, radius),
         y: VS.getRandExcl(-radius, radius)
@@ -76,7 +82,7 @@ Glob.prototype.move = function(dur, data) {
         .text(function(d) {
             return durationDict[d];
         })
-        .attr("transform", "translate(" + this.center.x + "," + this.center.y + ")")
+        .attr("transform", "translate(" + oldCenter.x + "," + oldCenter.y + ")")
         .style("opacity", 0)
         .transition(t)
         .attr("transform", transform)
