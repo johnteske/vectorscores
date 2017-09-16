@@ -12,13 +12,19 @@ var canvas = {
         width: 240
     },
     transitionTime = {
-        long: 5000,
+        // long: 5000,
         short: 600
     },
     scoreLength = 12,
     textoffset = 5,
     debug = +VS.getQueryString("debug") === 1 || false,
     svg = d3.select(".main");
+
+transitionTime.long = 20000;
+var globInterval = transitionTime.long;
+
+// transitionTime.long = 5000;
+// var globInterval = transitionTime.long * 3;
 
 {% include_relative _glob.js %}
 {% include_relative _settings.js %}

@@ -2,7 +2,7 @@ var score = [];
 
 for(var i = 0; i < scoreLength; i++) {
     score.push(VS.getItem(["glob", "chord", "rhythm"]));
-    VS.score.add(i * transitionTime.long, moveAndUpdate, [transitionTime.long, score[i]]);
+    VS.score.add(i * globInterval, moveAndUpdate, [transitionTime.long, score[i]]);
 }
 
 // final event
