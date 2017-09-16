@@ -55,7 +55,7 @@ Glob.prototype.move = function(dur, data) {
     }
 
     var globules = this.group.selectAll(".globule")
-        .data(data.durations, function(d) { return d; });
+        .data(data.durations);
 
     // exit
     globules.exit()

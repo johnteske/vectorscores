@@ -1,14 +1,21 @@
 var score = [];
 
 (function() {
-    var n,
-        dynamics,
+    var dynamics,
         lastIndex = scoreLength - 1;
 
-    function createGlobules(n) {
-        var globules = [];
+    var globules0 = [],
+        globules1 = [],
+        globules2 = [];
 
-        for (var i = 0; i < n; i++) {
+    function randN() {
+        return Math.floor(VS.getRandExcl(1, 21));
+    }
+
+    function createGlobules(globules, n) {
+        globules = globules.slice(0, n);
+
+        for (var i = 0; i < (n - globules.length); i++) {
             globules.push(VS.getItem([1, 2, 4]));
         }
 
@@ -16,7 +23,9 @@ var score = [];
     }
 
     for(var i = 0; i < scoreLength; i++) {
-        n = Math.floor(VS.getRandExcl(1, 21));
+        globules0 = createGlobules(globules0, randN());
+        globules1 = createGlobules(globules1, randN());
+        globules2 = createGlobules(globules2, randN());
 
         if (i === 0) {
             dynamics = "<";
@@ -30,15 +39,15 @@ var score = [];
             globs: [
                 {
                     type: VS.getItem(["glob", "chord", "rhythm"]),
-                    durations: createGlobules(n),
+                    durations: globules0,
                 },
                 {
                     type: VS.getItem(["glob", "chord", "rhythm"]),
-                    durations: createGlobules(n),
+                    durations: globules1,
                 },
                 {
                     type: VS.getItem(["glob", "chord", "rhythm"]),
-                    durations: createGlobules(n),
+                    durations: globules2,
                 }
             ],
             dynamics: dynamics
