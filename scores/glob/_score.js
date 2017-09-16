@@ -16,7 +16,7 @@ var score = [];
     }
 
     for(var i = 0; i < scoreLength; i++) {
-        n = Math.floor(VS.getRandExcl(3, 64));
+        n = Math.floor(VS.getRandExcl(1, 21));
 
         if (i === 0) {
             dynamics = "<";
@@ -27,12 +27,24 @@ var score = [];
         }
 
         score.push({
-            type: VS.getItem(["glob", "chord", "rhythm"]),
-            durations: createGlobules(n),
+            globs: [
+                {
+                    type: VS.getItem(["glob", "chord", "rhythm"]),
+                    durations: createGlobules(n),
+                },
+                {
+                    type: VS.getItem(["glob", "chord", "rhythm"]),
+                    durations: createGlobules(n),
+                },
+                {
+                    type: VS.getItem(["glob", "chord", "rhythm"]),
+                    durations: createGlobules(n),
+                }
+            ],
             dynamics: dynamics
         });
 
-        VS.score.add(i * globInterval, moveAndUpdate, [transitionTime.long, score[i]]);
+        VS.score.add(i * globInterval, update, [transitionTime.long, score[i]]);
     }
 }());
 

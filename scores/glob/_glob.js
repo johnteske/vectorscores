@@ -1,10 +1,12 @@
-function newPoint() {
-    var radius = VS.getRandExcl(1, 96),
+var radius = 96;
+
+function newPoint(x, y) {
+    var r = VS.getRandExcl(1, radius), // TODO allow radius to be set
         angle = Math.random() * Math.PI * 2,
-        dist = Math.random() - Math.random();
+        d = Math.random() - Math.random();
     return {
-        x: Math.cos(angle) * radius * dist,
-        y: Math.sin(angle) * radius * dist
+        x: (Math.cos(angle) * r * d) + x,
+        y: (Math.sin(angle) * r * d) + y
     };
 }
 
@@ -16,21 +18,34 @@ function newPoint() {
 function Glob(parent, args) {
     args = args || {};
 
-    this.group = parent.append("g");
+    this.group = parent.append("g")
+        .attr("transform",
+            "translate(" + (canvas.center - 11) + ", " + canvas.center + ")");
 
     this.size = args.n || 8;
+
+    this.center = {
+        x: 0,
+        y: 0
+    };
 
     // this.data = d3.range(this.size); // fallback if no data
 }
 
 Glob.prototype.move = function(dur, data) {
-    var t = d3.transition().duration(dur),
-        type = data.type;
+    var self = this,
+        type = data.type,
+        t = d3.transition().duration(dur);
 
     // this.data = data;
 
+    this.center = {
+        x: VS.getRandExcl(-radius, radius),
+        y: VS.getRandExcl(-radius, radius)
+    };
+
     function transform() {
-        var point = newPoint();
+        var point = newPoint(self.center.x, self.center.y);
         if (type === "chord") {
             point.x = 0;
         } else if (type === "rhythm") {
@@ -45,7 +60,7 @@ Glob.prototype.move = function(dur, data) {
     // exit
     globules.exit()
         .transition(t)
-        .attr("transform", "translate(0,0)")
+        .attr("transform", "translate(" + this.center.x + "," + this.center.y + ")")
         .style("opacity", 0)
         .remove();
 
@@ -61,6 +76,7 @@ Glob.prototype.move = function(dur, data) {
         .text(function(d) {
             return durationDict[d];
         })
+        .attr("transform", "translate(" + this.center.x + "," + this.center.y + ")")
         .style("opacity", 0)
         .transition(t)
         .attr("transform", transform)

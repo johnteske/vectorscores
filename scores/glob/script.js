@@ -34,46 +34,54 @@ var dynamicsDict = VS.dictionary.Bravura.dynamics;
 
 {% include_relative _glob.js %}
 
-var glob = new Glob(wrapper, { n: 20 });
-
-glob.group.attr("transform",
-    "translate(" + (canvas.center - 11) + ", " + canvas.center + ")");
+var glob0 = new Glob(wrapper);
+var glob1 = new Glob(wrapper);
+var glob2 = new Glob(wrapper);
 
 {% include_relative _meta.js %}
 
-function moveAndUpdate(dur, bar) {
-
-    // eventually multiple globs
-    glob.move(dur, bar);
-
+function update(dur, bar) {
     var pcSet = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random");
-
     pitchClassSet.update(pcSet);
+
+    glob0.move(dur, bar.globs[0]);
+    glob1.move(dur, bar.globs[1]);
+    glob2.move(dur, bar.globs[2]);
+
     dynamics.update(bar.dynamics);
 }
 
 {% include_relative _score.js %}
 {% include_relative _controls.js %}
 
-moveAndUpdate(0, score[0]);
+update(0, score[0]);
 
 /**
  * Debug
  */
 if(debug) {
-    wrapper.append("circle")
+    var debugGroup = wrapper.append("g")
+        .attr("class", "debug");
+
+    debugGroup.append("circle")
         .attr("r", 12)
         .attr("cx", canvas.center)
-        .attr("cy", canvas.center)
-        .attr("fill", "none")
-        .attr("stroke", "red");
+        .attr("cy", canvas.center);
 
-    wrapper.append("rect")
+    debugGroup.append("circle")
+        .attr("r", 96)
+        .attr("cx", canvas.center)
+        .attr("cy", canvas.center);
+
+    debugGroup.append("circle")
+        .attr("r", 192)
+        .attr("cx", canvas.center)
+        .attr("cy", canvas.center);
+
+    debugGroup.append("rect")
         .attr("r", 12)
         .attr("width", canvas.width)
-        .attr("height", canvas.height)
-        .attr("fill", "none")
-        .attr("stroke", "red");
+        .attr("height", canvas.height);
 }
 
 /**

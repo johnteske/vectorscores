@@ -27,6 +27,12 @@ text {
     fill: #111;
 }
 
+.debug {
+    fill: none;
+    stroke: pink;
+    stroke-dasharray: 5;
+}
+
 .globule {
     font-family: Bravura;
     font-size: 48px;
@@ -41,6 +47,6 @@ text {
 
 .dynamics {
     font-family: Bravura;
-    font-size: 48px;
+    font-size: 32px;
     text-anchor: middle;
 }
