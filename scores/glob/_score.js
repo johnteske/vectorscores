@@ -141,7 +141,7 @@ var score = [];
     }
 
     var time = 0;
-    var transpose = 12; // TODO fix pitch class module to transponse below 0
+    var transpose = 0;
 
     for(var i = 0; i < bars.length; i++) {
         var bar = bars[i],
@@ -175,7 +175,9 @@ var score = [];
         VS.score.add(time, update, [transitionTime.long, score[i]]);
 
         time += (bar.duration || globInterval);
-        transpose += VS.getItem([-2, -1, 0, 1, 2]);
+
+        // transpose +/- within range of pitch class set in normal form
+        transpose += VS.getItem([-1, 1]) * Math.floor(Math.random() * (bar.pitch.set[bar.pitch.set.length - 1] || 0));
     }
 
     // final event
