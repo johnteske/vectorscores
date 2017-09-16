@@ -3,13 +3,13 @@ layout: compress-js
 ---
 
 var canvas = {
-        margins: 20,
-        maxWidth: 400,
-        width: null,
-        center: null
+        width: 400,
+        height: 400,
+        center: 200
     },
     layout = {
-        width: 240
+        width: 240,
+        margin: {}
     },
     transitionTime = {
         // long: 5000,
@@ -18,7 +18,8 @@ var canvas = {
     scoreLength = 12,
     textoffset = 5,
     debug = +VS.getQueryString("debug") === 1 || false,
-    svg = d3.select(".main");
+    svg = d3.select(".main"),
+    wrapper = svg.append("g");
 
 transitionTime.long = 20000;
 var globInterval = transitionTime.long;
@@ -32,10 +33,15 @@ var durationDict = VS.dictionary.Bravura.durations.stemless;
 
 {% include_relative _glob.js %}
 
-var glob = new Glob(svg, { n: 20 });
+var glob = new Glob(wrapper, { n: 20 });
 
-var pitchClassSet = svg.append("text")
+glob.group.attr("transform",
+    "translate(" + (canvas.center - 12) + ", " + canvas.center + ")"); // offset by ~half font size
+
+var pitchClassSet = wrapper.append("text")
     .classed("pc-set", 1)
+    .attr("x", canvas.center)
+    .attr("y", canvas.width)
     .attr("dy", "-2em");
 
 function moveAndUpdate(dur, type) {
@@ -58,47 +64,38 @@ function moveAndUpdate(dur, type) {
 
 moveAndUpdate(0, score[0]);
 
-// resize
+/**
+ * Debug
+ */
+if(debug) {
+    wrapper.append("circle")
+        .attr("r", 12)
+        .attr("cx", canvas.center)
+        .attr("cy", canvas.center)
+        .attr("fill", "none")
+        .attr("stroke", "red");
+}
 
+/**
+ * Resize
+ */
 d3.select(window).on("resize", resize);
 
 function resize() {
-    // update width
-    canvas.width = Math.min(parseInt(d3.select("main").style("width"), 10), canvas.maxWidth);
-    canvas.center = canvas.width * 0.5;
-    var innerwidth = canvas.width - (canvas.margins * 2);
+    var main = d3.select("main");
 
-    svg
-        .style("width", canvas.width + "px")
-        .style("height", canvas.width + "px");
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
 
-    glob.group.attr("transform",
-        "translate(" + (canvas.center - 12) + ", " + canvas.center + ")" + // offset by ~half font size
-        "scale(" + (canvas.width / layout.width) + "," + (canvas.width / layout.width) + ")"
-        );
+    var scaleX = VS.clamp(w / canvas.width, 0.25, 3);
+    var scaleY = VS.clamp(h / canvas.height, 0.25, 3);
 
-    pitchClassSet
-        .attr("x", canvas.center)
-        .attr("y", canvas.width);
+    layout.scale = Math.min(scaleX, scaleY);
 
-    if(debug){
-        d3.select("rect")
-            .attr("width", innerwidth)
-            .attr("height", innerwidth);
-        d3.select("circle")
-            .attr("transform", "translate(" + canvas.center + ", " + canvas.center + ")");
-    }
+    layout.margin.left = (w * 0.5) - (canvas.width * 0.5 * layout.scale);
+    layout.margin.top = (h * 0.5) - (canvas.height * 0.5 * layout.scale);
+
+    wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
 }
 
 resize();
-
-if(debug) {
-    svg.classed("debug", true);
-    svg.append("rect")
-        .attr("width", canvas.width - (canvas.margins * 2))
-        .attr("height", canvas.width - (canvas.margins * 2))
-        .attr("transform", "translate(" + canvas.margins + ", " + canvas.margins + ")");
-    svg.append("circle")
-        .attr("r", 5)
-        .attr("transform", "translate(" + canvas.center + ", " + canvas.center + ")");
-}
