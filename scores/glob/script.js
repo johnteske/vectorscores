@@ -8,6 +8,9 @@ var canvas = {
         width: null,
         center: null
     },
+    layout = {
+        width: 240
+    },
     transitionTime = {
         long: 5000,
         short: 600
@@ -15,66 +18,46 @@ var canvas = {
     scoreLength = 12,
     textoffset = 5,
     debug = +VS.getQueryString("debug") === 1 || false,
-    main = d3.select(".main");
+    svg = d3.select(".main");
 
 {% include_relative _glob.js %}
 {% include_relative _settings.js %}
 
 var durationDict = VS.dictionary.Bravura.durations.stemless;
 
-function newPoint() {
-    var radius = VS.getRandExcl(1, 96),
-        angle = Math.random() * Math.PI * 2,
-        dist = Math.random() - Math.random();
-    return {
-        x: Math.cos(angle) * radius * dist,
-        y: Math.sin(angle) * radius * dist
-    };
-}
+var glob = new Glob(svg, { n: 20 });
 
-var glob = new Glob(main, 20);
-glob.width = 240;
-glob.group.selectAll("text")
-    .data(glob.data).enter()
+glob.children = glob.group.selectAll("text")
+    .data(glob.data)
+    .enter()
     .append("text")
     .classed("glob-child", 1)
     .text(function() {
         return durationDict[VS.getItem([1, 2, 4])];
     });
-glob.children = d3.selectAll("text");
 
-glob.pitchSet = main.append("text")
+var pitchClassSet = svg.append("text")
     .classed("pc-set", 1)
-    .style("opacity", "0"); // init value
+    .attr("dy", "-2em")
+    .text("{}");
 
-glob.move = function(dur, type) {
+function moveAndUpdate(dur, type) {
+
+    // eventually all globs
+    glob.move(dur, type);
+
     var pcSet = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random").map(function(pc) {
         return VS.pitchClass.format(pc, scoreSettings.pcFormat);
     });
 
-    glob.pitchSet
-        .attr("x", canvas.center)
-        .attr("y", canvas.width - textoffset)
+    pitchClassSet
         .text(function() {
             return "{" + pcSet.join(", ") + "}";
         });
-
-    glob.children
-        .transition().duration(dur)
-        // .attr("text-anchor", type === "chord" ? "start" : "middle")
-        .attr("text-anchor", "start")
-        .attr("transform", function() {
-            var point = newPoint();
-            if (type === "chord") {
-                point.x = 0; // VS.getItem([0, 40, -40]); // multiple chords
-            } else if (type === "rhythm") {
-                point.y = 0;
-            }
-            return "translate(" + point.x + ", " + point.y + ")";
-        });
-};
+}
 
 {% include_relative _score.js %}
+{% include_relative _controls.js %}
 
 // resize
 
@@ -86,16 +69,18 @@ function resize() {
     canvas.center = canvas.width * 0.5;
     var innerwidth = canvas.width - (canvas.margins * 2);
 
-    main
+    svg
         .style("width", canvas.width + "px")
         .style("height", canvas.width + "px");
+
     glob.group.attr("transform",
         "translate(" + (canvas.center - 12) + ", " + canvas.center + ")" + // offset by ~half font size
-        "scale(" + (canvas.width / glob.width) + "," + (canvas.width / glob.width) + ")"
+        "scale(" + (canvas.width / layout.width) + "," + (canvas.width / layout.width) + ")"
         );
-    glob.pitchSet
+
+    pitchClassSet
         .attr("x", canvas.center)
-        .attr("y", canvas.width - textoffset);
+        .attr("y", canvas.width);
 
     if(debug){
         d3.select("rect")
@@ -109,12 +94,12 @@ function resize() {
 resize();
 
 if(debug) {
-    main.classed("debug", true);
-    main.append("rect")
+    svg.classed("debug", true);
+    svg.append("rect")
         .attr("width", canvas.width - (canvas.margins * 2))
         .attr("height", canvas.width - (canvas.margins * 2))
         .attr("transform", "translate(" + canvas.margins + ", " + canvas.margins + ")");
-    main.append("circle")
+    svg.append("circle")
         .attr("r", 5)
         .attr("transform", "translate(" + canvas.center + ", " + canvas.center + ")");
 }
