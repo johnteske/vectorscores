@@ -36,15 +36,11 @@ var glob = new Glob(svg, { n: 20 });
 
 var pitchClassSet = svg.append("text")
     .classed("pc-set", 1)
-    .attr("dy", "-2em")
-    .text("{}");
+    .attr("dy", "-2em");
 
 function moveAndUpdate(dur, type) {
 
-    // update glob size
-    glob.data = d3.range(Math.floor(VS.getRandExcl(3, 64)));
-
-    // eventually all globs
+    // eventually multiple globs
     glob.move(dur, type);
 
     var pcSet = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random").map(function(pc) {
@@ -60,7 +56,7 @@ function moveAndUpdate(dur, type) {
 {% include_relative _score.js %}
 {% include_relative _controls.js %}
 
-glob.move(0, score[0]);
+moveAndUpdate(0, score[0]);
 
 // resize
 

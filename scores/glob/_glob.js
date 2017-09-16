@@ -20,12 +20,14 @@ function Glob(parent, args) {
 
     this.size = args.n || 8;
 
-    // fallback if no data
-    this.data = d3.range(this.size);
+    // this.data = d3.range(this.size); // fallback if no data
 }
 
-Glob.prototype.move = function(dur, type) {
-    var t = d3.transition().duration(dur);
+Glob.prototype.move = function(dur, data) {
+    var t = d3.transition().duration(dur),
+        type = data.type;
+
+    // this.data = data;
 
     function transform() {
         var point = newPoint();
@@ -38,13 +40,13 @@ Glob.prototype.move = function(dur, type) {
     }
 
     var globules = this.group.selectAll(".globule")
-        .data(this.data, function(d) { return d; });
+        .data(data.durations, function(d) { return d; });
 
     // exit
     globules.exit()
         .transition(t)
         .attr("transform", "translate(0,0)")
-        .style("opacity", -1)
+        .style("opacity", 0)
         .remove();
 
     // update
@@ -56,8 +58,8 @@ Glob.prototype.move = function(dur, type) {
     globules
         .enter().append("text")
         .attr("class", "globule")
-        .text(function() {
-            return durationDict[VS.getItem([1, 2, 4])]; // TODO use durations as data
+        .text(function(d) {
+            return durationDict[d];
         })
         .style("opacity", 0)
         .transition(t)
