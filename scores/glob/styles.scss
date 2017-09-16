@@ -23,16 +23,24 @@ svg {
     height: 100%;
 }
 
+text {
+    fill: #111;
+}
+
 .globule {
     font-family: Bravura;
     font-size: 48px;
-    fill: #111;
     text-anchor: start;
 }
 
 .pc-set {
     font-family: monospace;
     font-size: 16px;
-    fill: #111;
+    text-anchor: middle;
+}
+
+.dynamics {
+    font-family: Bravura;
+    font-size: 48px;
     text-anchor: middle;
 }

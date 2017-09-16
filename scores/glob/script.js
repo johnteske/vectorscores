@@ -28,6 +28,7 @@ var globInterval = transitionTime.long;
 // var globInterval = transitionTime.long * 3;
 
 var durationDict = VS.dictionary.Bravura.durations.stemless;
+var dynamicsDict = VS.dictionary.Bravura.dynamics;
 
 {% include_relative _settings.js %}
 
@@ -36,27 +37,19 @@ var durationDict = VS.dictionary.Bravura.durations.stemless;
 var glob = new Glob(wrapper, { n: 20 });
 
 glob.group.attr("transform",
-    "translate(" + (canvas.center - 12) + ", " + canvas.center + ")"); // offset by ~half font size
+    "translate(" + (canvas.center - 11) + ", " + canvas.center + ")");
 
-var pitchClassSet = wrapper.append("text")
-    .classed("pc-set", 1)
-    .attr("x", canvas.center)
-    .attr("y", canvas.width)
-    .attr("dy", "-2em");
+{% include_relative _meta.js %}
 
-function moveAndUpdate(dur, type) {
+function moveAndUpdate(dur, bar) {
 
     // eventually multiple globs
-    glob.move(dur, type);
+    glob.move(dur, bar);
 
-    var pcSet = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random").map(function(pc) {
-        return VS.pitchClass.format(pc, scoreSettings.pcFormat);
-    });
+    var pcSet = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random");
 
-    pitchClassSet
-        .text(function() {
-            return "{" + pcSet.join(", ") + "}";
-        });
+    pitchClassSet.update(pcSet);
+    dynamics.update(bar.dynamics);
 }
 
 {% include_relative _score.js %}
@@ -72,6 +65,13 @@ if(debug) {
         .attr("r", 12)
         .attr("cx", canvas.center)
         .attr("cy", canvas.center)
+        .attr("fill", "none")
+        .attr("stroke", "red");
+
+    wrapper.append("rect")
+        .attr("r", 12)
+        .attr("width", canvas.width)
+        .attr("height", canvas.height)
         .attr("fill", "none")
         .attr("stroke", "red");
 }
