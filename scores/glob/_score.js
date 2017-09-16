@@ -6,10 +6,4 @@ for(var i = 0; i < scoreLength; i++) {
 }
 
 // final event
-VS.score.add(scoreLength * transitionTime.long, function() {
-    d3.select(".pc-set")
-        .transition().duration(transitionTime.short)
-        .style("opacity", "0");
-});
-
-glob.move(0, score[0]);
+VS.score.add(scoreLength * transitionTime.long, VS.noop);

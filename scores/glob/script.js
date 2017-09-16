@@ -26,21 +26,13 @@ var globInterval = transitionTime.long;
 // transitionTime.long = 5000;
 // var globInterval = transitionTime.long * 3;
 
-{% include_relative _glob.js %}
-{% include_relative _settings.js %}
-
 var durationDict = VS.dictionary.Bravura.durations.stemless;
 
-var glob = new Glob(svg, { n: 20 });
+{% include_relative _settings.js %}
 
-glob.children = glob.group.selectAll("text")
-    .data(glob.data)
-    .enter()
-    .append("text")
-    .classed("glob-child", 1)
-    .text(function() {
-        return durationDict[VS.getItem([1, 2, 4])];
-    });
+{% include_relative _glob.js %}
+
+var glob = new Glob(svg, { n: 20 });
 
 var pitchClassSet = svg.append("text")
     .classed("pc-set", 1)
@@ -48,6 +40,9 @@ var pitchClassSet = svg.append("text")
     .text("{}");
 
 function moveAndUpdate(dur, type) {
+
+    // update glob size
+    glob.data = d3.range(Math.floor(VS.getRandExcl(3, 64)));
 
     // eventually all globs
     glob.move(dur, type);
@@ -64,6 +59,8 @@ function moveAndUpdate(dur, type) {
 
 {% include_relative _score.js %}
 {% include_relative _controls.js %}
+
+glob.move(0, score[0]);
 
 // resize
 
