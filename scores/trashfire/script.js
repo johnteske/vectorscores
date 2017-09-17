@@ -65,10 +65,10 @@ for (i = 0; i < 6; i++) {
 for (i = 0; i < 3; i++) {
     time = (i * 20000) + (Math.random() * 17000);
     VS.score.add(time, function() {
-        makeSpike();
+        TrashFire.spike.show();
     });
     VS.score.add(time + 2000, function() {
-        hitSpike();
+        TrashFire.spike.hit();
     });
 }
 
