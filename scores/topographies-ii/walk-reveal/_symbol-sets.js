@@ -2,7 +2,9 @@ var symbols = {},
     symbolOffsets = {},
     symbolScale = [];
 
-switch (Math.ceil(VS.getRandExcl(0, 4))) {
+var symbolSetIndex = +VS.getQueryString("symbols") || VS.getItem([1, 2, 3, 4]);
+
+switch (symbolSetIndex) {
     case 1:
         symbols = Object.assign(VS.dictionary.Bravura.accidentals, VS.dictionary.Bravura.durations.stemless);
 
@@ -80,6 +82,7 @@ switch (Math.ceil(VS.getRandExcl(0, 4))) {
         symbolOffsets.max = { x: -0.4, y: 0.135 };
 
         break;
+    case 4:
     default:
         symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations);
         symbolOffsets = {
