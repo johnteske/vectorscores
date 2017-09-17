@@ -59,7 +59,7 @@ var dynamics = ["f", "mf", "mp", "p", "pp", "pp", "p", "mp", "mf", "f", "ff"];
 
 var envelopes = {
     phraseLength: [1, 1, 2, 3, 4, 1, 1],
-    timeDispersion: [0, 0, 1, 1.5, 2, 2.5, 1],
+    timeDispersion: [0, 0, 1, 1.5, 2, 2.5, 3],
     pitch: {
         high: [0, 0, 0.5, 1, 1.5, 2, 2],
         low: [0, -0.5, -1, -1.5, -2, -2, -2]
