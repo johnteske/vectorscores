@@ -36,20 +36,6 @@ var layout = {
 {% include_relative _noise.js %}
 {% include_relative _score.js %}
 
-// /**
-//  * Noise
-//  * One cycle per 30 s interval,
-//  */
-// for (i = 0; i < 2; i++) {
-//     time = (i * 30000) + (Math.random() * 27000);
-//     VS.score.add(time, function() {
-//         TrashFire.noiseLayer.add(8, 200);
-//     });
-//     VS.score.add(time + 800, function() {
-//         TrashFire.noiseLayer.remove(32);
-//     });
-// }
-
 VS.score.stopCallback = function() {
     trash = [];
     TrashFire.noiseLayer.remove(0); // calls updateTrash();

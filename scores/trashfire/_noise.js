@@ -1,3 +1,7 @@
+/**
+ * TODO make noise noisier, similar to trash/fire paths
+ * TODO stash noise elements, reposition on resize if needed
+ */
 TrashFire.noiseLayer = (function() {
     var noiseLayer = {};
 
@@ -27,7 +31,7 @@ TrashFire.noiseLayer = (function() {
             .append("rect")
                 .attr("class", "noise")
                 .style("opacity", 0)
-                    .attr("fill", function() { return VS.getItem(["#888", "#888"]); })
+                .attr("fill", "#888888")
                 .attr("x", x)
                 .attr("y", y)
                 .attr("width", w)
