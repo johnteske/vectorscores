@@ -1,30 +1,52 @@
-TrashFire.noiseLayer = TrashFire.wrapper.append("g").attr("class", "noise-container");
+TrashFire.noiseLayer = (function() {
+    var noiseLayer = {};
 
-function addNoise(nElements) {
-    TrashFire.noiseLayer
-        .selectAll(".noise")
-        .data(d3.range(0, nElements))
-        .enter()
-        .append("rect")
-            .attr("class", "noise")
-            .style("opacity", 0)
-            .attr("fill", function() { return VS.getItem(["#eeeeee", "white"]); })
-            .attr("x", function() { return (Math.random() * TrashFire.view.width) - (TrashFire.view.width * 0.25); })
-            .attr("y", function() { return Math.random() * TrashFire.view.height; })
-            .attr("width", function() { return Math.random() * TrashFire.view.width; })
-            .attr("height", function() { return Math.random() * 5; })
-            // pop in
-            .transition().duration(0)
-            .delay(function(d, i) { return i * 5; })
-            .style("opacity", 1);
-    updateTrash();
-}
+    noiseLayer.selection = TrashFire.wrapper.append("g").attr("class", "noise-container");
 
-function removeNoise() {
-    TrashFire.noiseLayer
-        .selectAll(".noise")
-            .transition().duration(0)
-            .delay(function(d, i) { return i * 1; })
-            .remove();
-    updateTrash();
-}
+    function x() {
+        return (Math.random() * layout.main.width) - (layout.main.width * 0.25);
+    }
+
+    function y() {
+        return Math.random() * layout.main.height;
+    }
+
+    function w() {
+        return Math.random() * layout.main.width;
+    }
+
+    function h() {
+        return Math.random() * 2;
+    }
+
+    noiseLayer.add = function(delay, n) {
+        noiseLayer.selection
+            .selectAll(".noise")
+            .data(d3.range(0, n))
+            .enter()
+            .append("rect")
+                .attr("class", "noise")
+                .style("opacity", 0)
+                    .attr("fill", function() { return VS.getItem(["#888", "#888"]); })
+                .attr("x", x)
+                .attr("y", y)
+                .attr("width", w)
+                .attr("height", h)
+                // pop in
+                .transition().duration(0)
+                .delay(function(d, i) { return i * delay; })
+                .style("opacity", 1);
+        updateTrash();
+    }
+
+    noiseLayer.remove = function(delay) {
+        noiseLayer.selection
+            .selectAll(".noise")
+                .transition().duration(0)
+                .delay(function(d, i) { return i * delay; })
+                .remove();
+        updateTrash();
+    }
+
+    return noiseLayer;
+})();

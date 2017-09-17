@@ -23,6 +23,13 @@ var TrashFire = (function() {
     return tf;
 })();
 
+var layout = {
+    width: TrashFire.view.width,
+    height: TrashFire.view.height,
+    margin: {},
+    main: d3.select("main")
+};
+
 {% include_relative _dumpster.js %}
 {% include_relative _trash.js %}
 {% include_relative _spike.js %}
@@ -72,10 +79,10 @@ for (i = 0; i < 3; i++) {
 for (i = 0; i < 2; i++) {
     time = (i * 30000) + (Math.random() * 27000);
     VS.score.add(time, function() {
-        addNoise(200);
+        TrashFire.noiseLayer.add(8, 200);
     });
-    VS.score.add(time + 2000, function() {
-        removeNoise();
+    VS.score.add(time + 800, function() {
+        TrashFire.noiseLayer.remove(32);
     });
 }
 
@@ -88,8 +95,7 @@ VS.score.events.sort(function (a, b) {
 
 VS.score.stopCallback = function() {
     trash = [];
-    updateTrash();
-    TrashFire.noiseLayer.selectAll(".noise").remove();
+    TrashFire.noiseLayer.remove(0); // calls updateTrash();
     dumpsterShake();
 };
 
@@ -97,22 +103,17 @@ VS.score.stopCallback = function() {
  * Resize
  */
 function resize() {
-    var main = d3.select("main");
-    var layout = {
-        width: TrashFire.view.width,
-        height: TrashFire.view.height,
-        margin: {}
-    };
+    var main = layout.main;
 
-    var w = parseInt(main.style("width"), 10);
-    var h = parseInt(main.style("height"), 10);
+    var w = layout.main.width = parseInt(main.style("width"), 10);
+    var h = layout.main.height = parseInt(main.style("height"), 10);
 
     var scaleX = VS.clamp(w / layout.width, 0.25, 2);
     var scaleY = VS.clamp(h / layout.height, 0.25, 2);
 
     layout.scale = Math.min(scaleX, scaleY);
 
-    layout.margin.left = (w * 0.5) - ((layout.width * 0.5) * layout.scale) ;
+    layout.margin.left = (w * 0.5) - ((layout.width * 0.5) * layout.scale);
     layout.margin.top = (h * 0.5) - ((layout.height * 0.5) * layout.scale);
 
     TrashFire.wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
