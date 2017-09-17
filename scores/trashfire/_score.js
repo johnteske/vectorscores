@@ -1,41 +1,157 @@
-// TODO create timed events, log to console as tests to get pace down
+var score = [];
 
-function addTrash(n) {
+function addTrash(n, type, range) {
     for (var i = 0; i < n; i++) {
-        var type = VS.getItem(["embers", "crackle", "blaze", "scrape"]);
         trash.push({
-            active: true,
-            size: VS.getRandExcl(25, 75),
+            size: VS.getRandExcl(range[0], range[1]),
             type: type
         });
     }
-    updateTrash();
-}
-function removeTrash(n) {
-    for (var i = 0; i < n; i++) {
-        trash.pop();
-    }
+
     updateTrash();
 }
 
-// function fireCycle() {
-//     var cycle = [];
-//
-//     // always start with fire
-//     cycle.push("fire");
-//
-//     // 0–3 bangs
-//     var bangs = ["bang", "bang", "bang"];
-//     // var nBangs = Math.floor(VS.getRandExcl(0,4));
-//     var nBangs = VS.getWeightedItem([0, 1, 2, 3], [15, 50, 15, 10]);
-//     cycle.push(bangs.splice(0, nBangs));
-//
-//     // end with one or none of:
-//     var end = ["fire", "multi-fire", "embers"];
-//     var endIndex = VS.getWeightedItem([-1, 0, 1, 2], [25, 25, 25, 25]);
-//     if (endIndex !== -1) {
-//         cycle.push(end[endIndex]);
-//     }
-//
-//     return cycle;
-// }
+// TODO shift() would be preferable but updateTrash does not properly join data
+function removeTrash() {
+    trash.pop();
+    updateTrash();
+}
+
+function emptyTrash() {
+    trash = [];
+    updateTrash();
+}
+
+function fireCycle() {
+    var i = 0,
+        time = 0,
+        cycle = [];
+
+    // build fire, 3-5
+    var nFires = Math.floor(VS.getRandExcl(3, 6));
+    for (i = 0; i < nFires; i++) {
+        cycle.push({
+            time: time,
+            fn: addTrash,
+            args: [
+                1,
+                (i > 2) ? "blaze" : "crackle",
+                [25, 25 + (i * (50 / nFires))]
+            ]
+        });
+
+        time += ((7 - i) * 1000); // duration: 7-2 seconds
+    }
+
+    // hit dumpster, 0-3 times
+    var nSpikes = VS.getWeightedItem([0, 1, 2, 3], [15, 60, 15, 10]);
+    for (i = 0; i < nSpikes; i++) {
+        cycle.push({
+            time: time,
+            fn: TrashFire.spike.show,
+            args: []
+        });
+        cycle.push({
+            time: time + 600, // show() duration
+            fn: TrashFire.spike.hit,
+            args: []
+        });
+
+        time += 1350; // show() + hit() duration
+    }
+    // TODO reduce trash to last 3 items if no spike?
+
+    var tail = VS.getItem(["resume", "embers", "multi", ""]);
+    var nTail = 0;
+    switch (tail) {
+        // come back stronger
+        case "resume":
+            // add
+            cycle.push({
+                time: time,
+                fn: addTrash,
+                args: [1, "blaze", [25, 75]]
+            });
+            time += 7000;
+
+            break;
+        // embers, 1-3
+        case "embers":
+            nTail = VS.getItem([1, 2, 3]);
+
+            // grow
+            for (i = 0; i < nTail; i++) {
+                cycle.push({
+                    time: time,
+                    fn: addTrash,
+                    args: [nTail, "embers", [25, 75]]
+                });
+                time += ((7 - i) * 1000); // duration: 7-5 seconds
+            }
+
+            // die away
+            for (i = 0; i < nTail; i++) {
+                cycle.push({
+                    time: time,
+                    fn: removeTrash,
+                    args: []
+                });
+                time += ((nTail - i + 4) * 1000);
+            }
+
+            break;
+        // multiple small fires, 1-3
+        case "multi":
+            nTail = VS.getItem([1, 2, 3]);
+
+            // add all
+            cycle.push({
+                time: time,
+                fn: addTrash,
+                args: [nTail, "crackle", [25, 75]]
+            });
+            time += 7000;
+
+            // die away
+            for (i = 0; i < nTail; i++) {
+                cycle.push({
+                    time: time,
+                    fn: removeTrash,
+                    args: []
+                });
+                time += ((nTail - i + 4) * 1000);
+            }
+
+            break;
+        // end cycle
+        default:
+            break;
+    }
+
+    // empty trash
+    cycle.push({
+        time: time,
+        fn: emptyTrash,
+        args: []
+    });
+    time += 3000; // rest
+
+    return cycle;
+}
+
+score = score.concat(fireCycle());
+
+/**
+ * Sort score by event time
+ */
+// score.sort(function (a, b) {
+//   return a[0] - b[0];
+// });
+
+for (var i = 0; i < score.length; i++) {
+    var bar = score[i];
+    VS.score.add(bar.time, bar.fn, bar.args);
+}
+
+// dummy last event for testing
+VS.score.add(60 * 1000, VS.noop);

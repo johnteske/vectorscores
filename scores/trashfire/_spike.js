@@ -14,7 +14,7 @@ TrashFire.spike = (function() {
         spike.group
             .attr("transform", "translate(" + x + ","  + 15 + ")")
             .style("opacity", 0)
-            .transition().duration(1000)
+            .transition().duration(600)
             .style("opacity", 1);
     }
 
