@@ -16,7 +16,7 @@ TrashFire.spike = (function() {
             .style("opacity", 0)
             .transition().duration(600)
             .style("opacity", 1);
-    }
+    };
 
     spike.hit = function () {
         trash = [];
@@ -29,7 +29,7 @@ TrashFire.spike = (function() {
             .style("opacity", 0);
 
         dumpsterShake();
-    }
+    };
 
     return spike;
 })();

@@ -41,7 +41,7 @@ TrashFire.noiseLayer = (function() {
                 .delay(function(d, i) { return i * delay; })
                 .style("opacity", 1);
         updateTrash();
-    }
+    };
 
     noiseLayer.remove = function(delay) {
         noiseLayer.selection
@@ -50,7 +50,7 @@ TrashFire.noiseLayer = (function() {
                 .delay(function(d, i) { return i * delay; })
                 .remove();
         updateTrash();
-    }
+    };
 
     return noiseLayer;
 })();

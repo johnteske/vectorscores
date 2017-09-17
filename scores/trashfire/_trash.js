@@ -1,5 +1,5 @@
 /**
- * Generate test trash
+ * Generate trash
  */
 var trash = [];
 
