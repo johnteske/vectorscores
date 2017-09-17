@@ -317,12 +317,12 @@ var instructions = wrapper.append("text")
 VS.score.playCallback = function() {
     instructions.transition().duration(600)
         .attr("opacity", 0);
-}
+};
 
 VS.score.stopCallback = function() {
     instructions.transition().duration(600)
         .attr("opacity", 1);
-}
+};
 
 /**
  * Resize
