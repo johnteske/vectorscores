@@ -3,7 +3,8 @@ layout: compress-js
 ---
 
 var main = d3.select(".main"),
-    topo = main.append("g"),
+    wrapper = main.append("g"),
+    topo = wrapper.append("g"),
     // width = 480,
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
@@ -62,7 +63,8 @@ if (debug) {
     heightScale.revealed = 0;
     heightScale.hidden = 0;
 
-    topo.selectAll(".plus")
+    wrapper.append("g")
+        .selectAll(".plus")
         .data(topoData)
         .enter()
         .append("path")
@@ -303,6 +305,26 @@ addEvent(function() {
 addEvent(VS.noop, 0);
 
 /**
+ *
+ */
+var instructions = wrapper.append("text")
+    .attr("class", "instructions")
+    .attr("text-anchor", "middle")
+    .attr("y", 220)
+    .attr("opacity", 1)
+    .text("explore the unknown, try to remember the past");
+
+VS.score.playCallback = function() {
+    instructions.transition().duration(600)
+        .attr("opacity", 0);
+}
+
+VS.score.stopCallback = function() {
+    instructions.transition().duration(600)
+        .attr("opacity", 1);
+}
+
+/**
  * Resize
  */
 function resize() {
@@ -319,7 +341,7 @@ function resize() {
     layout.margin.left = w * 0.5;
     layout.margin.top = (h * 0.5) - ((layout.height * 0.25) * layout.scale);
 
-    topo.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
+    wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
 }
 
 d3.select(window).on("resize", resize);
