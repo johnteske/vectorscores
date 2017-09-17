@@ -131,15 +131,6 @@ function revealSymbols(selection, dur) {
 
             return ((c.x + c.y) * tileHeightHalf) - scaledHeight;
         })
-        .style("fill", function() {
-            var fill = "black";
-            // if (d.walker) {
-            //     fill = "blue";
-            // } else if (d.walked) {
-            //     fill = "red";
-            // }
-            return fill;
-        })
         .style("opacity", function(d) {
             if (d.revealed > 0) {
                 d.revealed--;
@@ -299,6 +290,17 @@ addEvent(function() {
 for (var i = 0; i < nEvents; i++) {
     addEvent(moveWalker, randDuration());
 }
+
+// final events
+addEvent(function() {
+    topo.selectAll("text")
+        .each(function(d) {
+            d.revealed = 0;
+        })
+        .call(revealSymbols, 6000);
+}, 6000);
+
+addEvent(VS.noop, 0);
 
 /**
  * Resize
