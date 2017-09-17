@@ -1,5 +1,8 @@
 var score = [];
 
+/**
+ * Fire/spike cycle
+ */
 function addTrash(n, type, range) {
     for (var i = 0; i < n; i++) {
         trash.push({
@@ -11,7 +14,7 @@ function addTrash(n, type, range) {
     updateTrash();
 }
 
-// TODO shift() would be preferable but updateTrash does not properly join data
+// TODO shift() would be useful but updateTrash does not properly join data
 function removeTrash() {
     trash.pop();
     updateTrash();
@@ -24,7 +27,6 @@ function emptyTrash() {
 
 function fireCycle() {
     var i = 0,
-        time = 0,
         cycle = [];
 
     // build fire, 3-5
@@ -84,7 +86,7 @@ function fireCycle() {
                 cycle.push({
                     time: time,
                     fn: addTrash,
-                    args: [nTail, "embers", [25, 75]]
+                    args: [1, "embers", [25, 75]]
                 });
                 time += ((7 - i) * 1000); // duration: 7-5 seconds
             }
@@ -139,19 +141,49 @@ function fireCycle() {
     return cycle;
 }
 
-score = score.concat(fireCycle());
+// create base score from 5x fireCycle
+var time = 0;
+score = score.concat(fireCycle(), fireCycle(), fireCycle(), fireCycle(), fireCycle());
+
+/**
+ * Noise
+ */
+var lastTime = score[score.length - 1].time;
+console.log(lastTime, lastTime / 60000);
+
+var noiseEvents = (function() {
+    var noises = [],
+        timeWindow = lastTime / 5,
+        noiseTime;
+
+    for (var i = 0; i < 5; i++) {
+        noiseTime = (timeWindow * i) + (Math.random() * timeWindow);
+
+        noises.push({
+            time: noiseTime,
+            fn: TrashFire.noiseLayer.add,
+            args: [8, 200]
+        });
+        noises.push({
+            time: noiseTime + 1600 + (Math.random() * 1600),
+            fn: TrashFire.noiseLayer.remove,
+            args: [32]
+        });
+    }
+
+    return noises;
+}());
+
+score = score.concat(noiseEvents);
 
 /**
  * Sort score by event time
  */
-// score.sort(function (a, b) {
-//   return a[0] - b[0];
-// });
+score.sort(function (a, b) {
+  return a.time - b.time;
+});
 
 for (var i = 0; i < score.length; i++) {
     var bar = score[i];
     VS.score.add(bar.time, bar.fn, bar.args);
 }
-
-// dummy last event for testing
-VS.score.add(60 * 1000, VS.noop);
