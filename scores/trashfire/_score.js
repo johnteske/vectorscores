@@ -177,6 +177,37 @@ var noiseEvents = (function() {
 score = score.concat(noiseEvents);
 
 /**
+ * Drone
+ */
+var droneEvents = (function() {
+    var drones = [],
+        timeWindow = lastTime / 3,
+        droneTime,
+        droneDur;
+
+    for (var i = 0; i < 3; i++) {
+        droneTime = (timeWindow * i) + (Math.random() * timeWindow);
+        // 50-75% drone
+        droneDur = (timeWindow * 0.5) + (Math.random() * (timeWindow * 0.25));
+
+        drones.push({
+            time: droneTime,
+            fn: TrashFire.scrapeDrone.show,
+            args: []
+        });
+        drones.push({
+            time: droneTime + droneDur,
+            fn: TrashFire.scrapeDrone.hide,
+            args: []
+        });
+    }
+
+    return drones;
+}());
+
+score = score.concat(droneEvents);
+
+/**
  * Sort score by event time
  */
 score.sort(function (a, b) {

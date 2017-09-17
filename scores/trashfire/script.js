@@ -34,11 +34,13 @@ var layout = {
 {% include_relative _trash.js %}
 {% include_relative _spike.js %}
 {% include_relative _noise.js %}
+{% include_relative _scrape-drone.js %}
 {% include_relative _score.js %}
 
 VS.score.stopCallback = function() {
     trash = [];
     TrashFire.noiseLayer.remove(0); // calls updateTrash();
+    TrashFire.scrapeDrone.hide(0);
     dumpsterShake();
 };
 
