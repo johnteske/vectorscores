@@ -100,18 +100,18 @@ function updateTrash(duration) {
     trashes.transition().duration(dur)
         .attr("transform", trashPosition);
 
-    // make brackets
-    trashes.append("path")
-        .style("opacity", 0)
-        .attr("stroke", "grey")
-        .attr("fill", "none")
-        .attr("d", function(d) {
-            var w = 5, h = d.size;
-            return "M" + w + ",0 L0,0 L0," + h + " L" + w + "," + h + " " +
-                "M" + (h - w) + "," + h + "L" + h + "," + h + " L" + h + "," + 0 + " L" + (h - w) + "," + 0;
-        })
-        .transition().duration(dur)
-        .style("opacity", 1);
+    // // make brackets
+    // trashes.append("path")
+    //     .style("opacity", 0)
+    //     .attr("stroke", "grey")
+    //     .attr("fill", "none")
+    //     .attr("d", function(d) {
+    //         var w = 5, h = d.size;
+    //         return "M" + w + ",0 L0,0 L0," + h + " L" + w + "," + h + " " +
+    //             "M" + (h - w) + "," + h + "L" + h + "," + h + " L" + h + "," + 0 + " L" + (h - w) + "," + 0;
+    //     })
+    //     .transition().duration(dur)
+    //     .style("opacity", 1);
 
     trashes.call(makePath);
 }
