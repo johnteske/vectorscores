@@ -1,3 +1,9 @@
+// get new transposition around center but not equalling center
+function transposeInRange(center, range) {
+    var t = VS.getItem([-1, 1]) * Math.floor(VS.getRandExcl(1, range + 1));
+    return center + t;
+}
+
 var cardList = [
     {
         duration: 2,
@@ -110,6 +116,7 @@ var cardList = [
             { time: 1, value: "p" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: transposeInRange(0, 2),
         content: [
             {
                 type: lnp,
@@ -135,6 +142,7 @@ var cardList = [
             { time: 1, value: "mf" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: transposeInRange(0, 4),
         content: [
             {
                 type: lnp,
@@ -160,6 +168,7 @@ var cardList = [
             { time: 1, value: "p" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: transposeInRange(0, 4),
         content: [
             {
                 type: lnp,
@@ -186,6 +195,7 @@ var cardList = [
             { time: 1, value: "n" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: transposeInRange(0, 2),
         content: [
             {
                 type: lnp,
@@ -231,6 +241,7 @@ var cardList = [
             { time: 1, value: "mf" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: transposeInRange(0, 3),
         content: [
             {
                 type: lines,
@@ -251,6 +262,7 @@ var cardList = [
             { time: 1, value: "p" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: transposeInRange(0, 6),
         content: [
             {
                 type: lines,
@@ -272,6 +284,7 @@ var cardList = [
             { time: 1, value: "n" }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
+        transpose: transposeInRange(0, 3),
         content: [
             {
                 type: lines,
@@ -315,6 +328,7 @@ var cardList = [
             { time: 1, value: "pp" }
         ],
         pcSet: [0, 1, 4, 6],
+        transpose: transposeInRange(0, 3),
         // pcSet: [0, 1, 3, 7]
         content: [
             {
@@ -339,6 +353,7 @@ var cardList = [
             { time: 1, value: "n" }
         ],
         pcSet: [0, 1, 4, 6],
+        transpose: transposeInRange(0, 7),
         // pcSet: [0, 1, 3, 7]
         content: [
             {
