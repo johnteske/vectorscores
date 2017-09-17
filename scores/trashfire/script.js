@@ -14,6 +14,8 @@ var TrashFire = (function() {
         .attr("width", tf.view.width)
         .attr("height", tf.view.height);
 
+    tf.wrapper = tf.svg.append("g");
+
     tf.dumpster = {
         y: 200
     };
@@ -90,3 +92,32 @@ VS.score.stopCallback = function() {
     TrashFire.noiseLayer.selectAll(".noise").remove();
     dumpsterShake();
 };
+
+/**
+ * Resize
+ */
+function resize() {
+    var main = d3.select("main");
+    var layout = {
+        width: TrashFire.view.width,
+        height: TrashFire.view.height,
+        margin: {}
+    };
+
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
+
+    var scaleX = VS.clamp(w / layout.width, 0.25, 2);
+    var scaleY = VS.clamp(h / layout.height, 0.25, 2);
+
+    layout.scale = Math.min(scaleX, scaleY);
+
+    layout.margin.left = (w * 0.5) - ((layout.width * 0.5) * layout.scale) ;
+    layout.margin.top = (h * 0.5) - ((layout.height * 0.5) * layout.scale);
+
+    TrashFire.wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
+}
+
+d3.select(window).on("resize", resize);
+
+d3.select(window).on("load", resize);

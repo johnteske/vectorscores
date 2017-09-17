@@ -8,7 +8,7 @@ TrashFire.trashOrigin = {
     y: 204 * 0.5
 };
 
-var dumpster = TrashFire.svg.append("g")
+var dumpster = TrashFire.wrapper.append("g")
     .attr("class", "dumpster")
     .attr("transform", function() {
         var x = (TrashFire.view.width - 312) * 0.5;

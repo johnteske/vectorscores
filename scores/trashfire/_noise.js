@@ -1,4 +1,4 @@
-TrashFire.noiseLayer = TrashFire.svg.append("g").attr("class", "noise-container");
+TrashFire.noiseLayer = TrashFire.wrapper.append("g").attr("class", "noise-container");
 
 function addNoise(nElements) {
     TrashFire.noiseLayer

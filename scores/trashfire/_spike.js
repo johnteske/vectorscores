@@ -1,7 +1,7 @@
 function makeSpike() {
     d3.selectAll(".spike").remove();
 
-    var spike = TrashFire.svg.append("g")
+    var spike = TrashFire.wrapper.append("g")
         .attr("class", "spike")
         .attr("transform", "translate(" + ((TrashFire.view.width - 30) * 0.5) + ","  + 15 + ")");
     spike.append("path")
