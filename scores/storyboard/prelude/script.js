@@ -1,16 +1,24 @@
 ---
 layout: compress-js
 ---
-// TODO put time signatures above cued chord cards? or, don't use cards and simply display time sig with accurate notation
+
+// TODO since scenes can be cards or not cards, rename variables and CSS classes to match
+
 var score = {
     totalDuration: 300, // 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
     cueBlinks: 2,
     transposeBy: 3
 };
 
-score.cueDuration = score.cueBlinks * 1000 // NOTE also changes preroll timing
+score.cueDuration = 3000; // NOTE this is the max cue timing
+score.scale = 1;
 
+{% include_relative _card-content.js %}
 {% include_relative _score.js %}
+
+var cues = [];
+{% include_relative _cue.js %}
+
 {% include_relative _settings.js %}
 
 var dynamicsDict = VS.dictionary.Bravura.dynamics;
@@ -19,13 +27,12 @@ var dynamicsDict = VS.dictionary.Bravura.dynamics;
 var cardWidth = 120,
     cardPadding = 24,
     cardTransTime = 600,
-    offset = cardWidth,
+    offset = cardWidth + cardPadding,
+    offsetY = 1,
     width = (cardWidth * 4) + (cardPadding * 2),
-    height = cardWidth * 3;
+    height = cardWidth * 2.5;
 
-var main = d3.select(".main")
-    .attr("width", width)
-    .attr("height", height);
+var svg = d3.select(".main");
 
 var scaleDuration = (function() {
     var scale = score.totalDuration / 481;
@@ -34,11 +41,37 @@ var scaleDuration = (function() {
         var dur = cardList[i].duration;
         // do not scale chords (2-3 s)
         return dur < 4 ? dur : dur * scale;
-    }
+    };
 })();
 
 function cardX(index) {
-    return index * (cardWidth + cardPadding);
+    return index * (cardWidth + cardPadding) * score.scale;
+}
+
+function makeCue(data, index) {
+    var selection = d3.select(this);
+
+    var symbols = {
+        // \ue890 // cue
+        1: "\ue893", // weak cue
+        2: "\ue894", // 2 beat
+        3: "\ue895" // 3 beat
+        // \ue896 // 4 beat
+        // \ue89a // free
+    };
+
+    selection
+        .attr("class", "cue bravura")
+        .attr("transform", "translate(" + cardX(index) + ", 100)")
+        .attr("dy", "-2em")
+        .style("text-anchor", data.cue ? "start" : "middle")
+        .style("fill", "#888")
+        .text(symbols[data.cue]);
+
+    cues[index] = new CueSymbol(selection, {
+        beats: data.cue,
+        interval: 1000
+    });
 }
 
 function makeCard(data, index) {
@@ -48,6 +81,15 @@ function makeCard(data, index) {
         .attr("class", "card-duration")
         .attr("dy", "-2.5em")
         .text(scaleDuration(index).toFixed(1) + "\u2033");
+
+    if (data.timbre) {
+        selection.append("text")
+            .attr("class", "card-timbre")
+            .attr("x", cardWidth)
+            .attr("dy", "-2.5em")
+            .style("text-anchor", "end")
+            .text(data.timbre);
+    }
 
     selection.append("text")
         .attr("dy", "-1em")
@@ -65,9 +107,18 @@ function makeCard(data, index) {
 
     var card = selection.append("g");
 
-    card.append("rect")
-        .attr("width", cardWidth)
-        .attr("height", cardWidth);
+    if (data.type === "card") {
+        card.append("rect")
+            .attr("width", cardWidth)
+            .attr("height", cardWidth);
+    } else {
+        card.append("line")
+            .attr("class", "barline")
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", 0)
+            .attr("y2", cardWidth);
+    }
 
     for (var ci = 0; ci < data.content.length; ci++) {
         var content = data.content[ci];
@@ -89,7 +140,7 @@ function makeCard(data, index) {
         .attr("text-anchor", function (d) {
             var anchor = "start";
 
-            if (d.time == 0.5) {
+            if (d.time === 0.5) {
                 anchor = "middle";
             } else if (d.time === 1) {
                 anchor = "end";
@@ -105,8 +156,14 @@ function makeCard(data, index) {
 }
 
 // create cards
-var cardGroup = main.append("g")
-    .attr("transform", "translate(" + offset + ", 0)");
+function translateCardGroup(pointer) {
+    var i = pointer || 0;
+    return "translate(" + (offset - cardX(i)) + ", " + offsetY + ") scale(" + score.scale + "," + score.scale + ")";
+}
+
+var cardGroup = svg.append("g")
+    .attr("transform", translateCardGroup);
+
 var cards = cardGroup.selectAll(".card")
     .data(cardList)
     .enter()
@@ -116,8 +173,36 @@ var cards = cardGroup.selectAll(".card")
     .attr("transform", function(d, i) { return "translate(" + cardX(i) + ", 100)"; })
     .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
 
-var cueIndicator = VS.cueTriangle(main);
-cueIndicator.selection.style("opacity", "0");
+// create cues
+cardGroup.append("g")
+    .attr("class", "cues")
+    .selectAll(".cue")
+    .data(cardList)
+    .enter()
+    .append("text")
+    .each(makeCue)
+    .call(showNextCue, 0, 0);
+
+function showNextCue(selection, pointer, dur) {
+    selection
+        .transition()
+        .duration(dur)
+        .style("opacity", function(d, i) {
+            return i === (pointer + 1) ? 1 : 0;
+        });
+}
+
+function fadePenultimateScene(active, dur) {
+    cards.filter(function(d, i) {
+        return i === (cardList.length - 1);
+    })
+    .style("opacity", 1)
+    .transition().duration(dur)
+    .style("opacity", active ? 0 : 1);
+}
+
+// var cueIndicator = VS.cueTriangle(main);
+// cueIndicator.selection.style("opacity", "0");
 
 function goToCard(index, control) {
     var pointer = (typeof index !== "undefined") ? index : VS.score.pointer;
@@ -125,9 +210,10 @@ function goToCard(index, control) {
     cardGroup.transition()
         .duration(dur)
         .attr("transform", function() {
-            var x = offset - cardX(pointer);
-            return "translate(" + x + ", 0)";
+            return translateCardGroup(pointer);
         });
+
+    d3.selectAll(".cue").call(showNextCue, pointer, dur);
 
     cards.transition()
         .duration(dur)
@@ -135,42 +221,73 @@ function goToCard(index, control) {
             // if rolling back to begin play, hide previous cards
             var p = control === "play" ? pointer + 1 : pointer;
 
-            if(p > i ){
+            if (p > i) {
                 return 0;
             }
             else {
                 return (0.5 * (pointer - i)) + 1;
             }
+        })
+        .on("end", function() {
+            // if penultimate scene, fade
+            if (VS.score.pointer === (VS.score.getLength() - 2) && control === "score") {
+                fadePenultimateScene(true, (scaleDuration(pointer) * 1000) - dur);
+            }
         });
 
     // if playing and not skipping, stopping
-    if(control === "score" && cardList[pointer + 1].cue) { updateCardIndicator(index); }
+    // if (control === "score") { updateCardIndicator(index); } // cue all
+    // if (control === "score" && cardList[pointer + 1].cue) { updateCardIndicator(index); } // only cue if set in score
+    if (control === "score") { scheduleCue(index); }
 }
 
-function cueBlink() {
-    cueIndicator.blink(1, 0, 0, score.cueBlinks);
-    cueIndicator.selection
-        .attr("transform", "translate(" + (cardX(1) + offset) + ", 36)")
-        .style("opacity", "1")
-        .transition()
-        .delay(score.cueDuration)
-        .duration(cardTransTime)
-        .attr("transform", "translate(" + (cardX(0) + offset) + ", 36)")
-        .style("opacity", "0");
-}
-function cueCancel() {
-    // cueIndicator.cancel();
-    cueIndicator.selection
-        .transition()
-        .style("opacity", "0");
+// function cueBlink() {
+//     cueIndicator.blink(1, 0, 0, score.cueBlinks);
+//     cueIndicator.selection
+//         .attr("transform", "translate(" + (cardX(1) + offset) + ", 36)")
+//         .style("opacity", "1")
+//         .transition()
+//         .delay(score.cueDuration)
+//         .duration(cardTransTime)
+//         .attr("transform", "translate(" + (cardX(0) + offset) + ", 36)")
+//         .style("opacity", "0");
+// }
+// function cueCancel() {
+//     // cueIndicator.cancel();
+//     cueIndicator.selection
+//         .transition()
+//         .style("opacity", "0");
+// }
+
+// function updateCardIndicator(pointer) {
+//     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
+//         blinkDuration = score.cueDuration,
+//         indicatorTime = cardDuration - blinkDuration;
+//
+//     VS.score.schedule(indicatorTime, cueBlink);
+// }
+
+function cueBlink2(pointer) {
+    cues[pointer + 1].blink();
 }
 
-function updateCardIndicator(pointer) {
+function cueCancel2() {
+    for (var i = 0; i < cues.length; i++) {
+        cues[i].cancel();
+    }
+}
+
+function scheduleCue(pointer) {
+    // do not schedule if penultimate scene
+    if (VS.score.pointer === (VS.score.getLength() - 2)) {
+        return;
+    }
+
     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
-        blinkDuration = score.cueDuration,
-        indicatorTime = cardDuration - blinkDuration;
+        nextCue = cues[pointer + 1],
+        cueDelay = cardDuration - nextCue.duration;
 
-    VS.score.schedule(indicatorTime, cueBlink);
+    VS.score.schedule(cueDelay, cueBlink2, pointer);
 }
 
 var addEvent = (function() {
@@ -193,12 +310,39 @@ VS.score.preroll = score.cueDuration; // cardTransTime;
 
 VS.score.playCallback = function() {
     goToCard(VS.score.pointer - 1, "play");
-    VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
-}
+    // VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
+    VS.score.schedule(VS.score.preroll - cues[VS.score.pointer].duration, cueBlink2, VS.score.pointer - 1);
+};
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {
+    cueCancel2();
+    fadePenultimateScene(false, 0);
     goToCard();
-    cueCancel();
+    // cueCancel();
 };
 
 VS.control.stepCallback = goToCard;
+
+/**
+ * Resize
+ */
+function resize() {
+    var main = d3.select("main");
+
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
+
+    var scaleX = VS.clamp(w / width, 0.25, 4);
+    var scaleY = VS.clamp(h / height, 0.25, 4);
+
+    score.scale = Math.min(scaleX, scaleY);
+
+    offset = (w * 0.5) - (cardWidth * score.scale);
+    offsetY = (h * 0.5) - (height * 0.5 * score.scale);
+
+    cardGroup.attr("transform", translateCardGroup);
+}
+
+resize();
+
+d3.select(window).on("resize", resize);

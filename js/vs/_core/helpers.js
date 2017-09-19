@@ -38,3 +38,7 @@ VS.constant = function(v) {
         return v;
     };
 };
+
+VS.mod = function(val, mod) {
+    return ((val % mod) + mod) % mod;
+};

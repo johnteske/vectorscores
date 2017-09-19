@@ -1,6 +1,7 @@
 # TODO use paths for each piece
 
 require 'em-websocket'
+require 'json'
 
 module MyKeyboardHandler
   include EM::Protocols::LineText2
@@ -10,12 +11,18 @@ module MyKeyboardHandler
   end
 
   def receive_line data
-      if data =~ /reload/i
-          @clients.each do |socket|
-            socket.send "{ \"type\":\"ws\", \"content\":\"reload\" }"
-          end
+    if data =~ /reload/i
+      msg = {
+        "type": "ws",
+        "content": "reload",
+      }.to_json
+
+      @clients.each do |socket|
+        socket.send msg
       end
+    end
   end
+
 end
 
 EM.run {
@@ -24,8 +31,16 @@ EM.run {
   # Update all clients with number of total connections
   def sendNConnections(cid = nil)
       puts "#{@clients.length} connections open"
+
+      msg = {
+          "cid": cid,
+          "type": "ws",
+          "content": "connections",
+          "connections": @clients.length
+      }.to_json
+
       @clients.each do |socket|
-        socket.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connections\", \"connections\":\"#{@clients.length}\" }"
+        socket.send msg
       end
   end
 
@@ -34,8 +49,16 @@ EM.run {
       puts "WebSocket connection open"
       cid = rand(36**8).to_s(36) # generate client id
       puts "#{cid} connected to #{handshake.path}."
+
       @clients << ws
-      ws.send "{ \"cid\":\"#{cid}\", \"type\":\"ws\", \"content\":\"connected\" }"
+
+      msg = {
+          "cid": cid,
+          "type": "ws",
+          "content": "connected"
+      }.to_json
+      ws.send msg
+
       sendNConnections(cid)
     }
 

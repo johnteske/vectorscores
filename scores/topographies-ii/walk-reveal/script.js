@@ -3,13 +3,14 @@ layout: compress-js
 ---
 
 var main = d3.select(".main"),
-    topo = main.append("g"),
+    wrapper = main.append("g"),
+    topo = wrapper.append("g"),
     // width = 480,
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
     heightScale = {
-        revealed: 5,
-        hidden: 2.5
+        revealed: 2.5,
+        hidden: 1
     },
     topoData,
     score = {
@@ -18,13 +19,20 @@ var main = d3.select(".main"),
     walker = {
         index: -1,
         lastDir: ""
-    };
+    },
+    revealFactor = 62,
+    nearbyRevealFactor = 38,
+    nEvents = 100;
+
+var layout = {
+    width: 400,
+    height: 300,
+    scale: 1,
+    margin: {}
+};
+var debug = +VS.getQueryString("debug") === 1;
 
 {% include_relative _symbol-sets.js %}
-
-main.style("width", 640 + "px")
-    .style("height", 640 + "px");
-
 {% include_relative _diamond-square.js %}
 {% include_relative _score.js %}
 
@@ -51,11 +59,12 @@ function coordinatesToIndex(x, y) {
 /**
  * Debug symbol offsets
  */
-if (+VS.getQueryString("debug") === 1) {
+if (debug) {
     heightScale.revealed = 0;
     heightScale.hidden = 0;
 
-    topo.selectAll(".plus")
+    wrapper.append("g")
+        .selectAll(".plus")
         .data(topoData)
         .enter()
         .append("path")
@@ -85,18 +94,26 @@ topo.selectAll("text")
         return (c.x - c.y) * tileWidthHalf;
     })
     .each(function(d) {
-        var selection = d3.select(this);
-        var symbolIndex = d.heightIndex + 4;
-        var symbolKey = symbolScale[symbolIndex];
+        var symbolIndex = d.heightIndex + 4,
+            symbolKey;
+
+        // if (d.height === score.range.max || symbolIndex > (symbolScale.length - 1)) {
+        if (symbolIndex > (symbolScale.length - 1)) {
+            symbolKey = "max";
+        // else if (d.height === score.range.min || symbolIndex < 0) {
+        } else if (symbolIndex < 0) {
+            symbolKey = "min";
+        } else {
+            symbolKey = symbolScale[symbolIndex];
+        }
+
         var offsets = symbolOffsets[symbolKey];
 
-        selection.text(symbols[symbolKey])
+        d3.select(this).text(symbols[symbolKey])
             .attr("dx", offsets.x + "em")
             .attr("dy", offsets.y + "em");
     })
     .call(revealSymbols, 0);
-
-topo.attr("transform", "translate(320,120)");
 
 /**
  * Reveal
@@ -105,21 +122,22 @@ function revealSymbols(selection, dur) {
     selection.transition().duration(dur)
         .attr("y", function(d, i) {
             var c = indexToCoordinates(i),
-                hScale = d.revealed ? heightScale.revealed : heightScale.hidden;
+                hScale = d.revealed ? heightScale.revealed : heightScale.hidden,
+                scaledHeight;
 
-            return ((c.x + c.y) * tileHeightHalf) - (d.height * hScale);
-        })
-        .style("fill", function() {
-            var fill = "black";
-            // if (d.walker) {
-            //     fill = "blue";
-            // } else if (d.walked) {
-            //     fill = "red";
-            // }
-            return fill;
+            if (debug) {
+                scaledHeight = 0;
+            } else {
+                scaledHeight = d.height * hScale;
+            }
+
+            return ((c.x + c.y) * tileHeightHalf) - scaledHeight;
         })
         .style("opacity", function(d) {
-            return d.revealed ? 1 : 0;
+            if (d.revealed > 0) {
+                d.revealed--;
+            }
+            return debug ? 1 : (d.revealed / revealFactor);
         });
 }
 
@@ -191,7 +209,7 @@ function moveWalker() {
 
     topoData[walker.index].walker = true;
     topoData[walker.index].walked = true;
-    topoData[walker.index].revealed = true;
+    topoData[walker.index].revealed = revealFactor;
 
     revealNearby();
 }
@@ -210,7 +228,7 @@ function revealNearby() {
 
     function setRevealed(x, y) {
         if (Math.random() < chance && x > -1 && x < score.width && y > -1 && y < score.width) {
-            topoData[coordinatesToIndex(x, y)].revealed = true;
+            topoData[coordinatesToIndex(x, y)].revealed = Math.min(topoData[coordinatesToIndex(x, y)].revealed + nearbyRevealFactor, revealFactor);
         }
     }
 
@@ -247,7 +265,7 @@ var addEvent = (function() {
 })();
 
 function randDuration() {
-    return 600 + (Math.random() * 600);
+    return 1200; // 600 + (Math.random() * 600);
 }
 /**
  * Reveal a starting point
@@ -264,13 +282,68 @@ addEvent(function() {
 
     var startIndex = walker.index = VS.getItem(extremaIndices);
 
-    topoData[startIndex].revealed = true;
+    topoData[startIndex].revealed = revealFactor;
     topoData[walker.index].walker = true;
     topoData[walker.index].walked = true;
 
     topo.selectAll("text").call(revealSymbols, 600);
 }, randDuration());
 
-for (var i = 0; i < 100; i++) {
+for (var i = 0; i < nEvents; i++) {
     addEvent(moveWalker, randDuration());
 }
+
+// final events
+addEvent(function() {
+    topo.selectAll("text")
+        .each(function(d) {
+            d.revealed = 0;
+        })
+        .call(revealSymbols, 6000);
+}, 6000);
+
+addEvent(VS.noop, 0);
+
+/**
+ *
+ */
+var instructions = wrapper.append("text")
+    .attr("class", "instructions")
+    .attr("text-anchor", "middle")
+    .attr("y", 220)
+    .attr("opacity", 1)
+    .text("explore the unknown, try to remember the past");
+
+VS.score.playCallback = function() {
+    instructions.transition().duration(600)
+        .attr("opacity", 0);
+};
+
+VS.score.stopCallback = function() {
+    instructions.transition().duration(600)
+        .attr("opacity", 1);
+};
+
+/**
+ * Resize
+ */
+function resize() {
+    var main = d3.select("main");
+
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
+
+    var scaleX = VS.clamp(w / layout.width, 0.25, 2);
+    var scaleY = VS.clamp(h / layout.height, 0.25, 2);
+
+    layout.scale = Math.min(scaleX, scaleY);
+
+    layout.margin.left = w * 0.5;
+    layout.margin.top = (h * 0.5) - ((layout.height * 0.25) * layout.scale);
+
+    wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
+}
+
+d3.select(window).on("resize", resize);
+
+d3.select(window).on("load", resize);

@@ -6,11 +6,11 @@ function generateValues() {
     var width = score.width;
     var height = score.width;
 
-    var featureSize = 8;
+    var featureSize = 4;
     var sampleSize = featureSize;
 
-    var initScale = 3;
-    var scale = 3;
+    var initScale = 4;
+    var scale = 4;
 
     function frand() {
         return (Math.random() * 2) - 1;
@@ -27,7 +27,7 @@ function generateValues() {
     }
 
     function setSample(x, y, value) {
-        value = VS.clamp(value, -initScale, initScale);
+        // value = VS.clamp(value, -initScale, initScale);
         values[(x & (width - 1)) + (y & (height - 1)) * width] = value;
     }
 

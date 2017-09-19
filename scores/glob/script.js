@@ -3,123 +3,107 @@ layout: compress-js
 ---
 
 var canvas = {
-        margins: 20,
-        maxWidth: 400,
-        width: null,
-        center: null
+        width: 400,
+        height: 400,
+        center: 200
+    },
+    layout = {
+        width: 240,
+        margin: {}
     },
     transitionTime = {
-        long: 5000,
+        // long: 5000,
         short: 600
     },
     scoreLength = 12,
     textoffset = 5,
-    debug = VS.getQueryString("debug") == 1 || false,
-    main = d3.select(".main");
+    debug = +VS.getQueryString("debug") === 1 || false,
+    svg = d3.select(".main"),
+    wrapper = svg.append("g");
 
-var globInterval = transitionTime.long * 3;
+transitionTime.long = 20000;
+var globInterval = transitionTime.long;
 
-{% include_relative _glob.js %}
-{% include_relative _settings.js %}
+// transitionTime.long = 5000;
+// var globInterval = transitionTime.long * 3;
 
 var durationDict = VS.dictionary.Bravura.durations.stemless;
+var dynamicsDict = VS.dictionary.Bravura.dynamics;
 
-function newPoint() {
-    var radius = VS.getRandExcl(1, 96),
-        angle = Math.random() * Math.PI * 2,
-        dist = Math.random() - Math.random();
-    return {
-        x: Math.cos(angle) * radius * dist,
-        y: Math.sin(angle) * radius * dist
-    };
+{% include_relative _settings.js %}
+
+{% include_relative _glob.js %}
+
+var glob0 = new Glob(wrapper);
+var glob1 = new Glob(wrapper);
+var glob2 = new Glob(wrapper);
+
+{% include_relative _meta.js %}
+
+function update(dur, bar) {
+    var pcSet = VS.pitchClass.transpose(bar.pitch.set, bar.pitch.transpose);
+    pitchClassSet.update(pcSet);
+
+    glob0.move(dur, bar.globs[0]);
+    glob1.move(dur, bar.globs[1]);
+    glob2.move(dur, bar.globs[2]);
+
+    dynamics.update(bar.dynamics);
 }
 
-var glob = new Glob(main, 20);
-glob.width = 240;
-glob.group.selectAll("text")
-    .data(glob.data).enter()
-    .append("text")
-    .classed("glob-child", 1)
-    .text(function() {
-        return durationDict[VS.getItem([1, 1.5, 2, 3, 4])];
-    });
-glob.children = d3.selectAll("text");
-
-glob.pitchSet = main.append("text")
-    .classed("pc-set", 1)
-    .style("opacity", "0"); // init value
-
-glob.move = function(dur, type) {
-    var pcSet = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random").map(function(pc) {
-        return VS.pitchClass.format(pc, scoreSettings.pcFormat);
-    });
-
-    glob.pitchSet
-        .attr("x", canvas.center)
-        .attr("y", canvas.width - textoffset)
-        .text(function() {
-            return "{" + pcSet.join(", ") + "}";
-        })
-        // fade in if needed
-        .transition().duration(transitionTime.short)
-        .style("opacity", "1");
-
-    glob.children
-        .transition().duration(dur)
-        // .attr("text-anchor", type === "chord" ? "start" : "middle")
-        .attr("text-anchor", "start")
-        .attr("transform", function() {
-            var point = newPoint();
-            if (type === "chord") {
-                point.x = 0; // VS.getItem([0, 40, -40]); // multiple chords
-            } else if (type === "rhythm") {
-                point.y = 0;
-            }
-            return "translate(" + point.x + ", " + point.y + ")";
-        });
-};
-
 {% include_relative _score.js %}
+{% include_relative _controls.js %}
 
-// resize
+update(0, score[0]);
 
+/**
+ * Debug
+ */
+if(debug) {
+    var debugGroup = wrapper.append("g")
+        .attr("class", "debug");
+
+    debugGroup.append("circle")
+        .attr("r", 12)
+        .attr("cx", canvas.center)
+        .attr("cy", canvas.center);
+
+    debugGroup.append("circle")
+        .attr("r", 96)
+        .attr("cx", canvas.center)
+        .attr("cy", canvas.center);
+
+    debugGroup.append("circle")
+        .attr("r", 192)
+        .attr("cx", canvas.center)
+        .attr("cy", canvas.center);
+
+    debugGroup.append("rect")
+        .attr("r", 12)
+        .attr("width", canvas.width)
+        .attr("height", canvas.height);
+}
+
+/**
+ * Resize
+ */
 d3.select(window).on("resize", resize);
 
 function resize() {
-    // update width
-    canvas.width = Math.min( parseInt(d3.select("main").style("width"), 10), canvas.maxWidth);
-    canvas.center = canvas.width * 0.5;
-    var innerwidth = canvas.width - (canvas.margins * 2);
+    var main = d3.select("main");
 
-    main
-        .style("width", canvas.width + "px")
-        .style("height", canvas.width + "px");
-    glob.group.attr("transform",
-        "translate(" + canvas.center + ", " + canvas.center + ")" +
-        "scale(" + (canvas.width / glob.width) + "," + (canvas.width / glob.width) + ")"
-        );
-    glob.pitchSet
-        .attr("x", canvas.center)
-        .attr("y", canvas.width - textoffset);
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
 
-    if(debug){
-        d3.select("rect")
-            .attr("width", innerwidth)
-            .attr("height", innerwidth);
-        d3.select("circle")
-            .attr("transform", "translate(" + canvas.center + ", " + canvas.center + ")");
-    }
+    var scaleX = VS.clamp(w / canvas.width, 0.25, 3);
+    var scaleY = VS.clamp(h / canvas.height, 0.25, 3);
+
+    layout.scale = Math.min(scaleX, scaleY);
+
+    layout.margin.left = (w * 0.5) - (canvas.width * 0.5 * layout.scale);
+    layout.margin.top = (h * 0.5) - (canvas.height * 0.5 * layout.scale);
+
+    wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
 }
 
 resize();
-
-if(debug) {
-    main.classed("debug", true);
-    main.append("rect")
-        .attr("width", canvas.width - (canvas.margins * 2))
-        .attr("height", canvas.width - (canvas.margins * 2))
-        .attr("transform", "translate(" + canvas.margins + ", " + canvas.margins + ")");
-    main.append("circle")
-        .attr("r", 5)
-        .attr("transform", "translate(" + canvas.center + ", " + canvas.center + ")");
-}

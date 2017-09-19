@@ -1,31 +1,35 @@
-function makeSpike() {
-    d3.selectAll(".spike").remove();
+TrashFire.spike = (function() {
+    var spike = {};
 
-    var spike = TrashFire.svg.append("g")
+    var x = TrashFire.view.width * 0.5;
+
+    spike.group = TrashFire.wrapper.append("g")
         .attr("class", "spike")
-        .attr("transform", "translate(" + ((TrashFire.view.width - 30) * 0.5) + ","  + 15 + ")");
-    spike.append("path")
-        .attr("d", "M0,0 L30,0 L15,60 L0,0");
-    spike
-        .style("opacity", 0)
-        .transition().duration(1000)
-        .style("opacity", 1);
-}
+        .style("opacity", 0);
 
-function hitSpike() {
-    trash = [];
-    updateTrash(300);
+    spike.group.append("path")
+        .attr("d", "M-15,0 L15,0 L0,60 Z");
 
-    d3.select(".spike")
-        .transition()
-        .duration(600)
-        .ease(d3.easeElastic)
-        .attr("transform", "translate(" + ((TrashFire.view.width - 30) * 0.5) + ","  + (TrashFire.dumpster.y - 45) + ")")
-        .transition()
-        .duration(300)
-        .ease(d3.easeLinear)
-        .style("opacity", 0)
-        .remove();
+    spike.show = function () {
+        spike.group
+            .attr("transform", "translate(" + x + ","  + 15 + ")")
+            .style("opacity", 0)
+            .transition().duration(600)
+            .style("opacity", 1);
+    };
 
-    dumpsterShake();
-}
+    spike.hit = function () {
+        trash = [];
+        updateTrash(300);
+
+        d3.select(".spike")
+            .transition().duration(600).ease(d3.easeElastic)
+            .attr("transform", "translate(" + x + ","  + (TrashFire.dumpster.y - 45) + ")")
+            .transition().duration(150).ease(d3.easeLinear)
+            .style("opacity", 0);
+
+        dumpsterShake();
+    };
+
+    return spike;
+})();

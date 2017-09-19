@@ -31,8 +31,13 @@ VS.pitchClass.format = (function() {
  * @returns {Array} array of transposed pitch classes
 */
 VS.pitchClass.transpose = function(pcset, transpose) {
-    var t = transpose !== "random" ? transpose : Math.floor(Math.random() * 12);
+    if (transpose === "random") {
+        transpose = Math.floor(Math.random() * 12);
+    } else {
+        transpose = VS.mod(transpose, 12);
+    }
+
     return pcset.map(function(pc) {
-        return (+pc + t) % 12;
+        return (+pc + transpose) % 12;
     });
 };

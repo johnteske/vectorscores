@@ -17,7 +17,8 @@ function createScoreFragment(data) {
 
         data[i] = {
             height: h,
-            heightIndex: ~~h // h > 0 ? Math.floor(h) : Math.ceil(h)
+            heightIndex: ~~h, // h > 0 ? Math.floor(h) : Math.ceil(h)
+            revealed: 0
         };
     }
 

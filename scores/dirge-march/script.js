@@ -2,48 +2,64 @@
 layout: compress-js
 ---
 
+// TODO scroll globject layer (and percussion dynamics) to show duration of phrases and transformation over time
+// rhythms would be still be generated in boxes but could be cued in and out CueSymbol#blink
+// may also solve issues of multiple globjects, timing, transitions
+
 var width = 480,
-    maxwidth = 480,
-    margin = 20,
-    boxwidth = width + (margin * 2),
-    center = boxwidth * 0.5,
+    height = 480,
+    globjectWidth = 240,
+    globjectHeight = 90,
     debug = +VS.getQueryString("debug") === 1 || false,
     transposeBy = 2,
     layout = {
+        scale: 1,
+        margin: {
+            left: 0,
+            top: 0
+        },
+        globjects: {
+            top: 16
+        },
         perc: {
-            x: 60 + 22, // TODO make this the score left margin
-            y: center,
+            y: 220,
             y1: 16,
-            y2: 60 + 16
+            y2: 60 + 16,
+            dynamics: 60 + 60 + 24
         },
     };
 
 // TODO a temporary solution to update rhythms within bars--eventually add specific rhythm selections/option to score
-var updateTimeout;
-var updateInterval = 8000;
+// var updateTimeout;
+// var updateInterval = 8000;
+
+var dynamics = VS.dictionary.Bravura.dynamics;
 
 {% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
 {% include_relative _score.js %}
+{% include_relative _settings.js %}
 
-var main = d3.select(".main")
-    .classed("debug", debug)
-    .style("width", boxwidth + "px")
-    .style("height", boxwidth + "px");
+var svg = d3.select("svg");
 
-var globjectContainer = main.append("g")
+var wrapper = svg.append("g")
+    .attr("class", "wrapper")
+    .classed("debug", debug);
+    // .attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ")");
+
+var globjectContainer = wrapper.append("g")
     .attr("class", "globjects")
-    .attr("transform", "translate(" + 0 + "," + 90 + ")");
+    .attr("transform", "translate(0," + layout.globjects.top + ")");
 
 var durationText = globjectContainer.append("text")
     .attr("class", "duration-text")
-    .attr("transform", "translate(" + layout.perc.x + "," + 0 + ")");
+    .attr("dy", "-3em");
 
 /**
  * Rhythm test
  */
-var percussionParts = main.append("g")
-    .attr("transform", "translate(" + layout.perc.x + "," + layout.perc.y + ")")
+var percussionParts = wrapper.append("g")
+    .attr("transform", "translate(" + 0 + "," + layout.perc.y + ")")
     .attr("class", "percussion-parts");
 
 var tempoText = percussionParts.append("text")
@@ -77,7 +93,7 @@ percussionParts.selectAll("g").call(function(selection) {
 
         cell.append("text")
             .attr("dx", 11)
-            .attr("y", 30);
+            .attr("y", 35);
     }
 
     // create two rhythm cells
@@ -85,70 +101,189 @@ percussionParts.selectAll("g").call(function(selection) {
     selection.call(createRhythmCell);
 });
 
+var percDynamics = percussionParts.append("g")
+    .attr("transform", "translate(0," + layout.perc.dynamics + ")");
+
+function textAnchor(t) {
+    var a = "middle";
+
+    if (t === 0) {
+        a = "start";
+    } else if (t === 1) {
+        a = "end";
+    }
+
+    return a;
+}
+
 var globject = VS.globject()
-    .width(function(d) { return d.width; })
-    .height(90)
+    .width(globjectWidth)
+    .height(globjectHeight)
     .curve(d3.curveCardinalClosed.tension(0.3));
 
 /**
  *
  */
+function makePhrase(type, set) {
+    function coin(prob) {
+        return Math.random() < (prob || 0.5);
+    }
+
+    return function() {
+        var notes = [],
+            pc1, pc2;
+
+        if (!type) {
+            pc1 = VS.getItem(set) + transposeBy;
+            notes.push({ pitch: pc1, duration: VS.getRandExcl(8, 12) });
+            notes.push({ pitch: pc1, duration: 0 });
+        } else if (type === "descending" || type === "ascending") {
+            pc1 = VS.getItem(set) + transposeBy;
+            pc2 = VS.getItem(set) + transposeBy + (type === "descending" ? -12 : 12);
+            notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
+            if (coin(0.33)) {
+                notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
+            }
+            if (coin(0.33)) {
+                notes.push({ pitch: pc2, duration: VS.getRandExcl(4, 6) });
+            }
+            notes.push({ pitch: pc2, duration: 0 });
+        } else if (type === "both") {
+            notes.push({ pitch: VS.getItem(set) + transposeBy, duration: VS.getRandExcl(4, 6) });
+            notes.push({ pitch: VS.getItem(set) + transposeBy + (coin() ? 12 : 0), duration: VS.getRandExcl(4, 6) });
+            notes.push({ pitch: VS.getItem(set) + transposeBy + (coin() ? 12 : 0), duration: 0 });
+        }
+
+        return notes;
+    };
+}
+
+var pattern = svg.append("defs")
+    .append("pattern")
+    .attr("id", "ascending-fill")
+    .attr("width", 2)
+    .attr("height", 2)
+    .attr("patternUnits", "userSpaceOnUse");
+
+pattern.append("circle")
+    .attr("fill", "#eee")
+    .attr("r", 1);
+
+/**
+ *
+ */
 function update(index, isControlEvent) {
+    var bar = score[index];
+
     /**
      * Globjects
      */
     d3.selectAll(".globject").remove();
 
     globjectContainer.selectAll(".globject")
-        .data(score[index].globjects)
+        .data(bar.pitched.globjects)
         .enter()
         .append("g")
         .each(globject)
         .each(function(d) {
+            var content = d3.select(this).select(".globject-content");
+
+            if (bar.pitched.phraseType === "ascending") {
+                content.append("rect")
+                    .attr("width", d.width)
+                    .attr("height", globjectHeight + 10)
+                    .attr("fill", "url(#ascending-fill)");
+            }
+
+            var lineCloud = VS.lineCloud()
+                .duration(bar.pitched.duration)
+                // TODO shape over time for each PC set, not by last set
+                .phrase(makePhrase(bar.pitched.phraseType, bar.pitched.pitch[bar.pitched.pitch.length - 1].classes))
+                .transposition("octave")
+                .curve(d3.curveCardinal)
+                .width(d.width)
+                .height(globjectHeight);
+
+            content.call(lineCloud, { n: Math.floor(bar.pitched.duration) });
+
+            content.selectAll(".line-cloud-path")
+                .attr("stroke", "grey")
+                .attr("stroke-dasharray", bar.pitched.phraseType === "ascending" ? "1" : "none")
+                .attr("fill", "none");
+        })
+        .each(function(d) {
             var selection = d3.select(this);
 
-            var g = selection.append("g").attr("transform", "translate(0, 90)"),
-                pitch = score[index].pitch,
+            var g = selection.append("g"),
+                pitch = bar.pitched.pitch,
                 text;
-
-            var anchor = {
-                "0": "start",
-                "0.5": "middle",
-                "1": "end"
-            };
-
-            var modifiers = {
-                "^": " \ueb61", // up, right
-                "-": " \ueb62", // right
-                "v": " \ueb63", // down, right
-                "<": " \ueb61, \ueb63"
-            };
 
             for (var i = 0; i < pitch.length; i++) {
                 text = g.append("text")
-                    .attr("dy", "2em")
+                    .attr("dy", "-1.5em")
                     .attr("x", pitch[i].time * d.width)
-                    .attr("text-anchor", anchor[pitch[i].time]);
+                    .attr("text-anchor", textAnchor(pitch[i].time));
 
-                var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy);
-                var formatted = "{" + VS.pitchClass.format(set) + "}";
+                var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy).map(function(pc) {
+                    return VS.pitchClass.format(pc, scoreSettings.pcFormat);
+                });
+                var formatted = "{" + set + "}";
 
-                text.append("tspan")
-                    .attr("class", "pitch-class")
-                    .text(formatted);
-                text.append("tspan")
-                    .attr("class", "modifier")
-                    .text(modifiers[pitch[i].modifier]);
+                text.text(formatted)
+                    .attr("class", "pitch-class");
             }
-        })
-        .each(centerGlobject);
 
-    durationText.text(score[index].duration + "\u2033");
+            /**
+             * Dynamics
+             */
+            if (bar.pitched.dynamics) {
+                selection.append("g")
+                    .attr("transform", "translate(0," + globjectHeight + ")")
+                    .selectAll(".dynamic")
+                    .data(bar.pitched.dynamics)
+                    .enter()
+                    .append("text")
+                        .attr("class", "dynamic")
+                        .attr("x", function(d, i) {
+                            return globjectWidth * d.time;
+                        })
+                        .attr("dy", "1em")
+                        .attr("text-anchor", function(d) {
+                            return textAnchor(d.time);
+                        })
+                        .text(function(d) {
+                            return dynamics[d.value];
+                        });
+            }
+        });
+
+    /**
+     * Duration
+     */
+    durationText.text(bar.pitched.duration + "\u2033");
+
+    /**
+     * Rest
+     */
+    var rest = d3.select(".rest").remove();
+
+    if (bar.pitched.phraseType === "rest") {
+        rest = globjectContainer.append("text")
+            .attr("class", "rest");
+        rest.append("tspan")
+            .attr("x", globjectWidth * 0.5)
+            .attr("y", (globjectHeight * 0.5) - 20)
+            .text("\ue4c6");
+        rest.append("tspan")
+            .attr("x", globjectWidth * 0.5)
+            .attr("y", globjectHeight * 0.5)
+            .text("\ue4e5");
+    }
 
     /**
      * Tempo
      */
-    var tempo = score[index].tempo;
+    var tempo = bar.percussion.tempo;
 
     tempoText.select(".bpm").remove();
 
@@ -163,6 +298,7 @@ function update(index, isControlEvent) {
     /**
      * Rhythms
      * TODO stash creation functions elsewhere?
+     * NOTE tempo and bar are in update scope
      */
     function createRhythm() {
         var selection = d3.select(this),
@@ -174,8 +310,10 @@ function update(index, isControlEvent) {
             return;
         }
 
-        var randRhythm = VS.getItem(rhythms.filter(function(r) {
-            return r !== percRhythm; // prevent duplicates within each part
+        var extent = bar.percussion.rhythmRange;
+        var randRhythm = VS.getItem(rhythms.filter(function(r, i) {
+            var inRange = extent[0] <= i && i <= extent[1];
+            return r !== percRhythm && inRange; // prevent duplicates within each part
         }));
 
         percRhythm = randRhythm;
@@ -184,9 +322,17 @@ function update(index, isControlEvent) {
 
         for (var si = 0; si < symbols.length; si++) {
             var symbol = symbols[si],
+                spacing = 0,
                 dy = symbol === "r0.5" || symbol === "r0.5." ? 0.4 : 0;
 
+            if (symbol === "trip") {
+                spacing = -6;
+            } else if (symbol === "1.") {
+                spacing = -5;
+            }
+
             textEl.append("tspan")
+                .style("letter-spacing", spacing)
                 .style("baseline-shift", dy + "em")
                 .text(stemmed[symbol]);
         }
@@ -220,60 +366,70 @@ function update(index, isControlEvent) {
         .each(createRhythm)
         .each(spacePerc);
 
-    // TODO
-    if (!isControlEvent) {
-        updateTimeout = window.setTimeout(function() { update(index) }, updateInterval);
-    } else {
-        window.clearTimeout(updateTimeout);
+    /**
+     * Percussion dynamics
+     */
+    percDynamics.selectAll(".dynamic").remove();
+
+    if (bar.percussion.dynamics) {
+        percDynamics.selectAll(".dynamic")
+            .data(bar.percussion.dynamics)
+            .enter()
+            .append("text")
+                .attr("class", "dynamic")
+                .attr("x", function(d, i) {
+                    return globjectWidth * d.time;
+                })
+                .attr("text-anchor", function(d) {
+                    return textAnchor(d.time);
+                })
+                .text(function(d) {
+                    return dynamics[d.value];
+                });
     }
-}
 
-function centerGlobject() {
-    d3.select(this).attr("transform", "translate(" + layout.perc.x + "," + 16 + ")");
+    // // TODO
+    // if (!isControlEvent) {
+    //     updateTimeout = window.setTimeout(function() { update(index); }, updateInterval);
+    // } else {
+    //     window.clearTimeout(updateTimeout);
+    // }
 }
-
 
 /**
  * Resize
  */
 function resize() {
-    // update width
-    boxwidth = Math.min( parseInt(d3.select("main").style("width"), 10), maxwidth);
-    center = boxwidth * 0.5;
-    width = boxwidth - (margin * 2);
+    var main = d3.select("main");
 
-    main
-        .style("width", boxwidth + "px")
-        .style("height", boxwidth + "px");
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
 
-    d3.selectAll(".globject").each(centerGlobject);
+    var scaleX = VS.clamp(w / width, 0.25, 2);
+    var scaleY = VS.clamp(h / height, 0.25, 2);
+
+    layout.scale = Math.min(scaleX, scaleY);
+
+    layout.margin.left = (w * 0.5) - (120 * layout.scale);
+    layout.margin.top = (h * 0.5) - ((height * 0.5 - 72) * layout.scale);
+
+    wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
 }
-
-resize();
 
 d3.select(window).on("resize", resize);
 
 /**
  * Populate score
  */
-// var addEvent = (function() {
-//     var time = 0;
-//
-//     return function(fn, duration, args) {
-//         VS.score.add(time, fn, args);
-//         time += duration;
-//     };
-// })();
-
 for (var i = 0; i < score.length; i++) {
     VS.score.add(score[i].time * 1000, update, [i]);
-    // addEvent(update, score[i].duration * 1000, [i]);
 }
 
 /**
  * Initialize score
  */
 d3.select(window).on("load", function () {
+    resize();
     update(0, true);
 });
 
@@ -284,5 +440,6 @@ VS.control.stopCallback = function() {
     update(0, true);
 };
 VS.control.pauseCallback = VS.control.stepCallback = function() {
+    // console.log("mm. " + (VS.score.pointer + 1));
     update(VS.score.pointer, true);
 };

@@ -4,50 +4,119 @@
 @import "mixins";
 @include BravuraFont();
 
-.card rect {
-  fill: none;
-  stroke: #888;
-  stroke-width: 1px;
-  /*shape-rendering: geometricPrecision;*/
-  /*shape-rendering: crispEdges;*/
+html {
+    height: 100%;
+}
+body {
+    min-height: 100%;
+    position: relative;
+}
+main {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+svg {
+    width: 100%;
+    height: 100%;
+}
+/**
+ * Cards
+ */
+.card {
+    rect {
+      fill: none;
+      stroke: #888;
+      stroke-width: 1px;
+      /*shape-rendering: geometricPrecision;*/
+      /*shape-rendering: crispEdges;*/
+    }
+
+    .barline {
+      stroke: #888;
+      stroke-width: 1px;
+    }
+
+    text {
+        fill: #111;
+    }
 }
 
-.card text {
-    fill: #111;
-}
-
-.card text.card-duration {
-    font-size: 12px;
+/**
+ * Card meta
+ */
+.monospace {
     font-family: monospace;
-}
-
-.card text.pitch-class-set {
     font-size: 12px;
-    font-family: monospace;
 }
 
-.card .dynamics text {
+.card {
+    .card-duration, {
+        @extend .monospace;
+    }
+
+    .card-timbre, {
+        @extend .monospace;
+        font-style: italic;
+    }
+
+    .pitch-class-set {
+        @extend .monospace;
+    }
+}
+
+/**
+ * Card content
+ */
+.bravura {
     font-size: 24px;
     font-family: Bravura;
 }
 
-.card text.duration {
-    font-size: 24px;
-    font-family: Bravura;
+.card {
+    .dynamics text {
+        @extend .bravura;
+    }
+
+    .duration {
+        @extend .bravura;
+    }
+
+    .chord,
+    .chord-flag,
+    .chord-art,
+    .time-sig,
+    .lnp {
+        @extend .bravura;
+    }
+
+    .chord-fermata {
+        @extend .bravura;
+        text-anchor: middle;
+    }
 }
 
-.card .chord,
-.card .chord-fermata, {
-    text-anchor: middle;
-    font-size: 24px;
-    font-family: Bravura;
-}
-.card .chord-flag {
-    font-size: 24px;
-    font-family: Bravura;
+//
+// _info
+//
+.modal-content a[target="_blank"],
+.modal-content a[target="VS_glossary"] {
+    padding-right: 0.4em;
+    &::after {
+        content: '°';
+        position: absolute;
+    }
 }
 
-.card .lnp {
-    font-size: 24px;
-    font-family: Bravura;
+.modal-content {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        padding-bottom: 1em;
+    }
 }
+@import "description-list";

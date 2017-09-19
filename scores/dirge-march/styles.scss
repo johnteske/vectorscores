@@ -4,6 +4,29 @@
 @import "mixins";
 @include BravuraFont();
 
+html {
+    height: 100%;
+}
+body {
+    min-height: 100%;
+    position: relative;
+}
+main {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+svg {
+    width: 100%;
+    height: 100%;
+}
+
+.debug {
+    outline: 1px dotted red;
+}
+
 .globject {
     .globject-path {
         stroke: #888;
@@ -19,9 +42,22 @@
     }
 }
 
-.percussion-parts text {
+.bravura {
     font-family: Bravura;
     font-size: 24px;
+}
+
+.rest {
+    @extend .bravura;
+    text-anchor: middle;
+}
+
+.percussion-parts text {
+    @extend .bravura;
+}
+
+.dynamic {
+    @extend .bravura;
 }
 
 .duration-text {

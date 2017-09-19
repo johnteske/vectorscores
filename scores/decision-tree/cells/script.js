@@ -3,7 +3,7 @@ layout: compress-js
 ---
 var score = {
     width: 320,
-    height: 480,
+    height: 320,
     cell: {
         size: 90,
         buffer: 30
@@ -13,6 +13,10 @@ var score = {
     // TODO increase over time/score pointer?
     // TODO scale according to number of choices per param?
     weightScale: 5
+};
+
+var layout = {
+    margin: {}
 };
 
 score.center = {
@@ -27,6 +31,8 @@ score.partWeight = score.weightScale; // init
 score.choices = {};
 score.selected = false;
 
+{% include_relative _settings.js %}
+
 /**
  * Symbols and choice
  */
@@ -35,13 +41,7 @@ score.selected = false;
 
 var durations = VS.dictionary.Bravura.durations.stemless;
 var dynamics = VS.dictionary.Bravura.dynamics;
-var phrases = [
-    durations["1"],
-    durations["1"] + " " + durations["1"],
-    durations["1"] + " " + durations["1"] + " " + durations["1"],
-    durations["1"] + " " + durations["1"] + " " + durations["1"] + " " + durations["1"],
-    "rest" // "\ue4e5"
-];
+var phrases = [0, 1, 2, 3, 4];
 
 params.add("duration", Object.keys(durations));
 params.add("dynamic", Object.keys(dynamics).filter(function(k) {
@@ -84,26 +84,36 @@ function updateChoices() {
     var choices = score.choices;
 
     choices.top = params.createChoice();
-    choices.bottom = params.createChoice();
+    choices.bottom = params.createChoice(+choices.top.phrase === 0);
 
     function updateCell(selection, choice) {
-        var isRest = choice.phrase === "rest";
+        var isRest = +choice.phrase === 0,
+            phrase = [];
 
         if (isRest) {
             choice.pitchClasses = "";
             choice.duration = "";
-            // choice.phrase = "rest";
+            phrase.push("\ue4e5");
             choice.dynamic = "";
+        } else {
+            for (var i = 0; i < +choice.phrase; i++) {
+                phrase.push(durations[choice.duration]);
+            }
         }
 
+        var set = choice.pitchClasses.split(",");
+        var formatted = VS.pitchClass.transpose(set, "random").map(function(pc) {
+            return VS.pitchClass.format(pc, scoreSettings.pcFormat);
+        });
+
         selection.select(".pitch-classes")
-            .text(formatPCSet(choice.pitchClasses));
-        selection.select("circle")
-            .style("opacity", isRest ? 0 : 1);
-        selection.select(".duration")
-            .text(durations[choice.duration]);
+            .text("{" + formatted + "}");
+        // selection.select("circle")
+            // .style("opacity", isRest ? 0 : 1);
+        // selection.select(".duration")
+        //     .text(durations[choice.duration]);
         selection.select(".phrase")
-            .text(isRest ? "\ue4e5" : choice.phrase);
+            .text(phrase.join(" "));
         selection.select(".dynamic")
             .text(dynamics[choice.dynamic]);
     }
@@ -139,7 +149,7 @@ function selectCell(position) {
 }
 
 var debugChoices = (function () {
-    var debug = VS.getQueryString("debug") == 1 || false,
+    var debug = +VS.getQueryString("debug") === 1 || false,
         el = document.getElementsByClassName("debug")[0];
 
     return debug ? function() {
@@ -169,9 +179,9 @@ function translateSelectedCell() {
         (score.center.y - score.cell.halfSize) + ")";
 }
 
-score.svg = d3.select(".main")
-    .attr("width", score.width)
-    .attr("height", score.height);
+score.svg = d3.select(".main");
+
+score.wrapper = score.svg.append("g");
 
 function createCell(selection) {
     selection
@@ -188,18 +198,18 @@ function createCell(selection) {
         .attr("dy", "-1em");
 
     var r = (22 * 1.5) / 2;
-    selection.append("circle")
-        .attr("cx", score.cell.size - r)
-        .attr("cy", -1.5 * r)
-        .attr("r", r)
-        .attr("stroke", "black")
-        .attr("fill", "none");
-    selection.append("text")
-        .attr("class", "duration bravura")
-        .attr("text-anchor", "middle")
-        .attr("x", score.cell.size - r)
-        .attr("y", -0.5 * r)
-        .attr("dy", "-1em");
+    // selection.append("circle")
+    //     .attr("cx", score.cell.size - r)
+    //     .attr("cy", -1.5 * r)
+    //     .attr("r", r)
+    //     .attr("stroke", "black")
+    //     .attr("fill", "none");
+    // selection.append("text")
+    //     .attr("class", "duration bravura")
+    //     .attr("text-anchor", "middle")
+    //     .attr("x", score.cell.size - r)
+    //     .attr("y", -0.5 * r)
+    //     .attr("dy", "-1em");
 
     selection.append("text")
         .attr("class", "phrase bravura")
@@ -213,13 +223,13 @@ function createCell(selection) {
         .attr("dy", -5);
 }
 
-score.topGroup = score.svg.append("g")
+score.topGroup = score.wrapper.append("g")
     .call(createCell)
     .on("click", function() {
         selectCell("top");
     });
 
-score.bottomGroup = score.svg.append("g")
+score.bottomGroup = score.wrapper.append("g")
     .call(createCell)
     .on("click", function() {
         selectCell("bottom");
@@ -238,6 +248,31 @@ function clearChoices() {
 }
 
 clearChoices();
+
+/**
+ * Resize
+ */
+function resize() {
+    var main = d3.select("main");
+
+    var w = parseInt(main.style("width"), 10);
+    var h = parseInt(main.style("height"), 10);
+
+    var scaleX = VS.clamp(w / score.width, 0.25, 2);
+    var scaleY = VS.clamp(h / score.height, 0.25, 2);
+
+    layout.scale = Math.min(scaleX, scaleY);
+
+    layout.margin.left = (w * 0.5) - ((score.width * 0.5) * layout.scale);
+    layout.margin.top = (h * 0.5) - ((score.height * 0.5) * layout.scale);
+
+    score.wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
+}
+
+d3.select(window).on("resize", resize);
+
+d3.select(window).on("load", resize);
+
 
 for (var i = 0; i < score.nEvents + 1; i++) {
     VS.score.add(i * score.interval, updateChoices, []);

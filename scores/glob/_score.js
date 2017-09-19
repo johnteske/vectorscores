@@ -1,36 +1,185 @@
-/**
- * Score
- */
 var score = [];
 
-for(var i = 0; i < scoreLength; i++) {
-    score.push(VS.getItem(["glob", "chord", "rhythm"]));
-    VS.score.add(i * globInterval, glob.move, [transitionTime.long, score[i]]);
-}
+(function() {
+    var bars = [
+        // <
+        {
+            duration: 3000,
+            types: ["glob"],
+            range: [0, 0],
+            dynamics: "n",
+            pitch: { set: [] }
+        },
+        // A
+        {
+            types: ["glob"],
+            range: [1, 4],
+            dynamics: "pp",
+            pitch: { set: [0, 1, 2] }
+        },
+        {
+            types: ["glob"],
+            range: [1, 4],
+            dynamics: "p",
+            pitch: { set: [0, 1, 4] }
+        },
+        // B
+        {
+            types: ["glob", "chord"],
+            range: [3, 7],
+            dynamics: "mf",
+            pitch: { set: [0, 1, 6] }
+        },
+        {
+            types: ["glob", "chord"],
+            range: [3, 7],
+            dynamics: "mf",
+            pitch: { set: [0, 2, 6] }
+        },
+        {
+            types: ["glob", "chord"],
+            range: [3, 7],
+            dynamics: "mf",
+            pitch: { set: [0, 1, 3] }
+        },
+        // C
+        {
+            types: ["glob"],
+            range: [3, 13],
+            dynamics: "mp",
+            pitch: { set: [0, 1, 4] }
+        },
+        {
+            types: ["rhythm"],
+            range: [3, 13],
+            dynamics: "p",
+            pitch: { set: [0, 2, 5] }
+        },
+        {
+            types: ["glob", "rhythm"],
+            range: [3, 13],
+            dynamics: "mp",
+            pitch: { set: [0, 1, 5] }
+        },
+        // D
+        {
+            types: ["glob"],
+            range: [12, 19],
+            dynamics: "mf",
+            pitch: { set: [0, 1, 3] }
+        },
+        {
+            types: ["glob"],
+            range: [12, 25],
+            dynamics: "ff",
+            pitch: { set: [0, 1, 4, 6] }
+        },
+        {
+            types: ["glob"],
+            range: [12, 25],
+            dynamics: "f",
+            pitch: { set: [0, 1, 4] }
+        },
+        // E
+        {
+            types: ["glob", "chord", "rhythm"],
+            range: [12, 25],
+            dynamics: "mf",
+            pitch: { set: [0, 2, 6] }
+        },
+        {
+            types: ["glob", "chord", "rhythm"],
+            range: [12, 25],
+            dynamics: "mp",
+            pitch: { set: [0, 1, 6] }
+        },
+        {
+            types: ["glob", "chord", "rhythm"],
+            range: [12, 25],
+            dynamics: "p",
+            pitch: { set: [0, 2, 5] }
+        },
+        // F
+        {
+            types: ["glob", "chord"],
+            range: [1, 25],
+            dynamics: "pp",
+            pitch: { set: [0, 1, 5] }
+        },
+        {
+            types: ["glob", "rhythm"],
+            range: [1, 4],
+            dynamics: "ppp",
+            pitch: { set: [0, 1, 3] }
+        },
+        // >
+        {
+            duration: 3000,
+            types: ["glob"],
+            range: [0, 0],
+            dynamics: "n",
+            pitch: { set: [] }
+        }
+    ];
 
-// final event
-VS.score.add(scoreLength * transitionTime.long, function() {
-    d3.select(".pc-set")
-        .transition().duration(transitionTime.short)
-        .style("opacity", "0");
-});
+    var globules0 = [],
+        globules1 = [],
+        globules2 = [];
 
-glob.move(0, score[0]);
+    function randInt(min, max) {
+        return Math.floor(VS.getRandExcl(min, max));
+    }
 
-/**
- * Controls
- */
- VS.score.preroll = 1000;
+    function createGlobules(globules, n) {
+        globules = globules.slice(0, n);
 
- VS.control.stepCallback = function() {
-     glob.move(transitionTime.short, score[VS.score.pointer]);
- };
+        for (var i = 0; i < (n - globules.length); i++) {
+            globules.push(VS.getItem([1, 2, 4]));
+        }
 
- VS.score.stopCallback = function() {
-     glob.pitchSet
-         .transition().duration(transitionTime.short)
-         .style("opacity", "0");
-     glob.children
-         .transition().duration(transitionTime.short)
-         .attr("transform", "translate(0, 0)");
- };
+        return globules;
+    }
+
+    var time = 0;
+    var transpose = 0;
+
+    for(var i = 0; i < bars.length; i++) {
+        var bar = bars[i],
+            range = bar.range;
+
+        globules0 = createGlobules(globules0, randInt(range[0], range[1]));
+        globules1 = createGlobules(globules1, randInt(range[0], range[1]));
+        globules2 = createGlobules(globules2, randInt(range[0], range[1]));
+
+        bar.pitch.transpose = transpose;
+
+        score.push({
+            globs: [
+                {
+                    type: VS.getItem(bar.types),
+                    durations: globules0,
+                },
+                {
+                    type: VS.getItem(bar.types),
+                    durations: globules1,
+                },
+                {
+                    type: VS.getItem(bar.types),
+                    durations: globules2,
+                }
+            ],
+            dynamics: bar.dynamics,
+            pitch: bar.pitch
+        });
+
+        VS.score.add(time, update, [transitionTime.long, score[i]]);
+
+        time += (bar.duration || globInterval);
+
+        // transpose +/- within range of pitch class set in normal form
+        transpose += VS.getItem([-1, 1]) * Math.floor(Math.random() * (bar.pitch.set[bar.pitch.set.length - 1] || 0));
+    }
+
+    // final event
+    VS.score.add(time, VS.noop);
+}());

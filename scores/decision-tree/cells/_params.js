@@ -23,12 +23,20 @@ var params = (function() {
         return property;
     };
 
-    params.createChoice = function() {
+    params.createChoice = function(filterRest) {
         var choice = {};
 
         for (var i = 0; i < params.keys.length; i++) {
             var key = params.keys[i];
-            choice[key] = VS.getWeightedItem(params.data[key].keys, params.data[key].weights);
+            var keys = params.data[key].keys;
+            var weights = params.data[key].weights;
+
+            if (key === "phrase" && filterRest) {
+                keys = keys.slice(1);
+                weights = weights.slice(1);
+            }
+
+            choice[key] = VS.getWeightedItem(keys, weights);
         }
 
         return choice;
