@@ -4,19 +4,16 @@ title: Set
 permalink: /set/
 menu: true
 set:
-    - ad;sr
+    - prelude
     - glob
     - dirge,,march
-    - trashfire
     - walk reveal
+    - trashfire
+    - ad;sr
     - cells
-    - prelude
 ---
 <ol>
 {% for title in page.set %}
-{% include work-list-loop.html filter_by='title' filter_equals=title %}
-{% endfor %}
-{% for title in page.set %}
-{% include work-list-loop.html layout_contains='movement' filter_by='title' filter_equals=title %}
+{% include work-list-loop.html layout_contains='o' filter_by='title' filter_equals=title %}
 {% endfor %}
 </ol>
