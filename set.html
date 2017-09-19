@@ -3,17 +3,34 @@ layout: page
 title: Set
 permalink: /set/
 menu: true
-set:
+setA:
     - prelude
     - glob
     - dirge,,march
-    - walk reveal
+setB:
     - trashfire
     - ad;sr
     - cells
 ---
 <ol>
-{% for title in page.set %}
+{% for title in page.setA %}
+{% include work-list-loop.html layout_contains='o' filter_by='title' filter_equals=title %}
+{% endfor %}
+
+<li>
+    <a href="{{ '/scores/topographies-ii/walk-reveal/?symbols=1' | prepend: site.baseurl }}" class="work-title">walk reveal (1)</a>
+</li>
+<li>
+    <a href="{{ '/scores/topographies-ii/walk-reveal/?symbols=2' | prepend: site.baseurl }}" class="work-title">walk reveal (2)</a>
+</li>
+<li>
+    <a href="{{ '/scores/topographies-ii/walk-reveal/?symbols=3' | prepend: site.baseurl }}" class="work-title">walk reveal (3)</a>
+</li>
+<li>
+    <a href="{{ '/scores/topographies-ii/walk-reveal/?symbols=4' | prepend: site.baseurl }}" class="work-title">walk reveal (4)</a>
+</li>
+
+{% for title in page.setB %}
 {% include work-list-loop.html layout_contains='o' filter_by='title' filter_equals=title %}
 {% endfor %}
 </ol>
