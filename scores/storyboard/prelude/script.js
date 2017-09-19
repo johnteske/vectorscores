@@ -27,10 +27,10 @@ var dynamicsDict = VS.dictionary.Bravura.dynamics;
 var cardWidth = 120,
     cardPadding = 24,
     cardTransTime = 600,
-    offset = cardWidth,
-    offsetY = 105,
+    offset = cardWidth + cardPadding,
+    offsetY = 1,
     width = (cardWidth * 4) + (cardPadding * 2),
-    height = width; // cardWidth * 3;
+    height = cardWidth * 2.5;
 
 var svg = d3.select(".main");
 
@@ -332,12 +332,13 @@ function resize() {
     var w = parseInt(main.style("width"), 10);
     var h = parseInt(main.style("height"), 10);
 
-    var scaleX = VS.clamp(w / width, 0.25, 2);
-    var scaleY = VS.clamp(h / height, 0.25, 2);
+    var scaleX = VS.clamp(w / width, 0.25, 4);
+    var scaleY = VS.clamp(h / height, 0.25, 4);
 
     score.scale = Math.min(scaleX, scaleY);
+
     offset = (w * 0.5) - (cardWidth * score.scale);
-    offsetY = (h * 0.5) - (190 * score.scale);
+    offsetY = (h * 0.5) - (height * 0.5 * score.scale);
 
     cardGroup.attr("transform", translateCardGroup);
 }
