@@ -8,7 +8,7 @@ var score = {
         size: 90,
         buffer: 30
     },
-    nEvents: 8,
+    nEvents: 16,
     interval: 30000,
     // TODO increase over time/score pointer?
     // TODO scale according to number of choices per param?
