@@ -16,7 +16,7 @@ var scaleX = 3,
     unitY = 10,
     view = {},
     // 16 parts is an arbitrary max, ideally large ensembles read from parts
-    numParts = 1; // clamp(+VS.getQueryString("parts") || 4, 1, 16);
+    numParts = clamp(+VS.getQueryString("parts") || 1, 1, 16);
 
 {% include_relative _settings.js %}
 
