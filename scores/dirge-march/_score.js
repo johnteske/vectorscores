@@ -361,5 +361,19 @@ var score = (function(score) {
     };
     score.push(stashedEvent);
 
+    // end
+    stashedEvent = {};
+    stashedEvent.time = 336 + rest;
+    stashedEvent.pitched = {
+        duration: "",
+        globjects: [],
+        pitch: [],
+        phraseType: ""
+    };
+    stashedEvent.percussion = {
+        tempo: 0
+    };
+    score.push(stashedEvent);
+
     return score;
 })([]);

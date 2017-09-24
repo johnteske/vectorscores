@@ -260,7 +260,7 @@ function update(index, isControlEvent) {
     /**
      * Duration
      */
-    durationText.text(bar.pitched.duration + "\u2033");
+    durationText.text(bar.pitched.duration + (bar.pitched.duration ? "\u2033" : ""));
 
     /**
      * Rest
