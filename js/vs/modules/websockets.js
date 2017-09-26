@@ -86,6 +86,7 @@ VS.WebSocket = (function () {
                                 break;
                             case "step":
                                 VS.score.updatePointer(data.pointer);
+                                VS.control.updateStepButtons();
                                 ws.stepCallback();
                                 break;
                         }
