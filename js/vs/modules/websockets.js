@@ -20,16 +20,16 @@ VS.WebSocket = (function () {
     function addControlCallbacks() {
         if (VS.control) {
             VS.control.playCallback = function () {
-                VS.WebSocket.send({ type: "score", scoreEvent: "play", pointer: VS.score.pointer });
+                VS.WebSocket.send(["vs", "", "play", VS.score.pointer]);
             };
             VS.control.pauseCallback = function () {
-                VS.WebSocket.send({ type: "score", scoreEvent: "pause", pointer: VS.score.pointer });
+                VS.WebSocket.send(["vs", "", "pause", VS.score.pointer]);
             };
             VS.control.stopCallback = function () {
-                VS.WebSocket.send({ type: "score", scoreEvent: "stop" });
+                VS.WebSocket.send(["vs", "", "stop"]);
             };
             VS.control.stepCallback = function () {
-                VS.WebSocket.send({ type: "score", scoreEvent: "step", pointer: VS.score.pointer });
+                VS.WebSocket.send(["vs", "", "step", VS.score.pointer]);
             };
         }
     }
@@ -60,18 +60,21 @@ VS.WebSocket = (function () {
             socket.onmessage = function (msg) {
                 try {
                     var data = JSON.parse(msg.data);
+                    var type = data[0];
+                    var cid = data[1];
+                    var msg = data[2];
 
-                    if (data.type === "ws" && data.content === "connected") {
-                        ws.cid = data.cid;
-                    } else if (data.type === "ws" && data.content === "connections") {
-                        log("Open, " + data.connections + " connection(s) total");
-                    } else if (data.type === "ws" && data.content === "reload") {
+                    if (type === "ws" && msg === "connected") {
+                        ws.cid = cid;
+                    } else if (type === "ws" && msg === "connections") {
+                        log("Open, " + data[3] + " connection(s) total");
+                    } else if (type === "ws" && msg === "reload") {
                         window.location.reload(true);
                     }
 
                     // if not sent by self
-                    if (data.type === "score" && data.cid !== ws.cid) {
-                        switch(data.scoreEvent) {
+                    if (type === "vs" && cid !== ws.cid) {
+                        switch(msg) {
                             case "play":
                                 VS.score.play();
                                 ws.playCallback();
@@ -85,7 +88,7 @@ VS.WebSocket = (function () {
                                 ws.stopCallback();
                                 break;
                             case "step":
-                                VS.score.updatePointer(data.pointer);
+                                VS.score.updatePointer(data[3]);
                                 VS.control.updateStepButtons();
                                 ws.stepCallback();
                                 break;
@@ -105,7 +108,7 @@ VS.WebSocket = (function () {
     };
 
     ws.send = function (data) {
-        data.cid = ws.cid; // attach client ID to all
+        data[1] = ws.cid; // attach client ID to all
         try {
             socket.send(JSON.stringify(data));
         } catch (err) {

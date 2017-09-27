@@ -460,7 +460,7 @@ resize();
 
 d3.select(window).on("resize", resize);
 
-VS.WebSocket.stepCallback = scrollCallback();
+VS.WebSocket.stepCallback = scrollCallback;
 VS.WebSocket.connect();
 
 /**
