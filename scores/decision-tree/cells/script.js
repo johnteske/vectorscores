@@ -1,6 +1,13 @@
 ---
 layout: compress-js
 ---
+/**
+ * NOTE using intervalSpread, the timing of events in each part will be unique.
+ * Use of the score step buttons and playing from any point other than the start
+ * will not be timed properly--although the step function should be disabled on
+ * this work anyway (even if the script made choices, it would be random,
+ * not the same as real musicians making choices).
+ */
 var score = {
     width: 320,
     height: 320,
@@ -10,6 +17,7 @@ var score = {
     },
     nEvents: 16,
     interval: 30000,
+    intervalSpread: 5000,
     // TODO increase over time/score pointer?
     // TODO scale according to number of choices per param?
     weightScale: 5
@@ -273,9 +281,11 @@ d3.select(window).on("resize", resize);
 
 d3.select(window).on("load", resize);
 
-
+/**
+ * Populate score
+ */
 for (var i = 0; i < score.nEvents + 1; i++) {
-    VS.score.add(i * score.interval, updateChoices, []);
+    VS.score.add(i * (score.interval + VS.getRandExcl(score.intervalSpread, -score.intervalSpread)), updateChoices, []);
 }
 
 {% include_relative _controls.js %}
