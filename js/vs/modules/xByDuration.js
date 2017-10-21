@@ -1,6 +1,3 @@
----
-layout: compress-js
----
 /**
  * Space items in a selection by an array of durations
  * @param {D3Selection} selection

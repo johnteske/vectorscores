@@ -27,3 +27,11 @@ compress_html:
     #blanklines: false
     #profile: true
     #startings: [html, head, body]
+
+defaults:
+    # Compress modules by default (and allow linting by excluding frontmatter in each file)
+    -
+        scope:
+            path: "js/vs/modules"
+        values:
+            layout: "compress-js"

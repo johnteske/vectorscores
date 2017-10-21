@@ -1,6 +1,3 @@
----
-layout: compress-js
----
 /**
  * TODO refactor as module (not as a generator but with prototype space)
  */

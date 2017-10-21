@@ -1,6 +1,3 @@
----
-layout: compress-js
----
 VS.RadioSetting = function(elements) {
     if (!(this instanceof VS.RadioSetting)) {
         return new VS.RadioSetting(elements);

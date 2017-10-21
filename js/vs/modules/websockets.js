@@ -1,6 +1,3 @@
----
-layout: compress-js
----
 VS.WebSocket = (function () {
     var ws = {};
 
