@@ -35,6 +35,7 @@ var width = 480,
 
 var dynamics = VS.dictionary.Bravura.dynamics;
 
+var globjects = {% include_relative _globjects.json %};
 {% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
 {% include_relative _score.js %}

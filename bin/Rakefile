@@ -30,7 +30,7 @@ options = {
     ],
 
     # Variables
-    'no-undef': 'warn'
+    # 'no-undef': 'warn'
     # 'no-use-before-define': 'warn'
   },
   env: {
