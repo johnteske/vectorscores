@@ -1,5 +1,6 @@
 require 'eslintrb/eslinttask'
 require 'json'
+require 'rubocop/rake_task'
 
 task :default => [:eslint_source, :eslint_build]
 
@@ -37,4 +38,9 @@ end
 # Lint built files with no options to catch parsing errors
 Eslintrb::EslintTask.new :eslint_build do |t|
   t.pattern = '_site/' + paths
+end
+
+# Lint ruby files
+RuboCop::RakeTask.new(:rubocop) do |t|
+  t.options = ['--display-cop-names']
 end
