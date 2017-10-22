@@ -22,6 +22,14 @@ module KeyboardHandler
   end
 end
 
+# Generate a unique id, referred to as the cid
+# TODO: returns a random (not truly unique) id,
+# which creates a very low chance of having duplicate ids
+def generate_client_id
+  rand(36**8).to_s(36)
+end
+
+# rubocop:disable BlockLength
 EM.run do
   @clients = []
 
@@ -38,9 +46,8 @@ EM.run do
 
   EM::WebSocket.start(host: '0.0.0.0', port: '4001') do |ws|
     ws.onopen do |handshake|
-      puts 'WebSocket connection open'
-      cid = rand(36**8).to_s(36) # generate client id
-      puts "#{cid} connected to #{handshake.path}."
+      cid = generate_client_id
+      puts "WebSocket connection opened: #{cid} connected to #{handshake.path}."
 
       @clients << ws
 
@@ -50,7 +57,7 @@ EM.run do
     end
 
     ws.onclose do
-      puts 'Closed.'
+      puts 'WebSocket connection closed.'
       ws.send ['', 'ws', 'closed'].to_json
       @clients.delete ws
       send_n_connections
