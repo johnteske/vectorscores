@@ -2,4 +2,4 @@
 #
 # Lint source and built Javascript files
 
-rake -f bin/Rakefile
+BUNDLE_GEMFILE=bin/Gemfile rake -f bin/Rakefile
