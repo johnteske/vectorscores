@@ -1,5 +1,3 @@
-var globjects = {% include_relative _globjects.json %};
-
 globjects = globjects.map(function(globject) {
     var highs = globject.rangeEnvelope.hi,
         lows = globject.rangeEnvelope.lo;
