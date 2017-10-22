@@ -2,7 +2,9 @@ require 'eslintrb/eslinttask'
 require 'json'
 require 'rubocop/rake_task'
 
-task default: %i[eslint_source eslint_build]
+task default: %i[test]
+task test: %i[eslint_source eslint_build rubocop]
+task eslint: %i[eslint_source eslint_build]
 
 eslint_file = File.read('.eslintrc.json')
 eslint_options = JSON.parse(eslint_file)
