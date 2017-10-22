@@ -35,13 +35,14 @@ window.addEventListener("keydown", keydownListener, true);
  * Websocket
  */
 VS.WebSocket.messageCallback = function(data) {
-    var type = data[0];
+    var cid = data[0];
+    var type = data[1];
     var msg = data[2];
 
     if (type === "ws" && msg === "connections") {
         score.partWeight = (1 / data[3]) * score.weightScale;
         debugChoices();
-    } else if (type === "choice" && data[1] !== VS.WebSocket.cid) {
+    } else if (type === "choice" && cid !== VS.WebSocket.cid) {
         params.updateWeights(msg, score.partWeight);
         debugChoices();
     }

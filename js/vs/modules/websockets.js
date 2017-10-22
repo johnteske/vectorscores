@@ -20,16 +20,16 @@ VS.WebSocket = (function () {
     function addControlCallbacks() {
         if (VS.control) {
             VS.control.playCallback = function () {
-                VS.WebSocket.send(["vs", "", "play", VS.score.pointer]);
+                VS.WebSocket.send(["vs", "play", VS.score.pointer]);
             };
             VS.control.pauseCallback = function () {
-                VS.WebSocket.send(["vs", "", "pause", VS.score.pointer]);
+                VS.WebSocket.send(["vs", "pause", VS.score.pointer]);
             };
             VS.control.stopCallback = function () {
-                VS.WebSocket.send(["vs", "", "stop"]);
+                VS.WebSocket.send(["vs", "stop"]);
             };
             VS.control.stepCallback = function () {
-                VS.WebSocket.send(["vs", "", "step", VS.score.pointer]);
+                VS.WebSocket.send(["vs", "step", VS.score.pointer]);
             };
         }
     }
@@ -60,8 +60,8 @@ VS.WebSocket = (function () {
             socket.onmessage = function (msg) {
                 try {
                     var data = JSON.parse(msg.data);
-                    var type = data[0];
-                    var cid = data[1];
+                    var cid = data[0];
+                    var type = data[1];
                     var msg = data[2];
 
                     if (type === "ws" && msg === "connected") {
@@ -108,7 +108,9 @@ VS.WebSocket = (function () {
     };
 
     ws.send = function (data) {
-        data[1] = ws.cid; // attach client ID to all
+        // attach client ID to all
+        data.unshift(ws.cid);
+
         try {
             socket.send(JSON.stringify(data));
         } catch (err) {

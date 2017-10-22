@@ -12,7 +12,7 @@ module MyKeyboardHandler
 
   def receive_line data
     if data =~ /reload/i
-      msg = ["ws", "", "reload"].to_json
+      msg = ["", "ws", "reload"].to_json
 
       @clients.each do |socket|
         socket.send msg
@@ -29,7 +29,7 @@ EM.run {
   def sendNConnections(cid = nil)
       puts "#{@clients.length} connections open"
 
-      msg = ["ws", cid, "n", @clients.length].to_json
+      msg = [cid, "ws", "n", @clients.length].to_json
 
       @clients.each do |socket|
         socket.send msg
@@ -44,14 +44,14 @@ EM.run {
 
       @clients << ws
 
-      ws.send ["ws", cid, "connected"].to_json
+      ws.send [cid, "ws", "connected"].to_json
 
       sendNConnections(cid)
     }
 
     ws.onclose {
       puts "Closed."
-      ws.send ["ws", "", "closed"].to_json
+      ws.send ["", "ws", "closed"].to_json
       @clients.delete ws
       sendNConnections()
     }

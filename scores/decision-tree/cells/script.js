@@ -149,7 +149,6 @@ function selectCell(position) {
 
         VS.WebSocket.send([
             "choice",
-            "",
             choice
         ]);
 
