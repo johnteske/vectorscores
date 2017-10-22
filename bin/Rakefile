@@ -2,7 +2,7 @@ require 'eslintrb/eslinttask'
 require 'json'
 require 'rubocop/rake_task'
 
-task :default => [:eslint_source, :eslint_build]
+task default: %i[eslint_source eslint_build]
 
 eslint_file = File.read('.eslintrc.json')
 eslint_options = JSON.parse(eslint_file)
@@ -11,7 +11,7 @@ dirs = [
   'js/vectorscores',
   'js/vs/',
   'scores/'
-  ]
+]
 
 paths = '{' + dirs.join(',') + '}**/*.js'
 
@@ -23,9 +23,7 @@ Eslintrb::EslintTask.new :eslint_source do |t|
   source_files = Dir[paths].reject do |file|
     first_line = File.open(file, &:readline)
 
-    if first_line =~ /^---/
-      ignored_files.push(file)
-    end
+    ignored_files.push(file) if first_line =~ /^---/
   end
 
   puts ignored_files
@@ -41,6 +39,6 @@ Eslintrb::EslintTask.new :eslint_build do |t|
 end
 
 # Lint ruby files
-RuboCop::RakeTask.new(:rubocop) do |t|
+RuboCop::RakeTask.new :rubocop do |t|
   t.options = ['--display-cop-names']
 end
