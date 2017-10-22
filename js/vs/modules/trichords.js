@@ -1,3 +1,6 @@
+---
+layout: compress-js
+---
 VS.trichords = [
     [0, 1, 2],
     [0, 1, 3],
