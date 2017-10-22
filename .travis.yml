@@ -1,5 +1,3 @@
-# gemfile: bin/Gemfile
-# script: BUNDLE_GEMFILE=bin/Gemfile bundle exec rake -f bin/Rakefile
 language: ruby
 gemfile: bin/Gemfile
 script: bundle exec rake -f bin/Rakefile
