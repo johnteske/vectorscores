@@ -1,0 +1,1 @@
+script: BUNDLE_GEMFILE=bin/Gemfile bundle exec rake -f bin/Rakefile
