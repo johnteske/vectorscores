@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# Lint source and built Javascript files
+
+rake -f bin/Rakefile
