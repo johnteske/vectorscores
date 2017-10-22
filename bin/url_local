@@ -5,7 +5,7 @@
 require 'socket'
 
 def first_private_ipv4
-  Socket.ip_address_list.detect{|intf| intf.ipv4_private?}
+  Socket.ip_address_list.detect(&:ipv4_private?)
 end
 
 ip = first_private_ipv4.ip_address unless first_private_ipv4.nil?

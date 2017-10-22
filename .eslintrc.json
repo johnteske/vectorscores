@@ -1,0 +1,33 @@
+{
+  "extends": "eslint:recommended",
+  "rules": {
+    "eqeqeq": "error",
+
+    "comma-spacing": [
+      "warn",
+      { "before": false, "after": true }
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "no-unneeded-ternary": "warn",
+    "operator-linebreak": [
+      "warn",
+      "after"
+    ],
+    "semi": "warn",
+    "space-infix-ops": "warn",
+    "quotes": [
+      "warn",
+      "double"
+    ]
+  },
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "d3": false,
+    "VS": false
+  }
+}
