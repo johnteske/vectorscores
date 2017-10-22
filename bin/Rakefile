@@ -1,46 +1,10 @@
 require 'eslintrb/eslinttask'
+require 'json'
 
 task :default => [:eslint_source, :eslint_build]
 
-options = {
-  'extends': 'eslint:recommended',
-  rules: {
-    # Best Practices
-    'eqeqeq': 'error',
-
-    # Stylistic Issues
-    'comma-spacing': [
-      'warn',
-      { 'before': false, 'after': true }
-    ],
-    'linebreak-style': [
-      'error',
-      'unix'
-    ],
-    'no-unneeded-ternary': 'warn',
-    'operator-linebreak': [
-      'warn',
-      'after'
-    ],
-    'semi': 'warn',
-    'space-infix-ops': 'warn',
-    'quotes': [
-      'warn',
-      'double'
-    ],
-
-    # Variables
-    # 'no-undef': 'warn'
-    # 'no-use-before-define': 'warn'
-  },
-  env: {
-    'browser': true
-  },
-  globals: {
-    'd3': false,
-    'VS': false
-  }
-}
+eslint_file = File.read('.eslintrc.json')
+eslint_options = JSON.parse(eslint_file)
 
 dirs = [
   'js/vectorscores',
@@ -67,7 +31,7 @@ Eslintrb::EslintTask.new :eslint_source do |t|
   puts "Ignoring #{ignored_files.length} source files containing front matter"
 
   t.pattern = source_files
-  t.options = options
+  t.options = eslint_options
 end
 
 # Lint built files with no options to catch parsing errors
