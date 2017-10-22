@@ -1,7 +1,6 @@
 require 'eslintrb/eslinttask'
 
-task :default => [:test]
-task :test => [:eslint_source, :eslint_build]
+task :default => [:eslint_source, :eslint_build]
 
 options = {
   'extends': 'eslint:recommended',
