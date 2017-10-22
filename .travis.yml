@@ -1,0 +1,6 @@
+language: ruby
+gemfile: bin/Gemfile
+script: bundle exec rake -f bin/Rakefile
+env:
+  global:
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
