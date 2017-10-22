@@ -1,10 +1,20 @@
 require 'eslintrb/eslinttask'
+# require 'html-proofer'
 require 'json'
 require 'rubocop/rake_task'
 
 task default: %i[test]
-task test: %i[eslint_source eslint_build rubocop]
+task test: %i[jekyll_build eslint_source eslint_build rubocop]
 task eslint: %i[eslint_source eslint_build]
+
+task :jekyll_build do
+  sh 'bundle exec jekyll build'
+  # options = {
+  #     :check_html => true,
+  #     :verbose => true
+  # }
+  # HTMLProofer.check_directory('./_site', options).run
+end
 
 eslint_file = File.read('.eslintrc.json')
 eslint_options = JSON.parse(eslint_file)
