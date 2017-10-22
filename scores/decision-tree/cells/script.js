@@ -147,10 +147,10 @@ function selectCell(position) {
         score.topGroup.call(transformCell, "bottom", position === "top");
         score.bottomGroup.call(transformCell, "bottom", position === "bottom");
 
-        VS.WebSocket.send({
-            type: "choice",
-            content: choice
-        });
+        VS.WebSocket.send([
+            "choice",
+            choice
+        ]);
 
         debugChoices();
     }
