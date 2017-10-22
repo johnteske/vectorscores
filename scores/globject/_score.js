@@ -68,13 +68,6 @@ function makeGlobject() {
     return globject;
 }
 
-{% comment %}
-var score = {% include_relative _score.json %};
-score = score.map(function(measure) {
-    return measure.globjects;
-});
-{% endcomment %}
-
 var score = (function() {
     var _score = [];
     for (var i = 0; i < 8; i++) {

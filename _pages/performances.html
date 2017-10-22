@@ -4,7 +4,9 @@ title: Performances
 permalink: /performances/
 menu: true
 ---
+{% if site.data.performances.upcoming %}
 <h2>Upcoming</h2>
+{% endif %}
 
 {% for perf in site.data.performances.upcoming %}
 <h4 class="perf-date"><a href="{{ perf.url }}">{{ perf.date_start | date: '%B %-d, %Y' }}</a></h4>

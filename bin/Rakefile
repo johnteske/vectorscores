@@ -1,5 +1,7 @@
 require 'eslintrb/eslinttask'
 
+task :default => [:eslint_source, :eslint_build]
+
 options = {
   'extends': 'eslint:recommended',
   rules: {
@@ -28,7 +30,7 @@ options = {
     ],
 
     # Variables
-    'no-undef': 'error',
+    # 'no-undef': 'warn'
     # 'no-use-before-define': 'warn'
   },
   env: {
@@ -40,12 +42,35 @@ options = {
   }
 }
 
-Eslintrb::EslintTask.new :eslint do |t|
-  paths = [
-    'js/vectorscores',
-    'js/vs/',
-    'scores/'
-    ].join(',')
-  t.pattern = '_site/{' + paths + '}**/*.js'
+dirs = [
+  'js/vectorscores',
+  'js/vs/',
+  'scores/'
+  ]
+
+paths = '{' + dirs.join(',') + '}**/*.js'
+
+# Lint source files
+Eslintrb::EslintTask.new :eslint_source do |t|
+  ignored_files = []
+
+  # Exclude .js files with frontmatter
+  source_files = Dir[paths].reject do |file|
+    first_line = File.open(file, &:readline)
+
+    if first_line =~ /^---/
+      ignored_files.push(file)
+    end
+  end
+
+  puts ignored_files
+  puts "Ignoring #{ignored_files.length} source files containing front matter"
+
+  t.pattern = source_files
   t.options = options
+end
+
+# Lint built files with no options to catch parsing errors
+Eslintrb::EslintTask.new :eslint_build do |t|
+  t.pattern = '_site/' + paths
 end
