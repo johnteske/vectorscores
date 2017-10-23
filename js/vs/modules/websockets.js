@@ -40,6 +40,43 @@ VS.WebSocket = (function () {
     ws.stopCallback = VS.noop;
     ws.stepCallback = VS.noop;
 
+    function handleWebSocketMsg(data) {
+        var cid = data[0];
+        var content = data[2];
+
+        if (content === "connected") {
+            ws.cid = cid;
+        } else if (content === "connections") {
+            log("Open, " + data[3] + " connection(s) total");
+        } else if (content === "reload") {
+            window.location.reload(true);
+        }
+    }
+
+    function handleVectorscoresMsg(data) {
+        var content = data[2];
+
+        switch (content) {
+            case "play":
+                VS.score.play();
+                ws.playCallback();
+                break;
+            case "pause":
+                VS.score.pause();
+                ws.pauseCallback();
+                break;
+            case "stop":
+                VS.score.stop();
+                ws.stopCallback();
+                break;
+            case "step":
+                VS.score.updatePointer(data[3]);
+                VS.control.updateStepButtons();
+                ws.stepCallback();
+                break;
+        }
+    }
+
     ws.connect = function () {
         try {
             socket = new WebSocket(host);
@@ -62,37 +99,15 @@ VS.WebSocket = (function () {
                     var data = JSON.parse(msg.data);
                     var cid = data[0];
                     var type = data[1];
-                    var msg = data[2];
 
-                    if (type === "ws" && msg === "connected") {
-                        ws.cid = cid;
-                    } else if (type === "ws" && msg === "connections") {
-                        log("Open, " + data[3] + " connection(s) total");
-                    } else if (type === "ws" && msg === "reload") {
-                        window.location.reload(true);
+                    // WebSockets messages
+                    if (type === "ws") {
+                        handleWebSocketMsg(data);
                     }
 
-                    // if not sent by self
+                    // vectorscores messages, only handle if not sent by self
                     if (type === "vs" && cid !== ws.cid) {
-                        switch(msg) {
-                            case "play":
-                                VS.score.play();
-                                ws.playCallback();
-                                break;
-                            case "pause":
-                                VS.score.pause();
-                                ws.pauseCallback();
-                                break;
-                            case "stop":
-                                VS.score.stop();
-                                ws.stopCallback();
-                                break;
-                            case "step":
-                                VS.score.updatePointer(data[3]);
-                                VS.control.updateStepButtons();
-                                ws.stepCallback();
-                                break;
-                        }
+                        handleVectorscoresMsg(data);
                     }
 
                     ws.messageCallback(data);
