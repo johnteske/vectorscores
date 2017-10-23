@@ -7,9 +7,9 @@ VS.enableModal = function(modalId, openId, closeId) {
     function openModal() {
         overlay.style.display = "block";
         modal.style.display = "block";
-        VS.page.showLayout();
+        VS.layout.show();
 
-        if (VS.page.footer) {
+        if (VS.layout.footer) {
             VS.score.pause();
             window.removeEventListener("keydown", VS.control.keydownListener, true);
         }
@@ -22,9 +22,9 @@ VS.enableModal = function(modalId, openId, closeId) {
     function closeModal() {
         overlay.style.display = "none";
         modal.style.display = "none";
-        VS.page.hideLayout();
+        VS.layout.hide();
 
-        if (VS.page.footer) {
+        if (VS.layout.footer) {
             window.addEventListener("keydown", VS.control.keydownListener, true);
         }
 

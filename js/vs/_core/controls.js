@@ -1,4 +1,4 @@
-if (VS.page.footer) {
+if (VS.layout.footer) {
 
     VS.control = (function() {
 

@@ -59,7 +59,7 @@ VS.score = (function() {
             VS.control.back.disable();
             VS.control.fwd.disable();
             schedule(VS.score.preroll, playEvent, VS.score.pointer);
-            VS.page.hideLayout();
+            VS.layout.hide();
             VS.score.playCallback();
         },
         pause: function() {
@@ -67,7 +67,7 @@ VS.score = (function() {
             VS.control.play.setPlay();
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
-            VS.page.showLayout();
+            VS.layout.show();
             VS.score.pauseCallback();
         },
         stop: function() {
@@ -78,7 +78,7 @@ VS.score = (function() {
             VS.control.stop.disable();
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
-            VS.page.showLayout();
+            VS.layout.show();
             VS.score.stopCallback();
         },
         schedule: schedule,

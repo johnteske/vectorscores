@@ -1,30 +1,38 @@
-VS.page = (function() {
-    var page = {};
+VS.layout = (function() {
+    var layout = {};
 
-    page.header = document.getElementById("score-header");
-    page.footer = document.getElementById("score-footer");
+    layout.header = document.getElementById("score-header");
+    layout.footer = document.getElementById("score-footer");
 
-    page.layoutClassed = function(c) {
-        page.header.className = c;
-        if (page.footer) { page.footer.className = c; }
+    layout.setClass = function(c) {
+        layout.header.className = c;
+
+        if (layout.footer) {
+            layout.footer.className = c;
+        }
     };
-    page.showLayout = function() {
-        page.layoutClassed("show");
+
+    layout.show = function() {
+        layout.setClass("show");
     };
-    page.hideLayout = function() {
-        page.layoutClassed("hide");
+
+    layout.hide = function() {
+        layout.setClass("hide");
     };
 
     function addLayoutInteraction(el) {
-        el.addEventListener("click", page.showLayout, false);
-        el.addEventListener("mouseover", page.showLayout, false);
-        el.addEventListener("mouseout", page.hideLayout, false);
+        el.addEventListener("click", layout.show, false);
+        el.addEventListener("mouseover", layout.show, false);
+        el.addEventListener("mouseout", layout.hide, false);
     }
 
-    addLayoutInteraction(page.header);
-    if (page.footer) { addLayoutInteraction(page.footer); }
+    addLayoutInteraction(layout.header);
 
-    return page;
+    if (layout.footer) {
+        addLayoutInteraction(layout.footer);
+    }
+
+    return layout;
 })();
 
-document.getElementsByTagName("main")[0].onclick = VS.page.hideLayout;
+document.getElementsByTagName("main")[0].onclick = VS.layout.hide;
