@@ -157,15 +157,15 @@ var score = [];
             globs: [
                 {
                     type: VS.getItem(bar.types),
-                    durations: globules0,
+                    durations: globules0
                 },
                 {
                     type: VS.getItem(bar.types),
-                    durations: globules1,
+                    durations: globules1
                 },
                 {
                     type: VS.getItem(bar.types),
-                    durations: globules2,
+                    durations: globules2
                 }
             ],
             dynamics: bar.dynamics,

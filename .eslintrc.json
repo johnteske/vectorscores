@@ -5,7 +5,14 @@
 
     "comma-spacing": [
       "warn",
-      { "before": false, "after": true }
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
     ],
     "linebreak-style": [
       "error",

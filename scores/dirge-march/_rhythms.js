@@ -18,7 +18,7 @@ var stemmed = {
     "trip": "\ue202",
     // "]": "\ue203"
     "r0.5": "\ue4e6",
-    "r0.5.": "\ue4e6\ue1e7",
+    "r0.5.": "\ue4e6\ue1e7"
 };
 
 var rhythms = [

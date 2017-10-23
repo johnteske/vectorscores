@@ -18,7 +18,7 @@ switch (symbolSetIndex) {
             "2":  { x: -0.175, y: 0 },
             "1": { x: -0.175, y: 0 },
             "0.5": { x: -0.025, y: -0.25 },
-            "0.25": { x: -0.025, y: -0.35 },
+            "0.25": { x: -0.025, y: -0.35 }
         };
         symbolScale = ["-1.5", "-1", "-0.5", "0", "2", "1", "0.5", "0.25"];
 
@@ -42,7 +42,7 @@ switch (symbolSetIndex) {
             "0": { x: -0.0875, y: 0 }, // natural
             "0.5": { x: -0.09, y: -0.025 }, // quarter sharp (single vertical stroke)
             "1": { x: -0.125, y: 0 }, // sharp
-            "1.5": { x: -0.1625, y: 0 }, // three-quarter sharp (three vertical strokes)
+            "1.5": { x: -0.1625, y: 0 } // three-quarter sharp (three vertical strokes)
             // "2": { x: -0.125, y: 0 }  // double sharp
         };
         symbolScale = ["under", "under", "over", "over", "0", "0.5", "1", "1.5"];
@@ -93,7 +93,7 @@ switch (symbolSetIndex) {
             "2":  { x: -0.175, y: 0 },
             "1": { x: -0.175, y: 0 },
             "0.5": { x: -0.025, y: -0.25 },
-            "0.25": { x: -0.025, y: -0.35 },
+            "0.25": { x: -0.025, y: -0.35 }
         };
         symbolScale = ["-", "-", ">", ".", 2, 1, 0.5, 0.25];
 
