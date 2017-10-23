@@ -4,20 +4,20 @@ VS.layout = (function() {
     layout.header = document.getElementById("score-header");
     layout.footer = document.getElementById("score-footer");
 
-    layout.setClass = function(c) {
+    function setClass(c) {
         layout.header.className = c;
 
         if (layout.footer) {
             layout.footer.className = c;
         }
-    };
+    }
 
     layout.show = function() {
-        layout.setClass("show");
+        setClass("show");
     };
 
     layout.hide = function() {
-        layout.setClass("hide");
+        setClass("hide");
     };
 
     function addLayoutInteraction(el) {
