@@ -172,9 +172,13 @@ function cueBlink() {
  */
 function makeGhost() {
 
-    var x1 = 10, // offset to tie
-        attackScale = 0.15,
-        attackNum = VS.getItem([7, 8, 9]);
+    var attackScale = 0.15,
+        attackNum = VS.getItem([7, 8, 9]),
+        x1 = 10, // offset to tie
+        x2 = x1 + (unitX * attackNum * attackScale),
+        cy1 = -4,
+        cy2 = -10;
+
     function ghostAttackSpacing(d, i) {
         return x1 + (unitX * i * attackScale);
     }
@@ -188,11 +192,21 @@ function makeGhost() {
             .classed("durations", true)
             .attr("y", score.partLayersY.articulations);
     ghostGroup
+        .append("path")
+            .attr("stroke", "black")
+            .attr("fill", "none")
+            .attr("d",
+                "M" + x1 + " " + cy1 +
+                " C " + x1 + " "  + cy2 +
+                " " + x2 + " " + cy2 +
+                " " + x2 + " " + cy1
+            );
+    ghostGroup
         .append("line")
             .attr("class", "ghost-beam")
             .attr("x1", x1)
             .attr("y1", 0)
-            .attr("x2", x1 + (unitX * attackNum * attackScale))
+            .attr("x2", x2)
             .attr("y2", 0);
     ghostGroup
         .append("text")
@@ -463,13 +477,4 @@ d3.select(window).on("resize", resize);
 VS.WebSocket.stepCallback = scrollCallback;
 VS.WebSocket.connect();
 
-/**
- * Performance notes
- */
-VS.cueTriangle(d3.select(".info-cue").attr("width", 12).attr("height", 12));
-
-var infoGhost = d3.select(".info-ghost")
-    .attr("width", 60)
-    .attr("height", 20)
-    .append("g");
-makeGhost.call(infoGhost.node());
+{% include_relative _info.js %}
