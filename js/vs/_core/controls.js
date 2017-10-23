@@ -1,6 +1,6 @@
 if (VS.page.footer) {
 
-    VS.control = (function () {
+    VS.control = (function() {
 
         function ScoreControl(id, fn) {
             this.element = document.getElementById(id);
@@ -14,7 +14,7 @@ if (VS.page.footer) {
         };
 
         function playPause() {
-            if(!VS.score.playing){
+            if (!VS.score.playing) {
                 VS.score.play();
                 VS.control.playCallback();
             } else {
@@ -23,13 +23,13 @@ if (VS.page.footer) {
             }
         }
 
-        function stop () {
+        function stop() {
             VS.score.stop();
             VS.control.stopCallback();
         }
 
         function stepPointer(steps) {
-            if(!VS.score.playing) { // don't allow skip while playing, for now
+            if (!VS.score.playing) { // don't allow skip while playing, for now
                 VS.score.updatePointer(VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1));
                 VS.control.updateStepButtons();
                 VS.control.stepCallback();
@@ -88,14 +88,14 @@ if (VS.page.footer) {
             stepCallback: VS.noop,
             play: play,
             stop: new ScoreControl("score-stop", stop),
-            fwd: new ScoreControl("score-fwd", function(){ stepPointer(1); }),
-            back: new ScoreControl("score-back", function(){ stepPointer(-1); }),
+            fwd: new ScoreControl("score-fwd", function() { stepPointer(1); }),
+            back: new ScoreControl("score-back", function() { stepPointer(-1); }),
             pointer: new ScoreControl("score-pointer", VS.score.pause),
             updateStepButtons: function() {
-                if(VS.score.pointer === 0) {
+                if (VS.score.pointer === 0) {
                     this.back.disable();
                     this.fwd.enable();
-                } else if(VS.score.pointer === (VS.score.getLength() - 1)) {
+                } else if (VS.score.pointer === (VS.score.getLength() - 1)) {
                     this.back.enable();
                     this.fwd.disable();
                 } else {

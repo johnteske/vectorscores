@@ -1,7 +1,6 @@
 ---
 layout: compress-js
 ---
-
 VS.pitchClass = {};
 
 /**

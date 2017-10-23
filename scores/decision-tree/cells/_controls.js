@@ -3,7 +3,7 @@
  */
 VS.score.stopCallback = clearChoices;
 
-VS.score.stepCallback = function () {
+VS.score.stepCallback = function() {
     if (VS.score.pointer === 0) {
         clearChoices();
     } else if (VS.score.pointer < VS.score.getLength() - 1) {

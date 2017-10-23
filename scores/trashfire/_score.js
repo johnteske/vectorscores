@@ -210,7 +210,7 @@ score = score.concat(droneEvents);
 /**
  * Sort score by event time
  */
-score.sort(function (a, b) {
+score.sort(function(a, b) {
   return a.time - b.time;
 });
 

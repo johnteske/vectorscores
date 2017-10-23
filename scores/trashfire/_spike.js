@@ -10,7 +10,7 @@ TrashFire.spike = (function() {
     spike.group.append("path")
         .attr("d", "M-15,0 L15,0 L0,60 Z");
 
-    spike.show = function () {
+    spike.show = function() {
         spike.group
             .attr("transform", "translate(" + x + ","  + 15 + ")")
             .style("opacity", 0)
@@ -18,7 +18,7 @@ TrashFire.spike = (function() {
             .style("opacity", 1);
     };
 
-    spike.hit = function () {
+    spike.hit = function() {
         trash = [];
         updateTrash(300);
 

@@ -1,8 +1,8 @@
-VS.score = (function () {
+VS.score = (function() {
 
     function schedule(time, func, params) {
         // allTimeouts.push( setTimeout(fn, time, params) ); // not <IE9
-        VS.score.allTimeouts.push( setTimeout(function(){ func(params); }, time) ); // IE fix?
+        VS.score.allTimeouts.push( setTimeout(function() { func(params); }, time) ); // IE fix?
     }
 
     function updatePointer(index) {
@@ -29,21 +29,21 @@ VS.score = (function () {
     }
 
     return {
-        add: function(time, func, params){
+        add: function(time, func, params) {
             this.events.push([time, func, params]);
         },
         events: [],
-        getLength: function(){ return this.events.length; },
+        getLength: function() { return this.events.length; },
         playing: false,
         pointer: 0,
         preroll: 0, // 300; // delay before play
         // TODO make private? and/or make single eventAt, returning object: { time: 0, fn: fn, params: []}
-        timeAt: function(i){ return this.events[i][0]; },
-        funcAt: function(i){ return this.events[i][1]; },
-        paramsAt: function(i){ return this.events[i][2]; },
+        timeAt: function(i) { return this.events[i][0]; },
+        funcAt: function(i) { return this.events[i][1]; },
+        paramsAt: function(i) { return this.events[i][2]; },
         allTimeouts: [],
         clearAllTimeouts: function() {
-            this.allTimeouts.forEach(function(t){
+            this.allTimeouts.forEach(function(t) {
                 clearTimeout(t);
             });
         },

@@ -82,7 +82,7 @@ for (var p = 0; p < numParts; p++) {
         var endLastPhrase = 0;
         if (i > 0) {
             var lastIndex = i - 1,
-                lastPhraseDuration = part[lastIndex].durations.reduce(function (a, b) { return a + b; }, 0);
+                lastPhraseDuration = part[lastIndex].durations.reduce(function(a, b) { return a + b; }, 0);
             // TODO last dur is not incuded in sum?
             // var lastDur = part[lastIndex].durations[part[lastIndex].durations.length - 1];
             var lastDur = 0;
@@ -146,7 +146,7 @@ for (var p = 0; p < numParts; p++) {
         } else { // if first bar, force x notehead
             phrase.durations.push(0);
         }
-        if(phrase.timbre === "ghost") {
+        if (phrase.timbre === "ghost") {
             phrase.durations.push(1.1); // to help space startTime, avoiding overlap
         }
 

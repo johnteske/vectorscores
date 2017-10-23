@@ -42,7 +42,7 @@ function makeGlobject() {
 
     newDynamics[0] = VS.getItem(dynamics);
     newDynamics[2] = VS.getItem(dynamics);
-    if(dynamics.indexOf(newDynamics[0]) > dynamics.indexOf(newDynamics[2])) {
+    if (dynamics.indexOf(newDynamics[0]) > dynamics.indexOf(newDynamics[2])) {
         newDynamics[1] = "dim.";
     } else if (dynamics.indexOf(newDynamics[0]) < dynamics.indexOf(newDynamics[2])) {
         newDynamics[1] = "cres.";

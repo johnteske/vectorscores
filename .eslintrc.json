@@ -3,6 +3,7 @@
   "rules": {
     "eqeqeq": "error",
 
+    "block-scoped-var": "error",
     "comma-spacing": [
       "warn",
       {
@@ -13,6 +14,12 @@
     "comma-dangle": [
       "error",
       "never"
+    ],
+    "keyword-spacing": [
+      "error",
+      {
+        "after": true
+      }
     ],
     "linebreak-style": [
       "error",
@@ -25,6 +32,8 @@
     ],
     "semi": "warn",
     "space-infix-ops": "warn",
+    "space-before-blocks": "error",
+    "space-before-function-paren": ["error", "never"],
     "quotes": [
       "warn",
       "double"

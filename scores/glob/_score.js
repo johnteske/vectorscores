@@ -143,7 +143,7 @@ var score = [];
     var time = 0;
     var transpose = 0;
 
-    for(var i = 0; i < bars.length; i++) {
+    for (var i = 0; i < bars.length; i++) {
         var bar = bars[i],
             range = bar.range;
 

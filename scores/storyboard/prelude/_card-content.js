@@ -84,7 +84,7 @@ var chord = (function() {
             marginLeft = 36,
             spacing = (cardWidth - marginLeft) / (args.n + 1);
 
-        function x(idea) {
+        function x(i) {
             return marginLeft + (i * spacing);
         }
 
