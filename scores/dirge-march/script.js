@@ -26,7 +26,7 @@ var width = 480,
             y1: 16,
             y2: 60 + 16,
             dynamics: 60 + 60 + 24
-        },
+        }
     };
 
 // TODO a temporary solution to update rhythms within bars--eventually add specific rhythm selections/option to score
@@ -35,7 +35,11 @@ var width = 480,
 
 var dynamics = VS.dictionary.Bravura.dynamics;
 
-var globjects = {% include_relative _globjects.json %};
+// Wrap in IIFE to aid in linting
+var globjects = (function() {
+    return {% include_relative _globjects.json %};
+}());
+
 {% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
 {% include_relative _score.js %}
@@ -429,7 +433,7 @@ for (var i = 0; i < score.length; i++) {
 /**
  * Initialize score
  */
-d3.select(window).on("load", function () {
+d3.select(window).on("load", function() {
     resize();
     update(0, true);
 });

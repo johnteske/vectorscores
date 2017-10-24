@@ -276,7 +276,7 @@ for (p = 0; p < numParts; p++) {
             var hasNewPitch = hasNewValues("pitch.low") || hasNewValues("pitch.high");
 
             if (thisPhrase.timbre !== "bartok" && thisPhrase.timbre !== "ghost") {
-                if(hasNewValues("timbre")) {
+                if (hasNewValues("timbre")) {
                     thisPartGroup.append("text")
                         .text(thisPhrase.timbre)
                         .attr("class", "timbre")
@@ -312,7 +312,7 @@ for (p = 0; p < numParts; p++) {
                 pitchDisplayClass = "pitch-range-numeric";
             }
 
-            if(hasNewPitch) {
+            if (hasNewPitch) {
                 thisPartGroup.append("text")
                     .text(pitchDisplay)
                     .attr("class", pitchDisplayClass)
@@ -371,7 +371,7 @@ for (p = 0; p < numParts; p++) {
                     });
 
             // dynamics
-            if(durations.length > 1 || hasNewValues("dynamics.0")) {
+            if (durations.length > 1 || hasNewValues("dynamics.0")) {
                 thisPartGroup.selectAll(".dynamics")
                     .data(dynamics)
                     .enter()

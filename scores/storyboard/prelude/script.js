@@ -137,7 +137,7 @@ function makeCard(data, index) {
         .attr("x", function(d) {
             return d.time * cardWidth;
         })
-        .attr("text-anchor", function (d) {
+        .attr("text-anchor", function(d) {
             var anchor = "start";
 
             if (d.time === 0.5) {
@@ -148,7 +148,7 @@ function makeCard(data, index) {
 
             return anchor;
         })
-        .attr("dx", function (d) {
+        .attr("dx", function(d) {
             return d.time === 0 ? "0.125em" : 0;
         })
         .attr("dy", "1em")

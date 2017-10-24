@@ -14,7 +14,7 @@ var main = d3.select(".main"),
     },
     topoData,
     score = {
-        width: 8, // currently used in creation, not display
+        width: 8 // currently used in creation, not display
     },
     walker = {
         index: -1,

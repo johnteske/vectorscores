@@ -1,23 +1,21 @@
 require 'eslintrb/eslinttask'
-# require 'html-proofer'
 require 'json'
 require 'rubocop/rake_task'
 
 task default: %i[test]
-task test: %i[jekyll_build eslint_source eslint_build rubocop]
-task eslint: %i[eslint_source eslint_build]
+task test: %i[jekyll_build eslint rubocop]
+task eslint: %i[eslint_frontmatter_source eslint_source eslint_build]
 
 task :jekyll_build do
   sh 'bundle exec jekyll build'
-  # options = {
-  #     :check_html => true,
-  #     :verbose => true
-  # }
-  # HTMLProofer.check_directory('./_site', options).run
 end
 
-eslint_file = File.read('.eslintrc.json')
-eslint_options = JSON.parse(eslint_file)
+def parse_eslintrc
+  eslint_file = File.read('.eslintrc.json')
+  JSON.parse(eslint_file)
+end
+
+eslint_options = parse_eslintrc
 
 dirs = [
   'js/vectorscores',
@@ -27,19 +25,51 @@ dirs = [
 
 paths = '{' + dirs.join(',') + '}**/*.js'
 
-# Lint source files
-Eslintrb::EslintTask.new :eslint_source do |t|
-  ignored_files = []
+frontmatter_source_files = []
+tmp_frontmatter_source_files = []
 
-  # Exclude .js files with frontmatter
-  source_files = Dir[paths].reject do |file|
-    first_line = File.open(file, &:readline)
+# make a directory for temp files if needed
+FileUtils.mkdir_p('.tmp')
 
-    ignored_files.push(file) if first_line =~ /^---/
+def remove_frontmatter(src, dest)
+  File.open(dest, 'w') do |file|
+    text = File.read(src)
+
+    # comment out front matter
+    text = text.gsub(/(^---\n(.|\n)*---)/, '/*\1*/')
+
+    # comment out liquid tags
+    text = text.gsub(/({%.*%}|{{.*}})/, '/*\1*/')
+
+    file.puts(text)
   end
+end
 
-  puts ignored_files
-  puts "Ignoring #{ignored_files.length} source files containing front matter"
+# Find source files with frontmatter
+Dir[paths].each do |file|
+  first_line = File.open(file, &:readline)
+
+  next unless first_line =~ /^---/
+
+  tmp_path = '.tmp/' + File.path(file)
+  FileUtils.mkdir_p(File.dirname(tmp_path))
+  remove_frontmatter(file, tmp_path)
+
+  frontmatter_source_files.push(file)
+  tmp_frontmatter_source_files.push(tmp_path)
+end
+
+# Lint source files with front matter
+Eslintrb::EslintTask.new :eslint_frontmatter_source do |t|
+  t.pattern = tmp_frontmatter_source_files
+  t.options = eslint_options
+end
+
+# Lint source files, excluding those with front matter
+Eslintrb::EslintTask.new :eslint_source do |t|
+  source_files = Dir[paths].reject do |file|
+    frontmatter_source_files.include?(file)
+  end
 
   t.pattern = source_files
   t.options = eslint_options

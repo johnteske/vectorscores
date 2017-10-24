@@ -59,7 +59,7 @@ update(0, score[0]);
 /**
  * Debug
  */
-if(debug) {
+if (debug) {
     var debugGroup = wrapper.append("g")
         .attr("class", "debug");
 

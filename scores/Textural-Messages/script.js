@@ -111,7 +111,7 @@ d3.select(window).on("resize", resize);
 (function() {
     var lastPos = ""; // TODO make these calculations in score
 
-    for(var i = 0; i < 16; i++) {
+    for (var i = 0; i < 16; i++) {
         lastPos = VS.getWeightedItem([lastPos, lastPos === "left" ? "right" : "left"], [0.2, 0.8]);
         VS.score.add(
             (i * 4000) + (2000 * Math.random()),
