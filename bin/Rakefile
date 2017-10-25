@@ -10,28 +10,28 @@ task :jekyll_build do
   sh 'bundle exec jekyll build'
 end
 
-def parse_eslintrc
+eslint_options = lambda {
   eslint_file = File.read('.eslintrc.json')
   JSON.parse(eslint_file)
-end
+}.call
 
-eslint_options = parse_eslintrc
+js_paths = lambda {
+  dirs = [
+    'js/vectorscores',
+    'js/vs/',
+    'scores/'
+  ]
 
-dirs = [
-  'js/vectorscores',
-  'js/vs/',
-  'scores/'
-]
-
-paths = '{' + dirs.join(',') + '}**/*.js'
+  '{' + dirs.join(',') + '}**/*.js'
+}.call
 
 frontmatter_source_files = []
 tmp_frontmatter_source_files = []
 
-# make a directory for temp files if needed
+# Make a directory for temp files if needed
 FileUtils.mkdir_p('.tmp')
 
-def remove_frontmatter(src, dest)
+def write_tmp_file_wo_liquid(src, dest)
   File.open(dest, 'w') do |file|
     text = File.read(src)
 
@@ -46,20 +46,23 @@ def remove_frontmatter(src, dest)
 end
 
 # Find source files with frontmatter
-Dir[paths].each do |file|
+Dir[js_paths].each do |file|
   first_line = File.open(file, &:readline)
 
   next unless first_line =~ /^---/
 
   tmp_path = '.tmp/' + File.path(file)
+
+  # Make a directory for temp file if needed
   FileUtils.mkdir_p(File.dirname(tmp_path))
-  remove_frontmatter(file, tmp_path)
+
+  write_tmp_file_wo_liquid(file, tmp_path)
 
   frontmatter_source_files.push(file)
   tmp_frontmatter_source_files.push(tmp_path)
 end
 
-# Lint source files with front matter
+# Lint source files with front matter, from .tmp/
 Eslintrb::EslintTask.new :eslint_frontmatter_source do |t|
   t.pattern = tmp_frontmatter_source_files
   t.options = eslint_options
@@ -67,7 +70,7 @@ end
 
 # Lint source files, excluding those with front matter
 Eslintrb::EslintTask.new :eslint_source do |t|
-  source_files = Dir[paths].reject do |file|
+  source_files = Dir[js_paths].reject do |file|
     frontmatter_source_files.include?(file)
   end
 
@@ -77,7 +80,7 @@ end
 
 # Lint built files with no options to catch parsing errors
 Eslintrb::EslintTask.new :eslint_build do |t|
-  t.pattern = '_site/' + paths
+  t.pattern = '_site/' + js_paths
 end
 
 # Lint ruby files
