@@ -4,7 +4,7 @@ require 'rubocop/rake_task'
 
 task default: %i[test]
 task test: %i[jekyll_build eslint rubocop]
-task eslint: %i[eslint_frontmatter_source eslint_source eslint_build]
+task eslint: %i[eslint_info eslint_frontmatter eslint_source eslint_build]
 
 task :jekyll_build do
   sh 'bundle exec jekyll build'
@@ -25,20 +25,26 @@ js_paths = lambda {
   '{' + dirs.join(',') + '}**/*.js'
 }.call
 
-frontmatter_source_files = []
-tmp_frontmatter_source_files = []
+tmp_dir = '.tmp'
+
+source_files = []
+frontmatter_tmp_files = []
 
 # Make a directory for temp files if needed
-FileUtils.mkdir_p('.tmp')
+FileUtils.mkdir_p(tmp_dir)
 
 def write_tmp_file_wo_liquid(src, dest)
+  # Make a directory for temp file if needed
+  FileUtils.mkdir_p(File.dirname(dest))
+
+  # Write a file without frontmatter or liquid
   File.open(dest, 'w') do |file|
     text = File.read(src)
 
-    # comment out front matter
+    # Comment out front matter
     text = text.gsub(/(^---\n(.|\n)*---)/, '/*\1*/')
 
-    # comment out liquid tags
+    # Comment out liquid tags
     text = text.gsub(/({%.*%}|{{.*}})/, '/*\1*/')
 
     file.puts(text)
@@ -49,31 +55,30 @@ end
 Dir[js_paths].each do |file|
   first_line = File.open(file, &:readline)
 
-  next unless first_line =~ /^---/
+  if first_line =~ /^---/
+    tmp_path = tmp_dir + '/' + File.path(file)
 
-  tmp_path = '.tmp/' + File.path(file)
+    write_tmp_file_wo_liquid(file, tmp_path)
 
-  # Make a directory for temp file if needed
-  FileUtils.mkdir_p(File.dirname(tmp_path))
+    frontmatter_tmp_files.push(tmp_path)
+  else
+    source_files.push(file)
+  end
+end
 
-  write_tmp_file_wo_liquid(file, tmp_path)
-
-  frontmatter_source_files.push(file)
-  tmp_frontmatter_source_files.push(tmp_path)
+task :eslint_info do
+  puts "Linting #{source_files.size} .js files without frontmatter"
+  puts "Linting #{frontmatter_tmp_files.size} .js files with frontmatter"
 end
 
 # Lint source files with front matter, from .tmp/
-Eslintrb::EslintTask.new :eslint_frontmatter_source do |t|
-  t.pattern = tmp_frontmatter_source_files
+Eslintrb::EslintTask.new :eslint_frontmatter do |t|
+  t.pattern = frontmatter_tmp_files
   t.options = eslint_options
 end
 
 # Lint source files, excluding those with front matter
 Eslintrb::EslintTask.new :eslint_source do |t|
-  source_files = Dir[js_paths].reject do |file|
-    frontmatter_source_files.include?(file)
-  end
-
   t.pattern = source_files
   t.options = eslint_options
 end
