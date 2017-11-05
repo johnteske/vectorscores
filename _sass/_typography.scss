@@ -19,7 +19,9 @@ body {
     font-family: $head-font-family;
     font-weight: bold;
     font-style: italic;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
+    font-size: 16px;
+    line-height: 1.40625;
 }
 .site-header, .site-footer {
     .vectorscores {
