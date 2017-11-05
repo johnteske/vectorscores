@@ -1,5 +1,3 @@
 Rake.add_rakelib 'bin/tasks'
 
-task default: %i[test]
-task test: %i[jekyll_build eslint rubocop]
-task eslint: %i[eslint:frontmatter eslint:source eslint:built]
+task default: %i[jekyll_build eslint:all rubocop]

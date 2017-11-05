@@ -1,6 +1,6 @@
 require 'eslintrb/eslinttask'
 
-js_paths = lambda {
+def js_glob
   dirs = [
     'js/vectorscores',
     'js/vs/',
@@ -8,12 +8,28 @@ js_paths = lambda {
   ]
 
   '{' + dirs.join(',') + '}**/*.js'
-}.call
+end
 
-tmp_dir = '.tmp'
+def split_file_list_by_frontmatter(glob)
+  source = []
+  frontmatter = []
 
-source_files = []
-frontmatter_tmp_files = []
+  Dir[glob].each do |file|
+    if File.open(file, &:readline) =~ /^---/
+      frontmatter.push(file)
+    else
+      source.push(file)
+    end
+  end
+
+  { source: source, frontmatter: frontmatter }
+end
+
+def write_lintable_frontmatter_files(files)
+  files.each do |file|
+    write_tmp_file_wo_liquid(file, '.tmp/' + file)
+  end
+end
 
 def write_tmp_file_wo_liquid(src, dest)
   # Make a directory for temp file if needed
@@ -33,48 +49,39 @@ def write_tmp_file_wo_liquid(src, dest)
   end
 end
 
-# Find source files with frontmatter
-Dir[js_paths].each do |file|
-  first_line = File.open(file, &:readline)
-
-  if first_line =~ /^---/
-    tmp_path = tmp_dir + '/' + File.path(file)
-
-    write_tmp_file_wo_liquid(file, tmp_path)
-
-    frontmatter_tmp_files.push(tmp_path)
-  else
-    source_files.push(file)
-  end
-end
-
+# TODO: file init and .tmp/ creation run for all tasks
 namespace :eslint do
+  glob = js_glob
+
+  files = split_file_list_by_frontmatter(glob)
+
+  write_lintable_frontmatter_files(files[:frontmatter])
+
   task :info do
-    puts "Linting #{source_files.size} .js files without frontmatter"
-    puts "Linting #{frontmatter_tmp_files.size} .js files with frontmatter"
+    puts "Linting #{files[:source].size} .js source files"
+    puts "Linting #{files[:frontmatter].size} .js source files with frontmatter"
   end
-end
 
-namespace :eslint do
-  desc 'Lint source files with front matter, from .tmp/'
-  Eslintrb::EslintTask.new frontmatter: [:info] do |t|
-    puts @test_paths
-    t.pattern = frontmatter_tmp_files
-    t.options = :eslintrc
-  end
-end
-
-namespace :eslint do
   desc 'Lint source files, excluding those with front matter'
   Eslintrb::EslintTask.new source: [:info] do |t|
-    t.pattern = source_files
+    t.pattern = files[:source]
     t.options = :eslintrc
   end
-end
 
-namespace :eslint do
+  desc 'Lint source files with front matter, from .tmp/'
+  Eslintrb::EslintTask.new frontmatter: [:info] do |t|
+    t.pattern = files[:frontmatter].map { |f| '.tmp/' + f }
+    t.options = :eslintrc
+  end
+
   desc 'Lint built files with no options to catch parsing errors'
   Eslintrb::EslintTask.new built: [:info] do |t|
-    t.pattern = '_site/' + js_paths
+    t.pattern = '_site/' + glob
   end
+
+  task :clean do
+    rm_rf '.tmp'
+  end
+
+  task all: %i[frontmatter source built clean]
 end
