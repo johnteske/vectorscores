@@ -114,7 +114,9 @@ h1 {
 .work-title {
     font-family: $layout-header-font-stack;
     font-style: italic;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
+    font-size: 16px;
+    line-height: 1.40625;
 }
 
 @import "score/footer-controls";
