@@ -13,40 +13,38 @@ module EslintFiles
   end
 
   # Will log all file lists on load, not as each task is being run
-  def self.report(list, string)
+  def self.report(list_name, string)
+    list = EslintFiles.instance_variable_get("@#{list_name}")
     puts "Linting #{list.size} #{string}"
   end
 
-  def self.frontmatter_list
-    files = FileList.new(js_glob) do |fl|
-      fl.exclude do |f|
-        !LiquidJSFiles.contains_frontmatter?(f)
-      end
+  # Get source files with frontmatter
+  frontmatter_source = FileList.new(js_glob) do |fl|
+    fl.exclude do |f|
+      !LiquidJSFiles.contains_frontmatter?(f)
     end
-
-    report(files, 'source .js files with frontmatter')
-
-    # Write and return list of tmp files to lint
-    LiquidJSFiles.write_lintable_files(files)
   end
 
-  def self.source_list
-    files = FileList.new(js_glob) do |fl|
-      fl.exclude do |f|
-        LiquidJSFiles.contains_frontmatter?(f)
-      end
-    end
+  # Write and return list of tmp files to lint
+  @frontmatter = LiquidJSFiles.write_lintable_files(frontmatter_source)
 
-    report(files, 'source .js files')
-
-    files
+  def self.frontmatter
+    @frontmatter
   end
 
-  def self.built_list
-    files = FileList.new('_site/' + js_glob)
+  @source = FileList.new(js_glob) do |fl|
+    fl.exclude do |f|
+      LiquidJSFiles.contains_frontmatter?(f)
+    end
+  end
 
-    report(files, 'built .js files')
+  def self.source
+    @source
+  end
 
-    files
+  @built = FileList.new('_site/' + js_glob)
+
+  def self.built
+    @built
   end
 end
