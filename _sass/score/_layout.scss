@@ -41,7 +41,7 @@ header, footer {
 }
 
 header {
-    padding: $unit;
+    padding: 0;
     top: 0;
 	border-bottom: $layout-border;
 }
@@ -52,18 +52,17 @@ footer {
 	border-top: $layout-border;
 }
 
-h1, #score-info-open {
+h1 {
     margin: 0;
-    padding: 0;
+    padding: $unit;
     display: inline-block;
     box-sizing: border-box;
-}
 
-h1 {
     font-size: $unit * 2;
     line-height: $unit * 2;
     white-space: nowrap;
     max-width: 85%;
+
     @media (max-width: 599px) {
         font-size: $unit;
     }
@@ -74,29 +73,6 @@ h1 {
     font-family: $layout-header-font-stack;
     font-style: italic;
     font-weight: bold;
-}
-
-#score-info-open {
-    float: right;
-    width: $unit * 2;
-    height: $unit * 2;
-    padding: $unit * 0.5;
-    border: 2px solid $score-info-color;
-    border-radius: 100%;
-    cursor: pointer;
-    font-family: $layout-header-font-stack;
-    font-size: $unit;
-    line-height: $unit;
-    text-align: center;
-    color: $score-info-color;
-    background-color: $layout-color-bg;
-    transition: $score-info-trans-time background-color;
-
-    &:hover {
-        color: $layout-color-bg;
-        background-color: $score-info-color;
-        transition: $score-info-trans-time background-color;
-    }
 }
 
 /**
@@ -119,4 +95,4 @@ h1 {
     line-height: 1.40625;
 }
 
-@import "score/footer-controls";
+@import "score/controls";
