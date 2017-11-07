@@ -16,17 +16,6 @@ p {
 	margin: 0;
 }
 
-#score-info-open.highlight {
+.highlight {
 	outline: 1px solid $highlight-color;
-}
-
-#score-footer {
-	button.highlight {
-		outline: 1px solid $highlight-color;
-		// background-color: $highlight-color;
-	}
-	input.highlight {
-		outline: 1px solid $highlight-color;
-		// background-color: $highlight-color;
-	}
 }
