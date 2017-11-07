@@ -1,5 +1,5 @@
 #score-footer {
-    button, input {
+    button, #score-pointer {
         margin: 0;
         padding: 0;
         border: 0;
@@ -9,18 +9,17 @@
         display: inline-block;
         box-sizing: border-box;
 
-        font-size: $unit;
         background: transparent;
+    }
 
+    button {
         &:hover {
             outline: 2px solid $layout-color-light;
         }
         &:active, &:focus {
             outline: 2px solid #ddd;
         }
-    }
 
-    button {
         &:disabled {
             g {
                 stroke: #ddd;
@@ -40,12 +39,17 @@
         }
     }
     #score-pointer {
+        vertical-align: top;
+        font-size: 18px;
+        padding-bottom: 4px;
+
         @media (max-width: $footer-height * 6) {
             display: none;
         }
     }
 }
 input {
+    font-family: $layout-font-stack;
     text-align: center;
 }
 
