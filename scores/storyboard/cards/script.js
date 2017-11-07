@@ -103,7 +103,7 @@ function goToCard(eventIndex, dur) {
     cards.transition()
         .duration(dur)
         .style("opacity", function(d, i) {
-            if(pointer > i ){
+            if (pointer > i ) {
                 return 0;
             }
             else {
@@ -112,7 +112,7 @@ function goToCard(eventIndex, dur) {
         });
 
     // if playing and not skipping, stopping
-    if(typeof eventIndex !== "undefined") { updateCardIndicator(eventIndex); }
+    if (typeof eventIndex !== "undefined") { updateCardIndicator(eventIndex); }
 }
 
 function updateCardIndicator(pointer) {
@@ -132,7 +132,7 @@ function updateCardIndicator(pointer) {
 }
 
 // create score events from card times
-for(var i = 0; i < cardList.length; i++) {
+for (var i = 0; i < cardList.length; i++) {
     VS.score.add(cardList[i].time, goToCard, [i]);
 }
 // and final noop 3 seconds after last card

@@ -4,6 +4,7 @@
 # local development
 _workspace/
 Gemfile.lock
+.tmp
 
 # Jekyll
 _site/
