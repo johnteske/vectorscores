@@ -1,30 +1,29 @@
 ---
-#layout: compress-js
+layout: compress-js
 ---
 
 d3.select("svg").remove();
 
 var message = document.getElementsByClassName("tutorial-message")[0];
 var initialMessage = message.innerHTML;
+
 var header = VS.layout.header;
 var footer = VS.layout.footer;
-var infoButton = document.querySelector("#score-info-open");
-var footerButtons = footer.querySelectorAll("button");
+var scoreButtons = document.querySelectorAll(".score-button");
 var footerInput = footer.querySelector("input");
 
 function clearHighlights() {
     header.className = "show";
     footer.className = "show";
-    infoButton.className = "";
     footerInput.className = "";
-    for (var i = 0; i < footerButtons.length; i++) {
-        footerButtons[i].className = "";
+    for (var i = 0; i < scoreButtons.length; i++) {
+        scoreButtons[i].className = "score-button";
     }
 }
 
 function highlightByID(id) {
     var el = document.getElementById(id);
-    el.className = "highlight";
+    el.className += " highlight";
 }
 
 /**
