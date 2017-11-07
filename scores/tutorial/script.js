@@ -6,8 +6,9 @@ d3.select("svg").remove();
 
 var message = document.getElementsByClassName("tutorial-message")[0];
 var initialMessage = message.innerHTML;
-var header = VS.page.header;
-var footer = VS.page.footer;
+
+var header = VS.layout.header;
+var footer = VS.layout.footer;
 var scoreButtons = document.querySelectorAll(".score-button");
 var footerInput = footer.querySelector("input");
 
