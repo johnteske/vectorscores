@@ -1,6 +1,14 @@
-<li>
-    <span><a href="{{ include.project.url | prepend: site.baseurl }}" class="work-title">{{ include.project.title }}</a>{% if include.project.instrumentation %}, for {{ include.project.instrumentation }}{% endif %}</span>
-    {% if include.project.formats %}
-    <span class="work-formats">[{{ include.project.formats | join: ", " }}]</span>
-    {% endif %}
-</li>
+<tr class="work-list-row">
+    <td>
+        <a href="{{ include.project.url | prepend: site.baseurl }}" class="work-title">{{ include.project.title }}</a>{% if include.project.instrumentation %}, for {{ include.project.instrumentation }}{% endif %}
+    </td>
+    <td class="work-list-duration">
+        {{ include.project.duration }}
+    </td>
+    <td class="work-list-formats">
+        {% if include.project.formats contains 'score' %}score{% endif %}
+    </td>
+    <td class="work-list-formats">
+        {% if include.project.formats contains 'parts' %}parts{% endif %}
+    </td>
+</tr>
