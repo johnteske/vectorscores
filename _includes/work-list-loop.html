@@ -11,6 +11,6 @@
 
 {% for score in scores %}
     {% if score[include.filter_by] == filter_equals or score[include.filter_by] contains filter_contains %}
-    {% include work-list-li.html project=score %}
+    {% include work-list-item.html project=score %}
     {% endif %}
 {% endfor %}
