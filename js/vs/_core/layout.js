@@ -1,8 +1,8 @@
 VS.layout = (function() {
     var layout = {};
 
-    layout.header = document.getElementById("score-header");
-    layout.footer = document.getElementById("score-footer");
+    layout.header = document.getElementById('score-header');
+    layout.footer = document.getElementById('score-footer');
 
     function setClass(c) {
         layout.header.className = c;
@@ -13,17 +13,17 @@ VS.layout = (function() {
     }
 
     layout.show = function() {
-        setClass("show");
+        setClass('show');
     };
 
     layout.hide = function() {
-        setClass("hide");
+        setClass('hide');
     };
 
     function addLayoutInteraction(el) {
-        el.addEventListener("click", layout.show, false);
-        el.addEventListener("mouseover", layout.show, false);
-        el.addEventListener("mouseout", layout.hide, false);
+        el.addEventListener('click', layout.show, false);
+        el.addEventListener('mouseover', layout.show, false);
+        el.addEventListener('mouseout', layout.hide, false);
     }
 
     addLayoutInteraction(layout.header);
@@ -35,4 +35,4 @@ VS.layout = (function() {
     return layout;
 })();
 
-document.getElementsByTagName("main")[0].onclick = VS.layout.hide;
+document.getElementsByTagName('main')[0].onclick = VS.layout.hide;

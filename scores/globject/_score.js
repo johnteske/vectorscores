@@ -6,19 +6,19 @@ function makeGlobject() {
     var globject = {},
         hiRangeGen = randRangeGenerator(),
         loRangeGen = randRangeGenerator(),
-        dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
-        newDynamics = ["", "", ""];
+        dynamics = ['ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff'],
+        newDynamics = ['', '', ''];
 
     globject.width = Math.round(VS.getRandExcl(100, 200));
 
     globject.rangeEnvelope = {
-        type: "midi",
+        type: 'midi',
         hi: hiRangeGen(4, 64, 127),
         lo: loRangeGen(4, 0, 63),
         times: [0, 0.3, 0.5, 1]
     };
 
-    var pcset = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random");
+    var pcset = VS.pitchClass.transpose(VS.getItem(VS.trichords), 'random');
 
     globject.pitches = [
         {
@@ -43,12 +43,12 @@ function makeGlobject() {
     newDynamics[0] = VS.getItem(dynamics);
     newDynamics[2] = VS.getItem(dynamics);
     if (dynamics.indexOf(newDynamics[0]) > dynamics.indexOf(newDynamics[2])) {
-        newDynamics[1] = "dim.";
+        newDynamics[1] = 'dim.';
     } else if (dynamics.indexOf(newDynamics[0]) < dynamics.indexOf(newDynamics[2])) {
-        newDynamics[1] = "cres.";
+        newDynamics[1] = 'cres.';
     } else {
-        newDynamics[1] = "subito " + VS.getItem(dynamics);
-        newDynamics[2] = "";
+        newDynamics[1] = 'subito ' + VS.getItem(dynamics);
+        newDynamics[2] = '';
     }
 
     globject.dynamics = [

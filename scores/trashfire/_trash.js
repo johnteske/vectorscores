@@ -14,7 +14,7 @@ function makePath(selection) {
             slice = (d.size - (margin * 2)) / (nPoints + 1),
             height;
 
-        if (d.type === "blaze") {
+        if (d.type === 'blaze') {
             height = d.size * 0.67;
         } else {
             height = 3;
@@ -24,7 +24,7 @@ function makePath(selection) {
 
         var j;
 
-        if (d.type !== "embers") {
+        if (d.type !== 'embers') {
             for (j = 0; j < nPoints; j++) {
                 d.pathPoints.push([
                     margin + (j * slice),
@@ -41,14 +41,14 @@ function makePath(selection) {
         }
     });
 
-    selection.append("path")
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr("stroke-width", function(d) { return d.type !== "embers" ? 2 : 1; })
-        .style("opacity", function(d) {
-            return d.type === "blaze" || d.type === "scrape" ? 1 : 0.5;
+    selection.append('path')
+        .attr('fill', 'none')
+        .attr('stroke', 'black')
+        .attr('stroke-width', function(d) { return d.type !== 'embers' ? 2 : 1; })
+        .style('opacity', function(d) {
+            return d.type === 'blaze' || d.type === 'scrape' ? 1 : 0.5;
         })
-        .attr("d", function(d) {
+        .attr('d', function(d) {
             return lineGenerator(d.pathPoints);
         });
 }
@@ -71,33 +71,33 @@ function updateTrash(duration) {
             x = (TrashFire.trashOrigin.x - (trashWidthSum * 0.5)) +
                 (sum + (i * offset)),
             y = d.size * -0.5 - 50;
-        return "translate(" + x + "," + y + ")";
+        return 'translate(' + x + ',' + y + ')';
     }
 
-    var trashSelection = trashContainer.selectAll(".trash")
+    var trashSelection = trashContainer.selectAll('.trash')
         .data(trash);
 
     // EXIT
     trashSelection.exit()
         .transition().duration(dur)
-        .attr("transform", function() {
-            return "translate(" + TrashFire.trashOrigin.x + "," + TrashFire.trashOrigin.y + ")";
+        .attr('transform', function() {
+            return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
         })
-        .style("opacity", 0)
+        .style('opacity', 0)
         .remove();
 
     // UPDATE
     trashSelection
         .transition().duration(dur)
-        .attr("transform", trashPosition);
+        .attr('transform', trashPosition);
 
     // ENTER
     trashSelection.enter()
-        .append("g").attr("class", "trash")
-            .attr("transform", function() {
-                return "translate(" + TrashFire.trashOrigin.x + "," + TrashFire.trashOrigin.y + ")";
+        .append('g').attr('class', 'trash')
+            .attr('transform', function() {
+                return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
             })
             .call(makePath)
             .transition().duration(dur)
-            .attr("transform", trashPosition);
+            .attr('transform', trashPosition);
 }

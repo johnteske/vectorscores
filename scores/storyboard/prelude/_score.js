@@ -8,26 +8,26 @@ var cardList = [
     {
         duration: 2,
         cue: 2,
-        type: "bar",
+        type: 'bar',
         dynamics: [
-            { time: 0, value: "ff" }
+            { time: 0, value: 'ff' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: 0,
         content: [
             {
                 type: chord,
-                args: { n: 1, timeSig: "2/4" }
+                args: { n: 1, timeSig: '2/4' }
             }
         ]
     },
     {
         duration: 11,
         cue: 2,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "n" },
-            { time: 0.5, value: "<"}
+            { time: 0, value: 'n' },
+            { time: 0.5, value: '<'}
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: 0,
@@ -41,26 +41,26 @@ var cardList = [
     {
         duration: 3,
         cue: 3,
-        type: "bar",
+        type: 'bar',
         dynamics: [
-            { time: 0, value: "ff" }
+            { time: 0, value: 'ff' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: 0,
         content: [
             {
                 type: chord,
-                args: { n: 2, timeSig: "3/4" }
+                args: { n: 2, timeSig: '3/4' }
             }
         ]
     },
     {
         duration: 16,
         cue: 3,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "n" },
-            { time: 0.5, value: "<" }
+            { time: 0, value: 'n' },
+            { time: 0.5, value: '<' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: 0,
@@ -74,25 +74,25 @@ var cardList = [
     {
         duration: 2,
         cue: 2,
-        type: "bar",
+        type: 'bar',
         dynamics: [
-            { time: 0, value: "ff" }
+            { time: 0, value: 'ff' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: 0,
         content: [
             {
                 type: chord,
-                args: { n: 1, duration: 1.5, timeSig: "2/4" }
+                args: { n: 1, duration: 1.5, timeSig: '2/4' }
             }
         ]
     },
     {
         duration: 23,
         cue: 2,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "mp" }
+            { time: 0, value: 'mp' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: 0,
@@ -109,11 +109,11 @@ var cardList = [
     {
         duration: 25.75,
         cue: 3,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "n" },
-            { time: 0.5, value: "<" },
-            { time: 1, value: "p" }
+            { time: 0, value: 'n' },
+            { time: 0.5, value: '<' },
+            { time: 1, value: 'p' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: transposeInRange(0, 2),
@@ -135,11 +135,11 @@ var cardList = [
     {
         duration: 25.75,
         cue: 1,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "p" },
-            { time: 0.5, value: "<" },
-            { time: 1, value: "mf" }
+            { time: 0, value: 'p' },
+            { time: 0.5, value: '<' },
+            { time: 1, value: 'mf' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: transposeInRange(0, 4),
@@ -161,11 +161,11 @@ var cardList = [
     {
         duration: 25.75,
         cue: 1,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "mf" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "p" }
+            { time: 0, value: 'mf' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'p' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: transposeInRange(0, 4),
@@ -188,11 +188,11 @@ var cardList = [
     {
         duration: 25.75,
         cue: 1,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "p" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "n" }
+            { time: 0, value: 'p' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'n' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: transposeInRange(0, 2),
@@ -218,27 +218,27 @@ var cardList = [
     {
         duration: 3,
         cue: 3,
-        type: "bar",
+        type: 'bar',
         dynamics: [
-            { time: 0, value: "ff" }
+            { time: 0, value: 'ff' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: 0,
         content: [
             {
                 type: chord,
-                args: { n: 2, timeSig: "3/4" }
+                args: { n: 2, timeSig: '3/4' }
             }
         ]
     },
     {
         duration: 56.5,
         cue: 3,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "n" },
-            { time: 0.5, value: "<" },
-            { time: 1, value: "mf" }
+            { time: 0, value: 'n' },
+            { time: 0.5, value: '<' },
+            { time: 1, value: 'mf' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: transposeInRange(0, 3),
@@ -255,11 +255,11 @@ var cardList = [
     {
         duration: 76.5 * (3 / 7),
         cue: 1,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "mf" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "p" }
+            { time: 0, value: 'mf' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'p' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: transposeInRange(0, 6),
@@ -277,11 +277,11 @@ var cardList = [
     {
         duration: 76.5 * (4 / 7),
         cue: 1,
-        type: "card",
+        type: 'card',
         dynamics: [
-            { time: 0, value: "p" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "n" }
+            { time: 0, value: 'p' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'n' }
         ],
         pcSet: [0, 1, 2, 4, 7, 8],
         transpose: transposeInRange(0, 3),
@@ -303,9 +303,9 @@ var cardList = [
     {
         duration: 2,
         cue: 2,
-        type: "bar",
+        type: 'bar',
         dynamics: [
-            { time: 0, value: "ff" }
+            { time: 0, value: 'ff' }
         ],
         pcSet: [0, 1, 4, 6],
         transpose: 0,
@@ -313,19 +313,19 @@ var cardList = [
         content: [
             {
                 type: chord,
-                args: { n: 1, duration: 1.5, timeSig: "2/4" }
+                args: { n: 1, duration: 1.5, timeSig: '2/4' }
             }
         ]
     },
     {
         duration: 180 * (3 / 7),
         cue: 2,
-        type: "card",
-        timbre: "glassy",
+        type: 'card',
+        timbre: 'glassy',
         dynamics: [
-            { time: 0, value: "mp" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "pp" }
+            { time: 0, value: 'mp' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'pp' }
         ],
         pcSet: [0, 1, 4, 6],
         transpose: transposeInRange(0, 3),
@@ -345,12 +345,12 @@ var cardList = [
     {
         duration: 180 * (4 / 7),
         cue: 1,
-        type: "card",
-        timbre: "glassy",
+        type: 'card',
+        timbre: 'glassy',
         dynamics: [
-            { time: 0, value: "pp" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "n" }
+            { time: 0, value: 'pp' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'n' }
         ],
         pcSet: [0, 1, 4, 6],
         transpose: transposeInRange(0, 7),

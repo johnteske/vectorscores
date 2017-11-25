@@ -31,7 +31,7 @@ var params = (function() {
             var keys = params.data[key].keys;
             var weights = params.data[key].weights;
 
-            if (key === "phrase" && filterRest) {
+            if (key === 'phrase' && filterRest) {
                 keys = keys.slice(1);
                 weights = weights.slice(1);
             }
@@ -53,13 +53,13 @@ var params = (function() {
     };
 
     params.getWeights = function() {
-        var weights = "";
+        var weights = '';
 
         for (var i = 0; i < params.keys.length; i++) {
             var key = params.keys[i];
             var data = params.data[key];
 
-            weights += key + ": " + data.weights + "\n";
+            weights += key + ': ' + data.weights + '\n';
         }
 
         return weights;

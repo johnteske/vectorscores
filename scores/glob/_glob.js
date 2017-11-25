@@ -18,9 +18,9 @@ function newPoint(x, y) {
 function Glob(parent, args) {
     args = args || {};
 
-    this.group = parent.append("g")
-        .attr("transform",
-            "translate(" + (canvas.center - 11) + ", " + canvas.center + ")");
+    this.group = parent.append('g')
+        .attr('transform',
+            'translate(' + (canvas.center - 11) + ', ' + canvas.center + ')');
 
     this.size = args.n || 8;
 
@@ -52,39 +52,39 @@ Glob.prototype.move = function(dur, data) {
 
     function transform() {
         var point = newPoint(self.center.x, self.center.y);
-        if (type === "chord") {
+        if (type === 'chord') {
             point.x = 0;
-        } else if (type === "rhythm") {
+        } else if (type === 'rhythm') {
             point.y = 0;
         }
-        return "translate(" + point.x + ", " + point.y + ")";
+        return 'translate(' + point.x + ', ' + point.y + ')';
     }
 
-    var globules = this.group.selectAll(".globule")
+    var globules = this.group.selectAll('.globule')
         .data(data.durations);
 
     // exit
     globules.exit()
         .transition(t)
-        .attr("transform", "translate(" + this.center.x + "," + this.center.y + ")")
-        .style("opacity", 0)
+        .attr('transform', 'translate(' + this.center.x + ',' + this.center.y + ')')
+        .style('opacity', 0)
         .remove();
 
     // update
     globules
         .transition(t)
-        .attr("transform", transform);
+        .attr('transform', transform);
 
     // enter
     globules
-        .enter().append("text")
-        .attr("class", "globule")
+        .enter().append('text')
+        .attr('class', 'globule')
         .text(function(d) {
             return durationDict[d];
         })
-        .attr("transform", "translate(" + oldCenter.x + "," + oldCenter.y + ")")
-        .style("opacity", 0)
+        .attr('transform', 'translate(' + oldCenter.x + ',' + oldCenter.y + ')')
+        .style('opacity', 0)
         .transition(t)
-        .attr("transform", transform)
-        .style("opacity", 1);
+        .attr('transform', transform)
+        .style('opacity', 1);
 };

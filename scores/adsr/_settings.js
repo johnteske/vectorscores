@@ -1,6 +1,6 @@
 var scoreSettings = {};
 
-scoreSettings.parts = document.getElementById("settings-parts");
+scoreSettings.parts = document.getElementById('settings-parts');
 
 scoreSettings.parts.value = numParts;
 
@@ -22,20 +22,20 @@ scoreSettings.parts.value = numParts;
 //     return preroll;
 // })();
 
-scoreSettings.pitchDisplay = "accidentals"; // "integers"
+scoreSettings.pitchDisplay = 'accidentals'; // "integers"
 
 // TODO clean up
 (function() {
-    var showAll = document.getElementById("settings-showall"),
-        checked = showAll.checked = +VS.getQueryString("showall");
+    var showAll = document.getElementById('settings-showall'),
+        checked = showAll.checked = +VS.getQueryString('showall');
 
     scoreSettings.showAll = checked;
 })();
 
-scoreSettings.generate = document.getElementById("settings-generate");
+scoreSettings.generate = document.getElementById('settings-generate');
 
 scoreSettings.generate.onclick = function() {
-    var qs = "?parts=" + scoreSettings.parts.value;
-    qs += "&showall=" + (document.getElementById("settings-showall").checked ? 1 : 0);
+    var qs = '?parts=' + scoreSettings.parts.value;
+    qs += '&showall=' + (document.getElementById('settings-showall').checked ? 1 : 0);
     document.location.href = qs;
 };

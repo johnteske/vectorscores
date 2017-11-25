@@ -10,15 +10,15 @@ VS.pitchClass = {};
  */
 VS.pitchClass.format = (function() {
     var names = [
-        "C", "C#", "D", "D#", "E", "F",
-        "F#", "G", "G#", "A", "A#", "B"
+        'C', 'C#', 'D', 'D#', 'E', 'F',
+        'F#', 'G', 'G#', 'A', 'A#', 'B'
     ];
 
     return function(integer, format) {
-        if (format === "name") {
+        if (format === 'name') {
             return names[integer];
         } else {
-            return integer.toString().replace("10", "T").replace("11", "E");
+            return integer.toString().replace('10', 'T').replace('11', 'E');
         }
     };
 })();
@@ -30,7 +30,7 @@ VS.pitchClass.format = (function() {
  * @returns {Array} array of transposed pitch classes
 */
 VS.pitchClass.transpose = function(pcset, transpose) {
-    if (transpose === "random") {
+    if (transpose === 'random') {
         transpose = Math.floor(Math.random() * 12);
     } else {
         transpose = VS.mod(transpose, 12);

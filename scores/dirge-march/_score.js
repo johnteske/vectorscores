@@ -16,7 +16,7 @@ var score = (function(score) {
      * dirge
      */
     var descending = globjects.filter(function(g) {
-        return g.contour === "descending";
+        return g.contour === 'descending';
     });
 
     // A
@@ -36,13 +36,13 @@ var score = (function(score) {
                 classes: [0, 3]
             }
         ],
-        phraseType: "",
+        phraseType: '',
         dynamics: [
-            { time: 0, value: "pp" },
-            { time: 0.25, value: "<" },
-            { time: 0.5, value: "p" },
-            { time: 0.75, value: ">" },
-            { time: 1, value: "pp" }
+            { time: 0, value: 'pp' },
+            { time: 0.25, value: '<' },
+            { time: 0.5, value: 'p' },
+            { time: 0.75, value: '>' },
+            { time: 1, value: 'pp' }
         ]
     };
     stashedEvent.percussion = {
@@ -57,9 +57,9 @@ var score = (function(score) {
         tempo: 60,
         rhythmRange: [0, 1],
         dynamics: [
-            { time: 0, value: "n" },
-            { time: 0.5, value: "<" },
-            { time: 1, value: "ppp" }
+            { time: 0, value: 'n' },
+            { time: 0.5, value: '<' },
+            { time: 1, value: 'ppp' }
         ]
     };
     score.push(stashedEvent);
@@ -80,13 +80,13 @@ var score = (function(score) {
                 classes: [0, 3, 7]
             }
         ],
-        phraseType: "",
+        phraseType: '',
         dynamics: [
-            { time: 0, value: "p" },
-            { time: 0.25, value: "<" },
-            { time: 0.5, value: "pp" },
-            { time: 0.75, value: ">" },
-            { time: 1, value: "p" }
+            { time: 0, value: 'p' },
+            { time: 0.25, value: '<' },
+            { time: 0.5, value: 'pp' },
+            { time: 0.75, value: '>' },
+            { time: 1, value: 'p' }
         ]
     };
     score.push(stashedEvent);
@@ -98,9 +98,9 @@ var score = (function(score) {
         tempo: 60,
         rhythmRange: [0, 3],
         dynamics: [
-            { time: 0, value: "ppp" },
-            { time: 0.5, value: "<" },
-            { time: 1, value: "p" }
+            { time: 0, value: 'ppp' },
+            { time: 0.5, value: '<' },
+            { time: 1, value: 'p' }
         ]
     };
     score.push(stashedEvent);
@@ -112,9 +112,9 @@ var score = (function(score) {
         tempo: 60,
         rhythmRange: [0, 4],
         dynamics: [
-            { time: 0, value: "p" },
-            { time: 0.5, value: "<" },
-            { time: 1, value: "mf" }
+            { time: 0, value: 'p' },
+            { time: 0.5, value: '<' },
+            { time: 1, value: 'mf' }
         ]
     };
     score.push(stashedEvent);
@@ -131,13 +131,13 @@ var score = (function(score) {
                 classes: [0, 3, 7]
             }
         ],
-        phraseType: "descending",
+        phraseType: 'descending',
         dynamics: [
-            { time: 0, value: "mp" },
-            { time: 0.25, value: "<" },
-            { time: 0.5, value: "mf" },
-            { time: 0.75, value: ">" },
-            { time: 1, value: "pp" }
+            { time: 0, value: 'mp' },
+            { time: 0.25, value: '<' },
+            { time: 0.5, value: 'mf' },
+            { time: 0.75, value: '>' },
+            { time: 1, value: 'pp' }
         ]
     };
     score.push(stashedEvent);
@@ -159,7 +159,7 @@ var score = (function(score) {
         duration: rest,
         globjects: [],
         pitch: [],
-        phraseType: "rest"
+        phraseType: 'rest'
     };
     stashedEvent.percussion = {
         tempo: 0
@@ -170,7 +170,7 @@ var score = (function(score) {
      *
      */
     var ascending = globjects.filter(function(g) {
-        return g.contour === "ascending";
+        return g.contour === 'ascending';
     });
 
     // mm 9
@@ -193,13 +193,13 @@ var score = (function(score) {
                 classes: [5, 9, 0]
             }
         ],
-        phraseType: "ascending",
+        phraseType: 'ascending',
         dynamics: [
-            { time: 0, value: "n" },
-            { time: 0.25, value: "<" },
-            { time: 0.5, value: "p" },
-            { time: 0.75, value: ">" },
-            { time: 1, value: "n" }
+            { time: 0, value: 'n' },
+            { time: 0.25, value: '<' },
+            { time: 0.5, value: 'p' },
+            { time: 0.75, value: '>' },
+            { time: 1, value: 'n' }
         ]
     };
     stashedEvent.percussion = {
@@ -220,9 +220,9 @@ var score = (function(score) {
         tempo: 120,
         rhythmRange: [5, 8],
         dynamics: [
-            { time: 0, value: "mf" },
-            { time: 0.5, value: "<" },
-            { time: 1, value: "f" }
+            { time: 0, value: 'mf' },
+            { time: 0.5, value: '<' },
+            { time: 1, value: 'f' }
         ]
     };
     score.push(stashedEvent);
@@ -245,22 +245,22 @@ var score = (function(score) {
                 classes: [0, 3]
             }
         ],
-        phraseType: "both",
+        phraseType: 'both',
         dynamics: [
-            { time: 0, value: "mf" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "p" }
+            { time: 0, value: 'mf' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'p' }
         ]
     };
     stashedEvent.percussion = {
         tempo: 120,
         rhythmRange: [5, 10],
         dynamics: [
-            { time: 0, value: "f" },
-            { time: 0.25, value: "<" },
-            { time: 0.5, value: "ff" },
-            { time: 0.75, value: ">" },
-            { time: 1, value: "ff" }
+            { time: 0, value: 'f' },
+            { time: 0.25, value: '<' },
+            { time: 0.5, value: 'ff' },
+            { time: 0.75, value: '>' },
+            { time: 1, value: 'ff' }
         ]
     };
     score.push(stashedEvent);
@@ -281,11 +281,11 @@ var score = (function(score) {
                 classes: [0, 3, 7]
             }
         ],
-        phraseType: "both",
+        phraseType: 'both',
         dynamics: [
-            { time: 0, value: "f" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "mp" }
+            { time: 0, value: 'f' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'mp' }
         ]
     };
     score.push(stashedEvent);
@@ -297,9 +297,9 @@ var score = (function(score) {
         tempo: 120,
         rhythmRange: [0, 10],
         dynamics: [
-            { time: 0, value: "f" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "mf" }
+            { time: 0, value: 'f' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'mf' }
         ]
     };
     score.push(stashedEvent);
@@ -320,11 +320,11 @@ var score = (function(score) {
                 classes: [0, 3, 7]
             }
         ],
-        phraseType: "both",
+        phraseType: 'both',
         dynamics: [
-            { time: 0, value: "f" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "mf" }
+            { time: 0, value: 'f' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'mf' }
         ]
     };
     score.push(stashedEvent);
@@ -349,11 +349,11 @@ var score = (function(score) {
                 classes: [0, 3, 7]
             }
         ],
-        phraseType: "both",
+        phraseType: 'both',
         dynamics: [
-            { time: 0, value: "mf" },
-            { time: 0.5, value: ">" },
-            { time: 1, value: "n" }
+            { time: 0, value: 'mf' },
+            { time: 0.5, value: '>' },
+            { time: 1, value: 'n' }
         ]
     };
     stashedEvent.percussion = {
@@ -365,10 +365,10 @@ var score = (function(score) {
     stashedEvent = {};
     stashedEvent.time = 336 + rest;
     stashedEvent.pitched = {
-        duration: "",
+        duration: '',
         globjects: [],
         pitch: [],
-        phraseType: ""
+        phraseType: ''
     };
     stashedEvent.percussion = {
         tempo: 0

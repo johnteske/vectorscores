@@ -36,15 +36,15 @@ if (VS.layout.footer) {
             }
         }
 
-        var play = new ScoreControl("score-play", playPause);
+        var play = new ScoreControl('score-play', playPause);
 
         play.setPlay = function() {
-            d3.select("g#play").classed("hide", 0);
-            d3.select("g#pause").classed("hide", 1);
+            d3.select('g#play').classed('hide', 0);
+            d3.select('g#pause').classed('hide', 1);
         };
         play.setPause = function() {
-            d3.select("g#play").classed("hide", 1);
-            d3.select("g#pause").classed("hide", 0);
+            d3.select('g#play').classed('hide', 1);
+            d3.select('g#pause').classed('hide', 0);
         };
 
         var keydownListener = function(event) {
@@ -55,19 +55,19 @@ if (VS.layout.footer) {
             var keyPressed = event.key || event.keyCode;
 
             switch (keyPressed) {
-            case " ":
+            case ' ':
             case 32:
                 playPause();
                 break;
-            case "ArrowLeft":
+            case 'ArrowLeft':
             case 37:
                 stepPointer(-1);
                 break;
-            case "ArrowRight":
+            case 'ArrowRight':
             case 39:
                 stepPointer(1);
                 break;
-            case "Escape":
+            case 'Escape':
             case 27:
                 stop();
                 break;
@@ -87,10 +87,10 @@ if (VS.layout.footer) {
             stopCallback: VS.noop,
             stepCallback: VS.noop,
             play: play,
-            stop: new ScoreControl("score-stop", stop),
-            fwd: new ScoreControl("score-fwd", function() { stepPointer(1); }),
-            back: new ScoreControl("score-back", function() { stepPointer(-1); }),
-            pointer: new ScoreControl("score-pointer", VS.score.pause),
+            stop: new ScoreControl('score-stop', stop),
+            fwd: new ScoreControl('score-fwd', function() { stepPointer(1); }),
+            back: new ScoreControl('score-back', function() { stepPointer(-1); }),
+            pointer: new ScoreControl('score-pointer', VS.score.pause),
             updateStepButtons: function() {
                 if (VS.score.pointer === 0) {
                     this.back.disable();
@@ -110,5 +110,5 @@ if (VS.layout.footer) {
 
     VS.control.back.disable();
     VS.control.stop.disable();
-    window.addEventListener("keydown", VS.control.keydownListener, true);
+    window.addEventListener('keydown', VS.control.keydownListener, true);
 }

@@ -9,10 +9,10 @@ layout: compress-js
 var score = {
     width: VS.getItem([3, 4, 5]),
     height: VS.getItem([3, 4, 5]),
-    container: d3.select(".main")
-        .attr("width", 640)
-        .attr("height", 640)
-        .append("g")
+    container: d3.select('.main')
+        .attr('width', 640)
+        .attr('height', 640)
+        .append('g')
 };
 score.center = {
     x: score.width * 0.5 - 0.5,

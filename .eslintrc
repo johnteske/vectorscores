@@ -36,7 +36,7 @@
     "space-before-function-paren": ["error", "never"],
     "quotes": [
       "warn",
-      "double"
+      "single"
     ]
   },
   "env": {

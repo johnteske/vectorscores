@@ -9,13 +9,13 @@ VS.cueTriangle = function(parent) {
     var onTime = 50,
         fadeTime = 700;
 
-    cue.selection = parent.append("path")
-        .attr("class", "indicator")
-        .attr("d", "M-6.928,0 L0,2 6.928,0 0,12 Z")
-        .style("stroke", "black")
-        .style("stroke-width", "1")
-        .style("fill", "black")
-        .style("fill-opacity", "0");
+    cue.selection = parent.append('path')
+        .attr('class', 'indicator')
+        .attr('d', 'M-6.928,0 L0,2 6.928,0 0,12 Z')
+        .style('stroke', 'black')
+        .style('stroke-width', '1')
+        .style('fill', 'black')
+        .style('fill-opacity', '0');
 
     // TODO allow custom options: opacities, timing, blink fn (other than fill-opacity?), etc.
     cue.blink = function(onOpacity, offOpacity, endOpacity, times) {
@@ -26,9 +26,9 @@ VS.cueTriangle = function(parent) {
 
         function blinkCycle(selection, delay, isEnd) {
             selection.transition().delay(delay).duration(onTime)
-                .style("fill-opacity", on)
+                .style('fill-opacity', on)
                 .transition().delay(onTime).duration(fadeTime)
-                .style("fill-opacity", isEnd ? end : off);
+                .style('fill-opacity', isEnd ? end : off);
         }
 
         for (var i = 0; i < (n + 1); i++) {
@@ -40,7 +40,7 @@ VS.cueTriangle = function(parent) {
     cue.cancel = function() {
         cue.selection
             .transition()
-            .style("fill-opacity", 0);
+            .style('fill-opacity', 0);
     };
 
     return cue;

@@ -17,9 +17,9 @@ var canvas = {
     },
     scoreLength = 12,
     textoffset = 5,
-    debug = +VS.getQueryString("debug") === 1 || false,
-    svg = d3.select(".main"),
-    wrapper = svg.append("g");
+    debug = +VS.getQueryString('debug') === 1 || false,
+    svg = d3.select('.main'),
+    wrapper = svg.append('g');
 
 transitionTime.long = 20000;
 var globInterval = transitionTime.long;
@@ -60,40 +60,40 @@ update(0, score[0]);
  * Debug
  */
 if (debug) {
-    var debugGroup = wrapper.append("g")
-        .attr("class", "debug");
+    var debugGroup = wrapper.append('g')
+        .attr('class', 'debug');
 
-    debugGroup.append("circle")
-        .attr("r", 12)
-        .attr("cx", canvas.center)
-        .attr("cy", canvas.center);
+    debugGroup.append('circle')
+        .attr('r', 12)
+        .attr('cx', canvas.center)
+        .attr('cy', canvas.center);
 
-    debugGroup.append("circle")
-        .attr("r", 96)
-        .attr("cx", canvas.center)
-        .attr("cy", canvas.center);
+    debugGroup.append('circle')
+        .attr('r', 96)
+        .attr('cx', canvas.center)
+        .attr('cy', canvas.center);
 
-    debugGroup.append("circle")
-        .attr("r", 192)
-        .attr("cx", canvas.center)
-        .attr("cy", canvas.center);
+    debugGroup.append('circle')
+        .attr('r', 192)
+        .attr('cx', canvas.center)
+        .attr('cy', canvas.center);
 
-    debugGroup.append("rect")
-        .attr("r", 12)
-        .attr("width", canvas.width)
-        .attr("height", canvas.height);
+    debugGroup.append('rect')
+        .attr('r', 12)
+        .attr('width', canvas.width)
+        .attr('height', canvas.height);
 }
 
 /**
  * Resize
  */
-d3.select(window).on("resize", resize);
+d3.select(window).on('resize', resize);
 
 function resize() {
-    var main = d3.select("main");
+    var main = d3.select('main');
 
-    var w = parseInt(main.style("width"), 10);
-    var h = parseInt(main.style("height"), 10);
+    var w = parseInt(main.style('width'), 10);
+    var h = parseInt(main.style('height'), 10);
 
     var scaleX = VS.clamp(w / canvas.width, 0.25, 3);
     var scaleY = VS.clamp(h / canvas.height, 0.25, 3);
@@ -103,7 +103,7 @@ function resize() {
     layout.margin.left = (w * 0.5) - (canvas.width * 0.5 * layout.scale);
     layout.margin.top = (h * 0.5) - (canvas.height * 0.5 * layout.scale);
 
-    wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
+    wrapper.attr('transform', 'translate(' + layout.margin.left + ',' + layout.margin.top + ') scale(' + layout.scale + ',' + layout.scale + ')');
 }
 
 resize();

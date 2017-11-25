@@ -16,7 +16,7 @@ var scaleX = 3,
     unitY = 10,
     view = {},
     // 16 parts is an arbitrary max, ideally large ensembles read from parts
-    numParts = clamp(+VS.getQueryString("parts") || 4, 1, 16);
+    numParts = clamp(+VS.getQueryString('parts') || 4, 1, 16);
 
 {% include_relative _settings.js %}
 
@@ -26,12 +26,12 @@ var score = (function() {
     _score.totalDuration = 360; // TODO recommend length based on *total* number in ensemble, i.e. 8 parts = 600 seconds
     _score.scale = 1;
     _score.width = _score.totalDuration * unitX; // total score duration
-    _score.svg = d3.select(".main").attr("width", _score.width);
-    _score.wrapper = _score.svg.append("g")
-        .attr("transform", "scale(" + _score.scale + "," + _score.scale + ")");
-    _score.group = _score.wrapper.append("g");
+    _score.svg = d3.select('.main').attr('width', _score.width);
+    _score.wrapper = _score.svg.append('g')
+        .attr('transform', 'scale(' + _score.scale + ',' + _score.scale + ')');
+    _score.group = _score.wrapper.append('g');
     _score.layout = {
-        group: _score.group.append("g").attr("class", "layout")
+        group: _score.group.append('g').attr('class', 'layout')
     };
     // to help track overall part height
     _score.partLayersY = {
@@ -88,58 +88,58 @@ function decimalRound(number, precision) {
 
 // create barlines
 score.layout.group
-    .append("g")
-    .selectAll("line")
+    .append('g')
+    .selectAll('line')
     .data(score.bars)
     .enter()
-    .append("line")
-        .attr("x1", 0)
-        .attr("y1", score.layoutLayersY.barlines.y1)
-        .attr("x2", 0)
-        .attr("y2", score.layoutLayersY.barlines.y2)
-    .attr("transform", function(d) {
-        return "translate(" + getBarlineX(d) + ", " + 0 + ")";
+    .append('line')
+        .attr('x1', 0)
+        .attr('y1', score.layoutLayersY.barlines.y1)
+        .attr('x2', 0)
+        .attr('y2', score.layoutLayersY.barlines.y2)
+    .attr('transform', function(d) {
+        return 'translate(' + getBarlineX(d) + ', ' + 0 + ')';
     });
 
 // show durations over barlines
 score.layout.group
-    .append("g")
-    .selectAll("text")
+    .append('g')
+    .selectAll('text')
     .data(score.bars)
     .enter()
-    .append("text")
+    .append('text')
         .text(function(d, i) {
             var dur = getBarDuration(i);
             // do not display last bar's duration
-            return i < score.bars.length - 1 ? decimalRound(dur, 1) + "\u2033" : "";
+            return i < score.bars.length - 1 ? decimalRound(dur, 1) + '\u2033' : '';
         })
-        .classed("bar-duration", 1)
-        .attr("transform", function(d) {
-            return "translate(" + getBarlineX(d) + ", " + score.layoutLayersY.barDurations + ")";
+        .classed('bar-duration', 1)
+        .attr('transform', function(d) {
+            return 'translate(' + getBarlineX(d) + ', ' + score.layoutLayersY.barDurations + ')';
         });
 
 // show rehearsal letters
-score.layout.letters = score.layout.group.append("g")
-    .selectAll("g")
+score.layout.letters = score.layout.group.append('g')
+    .selectAll('g')
     .data(score.rehearsalLetters)
     .enter()
-    .append("g")
-    .attr("transform", function(d) {
-        return "translate(" + getBarlineX(score.bars[d.index]) + ", " + score.layoutLayersY.rehearsalLetters + ")";
+    .append('g')
+    .attr('transform', function(d) {
+        return 'translate(' + getBarlineX(score.bars[d.index]) + ', ' + score.layoutLayersY.rehearsalLetters + ')';
     });
 score.layout.letters.each(function() {
     var thisLetter = d3.select(this);
 
-    thisLetter.append("rect")
-        .attr("y", -15)
-        .attr("width", 20)
-        .attr("height", 20);
+    thisLetter.append('rect')
+        .attr('y', -15)
+        .attr('width', 20)
+        .attr('height', 20);
 
-    thisLetter.append("text")
+    thisLetter.append('text')
         .text(function(d) {
             return d.letter;
         })
-        .attr("dx", "0.25em");
+        .attr('dx', '0.25em');
 });
 
 /**
@@ -157,12 +157,12 @@ function cueBlink() {
 (function() {
     var i, len = score.rehearsalLetters[0].index;
     for (i = 0; i <= len; i++) {
-        score.layout.group.append("text")
-            .style("font-family", "Bravura")
-            .style("text-anchor", "middle")
-            .attr("x", getBarlineX(score.bars[i]))
-            .attr("y", -48)
-            .text("\ue890");
+        score.layout.group.append('text')
+            .style('font-family', 'Bravura')
+            .style('text-anchor', 'middle')
+            .attr('x', getBarlineX(score.bars[i]))
+            .attr('y', -48)
+            .text('\ue890');
     }
 })();
 
@@ -183,47 +183,47 @@ function makeGhost() {
         return x1 + (unitX * i * attackScale);
     }
 
-    var ghostGroup = d3.select(this).append("g")
-        .attr("transform", "translate(" + 10 + ", 0)");
+    var ghostGroup = d3.select(this).append('g')
+        .attr('transform', 'translate(' + 10 + ', 0)');
 
     ghostGroup
-        .append("text")
-            .text(dict.art["tie"])
-            .classed("durations", true)
-            .attr("y", score.partLayersY.articulations);
+        .append('text')
+            .text(dict.art['tie'])
+            .classed('durations', true)
+            .attr('y', score.partLayersY.articulations);
     ghostGroup
-        .append("path")
-            .attr("stroke", "black")
-            .attr("fill", "none")
-            .attr("d",
-                "M" + x1 + " " + cy1 +
-                " C " + x1 + " "  + cy2 +
-                " " + x2 + " " + cy2 +
-                " " + x2 + " " + cy1
+        .append('path')
+            .attr('stroke', 'black')
+            .attr('fill', 'none')
+            .attr('d',
+                'M' + x1 + ' ' + cy1 +
+                ' C ' + x1 + ' '  + cy2 +
+                ' ' + x2 + ' ' + cy2 +
+                ' ' + x2 + ' ' + cy1
             );
     ghostGroup
-        .append("line")
-            .attr("class", "ghost-beam")
-            .attr("x1", x1)
-            .attr("y1", 0)
-            .attr("x2", x2)
-            .attr("y2", 0);
+        .append('line')
+            .attr('class', 'ghost-beam')
+            .attr('x1', x1)
+            .attr('y1', 0)
+            .attr('x2', x2)
+            .attr('y2', 0);
     ghostGroup
-        .append("text")
-            .text(dict.dyn[">"])
-            .attr("class", "dynamics")
-            .attr("x", x1)
-            .attr("y", score.partLayersY.dynamics);
+        .append('text')
+            .text(dict.dyn['>'])
+            .attr('class', 'dynamics')
+            .attr('x', x1)
+            .attr('y', score.partLayersY.dynamics);
 
-    ghostGroup.selectAll(".ghost-attack")
+    ghostGroup.selectAll('.ghost-attack')
         .data(d3.range(attackNum))
         .enter()
-        .append("line")
-            .attr("class", "ghost-attack")
-            .attr("x1", ghostAttackSpacing)
-            .attr("y1", 0)
-            .attr("x2", ghostAttackSpacing)
-            .attr("y2", unitY);
+        .append('line')
+            .attr('class', 'ghost-attack')
+            .attr('x1', ghostAttackSpacing)
+            .attr('y1', 0)
+            .attr('x2', ghostAttackSpacing)
+            .attr('y2', unitY);
 }
 
 /**
@@ -233,17 +233,17 @@ for (p = 0; p < numParts; p++) {
     var thisPart = parts[p],
         partYPos = score.layoutHeight + (p * score.partHeight);
 
-    var partGroup = score.group.append("g")
-        .attr("transform", "translate(0, " + partYPos + ")");
+    var partGroup = score.group.append('g')
+        .attr('transform', 'translate(0, ' + partYPos + ')');
 
     // for each phrase, create a group around a barline
-    partGroup.selectAll("g")
+    partGroup.selectAll('g')
         .data(score.bars)
         .enter()
-        .append("g")
-        .attr("transform", function(d, i) {
+        .append('g')
+        .attr('transform', function(d, i) {
             var x = thisPart[i].startTime * unitX;
-            return "translate(" + x + ", " + 0 + ")";
+            return 'translate(' + x + ', ' + 0 + ')';
         })
         // add phrase content
         .each(function(d, i) {
@@ -261,7 +261,7 @@ for (p = 0; p < numParts; p++) {
             }
 
             function getNestedProp(prop, obj) {
-                return prop.split(".").reduce(function(prev, curr) {
+                return prop.split('.').reduce(function(prev, curr) {
                     return prev[curr];
                 }, obj || this );
             }
@@ -273,116 +273,116 @@ for (p = 0; p < numParts; p++) {
                 return showValues || getNestedProp(prop, thisPhrase) !== getNestedProp(prop, prevPhrase);
             }
 
-            var hasNewPitch = hasNewValues("pitch.low") || hasNewValues("pitch.high");
+            var hasNewPitch = hasNewValues('pitch.low') || hasNewValues('pitch.high');
 
-            if (thisPhrase.timbre !== "bartok" && thisPhrase.timbre !== "ghost") {
-                if (hasNewValues("timbre")) {
-                    thisPartGroup.append("text")
+            if (thisPhrase.timbre !== 'bartok' && thisPhrase.timbre !== 'ghost') {
+                if (hasNewValues('timbre')) {
+                    thisPartGroup.append('text')
                         .text(thisPhrase.timbre)
-                        .attr("class", "timbre")
+                        .attr('class', 'timbre')
                         // stack if both pitch and timbre, otherwise save vertical space
-                        .attr("y", hasNewPitch ? layersY.timbre : layersY.pitch + 3);
+                        .attr('y', hasNewPitch ? layersY.timbre : layersY.pitch + 3);
                 }
-            } else if (thisPhrase.timbre === "bartok") {
-                thisPartGroup.append("text")
-                    .text(dict.art["bartok"])
-                    .attr("class", "bartok")
-                    .attr("y", layersY.timbre);
+            } else if (thisPhrase.timbre === 'bartok') {
+                thisPartGroup.append('text')
+                    .text(dict.art['bartok'])
+                    .attr('class', 'bartok')
+                    .attr('y', layersY.timbre);
             }
 
             var pitchDisplay, pitchDisplayClass;
-            if (scoreSettings.pitchDisplay === "accidentals") {
+            if (scoreSettings.pitchDisplay === 'accidentals') {
                 pitchDisplay = function() {
                     var lo = thisPhrase.pitch.low,
                         hi = thisPhrase.pitch.high;
-                    return "\uec82 " + dict.acc[lo] + ( (lo !== hi) ? ("\u2009,\u2002" + dict.acc[hi]) : "" ) + " \uec83"; // tenuto as endash
+                    return '\uec82 ' + dict.acc[lo] + ( (lo !== hi) ? ('\u2009,\u2002' + dict.acc[hi]) : '' ) + ' \uec83'; // tenuto as endash
                 };
-                pitchDisplayClass = "pitch-range";
+                pitchDisplayClass = 'pitch-range';
             } else {
                 pitchDisplay = function() {
                     var lo = thisPhrase.pitch.low,
                         hi = thisPhrase.pitch.high,
                         range = lo;
                     if (lo !== hi) {
-                        range += ", ";
-                        range += (hi === 0) ? hi : "+" + hi;
+                        range += ', ';
+                        range += (hi === 0) ? hi : '+' + hi;
                     }
-                    return "[" + range + "]";
+                    return '[' + range + ']';
                 };
-                pitchDisplayClass = "pitch-range-numeric";
+                pitchDisplayClass = 'pitch-range-numeric';
             }
 
             if (hasNewPitch) {
-                thisPartGroup.append("text")
+                thisPartGroup.append('text')
                     .text(pitchDisplay)
-                    .attr("class", pitchDisplayClass)
-                    .attr("y", layersY.pitch);
+                    .attr('class', pitchDisplayClass)
+                    .attr('y', layersY.pitch);
             }
 
-            thisPartGroup.selectAll(".durations")
+            thisPartGroup.selectAll('.durations')
                 .data(durations)
                 .enter()
-                .append("text")
+                .append('text')
                     .text(function(d) {
                         if (!d) {
-                            return dict.art["x"]; // x notehead is an articulation, not a duration
+                            return dict.art['x']; // x notehead is an articulation, not a duration
                         } else if (d === 1.1) {
-                            return "";
+                            return '';
                         } else {
                             return dict.dur[d];
                         }
                     })
-                    .attr("class", "durations")
-                    .attr("y", layersY.durations)
+                    .attr('class', 'durations')
+                    .attr('y', layersY.durations)
                     .call(phraseSpacing);
             // save this, could be an interesting setting to toggle
             // also, modify box height by pitch range
-            // thisPartGroup.selectAll(".durations-rect")
+            // thisPartGroup.selectAll('.durations-rect')
             //     .data(durations)
             //     .enter()
-            //     .append("rect")
-            //         .attr("rx", 1)
+            //     .append('rect')
+            //         .attr('rx', 1)
             //         .call(phraseSpacing)
-            //         .attr("class", "durations-rect")
-            //         .attr("y", 0)
-            //         .attr("width", function(d) { return d * unitX; })
-            //         .attr("height", unitY)
-            //         .attr("fill", "#eee")
-            //         .attr("fill-opacity", 0.5);
+            //         .attr('class', 'durations-rect')
+            //         .attr('y', 0)
+            //         .attr('width', function(d) { return d * unitX; })
+            //         .attr('height', unitY)
+            //         .attr('fill', '#eee')
+            //         .attr('fill-opacity', 0.5);
 
-            if (thisPhrase.timbre === "ghost") {
+            if (thisPhrase.timbre === 'ghost') {
                 makeGhost.call(this);
             }
 
             // articulations
-            thisPartGroup.selectAll(".articulations")
+            thisPartGroup.selectAll('.articulations')
                 .data(articulations)
                 .enter()
-                .append("text")
+                .append('text')
                     .text(function(d) { return dict.art[d]; })
-                    .classed("articulations", true)
-                    .attr("y", layersY.articulations)
+                    .classed('articulations', true)
+                    .attr('y', layersY.articulations)
                     .call(phraseSpacing)
-                    .attr("dx", function(d) {
-                        return d === "l.v." ? 12 : 0;
+                    .attr('dx', function(d) {
+                        return d === 'l.v.' ? 12 : 0;
                     })
-                    .attr("dy", function(d) {
-                        return d === "l.v." ? unitY * -0.5 : 0;
+                    .attr('dy', function(d) {
+                        return d === 'l.v.' ? unitY * -0.5 : 0;
                     });
 
             // dynamics
-            if (durations.length > 1 || hasNewValues("dynamics.0")) {
-                thisPartGroup.selectAll(".dynamics")
+            if (durations.length > 1 || hasNewValues('dynamics.0')) {
+                thisPartGroup.selectAll('.dynamics')
                     .data(dynamics)
                     .enter()
-                    .append("text")
+                    .append('text')
                         .text(function(d) {
-                            return d === "dim." ? "dim." : dict.dyn[d];
+                            return d === 'dim.' ? 'dim.' : dict.dyn[d];
                         })
-                        .attr("class", function(d) {
-                            return d === "dim." ? "timbre" : "dynamics";
+                        .attr('class', function(d) {
+                            return d === 'dim.' ? 'timbre' : 'dynamics';
                         })
-                        .attr("y", layersY.dynamics)
+                        .attr('y', layersY.dynamics)
                         .call(phraseSpacing);
             }
         }); // .each()
@@ -403,11 +403,11 @@ function scrollScore(index, dur, goToNextBar) {
         .transition()
         .ease(d3.easeLinear)
         .duration(dur)
-        .attr("transform",
-            "translate(" + (view.center - getBarlineX(targetBar)) + "," + view.scoreY + ")"
+        .attr('transform',
+            'translate(' + (view.center - getBarlineX(targetBar)) + ',' + view.scoreY + ')'
         )
         // fade if playing last bar
-        .style("opacity", playLastBar ? 0 : 1);
+        .style('opacity', playLastBar ? 0 : 1);
 }
 
 /**
@@ -451,28 +451,28 @@ VS.score.stepCallback = scrollCallback;
 function resize() {
     // TODO pause score if playing
     // TODO fix hard-coded Y spacing values
-    view.width = parseInt(d3.select("main").style("width"), 10);
-    view.height = parseInt(d3.select("main").style("height"), 10);
+    view.width = parseInt(d3.select('main').style('width'), 10);
+    view.height = parseInt(d3.select('main').style('height'), 10);
     score.scale = clamp(view.height / ((score.partHeight * numParts) + (14 * unitY)), 0.1, 2);
 
-    score.svg.attr("height", view.height);
-    score.wrapper.attr("transform", "scale(" + score.scale + "," + score.scale + ")");
+    score.svg.attr('height', view.height);
+    score.wrapper.attr('transform', 'scale(' + score.scale + ',' + score.scale + ')');
 
     view.center = (view.width / score.scale) * 0.5;
     view.scoreY = ((view.height / score.scale) * 0.5) - ((score.height - (4 * unitY)) * 0.5);
 
     cueIndicator.selection
-        .attr("transform", "translate(" +
-           view.center + "," +
-           (view.scoreY - (6 * unitY)) + ")");
-        // .style("opacity", 0.5);
+        .attr('transform', 'translate(' +
+           view.center + ',' +
+           (view.scoreY - (6 * unitY)) + ')');
+        // .style('opacity', 0.5);
 
     scrollScore(VS.score.pointer, [0]);
 }
 
 resize();
 
-d3.select(window).on("resize", resize);
+d3.select(window).on('resize', resize);
 
 VS.WebSocket.stepCallback = scrollCallback;
 VS.WebSocket.connect();

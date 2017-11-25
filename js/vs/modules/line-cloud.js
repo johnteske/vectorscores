@@ -6,7 +6,7 @@ VS.lineCloud = function() {
         h = VS.constant(127),
         dur = VS.constant(1),
         phrase = VS.constant([{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }]),
-        transposition = VS.constant("random"),
+        transposition = VS.constant('random'),
         curve = d3.curveLinear;
 
     // TODO how to handle last duration?
@@ -59,7 +59,7 @@ VS.lineCloud = function() {
 
         var data = [];
 
-        var transposeFn = transposition() === "octave" ? octaveY : randomY;
+        var transposeFn = transposition() === 'octave' ? octaveY : randomY;
 
         for (var i = 0; i < n; i++) {
             // NOTE pos is currently used to ensure x values are evenly distributed in card
@@ -75,36 +75,36 @@ VS.lineCloud = function() {
             })
             .curve(curve);
 
-        selection.selectAll(".line-cloud-path")
+        selection.selectAll('.line-cloud-path')
             .data(data)
             .enter()
-            .append("path")
-                .attr("class", "line-cloud-path")
-                .attr("d", line);
+            .append('path')
+                .attr('class', 'line-cloud-path')
+                .attr('d', line);
     }
 
     lineCloud.width = function(_) {
-        return arguments.length ? (w = typeof _ === "function" ? _ : VS.constant(+_), lineCloud) : w;
+        return arguments.length ? (w = typeof _ === 'function' ? _ : VS.constant(+_), lineCloud) : w;
     };
 
     lineCloud.height = function(_) {
-        return arguments.length ? (h = typeof _ === "function" ? _ : VS.constant(+_), lineCloud) : h;
+        return arguments.length ? (h = typeof _ === 'function' ? _ : VS.constant(+_), lineCloud) : h;
     };
 
     lineCloud.duration = function(_) {
-        return arguments.length ? (dur = typeof _ === "function" ? _ : VS.constant(+_), lineCloud) : dur;
+        return arguments.length ? (dur = typeof _ === 'function' ? _ : VS.constant(+_), lineCloud) : dur;
     };
 
     lineCloud.phrase = function(_) {
-        return arguments.length ? (phrase = typeof _ === "function" ? _ : VS.constant(_), lineCloud) : phrase;
+        return arguments.length ? (phrase = typeof _ === 'function' ? _ : VS.constant(_), lineCloud) : phrase;
     };
 
     lineCloud.transposition = function(_) {
-        return arguments.length ? (transposition = typeof _ === "function" ? _ : VS.constant(_), lineCloud) : transposition;
+        return arguments.length ? (transposition = typeof _ === 'function' ? _ : VS.constant(_), lineCloud) : transposition;
     };
 
     lineCloud.curve = function(_) {
-        return arguments.length ? (curve = typeof _ === "function" ? _ : curve, lineCloud) : curve;
+        return arguments.length ? (curve = typeof _ === 'function' ? _ : curve, lineCloud) : curve;
     };
 
     return lineCloud;

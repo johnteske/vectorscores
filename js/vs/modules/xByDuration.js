@@ -12,7 +12,7 @@ layout: compress-js
 VS.xByDuration = function(selection, durations, spacingUnit) {
     var unit = spacingUnit || 10;
 
-    selection.attr("x", function(d, i) {
+    selection.attr('x', function(d, i) {
         var upToI = durations.slice(0, i),
             sum = upToI.reduce(function(a, b) {
                 return a + b;
