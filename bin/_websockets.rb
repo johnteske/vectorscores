@@ -28,20 +28,13 @@ module WebSocketClients
     @clients.delete ws
   end
 
-  # Generate a unique id, referred to as the cid
-  # TODO: returns a random (not truly unique) id,
-  # which creates a very low chance of having duplicate ids
-  def self.generate_id
-    rand(36**8).to_s(36)
-  end
-
   def self.send_each(msg)
     @clients.each do |socket|
       socket.send msg
     end
   end
 
-  def self.send_n_connections(cid = nil)
+  def self.send_n_connections(cid)
     puts "#{@clients.length} connections open"
 
     msg = [cid, 'ws', 'n', @clients.length].to_json
@@ -53,25 +46,28 @@ end
 EM.run do
   EM::WebSocket.start(host: '0.0.0.0', port: '4001') do |ws|
     ws.onopen do |handshake|
-      cid = WebSocketClients.generate_id
+      cid = ws.object_id
+
+      ws.send [cid, 'ws', 'connected'].to_json
       puts "WebSocket connection opened: #{cid} connected to #{handshake.path}."
 
       WebSocketClients.add(ws)
-
-      ws.send [cid, 'ws', 'connected'].to_json
-
       WebSocketClients.send_n_connections(cid)
     end
 
     ws.onclose do
-      puts 'WebSocket connection closed.'
-      ws.send ['', 'ws', 'closed'].to_json
+      cid = ws.object_id
+
+      ws.send [cid, 'ws', 'closed'].to_json
+      puts "WebSocket connection closed: #{cid}"
+
       WebSocketClients.remove(ws)
-      WebSocketClients.send_n_connections
+      WebSocketClients.send_n_connections(cid)
     end
 
     ws.onmessage do |msg|
       puts "Received: #{msg}"
+
       WebSocketClients.send_each(msg)
     end
   end
