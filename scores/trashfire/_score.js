@@ -37,7 +37,7 @@ function fireCycle() {
             fn: addTrash,
             args: [
                 1,
-                (i > 2) ? "blaze" : "crackle",
+                (i > 2) ? 'blaze' : 'crackle',
                 [25, 25 + (i * (50 / nFires))]
             ]
         });
@@ -63,22 +63,22 @@ function fireCycle() {
     }
     // TODO reduce trash to last 3 items if no spike?
 
-    var tail = VS.getItem(["resume", "embers", "multi", ""]);
+    var tail = VS.getItem(['resume', 'embers', 'multi', '']);
     var nTail = 0;
     switch (tail) {
         // come back stronger
-        case "resume":
+        case 'resume':
             // add
             cycle.push({
                 time: time,
                 fn: addTrash,
-                args: [1, "blaze", [25, 75]]
+                args: [1, 'blaze', [25, 75]]
             });
             time += 7000;
 
             break;
         // embers, 1-3
-        case "embers":
+        case 'embers':
             nTail = VS.getItem([1, 2, 3]);
 
             // grow
@@ -86,7 +86,7 @@ function fireCycle() {
                 cycle.push({
                     time: time,
                     fn: addTrash,
-                    args: [1, "embers", [25, 75]]
+                    args: [1, 'embers', [25, 75]]
                 });
                 time += ((7 - i) * 1000); // duration: 7-5 seconds
             }
@@ -103,14 +103,14 @@ function fireCycle() {
 
             break;
         // multiple small fires, 1-3
-        case "multi":
+        case 'multi':
             nTail = VS.getItem([1, 2, 3]);
 
             // add all
             cycle.push({
                 time: time,
                 fn: addTrash,
-                args: [nTail, "crackle", [25, 75]]
+                args: [nTail, 'crackle', [25, 75]]
             });
             time += 7000;
 

@@ -5,119 +5,119 @@ var score = [];
         // <
         {
             duration: 3000,
-            types: ["glob"],
+            types: ['glob'],
             range: [0, 0],
-            dynamics: "n",
+            dynamics: 'n',
             pitch: { set: [] }
         },
         // A
         {
-            types: ["glob"],
+            types: ['glob'],
             range: [1, 4],
-            dynamics: "pp",
+            dynamics: 'pp',
             pitch: { set: [0, 1, 2] }
         },
         {
-            types: ["glob"],
+            types: ['glob'],
             range: [1, 4],
-            dynamics: "p",
+            dynamics: 'p',
             pitch: { set: [0, 1, 4] }
         },
         // B
         {
-            types: ["glob", "chord"],
+            types: ['glob', 'chord'],
             range: [3, 7],
-            dynamics: "mf",
+            dynamics: 'mf',
             pitch: { set: [0, 1, 6] }
         },
         {
-            types: ["glob", "chord"],
+            types: ['glob', 'chord'],
             range: [3, 7],
-            dynamics: "mf",
+            dynamics: 'mf',
             pitch: { set: [0, 2, 6] }
         },
         {
-            types: ["glob", "chord"],
+            types: ['glob', 'chord'],
             range: [3, 7],
-            dynamics: "mf",
+            dynamics: 'mf',
             pitch: { set: [0, 1, 3] }
         },
         // C
         {
-            types: ["glob"],
+            types: ['glob'],
             range: [3, 13],
-            dynamics: "mp",
+            dynamics: 'mp',
             pitch: { set: [0, 1, 4] }
         },
         {
-            types: ["rhythm"],
+            types: ['rhythm'],
             range: [3, 13],
-            dynamics: "p",
+            dynamics: 'p',
             pitch: { set: [0, 2, 5] }
         },
         {
-            types: ["glob", "rhythm"],
+            types: ['glob', 'rhythm'],
             range: [3, 13],
-            dynamics: "mp",
+            dynamics: 'mp',
             pitch: { set: [0, 1, 5] }
         },
         // D
         {
-            types: ["glob"],
+            types: ['glob'],
             range: [12, 19],
-            dynamics: "mf",
+            dynamics: 'mf',
             pitch: { set: [0, 1, 3] }
         },
         {
-            types: ["glob"],
+            types: ['glob'],
             range: [12, 25],
-            dynamics: "ff",
+            dynamics: 'ff',
             pitch: { set: [0, 1, 4, 6] }
         },
         {
-            types: ["glob"],
+            types: ['glob'],
             range: [12, 25],
-            dynamics: "f",
+            dynamics: 'f',
             pitch: { set: [0, 1, 4] }
         },
         // E
         {
-            types: ["glob", "chord", "rhythm"],
+            types: ['glob', 'chord', 'rhythm'],
             range: [12, 25],
-            dynamics: "mf",
+            dynamics: 'mf',
             pitch: { set: [0, 2, 6] }
         },
         {
-            types: ["glob", "chord", "rhythm"],
+            types: ['glob', 'chord', 'rhythm'],
             range: [12, 25],
-            dynamics: "mp",
+            dynamics: 'mp',
             pitch: { set: [0, 1, 6] }
         },
         {
-            types: ["glob", "chord", "rhythm"],
+            types: ['glob', 'chord', 'rhythm'],
             range: [12, 25],
-            dynamics: "p",
+            dynamics: 'p',
             pitch: { set: [0, 2, 5] }
         },
         // F
         {
-            types: ["glob", "chord"],
+            types: ['glob', 'chord'],
             range: [1, 25],
-            dynamics: "pp",
+            dynamics: 'pp',
             pitch: { set: [0, 1, 5] }
         },
         {
-            types: ["glob", "rhythm"],
+            types: ['glob', 'rhythm'],
             range: [1, 4],
-            dynamics: "ppp",
+            dynamics: 'ppp',
             pitch: { set: [0, 1, 3] }
         },
         // >
         {
             duration: 3000,
-            types: ["glob"],
+            types: ['glob'],
             range: [0, 0],
-            dynamics: "n",
+            dynamics: 'n',
             pitch: { set: [] }
         }
     ];

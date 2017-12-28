@@ -46,16 +46,16 @@ score.bars = [0, 6.3858708756625, 10.33255612459, 16.718427000252, 27.0509831248
 score.structure = [0, 0.14586594177599999, 0.236029032, 0.381924, 0.618, 0.763970968, 1 ];
 
 score.rehearsalLetters = [
-    {letter: "A", index : 6},
-    {letter: "B", index : 12},
-    {letter: "C", index : 18},
-    {letter: "D", index : 24},
-    {letter: "E", index : 27}
+    {letter: 'A', index : 6},
+    {letter: 'B', index : 12},
+    {letter: 'C', index : 18},
+    {letter: 'D', index : 24},
+    {letter: 'E', index : 27}
 ];
 
 var durations = [0.2, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6, 8];
-var timbres = ["bartok", "(pizz.)", "ghost", "rolling (pizz.)", "rolling, glassy", "glassy", "flutter", "vib.", "ord.", "l.v."];
-var dynamics = ["f", "mf", "mp", "p", "pp", "pp", "p", "mp", "mf", "f", "ff"];
+var timbres = ['bartok', '(pizz.)', 'ghost', 'rolling (pizz.)', 'rolling, glassy', 'glassy', 'flutter', 'vib.', 'ord.', 'l.v.'];
+var dynamics = ['f', 'mf', 'mp', 'p', 'pp', 'pp', 'p', 'mp', 'mf', 'f', 'ff'];
 
 var envelopes = {
     phraseLength: [1, 1, 2, 3, 4, 1, 1],
@@ -146,7 +146,7 @@ for (var p = 0; p < numParts; p++) {
         } else { // if first bar, force x notehead
             phrase.durations.push(0);
         }
-        if (phrase.timbre === "ghost") {
+        if (phrase.timbre === 'ghost') {
             phrase.durations.push(1.1); // to help space startTime, avoiding overlap
         }
 
@@ -154,17 +154,17 @@ for (var p = 0; p < numParts; p++) {
         phrase.dynamics = [];
         phrase.dynamics[0] = dynamics[timbreIndex];
         if (i === lastBar) {
-            phrase.dynamics[0] = "ff";
+            phrase.dynamics[0] = 'ff';
         }
 
-        if (phrase.durations.length > 1 && phrase.timbre !== "ghost") {
-            phrase.dynamics[1] = (phrase.durations[0] < 1) ? ">" : "dim.";
+        if (phrase.durations.length > 1 && phrase.timbre !== 'ghost') {
+            phrase.dynamics[1] = (phrase.durations[0] < 1) ? '>' : 'dim.';
         }
 
         phrase.articulations = []; // [">", /*dim.*/, "-", "l.v."]
-        if (phraseLength > 1 && phrase.durations[0] > 0.75) { phrase.articulations[0] = ">"; }
-        if (phraseLength > 2 && phrase.durations[2] < 4) { phrase.articulations[2] = "-"; }
-        if (phrase.timbre === "l.v.") { phrase.articulations[phrase.durations.length - 1] = "l.v."; }
+        if (phraseLength > 1 && phrase.durations[0] > 0.75) { phrase.articulations[0] = '>'; }
+        if (phraseLength > 2 && phrase.durations[2] < 4) { phrase.articulations[2] = '-'; }
+        if (phrase.timbre === 'l.v.') { phrase.articulations[phrase.durations.length - 1] = 'l.v.'; }
 
         part.push(phrase);
     }

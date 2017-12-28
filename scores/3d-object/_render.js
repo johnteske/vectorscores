@@ -12,7 +12,7 @@ function makePoint(array) {
 
 function render() {
     // remove existing elements, if any
-    score.container.selectAll(".rendered").remove();
+    score.container.selectAll('.rendered').remove();
 
     var c = makePoint([0, 0, 5]); // 3D point representing the camera
     var theta = makePoint([0, 0, 0]); // orientation of the camera (Tait–Bryan angles)
@@ -70,14 +70,14 @@ function render() {
             y: (d.y / d.z) * rz
         };
 
-        score.container.append("circle")
-            .classed("rendered", 1)
-            .attr("r", 1)
-            .style("stroke", "none")
-            .style("fill", "black")
-            .attr("cx", b.x)
-            .attr("cy", b.y);
+        score.container.append('circle')
+            .classed('rendered', 1)
+            .attr('r', 1)
+            .style('stroke', 'none')
+            .style('fill', 'black')
+            .attr('cx', b.x)
+            .attr('cy', b.y);
     }
 
-    score.container.attr("transform", "translate (150, 90)"); // TODO for testing
+    score.container.attr('transform', 'translate (150, 90)'); // TODO for testing
 }

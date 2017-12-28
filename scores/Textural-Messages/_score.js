@@ -15,8 +15,8 @@ function stepRangeGen(length, min, max, disp) {
 
 function makeGlobject() {
     var globject = {},
-        dynamics = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"],
-        globjectType = VS.getWeightedItem(["globject", "cluster"], [3, 1]);
+        dynamics = ['ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff'],
+        globjectType = VS.getWeightedItem(['globject', 'cluster'], [3, 1]);
 
     var rangeFilter = VS.getRandExcl(0.67, 1);
     var rangeTimes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
@@ -27,7 +27,7 @@ function makeGlobject() {
 
     var hiRange,
         loRange;
-    if (globjectType === "globject") {
+    if (globjectType === 'globject') {
         hiRange = stepRangeGen(rangeTimes.length, 85, 127, 10);
         loRange = stepRangeGen(rangeTimes.length, 0, 42, 10);
     } else {
@@ -35,21 +35,21 @@ function makeGlobject() {
         loRange = stepRangeGen(rangeTimes.length, 37, 42, 1);
     }
     globject.rangeEnvelope = {
-        type: "midi",
+        type: 'midi',
         hi: hiRange,
         lo: loRange,
         times: rangeTimes
     };
 
     var pcset;
-    if (globjectType === "globject") {
+    if (globjectType === 'globject') {
         pcset = VS.getItem(VS.trichords.slice(5, 6));
     } else {
         pcset = VS.getItem(VS.trichords.slice(0, 2));
     }
     globject.pitches = [
         {
-            classes: VS.pitchClass.transpose(pcset, "random"),
+            classes: VS.pitchClass.transpose(pcset, 'random'),
             time: 0
         }
     ];
@@ -60,7 +60,7 @@ function makeGlobject() {
 
     var durs = [0.5, 1, 1.5, 2];
 
-    if (globjectType !== "cluster") {
+    if (globjectType !== 'cluster') {
         globject.phraseTexture = [
             VS.getItem(durs),
             VS.getItem(durs),

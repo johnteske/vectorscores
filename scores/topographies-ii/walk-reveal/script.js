@@ -2,9 +2,9 @@
 layout: compress-js
 ---
 
-var main = d3.select(".main"),
-    wrapper = main.append("g"),
-    topo = wrapper.append("g"),
+var main = d3.select('.main'),
+    wrapper = main.append('g'),
+    topo = wrapper.append('g'),
     // width = 480,
     tileWidthHalf = 24,
     tileHeightHalf = tileWidthHalf * 0.5,
@@ -18,7 +18,7 @@ var main = d3.select(".main"),
     },
     walker = {
         index: -1,
-        lastDir: ""
+        lastDir: ''
     },
     revealFactor = 62,
     nearbyRevealFactor = 38,
@@ -30,7 +30,7 @@ var layout = {
     scale: 1,
     margin: {}
 };
-var debug = +VS.getQueryString("debug") === 1;
+var debug = +VS.getQueryString('debug') === 1;
 
 {% include_relative _symbol-sets.js %}
 {% include_relative _diamond-square.js %}
@@ -63,33 +63,33 @@ if (debug) {
     heightScale.revealed = 0;
     heightScale.hidden = 0;
 
-    wrapper.append("g")
-        .selectAll(".plus")
+    wrapper.append('g')
+        .selectAll('.plus')
         .data(topoData)
         .enter()
-        .append("path")
-        .attr("stroke", "red")
-        .attr("stroke-width", 1)
-        .attr("d", function(d, i) {
+        .append('path')
+        .attr('stroke', 'red')
+        .attr('stroke-width', 1)
+        .attr('d', function(d, i) {
             var c = indexToCoordinates(i),
                 px = (c.x - c.y) * tileWidthHalf,
                 py = (c.x + c.y) * tileHeightHalf;
 
-            return "M" + px + " " + (py - 5) +
-                " L" + px + " " + (py + 5) +
-                " M" + (px - 5) + " " + py +
-                " L" + (px + 5) + " " + py;
+            return 'M' + px + ' ' + (py - 5) +
+                ' L' + px + ' ' + (py + 5) +
+                ' M' + (px - 5) + ' ' + py +
+                ' L' + (px + 5) + ' ' + py;
         });
 }
 
 /**
  * Render score directly from row-major order data
  */
-topo.selectAll("text")
+topo.selectAll('text')
     .data(topoData)
     .enter()
-    .append("text")
-    .attr("x", function(d, i) {
+    .append('text')
+    .attr('x', function(d, i) {
         var c = indexToCoordinates(i);
         return (c.x - c.y) * tileWidthHalf;
     })
@@ -99,10 +99,10 @@ topo.selectAll("text")
 
         // if (d.height === score.range.max || symbolIndex > (symbolScale.length - 1)) {
         if (symbolIndex > (symbolScale.length - 1)) {
-            symbolKey = "max";
+            symbolKey = 'max';
         // else if (d.height === score.range.min || symbolIndex < 0) {
         } else if (symbolIndex < 0) {
-            symbolKey = "min";
+            symbolKey = 'min';
         } else {
             symbolKey = symbolScale[symbolIndex];
         }
@@ -110,8 +110,8 @@ topo.selectAll("text")
         var offsets = symbolOffsets[symbolKey];
 
         d3.select(this).text(symbols[symbolKey])
-            .attr("dx", offsets.x + "em")
-            .attr("dy", offsets.y + "em");
+            .attr('dx', offsets.x + 'em')
+            .attr('dy', offsets.y + 'em');
     })
     .call(revealSymbols, 0);
 
@@ -120,7 +120,7 @@ topo.selectAll("text")
  */
 function revealSymbols(selection, dur) {
     selection.transition().duration(dur)
-        .attr("y", function(d, i) {
+        .attr('y', function(d, i) {
             var c = indexToCoordinates(i),
                 hScale = d.revealed ? heightScale.revealed : heightScale.hidden,
                 scaledHeight;
@@ -133,7 +133,7 @@ function revealSymbols(selection, dur) {
 
             return ((c.x + c.y) * tileHeightHalf) - scaledHeight;
         })
-        .style("opacity", function(d) {
+        .style('opacity', function(d) {
             if (d.revealed > 0) {
                 d.revealed--;
             }
@@ -145,7 +145,7 @@ function moveWalker() {
     var c = indexToCoordinates(walker.index);
     var notWalked = [];
     var available = [];
-    var dir = "";
+    var dir = '';
 
     function checkNearby(x, y, dir) {
         if (x > -1 && x < score.width && y > -1 && y < score.width) {
@@ -157,13 +157,13 @@ function moveWalker() {
         }
     }
 
-    checkNearby(c.x, c.y - 1, "top");
-    checkNearby(c.x + 1, c.y, "right");
-    checkNearby(c.x, c.y + 1, "bottom");
-    checkNearby(c.x - 1, c.y, "left");
+    checkNearby(c.x, c.y - 1, 'top');
+    checkNearby(c.x + 1, c.y, 'right');
+    checkNearby(c.x, c.y + 1, 'bottom');
+    checkNearby(c.x - 1, c.y, 'left');
 
-    checkNearby(c.x - 1, c.y - 1, "topLeft");
-    checkNearby(c.x + 1, c.y + 1, "bottomRight");
+    checkNearby(c.x - 1, c.y - 1, 'topLeft');
+    checkNearby(c.x + 1, c.y + 1, 'bottomRight');
 
     /**
      * Make two moves in the same direction, if possible, or
@@ -173,7 +173,7 @@ function moveWalker() {
     if (notWalked.indexOf(walker.lastDir) !== -1 || available.indexOf(walker.lastDir) !== -1) {
         // console.log('last');
         dir = walker.lastDir;
-        walker.lastDir = "";
+        walker.lastDir = '';
     } else if (notWalked.length) {
         dir = VS.getItem(notWalked);
         walker.lastDir = dir;
@@ -185,22 +185,22 @@ function moveWalker() {
     topoData[walker.index].walker = false;
 
     switch (dir) {
-    case "top":
+    case 'top':
         walker.index = coordinatesToIndex(c.x, c.y - 1);
         break;
-    case "right":
+    case 'right':
         walker.index = coordinatesToIndex(c.x + 1, c.y);
         break;
-    case "bottom":
+    case 'bottom':
         walker.index = coordinatesToIndex(c.x, c.y + 1);
         break;
-    case "left":
+    case 'left':
         walker.index = coordinatesToIndex(c.x - 1, c.y);
         break;
-    case "topLeft":
+    case 'topLeft':
         walker.index = coordinatesToIndex(c.x - 1, c.y - 1);
         break;
-    case "bottomRight":
+    case 'bottomRight':
         walker.index = coordinatesToIndex(c.x + 1, c.y + 1);
         break;
     default:
@@ -247,7 +247,7 @@ function revealNearby() {
     }
 
     // Update map
-    topo.selectAll("text").call(revealSymbols, 600);
+    topo.selectAll('text').call(revealSymbols, 600);
 }
 
 /**
@@ -286,7 +286,7 @@ addEvent(function() {
     topoData[walker.index].walker = true;
     topoData[walker.index].walked = true;
 
-    topo.selectAll("text").call(revealSymbols, 600);
+    topo.selectAll('text').call(revealSymbols, 600);
 }, randDuration());
 
 for (var i = 0; i < nEvents; i++) {
@@ -295,7 +295,7 @@ for (var i = 0; i < nEvents; i++) {
 
 // final events
 addEvent(function() {
-    topo.selectAll("text")
+    topo.selectAll('text')
         .each(function(d) {
             d.revealed = 0;
         })
@@ -307,31 +307,31 @@ addEvent(VS.noop, 0);
 /**
  *
  */
-var instructions = wrapper.append("text")
-    .attr("class", "instructions")
-    .attr("text-anchor", "middle")
-    .attr("y", 220)
-    .attr("opacity", 1)
-    .text("explore the unknown, try to remember the past");
+var instructions = wrapper.append('text')
+    .attr('class', 'instructions')
+    .attr('text-anchor', 'middle')
+    .attr('y', 220)
+    .attr('opacity', 1)
+    .text('explore the unknown, try to remember the past');
 
 VS.score.playCallback = function() {
     instructions.transition().duration(600)
-        .attr("opacity", 0);
+        .attr('opacity', 0);
 };
 
 VS.score.stopCallback = function() {
     instructions.transition().duration(600)
-        .attr("opacity", 1);
+        .attr('opacity', 1);
 };
 
 /**
  * Resize
  */
 function resize() {
-    var main = d3.select("main");
+    var main = d3.select('main');
 
-    var w = parseInt(main.style("width"), 10);
-    var h = parseInt(main.style("height"), 10);
+    var w = parseInt(main.style('width'), 10);
+    var h = parseInt(main.style('height'), 10);
 
     var scaleX = VS.clamp(w / layout.width, 0.25, 2);
     var scaleY = VS.clamp(h / layout.height, 0.25, 2);
@@ -341,9 +341,9 @@ function resize() {
     layout.margin.left = w * 0.5;
     layout.margin.top = (h * 0.5) - ((layout.height * 0.25) * layout.scale);
 
-    wrapper.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ") scale(" + layout.scale + "," + layout.scale + ")");
+    wrapper.attr('transform', 'translate(' + layout.margin.left + ',' + layout.margin.top + ') scale(' + layout.scale + ',' + layout.scale + ')');
 }
 
-d3.select(window).on("resize", resize);
+d3.select(window).on('resize', resize);
 
-d3.select(window).on("load", resize);
+d3.select(window).on('load', resize);

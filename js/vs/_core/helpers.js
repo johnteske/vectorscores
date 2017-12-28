@@ -26,7 +26,7 @@ VS.getWeightedItem = function(items, weights) {
 
 VS.getQueryString = function(param, url) {
     var href = url ? url : window.location.href,
-        string = new RegExp("[?&]" + param + "=([^&#]*)", "i").exec(href);
+        string = new RegExp('[?&]' + param + '=([^&#]*)', 'i').exec(href);
 
     return string ? string[1] : null;
 };

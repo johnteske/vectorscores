@@ -37,10 +37,10 @@ CueSymbol.prototype.blink = function() {
 
     function blink(selection, delay, isLast) {
         self.selection.transition().delay(delay).duration(self.time.on)
-            .style("fill", isLast ? "#888" : "blue")
-            .style("opacity", self.opacities.on)
+            .style('fill', isLast ? '#888' : 'blue')
+            .style('opacity', self.opacities.on)
             .transition().delay(self.time.on).duration(self.time.off)
-            .style("opacity", isLast ? self.opacities.end : self.opacities.off);
+            .style('opacity', isLast ? self.opacities.end : self.opacities.off);
     }
 
     for (var i = 0; i < (n + 1); i++) {
@@ -50,7 +50,7 @@ CueSymbol.prototype.blink = function() {
 
 CueSymbol.prototype.cancel = function() {
     this.selection
-        .style("fill", "#888")
+        .style('fill', '#888')
         .transition()
-        .style("opacity", this.opacities.end);
+        .style('opacity', this.opacities.end);
 };

@@ -18,9 +18,9 @@ var cardWidth = 120,
     width = (cardWidth * 4) + (cardPadding * 2),
     height = cardWidth * 3;
 
-var main = d3.select(".main")
-    .attr("width", width)
-    .attr("height", height);
+var main = d3.select('.main')
+    .attr('width', width)
+    .attr('height', height);
 
 function newPoint(spread) {
     var angle = Math.random() * Math.PI * 2;
@@ -34,75 +34,75 @@ function cardX(index) {
 }
 
 function makeCard(selection) {
-    selection.append("rect")
-        .attr("width", cardWidth - 1)
-        .attr("height", cardWidth - 1);
+    selection.append('rect')
+        .attr('width', cardWidth - 1)
+        .attr('height', cardWidth - 1);
 
     selection.each(function(d) {
         var nnotes = d.nnotes,
             spread = d.spread;
 
-        d3.select(this).selectAll(".duration")
+        d3.select(this).selectAll('.duration')
             .data(d3.range(0, nnotes))
             .enter()
-            .append("text")
-            .attr("class", "duration")
-            .text(durationDict["1"])
-            .attr("transform", function() {
+            .append('text')
+            .attr('class', 'duration')
+            .text(durationDict['1'])
+            .attr('transform', function() {
                 var point = newPoint(spread);
-                return "translate(" +
-                    (point.x + (cardWidth * 0.5)) + ", " +
-                    (point.y + (cardWidth * 0.5)) + ")";
+                return 'translate(' +
+                    (point.x + (cardWidth * 0.5)) + ', ' +
+                    (point.y + (cardWidth * 0.5)) + ')';
             });
     });
 
-    selection.append("text")
-        .attr("dy", "-1em")
+    selection.append('text')
+        .attr('dy', '-1em')
         .text(function(d) {
             var pcSet = d.pcSet.map(function(pc) {
                 return VS.pitchClass.format(pc, scoreSettings.pcFormat);
             });
-            return "{" + pcSet.join(", ") + "}";
+            return '{' + pcSet.join(', ') + '}';
         })
-        .classed("pitch-class-set", 1);
+        .classed('pitch-class-set', 1);
 
-    selection.append("text")
-        .attr("y", cardWidth)
-        .attr("dx", "0.125em")
-        .attr("dy", "1em")
+    selection.append('text')
+        .attr('y', cardWidth)
+        .attr('dx', '0.125em')
+        .attr('dy', '1em')
         .text(function(d) { return dynamicsDict[d.dynamic]; })
-        .classed("dynamics", 1);
+        .classed('dynamics', 1);
 }
 // create cards
-var cardGroup = main.append("g")
-    .attr("transform", "translate(" + offset + ", 0)");
-var cards = cardGroup.selectAll(".card")
+var cardGroup = main.append('g')
+    .attr('transform', 'translate(' + offset + ', 0)');
+var cards = cardGroup.selectAll('.card')
     .data(cardList)
     .enter()
-    .append("g")
-    .classed("card", 1)
+    .append('g')
+    .classed('card', 1)
     .call(makeCard)
-    .attr("transform", function(d, i) { return "translate(" + cardX(i) + ", 100)"; })
-    .style("opacity", function(d, i) { return 1 - (i * (0.5)); });
+    .attr('transform', function(d, i) { return 'translate(' + cardX(i) + ', 100)'; })
+    .style('opacity', function(d, i) { return 1 - (i * (0.5)); });
 
 var cueIndicator = VS.cueTriangle(main);
 cueIndicator.selection
-    .attr("transform", "translate(" + (cardX(1) + offset) + ", 50)") // put at right card position
-    .style("opacity", "0");
+    .attr('transform', 'translate(' + (cardX(1) + offset) + ', 50)') // put at right card position
+    .style('opacity', '0');
 
 function goToCard(eventIndex, dur) {
     var pointer = eventIndex || VS.score.pointer;
     dur = dur || cardTransTime;
     cardGroup.transition()
         .duration(dur)
-        .attr("transform", function() {
+        .attr('transform', function() {
             var x = offset - cardX(pointer);
-            return "translate(" + x + ", 0)";
+            return 'translate(' + x + ', 0)';
         });
 
     cards.transition()
         .duration(dur)
-        .style("opacity", function(d, i) {
+        .style('opacity', function(d, i) {
             if (pointer > i ) {
                 return 0;
             }
@@ -112,7 +112,7 @@ function goToCard(eventIndex, dur) {
         });
 
     // if playing and not skipping, stopping
-    if (typeof eventIndex !== "undefined") { updateCardIndicator(eventIndex); }
+    if (typeof eventIndex !== 'undefined') { updateCardIndicator(eventIndex); }
 }
 
 function updateCardIndicator(pointer) {
@@ -123,11 +123,11 @@ function updateCardIndicator(pointer) {
     VS.score.schedule(indicatorTime, function() {
         cueIndicator.blink();
         cueIndicator.selection
-            .style("opacity", "1")
+            .style('opacity', '1')
             .transition()
             .delay(blinkDuration)
             .duration(cardTransTime)
-            .style("opacity", "0");
+            .style('opacity', '0');
     });
 }
 
