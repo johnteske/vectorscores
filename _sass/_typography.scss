@@ -37,10 +37,6 @@ body {
     line-height: 1.40625;
 }
 
-.work-formats {
-    color: #808080; // grey
-}
-
 
 
 /**
@@ -53,7 +49,7 @@ ul, ol, dl, figure,
     margin-bottom: $spacing-unit / 2;
 }
 
-p, ul, ol, dl {
+p, ul, ol, dl, table {
     + h1, + h2, + h3, + h4, + h5, + h6 {
         margin-top: $spacing-unit;
     }
