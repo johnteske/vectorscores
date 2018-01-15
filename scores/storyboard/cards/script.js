@@ -95,7 +95,8 @@ var cueTriangle = main.append('path')
     .attr('transform', 'translate(' + (cardX(1) + offset) + ', 50)') // put at right card position
     .style('opacity', '0');
 
-var cueIndicator = VS.cueBlink(cueTriangle, { beats: 3 })
+var cueIndicator = VS.cueBlink(cueTriangle)
+    .beats(3)
     .on(function(selection) {
         selection.style('fill-opacity', 1)
             .style('opacity', 1);
@@ -135,8 +136,7 @@ function goToCard(eventIndex, dur) {
 
 function updateCardIndicator(pointer) {
     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
-        blinkDuration = 3000,
-        indicatorTime = cardDuration - blinkDuration;
+        indicatorTime = cardDuration - cueIndicator.duration();
 
     VS.score.schedule(indicatorTime, function() {
         cueIndicator.start();

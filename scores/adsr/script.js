@@ -157,18 +157,17 @@ function makeCueTriangle(selection) {
 var cueTriangle = score.wrapper.append('path')
     .call(makeCueTriangle);
 
-var cueIndicator = VS.cueBlink(cueTriangle, {
-    beats: 3
-})
-.on(function(selection) {
-    selection.style('fill-opacity', 1);
-})
-.off(function(selection) {
-    selection.style('fill-opacity', 0);
-})
-.end(function(selection) {
-    selection.style('fill-opacity', 0);
-});
+var cueIndicator = VS.cueBlink(cueTriangle)
+    .beats(3)
+    .on(function(selection) {
+        selection.style('fill-opacity', 1);
+    })
+    .off(function(selection) {
+        selection.style('fill-opacity', 0);
+    })
+    .end(function(selection) {
+        selection.style('fill-opacity', 0);
+    });
 
 function cueBlink() {
     cueIndicator.start();
@@ -415,12 +414,6 @@ function scrollScore(index, dur, goToNextBar) {
     var playLastBar = goToNextBar && (index === score.bars.length - 2);
     var targetIndex = goToNextBar ? index + 1 : index, // true = proceed to next bar, false = go to this bar
         targetBar = score.bars[targetIndex];
-
-    // if(goToNextBar && index < 6) { // opening section, up to and including arrival at A
-    //     var cardDuration = VS.score.timeAt(index + 1) - VS.score.timeAt(index),
-    //         indicatorTime = cardDuration - 3000;
-    //     VS.score.schedule(indicatorTime, cueBlink);
-    // }
 
     score.group
         .transition()

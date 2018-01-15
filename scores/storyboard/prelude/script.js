@@ -256,7 +256,7 @@ function cueBlink(pointer) {
     cues[pointer + 1].start();
 }
 
-function cueCancel() {
+function cueCancelAll() {
     for (var i = 0; i < cues.length; i++) {
         cues[i].cancel();
     }
@@ -300,7 +300,7 @@ VS.score.playCallback = function() {
 };
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {
-    cueCancel();
+    cueCancelAll();
     fadePenultimateScene(false, 0);
     goToCard();
 };
