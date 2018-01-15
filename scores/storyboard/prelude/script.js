@@ -285,7 +285,7 @@ function scheduleCue(pointer) {
 
     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
         nextCue = cues[pointer + 1],
-        cueDelay = cardDuration - nextCue.duration;
+        cueDelay = cardDuration - nextCue.duration();
 
     VS.score.schedule(cueDelay, cueBlink2, pointer);
 }
@@ -311,7 +311,7 @@ VS.score.preroll = score.cueDuration; // cardTransTime;
 VS.score.playCallback = function() {
     goToCard(VS.score.pointer - 1, 'play');
     // VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
-    VS.score.schedule(VS.score.preroll - cues[VS.score.pointer].duration, cueBlink2, VS.score.pointer - 1);
+    VS.score.schedule(VS.score.preroll - cues[VS.score.pointer].duration(), cueBlink2, VS.score.pointer - 1);
 };
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {
