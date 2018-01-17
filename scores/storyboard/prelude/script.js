@@ -212,9 +212,6 @@ function fadePenultimateScene(active, dur) {
     .style('opacity', active ? 0 : 1);
 }
 
-// var cueIndicator = VS.cueTriangle(main);
-// cueIndicator.selection.style('opacity', '0');
-
 function goToCard(index, control) {
     var pointer = (typeof index !== 'undefined') ? index : VS.score.pointer;
     var dur = cardTransTime;
@@ -301,6 +298,7 @@ VS.score.playCallback = function() {
 
 VS.score.pauseCallback = VS.score.stopCallback = function() {
     cueCancelAll();
+    d3.selectAll('.cue').style('opacity', 0);
     fadePenultimateScene(false, 0);
     goToCard();
 };
