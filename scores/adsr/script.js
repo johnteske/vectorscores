@@ -145,10 +145,32 @@ score.layout.letters.each(function() {
 /**
  * Score pointer/cue aid
  */
-var cueIndicator = VS.cueTriangle(score.wrapper);
+function makeCueTriangle(selection) {
+    selection.attr('class', 'indicator')
+        .attr('d', 'M-6.928,0 L0,2 6.928,0 0,12 Z')
+        .style('stroke', 'black')
+        .style('stroke-width', '1')
+        .style('fill', 'black')
+        .style('fill-opacity', '0');
+}
+
+var cueTriangle = score.wrapper.append('path')
+    .call(makeCueTriangle);
+
+var cueIndicator = VS.cueBlink(cueTriangle)
+    .beats(3)
+    .on(function(selection) {
+        selection.style('fill-opacity', 1);
+    })
+    .off(function(selection) {
+        selection.style('fill-opacity', 0);
+    })
+    .end(function(selection) {
+        selection.style('fill-opacity', 0);
+    });
 
 function cueBlink() {
-    cueIndicator.blink(1, 0, 0);
+    cueIndicator.start();
 }
 
 /**
@@ -393,12 +415,6 @@ function scrollScore(index, dur, goToNextBar) {
     var targetIndex = goToNextBar ? index + 1 : index, // true = proceed to next bar, false = go to this bar
         targetBar = score.bars[targetIndex];
 
-    // if(goToNextBar && index < 6) { // opening section, up to and including arrival at A
-    //     var cardDuration = VS.score.timeAt(index + 1) - VS.score.timeAt(index),
-    //         indicatorTime = cardDuration - 3000;
-    //     VS.score.schedule(indicatorTime, cueBlink);
-    // }
-
     score.group
         .transition()
         .ease(d3.easeLinear)
@@ -443,6 +459,8 @@ function scrollCallback() {
         scrollScore(VS.score.pointer, 300, false);
     }
     // TODO else: set pointer back a step
+
+    cueIndicator.cancel();
 }
 VS.score.pauseCallback = scrollCallback;
 VS.score.stopCallback = scrollCallback;
@@ -461,7 +479,7 @@ function resize() {
     view.center = (view.width / score.scale) * 0.5;
     view.scoreY = ((view.height / score.scale) * 0.5) - ((score.height - (4 * unitY)) * 0.5);
 
-    cueIndicator.selection
+    cueTriangle
         .attr('transform', 'translate(' +
            view.center + ',' +
            (view.scoreY - (6 * unitY)) + ')');

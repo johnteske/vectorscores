@@ -85,10 +85,29 @@ var cards = cardGroup.selectAll('.card')
     .attr('transform', function(d, i) { return 'translate(' + cardX(i) + ', 100)'; })
     .style('opacity', function(d, i) { return 1 - (i * (0.5)); });
 
-var cueIndicator = VS.cueTriangle(main);
-cueIndicator.selection
+var cueTriangle = main.append('path')
+    .attr('class', 'indicator')
+    .attr('d', 'M-6.928,0 L0,2 6.928,0 0,12 Z')
+    .style('stroke', 'black')
+    .style('stroke-width', '1')
+    .style('fill', 'black')
+    .style('fill-opacity', '0')
     .attr('transform', 'translate(' + (cardX(1) + offset) + ', 50)') // put at right card position
     .style('opacity', '0');
+
+var cueIndicator = VS.cueBlink(cueTriangle)
+    .beats(3)
+    .on(function(selection) {
+        selection.style('fill-opacity', 1)
+            .style('opacity', 1);
+    })
+    .off(function(selection) {
+        selection.style('fill-opacity', 0);
+    })
+    .end(function(selection) {
+        selection.style('fill-opacity', 0)
+            .style('opacity', 0);
+    });
 
 function goToCard(eventIndex, dur) {
     var pointer = eventIndex || VS.score.pointer;
@@ -117,17 +136,10 @@ function goToCard(eventIndex, dur) {
 
 function updateCardIndicator(pointer) {
     var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
-        blinkDuration = 3000,
-        indicatorTime = cardDuration - blinkDuration;
+        indicatorTime = cardDuration - cueIndicator.duration();
 
     VS.score.schedule(indicatorTime, function() {
-        cueIndicator.blink();
-        cueIndicator.selection
-            .style('opacity', '1')
-            .transition()
-            .delay(blinkDuration)
-            .duration(cardTransTime)
-            .style('opacity', '0');
+        cueIndicator.start();
     });
 }
 
@@ -138,5 +150,11 @@ for (var i = 0; i < cardList.length; i++) {
 // and final noop 3 seconds after last card
 VS.score.add(cardList[cardList.length - 1].time + 3000, VS.noop);
 
-VS.control.stepCallback = goToCard;
-VS.score.stopCallback = goToCard;
+function scoreControlCallback() {
+    cueIndicator.cancel();
+    goToCard();
+}
+
+VS.control.stepCallback = scoreControlCallback;
+VS.score.stopCallback = scoreControlCallback;
+VS.score.pauseCallback = scoreControlCallback;

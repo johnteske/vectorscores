@@ -6,7 +6,8 @@
         .append('g')
             .attr('transform', 'translate(7, 0)');
 
-    VS.cueTriangle(infoCue);
+    infoCue.append('path')
+        .call(makeCueTriangle);
 
     // add ghost
     var infoGhost = d3.select('.info-ghost')
