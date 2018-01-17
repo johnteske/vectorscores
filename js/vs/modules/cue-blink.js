@@ -1,3 +1,6 @@
+---
+layout: compress-js
+---
 VS.cueBlink = function(selection, args) {
     var _selection = selection;
     var beats = args && args.beats ? +args.beats : 1;
