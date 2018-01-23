@@ -1,10 +1,60 @@
 ---
 # Jekyll layout that compresses JavaScript
-# v0.0.3
+# v1.0
 #
-# © 2017 John Teske
+# © 2017-2018 John Teske
 # MIT License
 # Inspired by Anatol Broder, http://jch.penibelst.de/
 ---
 {% capture _LINE_FEED %}
-{% endcapture %}{% capture _content %}{{ content }}{% endcapture %}{% assign _comments = "/* */" | split: " " %}{% capture _comment_befores %}.{{ _content }}{% endcapture %}{% assign _comment_befores = _comment_befores | split: _comments.first %}{% for _comment_before in _comment_befores %}{% if forloop.first %}{% continue %}{% endif %}{% capture _comment_outside %}{% if _carry %}{{ _comments.first }}{% endif %}{{ _comment_before }}{% endcapture %}{% capture _comment %}{% unless _carry %}{{ _comments.first }}{% endunless %}{{ _comment_outside | split: _comments.last | first }}{% if _comment_outside contains _comments.last %}{{ _comments.last }}{% assign _carry = false %}{% else %}{% assign _carry = true %}{% endif %}{% endcapture %}{% assign _content = _content | remove_first: _comment %}{% endfor %}{% assign _lines = _content | split: _LINE_FEED %}{% for line in _lines %}{% assign _clean_line = line | split: "// " | first | strip %}{{ _clean_line }}{% unless _clean_line == "" or forloop.last %}{{ _LINE_FEED }}{% endunless %}{% endfor %}
+{% endcapture %}
+
+{%- capture _content -%}{{ content }}{%- endcapture -%}
+
+{%- assign _comments = "/* */" | split: " " -%}
+{%- capture _comment_befores -%}.{{ _content }}{%- endcapture -%}
+{%- assign _comment_befores = _comment_befores | split: _comments.first -%}
+
+{%- comment -%}Remove block comments{%- endcomment -%}
+{%- for _comment_before in _comment_befores -%}
+    {%- capture _comment_outside -%}
+        {%- if _carry -%}
+            {{ _comments.first }}
+        {%- endif -%}
+
+        {{ _comment_before }}
+    {%- endcapture -%}
+
+    {%- capture _comment -%}
+        {%- unless _carry -%}
+            {{ _comments.first }}
+        {%- endunless -%}
+
+        {{ _comment_outside | split: _comments.last | first }}
+
+        {%- if _comment_outside contains _comments.last -%}
+            {{ _comments.last }}
+            {%- assign _carry = false -%}
+        {%- else -%}
+            {%- assign _carry = true -%}
+        {%- endif -%}
+    {%- endcapture -%}
+
+    {%- assign _content = _content | remove_first: _comment -%}
+{%- endfor -%}
+
+{%- comment -%}Remove comments and strip whitespace{%- endcomment -%}
+
+{%- assign _lines = _content | split: _LINE_FEED -%}
+
+{%- for line in _lines -%}
+    {%- comment -%}Remove comments and strip whitespace{%- endcomment -%}
+    {%- assign _clean_line = line | split: "// " | first | strip -%}
+
+    {{ _clean_line }}
+
+    {%- comment -%}Add a new line after each line{%- endcomment -%}
+    {%- unless _clean_line == "" or forloop.last -%}
+        {{ _LINE_FEED }}
+    {%- endunless -%}
+{%- endfor -%}
