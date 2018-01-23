@@ -1,6 +1,6 @@
 ---
 # Jekyll layout that compresses JavaScript
-# v1.0
+# v1.0.1
 #
 # © 2017-2018 John Teske
 # MIT License
@@ -9,17 +9,28 @@
 {% capture _LINE_FEED %}
 {% endcapture %}
 
+{%- comment -%}Initialization{%- endcomment -%}
+
 {%- capture _content -%}{{ content }}{%- endcapture -%}
 
-{%- assign _comments = "/* */" | split: " " -%}
+{%- assign _line_comments = "// " -%}
+{%- assign _line_comments_stripped = _line_comments | strip -%}
+
+{%- assign _block_comments = "/* */" | split: " " -%}
 {%- capture _comment_befores -%}.{{ _content }}{%- endcapture -%}
-{%- assign _comment_befores = _comment_befores | split: _comments.first -%}
+{%- assign _comment_befores = _comment_befores | split: _block_comments.first -%}
+
 
 {%- comment -%}Remove block comments{%- endcomment -%}
+
 {%- for _comment_before in _comment_befores -%}
+    {%- if forloop.first -%}
+        {% continue -%}
+    {%- endif -%}
+
     {%- capture _comment_outside -%}
         {%- if _carry -%}
-            {{ _comments.first }}
+            {{ _block_comments.first }}
         {%- endif -%}
 
         {{ _comment_before }}
@@ -27,13 +38,13 @@
 
     {%- capture _comment -%}
         {%- unless _carry -%}
-            {{ _comments.first }}
+            {{ _block_comments.first }}
         {%- endunless -%}
 
-        {{ _comment_outside | split: _comments.last | first }}
+        {{ _comment_outside | split: _block_comments.last | first }}
 
-        {%- if _comment_outside contains _comments.last -%}
-            {{ _comments.last }}
+        {%- if _comment_outside contains _block_comments.last -%}
+            {{ _block_comments.last }}
             {%- assign _carry = false -%}
         {%- else -%}
             {%- assign _carry = true -%}
@@ -43,18 +54,27 @@
     {%- assign _content = _content | remove_first: _comment -%}
 {%- endfor -%}
 
+
 {%- comment -%}Remove comments and strip whitespace{%- endcomment -%}
 
 {%- assign _lines = _content | split: _LINE_FEED -%}
 
 {%- for line in _lines -%}
     {%- comment -%}Remove comments and strip whitespace{%- endcomment -%}
-    {%- assign _clean_line = line | split: "// " | first | strip -%}
+    {%- assign _clean_line = line | split: _line_comments | first | strip -%}
 
+    {%- comment -%}Skip this line if blank or a line comment only{%- endcomment -%}
+    {%- if _clean_line == "" or _clean_line == _line_comments_stripped -%}
+        {% continue -%}
+    {%- endif -%}
+
+    {%- comment -%}Add the line{%- endcomment -%}
     {{ _clean_line }}
 
     {%- comment -%}Add a new line after each line{%- endcomment -%}
-    {%- unless _clean_line == "" or forloop.last -%}
+    {%- unless forloop.last -%}
         {{ _LINE_FEED }}
     {%- endunless -%}
 {%- endfor -%}
+
+{{ _LINE_FEED }}
