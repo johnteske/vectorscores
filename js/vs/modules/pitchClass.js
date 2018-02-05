@@ -9,16 +9,40 @@ VS.pitchClass = {};
  * @returns {String} formatted pitch class
  */
 VS.pitchClass.format = (function() {
-    var names = [
-        'C', 'C#', 'D', 'D#', 'E', 'F',
-        'F#', 'G', 'G#', 'A', 'A#', 'B'
-    ];
+    var names = {
+        sharps: [
+            'C', 'C#', 'D', 'D#', 'E', 'F',
+            'F#', 'G', 'G#', 'A', 'A#', 'B'
+        ],
+        flats: [
+            'C', 'Db', 'D', 'Eb', 'E', 'F',
+            'Gb', 'G', 'Ab', 'A', 'Bb', 'B'
+        ]
+    };
 
-    return function(integer, format) {
+    var te = {
+       10: 'T',
+       11: 'E'
+    };
+
+    var ab = {
+       10: 'A',
+       11: 'B'
+    };
+
+    return function(integer, format, options) {
         if (format === 'name') {
-            return names[integer];
+            var name;
+            var dict = (options === 'flats') ? 'flats' : 'sharps';
+
+            return names[dict][integer];
         } else {
-            return integer.toString().replace('10', 'T').replace('11', 'E');
+            var pc = integer.toString();
+            var dict = (options === 'ab') ? ab: te;
+
+            return pc.replace(/10|11/, function(matched) {
+                return dict[matched];
+            });
         }
     };
 })();

@@ -27,3 +27,9 @@ VS.RadioSetting.prototype.setValue = function(value) {
         }
     }
 };
+
+VS.RadioSetting.prototype.on = function(type, callback) {
+    for (var i = 0; i < this.elements.length; i++) {
+        this.elements[i].addEventListener(type, callback);
+    }
+};
