@@ -45,7 +45,7 @@ VS.PitchClassSettings.prototype.getValues = function() {
     } else {
         preference = this.pitchClassPrefRadio.getValue();
     }
-console.log(this.display, preference);
+
     return {
         display: this.display,
         preference: preference
@@ -60,4 +60,4 @@ VS.PitchClassSettings.prototype.updatePreferences = function() {
         this.pitchClassPreference.style.display = 'block';
         this.noteNamePreference.style.display = 'none';
     }
-}
+};
