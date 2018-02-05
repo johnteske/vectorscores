@@ -9,7 +9,7 @@ var pitchClassSet = (function() {
 
     function update(set) {
         var formatted = set.map(function(pc) {
-            return VS.pitchClass.format(pc, scoreSettings.pcDisplay, scoreSettings.pcPreference);
+            return VS.pitchClass.format(pc, scoreSettings.pitchClasses.display, scoreSettings.pitchClasses.preference);
         }).join(', ');
 
         selection.text(function() {

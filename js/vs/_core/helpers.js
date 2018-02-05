@@ -31,6 +31,12 @@ VS.getQueryString = function(param, url) {
     return string ? string[1] : null;
 };
 
+VS.makeQueryString = function(params) {
+    return Object.keys(params).map(function(key) {
+        return key + '=' + params[key];
+    }).join('&');
+};
+
 VS.clamp = function(val, min, max) {
     return Math.min(Math.max(val, min), max);
 };
