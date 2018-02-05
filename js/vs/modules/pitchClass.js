@@ -31,14 +31,16 @@ VS.pitchClass.format = (function() {
     };
 
     return function(integer, format, options) {
+        var dict;
+
         if (format === 'name') {
             var name;
-            var dict = (options === 'flats') ? 'flats' : 'sharps';
+            dict = (options === 'flats') ? 'flats' : 'sharps';
 
             return names[dict][integer];
         } else {
             var pc = integer.toString();
-            var dict = (options === 'ab') ? ab: te;
+            dict = (options === 'ab') ? ab : te;
 
             return pc.replace(/10|11/, function(matched) {
                 return dict[matched];

@@ -1,7 +1,7 @@
 var scoreSettings = (function() {
-    var pcDisplaySetting = new VS.RadioSetting(document.getElementsByName('settings-pc-display'));
-    var pcPrefs = new VS.RadioSetting(document.getElementsByName('settings-pc-preference'));
-    var notenamePrefs = new VS.RadioSetting(document.getElementsByName('settings-notename-preference'));
+    var pcDisplayRadio = new VS.RadioSetting('settings-pc-display');
+    var pcPrefRadio = new VS.RadioSetting('settings-pc-preference');
+    var notenamePrefRadio = new VS.RadioSetting('settings-notename-preference');
 
     var pitchClassPreference = document.getElementById('pitchclass-preference');
     var noteNamePreference = document.getElementById('notename-preference');
@@ -19,27 +19,26 @@ var scoreSettings = (function() {
 
     var settings = {};
 
-    settings.pcFormat = VS.getQueryString('pitch-class-display') || '';
+    settings.pcDisplay = VS.getQueryString('pc-display') || '';
 
-    pcDisplaySetting.setValue(settings.pcFormat);
-    pcDisplaySetting.on('change', function(e) {
+    pcDisplayRadio.setValue(settings.pcDisplay);
+    pcDisplayRadio.on('change', function(e) {
         showPreferences(e.target.value);
     });
 
-    settings.pcPreference = VS.getQueryString('pitch-class-pref') || '';
+    settings.pcPreference = VS.getQueryString('pc-pref') || '';
 
-    if (settings.pcFormat === 'name') {
-        notenamePrefs.setValue(settings.pcPreference);
+    if (settings.pcDisplay === 'name') {
+        notenamePrefRadio.setValue(settings.pcPreference);
     } else {
-        pcPrefs.setValue(settings.pcPreference);
+        pcPrefRadio.setValue(settings.pcPreference);
     }
-    showPreferences(settings.pcFormat);
+    showPreferences(settings.pcDisplay);
 
     function generate() {
-        var displaySetting = pcDisplaySetting.getValue();
-        var displayPref = (displaySetting === 'name') ? notenamePrefs.getValue() : pcPrefs.getValue();
-        // pcPrefs
-        document.location.href = '?pitch-class-display=' + displaySetting + '&pitch-class-pref=' + displayPref;
+        var displaySetting = pcDisplayRadio.getValue();
+        var displayPref = (displaySetting === 'name') ? notenamePrefRadio.getValue() : pcPrefRadio.getValue();
+        document.location.href = '?pc-display=' + displaySetting + '&pc-pref=' + displayPref;
     }
 
     generateButton.addEventListener('click', generate);

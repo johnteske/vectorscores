@@ -2,11 +2,12 @@
 layout: compress-js
 ---
 VS.RadioSetting = function(elements) {
-    if (!(this instanceof VS.RadioSetting)) {
-        return new VS.RadioSetting(elements);
+    // Allow the name of the radio options alone to be passed in
+    if (typeof elements === 'string') {
+        this.elements = document.getElementsByName(elements);
+    } else {
+        this.elements = elements;
     }
-
-    this.elements = elements;
 };
 
 VS.RadioSetting.prototype.getValue = function() {
