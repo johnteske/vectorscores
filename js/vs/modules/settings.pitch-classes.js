@@ -57,7 +57,7 @@ VS.PitchClassSettings.prototype.getValues = function() {
     return {
         display: this.display,
         preference: preference,
-        transposition: this.transposition
+        transposition: this.transpositionInput.value
     };
 };
 
