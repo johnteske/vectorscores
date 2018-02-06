@@ -106,7 +106,7 @@ function makeCard(data, index) {
         .attr('dy', '-1em')
         .text(function(d) {
             var transpose = (typeof d.transpose !== 'undefined') ? (d.transpose + score.transposeBy) : 'random';
-            var pcSet = VS.pitchClass.transpose(d.pcSet, transpose);
+            var pcSet = VS.pitchClass.transpose(d.pcSet, transpose + scoreSettings.pitchClasses.transposition);
 
             pcSet = pcSet.map(function(pc) {
                 return VS.pitchClass.format(pc, scoreSettings.pitchClasses.display, scoreSettings.pitchClasses.preference);
