@@ -109,7 +109,7 @@ function makeCard(data, index) {
             var pcSet = VS.pitchClass.transpose(d.pcSet, transpose);
 
             pcSet = pcSet.map(function(pc) {
-                return VS.pitchClass.format(pc, scoreSettings.pcFormat);
+                return VS.pitchClass.format(pc, scoreSettings.pitchClasses.display, scoreSettings.pitchClasses.preference);
             });
 
             return '{' + pcSet.join(',') + '}';

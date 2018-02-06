@@ -1,15 +1,24 @@
 var scoreSettings = (function() {
-    var generateButton = document.getElementById('settings-generate'),
-        radioSetting = new VS.RadioSetting(document.getElementsByName('settings-pc-display'));
+    var pcSettings = new VS.PitchClassSettings();
 
-    var settings = {};
+    var generateButton = document.getElementById('settings-generate');
 
-    settings.pcFormat = VS.getQueryString('pcs') || '';
-    radioSetting.setValue(settings.pcFormat);
+    var settings = {
+        pitchClasses: pcSettings.getValues()
+    };
 
-    generateButton.addEventListener('click', function() {
-        document.location.href = '?pcs=' + radioSetting.getValue();
-    });
+    function generate() {
+        var pcSettingsValues = pcSettings.getValues();
+
+        var queryString = VS.makeQueryString({
+            'pc-display': pcSettingsValues.display,
+            'pc-pref': pcSettingsValues.preference
+        });
+
+        document.location.href = '?' + queryString;
+    }
+
+    generateButton.addEventListener('click', generate);
 
     return settings;
 })();
