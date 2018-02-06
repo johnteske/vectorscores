@@ -8,12 +8,9 @@ var scoreSettings = (function() {
     };
 
     function generate() {
-        var pcSettingsValues = pcSettings.getValues();
+        var queryStringParams = pcSettings.getQueryStringParams();
 
-        var queryString = VS.makeQueryString({
-            'pc-display': pcSettingsValues.display,
-            'pc-pref': pcSettingsValues.preference
-        });
+        var queryString = VS.makeQueryString(queryStringParams);
 
         document.location.href = '?' + queryString;
     }

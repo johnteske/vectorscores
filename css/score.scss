@@ -9,5 +9,7 @@ $layout-border: 2px solid $layout-color-light;
 
 @import "mixins";
 @import "score/layout";
+@import "score/controls";
 @import "score/modal";
 @import "score/main";
+@import "score/settings";
