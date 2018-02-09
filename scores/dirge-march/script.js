@@ -44,6 +44,7 @@ var globjects = (function() {
 {% include_relative _rhythms.js %}
 {% include_relative _score.js %}
 {% include_relative _settings.js %}
+transposeBy += scoreSettings.pitchClasses.transposition;
 
 var svg = d3.select('svg');
 
@@ -230,7 +231,7 @@ function update(index, isControlEvent) {
                     .attr('text-anchor', textAnchor(pitch[i].time));
 
                 var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy).map(function(pc) {
-                    return VS.pitchClass.format(pc, scoreSettings.pcFormat);
+                    return VS.pitchClass.format(pc, scoreSettings.pitchClasses.display, scoreSettings.pitchClasses.preference);
                 });
                 var formatted = '{' + set + '}';
 
