@@ -17,18 +17,26 @@ VS.PitchClassSettings = function(elements) {
     this.pitchClassPreference = document.getElementById('pitchclass-preference');
     this.noteNamePreference = document.getElementById('notename-preference');
 
+    // Transposition input
+    this.transpositionInput = document.getElementById('settings-pc-transpose');
+
     // Init values from query string
     this.display = VS.getQueryString('pc-display') || '';
     this.preference = VS.getQueryString('pc-pref') || '';
+    this.transposition = +VS.getQueryString('pc-transpose') || 0;
 
     // Update UI
     this.displayRadio.setValue(this.display);
+
     this.updatePreferences();
+
     if (this.display === 'name') {
         this.noteNamePrefRadio.setValue(this.preference);
     } else {
         this.pitchClassPrefRadio.setValue(this.preference);
     }
+
+    this.transpositionInput.value = this.transposition;
 
     // Listen for changes
     this.displayRadio.on('change', function(e) {
@@ -48,7 +56,18 @@ VS.PitchClassSettings.prototype.getValues = function() {
 
     return {
         display: this.display,
-        preference: preference
+        preference: preference,
+        transposition: +this.transpositionInput.value
+    };
+};
+
+VS.PitchClassSettings.prototype.getQueryStringParams = function() {
+    var values = this.getValues();
+
+    return {
+        'pc-display': values.display,
+        'pc-pref': values.preference,
+        'pc-transpose': values.transposition
     };
 };
 
