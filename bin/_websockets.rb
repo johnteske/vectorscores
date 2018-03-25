@@ -20,17 +20,17 @@ end
 module WebSocketClients
   @clients = []
 
-  def self.add(ws)
-    @clients << ws
+  def self.add(websocket)
+    @clients << websocket
   end
 
-  def self.remove(ws)
-    @clients.delete ws
+  def self.remove(websocket)
+    @clients.delete websocket
   end
 
   def self.send_each(msg)
-    @clients.each do |socket|
-      socket.send msg
+    @clients.each do |websocket|
+      websocket.send msg
     end
   end
 
