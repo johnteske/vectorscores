@@ -1,4 +1,7 @@
+ruby '>=2.4.1'
+
 source 'https://rubygems.org'
+gem 'em-websocket'
 gem 'github-pages'
 
 # Test the build
@@ -7,4 +10,5 @@ group :test do
   # gem 'html-proofer'
   gem 'rake'
   gem 'rubocop'
+  # gem 'jasmine'
 end

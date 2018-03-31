@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+#
+
+BUNDLE_GEMFILE=bin/Gemfile bundle install

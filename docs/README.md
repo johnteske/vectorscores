@@ -1,10 +1,10 @@
 # *vectorscores*
 
-<span class="vectorscores">*vectorscores*</span> is a new series of dynamic compositions by John Teske. The scores are written algorithmically so the works as a whole are crafted but the details are unique for each performance.
+*vectorscores* is a new series of dynamic compositions by John Teske. The scores are written algorithmically so the works as a whole are crafted but the details are unique for each performance.
 
-John has been exploring ways to express complex ideas to musicians given limitations on rehearsal time, funding, and location. <span class="vectorscores">*vectorscores*</span> uses web technology to create scores and parts for musicians that use animation to present musical material, generate and update parts in real-time, and allow a musician's choices to influence other players' parts.
+John has been exploring ways to express complex ideas to musicians given limitations on rehearsal time, funding, and location. *vectorscores* uses web technology to create scores and parts for musicians that use animation to present musical material, generate and update parts in real-time, and allow a musician's choices to influence other players' parts.
 
-<span class="vectorscores">*vectorscores*</span> is iterative and transparent, with a public code repository and the latest progress published to the website. The project is a continual work in progress, with every rehearsal and performance helping the composer further shape the works and clarify notation.
+*vectorscores* is iterative and transparent, with a public code repository and the latest progress published to the website. The project is a continual work in progress, with every rehearsal and performance helping the composer further shape the works and clarify notation.
 
 
 ## Advantages over traditional scores
@@ -27,20 +27,20 @@ John has been exploring ways to express complex ideas to musicians given limitat
 - Use a video splitter to view the same score on multiple screens
 - Project the image for performers (projecting for the audience is less ideal in a concert setting)
 
-[Read more](https://github.com/johnteske/vectorscores/wiki/Running-vectorscores-locally) about running <span class="vectorscores">*vectorscores*</span> on the wiki.
+[Read more](https://github.com/johnteske/vectorscores/wiki/Running-vectorscores-locally) about running *vectorscores* on the wiki.
 
 ## Contributing
-- **Performances**. Perform works created with <span class="vectorscores">*vectorscores*</span>. Contact me and I'll list performances here along with links to any audio and video documentation.
-- **Compositions**. Use the <span class="vectorscores">*vectorscores*</span> framework to compose your own score. You are welcome to use my work a starting point—but please make them your own!
+- **Performances**. Perform works created with *vectorscores*. Contact me and I'll list performances here along with links to any audio and video documentation.
+- **Compositions**. Use the *vectorscores* framework to compose your own score. You are welcome to use my work a starting point—but please make them your own!
 - **Repository**. I encourage feedback and contributions to this project. Feel free to submit issues and pull requests!
 
 
 ## Licenses
-The <span class="vectorscores">*vectorscores*</span> framework is released under the [MIT License](http://opensource.org/licenses/MIT). Copyright of compositions resulting from code and parameters using the framework belong to the composer.
+The *vectorscores* framework is released under the [MIT License](http://opensource.org/licenses/MIT). Copyright of compositions resulting from code and parameters using the framework belong to the composer.
 
 
 ## Support
-<span class="vectorscores">*vectorscores*</span> is supported by the Seattle Office of Arts & Culture.
+*vectorscores* is supported by the Seattle Office of Arts & Culture.
 
 <p align="center"><img src="https://cdn.rawgit.com/johnteske/vectorscores/a2fa6bd7cabaeddcadd3386e1361f43d97237e16/_includes/icons-logos/SOAC-logo-grey.svg" width="128px" /></p>
 
@@ -56,7 +56,3 @@ The current scope of this project is to require as few dependencies as possible 
 - download pre-selected vector files and pdfs of scores
 - clone or download repository to run on local machine or WLAN
 - documentation of premiere performances and other performances as available
-
-
-[storyboard]: http://vectorscores.org/scores/storyboard/
-[Morphing clouds]: http://vectorscores.org/scores/glob/
