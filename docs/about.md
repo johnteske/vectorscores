@@ -4,4 +4,5 @@ title: About
 permalink: /about/
 menu: true
 ---
-{% include_relative README.md %}
+{% capture readme %}{% include_relative README.md %}{% endcapture %}
+{{ readme | replace: '*vectorscores*', '<span class="vectorscores">*vectorscores*</span>' }}
