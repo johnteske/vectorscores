@@ -8,7 +8,6 @@ layout: compress
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
     <link rel="stylesheet" href="{{ "/css/score.css" | prepend: site.baseurl }}">
-    <!-- <link rel="stylesheet" href="styles.css"> -->
 </head>
 <body>
     {% include score/header.html %}
@@ -21,9 +20,7 @@ layout: compress
         {% include work-list-loop.html layout_contains='movement' filter_by='path' filter_contains=set_path %}
         </ul>
     </main>
-    {% comment %}{% include score/footer.html %}{% endcomment %}
     {% include score/modals.html %}
     {% include score/scripts.html %}
-    <!-- <script src="script.js" charset="utf-8"></script> -->
 </body>
 </html>
