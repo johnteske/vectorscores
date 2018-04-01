@@ -3,12 +3,19 @@ title: vectorscores
 email: john@johnteskemusic.com
 description: >
     A new series of dynamic compositions.
-baseurl: "/vectorscores"
-assetsurl: "/assets"
 url: "http://vectorscores.org"
 twitter_username: johnteske
 github_username:  johnteske/vectorscores
 website: http://johnteskemusic.com
+
+# Url segments
+baseurl: "/vectorscores"
+assetsurl: "/assets"
+
+# Jekyll directories
+layouts_dir: _jekyll/layouts
+data_dir: _jekyll/data
+includes_dir: _jekyll/includes
 
 # Build settings
 safe: true
@@ -16,8 +23,7 @@ markdown: kramdown
 sass:
     sass_dir: assets/_sass
     style: compressed
-include: ["_pages"]
-exclude: ["bin", "docs/README.md"]
+exclude: ["bin"]
 
 # https://github.com/penibelst/jekyll-compress-html
 # Compression settings
