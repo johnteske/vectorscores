@@ -1,9 +1,7 @@
-# system files
+# System files
 .DS_Store
 
-# local development
-_workspace/
-Gemfile.lock
+# Generated files
 .tmp
 
 # Jekyll
@@ -11,5 +9,5 @@ _site/
 .sass-cache/
 .jekyll-metadata
 
-# Wiki
-*.wiki
+# Local development
+_workspace/
