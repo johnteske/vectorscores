@@ -1,5 +1,6 @@
 language: ruby
-gemfile: bin/Gemfile
+# gemfile: bin/Gemfile
+install: bin/install
 script:
   - gem list
   - BUNDLE_GEMFILE=bin/Gemfile rake -f bin/Rakefile
