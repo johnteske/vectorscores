@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "lint": "npm run lint-frontmatter-source; npm run lint-source; npm run lint-built",
+    "lint-frontmatter-source": "eslint './../.tmp'",
+    "lint-source": "eslint './../**/*.js' --ignore-path ./../.tmp-eslintignore --ignore-pattern 'd3*'",
+    "lint-built": "eslint './../_site/**/*.js' --no-eslintrc"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "tape": "^4.9.0"
+  }
+}

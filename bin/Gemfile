@@ -6,9 +6,6 @@ gem 'github-pages'
 
 # Test the build
 group :test do
-  gem 'eslintrb'
-  # gem 'html-proofer'
   gem 'rake'
   gem 'rubocop'
-  # gem 'jasmine'
 end

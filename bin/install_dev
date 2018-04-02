@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+# Install development dependencies
+
+# yarn install --no-lockfile
+npm install --no-package-lock
