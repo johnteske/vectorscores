@@ -1,6 +1,8 @@
 language: ruby
 gemfile: bin/Gemfile
-script: BUNDLE_GEMFILE=bin/Gemfile rake -f bin/Rakefile
+script:
+  - gem list
+  - BUNDLE_GEMFILE=bin/Gemfile rake -f bin/Rakefile
 # script: bin/test
 env:
   global:
