@@ -2,7 +2,6 @@
   "extends": "eslint:recommended",
   "rules": {
     "eqeqeq": "error",
-
     "block-scoped-var": "error",
     "comma-spacing": [
       "warn",

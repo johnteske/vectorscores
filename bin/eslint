@@ -2,4 +2,12 @@
 #
 # Lint source and built Javascript files
 
-npm --prefix bin run lint
+node bin/js/eslint-files.js
+
+bin/js/node_modules/.bin/eslint './.tmp/**/*.js'
+bin/js/node_modules/.bin/eslint './assets/**/*.js' --ignore-path './.tmp-eslintignore' --ignore-pattern 'd3*'
+bin/js/node_modules/.bin/eslint './scores/**/*.js' --ignore-path './.tmp-eslintignore' --ignore-pattern 'd3*'
+bin/js/node_modules/.bin/eslint './_site/**/*.js' --no-eslintrc
+
+rm -rf .tmp
+rm .tmp-eslintignore

@@ -2,5 +2,4 @@
 #
 # Install development dependencies
 
-# yarn install --no-lockfile
-npm install --no-package-lock
+npm --prefix bin/js install --no-package-lock

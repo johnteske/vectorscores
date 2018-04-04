@@ -1,10 +1,8 @@
 language: ruby
-# gemfile: bin/Gemfile
 install: bin/install
 script:
-  - gem list
   - BUNDLE_GEMFILE=bin/Gemfile rake -f bin/Rakefile
-# script: bin/test
+  # - bin/test
 env:
   global:
   - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
