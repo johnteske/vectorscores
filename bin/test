@@ -3,9 +3,4 @@
 # Build Jekyll site, lint Ruby files, lint source and built Javascript files
 
 BUNDLE_GEMFILE=bin/servers/Gemfile rake -f bin/servers/Rakefile
-ruby bin/servers/eslintfiles.rb
-bin/eslint
-
-# Clean up temporary files
-rm -rf .tmp
-rm .tmp-eslintignore
+# bin/eslint

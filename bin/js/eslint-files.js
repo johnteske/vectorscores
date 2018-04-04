@@ -1,4 +1,3 @@
-var rmrf = require('rmrf');
 var mkdirp = require('mkdirp');
 
 var fs = require('fs');
@@ -6,9 +5,6 @@ var path = require('path');
 var glob = require('glob');
 
 var root = './';
-
-// Clean the .tmp folder
-rmrf(root + '.tmp/');
 
 // Loop through all front-end JS files
 glob(root + '{assets,scores}/**/*.js', function(err, files) {
