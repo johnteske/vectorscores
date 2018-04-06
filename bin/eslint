@@ -2,4 +2,19 @@
 #
 # Lint source and built Javascript files
 
-BUNDLE_GEMFILE=bin/Gemfile rake -f bin/Rakefile eslint:all
+# Create temp files from source files with frontmatter
+node bin/js/eslint-tmp-files.js
+
+# Lint source files with frontmatter
+bin/js/node_modules/.bin/eslint './.tmp/**/*.js'
+
+# Lint source files without frontmatter
+bin/js/node_modules/.bin/eslint './assets/**/*.js' --ignore-path './.tmp-eslintignore'
+bin/js/node_modules/.bin/eslint './scores/**/*.js' --ignore-path './.tmp-eslintignore'
+
+# Lint built files
+bin/js/node_modules/.bin/eslint './_site/**/*.js' --no-eslintrc
+
+# Remove temp files
+rm -rf .tmp
+rm .tmp-eslintignore

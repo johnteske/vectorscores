@@ -3,11 +3,16 @@
 
 # Generated files
 .tmp
+.tmp-eslintignore
 
 # Jekyll
 _site/
 .sass-cache/
 .jekyll-metadata
+
+# Node
+node_modules
+bin/js/etc
 
 # Local development
 _workspace/

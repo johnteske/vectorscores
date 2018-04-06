@@ -1,5 +1,6 @@
 #!/bin/bash
 #
-# Lint source and built Javascript files
+# Build Jekyll site, lint Ruby files, lint source and built Javascript files
 
-BUNDLE_GEMFILE=bin/Gemfile rake -f bin/Rakefile
+BUNDLE_GEMFILE=bin/servers/Gemfile rake -f bin/servers/Rakefile
+# bin/eslint

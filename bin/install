@@ -1,5 +1,5 @@
 #!/bin/bash
 #
-#
+# Install production/local performance dependencies
 
-BUNDLE_GEMFILE=bin/Gemfile bundle install
+BUNDLE_GEMFILE=bin/servers/Gemfile bundle install

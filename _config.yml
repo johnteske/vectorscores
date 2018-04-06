@@ -23,7 +23,7 @@ markdown: kramdown
 sass:
     sass_dir: assets/_sass
     style: compressed
-exclude: ["bin"]
+exclude: ["bin", "node_modules"]
 
 # https://github.com/penibelst/jekyll-compress-html
 # Compression settings

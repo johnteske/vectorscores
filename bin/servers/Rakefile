@@ -1,0 +1,3 @@
+Rake.add_rakelib 'bin/servers/tasks'
+
+task default: %i[jekyll_build rubocop]

@@ -1,3 +1,0 @@
-Rake.add_rakelib 'bin/tasks'
-
-task default: %i[jekyll_build eslint:all rubocop]
