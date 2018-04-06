@@ -2,11 +2,10 @@
 
 ## Running WebSocket server
 
-Serve site and run WebSocket server
-`bin/start_local`
+Run `bin/start_local` to run both web server and WebSockets server
 
-Standalone WebSocket server
-`ruby bin/_websockets.rb`
+Run `bin/websockets` to run standalone WebSocket server
+
 
 ## Message format
 [*id*, *type*, *msg*[, *data*]]
