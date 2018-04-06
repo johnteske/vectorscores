@@ -2,4 +2,4 @@
 #
 # Install development dependencies
 
-npm --prefix bin/js install --no-package-lock
+npm --prefix bin/js install
