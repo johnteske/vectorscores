@@ -3,11 +3,18 @@
 # Display private IP address, adding protocol and port
 
 require 'socket'
+require 'yaml'
 
+# Get private IP address
 def first_private_ipv4
   Socket.ip_address_list.detect(&:ipv4_private?)
 end
 
 ip = first_private_ipv4.ip_address unless first_private_ipv4.nil?
 
-puts 'http://' + (ip ? ip : 'localhost') + ':4000'
+# Get baseurl from Jekyll config
+config = YAML.safe_load(File.read('_config.yml'))
+baseurl = config['baseurl']
+
+# Compose and print url
+puts 'http://' + (ip ? ip : 'localhost') + ':4000' + baseurl + '/'
