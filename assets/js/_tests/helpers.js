@@ -9,10 +9,17 @@ global.document = DOM.window.document
 
 const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
 
+test('VS#makeQueryString', t => {
+    t.equal(VS.makeQueryString({ a: '1' }), 'a=1', 'return query string')
+    t.equal(VS.makeQueryString({ a: '1', b: '2' }), 'a=1&b=2', 'return query string joined by \'&\'')
+
+    t.end()
+})
+
 test('VS#clamp', t => {
-    t.equal(VS.clamp(11, 0, 5), 5, 'value greater than max should return max')
-    t.equal(VS.clamp(-11, 0, 5), 0, 'value less than min should return min')
-    t.equal(VS.clamp(2.5, 0, 5), 2.5, 'value between min and max should return value')
+    t.equal(VS.clamp(11, 0, 5), 5, 'return max when value is greater than max')
+    t.equal(VS.clamp(-11, 0, 5), 0, 'return min when value is less than min')
+    t.equal(VS.clamp(2.5, 0, 5), 2.5, 'return value when value is between min and max')
 
     t.end()
 })
