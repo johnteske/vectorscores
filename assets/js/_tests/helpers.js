@@ -9,7 +9,10 @@ global.document = DOM.window.document
 
 const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
 
-test('VS#clamp', function(t) {
-    t.equal(VS.clamp(10, 0, 5), 5)
+test('VS#clamp', t => {
+    t.equal(VS.clamp(11, 0, 5), 5, 'value greater than max should return max')
+    t.equal(VS.clamp(-11, 0, 5), 0, 'value less than min should return min')
+    t.equal(VS.clamp(2.5, 0, 5), 2.5, 'value between min and max should return value')
+
     t.end()
 })
