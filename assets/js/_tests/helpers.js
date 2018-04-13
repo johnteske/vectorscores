@@ -1,15 +1,15 @@
-var path = require('path');
-var test = require(path.resolve('.', 'bin/js/node_modules/tape'));
-var JSDOM = require(path.resolve('.', 'bin/js/node_modules/jsdom')).JSDOM;
-var fs = require('fs');
-var html = fs.readFileSync(path.resolve('.', '_site/scores/tutorial/index.html'), 'utf8');
-var DOM = new JSDOM(html);
-global.window = DOM.window;
-global.document = DOM.window.document;
+const path = require('path')
+const test = require(path.resolve('.', 'bin/js/node_modules/tape'))
+const JSDOM = require(path.resolve('.', 'bin/js/node_modules/jsdom')).JSDOM
+const fs = require('fs')
+const html = fs.readFileSync(path.resolve('.', '_site/scores/tutorial/index.html'), 'utf8')
+const DOM = new JSDOM(html)
+global.window = DOM.window
+global.document = DOM.window.document
 
-var VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'));
+const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
 
 test('VS#clamp', function(t) {
-    t.equal(VS.clamp(10, 0, 5), 5);
-    t.end();
-});
+    t.equal(VS.clamp(10, 0, 5), 5)
+    t.end()
+})

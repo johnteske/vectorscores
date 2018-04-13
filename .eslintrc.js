@@ -25,7 +25,6 @@ module.exports = {
         ],
         'linebreak-style': [ 'error', 'unix' ],
         'operator-linebreak': [ 'warn', 'after' ],
-        'semi': 'warn',
         'space-infix-ops': 'warn',
         'space-before-blocks': 'warn',
         'space-before-function-paren': ['warn', 'never'],
@@ -41,13 +40,20 @@ module.exports = {
             'globals': {
                 'd3': false,
                 'VS': false
+            },
+            'rules': {
+                'semi': 'warn'
             }
         },
-        // Test scripts
+        // Node scripts
         {
-            'files': '**/_tests/**/*.js',
+            'files': ['**/_tests/**/*.js', 'bin/js/**/*.js'],
             'env': {
+                'es6': true,
                 'node': true,
+            },
+            'rules': {
+                'semi': ['warn', 'never']
             }
         }
     ]
