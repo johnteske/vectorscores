@@ -11,11 +11,11 @@ module.exports = {
             }
         ],
         'comma-dangle': [
-            'error',
+            'warn',
             'never'
         ],
         'keyword-spacing': [
-            'error',
+            'warn',
             {
                 'after': true
             }
@@ -25,8 +25,8 @@ module.exports = {
         'operator-linebreak': [ 'warn', 'after' ],
         'semi': 'warn',
         'space-infix-ops': 'warn',
-        'space-before-blocks': 'error',
-        'space-before-function-paren': ['error', 'never'],
+        'space-before-blocks': 'warn',
+        'space-before-function-paren': ['warn', 'never'],
         'quotes': [ 'warn', 'single' ]
     },
         'env': {
