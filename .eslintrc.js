@@ -1,8 +1,11 @@
 module.exports = {
     'extends': 'eslint:recommended',
     'rules': {
+        // Clarity
         'eqeqeq': 'error',
         'block-scoped-var': 'error',
+        'no-unneeded-ternary': 'warn',
+        // Style
         'comma-spacing': [
             'warn',
             {
@@ -21,7 +24,6 @@ module.exports = {
             }
         ],
         'linebreak-style': [ 'error', 'unix' ],
-        'no-unneeded-ternary': 'warn',
         'operator-linebreak': [ 'warn', 'after' ],
         'semi': 'warn',
         'space-infix-ops': 'warn',
@@ -29,11 +31,24 @@ module.exports = {
         'space-before-function-paren': ['warn', 'never'],
         'quotes': [ 'warn', 'single' ]
     },
-        'env': {
-        'browser': true
-    },
-    'globals': {
-        'd3': false,
-        'VS': false
-    }
+    'overrides': [
+        // Front-end scripts
+        {
+            'files': ['**/*.js', '.tmp/**/*.js'],
+            'env': {
+                'browser': true
+            },
+            'globals': {
+                'd3': false,
+                'VS': false
+            }
+        },
+        // Test scripts
+        {
+            'files': '**/_tests/**/*.js',
+            'env': {
+                'node': true,
+            }
+        }
+    ]
 };

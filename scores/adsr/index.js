@@ -16,7 +16,7 @@ var scaleX = 3,
     unitY = 10,
     view = {},
     // 16 parts is an arbitrary max, ideally large ensembles read from parts
-    numParts = clamp(+VS.getQueryString('parts') || 4, 1, 16);
+    numParts = VS.clamp(+VS.getQueryString('parts') || 4, 1, 16);
 
 {% include_relative _settings.js %}
 
@@ -471,7 +471,7 @@ function resize() {
     // TODO fix hard-coded Y spacing values
     view.width = parseInt(d3.select('main').style('width'), 10);
     view.height = parseInt(d3.select('main').style('height'), 10);
-    score.scale = clamp(view.height / ((score.partHeight * numParts) + (14 * unitY)), 0.1, 2);
+    score.scale = VS.clamp(view.height / ((score.partHeight * numParts) + (14 * unitY)), 0.1, 2);
 
     score.svg.attr('height', view.height);
     score.wrapper.attr('transform', 'scale(' + score.scale + ',' + score.scale + ')');

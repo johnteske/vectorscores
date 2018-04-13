@@ -44,8 +44,7 @@ function hasFrontmatter(filePath) {
 }
 
 /**
- * Write an .eslintignore file to ignore source files with frontmatter
- * and d3 library
+ * Write an .eslintignore file to ignore source files with frontmatter and libraries
  */
 function writeIgnoreFile(filePath, frontmatterFiles) {
     var content = frontmatterFiles.map(function(f) {
@@ -53,8 +52,8 @@ function writeIgnoreFile(filePath, frontmatterFiles) {
         })
         .join('\n');
 
-    // Ignore d3
-    content += '\nassets/js/d3*\n';
+    // Ignore libraries
+    content += '\nassets/js/lib\n';
 
     fs.writeFileSync(filePath, content);
 }
