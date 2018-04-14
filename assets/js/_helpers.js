@@ -1,6 +1,3 @@
-// TODO replace VS#noop with short circuits, i.e. (typeof callback === 'function') && callback(args)
-VS.noop = function() {};
-
 VS.getRandExcl = function(min, max) {
     return Math.random() * (max - min) + min;
 };

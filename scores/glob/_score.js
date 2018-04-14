@@ -180,6 +180,6 @@ var score = [];
         transpose += VS.getItem([-1, 1]) * Math.floor(Math.random() * (bar.pitch.set[bar.pitch.set.length - 1] || 0));
     }
 
-    // final event
-    VS.score.add(time, VS.noop);
+    // final, empty event
+    VS.score.add(time);
 }());

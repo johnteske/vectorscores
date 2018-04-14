@@ -440,7 +440,7 @@ score.bars.push(score.bars[score.bars.length - 1] + 30);
     for (i = 0; i < len; i++) {
         VS.score.add(
             score.bars[i] * 1000,
-            (i < len - 1) ? scrollScore : VS.noop,
+            (i < len - 1) && scrollScore,
             [i, getBarDuration(i) * 1000, true]);
     }
 })();

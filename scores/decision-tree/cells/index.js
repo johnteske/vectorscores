@@ -23,6 +23,8 @@ var score = {
     weightScale: 5
 };
 
+var debug = +VS.getQueryString('debug') === 1;
+
 var layout = {
     margin: {}
 };
@@ -152,19 +154,16 @@ function selectCell(position) {
             choice
         ]);
 
-        debugChoices();
+        debug && debugChoices();
     }
 }
 
-var debugChoices = (function() {
-    var debug = +VS.getQueryString('debug') === 1 || false,
-        el = document.getElementsByClassName('debug')[0];
+function debugChoices() {
+    var el = document.getElementsByClassName('debug')[0];
 
-    return debug ? function() {
-        el.innerHTML = 'weight: ' + score.partWeight + '<br />' +
-            params.getWeights().split('\n').join('<br />');
-    } : VS.noop;
-})();
+    el.innerHTML = 'weight: ' + score.partWeight + '<br />';
+    el.innerHTML += params.getWeights().split('\n').join('<br />');
+}
 
 /**
  * Create cells

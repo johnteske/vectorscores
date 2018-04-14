@@ -285,8 +285,9 @@ var addEvent = (function() {
 for (var i = 0; i < cardList.length; i++) {
     addEvent(goToCard, scaleDuration(i) * 1000, [i, 'score']);
 }
-// and final noop after last card
-addEvent(VS.noop);
+
+// and final, empty event after last card
+addEvent();
 
 VS.score.preroll = score.cueDuration; // cardTransTime;
 

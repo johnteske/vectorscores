@@ -34,11 +34,11 @@ VS.WebSocket = (function() {
         }
     }
 
-    ws.messageCallback = VS.noop;
-    ws.playCallback = VS.noop;
-    ws.pauseCallback = VS.noop;
-    ws.stopCallback = VS.noop;
-    ws.stepCallback = VS.noop;
+    ws.messageCallback = undefined;
+    ws.playCallback = undefined;
+    ws.pauseCallback = undefined;
+    ws.stopCallback = undefined;
+    ws.stepCallback = undefined;
 
     function handleWebSocketMsg(data) {
         var cid = data[0];
@@ -59,20 +59,20 @@ VS.WebSocket = (function() {
         switch (content) {
             case 'play':
                 VS.score.play();
-                ws.playCallback();
+                ws.playCallback && ws.playCallback();
                 break;
             case 'pause':
                 VS.score.pause();
-                ws.pauseCallback();
+                ws.pauseCallback && ws.pauseCallback();
                 break;
             case 'stop':
                 VS.score.stop();
-                ws.stopCallback();
+                ws.stopCallback && ws.stopCallback();
                 break;
             case 'step':
                 VS.score.updatePointer(data[3]);
                 VS.control.updateStepButtons();
-                ws.stepCallback();
+                ws.stepCallback && ws.stepCallback();
                 break;
         }
     }
@@ -110,7 +110,7 @@ VS.WebSocket = (function() {
                         handleVectorscoresMsg(data);
                     }
 
-                    ws.messageCallback(data);
+                    ws.messageCallback && ws.messageCallback(data);
                 }
                 catch (err) {
                     log('Receive error: ' + err);

@@ -2,23 +2,29 @@ VS.score = (function() {
 
     function schedule(time, func, params) {
         // allTimeouts.push( setTimeout(fn, time, params) ); // not <IE9
-        VS.score.allTimeouts.push( setTimeout(function() { func(params); }, time) ); // IE fix?
+
+        // IE fix?
+        // Schedule this event (if defined)
+        func && VS.score.allTimeouts.push(setTimeout(function() {
+            func(params);
+        }, time));
     }
 
     function updatePointer(index) {
         VS.score.pointer = index;
         VS.control.pointer.element.value = index;
-        VS.score.stepCallback();
+        VS.score.stepCallback && VS.score.stepCallback();
     }
 
     function playEvent(index) {
         VS.score.updatePointer(index);
 
+        // Execute this event (if defined)
         var thisFunc = VS.score.funcAt(index);
-        thisFunc.apply(null, VS.score.paramsAt(index));
+        thisFunc && thisFunc.apply(null, VS.score.paramsAt(index));
         // thisFunc(index, VS.score.paramsAt(index)); // TODO don't force first argument to be index
 
-        // schedule next event
+        // Schedule next event
         if (index < VS.score.getLength() - 1) {
             var timeToNext = VS.score.timeAt(index + 1) - VS.score.timeAt(index);
             schedule(timeToNext, playEvent, index + 1);
@@ -48,10 +54,10 @@ VS.score = (function() {
             });
         },
 
-        playCallback: VS.noop,
-        pauseCallback: VS.noop,
-        stopCallback: VS.noop,
-        stepCallback: VS.noop,
+        playCallback: undefined,
+        pauseCallback: undefined,
+        stopCallback: undefined,
+        stepCallback: undefined,
         play: function() {
             VS.score.playing = true;
             VS.control.play.setPause();
@@ -60,7 +66,7 @@ VS.score = (function() {
             VS.control.fwd.disable();
             schedule(VS.score.preroll, playEvent, VS.score.pointer);
             VS.layout.hide();
-            VS.score.playCallback();
+            VS.score.playCallback && VS.score.playCallback();
         },
         pause: function() {
             VS.score.playing = false;
@@ -68,7 +74,7 @@ VS.score = (function() {
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
             VS.layout.show();
-            VS.score.pauseCallback();
+            VS.score.pauseCallback && VS.score.pauseCallback();
         },
         stop: function() {
             VS.score.playing = false;
@@ -79,7 +85,7 @@ VS.score = (function() {
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
             VS.layout.show();
-            VS.score.stopCallback();
+            VS.score.stopCallback && VS.score.stopCallback();
         },
         schedule: schedule,
         updatePointer: updatePointer
