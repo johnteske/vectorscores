@@ -104,6 +104,16 @@ test('VS#getWeightedItem', { skip: sampleSize < 999 }, t => {
     t.end()
 })
 
+// TODO use JSDOM to test modal interaction, run as an integration test elsewhere
+test.only('VS#getQueryString', t => {
+    const url = 'http://localhost:4000/vectorscores/scores/adsr/?parts=4&showall=0'
+
+    t.equal(VS.getQueryString('parts', url), '4', 'return value as string given query parameter that exists in url')
+    t.equal(VS.getQueryString('foo', url), null, 'return null given query parameter that does not exist in url')
+
+    t.end()
+})
+
 test('VS#makeQueryString', t => {
     t.equal(VS.makeQueryString({ a: '1' }), 'a=1', 'return query string')
     t.equal(VS.makeQueryString({ a: '1', b: '2' }), 'a=1&b=2', 'return query string joined by \'&\'')

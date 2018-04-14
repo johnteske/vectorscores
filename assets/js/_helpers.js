@@ -25,6 +25,11 @@ VS.getWeightedItem = function(items, weights) {
     }
 };
 
+/**
+ * Get query parameter value from query string, by query parameter key
+ * @param {string} param - query parameter key
+ * @param {string} [url=window.location.href] - URL string to extract query parameter value from
+ */
 VS.getQueryString = function(param, url) {
     var href = url ? url : window.location.href,
         string = new RegExp('[?&]' + param + '=([^&#]*)', 'i').exec(href);
