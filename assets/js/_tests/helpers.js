@@ -23,3 +23,30 @@ test('VS#clamp', t => {
 
     t.end()
 })
+
+test('VS#normalize', t => {
+    const min = -5
+    const max = 5
+
+    t.equal(VS.normalize(5, min, max), 1)
+    t.equal(VS.normalize(0, min, max), 0.5)
+    t.equal(VS.normalize(-5, min, max), 0)
+
+    t.end()
+})
+
+test('VS#constant', t => {
+    const five = VS.constant(5)
+
+    t.equal(typeof five, 'function')
+    t.equal(five(), 5)
+
+    t.end()
+})
+
+test('VS#mod', t => {
+    t.equal(VS.mod(6, 12), 6)
+    t.equal(VS.mod(13, 12), 1)
+
+    t.end()
+})
