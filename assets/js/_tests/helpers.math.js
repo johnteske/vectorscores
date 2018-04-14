@@ -1,11 +1,6 @@
 const path = require('path')
-const test = require(path.resolve('.', 'bin/js/node_modules/tape'))
-const JSDOM = require(path.resolve('.', 'bin/js/node_modules/jsdom')).JSDOM
-const fs = require('fs')
-const html = fs.readFileSync(path.resolve('.', '_site/scores/tutorial/index.html'), 'utf8')
-const DOM = new JSDOM(html)
-global.window = DOM.window
-global.document = DOM.window.document
+const { test, setupDOM } = require(path.resolve('.', 'bin/js/tape-setup'))
+setupDOM('_site/scores/tutorial/index.html')
 
 const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
 const sampleSize = 1 // 5000000
@@ -104,23 +99,6 @@ test('VS#getWeightedItem', { skip: sampleSize < 999 }, t => {
     t.end()
 })
 
-// TODO use JSDOM to test modal interaction, run as an integration test elsewhere
-test.only('VS#getQueryString', t => {
-    const url = 'http://localhost:4000/vectorscores/scores/adsr/?parts=4&showall=0'
-
-    t.equal(VS.getQueryString('parts', url), '4', 'return value as string given query parameter that exists in url')
-    t.equal(VS.getQueryString('foo', url), null, 'return null given query parameter that does not exist in url')
-
-    t.end()
-})
-
-test('VS#makeQueryString', t => {
-    t.equal(VS.makeQueryString({ a: '1' }), 'a=1', 'return query string')
-    t.equal(VS.makeQueryString({ a: '1', b: '2' }), 'a=1&b=2', 'return query string joined by \'&\'')
-
-    t.end()
-})
-
 test('VS#clamp', t => {
     t.equal(VS.clamp(11, 0, 5), 5, 'return max when value is greater than max')
     t.equal(VS.clamp(-11, 0, 5), 0, 'return min when value is less than min')
@@ -136,16 +114,6 @@ test('VS#normalize', t => {
     t.equal(VS.normalize(5, min, max), 1, 'return 1 when value is max')
     t.equal(VS.normalize(0, min, max), 0.5, 'return 0.5 when value is midpoint between min and max')
     t.equal(VS.normalize(-5, min, max), 0, 'return 0 when value is min')
-
-    t.end()
-})
-
-test('VS#constant', t => {
-    const value = 5
-    const c = VS.constant(value)
-
-    t.equal(typeof c, 'function', 'be type \'function\'')
-    t.equal(c(), value, 'return same value initialized with')
 
     t.end()
 })
