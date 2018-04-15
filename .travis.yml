@@ -1,5 +1,7 @@
 language: ruby
-install: bin/install
+install:
+  - bin/install
+  - bin/install_dev
 script: bin/test
 env:
   global:
