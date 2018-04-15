@@ -1,15 +1,10 @@
 /**
- * Score
+ * Score callbacks
+ * Choices should be cleared so new choices can be loaded and selected on play
  */
+VS.score.pauseCallback = clearChoices;
 VS.score.stopCallback = clearChoices;
-
-VS.score.stepCallback = function() {
-    if (VS.score.pointer === 0) {
-        clearChoices();
-    } else if (VS.score.pointer < VS.score.getLength() - 1) {
-        updateChoices();
-    }
-};
+VS.score.stepCallback = clearChoices;
 
 /**
  * Keyboard
