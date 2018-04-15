@@ -16,23 +16,23 @@ if (VS.layout.footer) {
         function playPause() {
             if (!VS.score.playing) {
                 VS.score.play();
-                VS.control.playCallback && VS.control.playCallback();
+                VS.cb(VS.control.playCallback);
             } else {
                 VS.score.pause();
-                VS.control.pauseCallback && VS.control.pauseCallback();
+                VS.cb(VS.control.pauseCallback);
             }
         }
 
         function stop() {
             VS.score.stop();
-            VS.control.stopCallback && VS.control.stopCallback();
+            VS.cb(VS.control.stopCallback);
         }
 
         function stepPointer(steps) {
             if (!VS.score.playing) { // don't allow skip while playing, for now
                 VS.score.updatePointer(VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1));
                 VS.control.updateStepButtons();
-                VS.control.stepCallback && VS.control.stepCallback();
+                VS.cb(VS.control.stepCallback);
             }
         }
 

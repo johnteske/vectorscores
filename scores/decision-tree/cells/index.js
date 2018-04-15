@@ -154,7 +154,7 @@ function selectCell(position) {
             choice
         ]);
 
-        debug && debugChoices();
+        VS.cb(debugChoices);
     }
 }
 

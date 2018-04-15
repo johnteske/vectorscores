@@ -437,11 +437,9 @@ score.bars.push(score.bars[score.bars.length - 1] + 30);
 (function() {
     var i, len = score.bars.length;
 
+    // TODO clarify: event will be scrollScore, will be undefined if i >= len - 1
     for (i = 0; i < len; i++) {
-        VS.score.add(
-            score.bars[i] * 1000,
-            (i < len - 1) && scrollScore,
-            [i, getBarDuration(i) * 1000, true]);
+        VS.score.add(score.bars[i] * 1000, (i < len - 1) && scrollScore, [i, getBarDuration(i) * 1000, true]);
     }
 })();
 
