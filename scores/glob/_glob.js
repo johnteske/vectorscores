@@ -73,6 +73,7 @@ Glob.prototype.move = function(dur, data) {
     // update
     globules
         .transition(t)
+        .style('opacity', 1)
         .attr('transform', transform);
 
     // enter
