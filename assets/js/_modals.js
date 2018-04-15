@@ -7,12 +7,10 @@ VS.enableModal = function(modalId, openId, closeId) {
     function openModal() {
         overlay.style.display = 'block';
         modal.style.display = 'block';
-        VS.layout.show();
 
-        if (VS.layout.footer) {
-            VS.score.pause();
-            window.removeEventListener('keydown', VS.control.keydownListener, true);
-        }
+        VS.layout.show();
+        VS.score.pause();
+        window.removeEventListener('keydown', VS.control.keydownListener, true);
 
         closeTrigger.addEventListener('click', closeModal, true);
         window.addEventListener('click', clickListener, true);
@@ -24,9 +22,7 @@ VS.enableModal = function(modalId, openId, closeId) {
         modal.style.display = 'none';
         VS.layout.hide();
 
-        if (VS.layout.footer) {
-            window.addEventListener('keydown', VS.control.keydownListener, true);
-        }
+        window.addEventListener('keydown', VS.control.keydownListener, true);
 
         closeTrigger.removeEventListener('click', closeModal, true);
         window.removeEventListener('click', clickListener, true);

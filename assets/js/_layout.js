@@ -6,10 +6,7 @@ VS.layout = (function() {
 
     function setClass(c) {
         layout.header.className = c;
-
-        if (layout.footer) {
-            layout.footer.className = c;
-        }
+        layout.footer.className = c;
     }
 
     layout.show = function() {
@@ -27,10 +24,7 @@ VS.layout = (function() {
     }
 
     addLayoutInteraction(layout.header);
-
-    if (layout.footer) {
-        addLayoutInteraction(layout.footer);
-    }
+    addLayoutInteraction(layout.footer);
 
     return layout;
 })();
