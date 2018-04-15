@@ -31,7 +31,7 @@ test.skip('VS#getRandExcl', t => {
 
 test('VS#getItem', { skip: sampleSize < 999 }, t => {
     const items = ['a', 'b', 'c', 'd', 'e']
-    const weights = [0, 0, 0, 0, 0]
+    const count = [0, 0, 0, 0, 0]
     let results = []
 
     for (let i = 0; i < sampleSize; i++) {
@@ -48,14 +48,14 @@ test('VS#getItem', { skip: sampleSize < 999 }, t => {
         let weighting = results.reduce((acc, val) => {
             acc[items.indexOf(val)]++
             return acc
-        }, weights).map(v => {
+        }, count).map(v => {
             return v / sampleSize
         })
 
         const probability = 1 / items.length
 
         reportDistribution({
-            expected: weights.map(() => probability),
+            expected: count.map(() => probability),
             actual: weighting
         })
 
@@ -68,6 +68,7 @@ test('VS#getItem', { skip: sampleSize < 999 }, t => {
 test('VS#getWeightedItem', { skip: sampleSize < 999 }, t => {
     const items = ['a', 'b', 'c', 'd', 'e']
     const weights = [0.5, 0.25, 0.125, 0.0625, 0.0625]
+    const count = [0, 0, 0, 0, 0]
     let results = []
 
     for (let i = 0; i < sampleSize; i++) {
@@ -84,7 +85,7 @@ test('VS#getWeightedItem', { skip: sampleSize < 999 }, t => {
         let weighting = results.reduce((acc, val) => {
             acc[items.indexOf(val)]++
             return acc
-        }, [0, 0, 0, 0, 0]).map(v => {
+        }, count).map(v => {
             return v / sampleSize
         })
 

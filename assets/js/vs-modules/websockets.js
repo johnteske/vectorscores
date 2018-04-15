@@ -59,20 +59,20 @@ VS.WebSocket = (function() {
         switch (content) {
             case 'play':
                 VS.score.play();
-                ws.playCallback && ws.playCallback();
+                VS.cb(ws.playCallback);
                 break;
             case 'pause':
                 VS.score.pause();
-                ws.pauseCallback && ws.pauseCallback();
+                VS.cb(ws.pauseCallback);
                 break;
             case 'stop':
                 VS.score.stop();
-                ws.stopCallback && ws.stopCallback();
+                VS.cb(ws.stopCallback);
                 break;
             case 'step':
                 VS.score.updatePointer(data[3]);
                 VS.control.updateStepButtons();
-                ws.stepCallback && ws.stepCallback();
+                VS.cb(ws.stepCallback);
                 break;
         }
     }
@@ -110,7 +110,7 @@ VS.WebSocket = (function() {
                         handleVectorscoresMsg(data);
                     }
 
-                    ws.messageCallback && ws.messageCallback(data);
+                    (typeof ws.messageCallback === 'function') && ws.messageCallback(data);
                 }
                 catch (err) {
                     log('Receive error: ' + err);
