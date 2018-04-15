@@ -6,7 +6,7 @@
 BUNDLE_GEMFILE=bin/servers/Gemfile rake -f bin/servers/Rakefile
 
 # Lint built JavaScript files
-bin/js/node_modules/.bin/eslint './_site/**/*.js' --no-eslintrc
+bin/eslint --built
 
 # Run JavaScript tests
 bin/tap-spec
