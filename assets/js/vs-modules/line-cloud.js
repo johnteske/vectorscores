@@ -54,8 +54,8 @@ VS.lineCloud = function() {
         var n = args.n || 1; // TODO allow to be set by method?
 
         var width = w(), // w(d, i),
-            height = h(), // h(d, i);
-            duration = dur();
+            height = h(); // h(d, i);
+            // duration = dur(); // TODO
 
         var data = [];
 

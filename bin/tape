@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# Run tape tests
+
+bin/js/node_modules/.bin/tape './**/_tests/**/*.js'

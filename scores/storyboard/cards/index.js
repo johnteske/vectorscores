@@ -147,8 +147,8 @@ function updateCardIndicator(pointer) {
 for (var i = 0; i < cardList.length; i++) {
     VS.score.add(cardList[i].time, goToCard, [i]);
 }
-// and final noop 3 seconds after last card
-VS.score.add(cardList[cardList.length - 1].time + 3000, VS.noop);
+// and final, empty event 3 seconds after last card
+VS.score.add(cardList[cardList.length - 1].time + 3000);
 
 function scoreControlCallback() {
     cueIndicator.cancel();

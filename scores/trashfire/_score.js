@@ -149,7 +149,6 @@ score = score.concat(fireCycle(), fireCycle(), fireCycle(), fireCycle(), fireCyc
  * Noise
  */
 var lastTime = score[score.length - 1].time;
-console.log(lastTime, lastTime / 60000);
 
 var noiseEvents = (function() {
     var noises = [],

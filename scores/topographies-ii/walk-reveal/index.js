@@ -302,7 +302,7 @@ addEvent(function() {
         .call(revealSymbols, 6000);
 }, 6000);
 
-addEvent(VS.noop, 0);
+addEvent(undefined, 0);
 
 /**
  *

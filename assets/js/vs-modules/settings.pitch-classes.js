@@ -1,7 +1,8 @@
 ---
 layout: compress-js
 ---
-VS.PitchClassSettings = function(elements) {
+// TODO pass elements as argument?
+VS.PitchClassSettings = function() {
     var self = this;
 
     if (!VS.RadioSetting) {

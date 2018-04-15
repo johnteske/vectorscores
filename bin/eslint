@@ -2,18 +2,37 @@
 #
 # Lint source and built Javascript files
 
+# If no argument passed, lint all
+if [ "$#" == 0 ]; then
+    FRONTMATTER=1
+    SOURCE=1
+    BUILT=1
+fi
+
+# Allow each of the lint commands to be run
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --frontmatter) FRONTMATTER=1; shift 1;;
+        --source) SOURCE=1; shift 1;;
+        --built) BUILT=1; shift 1;;
+        *) echo "Unsupported argument: $1"; shift 1;;
+    esac
+done
+
 # Create temp files from source files with frontmatter
 node bin/js/eslint-tmp-files.js
 
 # Lint source files with frontmatter
-bin/js/node_modules/.bin/eslint './.tmp/**/*.js'
+[[ -n $FRONTMATTER ]] && bin/js/node_modules/.bin/eslint './.tmp/**/*.js'
 
 # Lint source files without frontmatter
-bin/js/node_modules/.bin/eslint './assets/**/*.js' --ignore-path './.tmp-eslintignore'
-bin/js/node_modules/.bin/eslint './scores/**/*.js' --ignore-path './.tmp-eslintignore'
+[[ -n $SOURCE ]] && bin/js/node_modules/.bin/eslint './assets/**/*.js' --ignore-path './.tmp-eslintignore'
+[[ -n $SOURCE ]] && bin/js/node_modules/.bin/eslint './scores/**/*.js' --ignore-path './.tmp-eslintignore'
 
 # Lint built files
-bin/js/node_modules/.bin/eslint './_site/**/*.js' --no-eslintrc
+[[ -n $BUILT ]] && bin/js/node_modules/.bin/eslint './_site/**/*.js' --no-eslintrc
+
+# TODO lint tests
 
 # Remove temp files
 rm -rf .tmp

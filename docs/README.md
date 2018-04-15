@@ -27,7 +27,7 @@ John has been exploring ways to express complex ideas to musicians given limitat
 - Use a video splitter to view the same score on multiple screens
 - Project the image for performers (projecting for the audience is less ideal in a concert setting)
 
-[Read more](installation.md) about running *vectorscores* on the wiki.
+[Read more](./../docs/installation.md) about running *vectorscores* locally.
 
 ## Contributing
 - **Performances**. Perform works created with *vectorscores*. Contact me and I'll list performances here along with links to any audio and video documentation.
