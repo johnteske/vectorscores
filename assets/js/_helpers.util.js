@@ -1,5 +1,6 @@
 /**
  * Wrapper to execute a callback, if it exists and is a function
+ * @param {function} callback
  */
 VS.cb = function(callback) {
     if (typeof callback === 'function') {
