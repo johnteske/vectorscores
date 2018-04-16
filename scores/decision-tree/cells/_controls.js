@@ -4,7 +4,6 @@
  */
 VS.score.pauseCallback = clearChoices;
 VS.score.stopCallback = clearChoices;
-VS.score.stepCallback = clearChoices;
 
 /**
  * Keyboard
