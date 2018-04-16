@@ -280,7 +280,7 @@ function randDuration() {
 /**
  * Reveal a starting point
  */
- (function() {
+(function() {
     var extremaIndices = [];
 
     for (var i = 0; i < topoData.length; i++) {
