@@ -18,20 +18,18 @@ VS.WebSocket = (function() {
     log('Not connected');
 
     function addControlCallbacks() {
-        if (VS.control) {
-            VS.control.playCallback = function() {
-                VS.WebSocket.send(['vs', 'play', VS.score.pointer]);
-            };
-            VS.control.pauseCallback = function() {
-                VS.WebSocket.send(['vs', 'pause', VS.score.pointer]);
-            };
-            VS.control.stopCallback = function() {
-                VS.WebSocket.send(['vs', 'stop']);
-            };
-            VS.control.stepCallback = function() {
-                VS.WebSocket.send(['vs', 'step', VS.score.pointer]);
-            };
-        }
+        VS.control.playCallback = function() {
+            VS.WebSocket.send(['vs', 'play', VS.score.pointer]);
+        };
+        VS.control.pauseCallback = function() {
+            VS.WebSocket.send(['vs', 'pause', VS.score.pointer]);
+        };
+        VS.control.stopCallback = function() {
+            VS.WebSocket.send(['vs', 'stop']);
+        };
+        VS.control.stepCallback = function() {
+            VS.WebSocket.send(['vs', 'step', VS.score.pointer]);
+        };
     }
 
     ws.messageCallback = undefined;
