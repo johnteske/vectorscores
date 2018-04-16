@@ -26,7 +26,8 @@ VS.layout = (function() {
     addLayoutInteraction(layout.header);
     addLayoutInteraction(layout.footer);
 
+    // Hide layout when interacting with score
+    document.getElementsByTagName('main')[0].onclick = layout.hide;
+
     return layout;
 })();
-
-document.getElementsByTagName('main')[0].onclick = VS.layout.hide;

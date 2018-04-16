@@ -34,13 +34,13 @@ VS.control = (function() {
         }
     }
 
-    var play = new ScoreControl('score-play', playPause);
+    var playControl = new ScoreControl('score-play', playPause);
 
-    play.setPlay = function() {
+    playControl.setPlay = function() {
         d3.select('g#play').classed('hide', 0);
         d3.select('g#pause').classed('hide', 1);
     };
-    play.setPause = function() {
+    playControl.setPause = function() {
         d3.select('g#play').classed('hide', 1);
         d3.select('g#pause').classed('hide', 0);
     };
@@ -79,15 +79,24 @@ VS.control = (function() {
         event.preventDefault();
     };
 
+    var stopControl = new ScoreControl('score-stop', stop);
+    var backControl = new ScoreControl('score-back', function() { stepPointer(-1); });
+
+    // Set initial control states
+    stopControl.disable();
+    backControl.disable();
+
+    window.addEventListener('keydown', keydownListener, true);
+
     return {
         playCallback: undefined,
         pauseCallback: undefined,
         stopCallback: undefined,
         stepCallback: undefined,
-        play: play,
-        stop: new ScoreControl('score-stop', stop),
+        play: playControl,
+        stop: stopControl,
         fwd: new ScoreControl('score-fwd', function() { stepPointer(1); }),
-        back: new ScoreControl('score-back', function() { stepPointer(-1); }),
+        back: backControl,
         pointer: new ScoreControl('score-pointer', VS.score.pause),
         updateStepButtons: function() {
             if (VS.score.pointer === 0) {
@@ -105,7 +114,3 @@ VS.control = (function() {
     };
 
 })();
-
-VS.control.back.disable();
-VS.control.stop.disable();
-window.addEventListener('keydown', VS.control.keydownListener, true);
