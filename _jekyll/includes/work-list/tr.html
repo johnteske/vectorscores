@@ -1,6 +1,6 @@
 <tr class="work-list-row">
     <td>
-        <a href="{{ include.project.url | prepend: site.baseurl }}" class="work-title">{{ include.project.title }}</a>{% if include.project.instrumentation %}, for {{ include.project.instrumentation }}{% endif %}
+        {% include work-list/a.html project=score %}
     </td>
     <td class="work-list-duration">
         {{ include.project.duration }}

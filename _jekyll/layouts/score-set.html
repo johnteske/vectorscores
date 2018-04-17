@@ -11,7 +11,7 @@ layout: compress
     <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
     <link rel="stylesheet" href="{{ '/css/score.css' | prepend: assets_url }}">
 </head>
-<body>
+<body class="score-set">
     {% include score/header.html %}
     <main>
         {{ content }}
@@ -19,7 +19,7 @@ layout: compress
         {% assign set_path = page.path | remove: page.name %}
 
         <ul class="work-list">
-        {% include work-list-loop.html layout_contains='movement' filter_by='path' filter_contains=set_path %}
+            {% include work-list/loop.html layout_contains='movement' filter_by='path' filter_contains=set_path tag='li' %}
         </ul>
     </main>
     {% include score/modals.html %}
