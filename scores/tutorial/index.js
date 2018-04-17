@@ -114,7 +114,7 @@ addEvent(function() {
 /**
  *
  */
-VS.score.stepCallback = function() {
+VS.control.stepCallback = function() {
     VS.score.funcAt(VS.score.pointer)();
 };
 

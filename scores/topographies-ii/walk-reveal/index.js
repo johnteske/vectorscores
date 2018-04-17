@@ -22,6 +22,7 @@ var main = d3.select('.main'),
     },
     revealFactor = 62,
     nearbyRevealFactor = 38,
+    transitionTime = 600,
     nEvents = 100;
 
 var layout = {
@@ -141,7 +142,7 @@ function revealSymbols(selection, dur) {
         });
 }
 
-function moveWalker() {
+function moveWalker(duration) {
     var c = indexToCoordinates(walker.index);
     var notWalked = [];
     var available = [];
@@ -211,10 +212,10 @@ function moveWalker() {
     topoData[walker.index].walked = true;
     topoData[walker.index].revealed = revealFactor;
 
-    revealNearby();
+    revealNearby(duration);
 }
 
-function revealNearby() {
+function revealNearby(duration) {
     // Chance nearby symbols will be revealed
     var chance = 0.2;
 
@@ -247,13 +248,21 @@ function revealNearby() {
     }
 
     // Update map
-    topo.selectAll('text').call(revealSymbols, 600);
+    topo.selectAll('text').call(revealSymbols, duration || transitionTime);
+}
+
+function forgetAll(duration) {
+    topo.selectAll('text')
+    .each(function(d) {
+        d.revealed = 0;
+    })
+    .call(revealSymbols, duration || transitionTime);
 }
 
 /**
  * Populate score
  */
-VS.score.preroll = 1000;
+VS.score.preroll = transitionTime;
 
 var addEvent = (function() {
     var time = 0;
@@ -267,10 +276,11 @@ var addEvent = (function() {
 function randDuration() {
     return 1200; // 600 + (Math.random() * 600);
 }
+
 /**
  * Reveal a starting point
  */
-addEvent(function() {
+(function() {
     var extremaIndices = [];
 
     for (var i = 0; i < topoData.length; i++) {
@@ -285,44 +295,69 @@ addEvent(function() {
     topoData[startIndex].revealed = revealFactor;
     topoData[walker.index].walker = true;
     topoData[walker.index].walked = true;
+}());
 
-    topo.selectAll('text').call(revealSymbols, 600);
-}, randDuration());
 
+/**
+ * Fade instructions in and out
+ */
+
+ // Start with instructions off
+ addEvent(function(duration) {
+     toggleInstructions(duration, false);
+ }, 0);
+
+addEvent(function(duration) {
+    toggleInstructions(duration, true);
+}, 3600);
+
+addEvent(function(duration) {
+    toggleInstructions(duration, false);
+    // Fade out symbols if stepping back
+    forgetAll(duration);
+}, 3600);
+
+// Add walk events
 for (var i = 0; i < nEvents; i++) {
     addEvent(moveWalker, randDuration());
 }
 
-// final events
-addEvent(function() {
-    topo.selectAll('text')
-        .each(function(d) {
-            d.revealed = 0;
-        })
-        .call(revealSymbols, 6000);
+// Add final events
+addEvent(function(duration) {
+    forgetAll(duration || 6000);
 }, 6000);
 
 addEvent(undefined, 0);
 
 /**
- *
+ * Instructions
  */
 var instructions = wrapper.append('text')
     .attr('class', 'instructions')
     .attr('text-anchor', 'middle')
     .attr('y', 220)
-    .attr('opacity', 1)
+    .attr('opacity', 0)
     .text('explore the unknown, try to remember the past');
 
-VS.score.playCallback = function() {
-    instructions.transition().duration(600)
-        .attr('opacity', 0);
+function toggleInstructions(duration, toggle) {
+    var opacity = toggle ? 1 : 0;
+    instructions.transition().duration(duration || transitionTime)
+        .attr('opacity', opacity);
+}
+
+/**
+ * Controls
+ */
+VS.control.stepCallback = function() {
+    var pointer = VS.score.pointer;
+    var fn = VS.score.funcAt(pointer);
+
+    if (typeof fn === 'function') {
+        fn(150);
+    }
 };
 
-VS.score.stopCallback = function() {
-    instructions.transition().duration(600)
-        .attr('opacity', 1);
-};
+VS.score.stopCallback = forgetAll;
 
 /**
  * Resize

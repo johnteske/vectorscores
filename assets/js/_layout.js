@@ -6,10 +6,7 @@ VS.layout = (function() {
 
     function setClass(c) {
         layout.header.className = c;
-
-        if (layout.footer) {
-            layout.footer.className = c;
-        }
+        layout.footer.className = c;
     }
 
     layout.show = function() {
@@ -27,12 +24,10 @@ VS.layout = (function() {
     }
 
     addLayoutInteraction(layout.header);
+    addLayoutInteraction(layout.footer);
 
-    if (layout.footer) {
-        addLayoutInteraction(layout.footer);
-    }
+    // Hide layout when interacting with score
+    document.getElementsByTagName('main')[0].onclick = layout.hide;
 
     return layout;
 })();
-
-document.getElementsByTagName('main')[0].onclick = VS.layout.hide;

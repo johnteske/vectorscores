@@ -20,10 +20,12 @@ var score = {
     intervalSpread: 5000,
     // TODO increase over time/score pointer?
     // TODO scale according to number of choices per param?
-    weightScale: 5
+    weightScale: 5,
+    transitionTime: 300
 };
 
 var debug = +VS.getQueryString('debug') === 1;
+var debugChoices;
 
 var layout = {
     margin: {}
@@ -71,7 +73,7 @@ function transformCell(selection, position, selected) {
         translateFn = position === 'top' ? translateTopCell : translateBottomCell;
     }
 
-    selection.transition().duration(300)
+    selection.transition().duration(score.transitionTime)
         .style('opacity', opacity)
         .attr('transform', translateFn);
         // .transition()
@@ -158,11 +160,13 @@ function selectCell(position) {
     }
 }
 
-function debugChoices() {
-    var el = document.getElementsByClassName('debug')[0];
+if (debug) {
+    debugChoices = function () {
+        var el = document.getElementsByClassName('debug')[0];
 
-    el.innerHTML = 'weight: ' + score.partWeight + '<br />';
-    el.innerHTML += params.getWeights().split('\n').join('<br />');
+        el.innerHTML = 'weight: ' + score.partWeight + '<br />';
+        el.innerHTML += params.getWeights().split('\n').join('<br />');
+    }
 }
 
 /**
@@ -242,16 +246,19 @@ score.bottomGroup = score.wrapper.append('g')
         selectCell('bottom');
     });
 
+function clearGroup(position) {
+    var group = position + 'Group';
+
+    score[group].call(transformCell, position);
+    score[group].selectAll('.bravura').text('');
+    score[group].select('.pitch-classes').text('{}');
+}
+
 function clearChoices() {
     // TODO also clear choice weights
 
-    score.topGroup.call(transformCell, 'top');
-    score.topGroup.selectAll('.bravura').text('');
-    score.topGroup.select('.pitch-classes').text('{}');
-
-    score.bottomGroup.call(transformCell, 'bottom');
-    score.bottomGroup.selectAll('.bravura').text('');
-    score.bottomGroup.select('.pitch-classes').text('{}');
+    clearGroup('top');
+    clearGroup('bottom');
 }
 
 clearChoices();
