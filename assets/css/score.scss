@@ -13,3 +13,15 @@ $layout-border: 2px solid $layout-color-light;
 @import "score/modal";
 @import "score/main";
 @import "score/settings";
+@import "work-list";
+
+.score-set .work-list {
+    margin: 0;
+    padding: $unit (2 * $unit);
+
+    list-style: none;
+}
+
+.score-set #score-header {
+    opacity: 1;
+}
