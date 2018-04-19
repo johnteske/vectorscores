@@ -30,7 +30,11 @@ VS.control = (function() {
         if (!VS.score.playing) { // don't allow skip while playing, for now
             VS.score.updatePointer(VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1));
             VS.control.updateStepButtons();
-            VS.cb(VS.control.stepCallback);
+            // VS.cb(VS.control.stepCallback);
+
+            for (var i = 0; i < VS.control.stepCallback.length; i++) {
+                VS.control.stepCallback[i]();
+            }
         }
     }
 
@@ -92,7 +96,7 @@ VS.control = (function() {
         playCallback: undefined,
         pauseCallback: undefined,
         stopCallback: undefined,
-        stepCallback: undefined,
+        stepCallback: [],
         play: playControl,
         stop: stopControl,
         fwd: new ScoreControl('score-fwd', function() { stepPointer(1); }),

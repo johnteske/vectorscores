@@ -143,4 +143,4 @@ update(0);
  * Score controls
  */
 VS.control.stopCallback = function() { update(0); };
-VS.control.stepCallback = function() { update(VS.score.pointer); };
+VS.control.stepCallback.push(function() { update(VS.score.pointer); });

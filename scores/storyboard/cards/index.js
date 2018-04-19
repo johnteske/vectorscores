@@ -155,6 +155,6 @@ function scoreControlCallback() {
     goToCard();
 }
 
-VS.control.stepCallback = scoreControlCallback;
+VS.control.stepCallback.push(scoreControlCallback);
 VS.score.stopCallback = scoreControlCallback;
 VS.score.pauseCallback = scoreControlCallback;

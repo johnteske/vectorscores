@@ -79,7 +79,7 @@ function resetSpans() {
 }
 
 // Activate all spans up to pointer
-VS.control.stepCallback = function() {
+VS.control.stepCallback.push(function() {
     resetSpans();
 
     var index = VS.score.pointer;
@@ -91,6 +91,6 @@ VS.control.stepCallback = function() {
         fn = VS.score.funcAt(i);
         fn.apply(null, params);
     }
-};
+});
 
 VS.score.stopCallback = resetSpans;

@@ -27,9 +27,9 @@ VS.WebSocket = (function() {
         VS.control.stopCallback = function() {
             VS.WebSocket.send(['vs', 'stop']);
         };
-        VS.control.stepCallback = function() {
+        VS.control.stepCallback.push(function() {
             VS.WebSocket.send(['vs', 'step', VS.score.pointer]);
-        };
+        });
     }
 
     ws.messageCallback = undefined;

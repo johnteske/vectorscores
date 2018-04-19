@@ -114,9 +114,9 @@ addEvent(function() {
 /**
  *
  */
-VS.control.stepCallback = function() {
+VS.control.stepCallback.push(function() {
     VS.score.funcAt(VS.score.pointer)();
-};
+});
 
 VS.score.stopCallback = function() {
     message.innerHTML = initialMessage;

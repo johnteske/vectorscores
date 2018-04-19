@@ -348,14 +348,14 @@ function toggleInstructions(duration, toggle) {
 /**
  * Controls
  */
-VS.control.stepCallback = function() {
+VS.control.stepCallback.push(function() {
     var pointer = VS.score.pointer;
     var fn = VS.score.funcAt(pointer);
 
     if (typeof fn === 'function') {
         fn(150);
     }
-};
+});
 
 VS.score.stopCallback = forgetAll;
 
