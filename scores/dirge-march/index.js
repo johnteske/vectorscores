@@ -449,5 +449,5 @@ d3.select(window).on('load', function() {
 
     VS.control.stopCallback = controlCallback;
     VS.control.pauseCallback = controlCallback
-    VS.control.stepCallback.push(controlCallback);
+    VS.control.hooks.add('step', controlCallback);
 })();

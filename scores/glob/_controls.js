@@ -9,5 +9,5 @@
     };
 
     VS.score.stopCallback = controlCallback;
-    VS.control.stepCallback.push(controlCallback);
+    VS.control.hooks.add('step', controlCallback);
 })();

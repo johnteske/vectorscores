@@ -79,7 +79,7 @@ function resetSpans() {
 }
 
 // Activate all spans up to pointer
-VS.control.stepCallback.push(function() {
+VS.control.hooks.add('step', function() {
     resetSpans();
 
     var index = VS.score.pointer;

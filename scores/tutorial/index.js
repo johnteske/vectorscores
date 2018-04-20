@@ -114,7 +114,7 @@ addEvent(function() {
 /**
  *
  */
-VS.control.stepCallback.push(function() {
+VS.control.hooks.add('step', function() {
     VS.score.funcAt(VS.score.pointer)();
 });
 

@@ -462,7 +462,7 @@ function scrollCallback() {
 }
 VS.score.pauseCallback = scrollCallback;
 VS.score.stopCallback = scrollCallback;
-VS.control.stepCallback.push(scrollCallback);
+VS.control.hooks.add('step', scrollCallback);
 
 function resize() {
     // TODO pause score if playing

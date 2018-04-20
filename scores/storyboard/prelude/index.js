@@ -304,7 +304,7 @@ VS.score.pauseCallback = VS.score.stopCallback = function() {
     goToCard();
 };
 
-VS.control.stepCallback.push(goToCard);
+VS.control.hooks.add('step', goToCard);
 
 /**
  * Resize
