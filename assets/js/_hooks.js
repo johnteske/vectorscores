@@ -2,9 +2,9 @@
  * Factory function to add hooks to internal methods
  * Currently no method to remove at this time as
  * hooks are not dynamically added/removed
- * @param {...string} : keys of hooks
+ * @param {array} keys : keys of hooks
  */
-VS.createHooks = function() {
+VS.createHooks = function(keys) {
 
     var hooks = {};
 
@@ -13,8 +13,8 @@ VS.createHooks = function() {
      */
     var dictionary = {};
 
-    for (var i = 0; i < arguments.length; i++) {
-        dictionary[arguments[i]] = [];
+    for (var i = 0; i < keys.length; i++) {
+        dictionary[keys[i]] = [];
     }
 
     /**

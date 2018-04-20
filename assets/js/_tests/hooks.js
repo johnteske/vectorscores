@@ -5,7 +5,7 @@ setupDOM('_site/scores/tutorial/index.html')
 const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
 
 test('VS#hooks', t => {
-    const hooks = new VS.createHooks('play')
+    const hooks = new VS.createHooks(['play'])
 
     const expected = {
         a: 2,
