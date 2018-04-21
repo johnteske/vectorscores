@@ -4,8 +4,7 @@ layout: compress-js
 VS.WebSocket = (function() {
     var ws = {};
 
-    var socket,
-        host = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.hostname + ':4001';
+    var socket;
 
     var log = (function() {
         var element = document.getElementById('ws-log');
@@ -16,6 +15,8 @@ VS.WebSocket = (function() {
     })();
 
     log('Not connected');
+
+    ws.hooks = VS.createHooks(['play', 'pause', 'stop', 'step', 'message']);
 
     function addControlCallbacks() {
         VS.control.hooks.add('play', function() {
@@ -33,10 +34,6 @@ VS.WebSocket = (function() {
     }
 
     ws.messageCallback = undefined;
-    ws.playCallback = undefined;
-    ws.pauseCallback = undefined;
-    ws.stopCallback = undefined;
-    ws.stepCallback = undefined;
 
     function handleWebSocketMsg(data) {
         var cid = data[0];
@@ -57,25 +54,27 @@ VS.WebSocket = (function() {
         switch (content) {
             case 'play':
                 VS.score.play();
-                VS.cb(ws.playCallback);
+                ws.hooks.trigger('play');
                 break;
             case 'pause':
                 VS.score.pause();
-                VS.cb(ws.pauseCallback);
+                ws.hooks.trigger('pause');
                 break;
             case 'stop':
                 VS.score.stop();
-                VS.cb(ws.stopCallback);
+                ws.hooks.trigger('stop');
                 break;
             case 'step':
                 VS.score.updatePointer(data[3]);
                 VS.control.updateStepButtons();
-                VS.cb(ws.stepCallback);
+                ws.hooks.trigger('step');
                 break;
         }
     }
 
     ws.connect = function() {
+        var host = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.hostname + ':4001';
+
         try {
             socket = new WebSocket(host);
 
