@@ -1,7 +1,5 @@
 /**
- * Factory function to add hooks to internal methods
- * Currently no method to remove at this time as
- * hooks are not dynamically added/removed
+ * Factory function to create methods to add and trigger hooks
  * @param {array} keys : keys of hooks
  */
 VS.createHooks = function(keys) {
