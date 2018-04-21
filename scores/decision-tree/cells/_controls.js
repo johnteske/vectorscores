@@ -28,7 +28,7 @@ window.addEventListener('keydown', keydownListener, true);
 /**
  * Websocket
  */
-VS.WebSocket.messageCallback = function(data) {
+VS.WebSocket.hooks.add('message', function(data) {
     var cid = data[0];
     var type = data[1];
     var msg = data[2];
@@ -40,6 +40,6 @@ VS.WebSocket.messageCallback = function(data) {
         params.updateWeights(msg, score.partWeight);
         debugChoices();
     }
-};
+});
 
 VS.WebSocket.connect();

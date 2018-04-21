@@ -33,12 +33,13 @@ VS.createHooks = function(keys) {
     /**
      * Call all functions for a given hook
      * @param {string} hook : key of hook to trigger
+     * @param {array} args : array of arguments to apply
      */
-    hooks.trigger = function(hook) {
+    hooks.trigger = function(hook, args) {
         var fns = dictionary[hook];
 
         for (var i = 0; i < fns.length; i++) {
-            fns[i]();
+            fns[i].apply(null, args);
         }
     };
 

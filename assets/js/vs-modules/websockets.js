@@ -107,7 +107,7 @@ VS.WebSocket = (function() {
                         handleVectorscoresMsg(data);
                     }
 
-                    (typeof ws.messageCallback === 'function') && ws.messageCallback(data);
+                    ws.hooks.trigger('message', [data]);
                 }
                 catch (err) {
                     log('Receive error: ' + err);
