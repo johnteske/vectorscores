@@ -18,15 +18,15 @@ VS.WebSocket = (function() {
     log('Not connected');
 
     function addControlCallbacks() {
-        VS.control.playCallback = function() {
+        VS.control.hooks.add('play', function() {
             VS.WebSocket.send(['vs', 'play', VS.score.pointer]);
-        };
-        VS.control.pauseCallback = function() {
+        });
+        VS.control.hooks.add('pause', function() {
             VS.WebSocket.send(['vs', 'pause', VS.score.pointer]);
-        };
-        VS.control.stopCallback = function() {
+        });
+        VS.control.hooks.add('stop', function() {
             VS.WebSocket.send(['vs', 'stop']);
-        };
+        });
         VS.control.hooks.add('step', function() {
             VS.WebSocket.send(['vs', 'step', VS.score.pointer]);
         });

@@ -14,16 +14,16 @@ VS.control = (function() {
     function playPause() {
         if (!VS.score.playing) {
             VS.score.play();
-            VS.cb(VS.control.playCallback);
+            hooks.trigger('play');
         } else {
             VS.score.pause();
-            VS.cb(VS.control.pauseCallback);
+            hooks.trigger('pause');
         }
     }
 
     function stop() {
         VS.score.stop();
-        VS.cb(VS.control.stopCallback);
+        hooks.trigger('stop');
     }
 
     function stepPointer(steps) {
@@ -91,10 +91,6 @@ VS.control = (function() {
     window.addEventListener('keydown', keydownListener, true);
 
     return {
-        playCallback: undefined,
-        pauseCallback: undefined,
-        stopCallback: undefined,
-        stepCallback: [],
         play: playControl,
         stop: stopControl,
         fwd: new ScoreControl('score-fwd', function() { stepPointer(1); }),
