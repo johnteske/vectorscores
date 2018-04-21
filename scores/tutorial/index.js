@@ -114,10 +114,10 @@ addEvent(function() {
 /**
  *
  */
-VS.control.stepCallback = function() {
+VS.control.hooks.add('step', function() {
     VS.score.funcAt(VS.score.pointer)();
-};
+});
 
-VS.score.stopCallback = function() {
-    message.innerHTML = initialMessage;
-};
+VS.score.hooks.add('stop', function() {
+   message.innerHTML = initialMessage;
+});

@@ -1,14 +1,4 @@
 /**
- * Wrapper to execute a callback, if it exists and is a function
- * @param {function} callback
- */
-VS.cb = function(callback) {
-    if (typeof callback === 'function') {
-        callback();
-    }
-};
-
-/**
  * Get query parameter value from query string, by query parameter key
  * @param {string} param : query parameter key
  * @param {string} [url=window.location.href] : URL string to extract query parameter value from

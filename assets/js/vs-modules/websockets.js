@@ -4,8 +4,7 @@ layout: compress-js
 VS.WebSocket = (function() {
     var ws = {};
 
-    var socket,
-        host = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.hostname + ':4001';
+    var socket;
 
     var log = (function() {
         var element = document.getElementById('ws-log');
@@ -17,26 +16,22 @@ VS.WebSocket = (function() {
 
     log('Not connected');
 
-    function addControlCallbacks() {
-        VS.control.playCallback = function() {
-            VS.WebSocket.send(['vs', 'play', VS.score.pointer]);
-        };
-        VS.control.pauseCallback = function() {
-            VS.WebSocket.send(['vs', 'pause', VS.score.pointer]);
-        };
-        VS.control.stopCallback = function() {
-            VS.WebSocket.send(['vs', 'stop']);
-        };
-        VS.control.stepCallback = function() {
-            VS.WebSocket.send(['vs', 'step', VS.score.pointer]);
-        };
-    }
+    ws.hooks = VS.createHooks(['play', 'pause', 'stop', 'step', 'message']);
 
-    ws.messageCallback = undefined;
-    ws.playCallback = undefined;
-    ws.pauseCallback = undefined;
-    ws.stopCallback = undefined;
-    ws.stepCallback = undefined;
+    function addControlHooks() {
+        VS.control.hooks.add('play', function() {
+            VS.WebSocket.send(['vs', 'play', VS.score.pointer]);
+        });
+        VS.control.hooks.add('pause', function() {
+            VS.WebSocket.send(['vs', 'pause', VS.score.pointer]);
+        });
+        VS.control.hooks.add('stop', function() {
+            VS.WebSocket.send(['vs', 'stop']);
+        });
+        VS.control.hooks.add('step', function() {
+            VS.WebSocket.send(['vs', 'step', VS.score.pointer]);
+        });
+    }
 
     function handleWebSocketMsg(data) {
         var cid = data[0];
@@ -57,31 +52,33 @@ VS.WebSocket = (function() {
         switch (content) {
             case 'play':
                 VS.score.play();
-                VS.cb(ws.playCallback);
+                ws.hooks.trigger('play');
                 break;
             case 'pause':
                 VS.score.pause();
-                VS.cb(ws.pauseCallback);
+                ws.hooks.trigger('pause');
                 break;
             case 'stop':
                 VS.score.stop();
-                VS.cb(ws.stopCallback);
+                ws.hooks.trigger('stop');
                 break;
             case 'step':
                 VS.score.updatePointer(data[3]);
                 VS.control.updateStepButtons();
-                VS.cb(ws.stepCallback);
+                ws.hooks.trigger('step');
                 break;
         }
     }
 
     ws.connect = function() {
+        var host = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.hostname + ':4001';
+
         try {
             socket = new WebSocket(host);
 
             socket.onopen = function() {
                 log('Open');
-                addControlCallbacks();
+                addControlHooks();
             };
 
             socket.onclose = function(e) {
@@ -108,7 +105,7 @@ VS.WebSocket = (function() {
                         handleVectorscoresMsg(data);
                     }
 
-                    (typeof ws.messageCallback === 'function') && ws.messageCallback(data);
+                    ws.hooks.trigger('message', [data]);
                 }
                 catch (err) {
                     log('Receive error: ' + err);

@@ -428,7 +428,6 @@ function scrollScore(index, dur, goToNextBar) {
 
 /**
  * Populate score
- * Use a preroll so the score doesn't start scrolling immediately // TODO allow user to define this value? min 3 seconds
  */
 
 // add final event 30 seconds after last bar, for playback
@@ -442,27 +441,6 @@ score.bars.push(score.bars[score.bars.length - 1] + 30);
         VS.score.add(score.bars[i] * 1000, (i < len - 1) && scrollScore, [i, getBarDuration(i) * 1000, true]);
     }
 })();
-
-VS.score.preroll = 3000;
-
-// scoreSettings.preroll.value = (VS.score.preroll * 0.001);
-
-VS.score.playCallback = function() {
-    VS.score.schedule(VS.score.preroll - 3000, cueBlink);
-};
-
-function scrollCallback() {
-    var pointer = VS.score.pointer;
-    if (pointer < score.bars.length - 1) {
-        scrollScore(VS.score.pointer, 300, false);
-    }
-    // TODO else: set pointer back a step
-
-    cueIndicator.cancel();
-}
-VS.score.pauseCallback = scrollCallback;
-VS.score.stopCallback = scrollCallback;
-VS.score.stepCallback = scrollCallback;
 
 function resize() {
     // TODO pause score if playing
@@ -490,7 +468,40 @@ resize();
 
 d3.select(window).on('resize', resize);
 
-VS.WebSocket.stepCallback = scrollCallback;
+/**
+ * Hooks
+ */
+
+// Use a preroll so the score doesn't start scrolling immediately
+// TODO allow user to define this value? min 3 seconds
+// scoreSettings.preroll.value = (VS.score.preroll * 0.001);
+VS.score.preroll = 3000;
+
+function prerollAnimateCue() {
+    VS.score.schedule(VS.score.preroll - 3000, cueBlink);
+}
+
+VS.control.hooks.add('play', prerollAnimateCue);
+VS.WebSocket.hooks.add('play', prerollAnimateCue);
+
+function scrollToPointer() {
+    var pointer = VS.score.pointer;
+    if (pointer < score.bars.length - 1) {
+        scrollScore(VS.score.pointer, 300, false);
+    }
+    // TODO else: set pointer back a step
+
+    cueIndicator.cancel();
+}
+
+VS.control.hooks.add('pause', scrollToPointer);
+VS.WebSocket.hooks.add('pause', scrollToPointer);
+
+VS.control.hooks.add('step', scrollToPointer);
+VS.WebSocket.hooks.add('step', scrollToPointer);
+
+VS.score.hooks.add('stop', scrollToPointer);
+
 VS.WebSocket.connect();
 
 {% include_relative _info.js %}

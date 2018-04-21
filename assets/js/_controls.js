@@ -14,23 +14,23 @@ VS.control = (function() {
     function playPause() {
         if (!VS.score.playing) {
             VS.score.play();
-            VS.cb(VS.control.playCallback);
+            hooks.trigger('play');
         } else {
             VS.score.pause();
-            VS.cb(VS.control.pauseCallback);
+            hooks.trigger('pause');
         }
     }
 
     function stop() {
         VS.score.stop();
-        VS.cb(VS.control.stopCallback);
+        hooks.trigger('stop');
     }
 
     function stepPointer(steps) {
         if (!VS.score.playing) { // don't allow skip while playing, for now
             VS.score.updatePointer(VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1));
             VS.control.updateStepButtons();
-            VS.cb(VS.control.stepCallback);
+            hooks.trigger('step');
         }
     }
 
@@ -86,17 +86,16 @@ VS.control = (function() {
     stopControl.disable();
     backControl.disable();
 
+    var hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
+
     window.addEventListener('keydown', keydownListener, true);
 
     return {
-        playCallback: undefined,
-        pauseCallback: undefined,
-        stopCallback: undefined,
-        stepCallback: undefined,
         play: playControl,
         stop: stopControl,
         fwd: new ScoreControl('score-fwd', function() { stepPointer(1); }),
         back: backControl,
+        hooks: hooks,
         pointer: new ScoreControl('score-pointer', VS.score.pause),
         updateStepButtons: function() {
             if (VS.score.pointer === 0) {

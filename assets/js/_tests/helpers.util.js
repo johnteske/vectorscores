@@ -4,25 +4,6 @@ setupDOM('_site/scores/tutorial/index.html')
 
 const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
 
-test('VS#cb', t => {
-    let value
-    VS.cb(5)
-
-    t.equal(value, undefined, 'do nothing if callback is not type function')
-
-    t.end()
-})
-
-test('VS#cb', t => {
-    let value
-    const callback = () => { value = 5 }
-    VS.cb(callback)
-
-    t.equal(value, 5, 'execute function if callback is type function')
-
-    t.end()
-})
-
 // TODO use JSDOM to test modal interaction, run as an integration test elsewhere
 test('VS#getQueryString', t => {
     const url = 'http://localhost:4000/vectorscores/scores/adsr/?parts=4&showall=0'

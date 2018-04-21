@@ -1,9 +1,10 @@
 /**
- * Score callbacks
+ * Hooks
  * Choices should be cleared so new choices can be loaded and selected on play
  */
-VS.score.pauseCallback = clearChoices;
-VS.score.stopCallback = clearChoices;
+VS.control.hooks.add('pause', clearChoices);
+VS.WebSocket.hooks.add('pause', clearChoices);
+VS.score.hooks.add('stop', clearChoices);
 
 /**
  * Keyboard
@@ -28,7 +29,7 @@ window.addEventListener('keydown', keydownListener, true);
 /**
  * Websocket
  */
-VS.WebSocket.messageCallback = function(data) {
+VS.WebSocket.hooks.add('message', function(data) {
     var cid = data[0];
     var type = data[1];
     var msg = data[2];
@@ -40,6 +41,6 @@ VS.WebSocket.messageCallback = function(data) {
         params.updateWeights(msg, score.partWeight);
         debugChoices();
     }
-};
+});
 
 VS.WebSocket.connect();

@@ -291,20 +291,22 @@ addEvent();
 
 VS.score.preroll = score.cueDuration; // cardTransTime;
 
-VS.score.playCallback = function() {
+VS.control.hooks.add('play', function() {
     goToCard(VS.score.pointer - 1, 'play');
     // VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
     VS.score.schedule(VS.score.preroll - cues[VS.score.pointer].duration(), cueBlink, VS.score.pointer - 1);
-};
+});
 
-VS.score.pauseCallback = VS.score.stopCallback = function() {
+function cancelAndGoToCard() {
     cueCancelAll();
     d3.selectAll('.cue').style('opacity', 0);
     fadePenultimateScene(false, 0);
     goToCard();
-};
+}
+VS.control.hooks.add('pause', cancelAndGoToCard);
+VS.control.hooks.add('stop', cancelAndGoToCard);
 
-VS.control.stepCallback = goToCard;
+VS.control.hooks.add('step', goToCard);
 
 /**
  * Resize

@@ -7,10 +7,12 @@ VS.score = (function() {
         }
     }
 
+    // Add a hook for the stop event, triggered after a score ends or by the user
+    var hooks = VS.createHooks(['stop']);
+
     function updatePointer(index) {
         VS.score.pointer = index;
         VS.control.pointer.element.value = index;
-        VS.cb(VS.score.stepCallback);
     }
 
     function playEvent(index) {
@@ -52,11 +54,7 @@ VS.score = (function() {
                 clearTimeout(t);
             });
         },
-
-        playCallback: undefined,
-        pauseCallback: undefined,
-        stopCallback: undefined,
-        stepCallback: undefined,
+        hooks: hooks,
         play: function() {
             VS.score.playing = true;
             VS.control.play.setPause();
@@ -65,7 +63,6 @@ VS.score = (function() {
             VS.control.fwd.disable();
             schedule(VS.score.preroll, playEvent, VS.score.pointer);
             VS.layout.hide();
-            VS.cb(VS.score.playCallback);
         },
         pause: function() {
             VS.score.playing = false;
@@ -73,7 +70,6 @@ VS.score = (function() {
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
             VS.layout.show();
-            VS.cb(VS.score.pauseCallback);
         },
         stop: function() {
             VS.score.playing = false;
@@ -84,7 +80,7 @@ VS.score = (function() {
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
             VS.layout.show();
-            VS.cb(VS.score.stopCallback);
+            hooks.trigger('stop');
         },
         schedule: schedule,
         updatePointer: updatePointer

@@ -70,7 +70,7 @@ VS.score.add(randomTime(nEvents));
 
 
 /**
- * Score and control callbacks
+ * Score and control hooks
  */
 
 // Reset all spans to default style
@@ -79,7 +79,7 @@ function resetSpans() {
 }
 
 // Activate all spans up to pointer
-VS.control.stepCallback = function() {
+VS.control.hooks.add('step', function() {
     resetSpans();
 
     var index = VS.score.pointer;
@@ -91,6 +91,6 @@ VS.control.stepCallback = function() {
         fn = VS.score.funcAt(i);
         fn.apply(null, params);
     }
-};
+});
 
-VS.score.stopCallback = resetSpans;
+VS.score.hooks.add('stop', resetSpans);
