@@ -25,7 +25,6 @@ var score = {
 };
 
 var debug = +VS.getQueryString('debug') === 1;
-var debugChoices;
 
 var layout = {
     margin: {}
@@ -156,17 +155,19 @@ function selectCell(position) {
             choice
         ]);
 
-        VS.cb(debugChoices);
+        debugChoices();
     }
 }
 
-if (debug) {
-    debugChoices = function () {
-        var el = document.getElementsByClassName('debug')[0];
-
-        el.innerHTML = 'weight: ' + score.partWeight + '<br />';
-        el.innerHTML += params.getWeights().split('\n').join('<br />');
+function debugChoices() {
+    if (!debug) {
+        return;
     }
+
+    var el = document.getElementsByClassName('debug')[0];
+
+    el.innerHTML = 'weight: ' + score.partWeight + '<br />';
+    el.innerHTML += params.getWeights().split('\n').join('<br />');
 }
 
 /**
