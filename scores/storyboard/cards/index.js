@@ -156,5 +156,5 @@ function scoreControlCallback() {
 }
 
 VS.control.hooks.add('step', scoreControlCallback);
-VS.score.stopCallback = scoreControlCallback;
-VS.score.pauseCallback = scoreControlCallback;
+VS.control.hooks.add('pause', scoreControlCallback);
+VS.score.hooks.add('stop', scoreControlCallback);

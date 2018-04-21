@@ -93,4 +93,4 @@ VS.control.hooks.add('step', function() {
     }
 });
 
-VS.score.stopCallback = resetSpans;
+VS.score.hooks.add('stop', resetSpans);

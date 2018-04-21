@@ -8,6 +8,6 @@
         }
     };
 
-    VS.score.stopCallback = controlCallback;
+    VS.score.hooks.add('stop', controlCallback);
     VS.control.hooks.add('step', controlCallback);
 })();

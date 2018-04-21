@@ -2,8 +2,8 @@
  * Score callbacks
  * Choices should be cleared so new choices can be loaded and selected on play
  */
-VS.score.pauseCallback = clearChoices;
-VS.score.stopCallback = clearChoices;
+VS.score.hooks.add('pause', clearChoices);
+VS.score.hooks.add('stop', clearChoices);
 
 /**
  * Keyboard

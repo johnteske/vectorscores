@@ -37,12 +37,12 @@ var layout = {
 {% include_relative _scrape-drone.js %}
 {% include_relative _score.js %}
 
-VS.score.stopCallback = function() {
+VS.score.hooks.add('stop', function() {
     trash = [];
     TrashFire.noiseLayer.remove(0); // calls updateTrash();
     TrashFire.scrapeDrone.hide(0);
     dumpsterShake();
-};
+});
 
 /**
  * Resize

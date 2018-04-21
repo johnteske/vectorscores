@@ -447,9 +447,9 @@ VS.score.preroll = 3000;
 
 // scoreSettings.preroll.value = (VS.score.preroll * 0.001);
 
-VS.score.playCallback = function() {
+VS.score.hooks.add('play', function() {
     VS.score.schedule(VS.score.preroll - 3000, cueBlink);
-};
+});
 
 function scrollCallback() {
     var pointer = VS.score.pointer;
@@ -460,8 +460,9 @@ function scrollCallback() {
 
     cueIndicator.cancel();
 }
-VS.score.pauseCallback = scrollCallback;
-VS.score.stopCallback = scrollCallback;
+
+VS.score.hooks.add('pause', scrollCallback);
+VS.score.hooks.add('stop', scrollCallback);
 VS.control.hooks.add('step', scrollCallback);
 
 function resize() {

@@ -357,7 +357,7 @@ VS.control.hooks.add('step', function() {
     }
 });
 
-VS.score.stopCallback = forgetAll;
+VS.control.hooks.add('stop', forgetAll);
 
 /**
  * Resize
