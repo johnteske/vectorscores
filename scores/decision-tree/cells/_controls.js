@@ -1,8 +1,9 @@
 /**
- * Score hooks
+ * Hooks
  * Choices should be cleared so new choices can be loaded and selected on play
  */
-VS.score.hooks.add('pause', clearChoices);
+VS.control.hooks.add('pause', clearChoices);
+VS.WebSocket.hooks.add('pause', clearChoices);
 VS.score.hooks.add('stop', clearChoices);
 
 /**

@@ -7,12 +7,12 @@ VS.score = (function() {
         }
     }
 
-    var hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
+    // Add a hook for the stop event, triggered after a score ends or by the user
+    var hooks = VS.createHooks(['stop']);
 
     function updatePointer(index) {
         VS.score.pointer = index;
         VS.control.pointer.element.value = index;
-        hooks.trigger('step');
     }
 
     function playEvent(index) {
@@ -63,7 +63,6 @@ VS.score = (function() {
             VS.control.fwd.disable();
             schedule(VS.score.preroll, playEvent, VS.score.pointer);
             VS.layout.hide();
-            hooks.trigger('play');
         },
         pause: function() {
             VS.score.playing = false;
@@ -71,7 +70,6 @@ VS.score = (function() {
             VS.score.clearAllTimeouts();
             VS.control.updateStepButtons();
             VS.layout.show();
-            hooks.trigger('pause');
         },
         stop: function() {
             VS.score.playing = false;
