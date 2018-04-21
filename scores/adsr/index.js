@@ -451,7 +451,7 @@ VS.score.hooks.add('play', function() {
     VS.score.schedule(VS.score.preroll - 3000, cueBlink);
 });
 
-function scrollCallback() {
+function scrollToPointer() {
     var pointer = VS.score.pointer;
     if (pointer < score.bars.length - 1) {
         scrollScore(VS.score.pointer, 300, false);
@@ -461,9 +461,9 @@ function scrollCallback() {
     cueIndicator.cancel();
 }
 
-VS.score.hooks.add('pause', scrollCallback);
-VS.score.hooks.add('stop', scrollCallback);
-VS.control.hooks.add('step', scrollCallback);
+VS.score.hooks.add('pause', scrollToPointer);
+VS.score.hooks.add('stop', scrollToPointer);
+VS.control.hooks.add('step', scrollToPointer);
 
 function resize() {
     // TODO pause score if playing
@@ -491,7 +491,7 @@ resize();
 
 d3.select(window).on('resize', resize);
 
-VS.WebSocket.hooks.add('step', scrollCallback);
+VS.WebSocket.hooks.add('step', scrollToPointer);
 VS.WebSocket.connect();
 
 {% include_relative _info.js %}

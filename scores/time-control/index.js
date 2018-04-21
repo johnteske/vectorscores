@@ -70,7 +70,7 @@ VS.score.add(randomTime(nEvents));
 
 
 /**
- * Score and control callbacks
+ * Score and control hooks
  */
 
 // Reset all spans to default style

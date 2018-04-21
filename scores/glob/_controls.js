@@ -1,5 +1,5 @@
 (function() {
-    var controlCallback = function() {
+    var updateAtPointer = function() {
         var pointer = VS.score.pointer;
         var fn = VS.score.funcAt(pointer);
 
@@ -8,6 +8,6 @@
         }
     };
 
-    VS.score.hooks.add('stop', controlCallback);
-    VS.control.hooks.add('step', controlCallback);
+    VS.score.hooks.add('stop', updateAtPointer);
+    VS.control.hooks.add('step', updateAtPointer);
 })();

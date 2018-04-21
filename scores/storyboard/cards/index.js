@@ -150,11 +150,11 @@ for (var i = 0; i < cardList.length; i++) {
 // and final, empty event 3 seconds after last card
 VS.score.add(cardList[cardList.length - 1].time + 3000);
 
-function scoreControlCallback() {
+function cancelAndGoToCard() {
     cueIndicator.cancel();
     goToCard();
 }
 
-VS.control.hooks.add('step', scoreControlCallback);
-VS.control.hooks.add('pause', scoreControlCallback);
-VS.score.hooks.add('stop', scoreControlCallback);
+VS.control.hooks.add('step', cancelAndGoToCard);
+VS.control.hooks.add('pause', cancelAndGoToCard);
+VS.score.hooks.add('stop', cancelAndGoToCard);

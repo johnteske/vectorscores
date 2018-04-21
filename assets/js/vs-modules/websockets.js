@@ -18,7 +18,7 @@ VS.WebSocket = (function() {
 
     ws.hooks = VS.createHooks(['play', 'pause', 'stop', 'step', 'message']);
 
-    function addControlCallbacks() {
+    function addControlHooks() {
         VS.control.hooks.add('play', function() {
             VS.WebSocket.send(['vs', 'play', VS.score.pointer]);
         });
@@ -32,8 +32,6 @@ VS.WebSocket = (function() {
             VS.WebSocket.send(['vs', 'step', VS.score.pointer]);
         });
     }
-
-    ws.messageCallback = undefined;
 
     function handleWebSocketMsg(data) {
         var cid = data[0];
@@ -80,7 +78,7 @@ VS.WebSocket = (function() {
 
             socket.onopen = function() {
                 log('Open');
-                addControlCallbacks();
+                addControlHooks();
             };
 
             socket.onclose = function(e) {

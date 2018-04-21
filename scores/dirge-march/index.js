@@ -442,12 +442,11 @@ d3.select(window).on('load', function() {
  * Score controls
  */
 (function() {
-    var controlCallback = function() {
-        // console.log('mm. ' + (VS.score.pointer + 1));
+    function updateAtPointer() {
         update(VS.score.pointer, true);
     }
 
-    VS.control.hooks.add('stop', controlCallback);
-    VS.control.hooks.add('pause', controlCallback);
-    VS.control.hooks.add('step', controlCallback);
+    VS.control.hooks.add('stop', updateAtPointer);
+    VS.control.hooks.add('pause', updateAtPointer);
+    VS.control.hooks.add('step', updateAtPointer);
 })();

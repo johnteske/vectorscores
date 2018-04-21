@@ -20,7 +20,7 @@ test('VS#hooks', t => {
 
     hooks.trigger('play')
 
-    t.deepEqual(actual, expected, 'should execute all registered callbacks')
+    t.deepEqual(actual, expected, 'should execute all registered functions')
 
     t.throws(() => {
         hooks.add('test', () => {})

@@ -1,5 +1,5 @@
 /**
- * Score callbacks
+ * Score hooks
  * Choices should be cleared so new choices can be loaded and selected on play
  */
 VS.score.hooks.add('pause', clearChoices);
