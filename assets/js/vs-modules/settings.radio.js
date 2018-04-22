@@ -1,13 +1,11 @@
 ---
 layout: compress-js
 ---
-VS.RadioSetting = function(elements) {
-    // Allow the name of the radio options alone to be passed in
-    if (typeof elements === 'string') {
-        this.elements = document.getElementsByName(elements);
-    } else {
-        this.elements = elements;
-    }
+/**
+ * @param {string} name : name of inputs, type="radio"
+ */
+VS.RadioSetting = function(name) {
+    this.elements = document.getElementsByName(name);
 };
 
 VS.RadioSetting.prototype.getValue = function() {

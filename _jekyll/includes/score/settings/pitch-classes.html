@@ -1,30 +1,23 @@
-<div>
-    <p>Display pitch classes as:</p>
-    <div style="margin: 1em 0;">
-        <input type="radio" name="settings-pc-display" value="integer" checked> Pitch class numbers<br>
-        <input type="radio" name="settings-pc-display" value="name"> Note names
-    </div>
-</div>
+<div id="settings-pc">
+    <section>
+        <h4>Display pitch classes as:</h4>
+        {% include score/settings/radio-group.html name='settings-pc-display' values='integer, name' labels='Pitch class numbers, Note names' %}
+    </section>
 
-<div id="pitchclass-preference">
-    <p>Display pitch classes 10, 11 as:</p>
-    <div style="margin: 1em 0;">
-        <input type="radio" name="settings-pc-preference" value="te" checked> T, E<br>
-        <input type="radio" name="settings-pc-preference" value="ab"> A, B
-    </div>
-</div>
+    <section id="pitchclass-preference">
+        <h4>Display pitch classes 10 and 11 as:</h4>
+        {% include score/settings/radio-group.html name='settings-pc-preference' values='te, ab' labels='T and E, A and B' %}
+    </section>
 
-<div id="notename-preference">
-    <p>Display accidentals as:</p>
-    <div style="margin: 1em 0;">
-        <input type="radio" name="settings-notename-preference" value="sharps" checked> sharps<br>
-        <input type="radio" name="settings-notename-preference" value="flats"> flats
-    </div>
-</div>
+    <section id="notename-preference">
+        <h4>Display accidentals as:</h4>
+        {% include score/settings/radio-group.html name='settings-notename-preference' values='sharps, flats' labels='sharps, flats' %}
+    </section>
 
-<div>
-    <p>Transpose by:</p>
-    <div style="margin: 1em 0;">
-        <input type="number" min="-11" max="11" step="1" value="0" id="settings-pc-transpose"> semitones
-    </div>
+    <section>
+        <h4>Transpose by:</h4>
+        <div class="settings-group">
+            <label><input type="number" min="-11" max="11" step="1" value="0" id="settings-pc-transpose"> semitones</label>
+        </div>
+    </section>
 </div>
