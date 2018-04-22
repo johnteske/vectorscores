@@ -229,8 +229,8 @@ function update(index, isControlEvent) {
                     .attr('x', pitch[i].time * d.width)
                     .attr('text-anchor', textAnchor(pitch[i].time));
 
-                var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy).map(function(pc) {
-                    return VS.pitchClass.format(pc, scoreSettings.pcFormat);
+                var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy + scoreSettings.pitchClasses.transposition).map(function(pc) {
+                    return VS.pitchClass.format(pc, scoreSettings.pitchClasses.display, scoreSettings.pitchClasses.preference);
                 });
                 var formatted = '{' + set + '}';
 
