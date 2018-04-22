@@ -6,9 +6,9 @@
     <label for="settings-showall">Show all parameters:</label>
     <input id="settings-showall" type="checkbox">
 </div>
-<div class="settings-group">
-    <button id="settings-generate">Generate new score</button>
-</div>
+
+{% include score/settings/generate-button.html %}
+
 {% comment %}
 <div class="settings-group">
     <label>Pre-roll (3–15 s):</label>
