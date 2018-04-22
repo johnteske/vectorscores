@@ -12,7 +12,7 @@ VS.CheckboxSetting.prototype.getValue = function() {
     return this.element.checked;
 };
 
-// TODO check and test value
+// Expects value of 1 for true, per expected query string
 VS.CheckboxSetting.prototype.setValue = function(value) {
     this.element.checked = value === 1;
 };
