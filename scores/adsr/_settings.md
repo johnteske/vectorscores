@@ -3,8 +3,7 @@
     <input type="number" min="1" max="16" id="settings-parts">
 </div>
 <div class="settings-group">
-    <label for="settings-showall">Show all parameters:</label>
-    <input id="settings-showall" type="checkbox">
+    <label><input name="settings-showall" type="checkbox"> Show parameters on each measure</label>
 </div>
 
 {% include score/settings/generate-button.html %}

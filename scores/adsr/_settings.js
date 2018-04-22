@@ -24,18 +24,16 @@ scoreSettings.parts.value = numParts;
 
 scoreSettings.pitchDisplay = 'accidentals'; // "integers"
 
-// TODO clean up
-(function() {
-    var showAll = document.getElementById('settings-showall'),
-        checked = showAll.checked = +VS.getQueryString('showall');
-
-    scoreSettings.showAll = checked;
-})();
-
 scoreSettings.generate = document.getElementById('settings-generate');
 
-scoreSettings.generate.onclick = function() {
-    var qs = '?parts=' + scoreSettings.parts.value;
-    qs += '&showall=' + (document.getElementById('settings-showall').checked ? 1 : 0);
-    document.location.href = qs;
-};
+(function() {
+    var showAll = new VS.CheckboxSetting('settings-showall');
+    showAll.setValue(+VS.getQueryString('showall'));
+    scoreSettings.showAll = showAll.getValue();
+
+    scoreSettings.generate.onclick = function() {
+        var qs = '?parts=' + scoreSettings.parts.value;
+        qs += '&showall=' + (showAll.getValue() ? 1 : 0);
+        document.location.href = qs;
+    };
+}());
