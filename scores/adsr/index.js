@@ -15,9 +15,6 @@ var scaleX = 3,
     unitX = 10 * scaleX,
     unitY = 10,
     view = {};
-    // TODO clamp parts
-    // 16 parts is an arbitrary max, ideally large ensembles read from parts
-    // numParts = VS.clamp(+VS.getQueryString('parts') || 4, 1, 16);
 
 {% include_relative _settings.js %}
 
@@ -290,9 +287,8 @@ for (p = 0; p < scoreOptions.parts; p++) {
             }
 
             function hasNewValues(prop) {
-                // TODO provide controls to show all
                 // TODO starting ghost notes do not have dynamics?
-                var showValues = (i === 0) || scoreOptions.showAll;
+                var showValues = (i === 0) || scoreOptions.verbose;
                 return showValues || getNestedProp(prop, thisPhrase) !== getNestedProp(prop, prevPhrase);
             }
 

@@ -3,37 +3,31 @@ VS.score.options = (function() {
     var options = {};
     var elements = {};
 
+    function updateElements() {
+        for (var key in elements) {
+            elements[key].setValue(options[key]);
+        }
+    }
+
     return {
-        // TODO opts are more like defaults
-        add: function(key, opts, element) {
-            options[key] = opts;
+        add: function(key, defaults, element) {
+            options[key] = defaults;
             elements[key] = element;
         },
-        updateUI: function() {
-            for (var key in elements) {
-                elements[key].setValue(options[key]);
-            }
-        },
-        setFromUI: function() {
-            for (var key in options) {
-                options[key] = elements[key].getValue();
-            }
-        },
         setFromQueryString: function() {
+            var value;
+
             for (var key in options) {
-                options[key] = VS.getQueryString(key);
+                value = VS.getQueryString(key);
+
+                if (value) {
+                    options[key] = value;
+                }
             }
+
+            updateElements();
+
             return options;
-            // options.updateUI();
-        },
-        makeQueryString: function() {
-            var params = [];
-
-            for (var key in options) {
-                params.push(key + '=' + options[key]);
-            }
-
-            return params.join('&');
         }
     };
 })();

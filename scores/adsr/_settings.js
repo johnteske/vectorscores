@@ -1,7 +1,5 @@
-VS.score.options.add('parts', 4, new VS.NumberSetting('settings-parts'));
-VS.score.options.add('showall', 1, new VS.CheckboxSetting('settings-showall'));
+VS.score.options.add('parts', 4, new VS.NumberSetting('parts'));
+VS.score.options.add('verbose', null, new VS.CheckboxSetting('verbose'));
 
 var scoreOptions = VS.score.options.setFromQueryString();
-VS.score.options.updateUI();
-
-new VS.GenerateButton('settings-generate');
+scoreOptions.parts = VS.clamp(scoreOptions.parts, 1, 16);
