@@ -115,7 +115,7 @@ function updateChoices() {
         var set = choice.pitchClasses.split(',');
 
         var formatted = VS.pitchClass.transpose(set, 'random').map(function(pc) {
-            return VS.pitchClass.format(pc, scoreSettings.pitchClasses.display, scoreSettings.pitchClasses.preference);
+            return VS.pitchClass.format(pc, scoreOptions.pitchClasses.display, scoreOptions.pitchClasses.preference);
         });
 
         selection.select('.pitch-classes')

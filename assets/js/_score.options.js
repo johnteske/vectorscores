@@ -10,6 +10,7 @@ VS.score.options = (function() {
     }
 
     // TODO this currently relies on a default being set for objects
+    // TODO fails for null as it is type 'object'
     function setFromObject(obj) {
         var value;
 

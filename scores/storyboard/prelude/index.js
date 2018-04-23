@@ -106,10 +106,10 @@ function makeCard(data, index) {
         .attr('dy', '-1em')
         .text(function(d) {
             var transpose = (typeof d.transpose !== 'undefined') ? (d.transpose + score.transposeBy) : 'random';
-            var pcSet = VS.pitchClass.transpose(d.pcSet, transpose + scoreSettings.pitchClasses.transposition);
+            var pcSet = VS.pitchClass.transpose(d.pcSet, transpose + scoreOptions.transposition);
 
             pcSet = pcSet.map(function(pc) {
-                return VS.pitchClass.format(pc, scoreSettings.pitchClasses.display, scoreSettings.pitchClasses.preference);
+                return VS.pitchClass.format(pc, scoreOptions.pitchClasses.display, scoreOptions.pitchClasses.preference);
             });
 
             return '{' + pcSet.join(',') + '}';

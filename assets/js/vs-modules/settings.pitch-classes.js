@@ -33,9 +33,9 @@ VS.PitchClassSettings.prototype.updatePreferences = function() {
     var preferValue = this.preferRadio.getValue();
 
     // Set to the first preference if switching pitch class display
-    if (pitchClassesValue === 'numbers' && (preferValue !== 'te' || preferValue !== 'ab')) {
+    if (pitchClassesValue === 'numbers' && (preferValue !== 'te' && preferValue !== 'ab')) {
         this.preferRadio.setValue('te');
-    } else if (pitchClassesValue === 'names' && (preferValue !== 'sharps' || preferValue !== 'flats')) {
+    } else if (pitchClassesValue === 'names' && (preferValue !== 'sharps' && preferValue !== 'flats')) {
         this.preferRadio.setValue('sharps');
     }
 };
