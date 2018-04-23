@@ -1,8 +1,8 @@
 ---
 layout: compress-js
 ---
-// TODO pass elements as argument?
 VS.PitchClassSettings = function() {
+
     var self = this;
 
     if (!VS.RadioSetting) {
@@ -10,74 +10,39 @@ VS.PitchClassSettings = function() {
     }
 
     // Radio settings
-    this.displayRadio = new VS.RadioSetting('settings-pc-display');
-    this.pitchClassPrefRadio = new VS.RadioSetting('settings-pc-preference');
-    this.noteNamePrefRadio = new VS.RadioSetting('settings-notename-preference');
+    this.pitchClassesRadio = new VS.RadioSetting('pitch-classes');
+    this.preferRadio = new VS.RadioSetting('prefer');
 
-    // Wrappers for preferences
-    this.pitchClassPreference = document.getElementById('pitchclass-preference');
-    this.noteNamePreference = document.getElementById('notename-preference');
-
-    // Transposition input
-    this.transpositionInput = document.getElementById('settings-pc-transpose');
-
-    // Init values from query string
-    this.display = VS.getQueryString('pc-display') || '';
-    this.preference = VS.getQueryString('pc-pref') || '';
-    this.transposition = +VS.getQueryString('pc-transpose') || 0;
-
-    // Update UI
-    this.displayRadio.setValue(this.display);
-
-    this.updatePreferences();
-
-    if (this.display === 'name') {
-        this.noteNamePrefRadio.setValue(this.preference);
-    } else {
-        this.pitchClassPrefRadio.setValue(this.preference);
+    // Update preference options shown when changing pitch class display
+    for (var i = 0; i < this.pitchClassesRadio.elements.length; i++) {
+        var el = this.pitchClassesRadio.elements[i];
+        el.addEventListener('change', function() {
+            self.updatePreferences();
+        });
     }
-
-    this.transpositionInput.value = this.transposition;
-
-    // Listen for changes
-    this.displayRadio.on('change', function(e) {
-        self.display = e.target.value;
-        self.updatePreferences();
-    });
-};
-
-VS.PitchClassSettings.prototype.getValues = function() {
-    var preference;
-
-    if (this.display === 'name') {
-        preference = this.noteNamePrefRadio.getValue();
-    } else {
-        preference = this.pitchClassPrefRadio.getValue();
-    }
-
-    return {
-        display: this.display,
-        preference: preference,
-        transposition: +this.transpositionInput.value
-    };
-};
-
-VS.PitchClassSettings.prototype.getQueryStringParams = function() {
-    var values = this.getValues();
-
-    return {
-        'pc-display': values.display,
-        'pc-pref': values.preference,
-        'pc-transpose': values.transposition
-    };
 };
 
 VS.PitchClassSettings.prototype.updatePreferences = function() {
-    if (this.display === 'name') {
-        this.pitchClassPreference.style.display = 'none';
-        this.noteNamePreference.style.display = 'block';
-    } else {
-        this.pitchClassPreference.style.display = 'block';
-        this.noteNamePreference.style.display = 'none';
+
+    var pitchClassesValue = this.pitchClassesRadio.getValue();
+
+    // Hide/show sections
+    document.getElementById('pitch-classes-numbers-preferences').style.display = (pitchClassesValue === 'numbers') ? 'block' : 'none';
+    document.getElementById('pitch-classes-names-preferences').style.display = (pitchClassesValue === 'names') ? 'block' : 'none';
+
+    var preferValue = this.preferRadio.getValue();
+
+    // Set to the first preference if switching pitch class display
+    if (pitchClassesValue === 'numbers' && (preferValue !== 'te' || preferValue !== 'ab')) {
+        this.preferRadio.setValue('te');
+    } else if (pitchClassesValue === 'names' && (preferValue !== 'sharps' || preferValue !== 'flats')) {
+        this.preferRadio.setValue('sharps');
     }
+};
+
+VS.PitchClassSettings.prototype.setValue = function(obj) {
+    this.pitchClassesRadio.setValue(obj['pitch-classes']);
+    this.preferRadio.setValue(obj['prefer']);
+
+    this.updatePreferences();
 };

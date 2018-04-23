@@ -9,22 +9,30 @@ VS.score.options = (function() {
         }
     }
 
+    // TODO this currently relies on a default being set for objects
+    function setFromObject(obj) {
+        var value;
+
+        for (var key in obj) {
+            // Add values from nested objects
+            if (typeof obj[key] === 'object') {
+                setFromObject(obj[key]);
+            } else {
+                value = VS.getQueryString(key);
+                if (value) {
+                    obj[key] = value;
+                }
+            }
+        }
+    }
+
     return {
         add: function(key, defaults, element) {
             options[key] = defaults;
             elements[key] = element;
         },
         setFromQueryString: function() {
-            var value;
-
-            for (var key in options) {
-                value = VS.getQueryString(key);
-
-                if (value) {
-                    options[key] = value;
-                }
-            }
-
+            setFromObject(options);
             updateElements();
 
             return options;

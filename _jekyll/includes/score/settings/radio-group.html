@@ -2,6 +2,6 @@
 {% assign labels = include.labels | split: ', ' %}
 <div class="settings-group">
     {% for val in values %}
-    <label><input type="radio" name="{{ include.name }}" value="{{ val }}" {% if forloop.first %}checked{% endif %}> {{ labels[forloop.index0] }}</label><br />
+    <label><input type="radio" name="{{ include.name }}" value="{{ val }}"> {{ labels[forloop.index0] }}</label>
     {% endfor %}
 </div>

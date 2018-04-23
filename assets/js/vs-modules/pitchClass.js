@@ -33,7 +33,7 @@ VS.pitchClass.format = (function() {
     return function(integer, format, options) {
         var dict;
 
-        if (format === 'name') {
+        if (format === 'names') {
             dict = (options === 'flats') ? 'flats' : 'sharps';
 
             return names[dict][integer];
