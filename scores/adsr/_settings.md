@@ -7,11 +7,4 @@
 
 {% include score/settings/generate-button.html %}
 
-{% comment %}
-<div class="settings-group">
-    <label>Pre-roll (3–15 s):</label>
-    <input type="number" id="settings-preroll">
-</div>
-{% endcomment %}
-
 {% include score/settings/websocket.html %}

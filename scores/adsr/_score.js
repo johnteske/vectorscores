@@ -69,7 +69,7 @@ var envelopes = {
 };
 
 var parts = [];
-for (var p = 0; p < numParts; p++) {
+for (var p = 0; p < scoreOptions.parts; p++) {
     var part = [];
     for (var i = 0, nBars = score.bars.length, lastBar = nBars - 1; i < nBars; i++) {
         var now = score.bars[i] / score.totalDuration,

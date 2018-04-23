@@ -9,10 +9,10 @@ VS.CheckboxSetting = function(name) {
 };
 
 VS.CheckboxSetting.prototype.getValue = function() {
-    return this.element.checked;
+    return this.element.checked ? 1 : 0;
 };
 
 // Expects value of 1 for true, per expected query string
 VS.CheckboxSetting.prototype.setValue = function(value) {
-    this.element.checked = value === 1;
+    this.element.checked = +value === 1;
 };

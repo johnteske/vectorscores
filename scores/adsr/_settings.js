@@ -1,20 +1,7 @@
-var scoreSettings = {};
+VS.score.options.add('parts', 4, new VS.NumberSetting('settings-parts'));
+VS.score.options.add('showall', 1, new VS.CheckboxSetting('settings-showall'));
 
-scoreSettings.parts = new VS.NumberSetting('settings-parts');
-scoreSettings.parts.setValue(numParts);
+var scoreOptions = VS.score.options.setFromQueryString();
+VS.score.options.updateUI();
 
-scoreSettings.pitchDisplay = 'accidentals'; // "integers"
-
-scoreSettings.generate = document.getElementById('settings-generate');
-
-(function() {
-    var showAll = new VS.CheckboxSetting('settings-showall');
-    showAll.setValue(+VS.getQueryString('showall'));
-    scoreSettings.showAll = showAll.getValue();
-
-    scoreSettings.generate.onclick = function() {
-        var qs = '?parts=' + scoreSettings.parts.getValue();
-        qs += '&showall=' + (showAll.getValue() ? 1 : 0);
-        document.location.href = qs;
-    };
-}());
+new VS.GenerateButton('settings-generate');
