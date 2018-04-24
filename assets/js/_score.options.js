@@ -9,17 +9,21 @@ VS.score.options = (function() {
         }
     }
 
-    // TODO this currently relies on a default being set for objects
-    // TODO fails for null as it is type 'object'
-    function setFromObject(obj) {
+    /**
+     * Set options from value, including nested objects
+     * TODO this currently relies on a default being set for objects
+     * @param {object} obj
+     * @param {string} [url]
+     */
+    function setFromObject(obj, url) {
         var value;
 
         for (var key in obj) {
-            // Add values from nested objects
-            if (typeof obj[key] === 'object') {
-                setFromObject(obj[key]);
+            if (typeof obj[key] === 'object' && obj[key] !== null) {
+                setFromObject(obj[key], url);
             } else {
-                value = VS.getQueryString(key);
+                value = VS.getQueryString(key, url);
+
                 if (value) {
                     obj[key] = value;
                 }
@@ -32,8 +36,8 @@ VS.score.options = (function() {
             options[key] = defaults;
             elements[key] = element;
         },
-        setFromQueryString: function() {
-            setFromObject(options);
+        setFromQueryString: function(url) {
+            setFromObject(options, url);
             updateElements();
 
             return options;
