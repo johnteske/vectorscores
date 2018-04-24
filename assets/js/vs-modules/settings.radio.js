@@ -2,7 +2,7 @@
 layout: compress-js
 ---
 /**
- * @param {string} name : name of inputs, type="radio"
+ * @param {string} name : name attribute of inputs, type="radio"
  */
 VS.RadioSetting = function(name) {
     this.elements = document.getElementsByName(name);

@@ -1,6 +1,12 @@
 ---
 layout: compress-js
 ---
+/**
+ * Creates a set of inputs:
+ * - pitch-classes (display pitch classes by numbers or note names)
+ * - prefer (preferences related to the pitch-classes selection)
+ * TODO add support for B -> H and Bb -> B?
+ */
 VS.PitchClassSettings = function() {
 
     var self = this;

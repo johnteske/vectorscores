@@ -3,7 +3,7 @@ layout: compress-js
 ---
 // TODO coerce number
 /**
- * @param {string} name : name of input, type="number"
+ * @param {string} name : name attribute of input, type="number"
  */
 VS.NumberSetting = function(name) {
     this.element = document.getElementsByName(name)[0];

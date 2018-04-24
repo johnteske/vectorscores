@@ -3,6 +3,8 @@ const { test, setupDOM } = require(path.resolve('.', 'bin/js/tape-setup'))
 setupDOM('_site/scores/tutorial/index.html')
 
 const vsPath = path.resolve('.', '_site/assets/js/vectorscores.js')
+
+// Clear require cache so VS (and VS.score.options) do not carry over between tests
 function clearVSFromCache() {
     delete require.cache[vsPath]
 }
