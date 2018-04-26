@@ -30,25 +30,25 @@ VS.PitchClassSettings = function() {
 
 VS.PitchClassSettings.prototype.updatePreferences = function() {
 
-    var pitchClassesValue = this.pitchClassesRadio.getValue();
+    var pitchClassesValue = this.pitchClassesRadio.get();
 
     // Hide/show sections
     document.getElementById('pitch-classes-numbers-preferences').style.display = (pitchClassesValue === 'numbers') ? 'block' : 'none';
     document.getElementById('pitch-classes-names-preferences').style.display = (pitchClassesValue === 'names') ? 'block' : 'none';
 
-    var preferValue = this.preferRadio.getValue();
+    var preferValue = this.preferRadio.get();
 
     // Set to the first preference if switching pitch class display
     if (pitchClassesValue === 'numbers' && (preferValue !== 'te' && preferValue !== 'ab')) {
-        this.preferRadio.setValue('te');
+        this.preferRadio.set('te');
     } else if (pitchClassesValue === 'names' && (preferValue !== 'sharps' && preferValue !== 'flats')) {
-        this.preferRadio.setValue('sharps');
+        this.preferRadio.set('sharps');
     }
 };
 
-VS.PitchClassSettings.prototype.setValue = function(obj) {
-    this.pitchClassesRadio.setValue(obj['pitch-classes']);
-    this.preferRadio.setValue(obj['prefer']);
+VS.PitchClassSettings.prototype.set = function(obj) {
+    this.pitchClassesRadio.set(obj['pitch-classes']);
+    this.preferRadio.set(obj['prefer']);
 
     this.updatePreferences();
 };

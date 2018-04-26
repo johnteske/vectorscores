@@ -5,7 +5,7 @@ VS.score.options = (function() {
 
     function updateElements() {
         for (var key in elements) {
-            elements[key].setValue(options[key]);
+            elements[key].set(options[key]);
         }
     }
 

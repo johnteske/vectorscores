@@ -8,6 +8,6 @@ VS.CheckboxSetting = function(name) {
     this.element = document.getElementsByName(name)[0];
 };
 
-VS.CheckboxSetting.prototype.setValue = function(value) {
+VS.CheckboxSetting.prototype.set = function(value) {
     this.element.checked = value === 'on';
 };

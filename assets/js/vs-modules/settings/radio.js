@@ -9,7 +9,7 @@ VS.RadioSetting = function(name) {
 };
 
 // For use in settings, not directly by composer
-VS.RadioSetting.prototype.getValue = function() {
+VS.RadioSetting.prototype.get = function() {
     for (var i = 0, length = this.elements.length; i < length; i++) {
         var thisElement = this.elements[i];
 
@@ -19,7 +19,7 @@ VS.RadioSetting.prototype.getValue = function() {
     }
 };
 
-VS.RadioSetting.prototype.setValue = function(value) {
+VS.RadioSetting.prototype.set = function(value) {
     for (var i = 0, length = this.elements.length; i < length; i++) {
         var thisElement = this.elements[i];
 

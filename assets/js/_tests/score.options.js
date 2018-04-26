@@ -12,7 +12,7 @@ function clearVSFromCache() {
 const url = 'http://localhost:4000/vectorscores/scores/adsr/?parts=4&showall=on'
 
 const MockControl = function() {}
-MockControl.prototype.setValue = function() {}
+MockControl.prototype.set = function() {}
 
 test('VS.score.options', t => {
     const VS = require(vsPath)
