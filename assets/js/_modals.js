@@ -53,6 +53,6 @@ VS.enableModal = function(modalId, openId, closeId) {
 if (document.getElementById('score-info-open')) {
     VS.enableModal('score-info-modal', 'score-info-open', 'score-info-close');
 }
-if (document.getElementById('score-settings-open')) {
-    VS.enableModal('score-settings-modal', 'score-settings-open', 'score-settings-close');
+if (document.getElementById('score-options-open')) {
+    VS.enableModal('score-options-modal', 'score-options-open', 'score-options-close');
 }

@@ -18,7 +18,7 @@ score.scale = 1;
 
 var cues = [];
 
-{% include_relative _settings.js %}
+{% include_relative _options.js %}
 
 var dynamicsDict = VS.dictionary.Bravura.dynamics;
 

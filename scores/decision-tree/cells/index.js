@@ -42,7 +42,7 @@ score.partWeight = score.weightScale; // init
 score.choices = {};
 score.selected = false;
 
-{% include_relative _settings.js %}
+{% include_relative _options.js %}
 
 /**
  * Symbols and choice

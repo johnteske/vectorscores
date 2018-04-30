@@ -30,7 +30,7 @@ var globInterval = transitionTime.long;
 var durationDict = VS.dictionary.Bravura.durations.stemless;
 var dynamicsDict = VS.dictionary.Bravura.dynamics;
 
-{% include_relative _settings.js %}
+{% include_relative _options.js %}
 
 {% include_relative _glob.js %}
 

@@ -43,7 +43,7 @@ var globjects = (function() {
 {% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
 {% include_relative _score.js %}
-{% include_relative _settings.js %}
+{% include_relative _options.js %}
 
 var svg = d3.select('svg');
 

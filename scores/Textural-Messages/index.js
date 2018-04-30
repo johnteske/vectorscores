@@ -19,7 +19,6 @@ var txtWrapper = main.append('g') // for easy scrolling
     .attr('height', height);
 
 {% include_relative _score.js %}
-{% comment %}{% include_relative _settings.js %}{% endcomment %}
 
 // var noteheads = VS.dictionary.Bravura.durations.stemless;
 

@@ -16,7 +16,7 @@ var scaleX = 3,
     unitY = 10,
     view = {};
 
-{% include_relative _settings.js %}
+{% include_relative _options.js %}
 
 var score = (function() {
     var _score = {};
