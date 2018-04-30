@@ -26,6 +26,7 @@ VS.layout = (function() {
     addLayoutInteraction(layout.header);
     addLayoutInteraction(layout.footer);
 
+    // TODO separate definition from instantiation
     // Hide layout when interacting with score
     document.getElementsByTagName('main')[0].onclick = layout.hide;
 

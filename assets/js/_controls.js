@@ -4,9 +4,11 @@ VS.control = (function() {
         this.element = document.getElementById(id);
         this.element.onclick = fn;
     }
+
     ScoreControl.prototype.enable = function() {
         this.element.disabled = false;
     };
+
     ScoreControl.prototype.disable = function() {
         this.element.disabled = true;
     };
@@ -26,8 +28,9 @@ VS.control = (function() {
         hooks.trigger('stop');
     }
 
+    // Step pointer if not playing
     function stepPointer(steps) {
-        if (!VS.score.playing) { // don't allow skip while playing, for now
+        if (!VS.score.playing) {
             VS.score.updatePointer(VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1));
             VS.control.updateStepButtons();
             hooks.trigger('step');
@@ -40,10 +43,18 @@ VS.control = (function() {
         d3.select('g#play').classed('hide', 0);
         d3.select('g#pause').classed('hide', 1);
     };
+
     playControl.setPause = function() {
         d3.select('g#play').classed('hide', 1);
         d3.select('g#pause').classed('hide', 0);
     };
+
+    var stopControl = new ScoreControl('score-stop', stop);
+    var backControl = new ScoreControl('score-back', function() { stepPointer(-1); });
+
+    // Set initial control states
+    stopControl.disable();
+    backControl.disable();
 
     var keydownListener = function(event) {
         if (event.defaultPrevented || event.metaKey) {
@@ -79,15 +90,9 @@ VS.control = (function() {
         event.preventDefault();
     };
 
-    var stopControl = new ScoreControl('score-stop', stop);
-    var backControl = new ScoreControl('score-back', function() { stepPointer(-1); });
-
-    // Set initial control states
-    stopControl.disable();
-    backControl.disable();
-
     var hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
 
+    // TODO separate definition from instantiation
     window.addEventListener('keydown', keydownListener, true);
 
     return {

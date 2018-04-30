@@ -49,7 +49,7 @@ VS.enableModal = function(modalId, openId, closeId) {
     openTrigger.addEventListener('click', openModal, true);
 };
 
-// TODO this check belongs in document.ready
+// TODO separate definition from instantiation
 if (document.getElementById('score-info-open')) {
     VS.enableModal('score-info-modal', 'score-info-open', 'score-info-close');
 }
