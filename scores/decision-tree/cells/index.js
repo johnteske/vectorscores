@@ -42,7 +42,7 @@ score.partWeight = score.weightScale; // init
 score.choices = {};
 score.selected = false;
 
-{% include_relative _settings.js %}
+{% include_relative _options.js %}
 
 /**
  * Symbols and choice
@@ -113,8 +113,9 @@ function updateChoices() {
         }
 
         var set = choice.pitchClasses.split(',');
+
         var formatted = VS.pitchClass.transpose(set, 'random').map(function(pc) {
-            return VS.pitchClass.format(pc, scoreSettings.pcFormat);
+            return VS.pitchClass.format(pc, scoreOptions.pitchClasses.display, scoreOptions.pitchClasses.preference);
         });
 
         selection.select('.pitch-classes')

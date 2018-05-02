@@ -4,9 +4,8 @@ setupDOM('_site/scores/tutorial/index.html')
 
 const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
 
-// TODO use JSDOM to test modal interaction, run as an integration test elsewhere
 test('VS#getQueryString', t => {
-    const url = 'http://localhost:4000/vectorscores/scores/adsr/?parts=4&showall=0'
+    const url = 'http://localhost:4000/vectorscores/scores/adsr/?parts=4&showall=on'
 
     t.equal(VS.getQueryString('parts', url), '4', 'return value as string given query parameter that exists in url')
     t.equal(VS.getQueryString('foo', url), null, 'return null given query parameter that does not exist in url')

@@ -14,11 +14,9 @@ layout: compress-js
 var scaleX = 3,
     unitX = 10 * scaleX,
     unitY = 10,
-    view = {},
-    // 16 parts is an arbitrary max, ideally large ensembles read from parts
-    numParts = VS.clamp(+VS.getQueryString('parts') || 4, 1, 16);
+    view = {};
 
-{% include_relative _settings.js %}
+{% include_relative _options.js %}
 
 var score = (function() {
     var _score = {};
@@ -50,7 +48,7 @@ var score = (function() {
         rehearsalLetters: unitY * -2,
         barlines: {
             y1: 3 * unitY,
-            y2: (numParts * _score.partHeight) + (6 * unitY)
+            y2: (scoreOptions.parts * _score.partHeight) + (6 * unitY)
         },
         barDurations: unitY
     };
@@ -251,7 +249,7 @@ function makeGhost() {
 /**
  * Draw parts
  */
-for (p = 0; p < numParts; p++) {
+for (p = 0; p < scoreOptions.parts; p++) {
     var thisPart = parts[p],
         partYPos = score.layoutHeight + (p * score.partHeight);
 
@@ -289,9 +287,8 @@ for (p = 0; p < numParts; p++) {
             }
 
             function hasNewValues(prop) {
-                // TODO provide controls to show all
                 // TODO starting ghost notes do not have dynamics?
-                var showValues = (i === 0) || scoreSettings.showAll;
+                var showValues = (i === 0) || scoreOptions.verbose;
                 return showValues || getNestedProp(prop, thisPhrase) !== getNestedProp(prop, prevPhrase);
             }
 
@@ -313,26 +310,26 @@ for (p = 0; p < numParts; p++) {
             }
 
             var pitchDisplay, pitchDisplayClass;
-            if (scoreSettings.pitchDisplay === 'accidentals') {
-                pitchDisplay = function() {
-                    var lo = thisPhrase.pitch.low,
-                        hi = thisPhrase.pitch.high;
-                    return '\uec82 ' + dict.acc[lo] + ( (lo !== hi) ? ('\u2009,\u2002' + dict.acc[hi]) : '' ) + ' \uec83'; // tenuto as endash
-                };
-                pitchDisplayClass = 'pitch-range';
-            } else {
-                pitchDisplay = function() {
-                    var lo = thisPhrase.pitch.low,
-                        hi = thisPhrase.pitch.high,
-                        range = lo;
-                    if (lo !== hi) {
-                        range += ', ';
-                        range += (hi === 0) ? hi : '+' + hi;
-                    }
-                    return '[' + range + ']';
-                };
-                pitchDisplayClass = 'pitch-range-numeric';
-            }
+            // if (scoreOptions.pitchDisplay === 'accidentals') {
+            pitchDisplay = function() {
+                var lo = thisPhrase.pitch.low,
+                    hi = thisPhrase.pitch.high;
+                return '\uec82 ' + dict.acc[lo] + ( (lo !== hi) ? ('\u2009,\u2002' + dict.acc[hi]) : '' ) + ' \uec83'; // tenuto as endash
+            };
+            pitchDisplayClass = 'pitch-range';
+            // } else {
+            //     pitchDisplay = function() {
+            //         var lo = thisPhrase.pitch.low,
+            //             hi = thisPhrase.pitch.high,
+            //             range = lo;
+            //         if (lo !== hi) {
+            //             range += ', ';
+            //             range += (hi === 0) ? hi : '+' + hi;
+            //         }
+            //         return '[' + range + ']';
+            //     };
+            //     pitchDisplayClass = 'pitch-range-numeric';
+            // }
 
             if (hasNewPitch) {
                 thisPartGroup.append('text')
@@ -447,7 +444,7 @@ function resize() {
     // TODO fix hard-coded Y spacing values
     view.width = parseInt(d3.select('main').style('width'), 10);
     view.height = parseInt(d3.select('main').style('height'), 10);
-    score.scale = VS.clamp(view.height / ((score.partHeight * numParts) + (14 * unitY)), 0.1, 2);
+    score.scale = VS.clamp(view.height / ((score.partHeight * scoreOptions.parts) + (14 * unitY)), 0.1, 2);
 
     score.svg.attr('height', view.height);
     score.wrapper.attr('transform', 'scale(' + score.scale + ',' + score.scale + ')');
@@ -474,7 +471,6 @@ d3.select(window).on('resize', resize);
 
 // Use a preroll so the score doesn't start scrolling immediately
 // TODO allow user to define this value? min 3 seconds
-// scoreSettings.preroll.value = (VS.score.preroll * 0.001);
 VS.score.preroll = 3000;
 
 function prerollAnimateCue() {

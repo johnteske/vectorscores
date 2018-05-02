@@ -80,31 +80,11 @@ addEvent(function() {
     message.innerHTML = 'If a score has additional information such as performance notes, they can be displayed by clicking the info button.';
 }, 3000);
 
-// addEvent(function() {
-//     message.innerHTML = "Click the play button or press spacebar to continue.";
-//     // TODO use this until modals have a (public) method to open and close
-//     document.querySelector("#score-info-open").click();
-//     VS.score.schedule(1, function() {
-//         VS.score.pause;
-//         VS.score.updatePointer(VS.score.pointer + 1);
-//     });
-// }, 0);
-
 addEvent(function() {
     clearHighlights();
-    highlightByID('score-settings-open');
-    message.innerHTML = 'If a score has settings that can be set by performers, they can accessed by clicking the settings button.';
+    highlightByID('score-options-open');
+    message.innerHTML = 'If a score has options that can be set by performers, they can accessed by clicking the options button.';
 }, 3000);
-
-// addEvent(function() {
-//     message.innerHTML = "Click the play button or press spacebar to continue.";
-//     // TODO use this until modals have a (public) method to open and close
-//     document.querySelector("#score-settings-open").click();
-//     VS.score.schedule(1, function() {
-//         VS.score.pause;
-//         VS.score.updatePointer(VS.score.pointer + 1);
-//     });
-// }, 0);
 
 addEvent(function() {
     clearHighlights();

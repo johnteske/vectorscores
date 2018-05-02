@@ -1,4 +1,4 @@
-#score-settings-modal {
+#score-options-modal {
     input[type="number"] {
         width: 3em;
         height: 2em;
@@ -12,5 +12,13 @@
         padding: 0.5em;
         border: 1px solid #888;
         background: transparent;
+    }
+}
+
+.settings-group {
+    margin: 1em 0;
+
+    label {
+        display: block;
     }
 }

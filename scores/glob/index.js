@@ -30,7 +30,7 @@ var globInterval = transitionTime.long;
 var durationDict = VS.dictionary.Bravura.durations.stemless;
 var dynamicsDict = VS.dictionary.Bravura.dynamics;
 
-{% include_relative _settings.js %}
+{% include_relative _options.js %}
 
 {% include_relative _glob.js %}
 
@@ -41,7 +41,7 @@ var glob2 = new Glob(wrapper);
 {% include_relative _meta.js %}
 
 function update(dur, bar) {
-    var pcSet = VS.pitchClass.transpose(bar.pitch.set, bar.pitch.transpose + scoreSettings.pitchClasses.transposition);
+    var pcSet = VS.pitchClass.transpose(bar.pitch.set, bar.pitch.transpose + scoreOptions.transposition);
     pitchClassSet.update(pcSet);
 
     glob0.move(dur, bar.globs[0]);
