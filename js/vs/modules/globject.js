@@ -21,8 +21,10 @@ VS.globject = function() {
 
         var rangeEnv = d.rangeEnvelope,
             rangePoints = [],
-            rangeType = rangeEnv.type.toLowerCase(),
-            scaleY;
+            rangeType = rangeEnv.type.toLowerCase();
+
+        var baseClassName = 'globject',
+            clipPathId = baseClassName + '-clip-' + VS.id();
 
         // old model, range points matching every time point
         if (rangeEnv.times) {
@@ -47,6 +49,7 @@ VS.globject = function() {
             }));
         }
 
+        var scaleY;
         if (rangeType === 'midi') {
             scaleY = yMIDI;
         } else if (rangeType === 'normalized') {
@@ -62,19 +65,19 @@ VS.globject = function() {
              })
              .curve(c);
 
-        selection.classed('globject', true);
+        selection.attr('class', baseClassName);
 
         selection.append('clipPath')
-            .attr('id', 'globject-clip-' + i)
+            .attr('id', clipPathId)
             .append('path')
                 .attr('d', line(rangePoints));
 
         selection.append('g')
-            .attr('class', 'globject-content')
-            .attr('clip-path', 'url(#globject-clip-' + i + ')');
+            .attr('class', baseClassName + '-content')
+            .attr('clip-path', 'url(#' + clipPathId + ')');
 
         selection.append('path')
-             .attr('class', 'globject-path')
+             .attr('class', baseClassName + '-path')
              .attr('d', line(rangePoints));
     }
 

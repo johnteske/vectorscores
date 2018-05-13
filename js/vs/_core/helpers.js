@@ -54,3 +54,11 @@ VS.constant = function(val) {
 VS.mod = function(val, mod) {
     return ((val % mod) + mod) % mod;
 };
+
+VS.id = (function() {
+    var id = 0;
+
+    return function() {
+        return id++;
+    };
+}());
