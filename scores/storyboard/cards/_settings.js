@@ -5,10 +5,10 @@ var scoreSettings = (function() {
     var settings = {};
 
     settings.pcFormat = VS.getQueryString('pcs') || '';
-    radioSetting.setValue(settings.pcFormat);
+    radioSetting.set(settings.pcFormat);
 
     generateButton.addEventListener('click', function() {
-        document.location.href = '?pcs=' + radioSetting.getValue();
+        document.location.href = '?pcs=' + radioSetting.get();
     });
 
     return settings;

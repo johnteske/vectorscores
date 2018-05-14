@@ -1,0 +1,27 @@
+---
+---
+$layout-color-bg: white; // transparent;
+$layout-color-light: #eeeeee;
+$layout-trans-time: 0.6s;
+$layout-header-font-stack: 'Times New Roman', serif;
+$layout-font-stack: Courier, monospace;
+$layout-border: 2px solid $layout-color-light;
+
+@import "mixins";
+@import "score/layout";
+@import "score/controls";
+@import "score/modal";
+@import "score/main";
+@import "score/settings";
+@import "work-list";
+
+.score-set .work-list {
+    margin: 0;
+    padding: $unit (2 * $unit);
+
+    list-style: none;
+}
+
+.score-set #score-header {
+    opacity: 1;
+}

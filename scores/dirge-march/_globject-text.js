@@ -22,7 +22,7 @@ function globjectText(d) {
         })
         .text(function(d) {
             var set = VS.pitchClass.transpose(d.classes, transposeBy).map(function(pc) {
-                return VS.pitchClass.format(pc, scoreSettings.pitchClasses.display, scoreSettings.pitchClasses.preference);
+                return VS.pitchClass.format(+pc, scoreOptions.pitchClasses.display, scoreOptions.pitchClasses.preference);
             });
 
             return '{' + set + '}';

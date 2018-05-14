@@ -1,0 +1,11 @@
+{
+  "private": "true",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "glob": "^7.1.2",
+    "jsdom": "^11.7.0",
+    "mkdirp": "^0.5.1",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.9.0"
+  }
+}

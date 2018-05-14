@@ -1,0 +1,14 @@
+<tr class="work-list-row">
+    <td>
+        {% include work-list/a.html project=score %}
+    </td>
+    <td class="work-list-duration">
+        {{ include.project.duration }}
+    </td>
+    <td class="work-list-formats">
+        {% if include.project.formats contains 'score' %}score{% endif %}
+    </td>
+    <td class="work-list-formats">
+        {% if include.project.formats contains 'parts' %}parts{% endif %}
+    </td>
+</tr>

@@ -21,9 +21,6 @@ function lerpEnvelope(env, iit) {
 function roundHalf(num) {
     return Math.round(num * 2) / 2;
 }
-function clamp(val, min, max) {
-    return Math.min(Math.max(val, min), max);
-}
 
 /**
  * While scalable, the original work was timed at 300 seconds (5 minutes)
@@ -72,7 +69,7 @@ var envelopes = {
 };
 
 var parts = [];
-for (var p = 0; p < numParts; p++) {
+for (var p = 0; p < scoreOptions.parts; p++) {
     var part = [];
     for (var i = 0, nBars = score.bars.length, lastBar = nBars - 1; i < nBars; i++) {
         var now = score.bars[i] / score.totalDuration,
@@ -122,8 +119,8 @@ for (var p = 0; p < numParts; p++) {
             };
         } else {
             phrase.pitch = {
-                high: clamp(roundHalf(lerpEnvelope(envelopes.pitch.high, iit) + VS.getRandExcl(-0.5, 0.5)), 0, 2),
-                low: clamp(roundHalf(lerpEnvelope(envelopes.pitch.low, iit) + VS.getRandExcl(-0.5, 0.5)), -2, 0)
+                high: VS.clamp(roundHalf(lerpEnvelope(envelopes.pitch.high, iit) + VS.getRandExcl(-0.5, 0.5)), 0, 2),
+                low: VS.clamp(roundHalf(lerpEnvelope(envelopes.pitch.low, iit) + VS.getRandExcl(-0.5, 0.5)), -2, 0)
             };
         }
 

@@ -1,5 +1,12 @@
 #!/bin/bash
 #
-# Lint source and built Javascript files
+# Run critical tests
 
-BUNDLE_GEMFILE=bin/Gemfile rake -f bin/Rakefile
+# Build Jekyll site and lint Ruby files
+BUNDLE_GEMFILE=bin/servers/Gemfile rake -f bin/servers/Rakefile
+
+# Lint built JavaScript files
+bin/eslint --built
+
+# Run JavaScript tests
+bin/tap-spec

@@ -1,0 +1,12 @@
+<form class="score-options">
+    <div class="settings-group">
+        <label>Number of parts (1–16): <input type="number" min="1" max="16" name="parts"></label>
+    </div>
+    <div class="settings-group">
+        <label>Show parameters on each measure: <input name="verbose" type="checkbox"></label>
+    </div>
+
+    {% include score/settings/generate-button.html %}
+</form>
+
+{% include score/websocket.html %}
