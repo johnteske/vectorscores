@@ -1,5 +1,5 @@
 var pitchedPart = (function() {
-    var ppo = {};
+    var part = {};
 
     var bars;
 
@@ -21,7 +21,9 @@ var pitchedPart = (function() {
             all: retrogradeGlobjects // globjects.concat(retrogradeGlobjects) // TODO WHHYYYY
         };
 
-        return score2.map(function(d) {
+        return score2.filter(function(d) {
+            return d.pitched;
+        }).map(function(d) {
             var globject = [];
 
             if (d.pitched.globjectContour !== 'all') {
@@ -44,7 +46,7 @@ var pitchedPart = (function() {
         });
     }
 
-    ppo.init = function(parent) {
+    part.init = function(parent) {
         bars = parent.selectAll('g')
             .data(coerceData())
             .enter()
@@ -54,7 +56,7 @@ var pitchedPart = (function() {
             });
     };
 
-    ppo.draw = function() {
+    part.draw = function() {
         drawGlobjects();
         drawPitchClasses();
         drawDynamics();
@@ -116,5 +118,5 @@ var pitchedPart = (function() {
             .text('\ue4e5');
     }
 
-    return ppo;
+    return part;
 }());

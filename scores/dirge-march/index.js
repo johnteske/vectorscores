@@ -44,7 +44,10 @@ var globjects = (function() {
 var score2 = (function() {
     return {% include_relative _score.json %};
 }());
+
 {% include_relative _pitched-part.js %}
+{% include_relative _percussion-part.js %}
+
 {% include_relative _options.js %}
 transposeBy += scoreOptions.transposition;
 
@@ -62,47 +65,41 @@ var percussionParts = wrapper.append('g')
     .attr('transform', 'translate(' + 0 + ',' + layout.perc.y + ')')
     .attr('class', 'percussion-parts');
 
-var tempoText = percussionParts.append('text')
-    .attr('class', 'tempo-text');
-
-tempoText.append('tspan')
-    .text(stemmed['1']);
-
-var perc1 = percussionParts.append('g')
-    .attr('transform', 'translate(' + 0 + ',' + layout.perc.y1 + ')');
-
-var perc2 = percussionParts.append('g')
-    .attr('transform', 'translate(' + 0 + ',' + layout.perc.y2 + ')');
-
-percussionParts.selectAll('g').call(function(selection) {
-    selection.append('text')
-        .style('font-family', 'Bravura')
-        .attr('x', -22)
-        .attr('y', 22)
-        .text('\ue069');
-
-    function createRhythmCell(g) {
-        var cell = g.append('g')
-            // .attr('transform', 'translate(' + 22 + ',' + 0 + ')')
-            .attr('class', 'rhythm');
-
-        cell.append('rect')
-            .attr('height', 45)
-            .attr('stroke', '#888')
-            .attr('fill', 'none');
-
-        cell.append('text')
-            .attr('dx', 11)
-            .attr('y', 35);
-    }
-
-    // create two rhythm cells
-    selection.call(createRhythmCell);
-    selection.call(createRhythmCell);
-});
-
-var percDynamics = percussionParts.append('g')
-    .attr('transform', 'translate(0,' + layout.perc.dynamics + ')');
+// var perc1 = percussionParts.append('g')
+//     .attr('transform', 'translate(' + 0 + ',' + layout.perc.y1 + ')');
+//
+// var perc2 = percussionParts.append('g')
+//     .attr('transform', 'translate(' + 0 + ',' + layout.perc.y2 + ')');
+//
+// percussionParts.selectAll('g').call(function(selection) {
+//     selection.append('text')
+//         .style('font-family', 'Bravura')
+//         .attr('x', -22)
+//         .attr('y', 22)
+//         .text('\ue069');
+//
+//     function createRhythmCell(g) {
+//         var cell = g.append('g')
+//             // .attr('transform', 'translate(' + 22 + ',' + 0 + ')')
+//             .attr('class', 'rhythm');
+//
+//         cell.append('rect')
+//             .attr('height', 45)
+//             .attr('stroke', '#888')
+//             .attr('fill', 'none');
+//
+//         cell.append('text')
+//             .attr('dx', 11)
+//             .attr('y', 35);
+//     }
+//
+//     // create two rhythm cells
+//     selection.call(createRhythmCell);
+//     selection.call(createRhythmCell);
+// });
+//
+// var percDynamics = percussionParts.append('g')
+//     .attr('transform', 'translate(0,' + layout.perc.dynamics + ')');
 
 function textAnchor(t) {
     var a = 'middle';
@@ -115,11 +112,6 @@ function textAnchor(t) {
 
     return a;
 }
-
-var globject = VS.globject()
-    .width(globjectWidth)
-    .height(globjectHeight)
-    .curve(d3.curveCardinalClosed.tension(0.3));
 
 /**
  *
@@ -159,6 +151,7 @@ function makePhrase(type, set) {
 }
 
 // TODO also add bar ticks, for reference, like in ad;sr
+// TODO add vinculum U+0305 to .333 and .666 bar times
 function renderLayout() {
     var barTimeGroup = wrapper.append('g')
         .attr('class', 'bar-times');
@@ -187,11 +180,20 @@ function renderLayout() {
 
 function renderPitched() {
     // TODO add class and position in DOM properly
-    var pitchedLayer = wrapper.append('g')
+    var pitchedGroup = wrapper.append('g')
         .attr('class', 'pitched-part');
 
-    pitchedLayer.call(pitchedPart.init);
+    pitchedGroup.call(pitchedPart.init);
     pitchedPart.draw();
+}
+
+function renderPercussion() {
+    var percussionGroup = wrapper.append('g')
+        .attr('transform', 'translate(' + 0 + ',' + layout.perc.y + ')')
+        .attr('class', 'percussion-parts');
+
+    percussionGroup.call(percussionPart.init);
+    percussionPart.draw();
 }
 
 // function update(index, isControlEvent) {
@@ -337,6 +339,7 @@ d3.select(window).on('load', function() {
     scrollScoreToIndex(0);
     renderLayout();
     renderPitched();
+    renderPercussion();
 });
 
 /**
