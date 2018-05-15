@@ -23,16 +23,13 @@ VS.globject = function() {
             rangePoints = [],
             rangeType = rangeEnv.type.toLowerCase();
 
-        var baseClassName = 'globject',
-            clipPathId = baseClassName + '-clip-' + VS.id();
-
-        // old model, range points matching every time point
+        // old model: range points matching every time point
         if (rangeEnv.times) {
             for (var t = 0; t < rangeEnv.times.length; t++) {
                 rangePoints.push({ 'x': rangeEnv.times[t], 'y': rangeEnv.hi[t] });
                 rangePoints.unshift({ 'x': rangeEnv.times[t], 'y': rangeEnv.lo[t] });
             }
-        // new model, range points paired with time
+        // new model: range points paired with time
         } else {
             rangePoints = rangeEnv.lo.map(function(o) {
                 return {
@@ -65,7 +62,10 @@ VS.globject = function() {
              })
              .curve(c);
 
+        var baseClassName = 'globject';
         selection.attr('class', baseClassName);
+
+        var clipPathId = baseClassName + '-clip-' + VS.id();
 
         selection.append('clipPath')
             .attr('id', clipPathId)
