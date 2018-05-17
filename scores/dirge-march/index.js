@@ -2,9 +2,6 @@
 layout: compress-js
 ---
 
-// TODO scroll globject layer (and percussion dynamics) to show duration of phrases and transformation over time
-// rhythms would be still be generated in boxes but could be cued in and out CueSymbol#blink
-// may also solve issues of multiple globjects, timing, transitions
 var timeScale = 3;
 
 var width = 480,
@@ -58,13 +55,6 @@ var wrapper = svg.append('g')
     .classed('debug', debug);
     // .attr('transform', 'translate(' + layout.margin.left + ',' + layout.margin.top + ')');
 
-/**
- * Rhythm test
- */
-var percussionParts = wrapper.append('g')
-    .attr('transform', 'translate(' + 0 + ',' + layout.perc.y + ')')
-    .attr('class', 'percussion-parts');
-
 // var perc1 = percussionParts.append('g')
 //     .attr('transform', 'translate(' + 0 + ',' + layout.perc.y1 + ')');
 //
@@ -80,7 +70,6 @@ var percussionParts = wrapper.append('g')
 //
 //     function createRhythmCell(g) {
 //         var cell = g.append('g')
-//             // .attr('transform', 'translate(' + 22 + ',' + 0 + ')')
 //             .attr('class', 'rhythm');
 //
 //         cell.append('rect')
@@ -196,57 +185,6 @@ function renderPercussion() {
     percussionPart.draw();
 }
 
-// function update(index, isControlEvent) {
-//     var bar = score[index];
-//
-//     /**
-//      * Rhythms
-//      * TODO stash creation functions elsewhere?
-//      * NOTE tempo and bar are in update scope
-//      */
-//     function createRhythm() {
-//         var selection = d3.select(this),
-//             textEl = selection.select('text');
-//
-//         textEl.selectAll('tspan').remove();
-//
-//         if (!tempo) {
-//             return;
-//         }
-//
-//         var extent = bar.percussion.rhythmRange;
-//         var randRhythm = VS.getItem(rhythms.filter(function(r, i) {
-//             var inRange = extent[0] <= i && i <= extent[1];
-//             return r !== percRhythm && inRange; // prevent duplicates within each part
-//         }));
-//
-//         percRhythm = randRhythm;
-//
-//         var symbols = randRhythm.split(',');
-//
-//         for (var si = 0; si < symbols.length; si++) {
-//             var symbol = symbols[si],
-//                 spacing = 0,
-//                 dy = symbol === 'r0.5' || symbol === 'r0.5.' ? 0.4 : 0;
-//
-//             if (symbol === 'trip') {
-//                 spacing = -6;
-//             } else if (symbol === '1.') {
-//                 spacing = -5;
-//             }
-//
-//             textEl.append('tspan')
-//                 .style('letter-spacing', spacing)
-//                 .style('baseline-shift', dy + 'em')
-//                 .text(stemmed[symbol]);
-//         }
-//
-//         var textWidth = textEl.node().getBBox().width;
-//         // TODO set d.width
-//
-//         selection.select('rect').attr('width', textWidth + 22);
-//     }
-//
 //     function spacePerc(d, i) {
 //         var selection = d3.select(this);
 //
@@ -257,19 +195,7 @@ function renderPercussion() {
 //
 //         selection.attr('transform', 'translate(' + xOffset + ',' + 0 + ')');
 //     }
-//
-//     var percPos = 0;
-//     var percRhythm = '';
-//     perc1.selectAll('.rhythm')
-//         .each(createRhythm)
-//         .each(spacePerc);
-//
-//     percPos = 0;
-//     percRhythm = '';
-//     perc2.selectAll('.rhythm')
-//         .each(createRhythm)
-//         .each(spacePerc);
-//
+
 //     /**
 //      * Percussion dynamics
 //      */
