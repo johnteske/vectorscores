@@ -138,9 +138,7 @@ var percussionPart = (function() {
             .attr('dy', '1em')
             .call(constructTextElement);
 
-        selection.each(function(d, i) {
-            d3.select(this).call(drawBoundingRect, new Rect(0, 5, 10, 10));
-        });
+        selection.call(drawBoundingRect, new Rect(0, 5, 10, 10));
     }
 
     function constructTextElement(selection) {
