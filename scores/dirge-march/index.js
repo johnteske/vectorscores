@@ -148,29 +148,6 @@ function renderPercussion() {
     percussionPart.draw();
 }
 
-//     /**
-//      * Percussion dynamics
-//      */
-//     percDynamics.selectAll('.dynamic').remove();
-//
-//     if (bar.percussion.dynamics) {
-//         percDynamics.selectAll('.dynamic')
-//             .data(bar.percussion.dynamics)
-//             .enter()
-//             .append('text')
-//                 .attr('class', 'dynamic')
-//                 .attr('x', function(d, i) {
-//                     return globjectWidth * d.time;
-//                 })
-//                 .attr('text-anchor', function(d) {
-//                     return textAnchor(d.time);
-//                 })
-//                 .text(function(d) {
-//                     return dynamics[d.value];
-//                 });
-//     }
-// }
-
 /**
  * Resize
  */

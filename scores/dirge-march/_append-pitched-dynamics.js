@@ -5,7 +5,7 @@ function appendPitchedDynamics(selection) {
         .selectAll('.dynamic')
         .data(function(d) {
             return d.dynamics.map(function(dynamic) {
-                dynamic.width = d.duration * timeScale;
+                dynamic.duration = d.duration;
                 return dynamic;
             });
         })
@@ -13,7 +13,7 @@ function appendPitchedDynamics(selection) {
         .append('text')
         .attr('class', 'dynamic')
             .attr('x', function(d, i) {
-                return d.width * d.time;
+                return d.duration * d.time * timeScale;
             })
             .attr('dy', '1em')
             .attr('text-anchor', function(d) {

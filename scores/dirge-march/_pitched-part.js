@@ -85,7 +85,7 @@ var pitchedPart = (function() {
             .append('g')
             .attr('class', 'globject')
             .each(staticGlobject)
-            .each(fillGlobject)
+            .each(fillGlobject);
     }
 
     function drawPitchClasses() {

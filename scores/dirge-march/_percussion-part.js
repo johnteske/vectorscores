@@ -74,10 +74,11 @@ var percussionPart = (function() {
         drawBars();
     };
 
-    // TODO de-duplicate repeated tempi, or allow option to hide/show
     function drawTempi() {
         bars.call(function(selection) {
-            var text = selection.append('text').attr('class', 'tempo-text');
+            var text = selection.append('text')
+                .attr('class', 'tempo-text')
+                .attr('dy', '-0.5em');
 
             text.append('tspan').text(stemmed['1']);
 
@@ -96,6 +97,7 @@ var percussionPart = (function() {
         bars.call(drawRhythms);
         bars.call(drawBoundingRect);
         bars.call(drawDurationLine);
+        bars.call(drawDynamics);
     }
 
     function drawRhythms(selection) {
@@ -105,6 +107,7 @@ var percussionPart = (function() {
             })
             .enter()
             .append('text')
+            .attr('class', 'rhythm')
             .attr('y', function(d, i) {
                 return i * (rhythmHeight + padding);
             })
@@ -120,7 +123,7 @@ var percussionPart = (function() {
     function constructTspans(d) {
         var rhythmStrings = d.map(function(index) {
             return rhythms[index].split(',');
-        })
+        });
 
         function flattenWithCommasBetween(array) {
             return array.reduce(function(a, b) {
@@ -202,6 +205,30 @@ var percussionPart = (function() {
             .attr('y2', boxHeight * 0.5)
             .attr('stroke', 'black')
             .attr('stroke-width', 3);
+    }
+
+    function drawDynamics(selection) {
+        selection.selectAll('.dynamic')
+            .data(function(d) {
+                return d.percussion.dynamics.map(function(dynamicObject) {
+                    dynamicObject.duration = d.percussion.duration;
+                    return dynamicObject;
+                });
+            })
+            .enter()
+            .append('text')
+                .attr('class', 'dynamic')
+                .attr('x', function(d) {
+                    return d.time * d.duration * timeScale;
+                })
+                .attr('y', boxHeight)
+                .attr('dy', '1em')
+                .attr('text-anchor', function(d) {
+                    return textAnchor(d.time);
+                })
+                .text(function(d) {
+                    return dynamics[d.value];
+                });
     }
 
     return part;
