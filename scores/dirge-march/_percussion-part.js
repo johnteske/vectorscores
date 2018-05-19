@@ -3,7 +3,11 @@ var percussionPart = (function() {
     var bars;
 
     var nParts = 2;
+    // TODO only a placeholder--only two rhythm indices are being passed as data
     var nRhythms = 2;
+
+    var padding = 6;
+    var rhythmHeight = 24;
 
     part.init = function(parent) {
         bars = parent.selectAll('g')
@@ -75,8 +79,13 @@ var percussionPart = (function() {
             var text = selection.append('text').attr('class', 'tempo-text');
 
             text.append('tspan').text(stemmed['1']);
+
+            text.append('tspan').text(' = ')
+                .style('letter-spacing', '-0.125em')
+                .attr('class', 'bpm');
+
             text.append('tspan').text(function(d) {
-                return ' = ' + d.percussion.tempo;
+                return d.percussion.tempo;
             })
             .attr('class', 'bpm');
         });
@@ -91,66 +100,84 @@ var percussionPart = (function() {
             .append('g')
             .attr('class', 'rhythm-wrapper')
             .attr('transform', function(d, i) {
-                return 'translate(0, ' + (i * 20) + ')';
+                return 'translate(0, ' + (i * (rhythmHeight + padding)) + ')';
             })
-            .call(drawBoundingRect, new Rect(0, 0, 20, 20))
             .call(drawRhythms);
-    }
 
-    function Rect(x, y, width, height) {
-        this.x = x;
-        this.y = y;
-        this.w = width;
-        this.h = height;
+        bars.each(function(d) {
+            var groupWidth = d3.select(this).node().getBBox().width;
+            d.width = groupWidth + padding;
+        })
+        .call(drawBoundingRect, {
+            x: 0,
+            y: 0,
+            height: (rhythmHeight * nParts) + (padding * (nParts + 1))
+        });
     }
 
     function drawBoundingRect(selection, rect) {
         selection.append('rect')
             .attr('x', rect.x)
             .attr('y', rect.y)
-            .attr('width', rect.w)
-            .attr('height', rect.h)
+            .attr('width', function(d) {
+                return d.width;
+            })
+            .attr('height', rect.height)
             .attr('stroke', 'black')
             .attr('fill', 'none');
     }
 
     function drawRhythms(selection) {
-        selection
-            .selectAll('.rhythm')
-            .data(function(d) {
+        selection.append('text')
+            .attr('dy', 16 + padding)
+            .attr('dx', padding)
+            .selectAll('tspan')
+                .data(function(d) {
+
+                    var rhythmStrings = d.map(function(index) {
+                        return rhythms[index].split(',');
+                    })
+
+                    function flattenWithCommasBetween(array) {
+                        return array.reduce(function(a, b) {
+                            return a.concat(b, [',']);
+                        }, []);
+                    }
+
+                    var string = flattenWithCommasBetween(rhythmStrings);
+                    string.pop(); // remove last comma
+
+                    string.unshift('{');
+                    string.push('}');
+
+                    return string;
+                })
+                .enter()
+                .append('tspan')
+                .call(styleTspan);
+    }
+
+    function styleTspan(tspanSelection) {
+
+        function isSetCharacter(string) {
+            return '{,}'.indexOf(string) !== -1;
+        }
+
+        // Unordered set characters
+        tspanSelection.filter(function(d) { return isSetCharacter(d); })
+            .text(function(d) {
                 return d;
             })
-            .enter()
-            .append('g')
-            .attr('class', 'rhythm')
-            .call(drawRhythm);
-    }
+            .style('font-family', 'monospace')
+            .style('font-size', 18);
 
-    function drawRhythm(selection) {
-        selection
-            .attr('transform', function(d, i) {
-                return 'translate(' + (i * 50) + ',0)';
-            });
-
-        selection.append('text')
-            .style('font-size', 12)
-            .style('font-family', 'Bravura')
-            .attr('dy', '1em')
-            .call(constructTextElement);
-
-        selection.call(drawBoundingRect, new Rect(0, 5, 10, 10));
-    }
-
-    function constructTextElement(selection) {
-        selection.selectAll('tspan')
-            .data(function(d) {
-                return rhythms[d].split(',');
-            })
-            .enter()
-            .append('tspan')
+        // Rhythms
+        tspanSelection.filter(function(d) { return !isSetCharacter(d); })
             .text(function(d) {
                 return stemmed[d];
             })
+            .style('font-family', 'Bravura')
+            .style('font-size', 12)
             .style('baseline-shift', function(d) {
                 var dy = (d === 'r0.5' || d === 'r0.5.') ? 0.4 : 0;
                 return dy + 'em';

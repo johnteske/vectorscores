@@ -2,7 +2,7 @@
 layout: compress-js
 ---
 
-var timeScale = 3;
+var timeScale = 5;
 
 var width = 480,
     height = 480,
