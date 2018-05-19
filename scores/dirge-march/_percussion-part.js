@@ -3,11 +3,11 @@ var percussionPart = (function() {
     var bars;
 
     var nParts = 2;
-    // TODO only a placeholder--only two rhythm indices are being passed as data
-    var nRhythms = 2;
+    var maxRhythms = 2;
 
     var padding = 6;
     var rhythmHeight = 24;
+    var boxHeight = (rhythmHeight * nParts) + (padding * (nParts + 1));
 
     part.init = function(parent) {
         bars = parent.selectAll('g')
@@ -44,8 +44,9 @@ var percussionPart = (function() {
         shuffle(availableIndices);
 
         var selectedIndices = [];
+        var n = Math.min(availableIndices.length, maxRhythms);
 
-        for (var j = 0; j < nRhythms; j++) {
+        for (var j = 0; j < n; j++) {
             selectedIndices.push(availableIndices.pop());
         }
 
@@ -92,82 +93,48 @@ var percussionPart = (function() {
     }
 
     function drawBars() {
-        bars.selectAll('.rhythm-wrapper')
+        bars.call(drawRhythms);
+        bars.call(drawBoundingRect);
+        bars.call(drawDurationLine);
+    }
+
+    function drawRhythms(selection) {
+        selection.selectAll('.rhythm')
             .data(function(d) {
                 return d.percussion.rhythmIndices;
             })
             .enter()
-            .append('g')
-            .attr('class', 'rhythm-wrapper')
-            .attr('transform', function(d, i) {
-                return 'translate(0, ' + (i * (rhythmHeight + padding)) + ')';
+            .append('text')
+            .attr('y', function(d, i) {
+                return i * (rhythmHeight + padding);
             })
-            .call(drawRhythms);
-
-        var boxHeight = (rhythmHeight * nParts) + (padding * (nParts + 1));
-        bars.each(function(d) {
-            var groupWidth = d3.select(this).node().getBBox().width;
-            d.width = groupWidth + padding;
-        })
-        .call(drawBoundingRect, {
-            x: 0,
-            y: 0,
-            height: boxHeight
-        });
-
-        bars.append('line')
-            .attr('x1', function(d) {
-                return d.width;
-            })
-            .attr('x2', function(d) {
-                return d.percussion.duration * timeScale;
-            })
-            .attr('y1', boxHeight * 0.5)
-            .attr('y2', boxHeight * 0.5)
-            .attr('stroke', 'black')
-            .attr('stroke-width', 3);
-    }
-
-    function drawBoundingRect(selection, rect) {
-        selection.append('rect')
-            .attr('x', rect.x)
-            .attr('y', rect.y)
-            .attr('width', function(d) {
-                return d.width;
-            })
-            .attr('height', rect.height)
-            .attr('stroke', 'black')
-            .attr('fill', 'none');
-    }
-
-    function drawRhythms(selection) {
-        selection.append('text')
             .attr('dy', 16 + padding)
             .attr('dx', padding)
             .selectAll('tspan')
-                .data(function(d) {
-
-                    var rhythmStrings = d.map(function(index) {
-                        return rhythms[index].split(',');
-                    })
-
-                    function flattenWithCommasBetween(array) {
-                        return array.reduce(function(a, b) {
-                            return a.concat(b, [',']);
-                        }, []);
-                    }
-
-                    var string = flattenWithCommasBetween(rhythmStrings);
-                    string.pop(); // remove last comma
-
-                    string.unshift('{');
-                    string.push('}');
-
-                    return string;
-                })
+                .data(constructTspans)
                 .enter()
                 .append('tspan')
                 .call(styleTspan);
+    }
+
+    function constructTspans(d) {
+        var rhythmStrings = d.map(function(index) {
+            return rhythms[index].split(',');
+        })
+
+        function flattenWithCommasBetween(array) {
+            return array.reduce(function(a, b) {
+                return a.concat(b, [',']);
+            }, []);
+        }
+
+        var string = flattenWithCommasBetween(rhythmStrings);
+        string.pop(); // remove last comma
+
+        string.unshift('{');
+        string.push('}');
+
+        return string;
     }
 
     function styleTspan(tspanSelection) {
@@ -206,6 +173,35 @@ var percussionPart = (function() {
 
                 return spacing;
             });
+    }
+
+    function drawBoundingRect(selection) {
+        selection.each(function(d) {
+            var groupWidth = d3.select(this).node().getBBox().width;
+            d.width = groupWidth + padding;
+        });
+
+        selection.append('rect')
+            .attr('width', function(d) {
+                return d.width;
+            })
+            .attr('height', boxHeight)
+            .attr('stroke', 'black')
+            .attr('fill', 'none');
+    }
+
+    function drawDurationLine(selection) {
+        selection.append('line')
+            .attr('x1', function(d) {
+                return d.width;
+            })
+            .attr('x2', function(d) {
+                return d.percussion.duration * timeScale;
+            })
+            .attr('y1', boxHeight * 0.5)
+            .attr('y2', boxHeight * 0.5)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 3);
     }
 
     return part;
