@@ -21,8 +21,6 @@ var width = 480,
         },
         perc: {
             y: 220,
-            y1: 16,
-            y2: 60 + 16,
             dynamics: 60 + 60 + 24
         }
     };
@@ -54,41 +52,6 @@ var wrapper = svg.append('g')
     .attr('class', 'wrapper')
     .classed('debug', debug);
     // .attr('transform', 'translate(' + layout.margin.left + ',' + layout.margin.top + ')');
-
-// var perc1 = percussionParts.append('g')
-//     .attr('transform', 'translate(' + 0 + ',' + layout.perc.y1 + ')');
-//
-// var perc2 = percussionParts.append('g')
-//     .attr('transform', 'translate(' + 0 + ',' + layout.perc.y2 + ')');
-//
-// percussionParts.selectAll('g').call(function(selection) {
-//     selection.append('text')
-//         .style('font-family', 'Bravura')
-//         .attr('x', -22)
-//         .attr('y', 22)
-//         .text('\ue069');
-//
-//     function createRhythmCell(g) {
-//         var cell = g.append('g')
-//             .attr('class', 'rhythm');
-//
-//         cell.append('rect')
-//             .attr('height', 45)
-//             .attr('stroke', '#888')
-//             .attr('fill', 'none');
-//
-//         cell.append('text')
-//             .attr('dx', 11)
-//             .attr('y', 35);
-//     }
-//
-//     // create two rhythm cells
-//     selection.call(createRhythmCell);
-//     selection.call(createRhythmCell);
-// });
-//
-// var percDynamics = percussionParts.append('g')
-//     .attr('transform', 'translate(0,' + layout.perc.dynamics + ')');
 
 function textAnchor(t) {
     var a = 'middle';
@@ -184,17 +147,6 @@ function renderPercussion() {
     percussionGroup.call(percussionPart.init);
     percussionPart.draw();
 }
-
-//     function spacePerc(d, i) {
-//         var selection = d3.select(this);
-//
-//         var width = selection.node().getBBox().width;
-//         var xOffset = percPos + (i * 11);
-//         percPos += width;
-//         // TODO get d.width
-//
-//         selection.attr('transform', 'translate(' + xOffset + ',' + 0 + ')');
-//     }
 
 //     /**
 //      * Percussion dynamics

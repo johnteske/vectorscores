@@ -104,6 +104,7 @@ var percussionPart = (function() {
             })
             .call(drawRhythms);
 
+        var boxHeight = (rhythmHeight * nParts) + (padding * (nParts + 1));
         bars.each(function(d) {
             var groupWidth = d3.select(this).node().getBBox().width;
             d.width = groupWidth + padding;
@@ -111,8 +112,20 @@ var percussionPart = (function() {
         .call(drawBoundingRect, {
             x: 0,
             y: 0,
-            height: (rhythmHeight * nParts) + (padding * (nParts + 1))
+            height: boxHeight
         });
+
+        bars.append('line')
+            .attr('x1', function(d) {
+                return d.width;
+            })
+            .attr('x2', function(d) {
+                return d.percussion.duration * timeScale;
+            })
+            .attr('y1', boxHeight * 0.5)
+            .attr('y2', boxHeight * 0.5)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 3);
     }
 
     function drawBoundingRect(selection, rect) {

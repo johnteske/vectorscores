@@ -25,6 +25,7 @@
         "time": 16,
         "percussion": {
             "tempo": 60,
+            "duration": 32,
             "rhythmRange": [0, 1],
             "dynamics": [
                 { "time": 0, "value": "n" },
@@ -65,6 +66,7 @@
         "time": 48,
         "percussion": {
             "tempo": 60,
+            "duration": 32,
             "rhythmRange": [0, 3],
             "dynamics": [
                 { "time": 0, "value": "ppp" },
@@ -77,6 +79,7 @@
         "time": 80,
         "percussion": {
             "tempo": 60,
+            "duration": 32,
             "rhythmRange": [0, 4],
             "dynamics": [
                 { "time": 0, "value": "p" },
@@ -152,6 +155,7 @@
         "time": 211,
         "percussion": {
             "tempo": 120,
+            "duration": 32,
             "rhythmRange": [5, 8],
             "dynamics": [
                 { "time": 0, "value": "mf" },
@@ -178,6 +182,7 @@
         },
         "percussion": {
             "tempo": 120,
+            "duration": 32,
             "rhythmRange": [5, 10],
             "dynamics": [
                 { "time": 0, "value": "f" },
@@ -213,6 +218,7 @@
         "time": 275,
         "percussion": {
             "tempo": 120,
+            "duration": 32,
             "rhythmRange": [0, 10],
             "dynamics": [
                 { "time": 0, "value": "f" },
@@ -244,10 +250,10 @@
     },
     {
         "time": 307,
-        "percussion": {
-            "tempo": null
-        }
-    },
+            "percussion": {
+                "tempo": null
+            }
+        },
     {
         "time": 315,
         "pitched": {
