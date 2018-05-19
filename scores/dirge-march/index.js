@@ -128,7 +128,6 @@ function renderLayout() {
  */
 {% include_relative _fill-globject.js %}
 {% include_relative _globject-text.js %}
-{% include_relative _append-pitched-dynamics.js %}
 
 function renderPitched() {
     // TODO add class and position in DOM properly
@@ -146,6 +145,26 @@ function renderPercussion() {
 
     percussionGroup.call(percussionPart.init);
     percussionPart.draw();
+}
+
+function appendDynamics(selection, data, y) {
+    selection.append('g')
+        .attr('transform', 'translate(0,' + y + ')')
+        .selectAll('.dynamic')
+        .data(data)
+        .enter()
+        .append('text')
+        .attr('class', 'dynamic')
+            .attr('x', function(d, i) {
+                return d.duration * d.time * timeScale;
+            })
+            .attr('dy', '1em')
+            .attr('text-anchor', function(d) {
+                return textAnchor(d.time);
+            })
+            .text(function(d) {
+                return dynamics[d.value];
+            });
 }
 
 /**

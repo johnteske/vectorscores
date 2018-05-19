@@ -208,27 +208,14 @@ var percussionPart = (function() {
     }
 
     function drawDynamics(selection) {
-        selection.selectAll('.dynamic')
-            .data(function(d) {
-                return d.percussion.dynamics.map(function(dynamicObject) {
-                    dynamicObject.duration = d.percussion.duration;
-                    return dynamicObject;
-                });
-            })
-            .enter()
-            .append('text')
-                .attr('class', 'dynamic')
-                .attr('x', function(d) {
-                    return d.time * d.duration * timeScale;
-                })
-                .attr('y', boxHeight)
-                .attr('dy', '1em')
-                .attr('text-anchor', function(d) {
-                    return textAnchor(d.time);
-                })
-                .text(function(d) {
-                    return dynamics[d.value];
-                });
+        function dynamicsData(d) {
+            return d.percussion.dynamics.map(function(dynamicObject) {
+                dynamicObject.duration = d.percussion.duration;
+                return dynamicObject;
+            });
+        }
+
+        selection.call(appendDynamics, dynamicsData, boxHeight);
     }
 
     return part;

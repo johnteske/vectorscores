@@ -93,7 +93,14 @@ var pitchedPart = (function() {
     }
 
     function drawDynamics() {
-        bars.call(appendPitchedDynamics);
+        function dynamicsData(d) {
+            return d.dynamics.map(function(dynamic) {
+                dynamic.duration = d.duration;
+                return dynamic;
+            });
+        }
+
+        bars.call(appendDynamics, dynamicsData, globjectHeight);
     }
 
     function drawRests() {
