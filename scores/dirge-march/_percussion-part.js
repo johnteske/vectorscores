@@ -30,7 +30,7 @@ var percussionPart = (function() {
                 .attr('class', 'tempo-text')
                 .attr('dy', '-0.5em');
 
-            text.append('tspan').text(stemmed['1']);
+            text.append('tspan').text(rhythms.stringToBravuraMap['1']);
 
             text.append('tspan').text(' = ')
                 .style('letter-spacing', '-0.125em')
@@ -64,30 +64,10 @@ var percussionPart = (function() {
             .attr('dy', 16 + padding)
             .attr('dx', padding)
             .selectAll('tspan')
-                .data(constructTspans)
+                .data(rhythms.getTextFragmentsFromIndices)
                 .enter()
                 .append('tspan')
                 .call(styleTspan);
-    }
-
-    function constructTspans(d) {
-        var rhythmStrings = d.map(function(index) {
-            return rhythms[index].split(',');
-        });
-
-        function flattenWithCommasBetween(array) {
-            return array.reduce(function(a, b) {
-                return a.concat(b, [',']);
-            }, []);
-        }
-
-        var string = flattenWithCommasBetween(rhythmStrings);
-        string.pop(); // remove last comma
-
-        string.unshift('{');
-        string.push('}');
-
-        return string;
     }
 
     function styleTspan(tspanSelection) {
@@ -107,7 +87,7 @@ var percussionPart = (function() {
         // Rhythms
         tspanSelection.filter(function(d) { return !isSetCharacter(d); })
             .text(function(d) {
-                return stemmed[d];
+                return rhythms.stringToBravuraMap[d];
             })
             .style('font-family', 'Bravura')
             .style('font-size', 12)
