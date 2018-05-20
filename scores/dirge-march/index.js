@@ -35,10 +35,16 @@ var globjects = (function() {
 {% include_relative _globjects.js %}
 {% include_relative _rhythms.js %}
 
-// TODO do score generation
-var score2 = (function() {
+var rawScore = (function() {
     return {% include_relative _score.json %};
 }());
+
+var barTimes = rawScore.map(function(d) {
+    return d.time;
+})
+
+{% include_relative _generate-parts.js %};
+var parts = generatePartsFromRawScore(rawScore);
 
 {% include_relative _pitched-part.js %}
 {% include_relative _percussion-part.js %}
@@ -109,17 +115,17 @@ function renderLayout() {
         .attr('class', 'bar-times');
 
     barTimeGroup.selectAll('text')
-        .data(score2)
+        .data(barTimes)
         .enter()
         .append('text')
         .style('font-family', 'serif')
         .style('font-style', 'italic')
         .attr('dy', '-3em')
         .attr('x', function(d) {
-            return d.time * timeScale;
+            return d * timeScale;
         })
         .text(function(d) {
-            return d.time + '\u2033';
+            return d + '\u2033';
         });
 }
 
@@ -184,7 +190,7 @@ function resize() {
 d3.select(window).on('resize', resize);
 
 function getXByScoreIndex(i) {
-    return score2[i].time * timeScale;
+    return barTimes[i] * timeScale;
 }
 
 function scrollScoreToIndex(i) {
@@ -201,8 +207,8 @@ function scrollScoreToIndex(i) {
 /**
  * Populate score
  */
-for (var i = 0; i < score2.length; i++) {
-    VS.score.add(score2[i].time * 1000, scrollScoreToIndex, [i]);
+for (var i = 0; i < barTimes.length; i++) {
+    VS.score.add(barTimes[i] * 1000, scrollScoreToIndex, [i]);
 }
 
 /**

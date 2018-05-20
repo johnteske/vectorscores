@@ -3,52 +3,9 @@ var pitchedPart = (function() {
 
     var bars;
 
-    // TODO don't mix score generation (this) and score rendering (intention of this file)
-    function coerceData() {
-        function getRandAndRemove(array) {
-            var i = Math.floor(VS.getRandExcl(0, array.length));
-            return array.splice(i, 1);
-        }
-
-        var contours = {
-            descending: globjects.filter(function(g) {
-                return g.contour === 'descending';
-            }),
-            rest: [],
-            ascending: globjects.filter(function(g) {
-                return g.contour === 'ascending';
-            }),
-            all: retrogradeGlobjects // globjects.concat(retrogradeGlobjects) // TODO WHHYYYY
-        };
-
-        return score2.filter(function(d) {
-            return d.pitched;
-        }).map(function(d) {
-            var globject = [];
-
-            if (d.pitched.globjectContour !== 'all') {
-                globject = getRandAndRemove(contours[d.pitched.globjectContour]);
-            } else {
-                for (var i = 0; i < (d.pitched.globjectCount || 1); i++) {
-                    globject.push(VS.getItem(contours[d.pitched.globjectContour]));
-                }
-            }
-
-
-            return {
-                time: d.time,
-                duration: d.pitched.duration,
-                dynamics: d.pitched.dynamics,
-                phraseType: d.pitched.phraseType,
-                pitch: d.pitched.pitch,
-                globjects: globject
-            };
-        });
-    }
-
     part.init = function(parent) {
         bars = parent.selectAll('g')
-            .data(coerceData())
+            .data(parts.pitched)
             .enter()
             .append('g')
             .attr('transform', function(d) {

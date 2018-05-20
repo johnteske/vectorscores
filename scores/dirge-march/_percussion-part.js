@@ -11,63 +11,13 @@ var percussionPart = (function() {
 
     part.init = function(parent) {
         bars = parent.selectAll('g')
-            .data(processData())
+            .data(parts.percussion)
             .enter()
             .append('g')
             .attr('transform', function(d) {
                 return 'translate(' + (d.time * timeScale) + ',' + 0 + ')';
             });
     };
-
-    function processData() {
-        return score2.filter(function(d) {
-            return d.percussion.tempo !== null;
-        })
-        .map(function(d) {
-            d.percussion.rhythmIndices = [];
-
-            for (var i = 0; i < nParts; i++) {
-                d.percussion.rhythmIndices.push(getRhythmIndices(d.percussion.rhythmRange));
-            }
-
-            return d;
-        });
-    }
-
-    function getRhythmIndices(extent) {
-        var availableIndices = [];
-
-        for (var i = extent[0]; i <= extent[1]; i++) {
-            availableIndices.push(i);
-        }
-
-        shuffle(availableIndices);
-
-        var selectedIndices = [];
-        var n = Math.min(availableIndices.length, maxRhythms);
-
-        for (var j = 0; j < n; j++) {
-            selectedIndices.push(availableIndices.pop());
-        }
-
-        return selectedIndices;
-    }
-
-    // Use randomly sorted arrays to select from with Array#pop to avoid duplicate selections
-    // TODO use for the pitched globject selection as well
-    // https://www.frankmitchell.org/2015/01/fisher-yates/
-    function shuffle(array) {
-        var i = 0;
-        var j = 0;
-        var temp = null;
-
-        for (i = array.length - 1; i > 0; i--) {
-            j = Math.floor(Math.random() * (i + 1));
-            temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-        }
-    }
 
     part.draw = function() {
         drawTempi();
