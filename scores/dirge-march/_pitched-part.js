@@ -32,15 +32,20 @@ var pitchedPart = (function() {
         .selectAll('.globject')
             .data(function(d) {
                 return d.globjects.map(function(globject) {
-                    globject.duration = d.duration;
-                    globject.pitch = d.pitch;
-                    globject.phraseType = d.phraseType;
-                    return globject;
+                    return {
+                        duration: d.duration,
+                        pitch: d.pitch,
+                        phraseType: d.phraseType,
+                        rangeEnvelope: globject.rangeEnvelope
+                    };
                 });
             })
             .enter()
             .append('g')
             .attr('class', 'globject')
+            .attr('transform', function(d, i) {
+                return 'translate(0,' + (i * globjectHeight) + ')';
+            })
             .each(staticGlobject)
             .each(fillGlobject);
     }

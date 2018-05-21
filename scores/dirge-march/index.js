@@ -28,11 +28,14 @@ var width = 480,
 var dynamics = VS.dictionary.Bravura.dynamics;
 
 // Wrap in IIFE to aid in linting
-var globjects = (function() {
-    return {% include_relative _globjects.json %};
+var rawGlobjects = (function() {
+    return {% include_relative _proto-globjects.json %};
 }());
 
-{% include_relative _globjects.js %}
+{% include_relative _generate-globjects.js %}
+var globjects = generateGlobjects(rawGlobjects);
+var retrogradeGlobjects = generateRetrogradeGlobjects(globjects);
+
 {% include_relative _rhythms.js %}
 
 var rawScore = (function() {
