@@ -2,28 +2,28 @@
 layout: compress-js
 ---
 
-var timeScale = 5;
+// Musical constants that define the piece
+var config = {
+    semitoneTransposition: 2,
+    numberOfPercussionParts: 2,
+    maxRhythmsPerBar: 2
+};
 
-var width = 480,
-    height = 480,
-    globjectWidth = 240,
-    globjectHeight = 90,
-    debug = +VS.getQueryString('debug') === 1 || false,
-    transposeBy = 2,
-    layout = {
-        scale: 1,
-        margin: {
-            left: 0,
-            top: 0
-        },
-        globjects: {
-            top: 16
-        },
-        perc: {
-            y: 220,
-            dynamics: 60 + 60 + 24
-        }
-    };
+// Display constants
+var layout = {
+    pitched: {
+        y: 0
+    },
+    percussion: {
+        y: 220,
+    },
+    scaleTime: function(x) {
+        return x * 5;
+    }
+};
+
+// TODO each globject should have its own height and y position
+var globjectHeight = 90;
 
 var dynamics = VS.dictionary.Bravura.dynamics;
 
@@ -38,6 +38,7 @@ var retrogradeGlobjects = generateRetrogradeGlobjects(globjects);
 
 {% include_relative _rhythms.js %}
 
+// Wrap in IIFE to aid in linting
 var rawScore = (function() {
     return {% include_relative _score.json %};
 }());
@@ -53,14 +54,12 @@ var parts = generatePartsFromRawScore(rawScore);
 {% include_relative _percussion-part.js %}
 
 {% include_relative _options.js %}
-transposeBy += scoreOptions.transposition;
+config.semitoneTransposition += scoreOptions.transposition;
 
 var svg = d3.select('svg');
 
 var wrapper = svg.append('g')
-    .attr('class', 'wrapper')
-    .classed('debug', debug);
-    // .attr('transform', 'translate(' + layout.margin.left + ',' + layout.margin.top + ')');
+    .attr('class', 'wrapper');
 
 function textAnchor(t) {
     var a = 'middle';
@@ -87,12 +86,12 @@ function makePhrase(type, set) {
             pc1, pc2;
 
         if (!type) {
-            pc1 = VS.getItem(set) + transposeBy;
+            pc1 = VS.getItem(set) + config.semitoneTransposition;
             notes.push({ pitch: pc1, duration: VS.getRandExcl(8, 12) });
             notes.push({ pitch: pc1, duration: 0 });
         } else if (type === 'descending' || type === 'ascending') {
-            pc1 = VS.getItem(set) + transposeBy;
-            pc2 = VS.getItem(set) + transposeBy + (type === 'descending' ? -12 : 12);
+            pc1 = VS.getItem(set) + config.semitoneTransposition;
+            pc2 = VS.getItem(set) + config.semitoneTransposition + (type === 'descending' ? -12 : 12);
             notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
             if (coin(0.33)) {
                 notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
@@ -102,9 +101,9 @@ function makePhrase(type, set) {
             }
             notes.push({ pitch: pc2, duration: 0 });
         } else if (type === 'both') {
-            notes.push({ pitch: VS.getItem(set) + transposeBy, duration: VS.getRandExcl(4, 6) });
-            notes.push({ pitch: VS.getItem(set) + transposeBy + (coin() ? 12 : 0), duration: VS.getRandExcl(4, 6) });
-            notes.push({ pitch: VS.getItem(set) + transposeBy + (coin() ? 12 : 0), duration: 0 });
+            notes.push({ pitch: VS.getItem(set) + config.semitoneTransposition, duration: VS.getRandExcl(4, 6) });
+            notes.push({ pitch: VS.getItem(set) + config.semitoneTransposition + (coin() ? 12 : 0), duration: VS.getRandExcl(4, 6) });
+            notes.push({ pitch: VS.getItem(set) + config.semitoneTransposition + (coin() ? 12 : 0), duration: 0 });
         }
 
         return notes;
@@ -125,7 +124,7 @@ function renderLayout() {
         .style('font-style', 'italic')
         .attr('dy', '-3em')
         .attr('x', function(d) {
-            return d * timeScale;
+            return layout.scaleTime(d);
         })
         .text(function(d) {
             return d + '\u2033';
@@ -141,7 +140,8 @@ function renderLayout() {
 function renderPitched() {
     // TODO add class and position in DOM properly
     var pitchedGroup = wrapper.append('g')
-        .attr('class', 'pitched-part');
+        .attr('class', 'pitched-part')
+        .attr('transform', 'translate(' + 0 + ',' + layout.pitched.y + ')');
 
     pitchedGroup.call(pitchedPart.init);
     pitchedPart.draw();
@@ -149,8 +149,8 @@ function renderPitched() {
 
 function renderPercussion() {
     var percussionGroup = wrapper.append('g')
-        .attr('transform', 'translate(' + 0 + ',' + layout.perc.y + ')')
-        .attr('class', 'percussion-parts');
+        .attr('class', 'percussion-parts')
+        .attr('transform', 'translate(' + 0 + ',' + layout.percussion.y + ')');
 
     percussionGroup.call(percussionPart.init);
     percussionPart.draw();
@@ -165,7 +165,7 @@ function appendDynamics(selection, data, y) {
         .append('text')
         .attr('class', 'dynamic')
             .attr('x', function(d, i) {
-                return d.duration * d.time * timeScale;
+                return layout.scaleTime(d.duration * d.time);
             })
             .attr('dy', '1em')
             .attr('text-anchor', function(d) {
@@ -193,7 +193,7 @@ function resize() {
 d3.select(window).on('resize', resize);
 
 function getXByScoreIndex(i) {
-    return barTimes[i] * timeScale;
+    return layout.scaleTime(barTimes[i]);
 }
 
 function scrollScoreToIndex(i) {

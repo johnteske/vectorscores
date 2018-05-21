@@ -13,7 +13,7 @@ function fillGlobject(d) {
     var bar = d;
     var phraseType = bar.phraseType;
     var duration = bar.duration;
-    var width = duration * timeScale;
+    var width = layout.scaleTime(duration);
 
     var content = d3.select(this).select('.globject-content');
 

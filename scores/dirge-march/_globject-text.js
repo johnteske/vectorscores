@@ -1,7 +1,7 @@
 function globjectText(d) {
 
     var selection = d3.select(this);
-    var width = d.duration * timeScale; // d.width;
+    var width = layout.scaleTime(d.duration);
 
     /**
      * Pitch classes
@@ -21,7 +21,7 @@ function globjectText(d) {
             return textAnchor(d.time);
         })
         .text(function(d) {
-            var set = VS.pitchClass.transpose(d.classes, transposeBy).map(function(pc) {
+            var set = VS.pitchClass.transpose(d.classes, config.semitoneTransposition).map(function(pc) {
                 return VS.pitchClass.format(+pc, scoreOptions.pitchClasses.display, scoreOptions.pitchClasses.preference);
             });
 

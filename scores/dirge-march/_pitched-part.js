@@ -9,7 +9,7 @@ var pitchedPart = (function() {
             .enter()
             .append('g')
             .attr('transform', function(d) {
-                return 'translate(' + (d.time * timeScale) + ',' + 0 + ')';
+                return 'translate(' + layout.scaleTime(d.time) + ',' + 0 + ')';
             });
     };
 
@@ -22,7 +22,7 @@ var pitchedPart = (function() {
 
     var staticGlobject = VS.globject()
         .width(function(d) {
-            return d.duration * timeScale;
+            return layout.scaleTime(d.duration);
         })
         .height(globjectHeight)
         .curve(d3.curveCardinalClosed.tension(0.3));
@@ -73,7 +73,7 @@ var pitchedPart = (function() {
         .attr('class', 'rest');
 
         function getBarCenterX(d) {
-            return d.duration * timeScale * 0.5;
+            return layout.scaleTime(d.duration * 0.5);
         }
 
         rest.append('tspan')

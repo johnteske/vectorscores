@@ -51,9 +51,6 @@ function generatePartsFromRawScore(rawScoreData) {
         });
     }
 
-    var nParts = 2; // TODO
-    var maxRhythms = 2; // TODO
-
     function generatePercussionPart() {
 
         return rawScoreData.filter(function(d) {
@@ -62,7 +59,7 @@ function generatePartsFromRawScore(rawScoreData) {
         .map(function(d) {
             d.percussion.rhythmIndices = [];
 
-            for (var i = 0; i < nParts; i++) {
+            for (var i = 0; i < config.numberOfPercussionParts; i++) {
                 d.percussion.rhythmIndices.push(getRhythmIndices(d.percussion.rhythmRange));
             }
 
@@ -80,9 +77,9 @@ function generatePartsFromRawScore(rawScoreData) {
         shuffle(availableIndices);
 
         var selectedIndices = [];
-        var n = Math.min(availableIndices.length, maxRhythms);
+        var rhythmsPerBar = Math.min(availableIndices.length, config.maxRhythmsPerBar);
 
-        for (var j = 0; j < n; j++) {
+        for (var j = 0; j < rhythmsPerBar; j++) {
             selectedIndices.push(availableIndices.pop());
         }
 

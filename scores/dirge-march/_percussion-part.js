@@ -2,12 +2,11 @@ var percussionPart = (function() {
     var part = {};
     var bars;
 
-    var nParts = 2;
-    var maxRhythms = 2;
+    var numberOfParts = config.numberOfPercussionParts;
 
     var padding = 6;
     var rhythmHeight = 24;
-    var boxHeight = (rhythmHeight * nParts) + (padding * (nParts + 1));
+    var boxHeight = (rhythmHeight * numberOfParts) + (padding * (numberOfParts + 1));
 
     part.init = function(parent) {
         bars = parent.selectAll('g')
@@ -15,7 +14,7 @@ var percussionPart = (function() {
             .enter()
             .append('g')
             .attr('transform', function(d) {
-                return 'translate(' + (d.time * timeScale) + ',' + 0 + ')';
+                return 'translate(' + layout.scaleTime(d.time) + ',' + 0 + ')';
             });
     };
 
@@ -129,7 +128,7 @@ var percussionPart = (function() {
                 return d.width;
             })
             .attr('x2', function(d) {
-                return d.percussion.duration * timeScale;
+                return layout.scaleTime(d.percussion.duration);
             })
             .attr('y1', boxHeight * 0.5)
             .attr('y2', boxHeight * 0.5)
