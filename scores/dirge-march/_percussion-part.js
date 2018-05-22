@@ -1,12 +1,16 @@
 var percussionPart = (function() {
     var part = {};
+
     var bars;
 
     var numberOfParts = config.numberOfPercussionParts;
 
-    var padding = 6;
-    var rhythmHeight = 24;
-    var boxHeight = (rhythmHeight * numberOfParts) + (padding * (numberOfParts + 1));
+    var rhythmLayout = {
+        padding: 6,
+        height: 24
+    };
+
+    rhythmLayout.boxHeight = (rhythmLayout.height * numberOfParts) + (rhythmLayout.padding * (numberOfParts + 1));
 
     part.init = function(parent) {
         bars = parent.selectAll('g')
@@ -24,33 +28,31 @@ var percussionPart = (function() {
     };
 
     function drawTempi() {
-        bars.call(function(selection) {
-            var text = selection.append('text')
-                .attr('class', 'tempo-text')
-                .attr('dy', '-0.5em');
+        var text = bars.append('text')
+            .attr('class', 'tempo-text')
+            .attr('dy', '-0.5em');
 
-            text.append('tspan').text(rhythms.stringToBravuraMap['1']);
+        text.append('tspan').text(rhythms.stringToBravuraMap['1']);
 
-            text.append('tspan').text(' = ')
-                .style('letter-spacing', '-0.125em')
-                .attr('class', 'bpm');
-
-            text.append('tspan').text(function(d) {
-                return d.percussion.tempo;
-            })
+        text.append('tspan').text(' = ')
+            .style('letter-spacing', '-0.125em')
             .attr('class', 'bpm');
-        });
+
+        text.append('tspan').text(function(d) {
+            return d.percussion.tempo;
+        })
+        .attr('class', 'bpm');
     }
 
     function drawBars() {
-        bars.call(drawRhythms);
-        bars.call(drawBoundingRect);
-        bars.call(drawDurationLine);
-        bars.call(drawDynamics);
+        drawRhythms();
+        drawBoundingRect();
+        drawDurationLine();
+        drawDynamics();
     }
 
-    function drawRhythms(selection) {
-        selection.selectAll('.rhythm')
+    function drawRhythms() {
+        var rhythms = bars.selectAll('.rhythm')
             .data(function(d) {
                 return d.percussion.rhythmIndices;
             })
@@ -58,25 +60,23 @@ var percussionPart = (function() {
             .append('text')
             .attr('class', 'rhythm')
             .attr('y', function(d, i) {
-                return i * (rhythmHeight + padding);
+                return i * (rhythmLayout.height + rhythmLayout.padding);
             })
-            .attr('dy', 16 + padding)
-            .attr('dx', padding)
-            .selectAll('tspan')
-                .data(rhythms.getTextFragmentsFromIndices)
-                .enter()
-                .append('tspan')
-                .call(styleTspan);
+            .attr('dy', 16 + rhythmLayout.padding)
+            .attr('dx', rhythmLayout.padding);
+
+        rhythms.call(appendTspans);
     }
 
-    function styleTspan(tspanSelection) {
+    function appendTspans(selection) {
 
-        function isSetCharacter(string) {
-            return '{,}'.indexOf(string) !== -1;
-        }
+        var tspans = selection.selectAll('tspan')
+            .data(rhythms.getTextFragmentsFromIndices)
+            .enter()
+            .append('tspan');
 
         // Unordered set characters
-        tspanSelection.filter(function(d) { return isSetCharacter(d); })
+        tspans.filter(function(d) { return isSetCharacter(d); })
             .text(function(d) {
                 return d;
             })
@@ -84,7 +84,7 @@ var percussionPart = (function() {
             .style('font-size', 18);
 
         // Rhythms
-        tspanSelection.filter(function(d) { return !isSetCharacter(d); })
+        tspans.filter(function(d) { return !isSetCharacter(d); })
             .text(function(d) {
                 return rhythms.stringToBravuraMap[d];
             })
@@ -105,38 +105,42 @@ var percussionPart = (function() {
 
                 return spacing;
             });
+
+        function isSetCharacter(string) {
+            return '{,}'.indexOf(string) !== -1;
+        }
     }
 
-    function drawBoundingRect(selection) {
-        selection.each(function(d) {
+    function drawBoundingRect() {
+        bars.each(function(d) {
             var groupWidth = d3.select(this).node().getBBox().width;
-            d.width = groupWidth + padding;
+            d.width = groupWidth + rhythmLayout.padding;
         });
 
-        selection.append('rect')
+        bars.append('rect')
             .attr('width', function(d) {
                 return d.width;
             })
-            .attr('height', boxHeight)
+            .attr('height', rhythmLayout.boxHeight)
             .attr('stroke', 'black')
             .attr('fill', 'none');
     }
 
-    function drawDurationLine(selection) {
-        selection.append('line')
+    function drawDurationLine() {
+        bars.append('line')
             .attr('x1', function(d) {
                 return d.width;
             })
             .attr('x2', function(d) {
                 return layout.scaleTime(d.percussion.duration);
             })
-            .attr('y1', boxHeight * 0.5)
-            .attr('y2', boxHeight * 0.5)
+            .attr('y1', rhythmLayout.boxHeight * 0.5)
+            .attr('y2', rhythmLayout.boxHeight * 0.5)
             .attr('stroke', 'black')
             .attr('stroke-width', 3);
     }
 
-    function drawDynamics(selection) {
+    function drawDynamics() {
         function dynamicsData(d) {
             return d.percussion.dynamics.map(function(dynamicObject) {
                 dynamicObject.duration = d.percussion.duration;
@@ -144,7 +148,7 @@ var percussionPart = (function() {
             });
         }
 
-        selection.call(appendDynamics, dynamicsData, boxHeight);
+        bars.call(appendDynamics, dynamicsData, rhythmLayout.boxHeight);
     }
 
     return part;
