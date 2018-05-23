@@ -11,6 +11,21 @@ var pitchedPart = (function() {
             .attr('transform', function(d) {
                 return 'translate(' + layout.scaleTime(d.time) + ',' + 0 + ')';
             });
+
+        createFillPattern();
+    };
+
+    function createFillPattern() {
+        var pattern = svg.append('defs')
+            .append('pattern')
+            .attr('id', 'ascending-fill')
+            .attr('width', 2)
+            .attr('height', 2)
+            .attr('patternUnits', 'userSpaceOnUse');
+
+        pattern.append('circle')
+            .attr('fill', '#eee')
+            .attr('r', 1);
     };
 
     part.draw = function() {

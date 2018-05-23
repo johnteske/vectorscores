@@ -1,14 +1,3 @@
-var pattern = svg.append('defs')
-    .append('pattern')
-    .attr('id', 'ascending-fill')
-    .attr('width', 2)
-    .attr('height', 2)
-    .attr('patternUnits', 'userSpaceOnUse');
-
-pattern.append('circle')
-    .attr('fill', '#eee')
-    .attr('r', 1);
-
 function fillGlobject(d) {
     var bar = d;
     var phraseType = bar.phraseType;
