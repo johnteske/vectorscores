@@ -73,43 +73,6 @@ function textAnchor(t) {
     return a;
 }
 
-/**
- *
- */
-function makePhrase(type, set) {
-    function coin(prob) {
-        return Math.random() < (prob || 0.5);
-    }
-
-    return function() {
-        var notes = [],
-            pc1, pc2;
-
-        if (!type) {
-            pc1 = VS.getItem(set) + config.semitoneTransposition;
-            notes.push({ pitch: pc1, duration: VS.getRandExcl(8, 12) });
-            notes.push({ pitch: pc1, duration: 0 });
-        } else if (type === 'descending' || type === 'ascending') {
-            pc1 = VS.getItem(set) + config.semitoneTransposition;
-            pc2 = VS.getItem(set) + config.semitoneTransposition + (type === 'descending' ? -12 : 12);
-            notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
-            if (coin(0.33)) {
-                notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
-            }
-            if (coin(0.33)) {
-                notes.push({ pitch: pc2, duration: VS.getRandExcl(4, 6) });
-            }
-            notes.push({ pitch: pc2, duration: 0 });
-        } else if (type === 'both') {
-            notes.push({ pitch: VS.getItem(set) + config.semitoneTransposition, duration: VS.getRandExcl(4, 6) });
-            notes.push({ pitch: VS.getItem(set) + config.semitoneTransposition + (coin() ? 12 : 0), duration: VS.getRandExcl(4, 6) });
-            notes.push({ pitch: VS.getItem(set) + config.semitoneTransposition + (coin() ? 12 : 0), duration: 0 });
-        }
-
-        return notes;
-    };
-}
-
 // TODO also add bar ticks, for reference, like in ad;sr
 // TODO add vinculum U+0305 to .333 and .666 bar times
 function renderLayout() {
