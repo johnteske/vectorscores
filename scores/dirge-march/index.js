@@ -1,6 +1,11 @@
 ---
 layout: compress-js
 ---
+/**
+ * TODO Don't remove pitch classes from data when deduplicating,
+ * instead hide them during rendering. Keeping the data will allow the
+ * better line cloud rendering (also TODO).
+ */
 
 // Musical constants that define the piece
 var config = {

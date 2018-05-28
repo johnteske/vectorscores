@@ -21,6 +21,11 @@ function globjectText(d) {
             return textAnchor(d.time);
         })
         .text(function(d) {
+            // TODO render as path, not text, taking width of text on either side into account
+            if (d.type === 'transform') {
+                return '\u2192';
+            }
+
             var set = VS.pitchClass.transpose(d.classes, config.semitoneTransposition).map(function(pc) {
                 return VS.pitchClass.format(+pc, scoreOptions.pitchClasses.display, scoreOptions.pitchClasses.preference);
             });

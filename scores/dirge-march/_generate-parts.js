@@ -53,15 +53,47 @@ function generatePartsFromRawScore(rawScoreData) {
             };
         });
 
+        insertSetTransformations(pitchedBars);
         deduplicateAdjacentSets(pitchedBars);
 
         return pitchedBars;
     }
 
+    function filterBarsWithSets(bar) {
+        return bar.phraseType !== 'rest';
+    }
+
+    function insertSetTransformations(bars) {
+        var barsWithSets = bars.filter(filterBarsWithSets);
+
+        function getMidPoint(current, next) {
+            return ((next - current) * 0.5) + current;
+        }
+
+        for (var i = 0; i < barsWithSets.length; i++) {
+            var pitch = barsWithSets[i].pitch;
+            var newPitch = [];
+
+            pitch.forEach(function(current, index, array) {
+                var next = array[index + 1];
+
+                newPitch.push(current);
+
+                if (array.length !== index + 1) {
+                    newPitch.push({
+                        time: getMidPoint(current.time, next.time),
+                        classes: [],
+                        type: 'transform'
+                    });
+                }
+            });
+
+            barsWithSets[i].pitch = newPitch;
+        }
+    }
+
     function deduplicateAdjacentSets(bars) {
-        var barsWithSets = bars.filter(function(bar) {
-            return bar.phraseType !== 'rest';
-        });
+        var barsWithSets = bars.filter(filterBarsWithSets);
 
         for (var i = 0; i < barsWithSets.length - 1; i++) {
             var bar = barsWithSets[i];

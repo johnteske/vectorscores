@@ -16,8 +16,9 @@ var fillGlobject = (function() {
 
         var lineCloud = VS.lineCloud()
             .duration(duration)
-            // TODO shape over time for each PC set, not by last set
-            .phrase(makePhrase(phraseType, bar.pitch[bar.pitch.length - 1].classes))
+            // TODO shape over time for each PC set, not by a single set
+            .phrase(makePhrase(phraseType, bar.pitch[0].classes))
+            // .phrase(makePhrase(phraseType, bar.pitch[bar.pitch.length - 1].classes))
             .transposition('octave')
             .curve(d3.curveCardinal)
             .width(width)
