@@ -29,44 +29,70 @@ function generatePartsFromRawScore(rawScoreData) {
         shuffle(contours.descending);
         shuffle(contours.all);
 
-        return rawScoreData
-        .filter(function(d) {
-            return d.pitched;
-        }).map(function(d) {
+        var pitchedBars = rawScoreData.filter(function(bar) {
+            return bar.pitched;
+        });
+
+        pitchedBars = pitchedBars.map(function(bar) {
             var globject = [];
 
-            if (d.pitched.globjectContour !== 'rest') {
-                for (var i = 0; i < (d.pitched.globjectCount || 1); i++) {
-                    globject.push(contours[d.pitched.globjectContour].pop());
+            if (bar.pitched.globjectContour !== 'rest') {
+                for (var i = 0; i < (bar.pitched.globjectCount || 1); i++) {
+                    globject.push(contours[bar.pitched.globjectContour].pop());
                 }
             }
 
             return {
-                index: d.index,
-                time: d.time,
-                duration: d.pitched.duration,
-                dynamics: d.pitched.dynamics,
-                phraseType: d.pitched.phraseType,
-                pitch: d.pitched.pitch,
+                index: bar.index,
+                time: bar.time,
+                duration: bar.pitched.duration,
+                dynamics: bar.pitched.dynamics,
+                phraseType: bar.pitched.phraseType,
+                pitch: bar.pitched.pitch,
                 globjects: globject
             };
         });
+
+        deduplicateAdjacentSets(pitchedBars);
+
+        return pitchedBars;
+    }
+
+    function deduplicateAdjacentSets(bars) {
+        var barsWithSets = bars.filter(function(bar) {
+            return bar.phraseType !== 'rest';
+        });
+
+        for (var i = 0; i < barsWithSets.length - 1; i++) {
+            var bar = barsWithSets[i];
+            var barSet = bar.pitch;
+            var lastSet = barSet[barSet.length - 1].classes.join();
+
+            var nextBar = barsWithSets[i + 1];
+            var nextSet = nextBar.pitch[0].classes.join();
+
+            // NOTE Simple way to handle floating point addition rounding (.333 vs. .334, etc.)
+            var adjacent = (Math.round(bar.time + bar.duration) === Math.round(nextBar.time));
+            if ((lastSet === nextSet) && adjacent) {
+                barSet.pop();
+            }
+        }
     }
 
     function generatePercussionPart() {
 
-        var percussionBars = rawScoreData.filter(function(d) {
-            return d.percussion.tempo !== null;
+        var percussionBars = rawScoreData.filter(function(bar) {
+            return bar.percussion.tempo !== null;
         });
 
-        percussionBars = percussionBars.map(function(d) {
-            d.percussion.rhythmIndices = [];
+        percussionBars = percussionBars.map(function(bar) {
+            bar.percussion.rhythmIndices = [];
 
             for (var i = 0; i < config.numberOfPercussionParts; i++) {
-                d.percussion.rhythmIndices.push(getRhythmIndices(d.percussion.rhythmRange));
+                bar.percussion.rhythmIndices.push(getRhythmIndices(bar.percussion.rhythmRange));
             }
 
-            return d;
+            return bar;
         });
 
         deduplicateAdjacentDynamics(percussionBars);

@@ -2,7 +2,7 @@
     {
         "time": 0,
         "pitched": {
-            "duration": 46.67,
+            "duration": 46.667,
             "globjectContour": "descending",
             "pitch": [
                 { "time": 0, "classes": [0] },
@@ -37,7 +37,7 @@
     {
         "time": 46.667,
         "pitched": {
-            "duration": 46.67,
+            "duration": 46.667,
             "globjectContour": "descending",
             "pitch": [
                 {
@@ -91,7 +91,7 @@
     {
         "time": 93.333,
         "pitched": {
-            "duration": 46.67,
+            "duration": 46.667,
             "globjectContour": "descending",
             "pitch": [
                 { "time": 0, "classes": [0, 3, 7] }
