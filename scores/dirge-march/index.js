@@ -86,8 +86,8 @@ function renderLayout() {
         .style('font-family', 'serif')
         .style('font-style', 'italic')
         .attr('dy', '-3em')
-        .attr('x', function(d) {
-            return layout.scaleTime(d);
+        .attr('x', function(d, i) {
+            return getXByScoreIndex(i);
         })
         .text(function(d) {
             return d + '\u2033';
@@ -156,7 +156,14 @@ function resize() {
 d3.select(window).on('resize', resize);
 
 function getXByScoreIndex(i) {
-    return layout.scaleTime(barTimes[i]);
+    var offset = 0;
+
+    // Add offset to give rest more space
+    if (i > 7) {
+        offset = 18;
+    }
+
+    return offset + layout.scaleTime(barTimes[i]);
 }
 
 function scrollScoreToIndex(i) {

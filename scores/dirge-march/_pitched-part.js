@@ -8,8 +8,8 @@ var pitchedPart = (function() {
             .data(parts.pitched)
             .enter()
             .append('g')
-            .attr('transform', function(d) {
-                return 'translate(' + layout.scaleTime(d.time) + ',' + 0 + ')';
+            .attr('transform', function(d, i) {
+                return 'translate(' + getXByScoreIndex(d.index) + ',' + 0 + ')';
             });
 
         createFillPattern();

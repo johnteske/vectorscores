@@ -15,6 +15,12 @@ function generatePartsFromRawScore(rawScoreData) {
         }
     }
 
+    function mapIndicesToBars(bar, i) {
+        console.log(i);
+        bar.index = i;
+        return bar;
+    }
+
     function generatePitchedPart() {
         var contours = {
             descending: globjects.filter(function(g) {
@@ -29,7 +35,8 @@ function generatePartsFromRawScore(rawScoreData) {
         shuffle(contours.descending);
         shuffle(contours.all);
 
-        return rawScoreData.filter(function(d) {
+        return rawScoreData.map(mapIndicesToBars)
+        .filter(function(d) {
             return d.pitched;
         }).map(function(d) {
             var globject = [];
@@ -41,6 +48,7 @@ function generatePartsFromRawScore(rawScoreData) {
             }
 
             return {
+                index: d.index,
                 time: d.time,
                 duration: d.pitched.duration,
                 dynamics: d.pitched.dynamics,

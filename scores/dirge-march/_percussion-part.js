@@ -18,7 +18,7 @@ var percussionPart = (function() {
             .enter()
             .append('g')
             .attr('transform', function(d) {
-                return 'translate(' + layout.scaleTime(d.time) + ',' + 0 + ')';
+                return 'translate(' + getXByScoreIndex(d.index) + ',' + 0 + ')';
             });
     };
 
