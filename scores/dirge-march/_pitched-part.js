@@ -85,21 +85,14 @@ var pitchedPart = (function() {
             return d.phraseType === 'rest';
         })
         .append('text')
-        .attr('class', 'rest');
+        .attr('class', 'rest')
+        .attr('y', globjectHeight * 0.5);
 
-        function getBarCenterX(d) {
-            return layout.scaleTime(d.duration * 0.5);
-        }
+        // Half rest
+        rest.append('tspan').text('\ue4f5');
 
-        rest.append('tspan')
-            .attr('x', getBarCenterX)
-            .attr('y', (globjectHeight * 0.5) - 20)
-            .text('\ue4c6');
-
-        rest.append('tspan')
-            .attr('x', getBarCenterX)
-            .attr('y', globjectHeight * 0.5)
-            .text('\ue4e5');
+        // Dot
+        rest.append('tspan').text('\ue1fc').attr('dx', '0.25em');
     }
 
     return part;
