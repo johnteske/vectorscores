@@ -127,15 +127,19 @@ var percussionPart = (function() {
     }
 
     function drawDurationLine() {
+        var y = rhythmLayout.boxHeight * 0.5;
+
         bars.append('line')
             .attr('x1', function(d) {
                 return d.width;
             })
             .attr('x2', function(d) {
-                return layout.scaleTime(d.percussion.duration);
+                var nextBarTime = d.time + d.percussion.duration;
+                var nextBarIndex = barTimes.indexOf(nextBarTime);
+                return getXByScoreIndex(nextBarIndex) - getXByScoreIndex(d.index);
             })
-            .attr('y1', rhythmLayout.boxHeight * 0.5)
-            .attr('y2', rhythmLayout.boxHeight * 0.5)
+            .attr('y1', y)
+            .attr('y2', y)
             .attr('stroke', 'black')
             .attr('stroke-width', 3);
     }

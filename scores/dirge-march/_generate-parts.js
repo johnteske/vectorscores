@@ -15,12 +15,6 @@ function generatePartsFromRawScore(rawScoreData) {
         }
     }
 
-    function mapIndicesToBars(bar, i) {
-        console.log(i);
-        bar.index = i;
-        return bar;
-    }
-
     function generatePitchedPart() {
         var contours = {
             descending: globjects.filter(function(g) {
@@ -35,7 +29,7 @@ function generatePartsFromRawScore(rawScoreData) {
         shuffle(contours.descending);
         shuffle(contours.all);
 
-        return rawScoreData.map(mapIndicesToBars)
+        return rawScoreData
         .filter(function(d) {
             return d.pitched;
         }).map(function(d) {
@@ -61,10 +55,11 @@ function generatePartsFromRawScore(rawScoreData) {
 
     function generatePercussionPart() {
 
-        return rawScoreData.filter(function(d) {
+        var percussionBars = rawScoreData.filter(function(d) {
             return d.percussion.tempo !== null;
-        })
-        .map(function(d) {
+        });
+
+        percussionBars = percussionBars.map(function(d) {
             d.percussion.rhythmIndices = [];
 
             for (var i = 0; i < config.numberOfPercussionParts; i++) {
@@ -73,6 +68,10 @@ function generatePartsFromRawScore(rawScoreData) {
 
             return d;
         });
+
+        deduplicateAdjacentDynamics(percussionBars);
+
+        return percussionBars;
     }
 
     function getRhythmIndices(extent) {
@@ -92,6 +91,21 @@ function generatePartsFromRawScore(rawScoreData) {
         }
 
         return selectedIndices;
+    }
+
+    function deduplicateAdjacentDynamics(bars) {
+        for (var i = 0; i < bars.length - 1; i++) {
+            var bar = bars[i];
+            var barDynamics = bar.percussion.dynamics;
+            var lastDynamic = barDynamics[barDynamics.length - 1].value;
+
+            var nextBar = bars[i + 1];
+            var nextDynamic = nextBar.percussion.dynamics[0].value;
+
+            if ((lastDynamic === nextDynamic) && (bar.time + bar.percussion.duration === nextBar.time)) {
+                bar.percussion.dynamics.pop();
+            }
+        }
     }
 
     return {

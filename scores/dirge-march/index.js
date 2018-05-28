@@ -19,7 +19,8 @@ var layout = {
     },
     scaleTime: function(x) {
         return x * 5;
-    }
+    },
+    barPadding: 6
 };
 
 // TODO each globject should have its own height and y position
@@ -40,7 +41,12 @@ var retrogradeGlobjects = generateRetrogradeGlobjects(globjects);
 
 // Wrap in IIFE to aid in linting
 var rawScore = (function() {
-    return {% include_relative _score.json %};
+    var raw = {% include_relative _score.json %};
+
+    return raw.map(function(bar, i) {
+        bar.index = i;
+        return bar;
+    });
 }());
 
 var barTimes = rawScore.map(function(d) {
@@ -156,14 +162,12 @@ function resize() {
 d3.select(window).on('resize', resize);
 
 function getXByScoreIndex(i) {
-    var offset = 0;
-
     // Add offset to give rest more space
-    if (i > 7) {
-        offset = 18;
-    }
+    var offset = (i > 7) ? 18 : 0;
 
-    return offset + layout.scaleTime(barTimes[i]);
+    var padding = i * layout.barPadding;
+
+    return offset + layout.scaleTime(barTimes[i]) + padding;
 }
 
 function scrollScoreToIndex(i) {

@@ -189,7 +189,7 @@
                 { "time": 0.25, "value": "<" },
                 { "time": 0.5, "value": "ff" },
                 { "time": 0.75, "value": ">" },
-                { "time": 1, "value": "ff" }
+                { "time": 1, "value": "f" }
             ]
         }
     },
