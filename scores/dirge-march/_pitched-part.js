@@ -14,19 +14,6 @@ var pitchedPart = (function() {
 
         createFillPattern();
         createArrowMarker();
-};
-
-    function createFillPattern() {
-        var pattern = svg.select('defs')
-            .append('pattern')
-            .attr('id', 'ascending-fill')
-            .attr('width', 2)
-            .attr('height', 2)
-            .attr('patternUnits', 'userSpaceOnUse');
-
-        pattern.append('circle')
-            .attr('fill', '#eee')
-            .attr('r', 1);
     };
 
     part.draw = function() {

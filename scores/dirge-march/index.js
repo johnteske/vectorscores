@@ -85,11 +85,26 @@ function textAnchor(t) {
     return a;
 }
 
-// TODO also add bar ticks, for reference, like in ad;sr
 // TODO add vinculum U+0305 to .333 and .666 bar times
+// -- or add tpans with optional .style('text-decoration', 'overline')
 function renderLayout() {
     var barTimeGroup = wrapper.append('g')
         .attr('class', 'bar-times');
+
+    barTimeGroup.selectAll('line')
+        .data(barTimes)
+        .enter()
+        .append('line')
+        .attr('x1', function(d, i) {
+            return getXByScoreIndex(i);
+        })
+        .attr('x2', function(d, i) {
+            return getXByScoreIndex(i);
+        })
+        .attr('y1', 0) // TODO
+        .attr('y2', layout.percussion.y) // TODO
+        .attr('stroke', 'black')
+        .attr('stroke-opacity', 0.25);
 
     barTimeGroup.selectAll('text')
         .data(barTimes)
@@ -113,7 +128,6 @@ function renderLayout() {
 {% include_relative _draw-pitch-class-layer.js %}
 
 function renderPitched() {
-    // TODO add class and position in DOM properly
     var pitchedGroup = wrapper.append('g')
         .attr('class', 'pitched-part')
         .attr('transform', 'translate(' + 0 + ',' + layout.pitched.y + ')');

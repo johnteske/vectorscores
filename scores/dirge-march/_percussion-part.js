@@ -45,10 +45,18 @@ var percussionPart = (function() {
     }
 
     function drawBars() {
-        drawRhythms();
         drawBoundingRect();
+        drawRhythms();
+        setBoundingRectWidth();
         drawDurationLine();
         drawDynamics();
+    }
+
+    function drawBoundingRect() {
+        bars.append('rect')
+            .attr('height', rhythmLayout.boxHeight)
+            .attr('stroke', 'black')
+            .attr('fill', 'white');
     }
 
     function drawRhythms() {
@@ -111,19 +119,16 @@ var percussionPart = (function() {
         }
     }
 
-    function drawBoundingRect() {
+    function setBoundingRectWidth() {
         bars.each(function(d) {
             var groupWidth = d3.select(this).node().getBBox().width;
             d.width = groupWidth + rhythmLayout.padding;
         });
 
-        bars.append('rect')
+        bars.selectAll('rect')
             .attr('width', function(d) {
                 return d.width;
-            })
-            .attr('height', rhythmLayout.boxHeight)
-            .attr('stroke', 'black')
-            .attr('fill', 'none');
+            });
     }
 
     function drawDurationLine() {

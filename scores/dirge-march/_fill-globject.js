@@ -1,3 +1,16 @@
+function createFillPattern() {
+    var pattern = svg.select('defs')
+        .append('pattern')
+        .attr('id', 'ascending-fill')
+        .attr('width', 2)
+        .attr('height', 2)
+        .attr('patternUnits', 'userSpaceOnUse');
+
+    pattern.append('circle')
+        .attr('fill', '#eee')
+        .attr('r', 1);
+}
+
 var fillGlobject = (function() {
     function fillGlobject(d) {
         var bar = d;
@@ -6,6 +19,11 @@ var fillGlobject = (function() {
         var width = layout.scaleTime(duration);
 
         var content = d3.select(this).select('.globject-content');
+
+        content.append('rect')
+            .attr('width', width)
+            .attr('height', globjectHeight + 10)
+            .attr('fill', 'white');
 
         if (phraseType === 'ascending') {
             content.append('rect')
