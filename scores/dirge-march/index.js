@@ -110,7 +110,7 @@ function renderLayout() {
  *
  */
 {% include_relative _fill-globject.js %}
-{% include_relative _globject-text.js %}
+{% include_relative _draw-pitch-class-layer.js %}
 
 function renderPitched() {
     // TODO add class and position in DOM properly

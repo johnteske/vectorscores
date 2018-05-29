@@ -13,7 +13,8 @@ var pitchedPart = (function() {
             });
 
         createFillPattern();
-    };
+        createArrowMarker();
+};
 
     function createFillPattern() {
         var pattern = svg.select('defs')
@@ -66,7 +67,7 @@ var pitchedPart = (function() {
     }
 
     function drawPitchClasses() {
-        bars.each(globjectText);
+        bars.each(drawPitchClassLayer);
     }
 
     function drawDynamics() {
