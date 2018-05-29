@@ -68,6 +68,7 @@ var parts = generatePartsFromRawScore(rawScore);
 config.semitoneTransposition += scoreOptions.transposition;
 
 var svg = d3.select('svg');
+svg.append('defs');
 
 var wrapper = svg.append('g')
     .attr('class', 'wrapper');

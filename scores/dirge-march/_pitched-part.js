@@ -16,7 +16,7 @@ var pitchedPart = (function() {
     };
 
     function createFillPattern() {
-        var pattern = svg.append('defs')
+        var pattern = svg.select('defs')
             .append('pattern')
             .attr('id', 'ascending-fill')
             .attr('width', 2)
