@@ -29,17 +29,22 @@ var drawPitchClassLayer = (function() {
         var width = layout.scaleTime(data.duration);
 
         var pitchClassGroup = selection.append('g')
+            .attr('class', 'pitch-classes')
             .selectAll('.pitch-class')
             .data(data.pitch)
             .enter();
 
-        pitchClassGroup.call(drawPitchClassText, width);
-        calculateJoiningSymbolPoints(selection.selectAll('.pitch-class'), width, data.pitch, function(d) { return d.type === 'transform'; });
-        pitchClassGroup.call(drawPitchClassLines, width);
+        pitchClassGroup.filter(filterSets(true))
+            .call(drawPitchClassText, width);
+
+        calculateJoiningSymbolPoints(selection.selectAll('.pitch-class'), width, data.pitch, filterSets(false));
+
+        pitchClassGroup.filter(filterSets(false))
+            .call(drawPitchClassLines, width);
     }
 
     function drawPitchClassText(selection, width) {
-        selection.filter(filterSets(true))
+        selection
             .append('text')
             .attr('class', 'pitch-class')
             .attr('x', function(d) {
@@ -62,7 +67,6 @@ var drawPitchClassLayer = (function() {
         var linePadding = 6;
 
         selection
-            .filter(filterSets(false))
             .append('line')
             .attr('x1', function(d) {
                 return d.x1 === 0 ? d.x1 : d.x1 + linePadding;

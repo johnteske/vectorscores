@@ -127,6 +127,7 @@ function renderLayout() {
 {% include_relative _fill-globject.js %}
 {% include_relative _calculate-joining-symbol-points.js %}
 {% include_relative _draw-pitch-class-layer.js %}
+{% include_relative _append-dynamics.js %}
 
 function renderPitched() {
     var pitchedGroup = wrapper.append('g')
@@ -144,26 +145,6 @@ function renderPercussion() {
 
     percussionGroup.call(percussionPart.init);
     percussionPart.draw();
-}
-
-function appendDynamics(selection, data, y) {
-    selection.append('g')
-        .attr('transform', 'translate(0,' + y + ')')
-        .selectAll('.dynamic')
-        .data(data)
-        .enter()
-        .append('text')
-        .attr('class', 'dynamic')
-            .attr('x', function(d, i) {
-                return layout.scaleTime(d.duration * d.time);
-            })
-            .attr('dy', '1em')
-            .attr('text-anchor', function(d) {
-                return textAnchor(d.time);
-            })
-            .text(function(d) {
-                return dynamics[d.value];
-            });
 }
 
 /**

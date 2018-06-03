@@ -58,14 +58,75 @@ var pitchedPart = (function() {
     }
 
     function drawDynamics() {
-        function dynamicsData(d) {
-            return d.dynamics.map(function(dynamic) {
-                dynamic.duration = d.duration;
+        bars.each(function(data) {
+            var selection = d3.select(this);
+            var width = layout.scaleTime(data.duration);
+
+            var dynamicsData = data.dynamics.map(function(dynamic) {
+                dynamic.duration = data.duration;
                 return dynamic;
             });
-        }
 
-        bars.call(appendDynamics, dynamicsData, globjectHeight);
+            var dynamicsGroup = selection.append('g')
+                .attr('class', 'dynamics')
+                .attr('transform', 'translate(0,' + globjectHeight + ')')
+                .selectAll('.dynamic')
+                .data(dynamicsData)
+                .enter();
+
+            dynamicsGroup.filter(includeCrescendos(false))
+                .call(appendDynamics2);
+
+            calculateJoiningSymbolPoints(dynamicsGroup.selectAll('text'), width, dynamicsData, includeCrescendos(true));
+
+            dynamicsGroup.filter(includeCrescendos(true))
+                .call(drawCrescendos, width);
+
+            function includeCrescendos(include) {
+                return function(d) {
+                    return include === ('<>'.indexOf(d.value) !== -1);
+                };
+            }
+        });
+    }
+
+    // TODO draw text if above a certain width
+    function drawCrescendos(selection, width) {
+        var linePadding = 10;
+        var y = 20;
+        var height = 10;
+        var halfHeight = height * 0.5;
+
+        var line = d3.line()
+            .x(function(d) { return d[0]; })
+            .y(function(d) { return d[1]; });
+
+        selection
+            .append('path')
+            .attr('d', function(d) {
+                var x1 = (d.x1 === 0) ? d.x1 : d.x1 + linePadding;
+                var x2 = (d.x2 === width) ? d.x2 : d.x2 - linePadding;
+                var hairpinStart;
+                var hairpinEnd;
+
+                if (d.value === '<') {
+                    hairpinStart = x1;
+                    hairpinEnd = x2;
+                } else {
+                    hairpinStart = x2;
+                    hairpinEnd = x1;
+                }
+
+                var points = [
+                    [hairpinEnd, y + halfHeight],
+                    [hairpinStart, y],
+                    [hairpinEnd, y - halfHeight]
+                ];
+
+                return line(points);
+            })
+            .attr('stroke', '#222222')
+            .attr('fill', 'none');
     }
 
     function drawRests() {

@@ -1,3 +1,5 @@
+// TODO this could be split into smaller functions
+// TODO this flow could be written to avoid manipulating the data with the selections
 function calculateJoiningSymbolPoints(selection, width, data, joinFilter) {
     // Save rendered dimensions
     selection.each(function(d) {
