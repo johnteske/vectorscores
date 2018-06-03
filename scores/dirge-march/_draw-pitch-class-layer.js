@@ -34,8 +34,8 @@ var drawPitchClassLayer = (function() {
             .enter();
 
         pitchClassGroup.call(drawPitchClassText, width);
-        calculateTransformLinePoints(selection, width, data);
-        pitchClassGroup.call(drawPitchClassLines);
+        calculateJoiningSymbolPoints(selection.selectAll('.pitch-class'), width, data.pitch, function(d) { return d.type === 'transform'; });
+        pitchClassGroup.call(drawPitchClassLines, width);
     }
 
     function drawPitchClassText(selection, width) {
@@ -58,45 +58,17 @@ var drawPitchClassLayer = (function() {
             });
     }
 
-    function calculateTransformLinePoints(selection, width, data) {
-        // Save rendered dimensions
-        selection.selectAll('.pitch-class').each(function(d) {
-            d.BBox = d3.select(this).node().getBBox();
-        });
-
+    function drawPitchClassLines(selection, width) {
         var linePadding = 6;
 
-        data.pitch.forEach(function(current, index, array) {
-            if (current.type !== 'transform') {
-                return;
-            }
-
-            var previous = array[index - 1];
-            var next = array[index + 1];
-
-            if ((index - 1) > -1) {
-                current.x1 = previous.BBox.x + previous.BBox.width + linePadding;
-            } else {
-                current.x1 = 0;
-            }
-
-            if (index + 1 < array.length) {
-                current.x2 = next.BBox.x - linePadding;
-            } else {
-                current.x2 = width;
-            }
-        });
-    }
-
-    function drawPitchClassLines(selection) {
         selection
             .filter(filterSets(false))
             .append('line')
             .attr('x1', function(d) {
-                return d.x1;
+                return d.x1 === 0 ? d.x1 : d.x1 + linePadding;
             })
             .attr('x2', function(d) {
-                return d.x2;
+                return d.x2 === width ? d.x2 : d.x2 - linePadding;
             })
             .attr('y1', y)
             .attr('y2', y)

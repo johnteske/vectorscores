@@ -125,6 +125,7 @@ function renderLayout() {
  *
  */
 {% include_relative _fill-globject.js %}
+{% include_relative _calculate-joining-symbol-points.js %}
 {% include_relative _draw-pitch-class-layer.js %}
 
 function renderPitched() {
