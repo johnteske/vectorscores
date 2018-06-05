@@ -19,6 +19,7 @@ function appendDynamics(selection, data, y) {
             });
 }
 
+// TODO consolidate
 function appendDynamics2(selection) {
     selection
         .append('text')
