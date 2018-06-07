@@ -150,14 +150,39 @@ var percussionPart = (function() {
     }
 
     function drawDynamics() {
-        function dynamicsData(d) {
-            return d.percussion.dynamics.map(function(dynamicObject) {
-                dynamicObject.duration = d.percussion.duration;
-                return dynamicObject;
-            });
-        }
+        bars.each(function(data) {
+            // TODO unlike the pitched part, `data` is not the percussion object, it is the full bar?
+            data = data.percussion;
 
-        bars.call(appendDynamics, dynamicsData, rhythmLayout.boxHeight);
+            var selection = d3.select(this);
+            var width = layout.scaleTime(data.duration);
+            var dynamicsData = data.dynamics.map(function(dynamic) {
+                dynamic.duration = data.duration;
+                return dynamic;
+            });
+
+            var dynamicsGroup = selection.append('g')
+                .attr('class', 'dynamics')
+                .attr('transform', 'translate(0,' + rhythmLayout.boxHeight + ')')
+                .selectAll('.dynamic')
+                .data(dynamicsData)
+                .enter();
+
+            dynamicsGroup.filter(includeCrescendos(false))
+                .call(appendDynamics2);
+
+            calculateJoiningSymbolPoints(dynamicsGroup.selectAll('text'), width, dynamicsData, includeCrescendos(true));
+
+            dynamicsGroup.filter(includeCrescendos(true))
+                .call(drawCrescendos, width);
+
+            function includeCrescendos(include) {
+                return function(d) {
+                    return include === ('<>'.indexOf(d.value) !== -1);
+                };
+            }
+
+        });
     }
 
     return part;

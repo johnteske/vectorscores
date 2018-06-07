@@ -61,6 +61,8 @@ var barTimes = rawScore.map(function(d) {
 {% include_relative _generate-parts.js %};
 var parts = generatePartsFromRawScore(rawScore);
 
+{% include_relative _draw-crescendos.js %}
+
 {% include_relative _pitched-part.js %}
 {% include_relative _percussion-part.js %}
 
