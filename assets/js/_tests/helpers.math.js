@@ -3,7 +3,7 @@ const { test, setupDOM } = require(path.resolve('.', 'bin/js/tape-setup'))
 setupDOM('_site/scores/tutorial/index.html')
 
 const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
-const sampleSize = 1 // 5000000
+const sampleSize = 5000000
 
 const reportDistribution = function({ expected, actual }) {
     console.log('sample size:\t', sampleSize)
@@ -11,23 +11,53 @@ const reportDistribution = function({ expected, actual }) {
     console.log('actual:\t', actual)
 }
 
-// TODO this would need very large sample size to be useful
-test.skip('VS#getRandExcl', t => {
+test('VS#getRandExcl', { skip: sampleSize < 999 }, t => {
+    const min = 0
     const max = 1
     let results = []
 
     for (let i = 0; i < sampleSize; i++) {
-        results.push(VS.getRandExcl(0, max))
+        results.push(VS.getRandExcl(min, max))
     }
 
-    const equalsMax = results.filter((v) => {
-        return v === max
+    const outOfRange = results.filter((v) => {
+        return (v < min) && (v <= max)
     })
 
-    t.equal(equalsMax.length, 0, `not include max in sample size of ${sampleSize}`)
+    t.equal(outOfRange.length, 0, `contain only values between min (inclusive) and max (exclusive) in sample size of ${sampleSize}`)
+
+    // TODO this would need very large sample size to be accurate
+    // const equalsMax = results.filter((v) => {
+    //     return v === max
+    // })
+    //
+    // t.equal(equalsMax.length, 0, `not include max in sample size of ${sampleSize}`)
 
     t.end()
 })
+
+test('VS#getRandIntIncl', { skip: sampleSize < 999 }, t => {
+    const min = 1
+    const max = 5
+    let results = []
+
+    for (let i = 0; i < sampleSize; i++) {
+        results.push(VS.getRandIntIncl(min, max))
+    }
+
+    const outOfRange = results.filter((v) => {
+        return (v < min) && (v < max)
+    })
+    t.equal(outOfRange.length, 0, `contain only values between min (inclusive) and max (inclusive) in sample size of ${sampleSize}`)
+
+    const roundedResults = results.filter((v) => {
+        return Math.round(v) !== v
+    })
+    t.equal(roundedResults.length, 0, `contain only integers in sample size of ${sampleSize}`)
+
+    t.end()
+})
+
 
 test('VS#getItem', { skip: sampleSize < 999 }, t => {
     const items = ['a', 'b', 'c', 'd', 'e']

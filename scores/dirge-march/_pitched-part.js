@@ -27,7 +27,7 @@ var pitchedPart = (function() {
         .width(function(d) {
             return layout.scaleTime(d.duration);
         })
-        .height(globjectHeight)
+        .height(globjectHeight * 0.5) // TODO
         .curve(d3.curveCardinalClosed.tension(0.3));
 
     function drawGlobjects() {
@@ -38,6 +38,7 @@ var pitchedPart = (function() {
                     return {
                         duration: d.duration,
                         pitch: d.pitch,
+                        range: d.range,
                         phraseType: d.phraseType,
                         rangeEnvelope: globject.rangeEnvelope
                     };
@@ -47,7 +48,11 @@ var pitchedPart = (function() {
             .append('g')
             .attr('class', 'globject')
             .attr('transform', function(d, i) {
-                return 'translate(0,' + (i * globjectHeight) + ')';
+                // console.log(d.range);
+                var height = 64; // in MIDI
+                var y = VS.getRandIntIncl(d.range.low + height, d.range.high);
+                return 'translate(0,' + (globjectHeight - y) + ')';
+                // return 'translate(0,' + (i * globjectHeight) + ')';
             })
             .each(staticGlobject)
             .each(fillGlobject);

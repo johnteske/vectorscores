@@ -49,6 +49,7 @@ function generatePartsFromRawScore(rawScoreData) {
                 dynamics: bar.pitched.dynamics,
                 phraseType: bar.pitched.phraseType,
                 pitch: bar.pitched.pitch,
+                range: bar.pitched.range,
                 globjects: globject
             };
         });

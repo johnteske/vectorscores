@@ -29,7 +29,7 @@ var layout = {
 };
 
 // TODO each globject should have its own height and y position
-var globjectHeight = 90;
+var globjectHeight = 127;
 
 var dynamics = VS.dictionary.Bravura.dynamics;
 

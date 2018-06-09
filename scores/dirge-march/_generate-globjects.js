@@ -54,9 +54,7 @@ function generateRetrogradeGlobjects(generatedGlobjects) {
             return mapped;
         }
 
-        var retrograde = {
-            width: globject.width
-        };
+        var retrograde = {};
 
         retrograde.rangeEnvelope = {
             type: globject.rangeEnvelope.type,
