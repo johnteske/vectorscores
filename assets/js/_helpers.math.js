@@ -10,6 +10,7 @@ VS.getRandExcl = function(min, max) {
 
 /**
  * Get random integer, inclusive
+ * NOTE expects integer input
  * @param {number} min : lower limit
  * @param {number} max : upper limit (included)
  * @returns {number} integer value between min and max, including max

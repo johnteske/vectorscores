@@ -3,7 +3,7 @@ const { test, setupDOM } = require(path.resolve('.', 'bin/js/tape-setup'))
 setupDOM('_site/scores/tutorial/index.html')
 
 const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
-const sampleSize = 5000000
+const sampleSize = 1 // 5000000
 
 const reportDistribution = function({ expected, actual }) {
     console.log('sample size:\t', sampleSize)
@@ -25,13 +25,6 @@ test('VS#getRandExcl', { skip: sampleSize < 999 }, t => {
     })
 
     t.equal(outOfRange.length, 0, `contain only values between min (inclusive) and max (exclusive) in sample size of ${sampleSize}`)
-
-    // TODO this would need very large sample size to be accurate
-    // const equalsMax = results.filter((v) => {
-    //     return v === max
-    // })
-    //
-    // t.equal(equalsMax.length, 0, `not include max in sample size of ${sampleSize}`)
 
     t.end()
 })
@@ -57,7 +50,6 @@ test('VS#getRandIntIncl', { skip: sampleSize < 999 }, t => {
 
     t.end()
 })
-
 
 test('VS#getItem', { skip: sampleSize < 999 }, t => {
     const items = ['a', 'b', 'c', 'd', 'e']
