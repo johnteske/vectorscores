@@ -16,6 +16,9 @@ var config = {
 
 // Display constants
 var layout = {
+    wrapper: {
+        y: 120
+    },
     pitched: {
         y: 0,
         globjects: {
@@ -68,6 +71,8 @@ var parts = generatePartsFromRawScore(rawScore);
 
 {% include_relative _options.js %}
 config.semitoneTransposition += scoreOptions.transposition;
+
+{% include_relative _cue.js %}
 
 var svg = d3.select('svg');
 svg.append('defs');
@@ -174,22 +179,31 @@ function getXByScoreIndex(i) {
     return offset + layout.scaleTime(barTimes[i]) + padding;
 }
 
-function scrollScoreToIndex(i) {
-    var index = (typeof i === 'undefined') ? VS.score.pointer : i;
+function scrollScoreToIndex(index, duration) {
     var x = viewCenter - getXByScoreIndex(index);
 
     wrapper
-        // .transition()
-        // .ease(d3.easeLinear)
-        // .duration(300)
-        .attr('transform', 'translate(' + x + ',' + 120 + ')');
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(duration)
+        .attr('transform', 'translate(' + x + ',' + layout.wrapper.y + ')');
+}
+
+function scrollToNextBar(index, duration) {
+    scrollScoreToIndex(index + 1, duration);
+}
+
+function setScorePosition() {
+    cueIndicator.cancel();
+    scrollScoreToIndex(VS.score.pointer, 300);
 }
 
 /**
  * Populate score
  */
 for (var i = 0; i < barTimes.length; i++) {
-    VS.score.add(barTimes[i] * 1000, scrollScoreToIndex, [i]);
+    var duration = (barTimes[i + 1] - barTimes[i]) * 1000;
+    VS.score.add(barTimes[i] * 1000, scrollToNextBar, [i, duration]);
 }
 
 /**
@@ -199,6 +213,7 @@ d3.select(window).on('load', function() {
     resize();
     scrollScoreToIndex(0);
     renderLayout();
+    initAndDrawCueTriangle();
     renderPitched();
     renderPercussion();
 });
@@ -206,6 +221,8 @@ d3.select(window).on('load', function() {
 /**
  * Score controls
  */
-VS.control.hooks.add('stop', scrollScoreToIndex);
-VS.control.hooks.add('step', scrollScoreToIndex);
-VS.control.hooks.add('pause', scrollScoreToIndex);
+VS.control.hooks.add('play', prerollAnimateCue);
+
+VS.control.hooks.add('stop', setScorePosition);
+VS.control.hooks.add('step', setScorePosition);
+VS.control.hooks.add('pause', setScorePosition);
