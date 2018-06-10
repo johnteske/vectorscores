@@ -186,7 +186,7 @@ function resize() {
 
     viewCenter = (w / layout.container.scale) * 0.5;
 
-    setScorePosition(0);
+    setScorePosition(true);
     cueIndicator.positionToCenter();
 }
 
@@ -215,8 +215,12 @@ function scrollToNextBar(index, duration) {
     scrollScoreToIndex(index + 1, duration);
 }
 
-function setScorePosition(duration) {
-    var dur = (typeof duration === 'undefined') ? 300 : duration;
+function setScorePosition(setImmediately) {
+    if (VS.score.pointer > barTimes.length - 1) {
+        return;
+    }
+
+    var dur = setImmediately ? 0 : 300;
     scrollScoreToIndex(VS.score.pointer, dur);
 }
 
@@ -224,8 +228,15 @@ function setScorePosition(duration) {
  * Populate score
  */
 for (var i = 0; i < barTimes.length; i++) {
+    var fn = scrollToNextBar;
+
+    if (VS.score.pointer < barTimes.length - 1) {
+        fn = function() {};
+    }
+
     var duration = (barTimes[i + 1] - barTimes[i]) * 1000;
-    VS.score.add(barTimes[i] * 1000, scrollToNextBar, [i, duration]);
+
+    VS.score.add(barTimes[i] * 1000, fn, [i, duration]);
 }
 
 /**

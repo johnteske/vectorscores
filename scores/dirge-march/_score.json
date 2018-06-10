@@ -278,10 +278,10 @@
     },
     {
         "time": 307,
-            "percussion": {
-                "tempo": null
-            }
-        },
+        "percussion": {
+            "tempo": null
+        }
+    },
     {
         "time": 315,
         "pitched": {
@@ -304,5 +304,11 @@
         "percussion": {
             "tempo": null
         }
-    }
+    },
+    {
+        "time": 338,
+        "percussion": {
+            "tempo": null
+        }
+    },
 ]
