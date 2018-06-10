@@ -87,7 +87,7 @@ var pitchedPart = (function() {
                 .enter();
 
             dynamicsGroup.filter(includeCrescendos(false))
-                .call(appendDynamics2);
+                .call(appendDynamics);
 
             calculateJoiningSymbolPoints(dynamicsGroup.selectAll('text'), width, dynamicsData, includeCrescendos(true));
 

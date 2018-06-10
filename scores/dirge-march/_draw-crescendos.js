@@ -3,7 +3,7 @@ function drawCrescendos(selection, width) {
     var y = 20;
     var height = 10;
     var halfHeight = height * 0.5;
-    var lineWidthThreshold = 100;
+    var lineWidthThreshold = 120;
 
     var line = d3.line()
         .x(function(d) { return d[0]; })

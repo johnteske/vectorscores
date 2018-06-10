@@ -36,7 +36,7 @@ var layout = {
         y: 220,
     },
     scaleTime: function(x) {
-        return x * 5;
+        return x * 5.5;
     },
     barPadding: 6
 };
@@ -105,27 +105,14 @@ function textAnchor(t) {
 // TODO add vinculum U+0305 to .333 and .666 bar times
 // -- or add tpans with optional .style('text-decoration', 'overline')
 function renderLayout() {
-    var barTimeGroup = wrapper.append('g')
-        .attr('class', 'bar-times');
+    var barLineGroup = wrapper.append('g')
+        .attr('class', 'bar-lines');
 
-    barTimeGroup.selectAll('line')
+    var barLineEnter = barLineGroup.selectAll('null')
         .data(barTimes)
         .enter()
-        .append('line')
-        .attr('x1', function(d, i) {
-            return getXByScoreIndex(i);
-        })
-        .attr('x2', function(d, i) {
-            return getXByScoreIndex(i);
-        })
-        .attr('y1', 0) // TODO
-        .attr('y2', layout.percussion.y) // TODO
-        .attr('stroke', 'black')
-        .attr('stroke-opacity', 0.25);
 
-    barTimeGroup.selectAll('text')
-        .data(barTimes)
-        .enter()
+    barLineEnter
         .append('text')
         .style('font-family', 'serif')
         .style('font-style', 'italic')
@@ -136,6 +123,23 @@ function renderLayout() {
         .text(function(d) {
             return d + '\u2033';
         });
+
+    function drawBarLine(selection, y1, y2) {
+        selection.append('line')
+            .attr('x1', function(d, i) {
+                return getXByScoreIndex(i);
+            })
+            .attr('x2', function(d, i) {
+                return getXByScoreIndex(i);
+            })
+            .attr('y1', y1)
+            .attr('y2', y2)
+            .attr('stroke', 'black')
+            .attr('stroke-opacity', 0.25);
+    }
+
+    barLineEnter.call(drawBarLine, 0, layout.pitched.globjects.height);
+    barLineEnter.call(drawBarLine, layout.percussion.y, layout.percussion.y + (config.numberOfPercussionParts * 32 + 2)); // Add 2 for box border
 }
 
 /**
