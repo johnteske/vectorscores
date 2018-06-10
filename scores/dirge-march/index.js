@@ -166,6 +166,9 @@ function resize() {
     var h = parseInt(main.style('height'), 10);
 
     viewCenter = w * 0.5;
+
+    setScorePosition(0);
+    cueIndicator.positionToCenter();
 }
 
 d3.select(window).on('resize', resize);
@@ -193,9 +196,9 @@ function scrollToNextBar(index, duration) {
     scrollScoreToIndex(index + 1, duration);
 }
 
-function setScorePosition() {
-    cueIndicator.cancel();
-    scrollScoreToIndex(VS.score.pointer, 300);
+function setScorePosition(duration) {
+    var dur = (typeof duration === 'undefined') ? 300 : duration;
+    scrollScoreToIndex(VS.score.pointer, dur);
 }
 
 /**
@@ -210,12 +213,11 @@ for (var i = 0; i < barTimes.length; i++) {
  * Initialize score
  */
 d3.select(window).on('load', function() {
-    resize();
-    scrollScoreToIndex(0);
     renderLayout();
-    initAndDrawCueTriangle();
+    cueIndicator.initAndRender();
     renderPitched();
     renderPercussion();
+    resize();
 });
 
 /**
