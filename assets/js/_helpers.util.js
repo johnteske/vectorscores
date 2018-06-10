@@ -32,3 +32,15 @@ VS.constant = function(val) {
         return val;
     };
 };
+
+/**
+ * Generate unique id
+ * @returns {number} : id
+ */
+VS.id = (function() {
+    var id = 0;
+
+    return function() {
+        return id++;
+    };
+}());

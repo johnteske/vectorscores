@@ -1,9 +1,6 @@
 ---
 ---
 
-@import "mixins";
-@include BravuraFont();
-
 html {
     height: 100%;
 }
@@ -23,23 +20,16 @@ svg {
     height: 100%;
 }
 
-.debug {
-    outline: 1px dotted red;
-}
-
 .globject {
     .globject-path {
         stroke: #888;
         stroke-width: 1;
         fill: none;
     }
+}
 
-    .pitch-class {
-        font-family: monospace;
-    }
-    .modifier {
-        font-family: Bravura;
-    }
+.pitch-class {
+    font-family: monospace;
 }
 
 .bravura {
@@ -49,7 +39,6 @@ svg {
 
 .rest {
     @extend .bravura;
-    text-anchor: middle;
 }
 
 .percussion-parts text {
@@ -66,7 +55,7 @@ svg {
 }
 
 .tempo-text tspan {
-    font-size: 16px;
+    font-size: 12px;
 
     &.bpm {
         font-family: monospace;

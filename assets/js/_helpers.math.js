@@ -9,6 +9,17 @@ VS.getRandExcl = function(min, max) {
 };
 
 /**
+ * Get random integer, inclusive
+ * NOTE expects integer input
+ * @param {number} min : lower limit
+ * @param {number} max : upper limit (included)
+ * @returns {number} integer value between min and max, including max
+ */
+VS.getRandIntIncl = function(min, max) {
+    return Math.floor(VS.getRandExcl(min, max + 1));
+};
+
+/**
  * Get random item from an array, using uniform distribution
  * @param {array} items
  * @returns {*}

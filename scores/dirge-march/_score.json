@@ -1,0 +1,314 @@
+[
+    {
+        "time": 0,
+        "pitched": {
+            "duration": 46.667,
+            "globjectContour": "descending",
+            "pitch": [
+                { "time": 0, "classes": [0] },
+                { "time": 1, "classes": [0, 3] }
+            ],
+            "range": {
+                "high": 96,
+                "low": 32
+            },
+            "phraseType": null,
+            "dynamics": [
+                { "time": 0, "value": "pp" },
+                { "time": 0.25, "value": "<" },
+                { "time": 0.5, "value": "p" },
+                { "time": 0.75, "value": ">" },
+                { "time": 1, "value": "pp" }
+            ]
+        },
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 16,
+        "percussion": {
+            "tempo": 60,
+            "duration": 32,
+            "rhythmRange": [0, 1],
+            "dynamics": [
+                { "time": 0, "value": "n" },
+                { "time": 0.5, "value": "<" },
+                { "time": 1, "value": "ppp" }
+            ]
+        }
+    },
+    {
+        "time": 46.667,
+        "pitched": {
+            "duration": 46.667,
+            "globjectContour": "descending",
+            "pitch": [
+                {
+                    "time": 0,
+                    "classes": [0, 3]
+                },
+                {
+                    "time": 1,
+                    "classes": [0, 3, 7]
+                }
+            ],
+            "range": {
+                "high": 96,
+                "low": 0
+            },
+            "phraseType": null,
+            "dynamics": [
+                { "time": 0, "value": "p" },
+                { "time": 0.25, "value": "<" },
+                { "time": 0.5, "value": "mp" },
+                { "time": 0.75, "value": ">" },
+                { "time": 1, "value": "p" }
+            ]
+        },
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 48,
+        "percussion": {
+            "tempo": 60,
+            "duration": 32,
+            "rhythmRange": [0, 3],
+            "dynamics": [
+                { "time": 0, "value": "ppp" },
+                { "time": 0.5, "value": "<" },
+                { "time": 1, "value": "p" }
+            ]
+        }
+    },
+    {
+        "time": 80,
+        "percussion": {
+            "tempo": 60,
+            "duration": 32,
+            "rhythmRange": [0, 4],
+            "dynamics": [
+                { "time": 0, "value": "p" },
+                { "time": 0.5, "value": "<" },
+                { "time": 1, "value": "mf" }
+            ]
+        }
+    },
+    {
+        "time": 93.333,
+        "pitched": {
+            "duration": 46.667,
+            "globjectContour": "descending",
+            "pitch": [
+                { "time": 0, "classes": [0, 3, 7] }
+            ],
+            "range": {
+                "high": 64,
+                "low": 0
+            },
+            "phraseType": "descending",
+            "dynamics": [
+                { "time": 0, "value": "mp" },
+                { "time": 0.25, "value": "<" },
+                { "time": 0.5, "value": "mf" },
+                { "time": 0.75, "value": ">" },
+                { "time": 1, "value": "pp" }
+            ]
+        },
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 112,
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 144,
+        "pitched": {
+            "duration": 3,
+            "globjectContour": "rest",
+            "pitch": [],
+            "phraseType": "rest",
+            "dynamics": []
+        },
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 147,
+        "pitched": {
+            "duration": 96,
+            "globjectContour": "ascending",
+            "pitch": [
+                { "time": 0, "classes": [5] },
+                { "time": 0.5, "classes": [5, 9] },
+                { "time": 1, "classes": [5, 9, 0] }
+            ],
+            "range": {
+                "high": 127,
+                "low": 64
+            },
+            "phraseType": "ascending",
+            "dynamics": [
+                { "time": 0, "value": "n" },
+                { "time": 0.25, "value": "<" },
+                { "time": 0.5, "value": "p" },
+                { "time": 0.75, "value": ">" },
+                { "time": 1, "value": "n" }
+            ]
+        },
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 211,
+        "percussion": {
+            "tempo": 120,
+            "duration": 32,
+            "rhythmRange": [5, 8],
+            "dynamics": [
+                { "time": 0, "value": "mf" },
+                { "time": 0.5, "value": "<" },
+                { "time": 1, "value": "f" }
+            ]
+        }
+    },
+    {
+        "time": 243,
+        "pitched": {
+            "duration": 24,
+            "globjectContour": "all",
+            "pitch": [
+                { "time": 0, "classes": [0] },
+                { "time": 1, "classes": [0, 3] }
+            ],
+            "range": {
+                "low": 32,
+                "high": 96
+            },
+            "phraseType": "both",
+            "dynamics": [
+                { "time": 0, "value": "mf" },
+                { "time": 0.5, "value": ">" },
+                { "time": 1, "value": "p" }
+            ]
+        },
+        "percussion": {
+            "tempo": 120,
+            "duration": 32,
+            "rhythmRange": [5, 10],
+            "dynamics": [
+                { "time": 0, "value": "f" },
+                { "time": 0.25, "value": "<" },
+                { "time": 0.5, "value": "ff" },
+                { "time": 0.75, "value": ">" },
+                { "time": 1, "value": "f" }
+            ]
+        }
+    },
+    {
+        "time": 267,
+        "pitched": {
+            "duration": 24,
+            "globjectContour": "all",
+            "globjectCount": 2,
+            "pitch": [
+                { "time": 0, "classes": [0, 3] },
+                { "time": 1, "classes": [0, 3, 7] }
+            ],
+            "range": {
+                "low": 0,
+                "high": 127
+            },
+            "phraseType": "both",
+            "dynamics": [
+                { "time": 0, "value": "f" },
+                { "time": 0.5, "value": ">" },
+                { "time": 1, "value": "mp" }
+            ]
+        },
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 275,
+        "percussion": {
+            "tempo": 120,
+            "duration": 32,
+            "rhythmRange": [0, 10],
+            "dynamics": [
+                { "time": 0, "value": "f" },
+                { "time": 0.5, "value": ">" },
+                { "time": 1, "value": "mf" }
+            ]
+        }
+    },
+    {
+        "time": 291,
+        "pitched": {
+            "duration": 24,
+            "globjectContour": "all",
+            "globjectCount": 3,
+            "pitch": [
+                { "time": 0, "classes": [0, 3] },
+                { "time": 1, "classes": [0, 3, 7] }
+            ],
+            "range": {
+                "low": 0,
+                "high": 127
+            },
+            "phraseType": "both",
+            "dynamics": [
+                { "time": 0, "value": "f" },
+                { "time": 0.5, "value": ">" },
+                { "time": 1, "value": "mp" }
+            ]
+        },
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 307,
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 315,
+        "pitched": {
+            "duration": 24,
+            "globjectContour": "all",
+            "pitch": [
+                { "time": 0, "classes": [0, 3, 7] }
+            ],
+            "range": {
+                "low": 32,
+                "high": 96
+            },
+            "phraseType": "both",
+            "dynamics": [
+                { "time": 0, "value": "mf" },
+                { "time": 0.5, "value": ">" },
+                { "time": 1, "value": "n" }
+            ]
+        },
+        "percussion": {
+            "tempo": null
+        }
+    },
+    {
+        "time": 338,
+        "percussion": {
+            "tempo": null
+        }
+    },
+]

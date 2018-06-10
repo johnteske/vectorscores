@@ -10,6 +10,7 @@ layout: compress
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
     <link rel="stylesheet" href="{{ '/css/score.css' | prepend: assets_url }}">
+    {% if page.inline_bravura %}<link rel="stylesheet" href="{{ '/fonts/Bravura-woff.css' | prepend: assets_url }}">{% endif %}
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>

@@ -1,113 +1,94 @@
 ---
 layout: compress-js
 ---
+/**
+ * TODO Don't remove pitch classes from data when deduplicating,
+ * instead hide them during rendering. Keeping the data will allow the
+ * better line cloud rendering (also TODO).
+ */
 
-// TODO scroll globject layer (and percussion dynamics) to show duration of phrases and transformation over time
-// rhythms would be still be generated in boxes but could be cued in and out CueSymbol#blink
-// may also solve issues of multiple globjects, timing, transitions
+// Musical constants that define the piece
+var config = {
+    semitoneTransposition: 2,
+    numberOfPercussionParts: 2,
+    maxRhythmsPerBar: 2
+};
 
-var width = 480,
-    height = 480,
-    globjectWidth = 240,
-    globjectHeight = 90,
-    debug = +VS.getQueryString('debug') === 1 || false,
-    transposeBy = 2,
-    layout = {
-        scale: 1,
-        margin: {
-            left: 0,
-            top: 0
-        },
+// Display constants
+var layout = {
+    container: {
+        height: null, // set after render for resizing/scaling
+        scale: 1
+    },
+    wrapper: {
+        y: 105
+    },
+    cueIndicator: {
+        y: 15
+    },
+    pitched: {
+        y: 0,
         globjects: {
-            top: 16
-        },
-        perc: {
-            y: 220,
-            y1: 16,
-            y2: 60 + 16,
-            dynamics: 60 + 60 + 24
+            height: 127
         }
-    };
-
-// TODO a temporary solution to update rhythms within bars--eventually add specific rhythm selections/option to score
-// var updateTimeout;
-// var updateInterval = 8000;
+    },
+    percussion: {
+        y: 220,
+    },
+    scaleTime: function(x) {
+        return x * 5.5;
+    },
+    barPadding: 6
+};
 
 var dynamics = VS.dictionary.Bravura.dynamics;
 
 // Wrap in IIFE to aid in linting
-var globjects = (function() {
-    return {% include_relative _globjects.json %};
+var rawGlobjects = (function() {
+    return {% include_relative _proto-globjects.json %};
 }());
 
-{% include_relative _globjects.js %}
+{% include_relative _generate-globjects.js %}
+var globjects = generateGlobjects(rawGlobjects);
+var retrogradeGlobjects = generateRetrogradeGlobjects(globjects);
+
 {% include_relative _rhythms.js %}
-{% include_relative _score.js %}
+
+// Wrap in IIFE to aid in linting
+var rawScore = (function() {
+    var raw = {% include_relative _score.json %};
+
+    return raw.map(function(bar, i) {
+        bar.index = i;
+        return bar;
+    });
+}());
+
+var barTimes = rawScore.map(function(d) {
+    return d.time;
+})
+
+{% include_relative _generate-parts.js %};
+var parts = generatePartsFromRawScore(rawScore);
+
+{% include_relative _draw-crescendos.js %}
+
+{% include_relative _pitched-part.js %}
+{% include_relative _percussion-part.js %}
+
 {% include_relative _options.js %}
+config.semitoneTransposition += scoreOptions.transposition;
+
+{% include_relative _cue.js %}
 
 var svg = d3.select('svg');
+svg.append('defs');
 
-var wrapper = svg.append('g')
-    .attr('class', 'wrapper')
-    .classed('debug', debug);
-    // .attr('transform', 'translate(' + layout.margin.left + ',' + layout.margin.top + ')');
+// Static group, for resizing/scaling calculations
+var container = svg.append('g');
 
-var globjectContainer = wrapper.append('g')
-    .attr('class', 'globjects')
-    .attr('transform', 'translate(0,' + layout.globjects.top + ')');
-
-var durationText = globjectContainer.append('text')
-    .attr('class', 'duration-text')
-    .attr('dy', '-3em');
-
-/**
- * Rhythm test
- */
-var percussionParts = wrapper.append('g')
-    .attr('transform', 'translate(' + 0 + ',' + layout.perc.y + ')')
-    .attr('class', 'percussion-parts');
-
-var tempoText = percussionParts.append('text')
-    .attr('class', 'tempo-text');
-
-tempoText.append('tspan')
-    .text(stemmed['1']);
-
-var perc1 = percussionParts.append('g')
-    .attr('transform', 'translate(' + 0 + ',' + layout.perc.y1 + ')');
-
-var perc2 = percussionParts.append('g')
-    .attr('transform', 'translate(' + 0 + ',' + layout.perc.y2 + ')');
-
-percussionParts.selectAll('g').call(function(selection) {
-    selection.append('text')
-        .style('font-family', 'Bravura')
-        .attr('x', -22)
-        .attr('y', 22)
-        .text('\ue069');
-
-    function createRhythmCell(g) {
-        var cell = g.append('g')
-            // .attr('transform', 'translate(' + 22 + ',' + 0 + ')')
-            .attr('class', 'rhythm');
-
-        cell.append('rect')
-            .attr('height', 45)
-            .attr('stroke', '#888')
-            .attr('fill', 'none');
-
-        cell.append('text')
-            .attr('dx', 11)
-            .attr('y', 35);
-    }
-
-    // create two rhythm cells
-    selection.call(createRhythmCell);
-    selection.call(createRhythmCell);
-});
-
-var percDynamics = percussionParts.append('g')
-    .attr('transform', 'translate(0,' + layout.perc.dynamics + ')');
+var wrapper = container.append('g')
+    .attr('class', 'wrapper');
 
 function textAnchor(t) {
     var a = 'middle';
@@ -121,332 +102,160 @@ function textAnchor(t) {
     return a;
 }
 
-var globject = VS.globject()
-    .width(globjectWidth)
-    .height(globjectHeight)
-    .curve(d3.curveCardinalClosed.tension(0.3));
+// TODO add vinculum U+0305 to .333 and .666 bar times
+// -- or add tpans with optional .style('text-decoration', 'overline')
+function renderLayout() {
+    var barLineGroup = wrapper.append('g')
+        .attr('class', 'bar-lines');
 
-/**
- *
- */
-function makePhrase(type, set) {
-    function coin(prob) {
-        return Math.random() < (prob || 0.5);
-    }
-
-    return function() {
-        var notes = [],
-            pc1, pc2;
-
-        if (!type) {
-            pc1 = VS.getItem(set) + transposeBy;
-            notes.push({ pitch: pc1, duration: VS.getRandExcl(8, 12) });
-            notes.push({ pitch: pc1, duration: 0 });
-        } else if (type === 'descending' || type === 'ascending') {
-            pc1 = VS.getItem(set) + transposeBy;
-            pc2 = VS.getItem(set) + transposeBy + (type === 'descending' ? -12 : 12);
-            notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
-            if (coin(0.33)) {
-                notes.push({ pitch: pc1, duration: VS.getRandExcl(4, 6) });
-            }
-            if (coin(0.33)) {
-                notes.push({ pitch: pc2, duration: VS.getRandExcl(4, 6) });
-            }
-            notes.push({ pitch: pc2, duration: 0 });
-        } else if (type === 'both') {
-            notes.push({ pitch: VS.getItem(set) + transposeBy, duration: VS.getRandExcl(4, 6) });
-            notes.push({ pitch: VS.getItem(set) + transposeBy + (coin() ? 12 : 0), duration: VS.getRandExcl(4, 6) });
-            notes.push({ pitch: VS.getItem(set) + transposeBy + (coin() ? 12 : 0), duration: 0 });
-        }
-
-        return notes;
-    };
-}
-
-var pattern = svg.append('defs')
-    .append('pattern')
-    .attr('id', 'ascending-fill')
-    .attr('width', 2)
-    .attr('height', 2)
-    .attr('patternUnits', 'userSpaceOnUse');
-
-pattern.append('circle')
-    .attr('fill', '#eee')
-    .attr('r', 1);
-
-/**
- *
- */
-function update(index, isControlEvent) {
-    var bar = score[index];
-
-    /**
-     * Globjects
-     */
-    d3.selectAll('.globject').remove();
-
-    globjectContainer.selectAll('.globject')
-        .data(bar.pitched.globjects)
+    var barLineEnter = barLineGroup.selectAll('null')
+        .data(barTimes)
         .enter()
-        .append('g')
-        .each(globject)
-        .each(function(d) {
-            var content = d3.select(this).select('.globject-content');
 
-            if (bar.pitched.phraseType === 'ascending') {
-                content.append('rect')
-                    .attr('width', d.width)
-                    .attr('height', globjectHeight + 10)
-                    .attr('fill', 'url(#ascending-fill)');
-            }
-
-            var lineCloud = VS.lineCloud()
-                .duration(bar.pitched.duration)
-                // TODO shape over time for each PC set, not by last set
-                .phrase(makePhrase(bar.pitched.phraseType, bar.pitched.pitch[bar.pitched.pitch.length - 1].classes))
-                .transposition('octave')
-                .curve(d3.curveCardinal)
-                .width(d.width)
-                .height(globjectHeight);
-
-            content.call(lineCloud, { n: Math.floor(bar.pitched.duration) });
-
-            content.selectAll('.line-cloud-path')
-                .attr('stroke', 'grey')
-                .attr('stroke-dasharray', bar.pitched.phraseType === 'ascending' ? '1' : 'none')
-                .attr('fill', 'none');
+    barLineEnter
+        .append('text')
+        .style('font-family', 'serif')
+        .style('font-style', 'italic')
+        .attr('dy', '-3em')
+        .attr('x', function(d, i) {
+            return getXByScoreIndex(i);
         })
-        .each(function(d) {
-            var selection = d3.select(this);
-
-            var g = selection.append('g'),
-                pitch = bar.pitched.pitch,
-                text;
-
-            for (var i = 0; i < pitch.length; i++) {
-                text = g.append('text')
-                    .attr('dy', '-1.5em')
-                    .attr('x', pitch[i].time * d.width)
-                    .attr('text-anchor', textAnchor(pitch[i].time));
-
-                var set = VS.pitchClass.transpose(pitch[i].classes, transposeBy + scoreOptions.transposition).map(function(pc) {
-                    return VS.pitchClass.format(pc, scoreOptions.pitchClasses.display, scoreOptions.pitchClasses.preference);
-                });
-                var formatted = '{' + set + '}';
-
-                text.text(formatted)
-                    .attr('class', 'pitch-class');
-            }
-
-            /**
-             * Dynamics
-             */
-            if (bar.pitched.dynamics) {
-                selection.append('g')
-                    .attr('transform', 'translate(0,' + globjectHeight + ')')
-                    .selectAll('.dynamic')
-                    .data(bar.pitched.dynamics)
-                    .enter()
-                    .append('text')
-                        .attr('class', 'dynamic')
-                        .attr('x', function(d, i) {
-                            return globjectWidth * d.time;
-                        })
-                        .attr('dy', '1em')
-                        .attr('text-anchor', function(d) {
-                            return textAnchor(d.time);
-                        })
-                        .text(function(d) {
-                            return dynamics[d.value];
-                        });
-            }
+        .text(function(d) {
+            return d + '\u2033';
         });
 
-    /**
-     * Duration
-     */
-    durationText.text(bar.pitched.duration + (bar.pitched.duration ? '\u2033' : ''));
-
-    /**
-     * Rest
-     */
-    var rest = d3.select('.rest').remove();
-
-    if (bar.pitched.phraseType === 'rest') {
-        rest = globjectContainer.append('text')
-            .attr('class', 'rest');
-        rest.append('tspan')
-            .attr('x', globjectWidth * 0.5)
-            .attr('y', (globjectHeight * 0.5) - 20)
-            .text('\ue4c6');
-        rest.append('tspan')
-            .attr('x', globjectWidth * 0.5)
-            .attr('y', globjectHeight * 0.5)
-            .text('\ue4e5');
+    function drawBarLine(selection, y1, y2) {
+        selection.append('line')
+            .attr('x1', function(d, i) {
+                return getXByScoreIndex(i);
+            })
+            .attr('x2', function(d, i) {
+                return getXByScoreIndex(i);
+            })
+            .attr('y1', y1)
+            .attr('y2', y2)
+            .attr('stroke', 'black')
+            .attr('stroke-opacity', 0.25);
     }
 
-    /**
-     * Tempo
-     */
-    var tempo = bar.percussion.tempo;
+    barLineEnter.call(drawBarLine, 0, layout.pitched.globjects.height);
+    barLineEnter.call(drawBarLine, layout.percussion.y, layout.percussion.y + (config.numberOfPercussionParts * 32 + 2)); // Add 2 for box border
+}
 
-    tempoText.select('.bpm').remove();
+/**
+ *
+ */
+{% include_relative _fill-globject.js %}
+{% include_relative _calculate-joining-symbol-points.js %}
+{% include_relative _draw-pitch-class-layer.js %}
+{% include_relative _append-dynamics.js %}
 
-    tempoText.append('tspan')
-        .attr('class', 'bpm')
-        .text(' = ' + tempo);
+function renderPitched() {
+    var pitchedGroup = wrapper.append('g')
+        .attr('class', 'pitched-part')
+        .attr('transform', 'translate(' + 0 + ',' + layout.pitched.y + ')');
 
-    percussionParts
-        // .transition().duration(300) // TODO fade in/out as part of event, not on start of event
-        .style('opacity', tempo ? 1 : 0);
+    pitchedGroup.call(pitchedPart.init);
+    pitchedPart.draw();
+}
 
-    /**
-     * Rhythms
-     * TODO stash creation functions elsewhere?
-     * NOTE tempo and bar are in update scope
-     */
-    function createRhythm() {
-        var selection = d3.select(this),
-            textEl = selection.select('text');
+function renderPercussion() {
+    var percussionGroup = wrapper.append('g')
+        .attr('class', 'percussion-parts')
+        .attr('transform', 'translate(' + 0 + ',' + layout.percussion.y + ')');
 
-        textEl.selectAll('tspan').remove();
-
-        if (!tempo) {
-            return;
-        }
-
-        var extent = bar.percussion.rhythmRange;
-        var randRhythm = VS.getItem(rhythms.filter(function(r, i) {
-            var inRange = extent[0] <= i && i <= extent[1];
-            return r !== percRhythm && inRange; // prevent duplicates within each part
-        }));
-
-        percRhythm = randRhythm;
-
-        var symbols = randRhythm.split(',');
-
-        for (var si = 0; si < symbols.length; si++) {
-            var symbol = symbols[si],
-                spacing = 0,
-                dy = symbol === 'r0.5' || symbol === 'r0.5.' ? 0.4 : 0;
-
-            if (symbol === 'trip') {
-                spacing = -6;
-            } else if (symbol === '1.') {
-                spacing = -5;
-            }
-
-            textEl.append('tspan')
-                .style('letter-spacing', spacing)
-                .style('baseline-shift', dy + 'em')
-                .text(stemmed[symbol]);
-        }
-
-        var textWidth = textEl.node().getBBox().width;
-        // TODO set d.width
-
-        selection.select('rect').attr('width', textWidth + 22);
-    }
-
-    function spacePerc(d, i) {
-        var selection = d3.select(this);
-
-        var width = selection.node().getBBox().width;
-        var xOffset = percPos + (i * 11);
-        percPos += width;
-        // TODO get d.width
-
-        selection.attr('transform', 'translate(' + xOffset + ',' + 0 + ')');
-    }
-
-    var percPos = 0;
-    var percRhythm = '';
-    perc1.selectAll('.rhythm')
-        .each(createRhythm)
-        .each(spacePerc);
-
-    percPos = 0;
-    percRhythm = '';
-    perc2.selectAll('.rhythm')
-        .each(createRhythm)
-        .each(spacePerc);
-
-    /**
-     * Percussion dynamics
-     */
-    percDynamics.selectAll('.dynamic').remove();
-
-    if (bar.percussion.dynamics) {
-        percDynamics.selectAll('.dynamic')
-            .data(bar.percussion.dynamics)
-            .enter()
-            .append('text')
-                .attr('class', 'dynamic')
-                .attr('x', function(d, i) {
-                    return globjectWidth * d.time;
-                })
-                .attr('text-anchor', function(d) {
-                    return textAnchor(d.time);
-                })
-                .text(function(d) {
-                    return dynamics[d.value];
-                });
-    }
-
-    // // TODO
-    // if (!isControlEvent) {
-    //     updateTimeout = window.setTimeout(function() { update(index); }, updateInterval);
-    // } else {
-    //     window.clearTimeout(updateTimeout);
-    // }
+    percussionGroup.call(percussionPart.init);
+    percussionPart.draw();
 }
 
 /**
  * Resize
  */
+var viewCenter;
 function resize() {
     var main = d3.select('main');
 
+    // TODO put global width, height in properties so these can be better named
     var w = parseInt(main.style('width'), 10);
     var h = parseInt(main.style('height'), 10);
 
-    var scaleX = VS.clamp(w / width, 0.25, 2);
-    var scaleY = VS.clamp(h / height, 0.25, 2);
+    // TODO manually added 105 of "bottom padding"
+    layout.container.scale = h / (layout.container.height + 15);
 
-    layout.scale = Math.min(scaleX, scaleY);
+    container.attr('transform', 'scale(' + layout.container.scale + ')')
 
-    layout.margin.left = (w * 0.5) - (120 * layout.scale);
-    layout.margin.top = (h * 0.5) - ((height * 0.5 - 72) * layout.scale);
+    viewCenter = (w / layout.container.scale) * 0.5;
 
-    wrapper.attr('transform', 'translate(' + layout.margin.left + ',' + layout.margin.top + ') scale(' + layout.scale + ',' + layout.scale + ')');
+    setScorePosition(true);
+    cueIndicator.positionToCenter();
 }
 
 d3.select(window).on('resize', resize);
 
+function getXByScoreIndex(i) {
+    // Add offset to give rest more space
+    var offset = (i > 7) ? 18 : 0;
+
+    var padding = i * layout.barPadding;
+
+    return offset + layout.scaleTime(barTimes[i]) + padding;
+}
+
+function scrollScoreToIndex(index, duration) {
+    var x = viewCenter - getXByScoreIndex(index);
+
+    wrapper
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(duration)
+        .attr('transform', 'translate(' + x + ',' + layout.wrapper.y + ')');
+}
+
+function scrollToNextBar(index, duration) {
+    scrollScoreToIndex(index + 1, duration);
+}
+
+function setScorePosition(setImmediately) {
+    if (VS.score.pointer > barTimes.length - 1) {
+        return;
+    }
+
+    var dur = setImmediately ? 0 : 300;
+    scrollScoreToIndex(VS.score.pointer, dur);
+}
+
 /**
  * Populate score
  */
-for (var i = 0; i < score.length; i++) {
-    VS.score.add(score[i].time * 1000, update, [i]);
+for (var i = 0; i < barTimes.length; i++) {
+    var fn = scrollToNextBar;
+
+    if (VS.score.pointer < barTimes.length - 1) {
+        fn = function() {};
+    }
+
+    var duration = (barTimes[i + 1] - barTimes[i]) * 1000;
+
+    VS.score.add(barTimes[i] * 1000, fn, [i, duration]);
 }
 
 /**
  * Initialize score
  */
 d3.select(window).on('load', function() {
+    renderLayout();
+    cueIndicator.initAndRender();
+    renderPitched();
+    renderPercussion();
+    layout.container.height = container.node().getBBox().height;
     resize();
-    update(0, true);
 });
 
 /**
  * Score controls
  */
-(function() {
-    function updateAtPointer() {
-        update(VS.score.pointer, true);
-    }
+VS.control.hooks.add('play', prerollAnimateCue);
 
-    VS.control.hooks.add('stop', updateAtPointer);
-    VS.control.hooks.add('pause', updateAtPointer);
-    VS.control.hooks.add('step', updateAtPointer);
-})();
+VS.control.hooks.add('stop', setScorePosition);
+VS.control.hooks.add('step', setScorePosition);
+VS.control.hooks.add('pause', setScorePosition);
