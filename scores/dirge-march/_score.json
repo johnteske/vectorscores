@@ -9,8 +9,8 @@
                 { "time": 1, "classes": [0, 3] }
             ],
             "range": {
-                "low": 0,
-                "high": 127
+                "high": 96,
+                "low": 32
             },
             "phraseType": null,
             "dynamics": [
@@ -54,8 +54,8 @@
                 }
             ],
             "range": {
-                "low": 0,
-                "high": 127
+                "high": 96,
+                "low": 0
             },
             "phraseType": null,
             "dynamics": [
@@ -105,8 +105,8 @@
                 { "time": 0, "classes": [0, 3, 7] }
             ],
             "range": {
-                "low": 0,
-                "high": 127
+                "high": 64,
+                "low": 0
             },
             "phraseType": "descending",
             "dynamics": [
@@ -151,8 +151,8 @@
                 { "time": 1, "classes": [5, 9, 0] }
             ],
             "range": {
-                "low": 0,
-                "high": 127
+                "high": 127,
+                "low": 64
             },
             "phraseType": "ascending",
             "dynamics": [
@@ -190,8 +190,8 @@
                 { "time": 1, "classes": [0, 3] }
             ],
             "range": {
-                "low": 0,
-                "high": 127
+                "low": 32,
+                "high": 96
             },
             "phraseType": "both",
             "dynamics": [
@@ -291,8 +291,8 @@
                 { "time": 0, "classes": [0, 3, 7] }
             ],
             "range": {
-                "low": 0,
-                "high": 127
+                "low": 32,
+                "high": 96
             },
             "phraseType": "both",
             "dynamics": [

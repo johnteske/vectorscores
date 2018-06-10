@@ -17,7 +17,10 @@ var config = {
 // Display constants
 var layout = {
     pitched: {
-        y: 0
+        y: 0,
+        globjects: {
+            height: 127
+        }
     },
     percussion: {
         y: 220,
@@ -27,9 +30,6 @@ var layout = {
     },
     barPadding: 6
 };
-
-// TODO each globject should have its own height and y position
-var globjectHeight = 127;
 
 var dynamics = VS.dictionary.Bravura.dynamics;
 

@@ -1,3 +1,5 @@
+var globjectHeight = 42;
+
 var pitchedPart = (function() {
     var part = {};
 
@@ -27,7 +29,7 @@ var pitchedPart = (function() {
         .width(function(d) {
             return layout.scaleTime(d.duration);
         })
-        .height(globjectHeight * 0.5) // TODO
+        .height(globjectHeight)
         .curve(d3.curveCardinalClosed.tension(0.3));
 
     function drawGlobjects() {
@@ -37,6 +39,7 @@ var pitchedPart = (function() {
                 return d.globjects.map(function(globject) {
                     return {
                         duration: d.duration,
+                        totalGlobjects: d.globjects.length,
                         pitch: d.pitch,
                         range: d.range,
                         phraseType: d.phraseType,
@@ -48,11 +51,15 @@ var pitchedPart = (function() {
             .append('g')
             .attr('class', 'globject')
             .attr('transform', function(d, i) {
-                // console.log(d.range);
-                var height = 64; // in MIDI
-                var y = VS.getRandIntIncl(d.range.low + height, d.range.high);
-                return 'translate(0,' + (globjectHeight - y) + ')';
-                // return 'translate(0,' + (i * globjectHeight) + ')';
+                var y = VS.getRandIntIncl(d.range.low + globjectHeight, d.range.high);
+
+                // TODO this is an easy way to space out the globjects--
+                // replace with a real bin-packing algorithm so globjects can fit closely together
+                if (d.totalGlobjects > 1) {
+                    y = (layout.pitched.globjects.height / d.totalGlobjects) * (i + 1);
+                }
+
+                return 'translate(0,' + (layout.pitched.globjects.height - y) + ')';
             })
             .each(staticGlobject)
             .each(fillGlobject);
@@ -74,7 +81,7 @@ var pitchedPart = (function() {
 
             var dynamicsGroup = selection.append('g')
                 .attr('class', 'dynamics')
-                .attr('transform', 'translate(0,' + globjectHeight + ')')
+                .attr('transform', 'translate(0,' + layout.pitched.globjects.height + ')')
                 .selectAll('.dynamic')
                 .data(dynamicsData)
                 .enter();
@@ -101,7 +108,7 @@ var pitchedPart = (function() {
         })
         .append('text')
         .attr('class', 'rest')
-        .attr('y', globjectHeight * 0.5);
+        .attr('y', layout.pitched.globjects.height * 0.5);
 
         // Half rest
         rest.append('tspan').text('\ue4f5');

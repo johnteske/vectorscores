@@ -40,7 +40,9 @@ var fillGlobject = (function() {
             .transposition('octave')
             .curve(d3.curveCardinal)
             .width(width)
-            .height(globjectHeight);
+            // NOTE this is not the height if the globject, it is the height of the fill,
+            // for accurate pitch representations
+            .height(layout.pitched.globjects.height);
 
         content.call(lineCloud, { n: Math.floor(duration) });
 
