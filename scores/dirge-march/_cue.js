@@ -18,7 +18,7 @@ var cueIndicator = (function() {
     var blink;
 
     cueIndicator.initAndRender = function() {
-        cueTriangle = svg.append('path')
+        cueTriangle = container.append('path')
             .call(makeCueTriangle);
 
         // this.positionToCenter();
@@ -37,8 +37,7 @@ var cueIndicator = (function() {
     };
 
     cueIndicator.positionToCenter = function() {
-        // TODO clean up layout y positions
-        cueTriangle.attr('transform', 'translate(' + viewCenter + ',' + (layout.wrapper.y - 90 ) + ')');
+        cueTriangle.attr('transform', 'translate(' + viewCenter + ',' + layout.cueIndicator.y + ')');
     };
 
     cueIndicator.blink = function() {

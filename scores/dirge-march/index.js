@@ -16,8 +16,15 @@ var config = {
 
 // Display constants
 var layout = {
+    container: {
+        height: null, // set after render for resizing/scaling
+        scale: 1
+    },
     wrapper: {
-        y: 120
+        y: 105
+    },
+    cueIndicator: {
+        y: 15
     },
     pitched: {
         y: 0,
@@ -77,7 +84,10 @@ config.semitoneTransposition += scoreOptions.transposition;
 var svg = d3.select('svg');
 svg.append('defs');
 
-var wrapper = svg.append('g')
+// Static group, for resizing/scaling calculations
+var container = svg.append('g');
+
+var wrapper = container.append('g')
     .attr('class', 'wrapper');
 
 function textAnchor(t) {
@@ -165,7 +175,12 @@ function resize() {
     var w = parseInt(main.style('width'), 10);
     var h = parseInt(main.style('height'), 10);
 
-    viewCenter = w * 0.5;
+    // TODO manually added 105 of "bottom padding"
+    layout.container.scale = h / (layout.container.height + 15);
+
+    container.attr('transform', 'scale(' + layout.container.scale + ')')
+
+    viewCenter = (w / layout.container.scale) * 0.5;
 
     setScorePosition(0);
     cueIndicator.positionToCenter();
@@ -217,6 +232,7 @@ d3.select(window).on('load', function() {
     cueIndicator.initAndRender();
     renderPitched();
     renderPercussion();
+    layout.container.height = container.node().getBBox().height;
     resize();
 });
 
