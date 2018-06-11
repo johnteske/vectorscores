@@ -67,10 +67,8 @@ function makeCue(data, index) {
         .style('fill', '#888')
         .text(symbols[data.cue]);
 
-    cues[index] = VS.cueBlink(selection, {
-        beats: data.cue,
-        interval: 1000
-    })
+    cues[index] = VS.cueBlink(selection)
+    .beats(data.cue)
     .on(function(selection) {
         selection.style('fill', 'blue')
             .style('opacity', 1);

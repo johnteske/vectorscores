@@ -1,10 +1,9 @@
 ---
 layout: compress-js
 ---
-VS.cueBlink = function(selection, args) {
-    var _selection = selection;
-    var beats = args && args.beats ? +args.beats : 1;
-    var interval = args && args.interval ? +args.interval : 1000; // period, T
+VS.cueBlink = function(cueSelection) {
+    var beats = 3;
+    var interval = 1000; // period, T
     var onDuration = 50;
     var offDuration = 700;
 
@@ -19,12 +18,11 @@ VS.cueBlink = function(selection, args) {
         selection.style('opacity', 0.25);
     };
 
-    var setEnd = function(selection) {
-        selection.style('opacity', 1);
-    };
+    var setEnd = setOn;
 
-    function blink(selection, delay, isLast) {
-        _selection.transition().delay(delay).duration(onDuration)
+    function blink(delay, isLast) {
+        cueSelection
+            .transition().delay(delay).duration(onDuration)
             .call(setOn)
             .transition().delay(onDuration).duration(offDuration)
             .call(isLast ? setEnd : setOff);
@@ -38,12 +36,12 @@ VS.cueBlink = function(selection, args) {
 
     cueBlink.start = function() {
         for (var i = 0; i < (beats + 1); i++) {
-            _selection.call(blink, i * interval, i === beats);
+            blink(i * interval, i === beats);
         }
     };
 
     cueBlink.cancel = function() {
-        _selection
+        cueSelection
             .interrupt()
             .call(setEnd);
     };
