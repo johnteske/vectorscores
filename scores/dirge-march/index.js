@@ -230,7 +230,7 @@ function setScorePosition(setImmediately) {
 for (var i = 0; i < barTimes.length; i++) {
     var fn = scrollToNextBar;
 
-    if (VS.score.pointer < barTimes.length - 1) {
+    if (VS.score.pointer > barTimes.length - 1) {
         fn = function() {};
     }
 
