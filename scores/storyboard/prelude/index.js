@@ -68,19 +68,22 @@ function makeCue(data, index) {
         .text(symbols[data.cue]);
 
     cues[index] = VS.cueBlink(selection)
-    .beats(data.cue)
-    .on(function(selection) {
-        selection.style('fill', 'blue')
-            .style('opacity', 1);
-    })
-    .off(function(selection) {
-        selection.style('fill', '#888')
-            .style('opacity', 0.25);
-    })
-    .end(function(selection) {
-        selection.style('fill', '#888')
-            .style('opacity', 1);
-    });
+        .beats(data.cue)
+        .inactive(function(selection) {
+            selection
+                .style('fill', '#888')
+                .style('opacity', 1);
+        })
+        .on(function(selection) {
+            selection
+                .style('fill', 'blue')
+                .style('opacity', 1);
+        })
+        .off(function(selection) {
+            selection
+                .style('fill', '#888')
+                .style('opacity', 0.25);
+        });
 }
 
 function makeCard(data, index) {

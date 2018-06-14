@@ -7,27 +7,18 @@ VS.cueBlink = function(cueSelection) {
     var onDuration = 0;
     var offDuration = 500;
 
-    /**
-     * Default on, off, end states
-     */
-    var setOn = function(selection) {
-        selection.style('opacity', 1);
-    };
+    var noop = function() {};
 
-    var setOff = function(selection) {
-        selection.style('opacity', 0.25);
-    };
-
-    var setEnd = function(selection) {
-        selection.style('opacity', 1);
-    };;
+    var setInactive = noop;
+    var setOn = noop;
+    var setOff = noop;
 
     function blink(delay, isLast) {
         cueSelection
             .transition().delay(delay).duration(onDuration)
             .call(setOn)
             .transition().delay(onDuration).duration(offDuration)
-            .call(isLast ? setEnd : setOff);
+            .call(isLast ? setInactive : setOff);
     }
 
     function cueBlink() {}
@@ -45,7 +36,7 @@ VS.cueBlink = function(cueSelection) {
     cueBlink.cancel = function() {
         cueSelection
             .interrupt()
-            .call(setEnd);
+            .call(setInactive);
     };
 
     cueBlink.beats = function(_) {
@@ -72,8 +63,16 @@ VS.cueBlink = function(cueSelection) {
         return (arguments.length && typeof _ === 'function') ? (setOff = _, cueBlink) : setOff;
     };
 
-    cueBlink.end = function(_) {
-        return (arguments.length && typeof _ === 'function') ? (setEnd = _, cueBlink) : setEnd;
+    cueBlink.inactive = function(_) {
+        if (arguments.length && typeof _ === 'function') {
+            setInactive = _;
+
+            cueSelection.call(setInactive);
+
+            return cueBlink;
+        } else {
+            return setInactive;
+        }
     };
 
     return cueBlink;
