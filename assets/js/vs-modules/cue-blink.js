@@ -4,8 +4,8 @@ layout: compress-js
 VS.cueBlink = function(cueSelection) {
     var beats = 3;
     var interval = 1000; // period, T
-    var onDuration = 50;
-    var offDuration = 700;
+    var onDuration = 0;
+    var offDuration = 500;
 
     /**
      * Default on, off, end states
@@ -18,7 +18,9 @@ VS.cueBlink = function(cueSelection) {
         selection.style('opacity', 0.25);
     };
 
-    var setEnd = setOn;
+    var setEnd = function(selection) {
+        selection.style('opacity', 1);
+    };;
 
     function blink(delay, isLast) {
         cueSelection
