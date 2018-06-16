@@ -33,6 +33,9 @@ var cueIndicator = (function() {
             })
             .off(function(selection) {
                 selection.style('fill-opacity', 0);
+            })
+            .down(function(selection) {
+                selection.style('fill-opacity', 1);
             });
     };
 

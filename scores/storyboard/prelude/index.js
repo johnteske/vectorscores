@@ -83,7 +83,13 @@ function makeCue(data, index) {
             selection
                 .style('fill', '#888')
                 .style('opacity', 0.25);
-        });
+        })
+        // Do not blink on downbeat--card position animation signals downbeat
+        .down(function(selection) {
+            selection
+                .style('fill', '#888')
+                .style('opacity', 0.25);
+        })
 }
 
 function makeCard(data, index) {

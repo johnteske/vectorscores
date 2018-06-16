@@ -109,6 +109,11 @@ var cueIndicator = VS.cueBlink(cueTriangle)
     })
     .off(function(selection) {
         selection.style('fill-opacity', 0);
+    })
+    .down(function(selection) {
+        selection
+            .style('fill-opacity', 1)
+            .style('opacity', 1);
     });
 
 function goToCard(eventIndex, dur) {

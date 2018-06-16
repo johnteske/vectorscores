@@ -12,11 +12,12 @@ VS.cueBlink = function(cueSelection) {
     var setInactive = noop;
     var setOn = noop;
     var setOff = noop;
+    var setDown = noop;
 
     function blink(delay, isLast) {
         cueSelection
             .transition().delay(delay).duration(onDuration)
-            .call(setOn)
+            .call(isLast ? setDown : setOn)
             .transition().delay(onDuration).duration(offDuration)
             .call(isLast ? setInactive : setOff);
     }
@@ -61,6 +62,10 @@ VS.cueBlink = function(cueSelection) {
 
     cueBlink.off = function(_) {
         return (arguments.length && typeof _ === 'function') ? (setOff = _, cueBlink) : setOff;
+    };
+
+    cueBlink.down = function(_) {
+        return (arguments.length && typeof _ === 'function') ? (setDown = _, cueBlink) : setDown;
     };
 
     cueBlink.inactive = function(_) {
