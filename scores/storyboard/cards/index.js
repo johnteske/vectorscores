@@ -97,16 +97,23 @@ var cueTriangle = main.append('path')
 
 var cueIndicator = VS.cueBlink(cueTriangle)
     .beats(3)
+    .inactive(function(selection) {
+        selection
+            .style('fill-opacity', 0)
+            .style('opacity', 0);
+    })
     .on(function(selection) {
-        selection.style('fill-opacity', 1)
+        selection
+            .style('fill-opacity', 1)
             .style('opacity', 1);
     })
     .off(function(selection) {
         selection.style('fill-opacity', 0);
     })
-    .end(function(selection) {
-        selection.style('fill-opacity', 0)
-            .style('opacity', 0);
+    .down(function(selection) {
+        selection
+            .style('fill-opacity', 1)
+            .style('opacity', 1);
     });
 
 function goToCard(eventIndex, dur) {

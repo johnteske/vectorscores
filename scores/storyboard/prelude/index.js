@@ -67,22 +67,29 @@ function makeCue(data, index) {
         .style('fill', '#888')
         .text(symbols[data.cue]);
 
-    cues[index] = VS.cueBlink(selection, {
-        beats: data.cue,
-        interval: 1000
-    })
-    .on(function(selection) {
-        selection.style('fill', 'blue')
-            .style('opacity', 1);
-    })
-    .off(function(selection) {
-        selection.style('fill', '#888')
-            .style('opacity', 0.25);
-    })
-    .end(function(selection) {
-        selection.style('fill', '#888')
-            .style('opacity', 1);
-    });
+    cues[index] = VS.cueBlink(selection)
+        .beats(data.cue)
+        .inactive(function(selection) {
+            selection
+                .style('fill', '#888')
+                .style('opacity', 1);
+        })
+        .on(function(selection) {
+            selection
+                .style('fill', 'blue')
+                .style('opacity', 1);
+        })
+        .off(function(selection) {
+            selection
+                .style('fill', '#888')
+                .style('opacity', 0.25);
+        })
+        // Do not blink on downbeat--card position animation signals downbeat
+        .down(function(selection) {
+            selection
+                .style('fill', '#888')
+                .style('opacity', 0.25);
+        })
 }
 
 function makeCard(data, index) {

@@ -1,33 +1,29 @@
 ---
 layout: compress-js
 ---
-VS.cueBlink = function(selection, args) {
-    var _selection = selection;
-    var beats = args && args.beats ? +args.beats : 1;
-    var interval = args && args.interval ? +args.interval : 1000; // period, T
-    var onDuration = 50;
-    var offDuration = 700;
+/**
+ * TODO set interval by tempo
+ * TODO re-consider duration method's usefulness or rename totalDuration to avoid confusion with setting on/off durations
+ */
+VS.cueBlink = function(cueSelection) {
+    var beats = 3;
+    var interval = 1000; // period, T
+    var onDuration = 0;
+    var offDuration = 500;
 
-    /**
-     * Default on, off, end states
-     */
-    var setOn = function(selection) {
-        selection.style('opacity', 1);
-    };
+    var noop = function() {};
 
-    var setOff = function(selection) {
-        selection.style('opacity', 0.25);
-    };
+    var setInactive = noop;
+    var setOn = noop;
+    var setOff = noop;
+    var setDown = noop;
 
-    var setEnd = function(selection) {
-        selection.style('opacity', 1);
-    };
-
-    function blink(selection, delay, isLast) {
-        _selection.transition().delay(delay).duration(onDuration)
-            .call(setOn)
+    function blink(delay, isLast) {
+        cueSelection
+            .transition().delay(delay).duration(onDuration)
+            .call(isLast ? setDown : setOn)
             .transition().delay(onDuration).duration(offDuration)
-            .call(isLast ? setEnd : setOff);
+            .call(isLast ? setInactive : setOff);
     }
 
     function cueBlink() {}
@@ -38,14 +34,14 @@ VS.cueBlink = function(selection, args) {
 
     cueBlink.start = function() {
         for (var i = 0; i < (beats + 1); i++) {
-            _selection.call(blink, i * interval, i === beats);
+            blink(i * interval, i === beats);
         }
     };
 
     cueBlink.cancel = function() {
-        _selection
+        cueSelection
             .interrupt()
-            .call(setEnd);
+            .call(setInactive);
     };
 
     cueBlink.beats = function(_) {
@@ -72,8 +68,20 @@ VS.cueBlink = function(selection, args) {
         return (arguments.length && typeof _ === 'function') ? (setOff = _, cueBlink) : setOff;
     };
 
-    cueBlink.end = function(_) {
-        return (arguments.length && typeof _ === 'function') ? (setEnd = _, cueBlink) : setEnd;
+    cueBlink.down = function(_) {
+        return (arguments.length && typeof _ === 'function') ? (setDown = _, cueBlink) : setDown;
+    };
+
+    cueBlink.inactive = function(_) {
+        if (arguments.length && typeof _ === 'function') {
+            setInactive = _;
+
+            cueSelection.call(setInactive);
+
+            return cueBlink;
+        } else {
+            return setInactive;
+        }
     };
 
     return cueBlink;
