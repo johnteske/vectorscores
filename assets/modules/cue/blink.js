@@ -2,6 +2,9 @@
 layout: compress-js
 ---
 /**
+ * Cue events--[on,off] loop based on number of beats:
+ * inactive,[on,off],down,off,inactive
+ *
  * TODO set interval by tempo
  * TODO re-consider duration method's usefulness or rename totalDuration to avoid confusion with setting on/off durations
  */
