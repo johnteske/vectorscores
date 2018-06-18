@@ -5,6 +5,6 @@
 {% endif %}
 
 <script src="{{ '/js/vectorscores.js' | prepend: assets_url }}" charset="utf-8"></script>
-{% for module in page.vs_modules %}
-<script src="{{ assets_url }}/js/vs-modules/{{ module }}.js" charset="utf-8"></script>
+{% for module in page.modules %}
+<script src="{{ assets_url }}/modules/{{ module }}.js" charset="utf-8"></script>
 {% endfor %}
