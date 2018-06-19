@@ -1,5 +1,8 @@
 ---
 ---
+@import "mixins";
+@include BravuraFont();
+
 .cue-test {
     svg {
         display: block;

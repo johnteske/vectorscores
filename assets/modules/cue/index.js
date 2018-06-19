@@ -16,6 +16,12 @@ function createTestCue(id) {
     var g = svg.append('g')
         .attr('transform', 'translate(' + (width * 0.5) + ', ' + (height * 0.5) + ')');
 
+    g.append('text').text('\ue894')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '-1em')
+        .style('fill', '#444')
+        .style('font-family', 'Bravura');
+
     return g.append('path')
         .attr('class', 'indicator')
         .attr('d', 'M-6.928,0 L0,2 6.928,0 0,12 Z')
