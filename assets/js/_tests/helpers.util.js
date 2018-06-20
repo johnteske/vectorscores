@@ -38,4 +38,3 @@ test('VS#constant', t => {
 
     t.end()
 })
-// }
