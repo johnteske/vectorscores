@@ -1,21 +1,26 @@
+const path = require('path')
+const { JSDOM } = require('jsdom')
+
 /**
- * Helper for intializing tests and JSDOM
+ * Create DOM from file and call function
+ * with window object when document is loaded
  */
-function setupDOM(filePath) {
-    const path = require('path')
-    const fs = require('fs')
+function getWindowFromFile(filePath, onLoad) {
+    const options = {
+        resources: 'usable',
+        runScripts: 'dangerously'
+    }
 
-    const JSDOM = require('jsdom').JSDOM
-    const html = fs.readFileSync(path.resolve('.', filePath), 'utf8')
-    const DOM = new JSDOM(html)
+    JSDOM.fromFile(path.resolve('.', filePath), options).then(dom => {
+        const window = dom.window
 
-    global.window = DOM.window
-    global.document = DOM.window.document
-
-    return DOM
+        window.addEventListener('load', () => {
+            onLoad(window)
+        })
+    })
 }
 
 module.exports = {
     test: require('tape'),
-    setupDOM
+    getWindowFromFile
 }

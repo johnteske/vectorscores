@@ -1,7 +1,8 @@
 ---
 layout: compress
 ---
-{% assign assets_url = site.assetsurl | prepend: site.baseurl %}
+{% assign dirs_to_root = page.url | split: '/' | size | minus: 1 %}
+{% capture assets_url %}{% for i in (1..dirs_to_root) %}../{% endfor %}assets{% endcapture %}
 
 <!DOCTYPE html>
 <html>

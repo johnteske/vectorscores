@@ -1,8 +1,6 @@
 const path = require('path')
-const { test, setupDOM } = require(path.resolve('.', 'bin/js/tape-setup'))
-setupDOM('_site/scores/tutorial/index.html')
+const { test, getWindowFromFile } = require(path.resolve('.', 'bin/js/tape-setup'))
 
-const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
 const sampleSize = 1 // 5000000
 
 const reportDistribution = function({ expected, actual }) {
@@ -11,7 +9,18 @@ const reportDistribution = function({ expected, actual }) {
     console.log('actual:\t', actual)
 }
 
+let window
+
+test('setup', t => {
+    getWindowFromFile('_site/scores/tutorial/index.html', loadedWindow => {
+        window = loadedWindow
+        t.end()
+    })
+})
+
 test('VS#getRandExcl', { skip: sampleSize < 999 }, t => {
+    const VS = window.VS
+
     const min = 0
     const max = 1
     let results = []
@@ -30,6 +39,8 @@ test('VS#getRandExcl', { skip: sampleSize < 999 }, t => {
 })
 
 test('VS#getRandIntIncl', { skip: sampleSize < 999 }, t => {
+    const VS = window.VS
+
     const min = 1
     const max = 5
     let results = []
@@ -52,6 +63,8 @@ test('VS#getRandIntIncl', { skip: sampleSize < 999 }, t => {
 })
 
 test('VS#getItem', { skip: sampleSize < 999 }, t => {
+    const VS = window.VS
+
     const items = ['a', 'b', 'c', 'd', 'e']
     const count = [0, 0, 0, 0, 0]
     let results = []
@@ -88,6 +101,8 @@ test('VS#getItem', { skip: sampleSize < 999 }, t => {
 })
 
 test('VS#getWeightedItem', { skip: sampleSize < 999 }, t => {
+    const VS = window.VS
+
     const items = ['a', 'b', 'c', 'd', 'e']
     const weights = [0.5, 0.25, 0.125, 0.0625, 0.0625]
     const count = [0, 0, 0, 0, 0]
@@ -123,6 +138,8 @@ test('VS#getWeightedItem', { skip: sampleSize < 999 }, t => {
 })
 
 test('VS#clamp', t => {
+    const VS = window.VS
+
     t.equal(VS.clamp(11, 0, 5), 5, 'return max when value is greater than max')
     t.equal(VS.clamp(-11, 0, 5), 0, 'return min when value is less than min')
     t.equal(VS.clamp(2.5, 0, 5), 2.5, 'return value when value is between min and max')
@@ -131,6 +148,8 @@ test('VS#clamp', t => {
 })
 
 test('VS#normalize', t => {
+    const VS = window.VS
+
     const min = -5
     const max = 5
 
@@ -142,6 +161,8 @@ test('VS#normalize', t => {
 })
 
 test('VS#mod', t => {
+    const VS = window.VS
+
     t.equal(VS.mod(6, 12), 6, 'return 6 when 6 mod 12')
     t.equal(VS.mod(13, 12), 1, 'return 1 when 13 mod 12')
 

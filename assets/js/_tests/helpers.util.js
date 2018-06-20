@@ -1,10 +1,17 @@
 const path = require('path')
-const { test, setupDOM } = require(path.resolve('.', 'bin/js/tape-setup'))
-setupDOM('_site/scores/tutorial/index.html')
+const { test, getWindowFromFile } = require(path.resolve('.', 'bin/js/tape-setup'))
 
-const VS = require(path.resolve('.', '_site/assets/js/vectorscores.js'))
+let window
+
+test('setup', t => {
+    getWindowFromFile('_site/scores/tutorial/index.html', loadedWindow => {
+        window = loadedWindow
+        t.end()
+    })
+})
 
 test('VS#getQueryString', t => {
+    const VS = window.VS
     const url = 'http://localhost:4000/vectorscores/scores/adsr/?parts=4&showall=on'
 
     t.equal(VS.getQueryString('parts', url), '4', 'return value as string given query parameter that exists in url')
@@ -14,6 +21,7 @@ test('VS#getQueryString', t => {
 })
 
 test('VS#makeQueryString', t => {
+    const VS = window.VS
     t.equal(VS.makeQueryString({ a: '1' }), 'a=1', 'return query string')
     t.equal(VS.makeQueryString({ a: '1', b: '2' }), 'a=1&b=2', 'return query string joined by \'&\'')
 
@@ -21,6 +29,7 @@ test('VS#makeQueryString', t => {
 })
 
 test('VS#constant', t => {
+    const VS = window.VS
     const value = 5
     const c = VS.constant(value)
 
@@ -29,3 +38,4 @@ test('VS#constant', t => {
 
     t.end()
 })
+// }
