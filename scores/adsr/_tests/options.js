@@ -1,11 +1,12 @@
 const path = require('path')
-const { test, setupDOM } = require(path.resolve('.', 'bin/js/tape-setup'))
-setupDOM('_site/scores/adsr/index.html')
+const { test, getWindowFromFile } = require(path.resolve('.', 'bin/js/tape-setup'))
 
 test('ad;sr', t => {
-    const optionsButton = document.getElementById('score-options-open')
+    getWindowFromFile('_site/scores/adsr/index.html', window => {
+        const optionsButton = window.document.getElementById('score-options-open')
 
-    t.true(optionsButton instanceof window.HTMLElement, 'should have a #score-options-open button')
+        t.true(optionsButton instanceof window.HTMLElement, 'should have a #score-options-open button')
 
-    t.end()
+        t.end()
+    })
 })
