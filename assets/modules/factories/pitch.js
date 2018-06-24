@@ -6,9 +6,6 @@ VS.factories.pitch = function() {
     // In scientific pitch notation
     var octave = 4;
 
-    // var frequency = ;
-    // var midi = 60;
-
     function pitch() {}
 
     pitch.noteName = function(_) {
@@ -18,7 +15,7 @@ VS.factories.pitch = function() {
         } else {
             return _pitchClass.noteName();
         }
-    }
+    };
 
     pitch.number = function(_) {
         if (arguments.length) {
@@ -27,23 +24,16 @@ VS.factories.pitch = function() {
         } else {
             return _pitchClass.number();
         }
-    }
-
-    // pitch.transpose = _pitchClass.transpose;
+    };
 
     pitch.octave = function(_) {
         if (arguments.length) {
             octave = +_;
-            // TODO change frequency
-            // TODO change MIDI
             return pitch;
         } else {
             return octave;
         }
     };
-
-    // TODO get and set by scientific pitch notation?
-    // pitch.spn = function(_)
 
     return pitch;
 }
