@@ -8,25 +8,22 @@ VS.factories = VS.factories || {};
 function hasPitchClass(obj) {
     var _noteNameMap = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
 
-    // TODO rename letter?
-    var noteName = 'c';
     // TODO rename integer? (currently only supports integers, not microtones)
     var number = 0;
 
+    // TODO rename letter?
     obj.noteName = function(_) {
         if (arguments.length) {
-            noteName = _;
-            number = _noteNameMap.indexOf(noteName);
+            number = _noteNameMap.indexOf(_);
             return obj;
         } else {
-            return noteName;
+            return _noteNameMap[number];
         }
     }
 
     obj.number = function(_) {
         if (arguments.length) {
             number = +_;
-            noteName = _noteNameMap[number];
             return obj;
         } else {
             return number;
@@ -59,41 +56,40 @@ VS.factories.pitchClass2 = function() {
 
 VS.factories.pitch2 = function() {
 
-    // In scientific pitch notation
-    var octave = 4;
-
-    // These could start as get-only methods
-    // var frequency
-    // var midi = 60;
-    // var spn
-    // var precisePitch = 0; // TODO since MIDI middle C can be C3 or C4, use own numeric pitch system?
+    // Scientific pitch notation, C4
+    // C0 = 0
+    // "Octave-major order": precisePitch = (Scientific pitch notation octave) * (pitch class number)
+    var precisePitch = 48;
 
     function pitch() {}
 
     hasPitchClass(pitch);
 
+    // TODO set precisePitch after setting number (or noteName)
+
+    pitch.pitch = function(_) {
+        if (arguments.length) {
+            precisePitch = +_;
+            return this;
+        } else {
+            return precisePitch;
+        }
+    }
+
     pitch.transpose = function(_) {
         if (arguments.length) {
-            var number = this.number();
-            this.number(transpose(number, _))
-            // this.number(VS.mod(+_ + number, 12));
-
-            octave += octaveDifference(+_);
-
+            precisePitch += +_;
+            this.number(VS.mod(precisePitch, 12));
             return this;
         }
     }
 
-    function octaveDifference(_){
-        return (_ / 12) >> 0;
-    }
-
     pitch.octave = function(_) {
         if (arguments.length) {
-            octave = +_;
-            return pitch;
+            // TODO set precisePitch by octave
+            return this;
         } else {
-            return octave;
+            return (precisePitch / 12) >> 0;
         }
     };
 
