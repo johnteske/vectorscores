@@ -1,6 +1,5 @@
 /**
- * TODO do note names and octaves, etc need to be stored?
- * or are only number stored and display names are calculated?
+ * TODO are these 'has' functions decorators?
  */
 VS.factories = VS.factories || {};
 
@@ -53,7 +52,7 @@ VS.factories = VS.factories || {};
         return pitchClass;
     };
 
-    VS.factories.pitch = function() {
+    function hasPitch(obj) {
 
         function _pitchClass() {}
         hasPitchClass(_pitchClass);
@@ -63,9 +62,7 @@ VS.factories = VS.factories || {};
         // C0 = 0
         var precisePitch = 48;
 
-        function pitch() {}
-
-        pitch.noteName = function(_) {
+        obj.noteName = function(_) {
             if (arguments.length) {
                 _pitchClass.noteName(_);
                 setPitchWithinOctave();
@@ -75,7 +72,7 @@ VS.factories = VS.factories || {};
             }
         };
 
-        pitch.number = function(_) {
+        obj.number = function(_) {
             if (arguments.length) {
                 _pitchClass.number(_);
                 setPitchWithinOctave();
@@ -86,10 +83,10 @@ VS.factories = VS.factories || {};
         };
 
         function setPitchWithinOctave() {
-            precisePitch = (pitch.octave() * 12) + pitch.number();
+            precisePitch = (obj.octave() * 12) + obj.number();
         }
 
-        pitch.pitch = function(_) {
+        obj.pitch = function(_) {
             if (arguments.length) {
                 precisePitch = +_;
                 return this;
@@ -98,7 +95,7 @@ VS.factories = VS.factories || {};
             }
         };
 
-        pitch.transpose = function(_) {
+        obj.transpose = function(_) {
             if (arguments.length) {
                 precisePitch += +_;
                 _pitchClass.number(VS.mod(precisePitch, 12));
@@ -106,7 +103,7 @@ VS.factories = VS.factories || {};
             }
         };
 
-        pitch.octave = function(_) {
+        obj.octave = function(_) {
             if (arguments.length) {
                 precisePitch = (+_ * 12) + _pitchClass.number();
                 return this;
@@ -114,8 +111,34 @@ VS.factories = VS.factories || {};
                 return (precisePitch / 12) >> 0;
             }
         };
+    }
+
+    VS.factories.pitch = function() {
+
+        function pitch() {}
+
+        hasPitch(pitch);
 
         return pitch;
+    };
+
+    VS.factories.note = function() {
+        var duration = 1; // TODO create hasDuration, to include duration scaling, etc.
+
+        function note() {}
+
+        hasPitch(note);
+
+        note.duration = function(_) {
+            if (arguments.length) {
+                duration = +_;
+                return this;
+            } else {
+                return duration;
+            }
+        };
+
+        return note;
     };
 
 })();

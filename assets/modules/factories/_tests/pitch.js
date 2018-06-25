@@ -52,3 +52,21 @@ test('factories.pitch transposition', t => {
 
     t.end()
 })
+
+test('factories.note', t => {
+    const { VS } = window
+
+    const note = VS.factories.note()
+        .noteName('g')
+        .octave(5)
+        .duration(4)
+
+    t.equal(note.noteName(), 'g', 'should have note name of \'g\', given pitch G5')
+    t.equal(note.octave(), 5, 'should have octave of 5, given pitch G5')
+    t.equal(note.number(), 7, 'should have pitch number of 7, given pitch G5')
+    t.equal(note.pitch(), 67, 'should have pitch of 67, given pitch G5')
+
+    t.equal(note.duration(), 4, 'should have duration of 4, given duration of 4')
+
+    t.end()
+})
