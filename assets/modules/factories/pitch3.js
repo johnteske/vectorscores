@@ -36,7 +36,7 @@ VS.factories = VS.factories || {};
         return VS.mod(+semitones + pitchClass, 12)
     }
 
-    VS.factories.pitchClass2 = function() {
+    VS.factories.pitchClass3 = function() {
 
         function pitchClass() {}
 
@@ -46,7 +46,6 @@ VS.factories = VS.factories || {};
             if (arguments.length) {
                 var number = this.number();
                 this.number(transpose(number, _))
-                // this.number(VS.mod(+_ + number, 12));
                 return this;
             }
         };
@@ -54,19 +53,41 @@ VS.factories = VS.factories || {};
         return pitchClass;
     };
 
+    VS.factories.pitch3 = function() {
 
-    VS.factories.pitch2 = function() {
+        function _pitchClass() {}
+        hasPitchClass(_pitchClass);
 
         // Scientific pitch notation, C4
+        // "Octave-major order": precisePitch = (Scientific pitch notation octave * 12) + (pitch class number)
         // C0 = 0
-        // "Octave-major order": precisePitch = (Scientific pitch notation octave) * (pitch class number)
         var precisePitch = 48;
 
         function pitch() {}
 
-        hasPitchClass(pitch);
+        pitch.noteName = function(_) {
+            if (arguments.length) {
+                _pitchClass.noteName(_);
+                setPitchWithinOctave();
+                return this;
+            } else {
+                return _pitchClass.noteName();
+            }
+        }
 
-        // TODO set precisePitch after setting number (or noteName)
+        pitch.number = function(_) {
+            if (arguments.length) {
+                _pitchClass.number(_);
+                setPitchWithinOctave();
+                return this;
+            } else {
+                return _pitchClass.number();
+            }
+        };
+
+        function setPitchWithinOctave() {
+            precisePitch = (pitch.octave() * 12) + pitch.number();
+        }
 
         pitch.pitch = function(_) {
             if (arguments.length) {
@@ -80,14 +101,14 @@ VS.factories = VS.factories || {};
         pitch.transpose = function(_) {
             if (arguments.length) {
                 precisePitch += +_;
-                this.number(VS.mod(precisePitch, 12));
+                _pitchClass.number(VS.mod(precisePitch, 12));
                 return this;
             }
         }
 
         pitch.octave = function(_) {
             if (arguments.length) {
-                // TODO set precisePitch by octave
+                precisePitch = (+_ * 12) + _pitchClass.number()
                 return this;
             } else {
                 return (precisePitch / 12) >> 0;
@@ -96,4 +117,5 @@ VS.factories = VS.factories || {};
 
         return pitch;
     }
+
 })();

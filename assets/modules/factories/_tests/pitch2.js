@@ -1,7 +1,7 @@
 const path = require('path')
 const { test, getWindowFromFile } = require(path.resolve('.', 'bin/js/tape-setup'))
 
-test.only('factories.pitch2 and factories.pitch2', t => {
+test('factories.pitch2 and factories.pitch2', t => {
     getWindowFromFile('_site/assets/modules/factories/index.html', window => {
         const { VS } = window
 
@@ -29,8 +29,8 @@ test.only('factories.pitch2 and factories.pitch2', t => {
 
         const pitch2b = VS.factories.pitch2()
 
-        pitch2b.noteName(7)
-        t.equal(pitch2b.pitch(), 61) // fails as pitch is not updated from noteName method
+        pitch2b.noteName('g')
+        t.equal(pitch2b.pitch(), 55) // fails as pitch is not updated from noteName method
 
         t.end()
     })
