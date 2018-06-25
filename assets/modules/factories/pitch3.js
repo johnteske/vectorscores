@@ -20,7 +20,7 @@ VS.factories = VS.factories || {};
             } else {
                 return _noteNameMap[number];
             }
-        }
+        };
 
         obj.number = function(_) {
             if (arguments.length) {
@@ -33,7 +33,7 @@ VS.factories = VS.factories || {};
     }
 
     function transpose(pitchClass, semitones) {
-        return VS.mod(+semitones + pitchClass, 12)
+        return VS.mod(+semitones + pitchClass, 12);
     }
 
     VS.factories.pitchClass3 = function() {
@@ -45,7 +45,7 @@ VS.factories = VS.factories || {};
         pitchClass.transpose = function(_) {
             if (arguments.length) {
                 var number = this.number();
-                this.number(transpose(number, _))
+                this.number(transpose(number, _));
                 return this;
             }
         };
@@ -73,7 +73,7 @@ VS.factories = VS.factories || {};
             } else {
                 return _pitchClass.noteName();
             }
-        }
+        };
 
         pitch.number = function(_) {
             if (arguments.length) {
@@ -96,7 +96,7 @@ VS.factories = VS.factories || {};
             } else {
                 return precisePitch;
             }
-        }
+        };
 
         pitch.transpose = function(_) {
             if (arguments.length) {
@@ -104,11 +104,11 @@ VS.factories = VS.factories || {};
                 _pitchClass.number(VS.mod(precisePitch, 12));
                 return this;
             }
-        }
+        };
 
         pitch.octave = function(_) {
             if (arguments.length) {
-                precisePitch = (+_ * 12) + _pitchClass.number()
+                precisePitch = (+_ * 12) + _pitchClass.number();
                 return this;
             } else {
                 return (precisePitch / 12) >> 0;
@@ -116,6 +116,6 @@ VS.factories = VS.factories || {};
         };
 
         return pitch;
-    }
+    };
 
 })();
