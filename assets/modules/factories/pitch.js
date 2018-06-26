@@ -1,31 +1,38 @@
 VS.factories = VS.factories || {};
 
 (function() {
+
+    function makeGetterSetter(getter, setter) {
+        return function(_) {
+            return arguments.length ? (setter(_), this) : getter();
+        };
+    }
+
+    function makeConditionalSetter(setter) {
+        return function(_) {
+            arguments.length && setter(_);
+            return this;
+        };
+    }
+
     // Adds pitch class functionality to an object (mutates)
     function hasPitchClass(obj) {
-        var _noteNameMap = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
 
         // TODO rename integer? (currently only supports integers, not microtones)
         var number = 0;
 
-        // TODO rename letter?
-        obj.noteName = function(_) {
-            if (arguments.length) {
-                number = _noteNameMap.indexOf(_);
-                return obj;
-            } else {
-                return _noteNameMap[number];
-            }
-        };
+        obj.number = makeGetterSetter(
+            function() { return number; },
+            function(_) { number = +_; }
+        );
 
-        obj.number = function(_) {
-            if (arguments.length) {
-                number = +_;
-                return obj;
-            } else {
-                return number;
-            }
-        };
+        var _noteNameMap = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
+
+        // TODO rename to 'letter'?
+        obj.noteName = makeGetterSetter(
+            function() { return _noteNameMap[number]; },
+            function(_) { number = _noteNameMap.indexOf(_); }
+        );
 
         return obj;
     }
@@ -38,13 +45,10 @@ VS.factories = VS.factories || {};
 
         var pitchClass = hasPitchClass(function() {});
 
-        pitchClass.transpose = function(_) {
-            if (arguments.length) {
-                var number = this.number();
-                this.number(transpose(number, _));
-                return this;
-            }
-        };
+        pitchClass.transpose = makeConditionalSetter(function(_) {
+            var current = pitchClass.number();
+            pitchClass.number(transpose(current, _));
+        });
 
         return pitchClass;
     };
@@ -61,48 +65,34 @@ VS.factories = VS.factories || {};
         obj.noteName = pitchClassDecorator(_pitchClass.noteName);
         obj.number = pitchClassDecorator(_pitchClass.number);
 
-        // or is it a wrapper?
         function pitchClassDecorator(fn) {
-            return function(_) {
-                if (arguments.length) {
+            return makeGetterSetter(
+                fn,
+                function(_) {
                     fn(_);
                     setPitchWithinOctave();
-                    return this;
-                } else {
-                    return fn();
                 }
-            };
+            );
         }
 
         function setPitchWithinOctave() {
             precisePitch = (obj.octave() * 12) + obj.number();
         }
 
-        obj.pitch = function(_) {
-            if (arguments.length) {
-                precisePitch = +_;
-                return this;
-            } else {
-                return precisePitch;
-            }
-        };
+        obj.pitch = makeGetterSetter(
+            function() { return precisePitch; },
+            function(_) { precisePitch = +_; }
+        );
 
-        obj.transpose = function(_) {
-            if (arguments.length) {
-                precisePitch += +_;
-                _pitchClass.number(VS.mod(precisePitch, 12));
-                return this;
-            }
-        };
+        obj.transpose = makeConditionalSetter(function(_) {
+            precisePitch += +_;
+            _pitchClass.number(VS.mod(precisePitch, 12));
+        });
 
-        obj.octave = function(_) {
-            if (arguments.length) {
-                precisePitch = (+_ * 12) + _pitchClass.number();
-                return this;
-            } else {
-                return (precisePitch / 12) >> 0;
-            }
-        };
+        obj.octave = makeGetterSetter(
+            function() { return (precisePitch / 12) >> 0; },
+            function(_) { precisePitch = (+_ * 12) + _pitchClass.number(); }
+        );
 
         return obj;
     }
@@ -117,14 +107,10 @@ VS.factories = VS.factories || {};
 
         var note = hasPitch(function() {});
 
-        note.duration = function(_) {
-            if (arguments.length) {
-                duration = +_;
-                return this;
-            } else {
-                return duration;
-            }
-        };
+        note.duration = makeGetterSetter(
+            function() { return duration; },
+            function(_) { duration = +_; }
+        );
 
         return note;
     };
