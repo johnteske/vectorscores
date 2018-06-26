@@ -1,6 +1,3 @@
-/**
- * TODO are these 'has' functions decorators?
- */
 VS.factories = VS.factories || {};
 
 (function() {
@@ -29,6 +26,8 @@ VS.factories = VS.factories || {};
                 return number;
             }
         };
+
+        return obj;
     }
 
     function transpose(pitchClass, semitones) {
@@ -37,9 +36,7 @@ VS.factories = VS.factories || {};
 
     VS.factories.pitchClass = function() {
 
-        function pitchClass() {}
-
-        hasPitchClass(pitchClass);
+        var pitchClass = hasPitchClass(function() {});
 
         pitchClass.transpose = function(_) {
             if (arguments.length) {
@@ -54,33 +51,28 @@ VS.factories = VS.factories || {};
 
     function hasPitch(obj) {
 
-        function _pitchClass() {}
-        hasPitchClass(_pitchClass);
+        var _pitchClass = hasPitchClass(function() {});
 
         // Scientific pitch notation, C4
         // "Octave-major order": precisePitch = (Scientific pitch notation octave * 12) + (pitch class number)
         // C0 = 0
         var precisePitch = 48;
 
-        obj.noteName = function(_) {
-            if (arguments.length) {
-                _pitchClass.noteName(_);
-                setPitchWithinOctave();
-                return this;
-            } else {
-                return _pitchClass.noteName();
-            }
-        };
+        obj.noteName = pitchClassDecorator(_pitchClass.noteName);
+        obj.number = pitchClassDecorator(_pitchClass.number);
 
-        obj.number = function(_) {
-            if (arguments.length) {
-                _pitchClass.number(_);
-                setPitchWithinOctave();
-                return this;
-            } else {
-                return _pitchClass.number();
-            }
-        };
+        // or is it a wrapper?
+        function pitchClassDecorator(fn) {
+            return function(_) {
+                if (arguments.length) {
+                    fn(_);
+                    setPitchWithinOctave();
+                    return this;
+                } else {
+                    return fn();
+                }
+            };
+        }
 
         function setPitchWithinOctave() {
             precisePitch = (obj.octave() * 12) + obj.number();
@@ -111,23 +103,19 @@ VS.factories = VS.factories || {};
                 return (precisePitch / 12) >> 0;
             }
         };
+
+        return obj;
     }
 
     VS.factories.pitch = function() {
-
-        function pitch() {}
-
-        hasPitch(pitch);
-
-        return pitch;
+        return hasPitch(function() {});
     };
 
     VS.factories.note = function() {
+
         var duration = 1; // TODO create hasDuration, to include duration scaling, etc.
 
-        function note() {}
-
-        hasPitch(note);
+        var note = hasPitch(function() {});
 
         note.duration = function(_) {
             if (arguments.length) {
