@@ -1,5 +1,6 @@
 VS.control = (function() {
 
+    // TODO use factory over class
     function ScoreControl(id, fn) {
         this.element = document.getElementById(id);
         this.element.onclick = fn;
@@ -28,6 +29,7 @@ VS.control = (function() {
         hooks.trigger('stop');
     }
 
+    // TODO create incrementPointer and decrementPointer functions
     // Step pointer if not playing
     function stepPointer(steps) {
         if (!VS.score.playing) {
@@ -39,11 +41,13 @@ VS.control = (function() {
 
     var playControl = new ScoreControl('score-play', playPause);
 
+    // TODO use document selection over d3
     playControl.setPlay = function() {
         d3.select('g#play').classed('hide', 0);
         d3.select('g#pause').classed('hide', 1);
     };
 
+    // TODO use document selection over d3
     playControl.setPause = function() {
         d3.select('g#play').classed('hide', 1);
         d3.select('g#pause').classed('hide', 0);
