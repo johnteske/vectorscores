@@ -12,7 +12,7 @@ function getWindowFromFile(filePath, onLoad) {
     }
 
     JSDOM.fromFile(path.resolve('.', filePath), options).then(dom => {
-        const window = dom.window
+        const { window } = dom
 
         window.addEventListener('load', () => {
             onLoad(window)
