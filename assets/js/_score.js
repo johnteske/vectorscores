@@ -42,7 +42,10 @@ VS.score = (function() {
         events: [], // TODO do not expose
         getLength: function() { return this.events.length; },
         playing: false, // TODO rename isPlaying
-        pointer: 0, // TODO get only
+        pointer: 0, // TODO get only,
+        pointerAtLastEvent: function() {
+            return this.pointer === (this.getLength() - 1);
+        },
         preroll: 0, // 300; // delay before play
         // TODO make private? and/or make single eventAt, returning object: { time: 0, fn: fn, params: []}
         timeAt: function(i) { return this.events[i][0]; },

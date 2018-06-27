@@ -1,4 +1,14 @@
+// TODO set states:
+// - first event state
+//   - including starting .play class (currently set in html)
+//   - back and stop buttons disabled
+// - last event state
+// - all other events
+// - also play, pause states, to remove from VS.score
+
 VS.control = (function() {
+
+    var control = {};
 
     function createScoreControl(id, clickHandler) {
         var element = document.getElementById(id);
@@ -48,27 +58,44 @@ VS.control = (function() {
         };
     }
 
-    var playControl = createScoreControl('score-play', playPause);
+    var hooks = control.hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
 
-    // TODO set initial state, including starting .play class (currently set in html)
-    playControl.setPlay = function() {
+    control.back = createScoreControl('score-back', decrementPointer);
+    control.back.disable(); // TODO
+
+    control.play = createScoreControl('score-play', playPause);
+
+    control.play.setPlay = function() {
         this.element.classList.add('play');
         this.element.classList.remove('pause');
     };
 
-    playControl.setPause = function() {
+    control.play.setPause = function() {
         this.element.classList.remove('play');
         this.element.classList.add('pause');
     };
 
-    var stopControl = createScoreControl('score-stop', stop);
-    var backControl = createScoreControl('score-back', decrementPointer);
+    control.stop = createScoreControl('score-stop', stop);
+    control.stop.disable(); // TODO
 
-    // Set initial control states
-    stopControl.disable();
-    backControl.disable();
+    control.fwd = createScoreControl('score-fwd', incrementPointer);
 
-    var keydownListener = function(event) {
+    control.pointer = createScoreControl('score-pointer', VS.score.pause);
+
+    control.updateStepButtons = function() {
+        if (VS.score.pointer === 0) {
+            this.back.disable();
+            this.fwd.enable();
+        } else if (VS.score.pointerAtLastEvent()) {
+            this.back.enable();
+            this.fwd.disable();
+        } else {
+            this.back.enable();
+            this.fwd.enable();
+        }
+    };
+
+    control.keydownListener = function(event) {
         if (event.defaultPrevented || event.metaKey) {
             return;
         }
@@ -99,31 +126,9 @@ VS.control = (function() {
         event.preventDefault();
     };
 
-    var hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
-
     // TODO separate definition from instantiation
-    window.addEventListener('keydown', keydownListener, true);
+    window.addEventListener('keydown', control.keydownListener, true);
 
-    return {
-        play: playControl,
-        stop: stopControl,
-        fwd: createScoreControl('score-fwd', incrementPointer),
-        back: backControl,
-        hooks: hooks,
-        pointer: createScoreControl('score-pointer', VS.score.pause),
-        updateStepButtons: function() {
-            if (VS.score.pointer === 0) {
-                this.back.disable();
-                this.fwd.enable();
-            } else if (VS.score.pointer === (VS.score.getLength() - 1)) {
-                this.back.enable();
-                this.fwd.disable();
-            } else {
-                this.back.enable();
-                this.fwd.enable();
-            }
-        },
-        keydownListener: keydownListener
-    };
+    return control;
 
 })();
