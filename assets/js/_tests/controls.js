@@ -16,7 +16,7 @@ function loadDomThenTest(...args) {
     })
 }
 
-loadDomThenTest('VS#controls initial state', htmlPath, (t, window) => {
+loadDomThenTest('VS.controls initial state', htmlPath, (t, window) => {
     const { VS } = window
     const pointerInput = VS.control.pointer.element
 
@@ -29,7 +29,7 @@ loadDomThenTest('VS#controls initial state', htmlPath, (t, window) => {
     t.end()
 })
 
-loadDomThenTest('VS#controls step states', htmlPath, (t, window) => {
+loadDomThenTest('VS.controls step states', htmlPath, (t, window) => {
     const { VS } = window
     const pointerInput = VS.control.pointer.element
 
@@ -43,12 +43,13 @@ loadDomThenTest('VS#controls step states', htmlPath, (t, window) => {
     t.equal(+pointerInput.value, 1, 'control pointer value to be 1 after two forward clicks and one back control click')
 
     VS.control.stop.element.click()
+    // TODO the below test fails--reason unknown
     // t.equal(+pointerInput.value, 0, 'control pointer value to be 0 after stop control click')
 
     t.end()
 })
 
-loadDomThenTest('VS#controls play and stop states', htmlPath, (t, window) => {
+loadDomThenTest('VS.controls play and stop states', htmlPath, (t, window) => {
     const { VS } = window
 
     VS.control.play.element.click()
