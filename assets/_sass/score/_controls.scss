@@ -30,11 +30,16 @@
             stroke: #000;
             stroke-width: 10;
             fill: none;
-            &.hide { // for play/pause
-                display: none;
-            }
         }
     }
+}
+
+.score-button.play g#pause {
+    display: none;
+}
+
+.score-button.pause g#play {
+    display: none;
 }
 
 #score-pointer {

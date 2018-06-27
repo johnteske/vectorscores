@@ -16,14 +16,14 @@ function clearHighlights() {
     header.className = 'show';
     footer.className = 'show';
     footerInput.className = '';
-    for (var i = 0; i < scoreButtons.length; i++) {
-        scoreButtons[i].className = 'score-button';
-    }
+
+    scoreButtons.forEach(function(button) {
+        button.classList.remove('highlight');
+    });
 }
 
 function highlightByID(id) {
-    var el = document.getElementById(id);
-    el.className += ' highlight';
+    document.getElementById(id).classList.add('highlight');
 }
 
 /**

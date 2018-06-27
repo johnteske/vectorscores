@@ -50,16 +50,15 @@ VS.control = (function() {
 
     var playControl = createScoreControl('score-play', playPause);
 
-    // TODO use document selection over d3
+    // TODO set initial state, including starting .play class (currently set in html)
     playControl.setPlay = function() {
-        d3.select('g#play').classed('hide', 0);
-        d3.select('g#pause').classed('hide', 1);
+        this.element.classList.add('play');
+        this.element.classList.remove('pause');
     };
 
-    // TODO use document selection over d3
     playControl.setPause = function() {
-        d3.select('g#play').classed('hide', 1);
-        d3.select('g#pause').classed('hide', 0);
+        this.element.classList.remove('play');
+        this.element.classList.add('pause');
     };
 
     var stopControl = createScoreControl('score-stop', stop);
