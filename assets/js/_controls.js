@@ -29,10 +29,16 @@ VS.control = (function() {
         hooks.trigger('stop');
     }
 
-    // TODO create incrementPointer and decrementPointer functions
+    var incrementPointer = createPointerStepper(1);
+    var decrementPointer = createPointerStepper(-1);
+
     // Step pointer if not playing
-    function stepPointer(steps) {
-        if (!VS.score.playing) {
+    function createPointerStepper(steps) {
+        return function () {
+            if (VS.score.playing) {
+                return;
+            }
+
             VS.score.updatePointer(VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1));
             VS.control.updateStepButtons();
             hooks.trigger('step');
@@ -54,7 +60,7 @@ VS.control = (function() {
     };
 
     var stopControl = new ScoreControl('score-stop', stop);
-    var backControl = new ScoreControl('score-back', function() { stepPointer(-1); });
+    var backControl = new ScoreControl('score-back', decrementPointer);
 
     // Set initial control states
     stopControl.disable();
@@ -74,11 +80,11 @@ VS.control = (function() {
             break;
         case 'ArrowLeft':
         case 37:
-            stepPointer(-1);
+            decrementPointer();
             break;
         case 'ArrowRight':
         case 39:
-            stepPointer(1);
+            incrementPointer();
             break;
         case 'Escape':
         case 27:
@@ -102,7 +108,7 @@ VS.control = (function() {
     return {
         play: playControl,
         stop: stopControl,
-        fwd: new ScoreControl('score-fwd', function() { stepPointer(1); }),
+        fwd: new ScoreControl('score-fwd', incrementPointer),
         back: backControl,
         hooks: hooks,
         pointer: new ScoreControl('score-pointer', VS.score.pause),
