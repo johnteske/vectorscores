@@ -90,13 +90,10 @@ VS.control = (function() {
         case 27:
             stop();
             break;
-        // case "/":
-        // case 191:
-        //     document.getElementById("score-pointer").focus();
-        //     break;
         default:
             return;
         }
+
         event.preventDefault();
     };
 
