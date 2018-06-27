@@ -1,20 +1,7 @@
 const path = require('path')
-const { test, getWindowFromFile } = require(path.resolve('.', 'bin/js/tape-setup'))
+const { loadDomThenTest } = require(path.resolve('.', 'bin/js/tape-setup'))
 
 const htmlPath = '_site/scores/tutorial/index.html'
-
-// TODO allow skip and only methods
-// [name], [options], filePath, testCallback
-function loadDomThenTest(...args) {
-    const testCallback = args.pop()
-    const filePath = args.pop()
-
-    test(...args, t => {
-        getWindowFromFile(filePath, window => {
-            testCallback(t, window)
-        })
-    })
-}
 
 loadDomThenTest('VS.controls initial state', htmlPath, (t, window) => {
     const { VS } = window
