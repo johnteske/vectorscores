@@ -1,18 +1,21 @@
 VS.control = (function() {
 
-    // TODO use factory over class
-    function ScoreControl(id, fn) {
-        this.element = document.getElementById(id);
-        this.element.onclick = fn;
+    function createScoreControl(id, clickHandler) {
+        var element = document.getElementById(id);
+        element.onclick = clickHandler;
+
+        function setDisabled(isDisabled) {
+            return function() {
+                return element.disabled = isDisabled;
+            };
+        }
+
+        return {
+            element: element,
+            enable: setDisabled(false),
+            disable: setDisabled(true)
+        };
     }
-
-    ScoreControl.prototype.enable = function() {
-        this.element.disabled = false;
-    };
-
-    ScoreControl.prototype.disable = function() {
-        this.element.disabled = true;
-    };
 
     function playPause() {
         if (!VS.score.playing) {
@@ -34,7 +37,7 @@ VS.control = (function() {
 
     // Step pointer if not playing
     function createPointerStepper(steps) {
-        return function () {
+        return function() {
             if (VS.score.playing) {
                 return;
             }
@@ -42,10 +45,10 @@ VS.control = (function() {
             VS.score.updatePointer(VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1));
             VS.control.updateStepButtons();
             hooks.trigger('step');
-        }
+        };
     }
 
-    var playControl = new ScoreControl('score-play', playPause);
+    var playControl = createScoreControl('score-play', playPause);
 
     // TODO use document selection over d3
     playControl.setPlay = function() {
@@ -59,8 +62,8 @@ VS.control = (function() {
         d3.select('g#pause').classed('hide', 0);
     };
 
-    var stopControl = new ScoreControl('score-stop', stop);
-    var backControl = new ScoreControl('score-back', decrementPointer);
+    var stopControl = createScoreControl('score-stop', stop);
+    var backControl = createScoreControl('score-back', decrementPointer);
 
     // Set initial control states
     stopControl.disable();
@@ -105,10 +108,10 @@ VS.control = (function() {
     return {
         play: playControl,
         stop: stopControl,
-        fwd: new ScoreControl('score-fwd', incrementPointer),
+        fwd: createScoreControl('score-fwd', incrementPointer),
         back: backControl,
         hooks: hooks,
-        pointer: new ScoreControl('score-pointer', VS.score.pause),
+        pointer: createScoreControl('score-pointer', VS.score.pause),
         updateStepButtons: function() {
             if (VS.score.pointer === 0) {
                 this.back.disable();
