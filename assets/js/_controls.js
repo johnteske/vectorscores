@@ -67,19 +67,20 @@ VS.control = (function() {
     control.pointer = createScoreControl('score-pointer', VS.score.pause);
 
     // Enabled state of controls
-    var states = (function() { return {% include_relative _control-states.json %}; })();
+    var states = {% include_relative _control-states.json %};
+
+    var controlsToToggle = ['back', 'stop', 'fwd'];
+    var iconsToToggle = ['play', 'pause'];
 
     control.set = function(stateKey) {
         var state = states[stateKey];
 
-        Object.keys(state).forEach(function(controlName) {
-            var isEnabled = state[controlName];
+        controlsToToggle.forEach(function(controlName) {
+            control[controlName].disabled = !state[controlName];
+        });
 
-            if (controlName === 'play' || controlName === 'pause') {
-                control.play.showIcon(controlName, isEnabled);
-            } else {
-                control[controlName].disabled = !isEnabled;
-            }
+        iconsToToggle.forEach(function(controlName) {
+            control.play.showIcon(controlName, state[controlName]);
         });
     };
 

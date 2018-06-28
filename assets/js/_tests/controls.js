@@ -4,8 +4,8 @@ const { loadDomThenTest } = require(path.resolve('.', 'bin/js/tape-setup'))
 const htmlPath = '_site/scores/tutorial/index.html'
 const controlStates = require('../_control-states.json')
 
-const controlsToCheckDisabled = ['back', 'stop', 'fwd']
-const controlsToCheckClass = ['play', 'pause']
+const controlsToToggle = ['back', 'stop', 'fwd']
+const iconsToToggle = ['play', 'pause']
 
 loadDomThenTest('VS.control states and pointer', htmlPath, (t, window) => {
     const { VS } = window
@@ -13,11 +13,11 @@ loadDomThenTest('VS.control states and pointer', htmlPath, (t, window) => {
     function testControlState() {
         const result = {}
 
-        controlsToCheckDisabled.forEach(function(controlName) {
+        controlsToToggle.forEach(function(controlName) {
             result[controlName] = !VS.control[controlName].disabled
         })
 
-        controlsToCheckClass.forEach(function(controlName) {
+        iconsToToggle.forEach(function(controlName) {
             result[controlName] = VS.control.play.classList.contains(controlName)
         })
 

@@ -13,7 +13,6 @@ VS.score = (function() {
     function updatePointer(index) {
         VS.score.pointer = index;
         VS.control.pointer.value = index;
-        // VS.control.setStateFromPointer(); // TODO
     }
 
     function playEvent(index) {
