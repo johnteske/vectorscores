@@ -1,11 +1,3 @@
-// TODO set states:
-// - first event state
-//   - including starting .play class (currently set in html)
-//   - back and stop buttons disabled
-// - last event state
-// - all other events
-// - also play, pause states, to remove from VS.score
-
 VS.control = (function() {
 
     var control = {};
@@ -14,16 +6,8 @@ VS.control = (function() {
         var element = document.getElementById(id);
         element.onclick = clickHandler;
 
-        function setDisabled(isDisabled) {
-            return function() {
-                return element.disabled = isDisabled;
-            };
-        }
-
         return {
-            element: element,
-            enable: setDisabled(false),
-            disable: setDisabled(true)
+            element: element
         };
     }
 
@@ -52,47 +36,83 @@ VS.control = (function() {
                 return;
             }
 
-            VS.score.updatePointer(VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1));
-            VS.control.updateStepButtons();
+            var pointer = VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1);
+            VS.score.updatePointer(pointer);
+
+            control.setStateFromPointer();
+
             hooks.trigger('step');
         };
+    }
+
+    control.setStateFromPointer = function() {
+        this.set(getStepStateFromPointer());
+    };
+
+    function getStepStateFromPointer() {
+        return VS.score.pointer === 0 ? 'firstStep' :
+            VS.score.pointerAtLastEvent() ? 'lastStep' :
+            'step';
     }
 
     var hooks = control.hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
 
     control.back = createScoreControl('score-back', decrementPointer);
-    control.back.disable(); // TODO
 
     control.play = createScoreControl('score-play', playPause);
-
-    control.play.setPlay = function() {
-        this.element.classList.add('play');
-        this.element.classList.remove('pause');
-    };
-
-    control.play.setPause = function() {
-        this.element.classList.remove('play');
-        this.element.classList.add('pause');
+    control.play.showIcon = function(iconName, state) {
+        var method = state ? 'add' : 'remove';
+        this.element.classList[method](iconName);
     };
 
     control.stop = createScoreControl('score-stop', stop);
-    control.stop.disable(); // TODO
-
     control.fwd = createScoreControl('score-fwd', incrementPointer);
-
     control.pointer = createScoreControl('score-pointer', VS.score.pause);
 
-    control.updateStepButtons = function() {
-        if (VS.score.pointer === 0) {
-            this.back.disable();
-            this.fwd.enable();
-        } else if (VS.score.pointerAtLastEvent()) {
-            this.back.enable();
-            this.fwd.disable();
-        } else {
-            this.back.enable();
-            this.fwd.enable();
+    // Enabled state of controls
+    var states = {
+        'playing': {
+            back: false,
+            play: false,
+            pause: true,
+            stop: true,
+            fwd: false
+        },
+        'firstStep': {
+            back: false,
+            play: true,
+            pause: false,
+            stop: false,
+            fwd: true
+        },
+        'step': {
+            back: true,
+            play: true,
+            pause: false,
+            stop: true,
+            fwd: true
+        },
+        'lastStep': {
+            back: true,
+            play: true,
+            pause: false,
+            stop: true,
+            fwd: false
         }
+    };
+
+    control.set = function(stateKey) {
+        var state = states[stateKey];
+
+        Object.keys(state).forEach(function(controlName) {
+            var isEnabled = state[controlName];
+
+            if (controlName === 'play' || controlName === 'pause') {
+                control.play.showIcon(controlName, isEnabled);
+            } else {
+                control[controlName].element.disabled = !isEnabled;
+            }
+        });
     };
 
     control.keydownListener = function(event) {
@@ -127,6 +147,7 @@ VS.control = (function() {
     };
 
     // TODO separate definition from instantiation
+    control.set('firstStep');
     window.addEventListener('keydown', control.keydownListener, true);
 
     return control;

@@ -13,6 +13,7 @@ VS.score = (function() {
     function updatePointer(index) {
         VS.score.pointer = index;
         VS.control.pointer.element.value = index;
+        VS.control.setStateFromPointer();
     }
 
     function playEvent(index) {
@@ -60,28 +61,21 @@ VS.score = (function() {
         hooks: hooks,
         play: function() {
             VS.score.playing = true;
-            VS.control.play.setPause();
-            VS.control.stop.enable();
-            VS.control.back.disable();
-            VS.control.fwd.disable();
             schedule(VS.score.preroll, playEvent, VS.score.pointer);
+            VS.control.set('playing');
             VS.layout.hide();
         },
         pause: function() {
             VS.score.playing = false;
-            VS.control.play.setPlay();
             VS.score.clearAllTimeouts();
-            VS.control.updateStepButtons();
+            VS.control.setStateFromPointer();
             VS.layout.show();
         },
         stop: function() {
             VS.score.playing = false;
-            VS.score.updatePointer(0);
-            VS.control.play.setPlay();
-            VS.control.play.enable();
-            VS.control.stop.disable();
             VS.score.clearAllTimeouts();
-            VS.control.updateStepButtons();
+            VS.score.updatePointer(0);
+            VS.control.set('firstStep');
             VS.layout.show();
             hooks.trigger('stop');
         },
