@@ -1,9 +1,12 @@
 VS.score = (function() {
 
+    var events = [];
+    var allTimeouts = [];
+
     // Schedule this event (if defined)
     function schedule(time, func, params) {
         if (typeof func === 'function') {
-            VS.score.allTimeouts.push(setTimeout(func, time, params));
+            allTimeouts.push(setTimeout(func, time, params));
         }
     }
 
@@ -37,10 +40,9 @@ VS.score = (function() {
 
     return {
         add: function(time, func, params) {
-            this.events.push([time, func, params]);
+            events.push([time, func, params]);
         },
-        events: [], // TODO do not expose
-        getLength: function() { return this.events.length; },
+        getLength: function() { return events.length; },
         playing: false, // TODO rename isPlaying
         pointer: 0, // TODO get only,
         pointerAtLastEvent: function() {
@@ -48,12 +50,11 @@ VS.score = (function() {
         },
         preroll: 0, // 300; // delay before play
         // TODO make private? and/or make single eventAt, returning object: { time: 0, fn: fn, params: []}
-        timeAt: function(i) { return this.events[i][0]; },
-        funcAt: function(i) { return this.events[i][1]; },
-        paramsAt: function(i) { return this.events[i][2]; },
-        allTimeouts: [], // TODO do not expose
+        timeAt: function(i) { return events[i][0]; },
+        funcAt: function(i) { return events[i][1]; },
+        paramsAt: function(i) { return events[i][2]; },
         clearAllTimeouts: function() {
-            this.allTimeouts.forEach(function(t) {
+            allTimeouts.forEach(function(t) {
                 clearTimeout(t);
             });
         },
