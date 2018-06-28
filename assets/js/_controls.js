@@ -5,10 +5,7 @@ VS.control = (function() {
     function createScoreControl(id, clickHandler) {
         var element = document.getElementById(id);
         element.onclick = clickHandler;
-
-        return {
-            element: element
-        };
+        return element;
     }
 
     function playPause() {
@@ -62,7 +59,7 @@ VS.control = (function() {
     control.play = createScoreControl('score-play', playPause);
     control.play.showIcon = function(iconName, state) {
         var method = state ? 'add' : 'remove';
-        this.element.classList[method](iconName);
+        this.classList[method](iconName);
     };
 
     control.stop = createScoreControl('score-stop', stop);
@@ -70,36 +67,7 @@ VS.control = (function() {
     control.pointer = createScoreControl('score-pointer', VS.score.pause);
 
     // Enabled state of controls
-    var states = {
-        'playing': {
-            back: false,
-            play: false,
-            pause: true,
-            stop: true,
-            fwd: false
-        },
-        'firstStep': {
-            back: false,
-            play: true,
-            pause: false,
-            stop: false,
-            fwd: true
-        },
-        'step': {
-            back: true,
-            play: true,
-            pause: false,
-            stop: true,
-            fwd: true
-        },
-        'lastStep': {
-            back: true,
-            play: true,
-            pause: false,
-            stop: true,
-            fwd: false
-        }
-    };
+    var states = (function() { return {% include_relative _control-states.json %}; })();
 
     control.set = function(stateKey) {
         var state = states[stateKey];
@@ -110,7 +78,7 @@ VS.control = (function() {
             if (controlName === 'play' || controlName === 'pause') {
                 control.play.showIcon(controlName, isEnabled);
             } else {
-                control[controlName].element.disabled = !isEnabled;
+                control[controlName].disabled = !isEnabled;
             }
         });
     };

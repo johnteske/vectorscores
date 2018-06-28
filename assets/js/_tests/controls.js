@@ -2,52 +2,45 @@ const path = require('path')
 const { loadDomThenTest } = require(path.resolve('.', 'bin/js/tape-setup'))
 
 const htmlPath = '_site/scores/tutorial/index.html'
+const controlStates = require('../_control-states.json')
 
-loadDomThenTest('VS.controls initial state', htmlPath, (t, window) => {
-    const { VS } = window
-    const pointerInput = VS.control.pointer.element
+const controlsToCheckDisabled = ['back', 'stop', 'fwd']
+const controlsToCheckClass = ['play', 'pause']
 
-    t.equal(+pointerInput.value, 0, 'control pointer value to be 0')
-    t.equal(VS.control.back.element.disabled, true, 'back control to start disabled')
-    t.equal(VS.control.play.element.disabled, false, 'play control to start enabled')
-    t.equal(VS.control.stop.element.disabled, true, 'stop control to start disabled')
-    t.equal(VS.control.fwd.element.disabled, false, 'fwd control to start enabled')
-
-    t.end()
-})
-
-loadDomThenTest('VS.controls step states', htmlPath, (t, window) => {
-    const { VS } = window
-    const pointerInput = VS.control.pointer.element
-
-    VS.control.fwd.element.click()
-    t.equal(VS.control.back.element.disabled, false, 'back control to be enabled after forward control click')
-
-    VS.control.fwd.element.click()
-    t.equal(+pointerInput.value, 2, 'control pointer value to be 2 after two forward control clicks')
-
-    VS.control.back.element.click()
-    t.equal(+pointerInput.value, 1, 'control pointer value to be 1 after two forward clicks and one back control click')
-
-    VS.control.stop.element.click()
-    // TODO the below test fails--reason unknown
-    // t.equal(+pointerInput.value, 0, 'control pointer value to be 0 after stop control click')
-
-    t.end()
-})
-
-loadDomThenTest('VS.controls play and stop states', htmlPath, (t, window) => {
+loadDomThenTest('VS.control states and pointer', htmlPath, (t, window) => {
     const { VS } = window
 
-    VS.control.play.element.click()
+    function testControlState() {
+        const result = {}
 
-    t.equal(VS.control.back.element.disabled, true, 'back control to be disabled when playing')
-    t.equal(VS.control.play.element.disabled, false, 'pause control to be enabled when playing')
-    t.equal(VS.control.stop.element.disabled, false, 'stop control to be enabled when playing')
-    t.equal(VS.control.fwd.element.disabled, true, 'fwd control to be disabled when playing')
+        controlsToCheckDisabled.forEach(function(controlName) {
+            result[controlName] = !VS.control[controlName].disabled
+        })
 
-    // Stop score playback to end test
-    VS.control.stop.element.click()
+        controlsToCheckClass.forEach(function(controlName) {
+            result[controlName] = VS.control.play.classList.contains(controlName)
+        })
+
+        return result
+    }
+
+    t.deepEqual(testControlState(VS), controlStates.firstStep, 'should show controls matching \'firstStep\' state on load')
+    t.equal(+VS.control.pointer.value, 0, 'should show pointer at 0 on load')
+
+    VS.control.play.click()
+    t.deepEqual(testControlState(VS), controlStates.playing, 'should show controls matching \'playing\' state after playing')
+
+    // Pause
+    VS.control.play.click()
+    t.deepEqual(testControlState(VS), controlStates.firstStep, 'should show controls matching \'firstStep\' state when paused on first score event')
+
+    VS.control.fwd.click()
+    t.deepEqual(testControlState(VS), controlStates.step, 'should show controls matching \'step\' state after clicking forward')
+    t.equal(+VS.control.pointer.value, 1, 'should show pointer at 1 after clicking forward')
+
+    VS.control.stop.click()
+    t.deepEqual(testControlState(VS), controlStates.firstStep, 'should show controls matching \'firstStep\' state after stop')
+    t.equal(+VS.control.pointer.value, 0, 'should show pointer at 0 after stop')
 
     t.end()
 })
