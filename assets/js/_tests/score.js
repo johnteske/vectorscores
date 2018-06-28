@@ -27,17 +27,17 @@ loadDomThenTest('VS.score events', htmlPath, (t, window) => {
 loadDomThenTest('VS.score play, pause, stop', htmlPath, (t, window) => {
     const { VS } = window
 
-    t.equal(VS.score.playing, false, 'should not be flagged as playing on load')
-    t.equal(VS.score.pointer, 0, 'should start with pointer at 0 on load')
+    t.equal(VS.score.isPlaying(), false, 'should not be flagged as playing on load')
+    t.equal(VS.score.getPointer(), 0, 'should start with pointer at 0 on load')
 
     VS.score.play()
-    t.equal(VS.score.playing, true, 'should be flagged as playing when playing')
+    t.equal(VS.score.isPlaying(), true, 'should be flagged as playing when playing')
 
     VS.score.pause()
-    t.equal(VS.score.playing, false, 'should not be flagged as playing when paused')
+    t.equal(VS.score.isPlaying(), false, 'should not be flagged as playing when paused')
 
     VS.score.stop()
-    t.equal(VS.score.playing, false, 'should not be flagged as playing when stopped')
+    t.equal(VS.score.isPlaying(), false, 'should not be flagged as playing when stopped')
 
     t.end()
 })

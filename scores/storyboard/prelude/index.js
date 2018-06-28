@@ -220,7 +220,7 @@ function fadePenultimateScene(active, dur) {
 }
 
 function goToCard(index, control) {
-    var pointer = (typeof index !== 'undefined') ? index : VS.score.pointer;
+    var pointer = (typeof index !== 'undefined') ? index : VS.score.getPointer();
     var dur = cardTransTime;
     cardGroup.transition()
         .duration(dur)
@@ -245,7 +245,7 @@ function goToCard(index, control) {
         })
         .on('end', function() {
             // if penultimate scene, fade
-            if (VS.score.pointer === (VS.score.getLength() - 2) && control === 'score') {
+            if (VS.score.getPointer() === (VS.score.getLength() - 2) && control === 'score') {
                 fadePenultimateScene(true, (scaleDuration(pointer) * 1000) - dur);
             }
         });
@@ -268,7 +268,7 @@ function cueCancelAll() {
 
 function scheduleCue(pointer) {
     // do not schedule if penultimate scene
-    if (VS.score.pointer === (VS.score.getLength() - 2)) {
+    if (VS.score.getPointer() === (VS.score.getLength() - 2)) {
         return;
     }
 
@@ -299,9 +299,10 @@ addEvent();
 VS.score.preroll = score.cueDuration; // cardTransTime;
 
 VS.control.hooks.add('play', function() {
-    goToCard(VS.score.pointer - 1, 'play');
+    var pointer = VS.score.getPointer();
+    goToCard(pointer - 1, 'play');
     // VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
-    VS.score.schedule(VS.score.preroll - cues[VS.score.pointer].duration(), cueBlink, VS.score.pointer - 1);
+    VS.score.schedule(VS.score.preroll - cues[pointer].duration(), cueBlink, pointer - 1);
 });
 
 function cancelAndGoToCard() {

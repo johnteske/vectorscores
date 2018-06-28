@@ -140,7 +140,7 @@ function updateChoices() {
 }
 
 function selectCell(position) {
-    if (!score.selected && VS.score.playing) {
+    if (!score.selected && VS.score.isPlaying()) {
 
         score.selected = true; // disable selection until new choices
 

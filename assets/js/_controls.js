@@ -9,7 +9,7 @@ VS.control = (function() {
     }
 
     function playPause() {
-        if (!VS.score.playing) {
+        if (!VS.score.isPlaying()) {
             VS.score.play();
             hooks.trigger('play');
         } else {
@@ -29,11 +29,11 @@ VS.control = (function() {
     // Step pointer if not playing
     function createPointerStepper(steps) {
         return function() {
-            if (VS.score.playing) {
+            if (VS.score.isPlaying()) {
                 return;
             }
 
-            var pointer = VS.clamp(VS.score.pointer + steps, 0, VS.score.getLength() - 1);
+            var pointer = VS.clamp(VS.score.getPointer() + steps, 0, VS.score.getLength() - 1);
             VS.score.updatePointer(pointer);
 
             control.setStateFromPointer();
@@ -47,7 +47,7 @@ VS.control = (function() {
     };
 
     function getStepStateFromPointer() {
-        return VS.score.pointer === 0 ? 'firstStep' :
+        return VS.score.getPointer() === 0 ? 'firstStep' :
             VS.score.pointerAtLastEvent() ? 'lastStep' :
             'step';
     }

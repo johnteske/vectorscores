@@ -461,7 +461,7 @@ function resize() {
            (view.scoreY - (6 * unitY)) + ')');
         // .style('opacity', 0.5);
 
-    scrollScore(VS.score.pointer, [0]);
+    scrollScore(VS.score.getPointer(), [0]);
 }
 
 resize();
@@ -484,9 +484,8 @@ VS.control.hooks.add('play', prerollAnimateCue);
 VS.WebSocket.hooks.add('play', prerollAnimateCue);
 
 function scrollToPointer() {
-    var pointer = VS.score.pointer;
-    if (pointer < score.bars.length - 1) {
-        scrollScore(VS.score.pointer, 300, false);
+    if (!VS.score.pointerAtLastEvent()) {
+        scrollScore(VS.score.getPointer(), 300, false);
     }
     // TODO else: set pointer back a step
 

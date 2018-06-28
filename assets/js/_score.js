@@ -1,7 +1,16 @@
 VS.score = (function() {
 
     var events = [];
+
     var allTimeouts = [];
+    function clearAllTimeouts() {
+        allTimeouts.forEach(function(t) {
+            clearTimeout(t);
+        });
+    }
+
+    var isPlaying = false;
+    var pointer = 0;
 
     // Schedule this event (if defined)
     function schedule(time, func, params) {
@@ -14,7 +23,7 @@ VS.score = (function() {
     var hooks = VS.createHooks(['stop']);
 
     function updatePointer(index) {
-        VS.score.pointer = index;
+        pointer = index;
         VS.control.pointer.value = index;
     }
 
@@ -43,37 +52,34 @@ VS.score = (function() {
             events.push([time, func, params]);
         },
         getLength: function() { return events.length; },
-        playing: false, // TODO rename isPlaying
-        pointer: 0, // TODO get only,
-        pointerAtLastEvent: function() {
-            return this.pointer === (this.getLength() - 1);
+        isPlaying: function() { return isPlaying; },
+        getPointer: function() {
+            return pointer;
         },
-        preroll: 0, // 300; // delay before play
+        pointerAtLastEvent: function() {
+            return pointer === (this.getLength() - 1);
+        },
+        preroll: 0, // delay before play
         // TODO make private? and/or make single eventAt, returning object: { time: 0, fn: fn, params: []}
         timeAt: function(i) { return events[i][0]; },
         funcAt: function(i) { return events[i][1]; },
         paramsAt: function(i) { return events[i][2]; },
-        clearAllTimeouts: function() {
-            allTimeouts.forEach(function(t) {
-                clearTimeout(t);
-            });
-        },
         hooks: hooks,
         play: function() {
-            VS.score.playing = true;
-            schedule(VS.score.preroll, playEvent, VS.score.pointer);
+            isPlaying = true;
+            schedule(VS.score.preroll, playEvent, pointer);
             VS.control.set('playing');
             VS.layout.hide();
         },
         pause: function() {
-            VS.score.playing = false;
-            VS.score.clearAllTimeouts();
+            isPlaying = false;
+            clearAllTimeouts();
             VS.control.setStateFromPointer();
             VS.layout.show();
         },
         stop: function() {
-            VS.score.playing = false;
-            VS.score.clearAllTimeouts();
+            isPlaying = false;
+            clearAllTimeouts();
             VS.score.updatePointer(0);
             VS.control.set('firstStep');
             VS.layout.show();

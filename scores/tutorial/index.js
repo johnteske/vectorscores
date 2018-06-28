@@ -95,7 +95,7 @@ addEvent(function() {
  *
  */
 VS.control.hooks.add('step', function() {
-    VS.score.funcAt(VS.score.pointer)();
+    VS.score.funcAt(VS.score.getPointer())();
 });
 
 VS.score.hooks.add('stop', function() {

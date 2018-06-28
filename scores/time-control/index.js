@@ -82,7 +82,7 @@ function resetSpans() {
 VS.control.hooks.add('step', function() {
     resetSpans();
 
-    var index = VS.score.pointer;
+    var index = VS.score.getPointer();
     var params;
     var fn;
 

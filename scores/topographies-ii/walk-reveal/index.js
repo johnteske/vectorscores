@@ -349,7 +349,7 @@ function toggleInstructions(duration, toggle) {
  * Controls
  */
 VS.control.hooks.add('step', function() {
-    var pointer = VS.score.pointer;
+    var pointer = VS.score.getPointer();
     var fn = VS.score.funcAt(pointer);
 
     if (typeof fn === 'function') {

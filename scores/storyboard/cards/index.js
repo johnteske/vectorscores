@@ -117,7 +117,7 @@ var cueIndicator = VS.cueBlink(cueTriangle)
     });
 
 function goToCard(eventIndex, dur) {
-    var pointer = eventIndex || VS.score.pointer;
+    var pointer = eventIndex || VS.score.getPointer();
     dur = dur || cardTransTime;
     cardGroup.transition()
         .duration(dur)
