@@ -18,8 +18,8 @@ loadDomThenTest('VS.score events', htmlPath, (t, window) => {
     const testEventIndex = VS.score.getLength() - 1
 
     t.equal(VS.score.timeAt(testEventIndex), 999, 'VS.score#timeAt should return set time')
-    t.equal(VS.score.funcAt(testEventIndex), testEvent, 'VS.score#funcAt should return set function')
-    t.deepEqual(VS.score.paramsAt(testEventIndex), ['a'], 'VS.score#paramsAt should return set parameters')
+    t.equal(VS.score.functionAt(testEventIndex), testEvent, 'VS.score#functionAt should return set function')
+    t.deepEqual(VS.score.parametersAt(testEventIndex), ['a'], 'VS.score#parametersAt should return set parameters')
 
     t.end()
 })

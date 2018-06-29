@@ -30,26 +30,30 @@ VS.score = (function() {
     function playEvent(index) {
         VS.score.updatePointer(index);
 
+        var thisEvent = events[index];
+
         // Execute this event (if defined)
-        var thisFunc = VS.score.funcAt(index);
-        if (typeof thisFunc === 'function') {
+        if (typeof thisEvent.action === 'function') {
             // TODO don't force first argument to be index
-            thisFunc.apply(null, VS.score.paramsAt(index));
+            thisEvent.action.apply(null, thisEvent.parameters);
         }
 
         // Schedule next event
         if (index < VS.score.getLength() - 1) {
-            var timeToNext = VS.score.timeAt(index + 1) - VS.score.timeAt(index);
+            var timeToNext = VS.score.timeAt(index + 1) - thisEvent.time;
             schedule(timeToNext, playEvent, index + 1);
         } else {
-            // TODO should the score automatically stop? or should the composer call this when ready?
-            VS.score.stop();
+            VS.score.stop(); // TODO should the score automatically stop? or should the composer call this when ready?
         }
     }
 
     return {
-        add: function(time, func, params) {
-            events.push([time, func, params]);
+        add: function(time, fn, parameters) {
+            events.push({
+                time: time,
+                action: fn,
+                parameters: parameters
+            });
         },
         getLength: function() { return events.length; },
         isPlaying: function() { return isPlaying; },
@@ -61,9 +65,9 @@ VS.score = (function() {
         },
         preroll: 0, // delay before play
         // TODO make private? and/or make single eventAt, returning object: { time: 0, fn: fn, params: []}
-        timeAt: function(i) { return events[i][0]; },
-        funcAt: function(i) { return events[i][1]; },
-        paramsAt: function(i) { return events[i][2]; },
+        timeAt: function(i) { return events[i].time; },
+        functionAt: function(i) { return events[i].action; },
+        parametersAt: function(i) { return events[i].parameters; },
         hooks: hooks,
         play: function() {
             isPlaying = true;
