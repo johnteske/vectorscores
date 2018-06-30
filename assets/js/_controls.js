@@ -39,14 +39,12 @@ VS.control = (function() {
     }
 
     control.setStateFromPointer = function() {
-        this.set(getStepStateFromPointer());
-    };
-
-    function getStepStateFromPointer() {
-        return VS.score.getPointer() === 0 ? 'firstStep' :
+        var state = VS.score.getPointer() === 0 ? 'firstStep' :
             VS.score.pointerAtLastEvent() ? 'lastStep' :
             'step';
-    }
+
+        this.set(state);
+    };
 
     var hooks = control.hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
 
