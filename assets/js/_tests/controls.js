@@ -7,7 +7,7 @@ const controlStates = require('../_control-states.json')
 const controlsToToggle = ['back', 'stop', 'fwd']
 const iconsToToggle = ['play', 'pause']
 
-loadDomThenTest.only('VS.control states and pointer', htmlPath, (t, window) => {
+loadDomThenTest('VS.control states and pointer', htmlPath, (t, window) => {
     const { VS } = window
 
     function testControlState() {
@@ -74,6 +74,9 @@ loadDomThenTest('VS.control keyboard control', htmlPath, (t, window) => {
 
     hitSpacebar()
     t.equal(VS.score.isPlaying(), true, 'should play score after hitting spacebar')
+
+    hitRightArrow()
+    t.equal(+VS.control.pointer.value, 0, 'should not change pointer at hitting right arrow while playing')
 
     // Pause
     hitSpacebar()
