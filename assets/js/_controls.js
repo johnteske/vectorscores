@@ -29,10 +29,6 @@ VS.control = (function() {
     // Step pointer if not playing
     function createPointerStepper(steps) {
         return function() {
-            if (VS.score.isPlaying()) {
-                return;
-            }
-
             var pointer = VS.clamp(VS.score.getPointer() + steps, 0, VS.score.getLength() - 1);
             VS.score.updatePointer(pointer);
 
@@ -98,11 +94,11 @@ VS.control = (function() {
             break;
         case 'ArrowLeft':
         case 37:
-            decrementPointer();
+            !VS.score.isPlaying() && decrementPointer();
             break;
         case 'ArrowRight':
         case 39:
-            incrementPointer();
+            !VS.score.isPlaying() && incrementPointer();
             break;
         case 'Escape':
         case 27:
