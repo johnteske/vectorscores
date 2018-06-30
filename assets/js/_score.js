@@ -14,9 +14,7 @@ VS.score = (function() {
 
     // Schedule this event (if defined)
     function schedule(time, func, params) {
-        if (typeof func === 'function') {
-            allTimeouts.push(setTimeout(func, time, params));
-        }
+        (typeof func === 'function') && allTimeouts.push(setTimeout(func, time, params));
     }
 
     // Add a hook for the stop event, triggered after a score ends or by the user
@@ -57,9 +55,7 @@ VS.score = (function() {
         },
         getLength: function() { return events.length; },
         isPlaying: function() { return isPlaying; },
-        getPointer: function() {
-            return pointer;
-        },
+        getPointer: function() { return pointer; },
         pointerAtLastEvent: function() {
             return pointer === (this.getLength() - 1);
         },

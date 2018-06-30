@@ -4,7 +4,7 @@ VS.control = (function() {
 
     function createScoreControl(id, clickHandler) {
         var element = document.getElementById(id);
-        element.onclick = clickHandler;
+        element.addEventListener('click', clickHandler, false);
         return element;
     }
 
@@ -60,7 +60,7 @@ VS.control = (function() {
 
     control.stop = createScoreControl('score-stop', stop);
     control.fwd = createScoreControl('score-fwd', incrementPointer);
-    control.pointer = createScoreControl('score-pointer', VS.score.pause);
+    control.pointer = createScoreControl('score-pointer');
 
     // Enabled state of controls
     var states = {% include_relative _control-states.json %};
