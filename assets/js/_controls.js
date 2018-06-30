@@ -51,13 +51,7 @@ VS.control = (function() {
     var hooks = control.hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
 
     control.back = createScoreControl('score-back', decrementPointer);
-
     control.play = createScoreControl('score-play', playPause);
-    control.play.showIcon = function(iconName, state) {
-        var method = state ? 'add' : 'remove';
-        this.classList[method](iconName);
-    };
-
     control.stop = createScoreControl('score-stop', stop);
     control.fwd = createScoreControl('score-fwd', incrementPointer);
     control.pointer = createScoreControl('score-pointer');
@@ -76,7 +70,8 @@ VS.control = (function() {
         });
 
         iconsToToggle.forEach(function(controlName) {
-            control.play.showIcon(controlName, state[controlName]);
+            var method = state[controlName] ? 'add' : 'remove';
+            control.play.classList[method](controlName);
         });
     };
 
