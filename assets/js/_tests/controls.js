@@ -67,10 +67,10 @@ loadDomThenTest('VS.control keyboard control', htmlPath, (t, window) => {
         }
     }
 
-    const hitLeftArrow = makeKeydownEvent({ key: 'ArrowLeft', keyCode: 37 })
-    const hitSpacebar = makeKeydownEvent({ key: ' ', keyCode: 32 })
-    const hitEscape = makeKeydownEvent({ key: 'Escape', keyCode: 27 })
-    const hitRightArrow = makeKeydownEvent({ key: 'ArrowRight', keyCode: 39 })
+    const hitLeftArrow = makeKeydownEvent({ key: 'ArrowLeft' })
+    const hitSpacebar = makeKeydownEvent({ key: ' ' })
+    const hitEscape = makeKeydownEvent({ key: 'Escape' })
+    const hitRightArrow = makeKeydownEvent({ key: 'ArrowRight' })
 
     hitSpacebar()
     t.equal(VS.score.isPlaying(), true, 'should play score after hitting spacebar')

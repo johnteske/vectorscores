@@ -78,23 +78,17 @@ VS.control = (function() {
             return;
         }
 
-        var keyPressed = event.key || event.keyCode;
-
-        switch (keyPressed) {
+        switch (event.key) {
         case ' ':
-        case 32:
             playPause();
             break;
         case 'ArrowLeft':
-        case 37:
             !VS.score.isPlaying() && decrementPointer();
             break;
         case 'ArrowRight':
-        case 39:
             !VS.score.isPlaying() && incrementPointer();
             break;
         case 'Escape':
-        case 27:
             stop();
             break;
         default:
