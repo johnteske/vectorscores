@@ -12,9 +12,7 @@ VS.enableModal = function(idPrefix) {
         VS.layout.show();
         VS.control.listenForKeydown(false);
 
-        closeTrigger.addEventListener('click', closeModal, true);
-        window.addEventListener('click', clickListener, true);
-        window.addEventListener('keydown', keydownListener, true);
+        listenForModalEvents(true);
     }
 
     function closeModal() {
@@ -24,9 +22,15 @@ VS.enableModal = function(idPrefix) {
         VS.layout.hide();
         VS.control.listenForKeydown(true);
 
-        closeTrigger.removeEventListener('click', closeModal, true);
-        window.removeEventListener('click', clickListener, true);
-        window.removeEventListener('keydown', keydownListener, true);
+        listenForModalEvents(false);
+    }
+
+    function listenForModalEvents(shouldListen) {
+        var method = shouldListen ? 'addEventListener' : 'removeEventListener';
+
+        closeTrigger[method]('click', closeModal, true);
+        window[method]('click', clickListener, true);
+        window[method]('keydown', keydownListener, true);
     }
 
     function clickListener(event) {
