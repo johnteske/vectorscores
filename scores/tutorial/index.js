@@ -8,7 +8,7 @@ var message = document.getElementsByClassName('tutorial-message')[0];
 var initialMessage = message.innerHTML;
 
 var scoreButtons = document.querySelectorAll('.score-button');
-var footerInput = VS.layout.footer.querySelector('input');
+var footerInput = document.querySelector('#score-footer input');
 
 function clearHighlights() {
     VS.layout.show();

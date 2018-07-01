@@ -1,13 +1,13 @@
 VS.layout = (function() {
     var layout = {};
 
-    layout.header = document.getElementById('score-header');
-    layout.footer = document.getElementById('score-footer');
+    var header = document.getElementById('score-header');
+    var footer = document.getElementById('score-footer');
 
     function makeClassSetter(className) {
         return function() {
-            layout.header.className = className;
-            layout.footer.className = className;
+            header.className = className;
+            footer.className = className;
         };
     }
 
@@ -20,8 +20,8 @@ VS.layout = (function() {
         el.addEventListener('mouseout', layout.hide, false);
     }
 
-    addLayoutInteraction(layout.header);
-    addLayoutInteraction(layout.footer);
+    addLayoutInteraction(header);
+    addLayoutInteraction(footer);
 
     // TODO separate definition from instantiation
     // Hide layout when interacting with score
