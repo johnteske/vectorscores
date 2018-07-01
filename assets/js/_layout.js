@@ -4,18 +4,15 @@ VS.layout = (function() {
     layout.header = document.getElementById('score-header');
     layout.footer = document.getElementById('score-footer');
 
-    function setClass(c) {
-        layout.header.className = c;
-        layout.footer.className = c;
+    function makeClassSetter(className) {
+        return function() {
+            layout.header.className = className;
+            layout.footer.className = className;
+        };
     }
 
-    layout.show = function() {
-        setClass('show');
-    };
-
-    layout.hide = function() {
-        setClass('hide');
-    };
+    layout.show = makeClassSetter('show');
+    layout.hide = makeClassSetter('hide');
 
     function addLayoutInteraction(el) {
         el.addEventListener('click', layout.show, false);
