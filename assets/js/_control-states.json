@@ -1,0 +1,30 @@
+{
+    "playing": {
+        "back": false,
+        "stop": true,
+        "fwd": false,
+        "play": false,
+        "pause": true
+    },
+    "firstStep": {
+        "back": false,
+        "stop": false,
+        "fwd": true,
+        "play": true,
+        "pause": false
+    },
+    "step": {
+        "back": true,
+        "stop": true,
+        "fwd": true,
+        "play": true,
+        "pause": false
+    },
+    "lastStep": {
+        "back": true,
+        "stop": true,
+        "fwd": false,
+        "play": true,
+        "pause": false
+    }
+}

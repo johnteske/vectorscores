@@ -82,13 +82,13 @@ function resetSpans() {
 VS.control.hooks.add('step', function() {
     resetSpans();
 
-    var index = VS.score.pointer;
+    var index = VS.score.getPointer();
     var params;
     var fn;
 
     for (var i = 0; i < index; i++) {
-        params = VS.score.paramsAt(i);
-        fn = VS.score.funcAt(i);
+        params = VS.score.parametersAt(i);
+        fn = VS.score.functionAt(i);
         fn.apply(null, params);
     }
 });

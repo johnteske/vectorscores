@@ -216,12 +216,12 @@ function scrollToNextBar(index, duration) {
 }
 
 function setScorePosition(setImmediately) {
-    if (VS.score.pointer > barTimes.length - 1) {
+    if (VS.score.getPointer() > barTimes.length - 1) {
         return;
     }
 
     var dur = setImmediately ? 0 : 300;
-    scrollScoreToIndex(VS.score.pointer, dur);
+    scrollScoreToIndex(VS.score.getPointer(), dur);
 }
 
 /**
@@ -230,7 +230,7 @@ function setScorePosition(setImmediately) {
 for (var i = 0; i < barTimes.length; i++) {
     var fn = scrollToNextBar;
 
-    if (VS.score.pointer > barTimes.length - 1) {
+    if (VS.score.getPointer() > barTimes.length - 1) {
         fn = function() {};
     }
 

@@ -1,5 +1,24 @@
 const path = require('path')
+const test = require('tape')
 const { JSDOM } = require('jsdom')
+
+function createDomTester(testMethod) {
+    // [name], [options], filePath, testCallback
+    return function(...args) {
+        const testCallback = args.pop()
+        const filePath = args.pop()
+
+        testMethod(...args, t => {
+            getWindowFromFile(filePath, window => {
+                testCallback(t, window)
+            })
+        })
+    }
+}
+
+const loadDomThenTest = createDomTester(test)
+loadDomThenTest.only = createDomTester(test.only)
+loadDomThenTest.skip = createDomTester(test.skip)
 
 /**
  * Create DOM from file and call function
@@ -12,7 +31,7 @@ function getWindowFromFile(filePath, onLoad) {
     }
 
     JSDOM.fromFile(path.resolve('.', filePath), options).then(dom => {
-        const window = dom.window
+        const { window } = dom
 
         window.addEventListener('load', () => {
             onLoad(window)
@@ -21,6 +40,7 @@ function getWindowFromFile(filePath, onLoad) {
 }
 
 module.exports = {
-    test: require('tape'),
+    test,
+    loadDomThenTest,
     getWindowFromFile
 }

@@ -20,16 +20,16 @@ VS.WebSocket = (function() {
 
     function addControlHooks() {
         VS.control.hooks.add('play', function() {
-            VS.WebSocket.send(['vs', 'play', VS.score.pointer]);
+            VS.WebSocket.send(['vs', 'play', VS.score.getPointer()]);
         });
         VS.control.hooks.add('pause', function() {
-            VS.WebSocket.send(['vs', 'pause', VS.score.pointer]);
+            VS.WebSocket.send(['vs', 'pause', VS.score.getPointer()]);
         });
         VS.control.hooks.add('stop', function() {
             VS.WebSocket.send(['vs', 'stop']);
         });
         VS.control.hooks.add('step', function() {
-            VS.WebSocket.send(['vs', 'step', VS.score.pointer]);
+            VS.WebSocket.send(['vs', 'step', VS.score.getPointer()]);
         });
     }
 
@@ -64,7 +64,6 @@ VS.WebSocket = (function() {
                 break;
             case 'step':
                 VS.score.updatePointer(data[3]);
-                VS.control.updateStepButtons();
                 ws.hooks.trigger('step');
                 break;
         }

@@ -1,5 +1,4 @@
 .modal-overlay {
-    display: none;
     position: fixed;
     z-index: 100;
     padding-top: $footer-height * 0.5;
@@ -13,7 +12,6 @@
 }
 
 .modal-content {
-    display: none;
     background: #ffffff;
     font-family: $layout-font-stack;
     font-weight: normal;
@@ -26,6 +24,14 @@
         margin-bottom: $footer-height * 2;
     }
     border: 1px solid #888;
+}
+
+.modal-overlay, .modal-content {
+    display: none;
+
+    &.show {
+        display: block;
+    }
 }
 
 $font-size-scale: 1.125;

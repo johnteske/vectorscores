@@ -143,4 +143,4 @@ update(0);
  * Score controls
  */
 VS.control.hooks.add('stop', function() { update(0); });
-VS.control.hooks.add('step', function() { update(VS.score.pointer); });
+VS.control.hooks.add('step', function() { update(VS.score.getPointer()); });

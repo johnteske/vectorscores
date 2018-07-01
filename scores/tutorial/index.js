@@ -13,14 +13,14 @@ var footerInput = document.querySelector('#score-footer input');
 function clearHighlights() {
     VS.layout.show();
     footerInput.className = '';
-    for (var i = 0; i < scoreButtons.length; i++) {
-        scoreButtons[i].className = 'score-button';
-    }
+
+    scoreButtons.forEach(function(button) {
+        button.classList.remove('highlight');
+    });
 }
 
 function highlightByID(id) {
-    var el = document.getElementById(id);
-    el.className += ' highlight';
+    document.getElementById(id).classList.add('highlight');
 }
 
 /**
@@ -92,7 +92,7 @@ addEvent(function() {
  *
  */
 VS.control.hooks.add('step', function() {
-    VS.score.funcAt(VS.score.pointer)();
+    VS.score.functionAt(VS.score.getPointer())();
 });
 
 VS.score.hooks.add('stop', function() {
