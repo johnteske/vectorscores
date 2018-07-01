@@ -96,14 +96,14 @@ VS.control = (function() {
         event.preventDefault();
     };
 
-    control.enableKeyDownListener = function(enabled) {
-        var method = enabled ? 'addEventListener' : 'removeEventListener';
+    control.listenForKeydown = function(shouldListen) {
+        var method = shouldListen ? 'addEventListener' : 'removeEventListener';
         window[method]('keydown', keydownListener, true);
     };
 
     // TODO separate definition from instantiation
     control.set('firstStep');
-    control.enableKeyDownListener(true);
+    control.listenForKeydown(true);
 
     return control;
 

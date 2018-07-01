@@ -10,7 +10,7 @@ VS.enableModal = function(modalId, openId, closeId) {
 
         VS.layout.show();
         VS.score.pause();
-        VS.control.enableKeyDownListener(false);
+        VS.control.listenForKeydown(false);
 
         closeTrigger.addEventListener('click', closeModal, true);
         window.addEventListener('click', clickListener, true);
@@ -22,7 +22,7 @@ VS.enableModal = function(modalId, openId, closeId) {
         modal.style.display = 'none';
 
         VS.layout.hide();
-        VS.control.enableKeyDownListener(true);
+        VS.control.listenForKeydown(true);
 
         closeTrigger.removeEventListener('click', closeModal, true);
         window.removeEventListener('click', clickListener, true);
