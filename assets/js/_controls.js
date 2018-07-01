@@ -2,32 +2,25 @@ VS.control = (function() {
 
     var control = {};
 
-    function createScoreControl(id, clickHandler) {
-        var element = document.getElementById(id);
-        element.addEventListener('click', clickHandler, false);
-        return element;
+    /**
+     * Compose callbacks
+     */
+    function createScoreEventCallback(scoreEvent) {
+        return function() {
+            VS.score[scoreEvent]();
+            hooks.trigger(scoreEvent);
+        };
     }
+
+    var play = createScoreEventCallback('play');
+    var pause = createScoreEventCallback('pause');
+    var stop = createScoreEventCallback('stop');
 
     function playPause() {
-        if (!VS.score.isPlaying()) {
-            VS.score.play();
-            hooks.trigger('play');
-        } else {
-            VS.score.pause();
-            hooks.trigger('pause');
-        }
+        VS.score.isPlaying() ? pause() : play();
     }
 
-    function stop() {
-        VS.score.stop();
-        hooks.trigger('stop');
-    }
-
-    var incrementPointer = createPointerStepper(1);
-    var decrementPointer = createPointerStepper(-1);
-
-    // Step pointer if not playing
-    function createPointerStepper(steps) {
+    function createStepCallback(steps) {
         return function() {
             var pointer = VS.clamp(VS.score.getPointer() + steps, 0, VS.score.getLength() - 1);
             VS.score.updatePointer(pointer);
@@ -38,15 +31,17 @@ VS.control = (function() {
         };
     }
 
-    control.setStateFromPointer = function() {
-        var state = VS.score.getPointer() === 0 ? 'firstStep' :
-            VS.score.pointerAtLastEvent() ? 'lastStep' :
-            'step';
+    var incrementPointer = createStepCallback(1);
+    var decrementPointer = createStepCallback(-1);
 
-        this.set(state);
-    };
-
-    var hooks = control.hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
+    /**
+     * Create controls
+     */
+    function createScoreControl(id, clickHandler) {
+        var element = document.getElementById(id);
+        element.addEventListener('click', clickHandler, false);
+        return element;
+    }
 
     control.back = createScoreControl('score-back', decrementPointer);
     control.play = createScoreControl('score-play', playPause);
@@ -54,7 +49,9 @@ VS.control = (function() {
     control.fwd = createScoreControl('score-fwd', incrementPointer);
     control.pointer = createScoreControl('score-pointer');
 
-    // Enabled state of controls
+    /**
+     * Control states (as enabled states)
+     */
     var states = {% include_relative _control-states.json %};
 
     var controlsToToggle = ['back', 'stop', 'fwd'];
@@ -72,6 +69,19 @@ VS.control = (function() {
             control.play.classList[method](controlName);
         });
     };
+
+    control.setStateFromPointer = function() {
+        var state = VS.score.getPointer() === 0 ? 'firstStep' :
+            VS.score.pointerAtLastEvent() ? 'lastStep' :
+            'step';
+
+        this.set(state);
+    };
+
+    /**
+     * Hooks and keyboard control
+     */
+    var hooks = control.hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
 
     function keydownListener(event) {
         if (event.defaultPrevented || event.metaKey) { return; }
@@ -94,14 +104,16 @@ VS.control = (function() {
         }
 
         event.preventDefault();
-    };
+    }
 
     control.listenForKeydown = function(shouldListen) {
         var method = shouldListen ? 'addEventListener' : 'removeEventListener';
         window[method]('keydown', keydownListener, true);
     };
 
-    // TODO separate definition from instantiation
+    /**
+     * Init
+     */
     control.set('firstStep');
     control.listenForKeydown(true);
 
