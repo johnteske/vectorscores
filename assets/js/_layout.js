@@ -1,34 +1,30 @@
 VS.layout = (function() {
     var layout = {};
 
-    layout.header = document.getElementById('score-header');
-    layout.footer = document.getElementById('score-footer');
+    var header = document.getElementById('score-header');
+    var footer = document.getElementById('score-footer');
 
-    function setClass(c) {
-        layout.header.className = c;
-        layout.footer.className = c;
+    function makeClassSetter(className) {
+        return function() {
+            header.className = className;
+            footer.className = className;
+        };
     }
 
-    layout.show = function() {
-        setClass('show');
-    };
+    layout.show = makeClassSetter('show');
+    layout.hide = makeClassSetter('hide');
 
-    layout.hide = function() {
-        setClass('hide');
-    };
-
-    function addLayoutInteraction(el) {
-        el.addEventListener('click', layout.show, false);
-        el.addEventListener('mouseover', layout.show, false);
-        el.addEventListener('mouseout', layout.hide, false);
+    function addLayoutInteraction(element) {
+        element.addEventListener('click', layout.show, false);
+        element.addEventListener('mouseover', layout.show, false);
+        element.addEventListener('mouseout', layout.hide, false);
     }
 
-    addLayoutInteraction(layout.header);
-    addLayoutInteraction(layout.footer);
+    addLayoutInteraction(header);
+    addLayoutInteraction(footer);
 
-    // TODO separate definition from instantiation
     // Hide layout when interacting with score
-    document.getElementsByTagName('main')[0].onclick = layout.hide;
+    document.getElementsByTagName('main')[0].addEventListener('click', layout.hide, false);
 
     return layout;
 })();
