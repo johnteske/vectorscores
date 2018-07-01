@@ -1,15 +1,15 @@
-VS.enableModal = function(modalId, openId, closeId) {
-    var modal = document.getElementById(modalId),
-        openTrigger = document.getElementById(openId),
-        closeTrigger = document.getElementById(closeId),
-        overlay = document.getElementById('score-modal-overlay'); // wraps all score modals
+VS.enableModal = function(idPrefix) {
+    var modal = document.getElementById(idPrefix + '-modal');
+    var openTrigger = document.getElementById(idPrefix + '-open');
+    var closeTrigger = document.getElementById(idPrefix + '-close');
+    var overlay = document.getElementById('score-modal-overlay'); // wraps all score modals
 
     function openModal() {
         overlay.style.display = 'block';
         modal.style.display = 'block';
 
-        VS.layout.show();
         VS.score.pause();
+        VS.layout.show();
         VS.control.listenForKeydown(false);
 
         closeTrigger.addEventListener('click', closeModal, true);
@@ -30,7 +30,7 @@ VS.enableModal = function(modalId, openId, closeId) {
     }
 
     function clickListener(event) {
-        if (event.target === overlay) { closeModal(); }
+        (event.target === overlay) && closeModal();
     }
 
     function keydownListener(event) {
@@ -52,8 +52,8 @@ VS.enableModal = function(modalId, openId, closeId) {
 
 // TODO separate definition from instantiation
 if (document.getElementById('score-info-open')) {
-    VS.enableModal('score-info-modal', 'score-info-open', 'score-info-close');
+    VS.enableModal('score-info');
 }
 if (document.getElementById('score-options-open')) {
-    VS.enableModal('score-options-modal', 'score-options-open', 'score-options-close');
+    VS.enableModal('score-options');
 }
