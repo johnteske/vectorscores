@@ -14,18 +14,17 @@ VS.layout = (function() {
     layout.show = makeClassSetter('show');
     layout.hide = makeClassSetter('hide');
 
-    function addLayoutInteraction(el) {
-        el.addEventListener('click', layout.show, false);
-        el.addEventListener('mouseover', layout.show, false);
-        el.addEventListener('mouseout', layout.hide, false);
+    function addLayoutInteraction(element) {
+        element.addEventListener('click', layout.show, false);
+        element.addEventListener('mouseover', layout.show, false);
+        element.addEventListener('mouseout', layout.hide, false);
     }
 
     addLayoutInteraction(header);
     addLayoutInteraction(footer);
 
-    // TODO separate definition from instantiation
     // Hide layout when interacting with score
-    document.getElementsByTagName('main')[0].onclick = layout.hide;
+    document.getElementsByTagName('main')[0].addEventListener('click', layout.hide, false);
 
     return layout;
 })();
