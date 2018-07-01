@@ -7,14 +7,11 @@ d3.select('svg').remove();
 var message = document.getElementsByClassName('tutorial-message')[0];
 var initialMessage = message.innerHTML;
 
-var header = VS.layout.header;
-var footer = VS.layout.footer;
 var scoreButtons = document.querySelectorAll('.score-button');
-var footerInput = footer.querySelector('input');
+var footerInput = VS.layout.footer.querySelector('input');
 
 function clearHighlights() {
-    header.className = 'show';
-    footer.className = 'show';
+    VS.layout.show();
     footerInput.className = '';
     for (var i = 0; i < scoreButtons.length; i++) {
         scoreButtons[i].className = 'score-button';
@@ -100,4 +97,5 @@ VS.control.hooks.add('step', function() {
 
 VS.score.hooks.add('stop', function() {
    message.innerHTML = initialMessage;
+   clearHighlights();
 });
