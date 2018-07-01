@@ -73,10 +73,8 @@ VS.control = (function() {
         });
     };
 
-    control.keydownListener = function(event) {
-        if (event.defaultPrevented || event.metaKey) {
-            return;
-        }
+    function keydownListener(event) {
+        if (event.defaultPrevented || event.metaKey) { return; }
 
         switch (event.key) {
         case ' ':
@@ -98,9 +96,14 @@ VS.control = (function() {
         event.preventDefault();
     };
 
+    control.enableKeyDownListener = function(enabled) {
+        var method = enabled ? 'addEventListener' : 'removeEventListener';
+        window[method]('keydown', keydownListener, true);
+    };
+
     // TODO separate definition from instantiation
     control.set('firstStep');
-    window.addEventListener('keydown', control.keydownListener, true);
+    control.enableKeyDownListener(true);
 
     return control;
 
