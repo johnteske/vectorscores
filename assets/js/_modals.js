@@ -5,8 +5,7 @@ VS.enableModal = function(idPrefix) {
     var overlay = document.getElementById('score-modal-overlay'); // wraps all score modals
 
     function openModal() {
-        overlay.style.display = 'block';
-        modal.style.display = 'block';
+        showModalAndOverlay(true);
 
         VS.score.pause();
         VS.layout.show();
@@ -16,13 +15,19 @@ VS.enableModal = function(idPrefix) {
     }
 
     function closeModal() {
-        overlay.style.display = 'none';
-        modal.style.display = 'none';
+        showModalAndOverlay(false);
 
         VS.layout.hide();
         VS.control.listenForKeydown(true);
 
         listenForModalEvents(false);
+    }
+
+    function showModalAndOverlay(shouldShow) {
+        var method = shouldShow ? 'add' : 'remove';
+
+        overlay.classList[method]('show');
+        modal.classList[method]('show');
     }
 
     function listenForModalEvents(shouldListen) {
