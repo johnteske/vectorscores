@@ -9,11 +9,10 @@ VS.createHooks = function(keys) {
     /**
      * Initialize dictionary
      */
-    var dictionary = {};
-
-    for (var i = 0; i < keys.length; i++) {
-        dictionary[keys[i]] = [];
-    }
+    var dictionary = keys.reduce(function(target, key) {
+        target[key] = [];
+        return target;
+    }, {});
 
     /**
      * Add hook
@@ -34,11 +33,9 @@ VS.createHooks = function(keys) {
      * @param {array} args : array of arguments to apply
      */
     hooks.trigger = function(hook, args) {
-        var fns = dictionary[hook];
-
-        for (var i = 0; i < fns.length; i++) {
-            fns[i].apply(null, args);
-        }
+        dictionary[hook].forEach(function(fn) {
+            fn.apply(null, args);
+        });
     };
 
     return Object.freeze(hooks);
