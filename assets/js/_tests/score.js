@@ -15,12 +15,6 @@ loadDomThenTest('VS.score events', htmlPath, (t, window) => {
     VS.score.add(999, testEvent, ['a'])
     t.equal(VS.score.getLength(), scoreLength + 1, 'adding an event to score to add one to score length')
 
-    const testEventIndex = VS.score.getLength() - 1
-
-    t.equal(VS.score.timeAt(testEventIndex), 999, 'VS.score#timeAt should return set time')
-    t.equal(VS.score.functionAt(testEventIndex), testEvent, 'VS.score#functionAt should return set function')
-    t.deepEqual(VS.score.parametersAt(testEventIndex), ['a'], 'VS.score#parametersAt should return set parameters')
-
     t.end()
 })
 
