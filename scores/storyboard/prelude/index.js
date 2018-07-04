@@ -272,7 +272,7 @@ function scheduleCue(pointer) {
         return;
     }
 
-    var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
+    var cardDuration = cardList[pointer + 1].time - cardList[pointer].time,
         nextCue = cues[pointer + 1],
         cueDelay = cardDuration - nextCue.duration();
 
