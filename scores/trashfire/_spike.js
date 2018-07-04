@@ -19,8 +19,8 @@ TrashFire.spike = (function() {
     };
 
     spike.hit = function() {
-        trash = [];
-        updateTrash(300);
+        trash.empty();
+        trash.update(300);
 
         d3.select('.spike')
             .transition().duration(600).ease(d3.easeElastic)

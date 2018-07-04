@@ -1,5 +1,3 @@
-var score = [];
-
 function sortByTime(a, b) {
     return a.time - b.time;
 }
@@ -8,25 +6,27 @@ function sortByTime(a, b) {
  * Fire/spike cycle
  */
 function addTrash(n, type, range) {
-    for (var i = 0; i < n; i++) {
-        trash.push({
+    while (n) {
+        trash.add({
             size: VS.getRandExcl(range[0], range[1]),
             type: type
         });
+
+        n--;
     }
 
-    updateTrash();
+    trash.update();
 }
 
 // TODO shift() would be useful but updateTrash does not properly join data
 function removeTrash() {
-    trash.pop();
-    updateTrash();
+    trash.remove();
+    trash.update();
 }
 
 function emptyTrash() {
-    trash = [];
-    updateTrash();
+    trash.empty();
+    trash.update();
 }
 
 function fireCycle() {
@@ -209,7 +209,7 @@ var droneEvents = (function() {
 /**
  * Sort score by event time
  */
-score = [].concat(fireEvents, noiseEvents, droneEvents)
+var score = [].concat(fireEvents, noiseEvents, droneEvents)
     .sort(sortByTime);
 
 score.forEach(function(bar) {

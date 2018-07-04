@@ -1,12 +1,80 @@
 /**
  * Generate trash
  */
-var trash = [];
+var trash = (function() {
+    var trash = {};
+
+    var _trash = [];
+
+    trash.add = function(t) {
+        _trash.push(t);
+    };
+
+    trash.empty = function() {
+        _trash = [];
+    };
+
+    trash.remove = function() {
+        _trash.pop();
+    };
+
+    trash.update = function(duration) {
+        var dur = duration || 1000;
+        var offset = 10;
+        var trashWidths = _trash.map(function(t) {
+            return t.size;
+        });
+        var trashWidthSum = trashWidths.reduce(function(a, b) {
+            return a + b;
+        }, (trashWidths.length - 1) * offset);
+
+        function trashPosition(d, i) {
+            var upToI = trashWidths.slice(0, i),
+                sum = upToI.reduce(function(a, b) {
+                    return a + b;
+                }, 0),
+                x = (TrashFire.trashOrigin.x - (trashWidthSum * 0.5)) +
+                    (sum + (i * offset)),
+                y = d.size * -0.5 - 50;
+            return 'translate(' + x + ',' + y + ')';
+        }
+
+        var trashSelection = trashContainer.selectAll('.trash')
+            .data(_trash);
+
+        // EXIT
+        trashSelection.exit()
+            .transition().duration(dur)
+            .attr('transform', function() {
+                return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
+            })
+            .style('opacity', 0)
+            .remove();
+
+        // UPDATE
+        trashSelection
+            .transition().duration(dur)
+            .attr('transform', trashPosition);
+
+        // ENTER
+        trashSelection.enter()
+            .append('g').attr('class', 'trash')
+                .attr('transform', function() {
+                    return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
+                })
+                .call(makePath)
+                .transition().duration(dur)
+                .attr('transform', trashPosition);
+    };
+
+    return trash;
+})();
 
 var lineGenerator = d3.line()
     .x(function(d) { return d[0]; })
     .y(function(d) { return d[1]; });
     // .interpolate("basis");
+
 function makePath(selection) {
     selection.each(function(d) {
         var nPoints = 60,
@@ -51,53 +119,4 @@ function makePath(selection) {
         .attr('d', function(d) {
             return lineGenerator(d.pathPoints);
         });
-}
-
-function updateTrash(duration) {
-    var dur = duration || 1000;
-    var offset = 10;
-    var trashWidths = trash.map(function(t) {
-        return t.size;
-    });
-    var trashWidthSum = trashWidths.reduce(function(a, b) {
-        return a + b;
-    }, (trashWidths.length - 1) * offset);
-
-    function trashPosition(d, i) {
-        var upToI = trashWidths.slice(0, i),
-            sum = upToI.reduce(function(a, b) {
-                return a + b;
-            }, 0),
-            x = (TrashFire.trashOrigin.x - (trashWidthSum * 0.5)) +
-                (sum + (i * offset)),
-            y = d.size * -0.5 - 50;
-        return 'translate(' + x + ',' + y + ')';
-    }
-
-    var trashSelection = trashContainer.selectAll('.trash')
-        .data(trash);
-
-    // EXIT
-    trashSelection.exit()
-        .transition().duration(dur)
-        .attr('transform', function() {
-            return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
-        })
-        .style('opacity', 0)
-        .remove();
-
-    // UPDATE
-    trashSelection
-        .transition().duration(dur)
-        .attr('transform', trashPosition);
-
-    // ENTER
-    trashSelection.enter()
-        .append('g').attr('class', 'trash')
-            .attr('transform', function() {
-                return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
-            })
-            .call(makePath)
-            .transition().duration(dur)
-            .attr('transform', trashPosition);
 }
