@@ -1,5 +1,9 @@
 var score = [];
 
+function sortByTime(a, b) {
+    return a.time - b.time;
+}
+
 /**
  * Fire/spike cycle
  */
@@ -140,16 +144,16 @@ function fireCycle() {
 
     return cycle;
 }
-
-// create base score from 5x fireCycle
 var time = 0;
-score = score.concat(fireCycle(), fireCycle(), fireCycle(), fireCycle(), fireCycle());
+
+var fireEvents = [].concat(fireCycle(), fireCycle(), fireCycle(), fireCycle(), fireCycle())
+    .sort(sortByTime);
+
+var lastTime = fireEvents[fireEvents.length - 1].time;
 
 /**
  * Noise
  */
-var lastTime = score[score.length - 1].time;
-
 var noiseEvents = (function() {
     var noises = [],
         timeWindow = lastTime / 5,
@@ -172,8 +176,6 @@ var noiseEvents = (function() {
 
     return noises;
 }());
-
-score = score.concat(noiseEvents);
 
 /**
  * Drone
@@ -204,16 +206,12 @@ var droneEvents = (function() {
     return drones;
 }());
 
-score = score.concat(droneEvents);
-
 /**
  * Sort score by event time
  */
-score.sort(function(a, b) {
-  return a.time - b.time;
-});
+score = [].concat(fireEvents, noiseEvents, droneEvents)
+    .sort(sortByTime);
 
-for (var i = 0; i < score.length; i++) {
-    var bar = score[i];
+score.forEach(function(bar) {
     VS.score.add(bar.time, bar.fn, bar.args);
-}
+});
