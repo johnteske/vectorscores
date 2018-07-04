@@ -1,6 +1,6 @@
-// ---
-// layout: compress-js
-// ---
+---
+layout: compress-js
+---
 
 // Remove unused element
 d3.select('svg').remove();
@@ -35,7 +35,7 @@ function createSpan(eventTime) {
 }
 
 
-function createEvent2(eventTime) {
+function createEvent(eventTime) {
     // Each span has a 1/2 chance of becoming green or blue
     var isUserEvent = VS.getItem([true, false]);
     // and each green span has a 1/3 chance of becoming a box
@@ -51,11 +51,11 @@ function createEvent2(eventTime) {
 /**
  * Score
  */
-var score = [createEvent2(0)];
+var score = [createEvent(0)];
 
 for (var i = 0; i < (nEvents - 1); i++) {
     var time = randomTime(i);
-    score.push(createEvent2(time));
+    score.push(createEvent(time));
 }
 
 score.forEach(function(bar) {
