@@ -297,37 +297,63 @@ function randDuration() {
     topoData[walker.index].walked = true;
 }());
 
+var makeToggler = function(toggle) {
+    return function(duration) {
+        toggleInstructions(duration, toggle);
+        forgetAll(duration);
+    };
+};
 
 /**
  * Fade instructions in and out
  */
+var instructionEventList = [
+    {
+        duration: 0,
+        action: makeToggler(false)
+    },
+    {
+        duration: 3600,
+        action: makeToggler(true)
+    },
+    {
+        duration: 3600,
+        action: makeToggler(false)
+    }
+];
 
- // Start with instructions off
- addEvent(function(duration) {
-     toggleInstructions(duration, false);
- }, 0);
-
-addEvent(function(duration) {
-    toggleInstructions(duration, true);
-}, 3600);
-
-addEvent(function(duration) {
-    toggleInstructions(duration, false);
-    // Fade out symbols if stepping back
-    forgetAll(duration);
-}, 3600);
-
-// Add walk events
+var walkEventList = [];
 for (var i = 0; i < nEvents; i++) {
-    addEvent(moveWalker, randDuration());
+    walkEventList.push({
+        duration: randDuration(),
+        action: moveWalker
+    });
 }
 
-// Add final events
-addEvent(function(duration) {
-    forgetAll(duration || 6000);
-}, 6000);
+var finalEventList = [
+    {
+        duration: 6000,
+        action: function(duration) {
+            forgetAll(duration || 6000);
+        }
+    },
+    {
+        duration: 0,
+        action: function() {}
+    }
+];
 
-addEvent(undefined, 0);
+var eventList = [].concat(instructionEventList, walkEventList, finalEventList)
+    .map(function(bar, i, list) {
+        bar.time = list.slice(0, i).reduce(function(sum, bar2) {
+            return sum += bar2.duration;
+        }, 0);
+        return bar;
+    });
+
+eventList.forEach(function(bar) {
+    VS.score.add(bar.time, bar.action);
+});
 
 /**
  * Instructions
@@ -340,9 +366,8 @@ var instructions = wrapper.append('text')
     .text('explore the unknown, try to remember the past');
 
 function toggleInstructions(duration, toggle) {
-    var opacity = toggle ? 1 : 0;
     instructions.transition().duration(duration || transitionTime)
-        .attr('opacity', opacity);
+        .attr('opacity', toggle ? 1 : 0);
 }
 
 /**
@@ -350,11 +375,7 @@ function toggleInstructions(duration, toggle) {
  */
 VS.control.hooks.add('step', function() {
     var pointer = VS.score.getPointer();
-    var fn = VS.score.functionAt(pointer);
-
-    if (typeof fn === 'function') {
-        fn(150);
-    }
+    eventList[pointer].action(150);
 });
 
 VS.control.hooks.add('stop', forgetAll);
