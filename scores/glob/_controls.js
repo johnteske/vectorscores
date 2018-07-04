@@ -1,9 +1,8 @@
 (function() {
     var updateAtPointer = function() {
         var pointer = VS.score.getPointer();
-        var fn = VS.score.functionAt(pointer);
 
-        if (typeof fn === 'function') {
+        if (!VS.score.pointerAtLastEvent()) {
             update(transitionTime.short, score[pointer]);
         }
     };

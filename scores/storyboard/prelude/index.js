@@ -4,14 +4,14 @@ layout: compress-js
 
 // TODO since scenes can be cards or not cards, rename variables and CSS classes to match
 
-var score = {
+var scoreConfig = {
     totalDuration: 300, // 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
     cueBlinks: 2,
     transposeBy: 3
 };
 
-score.cueDuration = 3000; // NOTE this is the max cue timing
-score.scale = 1;
+scoreConfig.cueDuration = 3000; // NOTE this is the max cue timing
+scoreConfig.scale = 1;
 
 {% include_relative _card-content.js %}
 {% include_relative _score.js %}
@@ -34,17 +34,17 @@ var cardWidth = 120,
 var svg = d3.select('.main');
 
 var scaleDuration = (function() {
-    var scale = score.totalDuration / 481;
+    var scale = scoreConfig.totalDuration / 481;
 
     return function(i) {
         var dur = cardList[i].duration;
-        // do not scale chords (2-3 s)
-        return dur < 4 ? dur : dur * scale;
+        // Do not scale chords (2-3 s)
+        return (dur < 4) ? dur : (dur * scale);
     };
 })();
 
 function cardX(index) {
-    return index * (cardWidth + cardPadding) * score.scale;
+    return index * (cardWidth + cardPadding) * scoreConfig.scale;
 }
 
 function makeCue(data, index) {
@@ -89,7 +89,7 @@ function makeCue(data, index) {
             selection
                 .style('fill', '#888')
                 .style('opacity', 0.25);
-        })
+        });
 }
 
 function makeCard(data, index) {
@@ -112,7 +112,7 @@ function makeCard(data, index) {
     selection.append('text')
         .attr('dy', '-1em')
         .text(function(d) {
-            var transpose = (typeof d.transpose !== 'undefined') ? (d.transpose + score.transposeBy) : 'random';
+            var transpose = (typeof d.transpose !== 'undefined') ? (d.transpose + scoreConfig.transposeBy) : 'random';
             var pcSet = VS.pitchClass.transpose(d.pcSet, transpose + scoreOptions.transposition);
 
             pcSet = pcSet.map(function(pc) {
@@ -176,7 +176,7 @@ function makeCard(data, index) {
 // create cards
 function translateCardGroup(pointer) {
     var i = pointer || 0;
-    return 'translate(' + (offset - cardX(i)) + ', ' + offsetY + ') scale(' + score.scale + ',' + score.scale + ')';
+    return 'translate(' + (offset - cardX(i)) + ', ' + offsetY + ') scale(' + scoreConfig.scale + ',' + scoreConfig.scale + ')';
 }
 
 var cardGroup = svg.append('g')
@@ -272,31 +272,30 @@ function scheduleCue(pointer) {
         return;
     }
 
-    var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
+    var cardDuration = cardList[pointer + 1].time - cardList[pointer].time,
         nextCue = cues[pointer + 1],
         cueDelay = cardDuration - nextCue.duration();
 
     VS.score.schedule(cueDelay, cueBlink, pointer);
 }
 
-var addEvent = (function() {
-    var time = 0;
+// Add final event for proper timing of last card
+var cardsWithFinalEvent = [].concat(cardList, { duration: 0 });
 
-    return function(fn, duration, args) {
-        VS.score.add(time, fn, args);
-        time += duration;
-    };
-})();
+var score = cardsWithFinalEvent.map(function(card, i, list) {
+    card.time = list.slice(0, i).reduce(function(sum, c, j) {
+        return sum += (scaleDuration(j) * 1000);
+    }, 0);
 
-// create score events from card durations
-for (var i = 0; i < cardList.length; i++) {
-    addEvent(goToCard, scaleDuration(i) * 1000, [i, 'score']);
-}
+    return card;
+});
 
-// and final, empty event after last card
-addEvent();
+score.slice(0, -1).forEach(function(card, i) {
+    VS.score.add(card.time, goToCard, [i, 'score']);
+});
+VS.score.add(score[score.length - 1].time);
 
-VS.score.preroll = score.cueDuration; // cardTransTime;
+VS.score.preroll = scoreConfig.cueDuration; // cardTransTime;
 
 VS.control.hooks.add('play', function() {
     var pointer = VS.score.getPointer();
@@ -328,10 +327,10 @@ function resize() {
     var scaleX = VS.clamp(w / width, 0.25, 4);
     var scaleY = VS.clamp(h / height, 0.25, 4);
 
-    score.scale = Math.min(scaleX, scaleY);
+    scoreConfig.scale = Math.min(scaleX, scaleY);
 
-    offset = (w * 0.5) - (cardWidth * score.scale);
-    offsetY = (h * 0.5) - (height * 0.5 * score.scale);
+    offset = (w * 0.5) - (cardWidth * scoreConfig.scale);
+    offsetY = (h * 0.5) - (height * 0.5 * scoreConfig.scale);
 
     cardGroup.attr('transform', translateCardGroup);
 }

@@ -142,12 +142,10 @@ function goToCard(eventIndex, dur) {
 }
 
 function updateCardIndicator(pointer) {
-    var cardDuration = VS.score.timeAt(pointer + 1) - VS.score.timeAt(pointer),
-        indicatorTime = cardDuration - cueIndicator.duration();
+    var cardDuration = cardList[pointer + 1].time - cardList[pointer].time;
+    var indicatorTime = cardDuration - cueIndicator.duration();
 
-    VS.score.schedule(indicatorTime, function() {
-        cueIndicator.start();
-    });
+    VS.score.schedule(indicatorTime, cueIndicator.start);
 }
 
 // create score events from card times

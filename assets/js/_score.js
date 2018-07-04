@@ -38,7 +38,7 @@ VS.score = (function() {
 
         // Schedule next event
         if (index < VS.score.getLength() - 1) {
-            var timeToNext = VS.score.timeAt(index + 1) - thisEvent.time;
+            var timeToNext = events[index + 1].time - thisEvent.time;
             schedule(timeToNext, playEvent, index + 1);
         } else {
             VS.score.stop(); // TODO should the score automatically stop? or should the composer call this when ready?
@@ -60,10 +60,6 @@ VS.score = (function() {
             return pointer === (this.getLength() - 1);
         },
         preroll: 0, // delay before play
-        // TODO make private? and/or make single eventAt, returning object: { time: 0, fn: fn, params: []}
-        timeAt: function(i) { return events[i].time; },
-        functionAt: function(i) { return events[i].action; },
-        parametersAt: function(i) { return events[i].parameters; },
         hooks: hooks,
         play: function() {
             isPlaying = true;

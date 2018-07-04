@@ -5,10 +5,13 @@ layout: compress-js
 // Remove unused element
 d3.select('svg').remove();
 
-// Set score size between 12 and 18 events
 // TODO create VS.getRandInt
-var nEvents = Math.floor(Math.random() * 6) + 12;
+function getRandInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
+// Set score size between 12 and 18 events
+var nEvents = getRandInt(12, 18);
 
 /**
  * Events and span creation
@@ -31,43 +34,41 @@ function createSpan(eventTime) {
     document.getElementById('events').appendChild(el);
 }
 
-// Create a span element and add an event to the score
+
 function createEvent(eventTime) {
     // Each span has a 1/2 chance of becoming green or blue
     var isUserEvent = VS.getItem([true, false]);
     // and each green span has a 1/3 chance of becoming a box
     var isBox = VS.getWeightedItem([true, false], [1, 2]);
 
-    if (isUserEvent) {
-        VS.score.add(eventTime, greenEvent, [eventTime, isBox]);
-    } else {
-        VS.score.add(eventTime, blueEvent, [eventTime]);
-    }
-
-    createSpan(eventTime);
+    return {
+        time: eventTime,
+        action: isUserEvent ? greenEvent : blueEvent,
+        parameters: [eventTime, isBox]
+    };
 }
-
 
 /**
  * Score
  */
+var score = [createEvent(0)];
 
-function randomTime(i) {
-    // TODO create VS.getRandInt
-    return Math.floor(Math.random() * 500) + (i * 1500) + 1000;
-}
-
-// Create first event at time 0
-createEvent(0);
-
-// Create remaining events
 for (var i = 0; i < (nEvents - 1); i++) {
-    createEvent(randomTime(i));
+    var time = randomTime(i);
+    score.push(createEvent(time));
 }
+
+score.forEach(function(bar) {
+    VS.score.add(bar.time, bar.action, bar.parameters);
+    createSpan(bar.time);
+});
 
 // Create final event so last span has time to animate
 VS.score.add(randomTime(nEvents));
 
+function randomTime(i) {
+    return getRandInt(0, 500) + (i * 1500) + 1000;
+}
 
 /**
  * Score and control hooks
@@ -83,14 +84,10 @@ VS.control.hooks.add('step', function() {
     resetSpans();
 
     var index = VS.score.getPointer();
-    var params;
-    var fn;
 
-    for (var i = 0; i < index; i++) {
-        params = VS.score.parametersAt(i);
-        fn = VS.score.functionAt(i);
-        fn.apply(null, params);
-    }
+    score.slice(0, index).forEach(function(bar) {
+        bar.action.apply(null, bar.parameters);
+    });
 });
 
 VS.score.hooks.add('stop', resetSpans);
