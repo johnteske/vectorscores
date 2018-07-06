@@ -29,187 +29,215 @@ function emptyTrash() {
     trash.update();
 }
 
-function fireCycle() {
-    var i = 0,
-        cycle = [];
+function flatten(target, array) {
+    return target.concat(array);
+}
 
-    // build fire, 3-5
-    var nFires = Math.floor(VS.getRandExcl(3, 6));
-    for (i = 0; i < nFires; i++) {
-        cycle.push({
-            time: time,
+function buildArray(n, fn) {
+    var array = [];
+
+    for (var i = 0; i < n; i++) {
+        array[i] = fn(i, n);
+    }
+
+    return array;
+}
+
+// NOTE this mutates its input
+function addTimeFromDurations(currentBar, i, score) {
+    currentBar.time = score.slice(0, i).reduce(function(sum, bar) {
+        return sum += bar.duration;
+    }, 0);
+
+    return currentBar;
+}
+
+function fireCycle() {
+
+    // Build 3-5 flames
+    var flames = buildArray(VS.getItem([3, 4, 5]), function(index, n) {
+        return {
+            duration: ((7 - index) * 1000), // duration: 7-2 seconds
             fn: addTrash,
             args: [
                 1,
-                (i > 2) ? 'blaze' : 'crackle',
-                [25, 25 + (i * (50 / nFires))]
+                (index > 2) ? 'blaze' : 'crackle',
+                [25, 25 + (index * (50 / n))]
             ]
-        });
+        };
+    });
 
-        time += ((7 - i) * 1000); // duration: 7-2 seconds
-    }
-
-    // hit dumpster, 0-3 times
-    var nSpikes = VS.getWeightedItem([0, 1, 2, 3], [15, 60, 15, 10]);
-    for (i = 0; i < nSpikes; i++) {
-        cycle.push({
-            time: time,
-            fn: TrashFire.spike.show,
-            args: []
-        });
-        cycle.push({
-            time: time + 600, // show() duration
-            fn: TrashFire.spike.hit,
-            args: []
-        });
-
-        time += 1350; // show() + hit() duration
-    }
+    // Hit dumpster, 0-3 times
     // TODO reduce trash to last 3 items if no spike?
-
-    var tail = VS.getItem(['resume', 'embers', 'multi', '']);
-    var nTail = 0;
-    switch (tail) {
-        // come back stronger
-        case 'resume':
-            // add
-            cycle.push({
-                time: time,
-                fn: addTrash,
-                args: [1, 'blaze', [25, 75]]
-            });
-            time += 7000;
-
-            break;
-        // embers, 1-3
-        case 'embers':
-            nTail = VS.getItem([1, 2, 3]);
-
-            // grow
-            for (i = 0; i < nTail; i++) {
-                cycle.push({
-                    time: time,
-                    fn: addTrash,
-                    args: [1, 'embers', [25, 75]]
-                });
-                time += ((7 - i) * 1000); // duration: 7-5 seconds
+    var nSpikes = VS.getWeightedItem([0, 1, 2, 3], [15, 60, 15, 10]);
+    var spikes = buildArray(nSpikes, function() {
+        return [
+            {
+                duration: 600,
+                fn: TrashFire.spike.show,
+                args: []
+            },
+            {
+                duration: 750,
+                fn: TrashFire.spike.hit,
+                args: []
             }
+        ];
+    })
+    .reduce(flatten, []);
 
-            // die away
-            for (i = 0; i < nTail; i++) {
-                cycle.push({
-                    time: time,
-                    fn: removeTrash,
-                    args: []
-                });
-                time += ((nTail - i + 4) * 1000);
-            }
+    var tailType = VS.getItem(['resume', 'embers', 'multi', '']);
+    var tailFns = {
+        'resume': resume,
+        'embers': embers,
+        'multi': multi
+    };
+    var tail = (tailType !== '') ? tailFns[tailType]() : [];
 
-            break;
-        // multiple small fires, 1-3
-        case 'multi':
-            nTail = VS.getItem([1, 2, 3]);
-
-            // add all
-            cycle.push({
-                time: time,
-                fn: addTrash,
-                args: [nTail, 'crackle', [25, 75]]
-            });
-            time += 7000;
-
-            // die away
-            for (i = 0; i < nTail; i++) {
-                cycle.push({
-                    time: time,
-                    fn: removeTrash,
-                    args: []
-                });
-                time += ((nTail - i + 4) * 1000);
-            }
-
-            break;
-        // end cycle
-        default:
-            break;
+    // Come back stronger
+    function resume() {
+        return {
+            duration: 7000,
+            fn: addTrash,
+            args: [1, 'blaze', [25, 75]]
+        };
     }
 
-    // empty trash
-    cycle.push({
-        time: time,
+    function embers() {
+        var n = VS.getItem([1, 2, 3]);
+
+        var grow = buildArray(n, function(i) {
+            return {
+                duration: ((7 - i) * 1000), // duration: 7-5 seconds
+                fn: addTrash,
+                args: [1, 'embers', [25, 75]]
+            };
+        });
+
+        var die = buildArray(n, function(i, n) {
+            return {
+                duration: ((n - i + 4) * 1000),
+                fn: removeTrash,
+                args: []
+            };
+        });
+
+        return [].concat(grow, die);
+    }
+
+    function multi() {
+        var n = VS.getItem([1, 2, 3]);
+
+        // Add
+        var add = {
+            duration: 7000,
+            fn: addTrash,
+            args: [n, 'crackle', [25, 75]]
+        };
+
+        // Then die away
+        var dieAway = buildArray(n, function(i, n) {
+            return {
+                duration: ((n - i + 4) * 1000),
+                fn: removeTrash,
+                args: []
+            };
+        });
+
+        return [].concat(add, dieAway);
+    }
+
+    // Empty trash
+    var empty = {
+        duration: 3000, // rest
         fn: emptyTrash,
         args: []
-    });
-    time += 3000; // rest
+    };
 
-    return cycle;
+    return [].concat(flames, spikes, tail, empty)
+        .map(addTimeFromDurations);
 }
-var time = 0;
 
-var fireEvents = [].concat(fireCycle(), fireCycle(), fireCycle(), fireCycle(), fireCycle())
+function timeOffset(ms) {
+    return function(bar) {
+        bar.time += ms;
+        return bar;
+    };
+}
+
+var fireEvents = [].concat(
+    fireCycle(),
+    fireCycle().map(timeOffset(60000)),
+    fireCycle().map(timeOffset(120000)),
+    fireCycle().map(timeOffset(180000)),
+    fireCycle().map(timeOffset(240000))
+    )
     .sort(sortByTime);
 
-var lastTime = fireEvents[fireEvents.length - 1].time;
+console.log(fireEvents.map(function(c) { return c.time; }));
 
-/**
- * Noise
- */
-var noiseEvents = (function() {
-    var noises = [],
-        timeWindow = lastTime / 5,
-        noiseTime;
+// var lastTime = fireEvents[fireEvents.length - 1].time;
 
-    for (var i = 0; i < 5; i++) {
-        noiseTime = (timeWindow * i) + (Math.random() * timeWindow);
+// /**
+//  * Noise
+//  */
+// var noiseEvents = (function() {
+//     var noises = [],
+//         timeWindow = lastTime / 5,
+//         noiseTime;
 
-        noises.push({
-            time: noiseTime,
-            fn: TrashFire.noiseLayer.add,
-            args: [8, 200]
-        });
-        noises.push({
-            time: noiseTime + 1600 + (Math.random() * 1600),
-            fn: TrashFire.noiseLayer.remove,
-            args: [32]
-        });
-    }
+//     for (var i = 0; i < 5; i++) {
+//         noiseTime = (timeWindow * i) + (Math.random() * timeWindow);
 
-    return noises;
-}());
+//         noises.push({
+//             time: noiseTime,
+//             fn: TrashFire.noiseLayer.add,
+//             args: [8, 200]
+//         });
+//         noises.push({
+//             time: noiseTime + 1600 + (Math.random() * 1600),
+//             fn: TrashFire.noiseLayer.remove,
+//             args: [32]
+//         });
+//     }
 
-/**
- * Drone
- */
-var droneEvents = (function() {
-    var drones = [],
-        timeWindow = lastTime / 3,
-        droneTime,
-        droneDur;
+//     return noises;
+// }());
 
-    for (var i = 0; i < 3; i++) {
-        droneTime = (timeWindow * i) + (Math.random() * timeWindow);
-        // 50-75% drone
-        droneDur = (timeWindow * 0.5) + (Math.random() * (timeWindow * 0.25));
+// /**
+//  * Drone
+//  */
+// var droneEvents = (function() {
+//     var drones = [],
+//         timeWindow = lastTime / 3,
+//         droneTime,
+//         droneDur;
 
-        drones.push({
-            time: droneTime,
-            fn: TrashFire.scrapeDrone.show,
-            args: []
-        });
-        drones.push({
-            time: droneTime + droneDur,
-            fn: TrashFire.scrapeDrone.hide,
-            args: []
-        });
-    }
+//     for (var i = 0; i < 3; i++) {
+//         droneTime = (timeWindow * i) + (Math.random() * timeWindow);
+//         // 50-75% drone
+//         droneDur = (timeWindow * 0.5) + (Math.random() * (timeWindow * 0.25));
 
-    return drones;
-}());
+//         drones.push({
+//             time: droneTime,
+//             fn: TrashFire.scrapeDrone.show,
+//             args: []
+//         });
+//         drones.push({
+//             time: droneTime + droneDur,
+//             fn: TrashFire.scrapeDrone.hide,
+//             args: []
+//         });
+//     }
+
+//     return drones;
+// }());
 
 /**
  * Sort score by event time
  */
-var score = [].concat(fireEvents, noiseEvents, droneEvents)
+// var score = [].concat(fireEvents, noiseEvents, droneEvents)
+var score = [].concat(fireEvents)
     .sort(sortByTime);
 
 score.forEach(function(bar) {
