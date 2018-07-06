@@ -178,35 +178,35 @@ var fireEvents = buildArray(5, fireCycle)
     })
     .reduce(flatten);
 
-console.log(fireEvents.map(function(c) { return c.time; }));
+// console.log(fireEvents.map(function(c) { return c.time; }));
 
-// var lastTime = fireEvents[fireEvents.length - 1].time;
+var lastTime = fireEvents[fireEvents.length - 1].time;
 
-// /**
-//  * Noise
-//  */
-// var noiseEvents = (function() {
-//     var noises = [],
-//         timeWindow = lastTime / 5,
-//         noiseTime;
+console.log(lastTime);
 
-//     for (var i = 0; i < 5; i++) {
-//         noiseTime = (timeWindow * i) + (Math.random() * timeWindow);
+/**
+ * Noise
+ */
+var noiseEvents = buildArray(5, function(i) {
+    var timeWindow = lastTime / 5;
+    var time = (timeWindow * i) + VS.getRandExcl(0, timeWindow);
+    var duration = VS.getRandExcl(1600, 3200);
 
-//         noises.push({
-//             time: noiseTime,
-//             fn: TrashFire.noiseLayer.add,
-//             args: [8, 200]
-//         });
-//         noises.push({
-//             time: noiseTime + 1600 + (Math.random() * 1600),
-//             fn: TrashFire.noiseLayer.remove,
-//             args: [32]
-//         });
-//     }
+    return [{
+        time: time,
+        fn: TrashFire.noiseLayer.add,
+        args: [8, 200]
+    },
+    {
+        time: time + duration,
+        fn: TrashFire.noiseLayer.remove,
+        args: [32]
+    }];
 
-//     return noises;
-// }());
+})
+.reduce(flatten);
+
+console.log(noiseEvents.map(function(c) { return c.time; }));
 
 // /**
 //  * Drone
@@ -241,7 +241,7 @@ console.log(fireEvents.map(function(c) { return c.time; }));
  * Sort score by event time
  */
 // var score = [].concat(fireEvents, noiseEvents, droneEvents)
-var score = [].concat(fireEvents)
+var score = [].concat(fireEvents, noiseEvents)
     .sort(sortByTime);
 
 score.forEach(function(bar) {
