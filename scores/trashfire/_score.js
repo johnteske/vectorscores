@@ -165,14 +165,18 @@ function timeOffset(ms) {
     };
 }
 
-var fireEvents = [].concat(
-    fireCycle(),
-    fireCycle().map(timeOffset(60000)),
-    fireCycle().map(timeOffset(120000)),
-    fireCycle().map(timeOffset(180000)),
-    fireCycle().map(timeOffset(240000))
-    )
-    .sort(sortByTime);
+var fireEvents = buildArray(5, fireCycle)
+    .map(function(cycle, i, cycles) {
+        if (i === 0) {
+            return cycle;
+        }
+
+        var previousCycle = cycles[i - 1];
+        var offset = previousCycle[previousCycle.length - 1].time + 3000;
+
+        return cycle.map(timeOffset(offset));
+    })
+    .reduce(flatten);
 
 console.log(fireEvents.map(function(c) { return c.time; }));
 
