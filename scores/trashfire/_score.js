@@ -178,11 +178,7 @@ var fireEvents = buildArray(5, fireCycle)
     })
     .reduce(flatten);
 
-// console.log(fireEvents.map(function(c) { return c.time; }));
-
 var lastTime = fireEvents[fireEvents.length - 1].time;
-
-console.log(lastTime);
 
 /**
  * Noise
@@ -206,42 +202,35 @@ var noiseEvents = buildArray(5, function(i) {
 })
 .reduce(flatten);
 
-console.log(noiseEvents.map(function(c) { return c.time; }));
+/**
+ * Drone
+ */
+var droneEvents = buildArray(3, function(i) {
+    var timeWindow = lastTime / 3;
+    // Start anywhere in window
+    var time = (timeWindow * i) + VS.getRandExcl(0, timeWindow);
+    // Drone for 50-75% of window
+    var duration = timeWindow * VS.getRandExcl(0.5, 0.75);
 
-// /**
-//  * Drone
-//  */
-// var droneEvents = (function() {
-//     var drones = [],
-//         timeWindow = lastTime / 3,
-//         droneTime,
-//         droneDur;
-
-//     for (var i = 0; i < 3; i++) {
-//         droneTime = (timeWindow * i) + (Math.random() * timeWindow);
-//         // 50-75% drone
-//         droneDur = (timeWindow * 0.5) + (Math.random() * (timeWindow * 0.25));
-
-//         drones.push({
-//             time: droneTime,
-//             fn: TrashFire.scrapeDrone.show,
-//             args: []
-//         });
-//         drones.push({
-//             time: droneTime + droneDur,
-//             fn: TrashFire.scrapeDrone.hide,
-//             args: []
-//         });
-//     }
-
-//     return drones;
-// }());
+    return [
+        {
+            time: time,
+            fn: TrashFire.scrapeDrone.show,
+            args: []
+        },
+        {
+            time: time + duration,
+            fn: TrashFire.scrapeDrone.hide,
+            args: []
+        }
+    ];
+})
+.reduce(flatten);
 
 /**
  * Sort score by event time
  */
-// var score = [].concat(fireEvents, noiseEvents, droneEvents)
-var score = [].concat(fireEvents, noiseEvents)
+var score = [].concat(fireEvents, noiseEvents, droneEvents)
     .sort(sortByTime);
 
 score.forEach(function(bar) {
