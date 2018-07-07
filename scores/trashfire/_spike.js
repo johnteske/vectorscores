@@ -28,7 +28,7 @@ TrashFire.spike = (function() {
             .transition().duration(150).ease(d3.easeLinear)
             .style('opacity', 0);
 
-        dumpsterShake();
+        dumpster.shake();
     };
 
     return spike;

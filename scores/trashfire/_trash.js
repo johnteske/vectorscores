@@ -39,7 +39,7 @@ var trash = (function() {
             return 'translate(' + x + ',' + y + ')';
         }
 
-        var trashSelection = trashContainer.selectAll('.trash')
+        var trashSelection = dumpster.trashGroup.selectAll('.trash')
             .data(_trash);
 
         // EXIT

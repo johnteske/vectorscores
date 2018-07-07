@@ -18,6 +18,11 @@ var TrashFire = (function() {
         height: 204
     };
 
+    tf.trashOrigin = {
+        x: tf.dumpster.width * 0.5,
+        y: tf.dumpster.height * 0.5
+    };
+
     return tf;
 })();
 
