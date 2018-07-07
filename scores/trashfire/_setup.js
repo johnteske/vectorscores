@@ -32,3 +32,8 @@ var layout = {
     margin: {},
     main: d3.select('main')
 };
+
+d3.select(window).on('load', function() {
+    resize();
+    TrashFire.noiseLayer.render();
+});

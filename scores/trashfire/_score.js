@@ -181,7 +181,7 @@ var noiseEvents = buildArray(5, function(i) {
     return [{
         time: time,
         fn: TrashFire.noiseLayer.add,
-        args: [8, 200]
+        args: [8]
     },
     {
         time: time + duration,
