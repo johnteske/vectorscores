@@ -50,8 +50,6 @@ TrashFire.noiseLayer = (function(tf) {
                 .transition().duration(0)
                 .delay(function(d, i) { return i * delay; })
                 .style('opacity', opacity);
-
-            trash.update();
         };
     }
 
