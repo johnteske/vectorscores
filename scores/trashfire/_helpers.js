@@ -7,3 +7,7 @@ function buildArray(n, fn) {
 
     return array;
 }
+
+var lineGenerator = d3.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; });

@@ -1,8 +1,11 @@
 /**
  * Generate trash
  */
-var trash = (function() {
+var trash = (function(tf) {
     var trash = {};
+
+    var xOffset = 10;
+    var yOffset = -50;
 
     var _trash = [];
 
@@ -20,22 +23,20 @@ var trash = (function() {
 
     trash.update = function(duration) {
         var dur = duration || 1000;
-        var offset = 10;
+
         var trashWidths = _trash.map(function(t) {
             return t.size;
         });
-        var trashWidthSum = trashWidths.reduce(function(a, b) {
-            return a + b;
-        }, (trashWidths.length - 1) * offset);
+
+        var xOffsets = (_trash.length - 1) * xOffset;
+        var trashWidthSum = trashWidths.reduce(sum, xOffsets);
+        // Leftmost trash position based on width of all trash (and offsets)
+        var trashX = tf.trashOrigin.x - (trashWidthSum * 0.5);
 
         function trashPosition(d, i) {
-            var upToI = trashWidths.slice(0, i),
-                sum = upToI.reduce(function(a, b) {
-                    return a + b;
-                }, 0),
-                x = (TrashFire.trashOrigin.x - (trashWidthSum * 0.5)) +
-                    (sum + (i * offset)),
-                y = d.size * -0.5 - 50;
+            var currentSum = trashWidths.slice(0, i).reduce(sum, 0);
+            var x = trashX + (currentSum + (i * xOffset));
+            var y = (d.size * -0.5) + yOffset;
             return 'translate(' + x + ',' + y + ')';
         }
 
@@ -45,9 +46,7 @@ var trash = (function() {
         // EXIT
         trashSelection.exit()
             .transition().duration(dur)
-            .attr('transform', function() {
-                return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
-            })
+            .attr('transform', translateTrashOrigin)
             .style('opacity', 0)
             .remove();
 
@@ -59,21 +58,22 @@ var trash = (function() {
         // ENTER
         trashSelection.enter()
             .append('g').attr('class', 'trash')
-                .attr('transform', function() {
-                    return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
-                })
+                .attr('transform', translateTrashOrigin)
                 .call(makePath)
                 .transition().duration(dur)
                 .attr('transform', trashPosition);
     };
 
-    return trash;
-})();
+    function sum(a, b) {
+        return a + b;
+    }
 
-var lineGenerator = d3.line()
-    .x(function(d) { return d[0]; })
-    .y(function(d) { return d[1]; });
-    // .interpolate("basis");
+    function translateTrashOrigin() {
+        return 'translate(' + tf.trashOrigin.x + ',' + tf.trashOrigin.y + ')';
+    }
+
+    return trash;
+})(TrashFire);
 
 function makePath(selection) {
     selection.each(function(d) {
