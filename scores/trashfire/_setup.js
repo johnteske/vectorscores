@@ -13,7 +13,9 @@ var TrashFire = (function() {
     tf.wrapper = tf.svg.append('g');
 
     tf.dumpster = {
-        y: 200
+        y: 200,
+        width: 312,
+        height: 204
     };
 
     return tf;

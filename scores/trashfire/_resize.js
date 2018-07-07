@@ -18,6 +18,4 @@ function resize() {
     TrashFire.wrapper.attr('transform', 'translate(' + layout.margin.left + ',' + layout.margin.top + ') scale(' + layout.scale + ',' + layout.scale + ')');
 }
 
-d3.select(window).on('resize', resize);
-
-d3.select(window).on('load', resize);
+d3.select(window).on('load resize', resize);

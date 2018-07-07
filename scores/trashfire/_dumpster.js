@@ -2,43 +2,38 @@
  * Draw front and back groups so objects can emerge between the layers
  */
 
-// dumpster width = 312
 TrashFire.trashOrigin = {
-    x: 312 * 0.5,
-    y: 204 * 0.5
+    x: TrashFire.dumpster.width * 0.5,
+    y: TrashFire.dumpster.height * 0.5
 };
 
 var dumpster = TrashFire.wrapper.append('g')
-    .attr('class', 'dumpster')
-    .attr('transform', function() {
-        var x = (TrashFire.view.width - 312) * 0.5;
-        return 'translate(' + x + ', ' + TrashFire.dumpster.y + ')';
-    });
+    .attr('transform', translateDumpsterWithYOffset(0));
 
-dumpster.append('g')
-    .classed('back', 1)
-    .append('use').attr('xlink:href', 'dumpster.svg#back');
-
+dumpster.call(addDumpsterLayer, 'back');
 var trashContainer = dumpster.append('g');
-
-dumpster.append('g')
-    .classed('front', 1)
-    .append('use').attr('xlink:href', 'dumpster.svg#front');
+dumpster.call(addDumpsterLayer, 'front');
 
 function dumpsterShake() {
     dumpster
         .transition()
         .duration(300)
         .ease(d3.easeElastic)
-        .attr('transform', function() {
-            var x = (TrashFire.view.width - 312) * 0.5;
-            return 'translate(' + x + ', ' + (TrashFire.dumpster.y + 10) + ')';
-        })
+        .attr('transform', translateDumpsterWithYOffset(10))
         .transition()
         .duration(300)
         .ease(d3.easeBounce)
-        .attr('transform', function() {
-            var x = (TrashFire.view.width - 312) * 0.5;
-            return 'translate(' + x + ', ' + TrashFire.dumpster.y + ')';
-        });
+        .attr('transform', translateDumpsterWithYOffset(0));
 }
+
+function translateDumpsterWithYOffset(yOffset) {
+    return function() {
+        return 'translate(' +
+            ((TrashFire.view.width - TrashFire.dumpster.width) * 0.5) + ', ' +
+            (TrashFire.dumpster.y + yOffset) + ')';
+    };
+}
+
+function addDumpsterLayer(selection, layer) {
+    selection.append('g').append('use').attr('xlink:href', 'dumpster.svg#' + layer);
+ }
