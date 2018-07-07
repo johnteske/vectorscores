@@ -3,10 +3,6 @@ TrashFire.scrapeDrone = (function() {
         width: TrashFire.view.width * 0.75 // 232 // dumpster bottom edge
     };
 
-    var pathGenerator = d3.line()
-        .x(function(d) { return d[0]; })
-        .y(function(d) { return d[1]; });
-
     drone.group = TrashFire.wrapper.append('g')
         .attr('class', 'drone')
         .attr('transform', 'translate(' + ((TrashFire.view.width * 0.5) - (drone.width * 0.5)) + ',' + 350 + ')');

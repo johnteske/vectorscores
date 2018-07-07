@@ -77,35 +77,25 @@ var lineGenerator = d3.line()
 
 function makePath(selection) {
     selection.each(function(d) {
-        var nPoints = 60,
-            margin = 10,
-            slice = (d.size - (margin * 2)) / (nPoints + 1),
-            height;
+        var nPoints = 60;
+        var margin = 10;
+        var slice = (d.size - (margin * 2)) / (nPoints + 1);
+        var height = (d.type === 'blaze') ? d.size * 0.67 : 3;
 
-        if (d.type === 'blaze') {
-            height = d.size * 0.67;
-        } else {
-            height = 3;
+        d.pathPoints = buildArray(nPoints, d.type === 'embers' ? makeEmberPoint : makeFlamePoint);
+
+        function makeFlamePoint(i) {
+            return [
+                margin + (i * slice),
+                (d.size * 0.5 - (height * 0.5)) + (Math.random() * height)
+            ];
         }
 
-        d.pathPoints = [];
-
-        var j;
-
-        if (d.type !== 'embers') {
-            for (j = 0; j < nPoints; j++) {
-                d.pathPoints.push([
-                    margin + (j * slice),
-                    (d.size * 0.5 - (height * 0.5)) + (Math.random() * height)
-                ]);
-            }
-        } else {
-            for (j = 0; j < nPoints; j++) {
-                d.pathPoints.push([
-                    margin + (j * slice),
-                    d.size - margin - (j * slice) + (Math.random() * height)
-                ]);
-            }
+        function makeEmberPoint(i) {
+            return [
+                margin + (i * slice),
+                d.size - margin - (i * slice) + (Math.random() * height)
+            ];
         }
     });
 

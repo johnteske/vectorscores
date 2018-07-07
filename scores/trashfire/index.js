@@ -3,6 +3,7 @@ layout: compress-js
 ---
 
 {% include_relative _setup.js %}
+{% include_relative _helpers.js %}
 {% include_relative _dumpster.js %}
 {% include_relative _trash.js %}
 {% include_relative _spike.js %}

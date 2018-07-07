@@ -33,16 +33,6 @@ function flatten(target, array) {
     return target.concat(array);
 }
 
-function buildArray(n, fn) {
-    var array = [];
-
-    for (var i = 0; i < n; i++) {
-        array[i] = fn(i, n);
-    }
-
-    return array;
-}
-
 // NOTE this mutates its input
 function addTimeFromDurations(currentBar, i, score) {
     currentBar.time = score.slice(0, i).reduce(function(sum, bar) {
