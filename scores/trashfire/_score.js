@@ -1,20 +1,9 @@
-function sortByTime(a, b) {
-    return a.time - b.time;
-}
-
-/**
- * Fire/spike cycle
- */
 function makeTrash(type, range) {
     return {
         id: VS.id(),
         size: VS.getRandExcl(range[0], range[1]),
         type: type
     };
-}
-
-function flatten(target, array) {
-    return target.concat(array);
 }
 
 // NOTE this mutates its input
@@ -26,6 +15,20 @@ function addTimeFromDurations(currentBar, i, score) {
     return currentBar;
 }
 
+function timeOffset(ms) {
+    return function(bar) {
+        bar.time += ms;
+        return bar;
+    };
+}
+
+function sortByTime(a, b) {
+    return a.time - b.time;
+}
+
+/**
+ * Fire/spike cycle
+ */
 function fireCycle() {
 
     // Build 3-5 flames
@@ -139,13 +142,6 @@ function fireCycle() {
 
     return [].concat(flames, spikes, tail, empty)
         .map(addTimeFromDurations);
-}
-
-function timeOffset(ms) {
-    return function(bar) {
-        bar.time += ms;
-        return bar;
-    };
 }
 
 var fireEvents = buildArray(5, fireCycle)

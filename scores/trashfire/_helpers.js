@@ -11,3 +11,11 @@ function buildArray(n, fn) {
 var lineGenerator = d3.line()
     .x(function(d) { return d[0]; })
     .y(function(d) { return d[1]; });
+
+function flatten(target, array) {
+    return target.concat(array);
+}
+
+function sum(a, b) {
+    return a + b;
+}

@@ -67,10 +67,6 @@ var trash = (function(tf) {
                 .call(makePath)
                 .transition().duration(dur)
                 .attr('transform', trashPosition);
-    };
-
-    function sum(a, b) {
-        return a + b;
     }
 
     function translateTrashOrigin() {
