@@ -9,19 +9,22 @@ var trash = (function(tf) {
 
     var _trash = [];
 
-    trash.add = function(t) {
-        _trash.push(t);
-    };
-
-    trash.empty = function() {
-        _trash = [];
+    trash.add = function(moreTrash) {
+        _trash = _trash.concat(moreTrash);
+        update();
     };
 
     trash.remove = function() {
         _trash.shift();
+        update();
     };
 
-    trash.update = function(duration) {
+    trash.empty = function(t) {
+        _trash = [];
+        update(t);
+    };
+
+    function update(duration) {
         var dur = duration || 1000;
 
         var trashWidths = _trash.map(function(t) {
