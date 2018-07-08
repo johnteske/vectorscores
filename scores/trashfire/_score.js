@@ -164,7 +164,7 @@ var fireEvents = buildArray(5, fireCycle)
 
         return cycle.map(timeOffset(offset));
     })
-    .reduce(flatten);
+    .reduce(flatten, []);
 
 var lastTime = fireEvents[fireEvents.length - 1].time;
 
@@ -187,7 +187,7 @@ var noiseEvents = buildArray(5, function() {
     .map(addTimeFromDurations);
 })
 .map(timeWindowOffset(lastTime))
-.reduce(flatten);
+.reduce(flatten, []);
 
 /**
  * Drone
@@ -211,7 +211,7 @@ var droneEvents = buildArray(3, function(i, n) {
     .map(addTimeFromDurations);
 })
 .map(timeWindowOffset(lastTime))
-.reduce(flatten);
+.reduce(flatten, []);
 
 /**
  * Sort score by event time
