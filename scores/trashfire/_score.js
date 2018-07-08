@@ -22,6 +22,15 @@ function timeOffset(ms) {
     };
 }
 
+function timeWindowOffset(endTime) {
+    return function(d, i, list) {
+        var timeWindow = Math.floor(endTime / list.length);
+        var offset = (timeWindow * i) + VS.getRandIntIncl(0, timeWindow);
+
+        return d.map(timeOffset(offset));
+    };
+}
+
 function sortByTime(a, b) {
     return a.time - b.time;
 }
@@ -162,48 +171,46 @@ var lastTime = fireEvents[fireEvents.length - 1].time;
 /**
  * Noise
  */
-var noiseEvents = buildArray(5, function(i) {
-    var timeWindow = lastTime / 5;
-    var time = (timeWindow * i) + VS.getRandIntIncl(0, timeWindow);
+var noiseEvents = buildArray(5, function() {
     var duration = VS.getRandIntIncl(1600, 3200);
 
     return [{
-        time: time,
+        duration: duration,
         fn: TrashFire.noiseLayer.add,
         args: [8]
     },
     {
-        time: time + duration,
+        duration: 0,
         fn: TrashFire.noiseLayer.remove,
         args: [32]
-    }];
-
+    }]
+    .map(addTimeFromDurations);
 })
+.map(timeWindowOffset(lastTime))
 .reduce(flatten);
 
 /**
  * Drone
  */
-var droneEvents = buildArray(3, function(i) {
-    var timeWindow = lastTime / 3;
-    // Start anywhere in window
-    var time = (timeWindow * i) + VS.getRandIntIncl(0, timeWindow);
-    // Drone for 50-75% of window
+var droneEvents = buildArray(3, function(i, n) {
+    var timeWindow = Math.floor(lastTime / n);
     var duration = timeWindow * VS.getRandIntIncl(0.5, 0.75);
 
     return [
         {
-            time: time,
+            duration: duration,
             fn: TrashFire.scrapeDrone.show,
             args: []
         },
         {
-            time: time + duration,
+            duration: 0,
             fn: TrashFire.scrapeDrone.hide,
             args: []
         }
-    ];
+    ]
+    .map(addTimeFromDurations);
 })
+.map(timeWindowOffset(lastTime))
 .reduce(flatten);
 
 /**
