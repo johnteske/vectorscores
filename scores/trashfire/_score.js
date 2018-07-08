@@ -1,7 +1,7 @@
 function makeTrash(type, range) {
     return {
         id: VS.id(),
-        size: VS.getRandExcl(range[0], range[1]),
+        size: VS.getRandIntIncl(range[0], range[1]),
         type: type
     };
 }
@@ -164,8 +164,8 @@ var lastTime = fireEvents[fireEvents.length - 1].time;
  */
 var noiseEvents = buildArray(5, function(i) {
     var timeWindow = lastTime / 5;
-    var time = (timeWindow * i) + VS.getRandExcl(0, timeWindow);
-    var duration = VS.getRandExcl(1600, 3200);
+    var time = (timeWindow * i) + VS.getRandIntIncl(0, timeWindow);
+    var duration = VS.getRandIntIncl(1600, 3200);
 
     return [{
         time: time,
@@ -187,9 +187,9 @@ var noiseEvents = buildArray(5, function(i) {
 var droneEvents = buildArray(3, function(i) {
     var timeWindow = lastTime / 3;
     // Start anywhere in window
-    var time = (timeWindow * i) + VS.getRandExcl(0, timeWindow);
+    var time = (timeWindow * i) + VS.getRandIntIncl(0, timeWindow);
     // Drone for 50-75% of window
-    var duration = timeWindow * VS.getRandExcl(0.5, 0.75);
+    var duration = timeWindow * VS.getRandIntIncl(0.5, 0.75);
 
     return [
         {

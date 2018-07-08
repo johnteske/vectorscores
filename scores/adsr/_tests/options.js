@@ -1,7 +1,7 @@
 const path = require('path')
 const { test, getWindowFromFile } = require(path.resolve('.', 'bin/js/tape-setup'))
 
-test.skip('ad;sr', t => {
+test('ad;sr', t => {
     getWindowFromFile('_site/scores/adsr/index.html', window => {
         const optionsButton = window.document.getElementById('score-options-open')
 
