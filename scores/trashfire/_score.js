@@ -8,6 +8,7 @@ function sortByTime(a, b) {
 function addTrash(n, type, range) {
     while (n) {
         trash.add({
+            id: VS.id(),
             size: VS.getRandExcl(range[0], range[1]),
             type: type
         });
@@ -18,7 +19,6 @@ function addTrash(n, type, range) {
     trash.update();
 }
 
-// TODO shift() would be useful but updateTrash does not properly join data
 function removeTrash() {
     trash.remove();
     trash.update();

@@ -18,7 +18,7 @@ var trash = (function(tf) {
     };
 
     trash.remove = function() {
-        _trash.pop();
+        _trash.shift();
     };
 
     trash.update = function(duration) {
@@ -41,7 +41,9 @@ var trash = (function(tf) {
         }
 
         var trashSelection = dumpster.trashGroup.selectAll('.trash')
-            .data(_trash);
+            .data(_trash, function(d) {
+                return d.id;
+            });
 
         // EXIT
         trashSelection.exit()
