@@ -40,7 +40,7 @@ function getWindowFromFile(filePath, onLoad) {
         window.addEventListener('load', () => {
             onLoad(window)
         })
-    })
+    }).catch(console.log)
 }
 
 module.exports = {
