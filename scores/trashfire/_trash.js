@@ -9,13 +9,13 @@ var trash = (function(tf) {
 
     var _trash = [];
 
-    trash.set = function(trashArray) {
+    trash.set = function(t, trashArray) {
         _trash = trashArray;
-        update();
+        update(t);
     };
 
-    function update(duration) {
-        var dur = duration || 1000;
+    function update(dur) {
+        // var dur = duration || 1000;
 
         var trashWidths = _trash.map(function(t) {
             return t.size;

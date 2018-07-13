@@ -16,8 +16,9 @@ TrashFire.spike = (function(tf) {
             .style('opacity', 1);
     };
 
-    spike.hit = function(trashes) {
-        trash.set(trashes); // TODO // 300ms
+    // TODO set t and calculate all transition durations
+    spike.hit = function(t, trashes) {
+        trash.set(300, trashes);
 
         path
             .transition().duration(600).ease(d3.easeElastic)

@@ -170,7 +170,7 @@ function fireCycle() {
         return {
             duration: d.duration,
             fn: d.fn,
-            args: [trashes[i]]
+            args: [1000, trashes[i]] // TODO default duration is 1s
         };
     })
     .map(addTimeFromDurations);
