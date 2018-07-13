@@ -8,22 +8,21 @@ TrashFire.spike = (function(tf) {
         .attr('d', 'M-15,0 L15,0 L0,60 Z')
         .style('opacity', 0);
 
-    spike.show = function() {
+    spike.show = function(t) {
         path
             .attr('transform', translateY(15))
             .style('opacity', 0)
-            .transition().duration(600)
+            .transition().duration(t)
             .style('opacity', 1);
     };
 
-    // TODO set t and calculate all transition durations
     spike.hit = function(t, trashes) {
-        trash.set(300, trashes);
+        trash.set(t * 0.4, trashes);
 
         path
-            .transition().duration(600).ease(d3.easeElastic)
+            .transition().duration(t * 0.8).ease(d3.easeElastic)
             .attr('transform', translateY(tf.dumpster.y - 45))
-            .transition().duration(150).ease(d3.easeLinear)
+            .transition().duration(t * 0.2).ease(d3.easeLinear)
             .style('opacity', 0);
 
         dumpster.shake();

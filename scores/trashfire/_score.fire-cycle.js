@@ -62,12 +62,14 @@ function fireCycle() {
             {
                 duration: 600,
                 action: 'copy',
-                fn: TrashFire.spike.show
+                fn: TrashFire.spike.show,
+                transitionDuration: 600
             },
             {
                 duration: 750,
                 action: 'empty',
-                fn: TrashFire.spike.hit
+                fn: TrashFire.spike.hit,
+                transitionDuration: 750
             }
         ];
     })
@@ -167,10 +169,11 @@ function fireCycle() {
 
     // Zip the events and trash together, then add time, for a valid VS.score event
     return cycle.map(function(d, i) {
+        var transitionDuration = d.transitionDuration || 1000; // TODO default duration is 1s
         return {
             duration: d.duration,
             fn: d.fn,
-            args: [1000, trashes[i]] // TODO default duration is 1s
+            args: [transitionDuration, trashes[i]]
         };
     })
     .map(addTimeFromDurations);
