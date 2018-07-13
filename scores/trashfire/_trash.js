@@ -9,6 +9,11 @@ var trash = (function(tf) {
 
     var _trash = [];
 
+    trash.set = function(trashArray) {
+        _trash = trashArray;
+        update();
+    };
+
     trash.add = function(moreTrash) {
         _trash = _trash.concat(moreTrash);
         update();

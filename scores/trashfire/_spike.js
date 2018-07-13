@@ -17,6 +17,7 @@ TrashFire.spike = (function(tf) {
     };
 
     spike.hit = function() {
+        // trash.set(300); // TODO
         trash.empty(300);
 
         path

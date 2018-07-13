@@ -1,9 +1,38 @@
-function makeTrash(type, range) {
+function makeTrash(type, min, max) {
     return {
         id: VS.id(),
-        size: VS.getRandIntIncl(range[0], range[1]),
+        size: VS.getRandIntIncl(min, max),
         type: type
     };
+}
+
+function last(array) {
+    return array.slice(-1)[0] || [];
+}
+
+function push(array, item) {
+    return [].concat(array, item);
+}
+
+function addTrash(acc, bar, fn) {
+    var lastTrashList = last(acc);
+    var newTrashList = push(lastTrashList, fn(bar));
+    return push(acc, [newTrashList]);
+}
+
+function removeTrash(acc) {
+    var lastTrashList = last(acc);
+    var newTrashList = lastTrashList.slice(1);
+    return push(acc, [newTrashList]);
+}
+
+function emptyTrash(acc) {
+    return push(acc, [[]]);
+}
+
+function copyTrash(acc) {
+    var lastTrashList = last(acc);
+    return push(acc, [lastTrashList]);
 }
 
 /**
@@ -14,13 +43,13 @@ function fireCycle() {
     // Build 3-5 flames
     var flames = buildArray(VS.getItem([3, 4, 5]), function(index, n) {
         var type = (index > 2) ? 'blaze' : 'crackle';
-        var range = [25, 25 + (index * (50 / n))];
 
         return {
             duration: ((7 - index) * 1000), // duration: 7-2 seconds
-            fn: trash.add,
-            args: [
-                makeTrash(type, range)
+            action: 'add',
+            fn: trash.set,
+            trashes: [
+                makeTrash(type, 25, 25 + (index * (50 / n)))
             ]
         };
     });
@@ -32,13 +61,13 @@ function fireCycle() {
         return [
             {
                 duration: 600,
-                fn: TrashFire.spike.show,
-                args: []
+                action: 'copy',
+                fn: TrashFire.spike.show
             },
             {
                 duration: 750,
-                fn: TrashFire.spike.hit,
-                args: []
+                action: 'empty',
+                fn: TrashFire.spike.hit
             }
         ];
     })
@@ -56,9 +85,10 @@ function fireCycle() {
     function resume() {
         return {
             duration: 7000,
-            fn: trash.add,
-            args: [
-                makeTrash('blaze', [25, 75])
+            action: 'add',
+            fn: trash.set,
+            trashes: [
+                makeTrash('blaze', 25, 75)
             ]
         };
     }
@@ -69,9 +99,10 @@ function fireCycle() {
         var grow = buildArray(n, function(i) {
             return {
                 duration: ((7 - i) * 1000), // duration: 7-5 seconds
-                fn: trash.add,
-                args: [
-                    makeTrash('embers', [25, 75])
+                action: 'add',
+                fn: trash.set,
+                trashes: [
+                    makeTrash('embers', 25, 75)
                 ]
             };
         });
@@ -79,8 +110,8 @@ function fireCycle() {
         var die = buildArray(n, function(i, n) {
             return {
                 duration: ((n - i + 4) * 1000),
-                fn: trash.remove,
-                args: []
+                action: 'remove',
+                fn: trash.set
             };
         });
 
@@ -91,22 +122,23 @@ function fireCycle() {
         var n = VS.getItem([1, 2, 3]);
 
         var trashes = buildArray(n, function() {
-            return makeTrash('crackle', [25, 75]);
+            return makeTrash('crackle', 25, 75);
         });
 
         // Add
         var add = {
             duration: 7000,
-            fn: trash.add,
-            args: [trashes]
+            action: 'add',
+            fn: trash.set,
+            trashes: trashes
         };
 
         // Then die away
         var dieAway = buildArray(n, function(i, n) {
             return {
                 duration: ((n - i + 4) * 1000),
-                fn: trash.remove,
-                args: []
+                action: 'remove',
+                fn: trash.set
             };
         });
 
@@ -115,13 +147,33 @@ function fireCycle() {
 
     // Empty trash
     var empty = {
-        duration: 3000, // rest
-        fn: trash.empty,
-        args: []
+        duration: 3000, // rest // TODO does this value even impact the phrasing?
+        action: 'empty',
+        fn: trash.set
     };
 
-    return [].concat(flames, spikes, tail, empty)
-        .map(addTimeFromDurations);
+    var cycle = [].concat(flames, spikes, tail, empty);
+
+    // TODO make the trashses here, then ZIP
+    var trashes = cycle.reduce(function(acc, bar) {
+        var actions = {
+            add: addTrash,
+            remove: removeTrash,
+            empty: emptyTrash,
+            copy: copyTrash
+        };
+        return actions[bar.action](acc, bar, function(bar) { return bar.trashes; });
+    }, []);
+
+    // Zip the events and trash together, then add time, for a valid VS.score event
+    return cycle.map(function(d, i) {
+        return {
+            duration: d.duration,
+            fn: d.fn,
+            args: [trashes[i]]
+        };
+    })
+    .map(addTimeFromDurations);
 }
 
 var fireEvents = buildArray(5, fireCycle)
