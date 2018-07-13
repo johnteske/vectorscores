@@ -16,9 +16,8 @@ TrashFire.spike = (function(tf) {
             .style('opacity', 1);
     };
 
-    spike.hit = function() {
-        // trash.set(300); // TODO
-        trash.empty(300);
+    spike.hit = function(trashes) {
+        trash.set(trashes); // TODO // 300ms
 
         path
             .transition().duration(600).ease(d3.easeElastic)

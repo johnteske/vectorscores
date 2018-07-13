@@ -34,31 +34,5 @@ loadDomThenTest.only('trashfire', '_site/scores/trashfire/index.html', (t, windo
     const newTrashes4 = copyTrash(trashes4)
     t.deepEquals(newTrashes4, [[1, 2], [1, 2, 3], [1, 2, 3]], 'copyTrash should push a copy of the last bar')
 
-    // const trashes = trashActions.reduce((acc, bar) => {
-    //     const actions = {
-    //         add: addTrash,
-    //         remove: removeTrash,
-    //         empty: emptyTrash
-    //     }
-    //     return actions[bar](acc, bar)
-    // }, [])
-
-    // console.log(trashes)
-
-    // // t.deepEquals(trashes.map(d => d.args[0].length), [ 1, 0, 1, 2, 1, 2, 3, 4, 0 ])
-    // t.deepEquals(trashes.map(d => {
-    //     // console.log(d)
-    //     return d.args[0].length
-    // }), [ 1, 0, 1, 2, 1, 2, 3, 4, 0 ])
-
-    // const zipped = trashActions.map((d, i) => {
-    //     return {
-    //         action: d,
-    //         trashes: trashes[i]
-    //     }
-    // })
-
-    // console.log(zipped)
-
     t.end()
 })

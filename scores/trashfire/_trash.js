@@ -14,21 +14,6 @@ var trash = (function(tf) {
         update();
     };
 
-    trash.add = function(moreTrash) {
-        _trash = _trash.concat(moreTrash);
-        update();
-    };
-
-    trash.remove = function() {
-        _trash.shift();
-        update();
-    };
-
-    trash.empty = function(t) {
-        _trash = [];
-        update(t);
-    };
-
     function update(duration) {
         var dur = duration || 1000;
 
