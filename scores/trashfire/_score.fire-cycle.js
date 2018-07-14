@@ -40,6 +40,7 @@ function fireCycle() {
             duration: ((7 - index) * 1000), // duration: 7-2 seconds
             action: 'add',
             fn: trash.set,
+            transitionDuration: 1000,
             trashes: [
                 makeTrash(type, 25, 25 + (index * (50 / n)))
             ]
@@ -81,6 +82,7 @@ function fireCycle() {
             duration: 7000,
             action: 'add',
             fn: trash.set,
+            transitionDuration: 1000,
             trashes: [
                 makeTrash('blaze', 25, 75)
             ]
@@ -95,6 +97,7 @@ function fireCycle() {
                 duration: ((7 - i) * 1000), // duration: 7-5 seconds
                 action: 'add',
                 fn: trash.set,
+                transitionDuration: 1000,
                 trashes: [
                     makeTrash('embers', 25, 75)
                 ]
@@ -105,7 +108,8 @@ function fireCycle() {
             return {
                 duration: ((n - i + 4) * 1000),
                 action: 'remove',
-                fn: trash.set
+                fn: trash.set,
+                transitionDuration: 1000
             };
         });
 
@@ -124,6 +128,7 @@ function fireCycle() {
             duration: 7000,
             action: 'add',
             fn: trash.set,
+            transitionDuration: 1000,
             trashes: trashes
         };
 
@@ -132,7 +137,8 @@ function fireCycle() {
             return {
                 duration: ((n - i + 4) * 1000),
                 action: 'remove',
-                fn: trash.set
+                fn: trash.set,
+                transitionDuration: 1000
             };
         });
 
@@ -141,14 +147,14 @@ function fireCycle() {
 
     // Empty trash
     var empty = {
-        duration: 3000, // rest // TODO does this value even impact the phrasing?
+        duration: 3000,
         action: 'empty',
-        fn: trash.set
+        fn: trash.set,
+        transitionDuration: 1000
     };
 
     var cycle = [].concat(flames, spikes, tail, empty);
 
-    // TODO make the trashses here, then ZIP
     var trashes = cycle.reduce(function(acc, bar) {
         var actions = {
             add: addTrash,
@@ -161,11 +167,10 @@ function fireCycle() {
 
     // Zip the events and trash together, then add time, for a valid VS.score event
     return cycle.map(function(d, i) {
-        var transitionDuration = d.transitionDuration || 1000; // TODO default duration is 1s
         return {
             duration: d.duration,
             fn: d.fn,
-            args: [transitionDuration, trashes[i]]
+            args: [d.transitionDuration, trashes[i]]
         };
     })
     .map(addTimeFromDurations);
@@ -178,7 +183,8 @@ var fireEvents = TrashUtils.buildArray(5, fireCycle)
         }
 
         var previousCycle = cycles[i - 1];
-        var offset = previousCycle[previousCycle.length - 1].time + 3000;
+        var lastBarPreviousCycle = previousCycle[previousCycle.length - 1];
+        var offset = lastBarPreviousCycle.time + lastBarPreviousCycle.duration;
 
         return cycle.map(timeOffset(offset));
     })
