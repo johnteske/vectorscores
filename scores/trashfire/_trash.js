@@ -22,12 +22,12 @@ var trash = (function(tf) {
         });
 
         var xOffsets = (_trash.length - 1) * xOffset;
-        var trashWidthSum = trashWidths.reduce(sum, xOffsets);
+        var trashWidthSum = trashWidths.reduce(TrashUtils.sum, xOffsets);
         // Leftmost trash position based on width of all trash (and offsets)
         var trashX = tf.trashOrigin.x - (trashWidthSum * 0.5);
 
         function trashPosition(d, i) {
-            var currentSum = trashWidths.slice(0, i).reduce(sum, 0);
+            var currentSum = trashWidths.slice(0, i).reduce(TrashUtils.sum, 0);
             var x = trashX + (currentSum + (i * xOffset));
             var y = (d.size * -0.5) + yOffset;
             return 'translate(' + x + ',' + y + ')';
@@ -73,7 +73,7 @@ function makePath(selection) {
         var slice = (d.size - (margin * 2)) / (nPoints + 1);
         var height = (d.type === 'blaze') ? d.size * 0.67 : 3;
 
-        d.pathPoints = buildArray(nPoints, d.type === 'embers' ? makeEmberPoint : makeFlamePoint);
+        d.pathPoints = TrashUtils.buildArray(nPoints, d.type === 'embers' ? makeEmberPoint : makeFlamePoint);
 
         function makeFlamePoint(i) {
             return [
@@ -98,6 +98,6 @@ function makePath(selection) {
             return d.type === 'blaze' || d.type === 'scrape' ? 1 : 0.5;
         })
         .attr('d', function(d) {
-            return lineGenerator(d.pathPoints);
+            return TrashUtils.lineGenerator(d.pathPoints);
         });
 }

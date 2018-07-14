@@ -1,4 +1,6 @@
-function buildArray(n, fn) {
+var TrashUtils = {};
+
+TrashUtils.buildArray = function(n, fn) {
     var array = [];
 
     for (var i = 0; i < n; i++) {
@@ -6,16 +8,24 @@ function buildArray(n, fn) {
     }
 
     return array;
-}
+};
 
-var lineGenerator = d3.line()
+TrashUtils.flatten = function(target, array) {
+    return target.concat(array);
+};
+
+TrashUtils.last = function(array) {
+    return array.slice(-1)[0] || [];
+};
+
+TrashUtils.lineGenerator = d3.line()
     .x(function(d) { return d[0]; })
     .y(function(d) { return d[1]; });
 
-function flatten(target, array) {
-    return target.concat(array);
-}
+TrashUtils.push = function(array, item) {
+    return [].concat(array, item);
+};
 
-function sum(a, b) {
+TrashUtils.sum = function(a, b) {
     return a + b;
-}
+};

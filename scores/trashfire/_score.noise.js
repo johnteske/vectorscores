@@ -1,7 +1,7 @@
 /**
  * Noise
  */
-var noiseEvents = buildArray(5, function() {
+var noiseEvents = TrashUtils.buildArray(5, function() {
     var duration = VS.getRandIntIncl(1600, 3200);
 
     return [{
@@ -17,4 +17,4 @@ var noiseEvents = buildArray(5, function() {
     .map(addTimeFromDurations);
 })
 .map(timeWindowOffset(lastTime))
-.reduce(flatten, []);
+.reduce(TrashUtils.flatten, []);

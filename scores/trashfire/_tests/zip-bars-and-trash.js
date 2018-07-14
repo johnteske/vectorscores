@@ -4,7 +4,7 @@ const { loadDomThenTest } = require(path.resolve('.', 'bin/js/tape-setup'))
 loadDomThenTest.only('trashfire', '_site/scores/trashfire/index.html', (t, window) => {
     // const trashActions = ['add', 'remove', 'add', 'add', 'remove', 'add', 'add', 'add', 'empty']
 
-    const { last, push } = window
+    const { last, push } = window.TrashUtils
 
     const abcd = ['a', 'b', 'c', 'd']
     let d = last(abcd)

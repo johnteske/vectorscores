@@ -6,9 +6,7 @@ VS.score.hooks.add('stop', function() {
 });
 
 VS.control.hooks.add('step', function() {
-    // TODO set duration to 0, otherwise trash can get lost if stepping quickly
     var pointer = VS.score.getPointer();
-    var args = score[pointer].args;
-    args[0] = 0;
-    score[pointer].fn.apply(null, args);
+    var argsWithZeroDuration = [].concat(0, score[pointer].args.slice(1));
+    score[pointer].fn.apply(null, argsWithZeroDuration);
 });

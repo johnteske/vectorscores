@@ -6,33 +6,25 @@ function makeTrash(type, min, max) {
     };
 }
 
-function last(array) {
-    return array.slice(-1)[0] || [];
-}
-
-function push(array, item) {
-    return [].concat(array, item);
-}
-
 function addTrash(acc, bar, fn) {
-    var lastTrashList = last(acc);
-    var newTrashList = push(lastTrashList, fn(bar));
-    return push(acc, [newTrashList]);
+    var lastTrashList = TrashUtils.last(acc);
+    var newTrashList = TrashUtils.push(lastTrashList, fn(bar));
+    return TrashUtils.push(acc, [newTrashList]);
 }
 
 function removeTrash(acc) {
-    var lastTrashList = last(acc);
+    var lastTrashList = TrashUtils.last(acc);
     var newTrashList = lastTrashList.slice(1);
-    return push(acc, [newTrashList]);
+    return TrashUtils.push(acc, [newTrashList]);
 }
 
 function emptyTrash(acc) {
-    return push(acc, [[]]);
+    return TrashUtils.push(acc, [[]]);
 }
 
 function copyTrash(acc) {
-    var lastTrashList = last(acc);
-    return push(acc, [lastTrashList]);
+    var lastTrashList = TrashUtils.last(acc);
+    return TrashUtils.push(acc, [lastTrashList]);
 }
 
 /**
@@ -41,7 +33,7 @@ function copyTrash(acc) {
 function fireCycle() {
 
     // Build 3-5 flames
-    var flames = buildArray(VS.getItem([3, 4, 5]), function(index, n) {
+    var flames = TrashUtils.buildArray(VS.getItem([3, 4, 5]), function(index, n) {
         var type = (index > 2) ? 'blaze' : 'crackle';
 
         return {
@@ -57,7 +49,7 @@ function fireCycle() {
     // Hit dumpster, 0-3 times
     // TODO reduce trash to last 3 items if no spike?
     var nSpikes = VS.getWeightedItem([0, 1, 2, 3], [15, 60, 15, 10]);
-    var spikes = buildArray(nSpikes, function() {
+    var spikes = TrashUtils.buildArray(nSpikes, function() {
         return [
             {
                 duration: 600,
@@ -73,7 +65,7 @@ function fireCycle() {
             }
         ];
     })
-    .reduce(flatten, []);
+    .reduce(TrashUtils.flatten, []);
 
     var tailType = VS.getItem(['resume', 'embers', 'multi', '']);
     var tailFns = {
@@ -98,7 +90,7 @@ function fireCycle() {
     function embers() {
         var n = VS.getItem([1, 2, 3]);
 
-        var grow = buildArray(n, function(i) {
+        var grow = TrashUtils.buildArray(n, function(i) {
             return {
                 duration: ((7 - i) * 1000), // duration: 7-5 seconds
                 action: 'add',
@@ -109,7 +101,7 @@ function fireCycle() {
             };
         });
 
-        var die = buildArray(n, function(i, n) {
+        var die = TrashUtils.buildArray(n, function(i, n) {
             return {
                 duration: ((n - i + 4) * 1000),
                 action: 'remove',
@@ -123,7 +115,7 @@ function fireCycle() {
     function multi() {
         var n = VS.getItem([1, 2, 3]);
 
-        var trashes = buildArray(n, function() {
+        var trashes = TrashUtils.buildArray(n, function() {
             return makeTrash('crackle', 25, 75);
         });
 
@@ -136,7 +128,7 @@ function fireCycle() {
         };
 
         // Then die away
-        var dieAway = buildArray(n, function(i, n) {
+        var dieAway = TrashUtils.buildArray(n, function(i, n) {
             return {
                 duration: ((n - i + 4) * 1000),
                 action: 'remove',
@@ -179,7 +171,7 @@ function fireCycle() {
     .map(addTimeFromDurations);
 }
 
-var fireEvents = buildArray(5, fireCycle)
+var fireEvents = TrashUtils.buildArray(5, fireCycle)
     .map(function(cycle, i, cycles) {
         if (i === 0) {
             return cycle;
@@ -190,6 +182,6 @@ var fireEvents = buildArray(5, fireCycle)
 
         return cycle.map(timeOffset(offset));
     })
-    .reduce(flatten, []);
+    .reduce(TrashUtils.flatten, []);
 
 var lastTime = fireEvents[fireEvents.length - 1].time;

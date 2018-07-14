@@ -9,7 +9,7 @@ TrashFire.scrapeDrone = (function(tf) {
         .attr('fill', 'none')
         .attr('stroke', '#444')
         .attr('d', function() {
-            return lineGenerator(makePath());
+            return TrashUtils.lineGenerator(makePath());
         });
 
     function makePath() {
@@ -17,7 +17,7 @@ TrashFire.scrapeDrone = (function(tf) {
         var slice = width / (points + 1);
         var height = 3;
 
-        return buildArray(points, function(i) {
+        return TrashUtils.buildArray(points, function(i) {
             return [
                 i * slice,
                 (height * 0.5) + (Math.random() * height)

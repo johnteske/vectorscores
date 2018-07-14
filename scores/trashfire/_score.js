@@ -23,15 +23,13 @@ function timeWindowOffset(endTime) {
     };
 }
 
-function sortByTime(a, b) {
-    return a.time - b.time;
-}
-
 /**
  * Sort score by event time
  */
 var score = [].concat(fireEvents, noiseEvents, droneEvents)
-    .sort(sortByTime);
+    .sort(function(a, b) {
+        return a.time - b.time;
+    });
 
 score.forEach(function(bar) {
     VS.score.add(bar.time, bar.fn, bar.args);

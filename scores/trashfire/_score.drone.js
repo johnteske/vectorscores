@@ -1,7 +1,7 @@
 /**
  * Drone
  */
-var droneEvents = buildArray(3, function(i, n) {
+var droneEvents = TrashUtils.buildArray(3, function(i, n) {
     var timeWindow = Math.floor(lastTime / n);
     var duration = timeWindow * VS.getRandIntIncl(0.5, 0.75);
 
@@ -20,4 +20,4 @@ var droneEvents = buildArray(3, function(i, n) {
     .map(addTimeFromDurations);
 })
 .map(timeWindowOffset(lastTime))
-.reduce(flatten, []);
+.reduce(TrashUtils.flatten, []);
