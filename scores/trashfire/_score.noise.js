@@ -6,12 +6,12 @@ var noiseEvents = TrashUtils.buildArray(5, function() {
 
     return [{
         duration: duration,
-        fn: TrashFire.noiseLayer.add,
+        fn: TrashFire.noiseLayer.show,
         args: [8]
     },
     {
         duration: 0,
-        fn: TrashFire.noiseLayer.remove,
+        fn: TrashFire.noiseLayer.hide,
         args: [32]
     }]
     .map(addTimeFromDurations);

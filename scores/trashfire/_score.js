@@ -23,10 +23,16 @@ function timeWindowOffset(endTime) {
     };
 }
 
+var firstEvent = {
+    time: 0,
+    fn: trash.set,
+    args: [0, []]
+};
+
 /**
  * Sort score by event time
  */
-var score = [].concat(fireEvents, noiseEvents, droneEvents)
+var score = [].concat(firstEvent, fireEvents, noiseEvents, droneEvents)
     .sort(function(a, b) {
         return a.time - b.time;
     });

@@ -8,7 +8,9 @@ TrashFire.spike = (function(tf) {
         .attr('d', 'M-15,0 L15,0 L0,60 Z')
         .style('opacity', 0);
 
-    spike.show = function(t) {
+    spike.show = function(t, trashes) {
+        trash.set(0, trashes);
+
         path
             .attr('transform', translateY(15))
             .style('opacity', 0)
@@ -26,6 +28,11 @@ TrashFire.spike = (function(tf) {
             .style('opacity', 0);
 
         dumpster.shake();
+    };
+
+    // Used for step control hook only
+    spike.hide = function() {
+        path.style('opacity', 0);
     };
 
     function translateY(y) {

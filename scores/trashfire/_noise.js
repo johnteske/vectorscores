@@ -40,9 +40,9 @@ TrashFire.noiseLayer = (function(tf) {
                 .attr('height', h);
     };
 
-    noiseLayer.add = delayedOpacityTransition(1);
+    noiseLayer.show = delayedOpacityTransition(1);
 
-    noiseLayer.remove = delayedOpacityTransition(0);
+    noiseLayer.hide = delayedOpacityTransition(0);
 
     function delayedOpacityTransition(opacity) {
         return function(delay) {
