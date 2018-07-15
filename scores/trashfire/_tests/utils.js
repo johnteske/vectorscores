@@ -1,7 +1,7 @@
 const path = require('path')
 const { loadDomThenTest } = require(path.resolve('.', 'bin/js/tape-setup'))
 
-loadDomThenTest.only('trashfire', '_site/scores/trashfire/index.html', (t, window) => {
+loadDomThenTest('trashfire', '_site/scores/trashfire/index.html', (t, window) => {
 
     const { last, push, buildArray } = window.TrashUtils
 

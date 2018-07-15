@@ -1,13 +1,10 @@
 const path = require('path')
-const { test, getWindowFromFile } = require(path.resolve('.', 'bin/js/tape-setup'))
+const { loadDomThenTest } = require(path.resolve('.', 'bin/js/tape-setup'))
 
-test('trashfire', t => {
-    getWindowFromFile('_site/scores/trashfire/index.html', window => {
-        // console.log(window.score)
+loadDomThenTest('trashfire', '_site/scores/trashfire/index.html', (t, window) => {
 
-        const eventTimesAreIntegers = window.score.every(bar => bar.time === Math.floor(bar.time))
-        t.true(eventTimesAreIntegers, 'should have score event times as integers')
+    const eventTimesAreIntegers = window.score.every(bar => bar.time === Math.floor(bar.time))
+    t.true(eventTimesAreIntegers, 'should have score event times as integers')
 
-        t.end()
-    })
+    t.end()
 })
