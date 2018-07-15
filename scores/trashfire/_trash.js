@@ -1,43 +1,92 @@
 /**
  * Generate trash
  */
-var trash = [];
+var trash = (function(tf) {
+    var trash = {};
 
-var lineGenerator = d3.line()
-    .x(function(d) { return d[0]; })
-    .y(function(d) { return d[1]; });
-    // .interpolate("basis");
-function makePath(selection) {
-    selection.each(function(d) {
-        var nPoints = 60,
-            margin = 10,
-            slice = (d.size - (margin * 2)) / (nPoints + 1),
-            height;
+    var xOffset = 10;
+    var yOffset = -50;
 
-        if (d.type === 'blaze') {
-            height = d.size * 0.67;
-        } else {
-            height = 3;
+    var _trash = [];
+
+    trash.set = function(t, trashArray) {
+        _trash = trashArray;
+        update(t);
+    };
+
+    function update(dur) {
+        // var dur = duration || 1000;
+
+        var trashWidths = _trash.map(function(t) {
+            return t.size;
+        });
+
+        var xOffsets = (_trash.length - 1) * xOffset;
+        var trashWidthSum = trashWidths.reduce(TrashUtils.sum, xOffsets);
+        // Leftmost trash position based on width of all trash (and offsets)
+        var trashX = tf.trashOrigin.x - (trashWidthSum * 0.5);
+
+        function trashPosition(d, i) {
+            var currentSum = trashWidths.slice(0, i).reduce(TrashUtils.sum, 0);
+            var x = trashX + (currentSum + (i * xOffset));
+            var y = (d.size * -0.5) + yOffset;
+            return 'translate(' + x + ',' + y + ')';
         }
 
-        d.pathPoints = [];
+        var trashSelection = dumpster.trashGroup.selectAll('.trash')
+            .data(_trash, function(d) {
+                return d.id;
+            });
 
-        var j;
+        // EXIT
+        trashSelection.exit()
+            .transition().duration(dur)
+            .attr('transform', translateTrashOrigin)
+            .style('opacity', 0)
+            .remove();
 
-        if (d.type !== 'embers') {
-            for (j = 0; j < nPoints; j++) {
-                d.pathPoints.push([
-                    margin + (j * slice),
-                    (d.size * 0.5 - (height * 0.5)) + (Math.random() * height)
-                ]);
-            }
-        } else {
-            for (j = 0; j < nPoints; j++) {
-                d.pathPoints.push([
-                    margin + (j * slice),
-                    d.size - margin - (j * slice) + (Math.random() * height)
-                ]);
-            }
+        // UPDATE
+        trashSelection
+            .transition().duration(dur)
+            .attr('transform', trashPosition);
+
+        // ENTER
+        trashSelection.enter()
+            .append('g').attr('class', 'trash')
+                .attr('transform', translateTrashOrigin)
+                .call(makePath)
+                .transition().duration(dur)
+                .attr('transform', trashPosition);
+    }
+
+    function translateTrashOrigin() {
+        return 'translate(' + tf.trashOrigin.x + ',' + tf.trashOrigin.y + ')';
+    }
+
+    return trash;
+})(TrashFire);
+
+function makePath(selection) {
+    selection.each(function(d) {
+        var nPoints = 60;
+        var margin = 10;
+        var slice = (d.size - (margin * 2)) / (nPoints + 1);
+        var height = (d.type === 'blaze') ? d.size * 0.67 : 3;
+
+        d.pathPoints = TrashUtils.buildArray(nPoints, d.type === 'embers' ? makeEmberPoint : makeFlamePoint);
+
+        function makeFlamePoint(i) {
+            return [
+                margin + (i * slice),
+                (d.size * 0.5 - (height * 0.5)) + (Math.random() * height)
+            ];
+        }
+
+        function makeEmberPoint(i) {
+            return [
+                margin + (i * slice),
+                d.size - margin - (i * slice) + (Math.random() * height)
+            ];
         }
     });
 
@@ -49,55 +98,6 @@ function makePath(selection) {
             return d.type === 'blaze' || d.type === 'scrape' ? 1 : 0.5;
         })
         .attr('d', function(d) {
-            return lineGenerator(d.pathPoints);
+            return TrashUtils.lineGenerator(d.pathPoints);
         });
-}
-
-function updateTrash(duration) {
-    var dur = duration || 1000;
-    var offset = 10;
-    var trashWidths = trash.map(function(t) {
-        return t.size;
-    });
-    var trashWidthSum = trashWidths.reduce(function(a, b) {
-        return a + b;
-    }, (trashWidths.length - 1) * offset);
-
-    function trashPosition(d, i) {
-        var upToI = trashWidths.slice(0, i),
-            sum = upToI.reduce(function(a, b) {
-                return a + b;
-            }, 0),
-            x = (TrashFire.trashOrigin.x - (trashWidthSum * 0.5)) +
-                (sum + (i * offset)),
-            y = d.size * -0.5 - 50;
-        return 'translate(' + x + ',' + y + ')';
-    }
-
-    var trashSelection = trashContainer.selectAll('.trash')
-        .data(trash);
-
-    // EXIT
-    trashSelection.exit()
-        .transition().duration(dur)
-        .attr('transform', function() {
-            return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
-        })
-        .style('opacity', 0)
-        .remove();
-
-    // UPDATE
-    trashSelection
-        .transition().duration(dur)
-        .attr('transform', trashPosition);
-
-    // ENTER
-    trashSelection.enter()
-        .append('g').attr('class', 'trash')
-            .attr('transform', function() {
-                return 'translate(' + TrashFire.trashOrigin.x + ',' + TrashFire.trashOrigin.y + ')';
-            })
-            .call(makePath)
-            .transition().duration(dur)
-            .attr('transform', trashPosition);
 }

@@ -1,47 +1,33 @@
-TrashFire.scrapeDrone = (function() {
-    var drone = {
-        width: TrashFire.view.width * 0.75 // 232 // dumpster bottom edge
-    };
+TrashFire.scrapeDrone = (function(tf) {
+    var drone = {};
 
-    var pathGenerator = d3.line()
-        .x(function(d) { return d[0]; })
-        .y(function(d) { return d[1]; });
+    var width = tf.view.width * 0.75;
 
-    drone.group = TrashFire.wrapper.append('g')
-        .attr('class', 'drone')
-        .attr('transform', 'translate(' + ((TrashFire.view.width * 0.5) - (drone.width * 0.5)) + ',' + 350 + ')');
-
-    function makePath() {
-        var nPoints = 232,
-            length = drone.width,
-            slice = length / (nPoints + 1),
-            height = 3;
-
-        var points = [];
-
-        for (var j = 0; j < nPoints; j++) {
-            points.push([
-                j * slice,
-                (height * 0.5) + (Math.random() * height)
-            ]);
-        }
-
-        return points;
-    }
-
-    drone.pathData = makePath();
-
-    drone.selection = drone.group.append('path')
+    var selection = tf.wrapper.append('path')
+        .attr('transform', 'translate(' + ((tf.view.width * 0.5) - (width * 0.5)) + ',' + 350 + ')')
         .style('opacity', 0)
         .attr('fill', 'none')
         .attr('stroke', '#444')
         .attr('d', function() {
-            return lineGenerator(drone.pathData);
+            return TrashUtils.lineGenerator(makePath());
         });
+
+    function makePath() {
+        var points = 232;
+        var slice = width / (points + 1);
+        var height = 3;
+
+        return TrashUtils.buildArray(points, function(i) {
+            return [
+                i * slice,
+                (height * 0.5) + (Math.random() * height)
+            ];
+        });
+    }
 
     drone.show = function(t) {
         var dur = typeof t === 'undefined' ? 7000 : t;
-        drone.selection
+        selection
             .attr('stroke-width', 0)
             .transition().duration(dur)
             .attr('stroke-width', 5)
@@ -50,11 +36,11 @@ TrashFire.scrapeDrone = (function() {
 
     drone.hide = function(t) {
         var dur = typeof t === 'undefined' ? 7000 : t;
-        drone.selection
+        selection
             .transition().duration(dur)
             .attr('stroke-width', 0)
             .style('opacity', 0);
     };
 
     return drone;
-})();
+})(TrashFire);

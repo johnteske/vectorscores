@@ -1,11 +1,13 @@
 /**
  * TODO make noise noisier, similar to trash/fire paths
- * TODO stash noise elements, reposition on resize if needed
  */
-TrashFire.noiseLayer = (function() {
+TrashFire.noiseLayer = (function(tf) {
     var noiseLayer = {};
 
-    noiseLayer.selection = TrashFire.wrapper.append('g').attr('class', 'noise-container');
+    var group = tf.wrapper.append('g');
+    var noiseElements;
+
+    var n = 200; // fixed size, for now
 
     function x() {
         return (Math.random() * layout.main.width) - (layout.main.width * 0.25);
@@ -23,8 +25,8 @@ TrashFire.noiseLayer = (function() {
         return Math.random() * 2;
     }
 
-    noiseLayer.add = function(delay, n) {
-        noiseLayer.selection
+    noiseLayer.render = function() {
+        noiseElements = group
             .selectAll('.noise')
             .data(d3.range(0, n))
             .enter()
@@ -35,22 +37,21 @@ TrashFire.noiseLayer = (function() {
                 .attr('x', x)
                 .attr('y', y)
                 .attr('width', w)
-                .attr('height', h)
-                // pop in
-                .transition().duration(0)
-                .delay(function(d, i) { return i * delay; })
-                .style('opacity', 1);
-        updateTrash();
+                .attr('height', h);
     };
 
-    noiseLayer.remove = function(delay) {
-        noiseLayer.selection
-            .selectAll('.noise')
+    noiseLayer.show = delayedOpacityTransition(1);
+
+    noiseLayer.hide = delayedOpacityTransition(0);
+
+    function delayedOpacityTransition(opacity) {
+        return function(delay) {
+            noiseElements
                 .transition().duration(0)
                 .delay(function(d, i) { return i * delay; })
-                .remove();
-        updateTrash();
-    };
+                .style('opacity', opacity);
+        };
+    }
 
     return noiseLayer;
-})();
+})(TrashFire);

@@ -1,35 +1,45 @@
-TrashFire.spike = (function() {
+TrashFire.spike = (function(tf) {
     var spike = {};
 
-    var x = TrashFire.view.width * 0.5;
+    var x = tf.view.width * 0.5;
 
-    spike.group = TrashFire.wrapper.append('g')
-        .attr('class', 'spike')
+    var path = tf.wrapper
+        .append('path')
+        .attr('d', 'M-15,0 L15,0 L0,60 Z')
         .style('opacity', 0);
 
-    spike.group.append('path')
-        .attr('d', 'M-15,0 L15,0 L0,60 Z');
+    spike.show = function(t, trashes) {
+        trash.set(0, trashes);
 
-    spike.show = function() {
-        spike.group
-            .attr('transform', 'translate(' + x + ','  + 15 + ')')
+        path
+            .attr('transform', translateY(15))
             .style('opacity', 0)
-            .transition().duration(600)
+            .transition().duration(t)
             .style('opacity', 1);
     };
 
-    spike.hit = function() {
-        trash = [];
-        updateTrash(300);
+    spike.hit = function(t, trashes) {
+        trash.set(t * 0.4, trashes);
 
-        d3.select('.spike')
-            .transition().duration(600).ease(d3.easeElastic)
-            .attr('transform', 'translate(' + x + ','  + (TrashFire.dumpster.y - 45) + ')')
-            .transition().duration(150).ease(d3.easeLinear)
+        path
+            .transition().duration(t * 0.8).ease(d3.easeElastic)
+            .attr('transform', translateY(tf.dumpster.y - 45))
+            .transition().duration(t * 0.2).ease(d3.easeLinear)
             .style('opacity', 0);
 
-        dumpsterShake();
+        dumpster.shake();
     };
 
+    // Used for step control hook only
+    spike.hide = function() {
+        path.style('opacity', 0);
+    };
+
+    function translateY(y) {
+        return function() {
+            return 'translate(' + x + ', ' + y + ')';
+        };
+    }
+
     return spike;
-})();
+})(TrashFire);

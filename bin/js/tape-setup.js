@@ -1,6 +1,6 @@
 const path = require('path')
 const test = require('tape')
-const { JSDOM } = require('jsdom')
+const { JSDOM, VirtualConsole } = require('jsdom')
 
 function createDomTester(testMethod) {
     // [name], [options], filePath, testCallback
@@ -27,7 +27,11 @@ loadDomThenTest.skip = createDomTester(test.skip)
 function getWindowFromFile(filePath, onLoad) {
     const options = {
         resources: 'usable',
-        runScripts: 'dangerously'
+        runScripts: 'dangerously',
+        virtualConsole: new VirtualConsole().sendTo(
+            console,
+            { omitJSDOMErrors: true }
+        )
     }
 
     JSDOM.fromFile(path.resolve('.', filePath), options).then(dom => {
@@ -36,7 +40,7 @@ function getWindowFromFile(filePath, onLoad) {
         window.addEventListener('load', () => {
             onLoad(window)
         })
-    })
+    }).catch(console.log)
 }
 
 module.exports = {

@@ -1,44 +1,41 @@
 /**
  * Draw front and back groups so objects can emerge between the layers
  */
+var dumpster = (function(tf) {
+    var dumpster = {};
 
-// dumpster width = 312
-TrashFire.trashOrigin = {
-    x: 312 * 0.5,
-    y: 204 * 0.5
-};
+    var group = tf.wrapper.append('g')
+        .attr('transform', translateDumpsterWithYOffset(0));
 
-var dumpster = TrashFire.wrapper.append('g')
-    .attr('class', 'dumpster')
-    .attr('transform', function() {
-        var x = (TrashFire.view.width - 312) * 0.5;
-        return 'translate(' + x + ', ' + TrashFire.dumpster.y + ')';
-    });
+    group.call(addDumpsterLayer, 'back');
 
-dumpster.append('g')
-    .classed('back', 1)
-    .append('use').attr('xlink:href', 'dumpster.svg#back');
+    dumpster.trashGroup = group.append('g');
 
-var trashContainer = dumpster.append('g');
+    group.call(addDumpsterLayer, 'front');
 
-dumpster.append('g')
-    .classed('front', 1)
-    .append('use').attr('xlink:href', 'dumpster.svg#front');
+    dumpster.shake = function() {
+        group
+            .transition()
+                .duration(300)
+                .ease(d3.easeElastic)
+                .attr('transform', translateDumpsterWithYOffset(10))
+            .transition()
+                .duration(300)
+                .ease(d3.easeBounce)
+                .attr('transform', translateDumpsterWithYOffset(0));
+    };
 
-function dumpsterShake() {
-    dumpster
-        .transition()
-        .duration(300)
-        .ease(d3.easeElastic)
-        .attr('transform', function() {
-            var x = (TrashFire.view.width - 312) * 0.5;
-            return 'translate(' + x + ', ' + (TrashFire.dumpster.y + 10) + ')';
-        })
-        .transition()
-        .duration(300)
-        .ease(d3.easeBounce)
-        .attr('transform', function() {
-            var x = (TrashFire.view.width - 312) * 0.5;
-            return 'translate(' + x + ', ' + TrashFire.dumpster.y + ')';
-        });
-}
+    function translateDumpsterWithYOffset(yOffset) {
+        return function() {
+            return 'translate(' +
+                ((tf.view.width - tf.dumpster.width) * 0.5) + ', ' +
+                (tf.dumpster.y + yOffset) + ')';
+        };
+    }
+
+    function addDumpsterLayer(selection, layer) {
+        selection.append('g').append('use').attr('xlink:href', 'dumpster.svg#' + layer);
+    }
+
+    return dumpster;
+})(TrashFire);
