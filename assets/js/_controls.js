@@ -57,10 +57,9 @@ VS.control = (function() {
         { key: 'stop', flag: 8},
         { key: 'fwd', flag: 4}
     ];
-    var toggleMap = [
-        { key: 'play', flag: 2},
-        { key: 'pause', flag: 1}
-    ];
+    var playPauseFlag = 2;
+
+    // TODO remove pause
     var states = {
         playing: 9, // 01001,
         firstStep: 6, // 00110,
@@ -75,10 +74,8 @@ VS.control = (function() {
             control[pair.key].disabled = (state & pair.flag) === 0;
         });
 
-        toggleMap.forEach(function(pair) {
-            var method = (state & pair.flag) ? 'add' : 'remove';
-            control.play.classList[method](pair.key);
-        });
+        var pauseClassMethod = (state & playPauseFlag) ? 'remove' : 'add';
+        control.play.classList[pauseClassMethod]('pause');
     };
 
     control.setStateFromPointer = function() {
