@@ -52,15 +52,15 @@ VS.control = (function() {
     /**
      * Control states (as enabled states)
      */
-    var controlMap = new Map([
-        ['back', 16],
-        ['stop', 8],
-        ['fwd', 4]
-    ]);
-    var toggleMap = new Map([
-        ['play', 2],
-        ['pause', 1]
-    ]);
+    var controlMap = [
+        { key: 'back', flag: 16},
+        { key: 'stop', flag: 8},
+        { key: 'fwd', flag: 4}
+    ];
+    var toggleMap = [
+        { key: 'play', flag: 2},
+        { key: 'pause', flag: 1}
+    ];
     var states = {
         playing: 9, // 01001,
         firstStep: 6, // 00110,
@@ -68,19 +68,16 @@ VS.control = (function() {
         lastStep: 26 // 11010
     };
 
-    var controlsToToggle = ['back', 'stop', 'fwd'];
-    var iconsToToggle = ['play', 'pause'];
-
     control.set = function(stateKey) {
         var state = states[stateKey];
 
-        controlMap.forEach(function(flag, key) {
-            control[key].disabled = (state & flag) === 0;
+        controlMap.forEach(function(pair) {
+            control[pair.key].disabled = (state & pair.flag) === 0;
         });
 
-        toggleMap.forEach(function(flag, key) {
-            var method = (state & flag) ? 'add' : 'remove';
-            control.play.classList[method](key);
+        toggleMap.forEach(function(pair) {
+            var method = (state & pair.flag) ? 'add' : 'remove';
+            control.play.classList[method](pair.key);
         });
     };
 
