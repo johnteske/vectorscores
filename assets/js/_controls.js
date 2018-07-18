@@ -53,18 +53,17 @@ VS.control = (function() {
      * Control states (as enabled states)
      */
     var controlMap = [
-        { key: 'back', flag: 16},
-        { key: 'stop', flag: 8},
-        { key: 'fwd', flag: 4}
+        { key: 'back', flag: 8},
+        { key: 'stop', flag: 4},
+        { key: 'fwd', flag: 2}
     ];
-    var playPauseFlag = 2;
 
-    // TODO remove pause
+    // back, stop, fwd, play/pause
     var states = {
-        playing: 9, // 01001,
-        firstStep: 6, // 00110,
-        step: 30, // 11110,
-        lastStep: 26 // 11010
+        playing: 4, // 0100,
+        firstStep: 3, // 0011,
+        step: 15, // 1111,
+        lastStep: 13 // 1101
     };
 
     control.set = function(stateKey) {
@@ -74,7 +73,7 @@ VS.control = (function() {
             control[pair.key].disabled = (state & pair.flag) === 0;
         });
 
-        var pauseClassMethod = (state & playPauseFlag) ? 'remove' : 'add';
+        var pauseClassMethod = (state & 1) ? 'remove' : 'add';
         control.play.classList[pauseClassMethod]('pause');
     };
 
