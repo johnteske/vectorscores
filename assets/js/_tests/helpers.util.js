@@ -1,17 +1,10 @@
 const path = require('path')
-const { test, getWindowFromFile } = require(path.resolve('.', 'bin/js/tape-setup'))
+const { loadDomThenTest } = require(path.resolve('.', 'bin/js/tape-setup'))
 
-let window
+const htmlPath = '_site/scores/tutorial/index.html'
 
-test('setup', t => {
-    getWindowFromFile('_site/scores/tutorial/index.html', loadedWindow => {
-        window = loadedWindow
-        t.end()
-    })
-})
-
-test('VS#getQueryString', t => {
-    const VS = window.VS
+loadDomThenTest('VS#getQueryString', htmlPath, (t, window) => {
+    const { VS } = window
     const url = 'http://localhost:4000/vectorscores/scores/adsr/?parts=4&showall=on'
 
     t.equal(VS.getQueryString('parts', url), '4', 'return value as string given query parameter that exists in url')
@@ -20,16 +13,17 @@ test('VS#getQueryString', t => {
     t.end()
 })
 
-test('VS#makeQueryString', t => {
-    const VS = window.VS
+loadDomThenTest('VS#makeQueryString', htmlPath, (t, window) => {
+    const { VS } = window
+
     t.equal(VS.makeQueryString({ a: '1' }), 'a=1', 'return query string')
     t.equal(VS.makeQueryString({ a: '1', b: '2' }), 'a=1&b=2', 'return query string joined by \'&\'')
 
     t.end()
 })
 
-test('VS#constant', t => {
-    const VS = window.VS
+loadDomThenTest('VS#constant', htmlPath, (t, window) => {
+    const { VS } = window
     const value = 5
     const c = VS.constant(value)
 
