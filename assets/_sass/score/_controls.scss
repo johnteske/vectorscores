@@ -36,12 +36,18 @@
     }
 }
 
-.score-button.play g#pause {
+.score-button g#pause {
     display: none;
 }
 
-.score-button.pause g#play {
-    display: none;
+.score-button.pause {
+    g#play {
+        display: none;
+    }
+
+    g#pause {
+        display: inline;
+    }
 }
 
 #score-pointer {
