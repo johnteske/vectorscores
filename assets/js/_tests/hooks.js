@@ -1,31 +1,31 @@
 const path = require('path')
-const { test, getWindowFromFile } = require(path.resolve('.', 'bin/js/tape-setup'))
+const { loadDomThenTest } = require(path.resolve('.', 'bin/js/tape-setup'))
 
-test('VS#createHooks', t => {
-    getWindowFromFile('_site/scores/tutorial/index.html', window => {
-        const VS = window.VS
+const htmlPath = '_site/scores/tutorial/index.html'
 
-        const hooks = new VS.createHooks(['play'])
+loadDomThenTest('VS#createHooks', htmlPath, (t, window) => {
+    const { VS } = window
 
-        const expected = {
-            a: 2,
-            b: 4,
-            c: 6
-        }
-        let actual = {}
+    const hooks = new VS.createHooks(['play'])
 
-        hooks.add('play', () => { actual.a = 2 })
-        hooks.add('play', () => { actual.b = 4 })
-        hooks.add('play', () => { actual.c = 6 })
+    const expected = {
+        a: 2,
+        b: 4,
+        c: 6
+    }
+    let actual = {}
 
-        hooks.trigger('play')
+    hooks.add('play', () => { actual.a = 2 })
+    hooks.add('play', () => { actual.b = 4 })
+    hooks.add('play', () => { actual.c = 6 })
 
-        t.deepEqual(actual, expected, 'should execute all registered functions')
+    hooks.trigger('play')
 
-        t.throws(() => {
-            hooks.add('test', () => {})
-        }, 'should throw an error when adding an unregistered hook')
+    t.deepEqual(actual, expected, 'should execute all registered functions')
 
-        t.end()
-    })
+    t.throws(() => {
+        hooks.add('test', () => {})
+    }, 'should throw an error when adding an unregistered hook')
+
+    t.end()
 })

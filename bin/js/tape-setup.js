@@ -45,6 +45,5 @@ function getWindowFromFile(filePath, onLoad) {
 
 module.exports = {
     test,
-    loadDomThenTest,
-    getWindowFromFile
+    loadDomThenTest
 }
