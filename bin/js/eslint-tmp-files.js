@@ -10,37 +10,35 @@ const root = './'
 glob(root + '{assets,scores}/**/*.js', (err, files) => {
     if (!err) {
         const frontmatterFiles = files.filter(hasFrontmatter)
+        frontmatterFiles.forEach(writeTmpFileWithoutFrontmatter)
         writeIgnoreFile(root + '.tmp-eslintignore', frontmatterFiles)
     }
 })
 
-/**
- * Check the first line of the file for frontmatter,
- * if true comment out the frontmatter and write to a tmp file,
- * and return true for the glob filter.
- */
 function hasFrontmatter(filePath) {
     const content = fs.readFileSync(filePath).toString()
     const head = content.substring(0, 3)
+    return head === '---'
+}
 
-    const hasFM = head === '---'
+/**
+ * Comment out the frontmatter and write to a tmp file
+ */
+const writeTmpFileWithoutFrontmatter = filePath => {
+    const content = fs.readFileSync(filePath).toString()
 
-    if (hasFM) {
-        const contentNoFM = content
-            .replace(/(^---\n(.|\n)*---)/g, '/*$1*/')
-            .replace(/({%.*%}|{{.*}})/g, '/*$1*/')
+    const contentNoFM = content
+        .replace(/(^---\n(.|\n)*---)/g, '/*$1*/')
+        .replace(/({%.*%}|{{.*}})/g, '/*$1*/')
 
-        const tmpPath = filePath.replace(root, root + '.tmp/')
+    const tmpPath = filePath.replace(root, root + '.tmp/')
 
-        try {
-            mkdirp.sync(path.dirname(tmpPath))
-            fs.writeFileSync(tmpPath, contentNoFM)
-        } catch (err) {
-            throw new Error(err)
-        }
+    try {
+        mkdirp.sync(path.dirname(tmpPath))
+        fs.writeFileSync(tmpPath, contentNoFM)
+    } catch (err) {
+        throw new Error(err)
     }
-
-    return hasFM
 }
 
 /**
@@ -50,16 +48,13 @@ function hasFrontmatter(filePath) {
  * - tests
  */
 function writeIgnoreFile(filePath, frontmatterFiles) {
-    let content = frontmatterFiles.map(f => {
-            return f.replace(root, '')
-        })
-        .join('\n')
-
-    // Ignore libraries
-    content += '\nassets/js/lib\n'
-
-    // Ignore tests
-    content += '\n**/_tests/**/*.js\n'
+    let content = [].concat(
+        frontmatterFiles.map(f => f.replace(root, '')),
+        'assets/js/lib',
+        '**/_tests/**/*.js',
+        ''
+    )
+    .join('\n')
 
     fs.writeFileSync(filePath, content)
 }
