@@ -22,12 +22,14 @@ done
 # Create temp files from source files with frontmatter
 node bin/js/eslint-tmp-files.js
 
+PARTIAL_FLAGS=(--rule "no-undef: 0" --rule "no-unused-vars: 0")
+
 # Lint source files with frontmatter
-[[ -n $FRONTMATTER ]] && bin/js/node_modules/.bin/eslint './.tmp/**/*.js' --rule '{ no-undef: 0 }' --rule '{ no-unused-vars: 0 }'
+[[ -n $FRONTMATTER ]] && bin/js/node_modules/.bin/eslint './.tmp/**/*.js' "${PARTIAL_FLAGS[@]}"
 
 # Lint source files without frontmatter
-[[ -n $SOURCE ]] && bin/js/node_modules/.bin/eslint './assets/**/*.js' --ignore-path './.tmp-eslintignore' --rule '{ no-undef: 0 }' --rule '{ no-unused-vars: 0 }'
-[[ -n $SOURCE ]] && bin/js/node_modules/.bin/eslint './scores/**/*.js' --ignore-path './.tmp-eslintignore' --rule '{ no-undef: 0 }' --rule '{ no-unused-vars: 0 }'
+[[ -n $SOURCE ]] && bin/js/node_modules/.bin/eslint './assets/**/*.js' --ignore-path './.tmp-eslintignore' "${PARTIAL_FLAGS[@]}"
+[[ -n $SOURCE ]] && bin/js/node_modules/.bin/eslint './scores/**/*.js' --ignore-path './.tmp-eslintignore' "${PARTIAL_FLAGS[@]}"
 
 # Lint built files
 [[ -n $BUILT ]] && bin/js/node_modules/.bin/eslint './_site/**/*.js' --no-eslintrc
