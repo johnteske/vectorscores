@@ -220,21 +220,17 @@ function randDuration() {
 }
 
 /**
- * Reveal a starting point
+ * Reveal a starting point, chosen from an extreme high or low
  */
 (function() {
-    var extremaIndices = [];
+    var extremaIndices = topoData.reduce(function(indices, d, i) {
+        ((d.height === score.range.min) || (d.height === score.range.max)) && indices.push(i);
+        return indices;
+    }, []);
 
-    for (var i = 0; i < topoData.length; i++) {
-        var d = topoData[i];
-        if (d.height === score.range.min || d.height === score.range.max) {
-            extremaIndices.push(i);
-        }
-    }
+    walker.index = VS.getItem(extremaIndices);
 
-    var startIndex = walker.index = VS.getItem(extremaIndices);
-
-    topoData[startIndex].revealed = revealFactor;
+    topoData[walker.index].revealed = revealFactor;
     topoData[walker.index].walker = true;
     topoData[walker.index].walked = true;
 }());
