@@ -32,6 +32,7 @@ var layout = {
 };
 
 {% include_relative _utils.js %}
+{% include_relative _point.js %}
 {% include_relative _symbol-sets.js %}
 {% include_relative _score.js %}
 {% include_relative _text.js %}
