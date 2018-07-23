@@ -32,29 +32,13 @@ var layout = {
 };
 var debug = +VS.getQueryString('debug') === 1;
 
+{% include_relative _utils.js %}
 {% include_relative _symbol-sets.js %}
 {% include_relative _score.js %}
 
 var topography =  generateValues();
 score.range = getScoreRange(topography);
 var topoData = createScoreFragment(topography);
-
-/**
- * x, y from i of row-major order
- */
-function indexToCoordinates(i) {
-    var y = Math.floor(i / score.width);
-    var x = i - (y * score.width);
-
-    return {
-        x: x,
-        y: y
-    };
-}
-
-function coordinatesToIndex(x, y) {
-    return (x & (score.width - 1)) + (y & (score.width - 1)) * score.width;
-}
 
 /**
  * Debug symbol offsets

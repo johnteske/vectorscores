@@ -9,7 +9,6 @@ function generateValues() {
     var featureSize = 4;
     var sampleSize = featureSize;
 
-    var initScale = 4;
     var scale = 4;
 
     function frand() {
@@ -23,12 +22,11 @@ function generateValues() {
     }
 
     function sample(x, y) {
-        return values[(x & (width - 1)) + (y & (height - 1)) * width];
+        return values[coordinatesToIndex(x, y)];
     }
 
     function setSample(x, y, value) {
-        // value = VS.clamp(value, -initScale, initScale);
-        values[(x & (width - 1)) + (y & (height - 1)) * width] = value;
+        values[coordinatesToIndex(x, y)] = value;
     }
 
     function sampleSquare(x, y, size, value) {
