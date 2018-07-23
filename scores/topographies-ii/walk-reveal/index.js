@@ -35,6 +35,7 @@ var debug = +VS.getQueryString('debug') === 1;
 {% include_relative _utils.js %}
 {% include_relative _symbol-sets.js %}
 {% include_relative _score.js %}
+{% include_relative _text.js %}
 
 var topography =  generateValues();
 score.range = getScoreRange(topography);
@@ -269,28 +270,21 @@ function randDuration() {
     topoData[walker.index].walked = true;
 }());
 
-var makeToggler = function(toggle) {
-    return function(duration) {
-        toggleInstructions(duration, toggle);
-        forgetAll(duration);
-    };
-};
-
 /**
- * Fade instructions in and out
+ * Fade text in and out
  */
-var instructionEventList = [
+var textEventList = [
     {
         duration: 0,
-        action: makeToggler(false)
+        action: makeTextToggler(false)
     },
     {
         duration: 3600,
-        action: makeToggler(true)
+        action: makeTextToggler(true)
     },
     {
         duration: 3600,
-        action: makeToggler(false)
+        action: makeTextToggler(false)
     }
 ];
 
@@ -315,7 +309,7 @@ var finalEventList = [
     }
 ];
 
-var eventList = [].concat(instructionEventList, walkEventList, finalEventList)
+var eventList = [].concat(textEventList, walkEventList, finalEventList)
     .map(function(bar, i, list) {
         bar.time = list.slice(0, i).reduce(function(sum, bar2) {
             return sum += bar2.duration;
@@ -326,21 +320,6 @@ var eventList = [].concat(instructionEventList, walkEventList, finalEventList)
 eventList.forEach(function(bar) {
     VS.score.add(bar.time, bar.action);
 });
-
-/**
- * Instructions
- */
-var instructions = wrapper.append('text')
-    .attr('class', 'instructions')
-    .attr('text-anchor', 'middle')
-    .attr('y', 220)
-    .attr('opacity', 0)
-    .text('explore the unknown, try to remember the past');
-
-function toggleInstructions(duration, toggle) {
-    instructions.transition().duration(duration || transitionTime)
-        .attr('opacity', toggle ? 1 : 0);
-}
 
 /**
  * Controls
