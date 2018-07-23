@@ -1,17 +1,14 @@
-var symbols = {},
-    symbolOffsets = {},
-    symbolScale = [];
+var symbolSet = {};
 
-var symbolSetIndex = +VS.getQueryString('symbols') || VS.getItem([1, 2, 3, 4]);
-
-switch (symbolSetIndex) {
+switch (+VS.getQueryString('symbols') || VS.getRandIntIncl(1, 4)) {
     case 1:
+        symbolSet.strings =
         symbols = Object.assign(VS.dictionary.Bravura.accidentals, VS.dictionary.Bravura.durations.stemless, {
             min: '\uE4E5', // quarter rest
             max: '\uE4C4' // short fermata
         });
 
-        symbolOffsets = {
+        symbolSet.offsets = {
             min: { x: -0.125, y: 0 },
             '-1.5': { x: -0.225, y: 0 }, // three-quarter flat (backwards, forwards)
             '-1': { x: -0.1, y: 0 }, // flat
@@ -24,10 +21,11 @@ switch (symbolSetIndex) {
             max: { x: -0.3, y: 0.175 }
         };
 
-        symbolScale = ['-1.5', '-1', '-0.5', '0', '2', '1', '0.5', '0.25'];
+        symbolSet.scale = ['-1.5', '-1', '-0.5', '0', '2', '1', '0.5', '0.25'];
 
         break;
     case 2:
+        symbolSet.strings =
         symbols = Object.assign(VS.dictionary.Bravura.accidentals, {
             min: '\uE4C1', // long fermata, flipped
             under: '\uE4BA',
@@ -35,7 +33,7 @@ switch (symbolSetIndex) {
             max: '\uE4C4' // short fermata
         });
 
-        symbolOffsets = {
+        symbolSet.offsets = {
             min: { x: -0.3, y: -0.16 },
             under: { x: -0.185, y: 0},
             over: { x: -0.185, y: 0},
@@ -46,10 +44,11 @@ switch (symbolSetIndex) {
             max: { x: -0.3, y: 0.175 }
         };
 
-        symbolScale = ['under', 'under', 'over', 'over', '0', '0.5', '1', '1.5'];
+        symbolSet.scale = ['under', 'under', 'over', 'over', '0', '0.5', '1', '1.5'];
 
         break;
     case 3:
+        symbolSet.strings =
         symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, {
             min: '\uE4C6', // long fermata
             graceAcc: '\uE560',
@@ -59,7 +58,7 @@ switch (symbolSetIndex) {
             max: '\uE537' // sfp
         });
 
-        symbolOffsets = {
+        symbolSet.offsets = {
             min: { x: -0.3, y: 0.1625 },
             '8':  { x: -0.35, y: 0 },
             '4':  { x: -0.225, y: 0 },
@@ -72,17 +71,18 @@ switch (symbolSetIndex) {
             max: { x: -0.4, y: 0.135 }
         };
 
-        symbolScale = [8, 4, 2, 1, 'irrTremolo', 'mordent', 'graceApp', 'graceAcc'];
+        symbolSet.scale = [8, 4, 2, 1, 'irrTremolo', 'mordent', 'graceApp', 'graceAcc'];
 
         break;
     case 4:
     default:
+        symbolSet.strings =
         symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations, {
             min: '\uE4C1', // long fermata, flipped
             max: '\uE4C4' // short fermata
         });
 
-        symbolOffsets = {
+        symbolSet.offsets = {
             min: { x: -0.3, y: -0.16 },
             '-': { x: -0.1625, y: 0.03125 },
             '>': { x: -0.1625, y: 0.125 },
@@ -94,5 +94,5 @@ switch (symbolSetIndex) {
             max: { x: -0.3, y: 0.175 }
         };
 
-        symbolScale = ['-', '-', '>', '.', 2, 1, 0.5, 0.25];
+        symbolSet.scale = ['-', '-', '>', '.', 2, 1, 0.5, 0.25];
 }

@@ -95,26 +95,25 @@ topo.selectAll('text')
         return (c.x - c.y) * tileWidthHalf;
     })
     .each(function(d) {
-        var symbolIndex = d.heightIndex + 4,
-            symbolKey;
+        var symbolIndex = d.heightIndex + 4;
+        var symbolKey = getStringByIndex(symbolIndex);
+        var offsets = symbolSet.offsets[symbolKey];
 
-        // if (d.height === score.range.max || symbolIndex > (symbolScale.length - 1)) {
-        if (symbolIndex > (symbolScale.length - 1)) {
-            symbolKey = 'max';
-        // else if (d.height === score.range.min || symbolIndex < 0) {
-        } else if (symbolIndex < 0) {
-            symbolKey = 'min';
-        } else {
-            symbolKey = symbolScale[symbolIndex];
-        }
-
-        var offsets = symbolOffsets[symbolKey];
-
-        d3.select(this).text(symbols[symbolKey])
+        d3.select(this).text(symbolSet.strings[symbolKey])
             .attr('dx', offsets.x + 'em')
             .attr('dy', offsets.y + 'em');
     })
     .call(revealSymbols, 0);
+
+function getStringByIndex(index) {
+    if (index > (symbolSet.scale.length - 1)) {
+        return 'max';
+    } else if (index < 0) {
+        return 'min';
+    } else {
+        return symbolSet.scale[index];
+    }
+}
 
 /**
  * Reveal
