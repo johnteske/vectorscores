@@ -203,31 +203,21 @@ function revealNearby(duration) {
 
     var revealedIndices = [walker.index];
 
-    // for (var i = 0; i < topoData.length; i++) {
-    //     if (topoData[i].revealed) {
-    //         revealedIndices.push(i);
-    //     }
-    // }
-
     function setRevealed(x, y) {
         if (Math.random() < chance && x > -1 && x < score.width && y > -1 && y < score.width) {
             topoData[coordinatesToIndex(x, y)].revealed = Math.min(topoData[coordinatesToIndex(x, y)].revealed + nearbyRevealFactor, revealFactor);
         }
     }
 
-    // Reveal surrounding indices
-    for (var i = 0; i < revealedIndices.length; i++) {
-        var index = revealedIndices[i],
-            c = indexToCoordinates(index);
+    var c = indexToCoordinates(walker.index);
 
-        setRevealed(c.x, c.y - 1); // top
-        setRevealed(c.x + 1, c.y); // right
-        setRevealed(c.x, c.y + 1); // bottom
-        setRevealed(c.x - 1, c.y); // left
+    setRevealed(c.x, c.y - 1); // top
+    setRevealed(c.x + 1, c.y); // right
+    setRevealed(c.x, c.y + 1); // bottom
+    setRevealed(c.x - 1, c.y); // left
 
-        setRevealed(c.x - 1, c.y - 1); // top left
-        setRevealed(c.x + 1, c.y + 1); // bottom right
-    }
+    setRevealed(c.x - 1, c.y - 1); // top left
+    setRevealed(c.x + 1, c.y + 1); // bottom right
 
     // Update map
     topo.selectAll('text').call(revealSymbols, duration || transitionTime);
