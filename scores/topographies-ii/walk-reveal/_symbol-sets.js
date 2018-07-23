@@ -2,8 +2,7 @@ var symbolSet = {};
 
 switch (+VS.getQueryString('symbols') || VS.getRandIntIncl(1, 4)) {
     case 1:
-        symbolSet.strings =
-        symbols = Object.assign(VS.dictionary.Bravura.accidentals, VS.dictionary.Bravura.durations.stemless, {
+        symbolSet.strings = Object.assign(VS.dictionary.Bravura.accidentals, VS.dictionary.Bravura.durations.stemless, {
             min: '\uE4E5', // quarter rest
             max: '\uE4C4' // short fermata
         });
@@ -25,8 +24,7 @@ switch (+VS.getQueryString('symbols') || VS.getRandIntIncl(1, 4)) {
 
         break;
     case 2:
-        symbolSet.strings =
-        symbols = Object.assign(VS.dictionary.Bravura.accidentals, {
+        symbolSet.strings = Object.assign(VS.dictionary.Bravura.accidentals, {
             min: '\uE4C1', // long fermata, flipped
             under: '\uE4BA',
             over: '\uE4BB',
@@ -48,8 +46,7 @@ switch (+VS.getQueryString('symbols') || VS.getRandIntIncl(1, 4)) {
 
         break;
     case 3:
-        symbolSet.strings =
-        symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, {
+        symbolSet.strings = Object.assign(VS.dictionary.Bravura.durations.stemless, {
             min: '\uE4C6', // long fermata
             graceAcc: '\uE560',
             graceApp: '\uE562',
@@ -76,8 +73,7 @@ switch (+VS.getQueryString('symbols') || VS.getRandIntIncl(1, 4)) {
         break;
     case 4:
     default:
-        symbolSet.strings =
-        symbols = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations, {
+        symbolSet.strings = Object.assign(VS.dictionary.Bravura.durations.stemless, VS.dictionary.Bravura.articulations, {
             min: '\uE4C1', // long fermata, flipped
             max: '\uE4C4' // short fermata
         });
