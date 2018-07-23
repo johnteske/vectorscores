@@ -12,7 +12,6 @@ var main = d3.select('.main'),
         revealed: 2.5,
         hidden: 1
     },
-    topoData,
     score = {
         width: 8 // currently used in creation, not display
     },
@@ -34,11 +33,11 @@ var layout = {
 var debug = +VS.getQueryString('debug') === 1;
 
 {% include_relative _symbol-sets.js %}
-{% include_relative _diamond-square.js %}
 {% include_relative _score.js %}
 
-score.range = getScoreRange(topoData);
-topoData = createScoreFragment(topoData);
+var topography =  generateValues();
+score.range = getScoreRange(topography);
+var topoData = createScoreFragment(topography);
 
 /**
  * x, y from i of row-major order
