@@ -30,7 +30,6 @@ var layout = {
     scale: 1,
     margin: {}
 };
-var debug = +VS.getQueryString('debug') === 1;
 
 {% include_relative _utils.js %}
 {% include_relative _symbol-sets.js %}
@@ -40,32 +39,6 @@ var debug = +VS.getQueryString('debug') === 1;
 var topography =  generateValues();
 score.range = getScoreRange(topography);
 var topoData = createScoreFragment(topography);
-
-/**
- * Debug symbol offsets
- */
-if (debug) {
-    heightScale.revealed = 0;
-    heightScale.hidden = 0;
-
-    wrapper.append('g')
-        .selectAll('.plus')
-        .data(topoData)
-        .enter()
-        .append('path')
-        .attr('stroke', 'red')
-        .attr('stroke-width', 1)
-        .attr('d', function(d, i) {
-            var c = indexToCoordinates(i),
-                px = (c.x - c.y) * tileWidthHalf,
-                py = (c.x + c.y) * tileHeightHalf;
-
-            return 'M' + px + ' ' + (py - 5) +
-                ' L' + px + ' ' + (py + 5) +
-                ' M' + (px - 5) + ' ' + py +
-                ' L' + (px + 5) + ' ' + py;
-        });
-}
 
 /**
  * Render score directly from row-major order data
@@ -109,11 +82,7 @@ function revealSymbols(selection, dur) {
                 hScale = d.revealed ? heightScale.revealed : heightScale.hidden,
                 scaledHeight;
 
-            if (debug) {
-                scaledHeight = 0;
-            } else {
-                scaledHeight = d.height * hScale;
-            }
+            scaledHeight = d.height * hScale;
 
             return ((c.x + c.y) * tileHeightHalf) - scaledHeight;
         })
@@ -121,7 +90,7 @@ function revealSymbols(selection, dur) {
             if (d.revealed > 0) {
                 d.revealed--;
             }
-            return debug ? 1 : (d.revealed / revealFactor);
+            return d.revealed / revealFactor;
         });
 }
 
