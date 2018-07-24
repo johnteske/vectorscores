@@ -1,98 +1,83 @@
 /**
- * @returns {Array} - row-major order data
+ * Populate score
  */
-function generateValues() {
-    var values = [];
-    var width = score.width;
-    var height = score.width;
+VS.score.preroll = transitionTime;
 
-    var featureSize = 4;
-    var sampleSize = featureSize;
+var addEvent = (function() {
+    var time = 0;
 
-    var scale = 4;
-
-    function frand() {
-        return (Math.random() * 2) - 1;
-    }
-
-    for (var y = 0; y < height; y += featureSize) {
-        for (var x = 0; x < width; x += featureSize) {
-            setSample(x, y, frand() * scale);
-        }
-    }
-
-    function sample(x, y) {
-        return values[xyToIndex(x, y)];
-    }
-
-    function setSample(x, y, value) {
-        values[xyToIndex(x, y)] = value;
-    }
-
-    function sampleSquare(x, y, size, value) {
-        var half = size / 2;
-
-        var a = sample(x - half, y - half);
-        var b = sample(x + half, y - half);
-        var c = sample(x - half, y + half);
-        var d = sample(x + half, y + half);
-
-        setSample(x, y, ((a + b + c + d) / 4.0) + value);
-    }
-
-    function sampleDiamond(x, y, size, value) {
-        var half = size / 2;
-
-        var a = sample(x - half, y);
-        var b = sample(x + half, y);
-        var c = sample(x, y - half);
-        var d = sample(x, y + half);
-
-        setSample(x, y, ((a + b + c + d) / 4.0) + value);
-    }
-
-    function diamondSquare(stepSize, scale) {
-        var x, y;
-        var halfStep = stepSize / 2;
-
-        for (y = halfStep; y < height + halfStep; y += stepSize) {
-            for (x = halfStep; x < width + halfStep; x += stepSize) {
-                sampleSquare(x, y, stepSize, frand() * scale);
-            }
-        }
-
-        for (y = 0; y < height; y += stepSize) {
-            for (x = 0; x < width; x += stepSize) {
-                sampleDiamond(x + halfStep, y, stepSize, frand() * scale);
-                sampleDiamond(x, y + halfStep, stepSize, frand() * scale);
-            }
-        }
-    }
-
-    while (sampleSize > 1) {
-        diamondSquare(sampleSize, scale);
-        sampleSize /= 2;
-        scale /= 2.0;
-    }
-
-    return values;
-}
-
-function getScoreRange(data) {
-    return {
-        min: Math.min.apply(null, data),
-        max: Math.max.apply(null, data)
+    return function(fn, duration) {
+        VS.score.add(time, fn);
+        time += duration;
     };
+})();
+
+function randDuration() {
+    return 1200; // 600 + (Math.random() * 600);
 }
 
 /**
- * Assign properties to row-major order data
+ * Reveal a starting point, chosen from an extreme high or low
  */
-function createScoreFragment(data) {
-    return data.map(function(d) {
-        return {
-            height: d,
-            revealed: 0 // TODO topoData will not need this at first, only height
-        };
+(function() {
+    var extremaIndices = topoData.reduce(function(indices, d, i) {
+        ((d.height === score.range.min) || (d.height === score.range.max)) && indices.push(i);
+        return indices;
+    }, []);
+
+    walker.index = VS.getItem(extremaIndices);
+
+    topoData[walker.index].revealed = revealFactor;
+    topoData[walker.index].walked = true;
+}());
+
+/**
+ * Fade text in and out
+ */
+var textEventList = [
+    {
+        duration: 0,
+        action: makeTextToggler(false)
+    },
+    {
+        duration: 3600,
+        action: makeTextToggler(true)
+    },
+    {
+        duration: 3600,
+        action: makeTextToggler(false)
+    }
+];
+
+var walkEventList = [];
+for (var i = 0; i < nEvents; i++) {
+    walkEventList.push({
+        duration: randDuration(),
+        action: moveWalker
     });
 }
+
+var finalEventList = [
+    {
+        duration: 6000,
+        action: function(duration) {
+            forgetAll(duration || 6000);
+        }
+    },
+    {
+        duration: 0,
+        action: function() {}
+    }
+];
+
+var eventList = [].concat(textEventList, walkEventList, finalEventList)
+    .map(function(bar, i, list) {
+        bar.time = list.slice(0, i).reduce(function(sum, bar2) {
+            return sum += bar2.duration;
+        }, 0);
+        return bar;
+    });
+
+eventList.forEach(function(bar) {
+    VS.score.add(bar.time, bar.action);
+});
