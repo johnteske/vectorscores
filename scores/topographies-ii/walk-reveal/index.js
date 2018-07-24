@@ -41,11 +41,13 @@ var topography =  generateValues();
 score.range = getScoreRange(topography);
 var topoData = createScoreFragment(topography);
 
+{% include_relative _walk-events.js %}
+
 /**
  * Render score directly from row-major order data
  */
 topo.selectAll('text')
-    .data(topoData)
+    .data(topoData) // TODO this will become walkEvents[0]
     .enter()
     .append('text')
     .attr('x', function(d, i) {
@@ -53,7 +55,7 @@ topo.selectAll('text')
         return (c.x - c.y) * tileWidthHalf;
     })
     .each(function(d) {
-        var symbolIndex = d.heightIndex + 4;
+        var symbolIndex = ~~d.height + 4;
         var symbolKey = getStringByIndex(symbolIndex);
         var offsets = symbolSet.offsets[symbolKey];
 
@@ -127,7 +129,6 @@ function moveWalker(duration) {
      * move to any available position
      */
     if (notWalked.indexOf(walker.lastDir) !== -1 || available.indexOf(walker.lastDir) !== -1) {
-        // console.log('last');
         dir = walker.lastDir;
         walker.lastDir = '';
     } else if (notWalked.length) {
@@ -137,8 +138,6 @@ function moveWalker(duration) {
         dir = VS.getItem(available);
         walker.lastDir = dir;
     }
-
-    topoData[walker.index].walker = false;
 
     switch (dir) {
     case 'top':
@@ -163,7 +162,6 @@ function moveWalker(duration) {
         break;
     }
 
-    topoData[walker.index].walker = true;
     topoData[walker.index].walked = true;
     topoData[walker.index].revealed = revealFactor;
 
@@ -173,8 +171,6 @@ function moveWalker(duration) {
 function revealNearby(duration) {
     // Chance nearby symbols will be revealed
     var chance = 0.2;
-
-    var revealedIndices = [walker.index];
 
     function setRevealed(point) {
         var x = point.x;
@@ -236,7 +232,6 @@ function randDuration() {
     walker.index = VS.getItem(extremaIndices);
 
     topoData[walker.index].revealed = revealFactor;
-    topoData[walker.index].walker = true;
     topoData[walker.index].walked = true;
 }());
 

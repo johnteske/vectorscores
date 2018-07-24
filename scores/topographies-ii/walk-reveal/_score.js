@@ -92,8 +92,7 @@ function createScoreFragment(data) {
     return data.map(function(d) {
         return {
             height: d,
-            heightIndex: ~~d,
-            revealed: 0
+            revealed: 0 // TODO topoData will not need this at first, only height
         };
     });
 }
