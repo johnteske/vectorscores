@@ -22,11 +22,11 @@ function generateValues() {
     }
 
     function sample(x, y) {
-        return values[coordinatesToIndex(x, y)];
+        return values[xyToIndex(x, y)];
     }
 
     function setSample(x, y, value) {
-        values[coordinatesToIndex(x, y)] = value;
+        values[xyToIndex(x, y)] = value;
     }
 
     function sampleSquare(x, y, size, value) {

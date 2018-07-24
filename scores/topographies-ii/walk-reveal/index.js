@@ -49,7 +49,7 @@ topo.selectAll('text')
     .enter()
     .append('text')
     .attr('x', function(d, i) {
-        var c = indexToCoordinates(i);
+        var c = indexToPoint(i);
         return (c.x - c.y) * tileWidthHalf;
     })
     .each(function(d) {
@@ -79,7 +79,7 @@ function getStringByIndex(index) {
 function revealSymbols(selection, dur) {
     selection.transition().duration(dur)
         .attr('y', function(d, i) {
-            var c = indexToCoordinates(i),
+            var c = indexToPoint(i),
                 hScale = d.revealed ? heightScale.revealed : heightScale.hidden,
                 scaledHeight;
 
@@ -96,14 +96,16 @@ function revealSymbols(selection, dur) {
 }
 
 function moveWalker(duration) {
-    var c = indexToCoordinates(walker.index);
+    var c = indexToPoint(walker.index);
     var notWalked = [];
     var available = [];
     var dir = '';
 
-    function checkNearby(x, y, dir) {
+    function checkNearby(point, dir) {
+        var x = point.x;
+        var y = point.y;
         if (x > -1 && x < score.width && y > -1 && y < score.width) {
-            if (!topoData[coordinatesToIndex(x, y)].walked) {
+            if (!topoData[pointToIndex(point)].walked) {
                 notWalked.push(dir);
             } else {
                 available.push(dir);
@@ -111,13 +113,13 @@ function moveWalker(duration) {
         }
     }
 
-    checkNearby(c.x, c.y - 1, 'top');
-    checkNearby(c.x + 1, c.y, 'right');
-    checkNearby(c.x, c.y + 1, 'bottom');
-    checkNearby(c.x - 1, c.y, 'left');
+    checkNearby(north(c), 'top');
+    checkNearby(east(c), 'right');
+    checkNearby(south(c), 'bottom');
+    checkNearby(west(c), 'left');
 
-    checkNearby(c.x - 1, c.y - 1, 'topLeft');
-    checkNearby(c.x + 1, c.y + 1, 'bottomRight');
+    checkNearby(northWest(c), 'topLeft');
+    checkNearby(southEast(c), 'bottomRight');
 
     /**
      * Make two moves in the same direction, if possible, or
@@ -140,22 +142,22 @@ function moveWalker(duration) {
 
     switch (dir) {
     case 'top':
-        walker.index = coordinatesToIndex(c.x, c.y - 1);
+        walker.index = pointToIndex(north(c));
         break;
     case 'right':
-        walker.index = coordinatesToIndex(c.x + 1, c.y);
+        walker.index = pointToIndex(east(c));
         break;
     case 'bottom':
-        walker.index = coordinatesToIndex(c.x, c.y + 1);
+        walker.index = pointToIndex(south(c));
         break;
     case 'left':
-        walker.index = coordinatesToIndex(c.x - 1, c.y);
+        walker.index = pointToIndex(west(c));
         break;
     case 'topLeft':
-        walker.index = coordinatesToIndex(c.x - 1, c.y - 1);
+        walker.index = pointToIndex(northWest(c));
         break;
     case 'bottomRight':
-        walker.index = coordinatesToIndex(c.x + 1, c.y + 1);
+        walker.index = pointToIndex(southEast(c));
         break;
     default:
         break;
@@ -174,21 +176,23 @@ function revealNearby(duration) {
 
     var revealedIndices = [walker.index];
 
-    function setRevealed(x, y) {
+    function setRevealed(point) {
+        var x = point.x;
+        var y = point.y;
         if (Math.random() < chance && x > -1 && x < score.width && y > -1 && y < score.width) {
-            topoData[coordinatesToIndex(x, y)].revealed = Math.min(topoData[coordinatesToIndex(x, y)].revealed + nearbyRevealFactor, revealFactor);
+            topoData[pointToIndex(point)].revealed = Math.min(topoData[pointToIndex(point)].revealed + nearbyRevealFactor, revealFactor);
         }
     }
 
-    var c = indexToCoordinates(walker.index);
+    var c = indexToPoint(walker.index);
 
-    setRevealed(c.x, c.y - 1); // top
-    setRevealed(c.x + 1, c.y); // right
-    setRevealed(c.x, c.y + 1); // bottom
-    setRevealed(c.x - 1, c.y); // left
+    setRevealed(north(c));
+    setRevealed(east(c));
+    setRevealed(south(c));
+    setRevealed(west(c));
 
-    setRevealed(c.x - 1, c.y - 1); // top left
-    setRevealed(c.x + 1, c.y + 1); // bottom right
+    setRevealed(northWest(c));
+    setRevealed(southEast(c));
 
     // Update map
     topo.selectAll('text').call(revealSymbols, duration || transitionTime);
