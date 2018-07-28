@@ -20,12 +20,12 @@ function randDuration() {
  * Reveal a starting point, chosen from an extreme high or low
  */
 (function() {
-    var extremaIndices = topoData.reduce(function(indices, d, i) {
-        ((d.height === score.range.min) || (d.height === score.range.max)) && indices.push(i);
-        return indices;
-    }, []);
+    // var extremaIndices = topoData.reduce(function(indices, d, i) {
+    //     ((d.height === score.range.min) || (d.height === score.range.max)) && indices.push(i);
+    //     return indices;
+    // }, []);
 
-    walker.index = VS.getItem(extremaIndices);
+    walker.index = 0; // VS.getItem(extremaIndices);
 
     topoData[walker.index].revealed = revealFactor;
     topoData[walker.index].walked = true;

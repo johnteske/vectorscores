@@ -1,18 +1,16 @@
 // Initial render
 
-/**
- * Render score directly from row-major order data
- */
 topo.selectAll('text')
     .data(topoData) // TODO this will become walkEvents[0]
+    // .data(walkEvents[0])
     .enter()
     .append('text')
     .attr('x', function(d, i) {
         var c = indexToPoint(i);
         return (c.x - c.y) * tileWidthHalf;
     })
-    .each(function(d) {
-        var symbolIndex = ~~d.height + 4;
+    .each(function(d, i) {
+        var symbolIndex = ~~topography[i] + 4; // NOTE get symbols from topography, not own data
         var symbolKey = getStringByIndex(symbolIndex);
         var offsets = symbolSet.offsets[symbolKey];
 
