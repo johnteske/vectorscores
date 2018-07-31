@@ -21,7 +21,7 @@ var walkEvents = [
 ];
 
 // NOTE index starts at 1
-for (var index = 1; index < nEvents; index++) {
+for (var index = 1; index < 20; index++) {
     walkEvents.push(moveWalkerIndex(walkEvents[index - 1]));
 }
 console.log(walkEvents);
@@ -39,7 +39,7 @@ function moveWalkerIndex(lastFrame) {
 
     var lastPoint = indexToPoint(lastFrame.walkerIndex);
 
-    // TODO actually a 'tuple'--direction and index
+    // TODO not an index but actually a 'tuple'--direction and index
     var adjacentIndices = ['north', 'south', 'east', 'west', 'northWest', 'southEast']
         .map(function(dir) {
             return {
@@ -57,13 +57,27 @@ function moveWalkerIndex(lastFrame) {
             };
         });
 
+    function revealAdjacentIndices(index, frame) {
+        adjacentIndices.map(function(d) {
+            return d.index;
+        })
+        .filter(function() {
+            return Math.random() < 0.2;
+        }).forEach(function(index) {
+            frame.topography[index].revealed = revealFactor;
+        });
+
+        return frame;
+    }
+
     function createNewFrame(tuple) {
         var newFrame = {
             topography: lastFrame.topography.map(function(d) {
                 // copy
                 return {
                     height: d.height,
-                    revealed: d.revealed,
+                    // decrement reveal, if not 0
+                    revealed: d.revealed ? d.revealed - 1 : 0,
                     explored: d.explored
                 };
             })
@@ -72,6 +86,7 @@ function moveWalkerIndex(lastFrame) {
         newFrame.direction = tuple.direction;
         newFrame.topography[tuple.index].explored = true;
         newFrame.topography[tuple.index].revealed = revealFactor;
+        newFrame = revealAdjacentIndices(tuple.index, newFrame);
         return newFrame;
     }
 
