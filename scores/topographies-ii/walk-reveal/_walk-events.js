@@ -6,25 +6,35 @@
  * TODO set nearby revealed after creating newFrame
  */
 // TODO is also last event as opposed to forgetAll()?
-var walkEvents = [
-    {
-        walkerIndex: 32, // TODO starting index
-        direction: '',
-        topography: topography.map(function(d) {
-            return {
-                height: d,
-                revealed: 0,
-                explored: false
-            };
-        })
-    }
-];
+var emptyFrame = {
+    walkerIndex: 32, // TODO starting index
+    direction: '',
+    topography: topography.map(function(d) {
+        return {
+            height: d,
+            revealed: 0,
+            explored: false
+        };
+    })
+};
 
-// NOTE index starts at 1
-for (var index = 1; index < 20; index++) {
-    walkEvents.push(moveWalkerIndex(walkEvents[index - 1]));
-}
+var walkEvents = [].concat(
+    emptyFrame,
+    walkFrames(),
+    emptyFrame
+);
 console.log(walkEvents);
+
+function walkFrames() {
+    var frames = [];
+
+    for (var i = 0, lastFrame; i < nEvents; i++) {
+        lastFrame = (i > 0) ? frames[i - 1] : emptyFrame;
+        frames.push(moveWalkerIndex(lastFrame));
+    }
+
+    return frames;
+}
 
 function numberIsInBounds(n) {
     return (n > 0) && (n < score.width);
