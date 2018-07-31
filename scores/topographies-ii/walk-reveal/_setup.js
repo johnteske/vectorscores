@@ -11,10 +11,6 @@ var main = d3.select('.main'),
     score = {
         width: 8 // currently used in creation, not display
     },
-    walker = {
-        index: -1,
-        lastDir: ''
-    },
     revealFactor = 62,
     nearbyRevealFactor = 38,
     transitionTime = 600,

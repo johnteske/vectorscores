@@ -1,8 +1,6 @@
 // Initial render
-
 topo.selectAll('text')
-    .data(topoData) // TODO this will become walkEvents[0]
-    // .data(walkEvents[0])
+    .data(walkEvents[0].topography)
     .enter()
     .append('text')
     .attr('x', function(d, i) {
@@ -18,7 +16,7 @@ topo.selectAll('text')
             .attr('dx', offsets.x + 'em')
             .attr('dy', offsets.y + 'em');
     })
-    .call(revealSymbols, 0);
+    .call(update, 0, 0);
 
 function getStringByIndex(index) {
     if (index > (symbolSet.scale.length - 1)) {

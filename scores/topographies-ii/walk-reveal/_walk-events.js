@@ -1,13 +1,20 @@
 /**
- * WIP
- * list of height, revealed, explored data at each point in walk
- * first event is initial topoData,
- *
- * TODO set nearby revealed after creating newFrame
+ * Reveal a starting point, chosen from an extreme high or low
  */
-// TODO is also last event as opposed to forgetAll()?
+// var startingIndex = (function() {
+//     var extremaIndices = topography.reduce(function(indices, d, i) {
+//         ((d.height === score.range.min) || (d.height === score.range.max)) && indices.push(i);
+//         return indices;
+//     }, []);
+
+//     return VS.getItem(extremaIndices);
+// }());
+
+/**
+ * list of height, revealed, explored data at each point in walk
+ */
 var emptyFrame = {
-    walkerIndex: 32, // TODO starting index
+    walkerIndex: VS.getRandIntIncl(0, 63), // TODO starting index
     direction: '',
     topography: topography.map(function(d) {
         return {
@@ -23,7 +30,6 @@ var walkEvents = [].concat(
     walkFrames(),
     emptyFrame
 );
-console.log(walkEvents);
 
 function walkFrames() {
     var frames = [];
@@ -74,7 +80,7 @@ function moveWalkerIndex(lastFrame) {
         .filter(function() {
             return Math.random() < 0.2;
         }).forEach(function(index) {
-            frame.topography[index].revealed = revealFactor;
+            frame.topography[index].revealed += nearbyRevealFactor;
         });
 
         return frame;

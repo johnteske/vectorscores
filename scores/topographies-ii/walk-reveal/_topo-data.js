@@ -85,18 +85,5 @@ function getScoreRange(data) {
     };
 }
 
-/**
- * Assign properties to row-major order data
- */
-function createScoreFragment(data) {
-    return data.map(function(d) {
-        return {
-            height: d,
-            revealed: 0 // TODO topoData will not need this at first, only height
-        };
-    });
-}
-
 var topography =  generateValues();
 score.range = getScoreRange(topography);
-var topoData = createScoreFragment(topography);

@@ -1,7 +1,7 @@
 const path = require('path')
 const { loadDomThenTest } = require(path.resolve('.', 'bin/js/tape-setup'))
 
-loadDomThenTest.only('topographies ii points', '_site/scores/topographies-ii/walk-reveal/index.html', (t, window) => {
+loadDomThenTest('topographies ii points', '_site/scores/topographies-ii/walk-reveal/index.html', (t, window) => {
     const { west, east, north, south, northWest, southEast } = window
 
     const point = { x: 5, y: 5 }

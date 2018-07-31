@@ -3,33 +3,9 @@
  */
 VS.score.preroll = transitionTime;
 
-var addEvent = (function() {
-    var time = 0;
-
-    return function(fn, duration) {
-        VS.score.add(time, fn);
-        time += duration;
-    };
-})();
-
 function randDuration() {
     return 1200; // 600 + (Math.random() * 600);
 }
-
-/**
- * Reveal a starting point, chosen from an extreme high or low
- */
-(function() {
-    // var extremaIndices = topoData.reduce(function(indices, d, i) {
-    //     ((d.height === score.range.min) || (d.height === score.range.max)) && indices.push(i);
-    //     return indices;
-    // }, []);
-
-    walker.index = 0; // VS.getItem(extremaIndices);
-
-    topoData[walker.index].revealed = revealFactor;
-    topoData[walker.index].walked = true;
-}());
 
 /**
  * Fade text in and out
@@ -49,21 +25,21 @@ var textEventList = [
     }
 ];
 
-var walkEventList = [];
-for (var i = 0; i < nEvents; i++) {
-    walkEventList.push({
+var walkEventList = walkEvents.map(function(frame, frameIndex) {
+    return {
         duration: randDuration(),
-        action: moveWalker
-    });
-}
+        action: updateText,
+        parameters: [600, frameIndex]
+    };
+});
 
 var finalEventList = [
-    {
-        duration: 6000,
-        action: function(duration) {
-            forgetAll(duration || 6000);
-        }
-    },
+    // {
+    //     duration: 6000,
+    //     action: function(duration) {
+    //         forgetAll(duration || 6000);
+    //     }
+    // },
     {
         duration: 0,
         action: function() {}
@@ -79,5 +55,5 @@ var eventList = [].concat(textEventList, walkEventList, finalEventList)
     });
 
 eventList.forEach(function(bar) {
-    VS.score.add(bar.time, bar.action);
+    VS.score.add(bar.time, bar.action, bar.parameters);
 });

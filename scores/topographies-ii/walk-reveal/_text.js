@@ -13,6 +13,5 @@ function toggleText(duration, toggle) {
 var makeTextToggler = function(toggle) {
     return function(duration) {
         toggleText(duration, toggle);
-        forgetAll(duration);
     };
 };
