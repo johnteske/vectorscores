@@ -24,18 +24,12 @@ var textEventList = [
 var walkEventList = walkEvents.map(function(frame, frameIndex) {
     return {
         duration: frame.duration,
-        action: updateText,
+        action: updateSymbols,
         parameters: [600, frameIndex]
     };
 });
 
 var finalEventList = [
-    // {
-    //     duration: 6000,
-    //     action: function(duration) {
-    //         forgetAll(duration || 6000);
-    //     }
-    // },
     {
         duration: 0,
         action: function() {}

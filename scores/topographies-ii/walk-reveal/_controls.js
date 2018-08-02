@@ -7,5 +7,5 @@ VS.control.hooks.add('step', function() {
 
 VS.control.hooks.add('stop', function() {
     makeTextToggler(false)(150);
-    updateText(150, 0);
+    updateSymbols(150, 0);
 });
