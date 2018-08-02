@@ -8,7 +8,7 @@ layout: compress-js
 {% include_relative _point.js %}
 {% include_relative _symbol-sets.js %}
 
-{% include_relative _topo-data.js %}
+{% include_relative _topography.js %}
 {% include_relative _walk-events.js %}
 {% include_relative _text.js %}
 
