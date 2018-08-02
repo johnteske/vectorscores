@@ -1,7 +1,7 @@
 /**
  * @returns {Array} - row-major order data
  */
-function generateValues() {
+var topography = (function generateValues() {
     var values = [];
     var width = score.width;
     var height = score.width;
@@ -76,14 +76,4 @@ function generateValues() {
     }
 
     return values;
-}
-
-function getScoreRange(data) {
-    return {
-        min: Math.min.apply(null, data),
-        max: Math.max.apply(null, data)
-    };
-}
-
-var topography =  generateValues();
-score.range = getScoreRange(topography);
+})();

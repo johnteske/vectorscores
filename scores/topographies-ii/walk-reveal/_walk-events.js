@@ -1,6 +1,13 @@
 /**
  * Reveal a starting point, chosen from an extreme high or low
  */
+// function getScoreRange(data) {
+//     return {
+//         min: Math.min.apply(null, data),
+//         max: Math.max.apply(null, data)
+//     };
+// }
+// score.range = getScoreRange(topography);
 // var startingIndex = (function() {
 //     var extremaIndices = topography.reduce(function(indices, d, i) {
 //         ((d.height === score.range.min) || (d.height === score.range.max)) && indices.push(i);
