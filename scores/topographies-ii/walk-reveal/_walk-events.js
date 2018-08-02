@@ -69,8 +69,7 @@ function createNewFrame(lastFrame) {
 
     var lastPoint = indexToPoint(lastFrame.walkerIndex);
 
-    // TODO not an index but actually a 'tuple'--direction and index
-    var adjacentIndices = ['north', 'south', 'east', 'west', 'northWest', 'southEast']
+    var adjacentChoices = ['north', 'south', 'east', 'west', 'northWest', 'southEast']
         .map(function(dir) {
             return {
                 direction: dir,
@@ -87,8 +86,8 @@ function createNewFrame(lastFrame) {
             };
         });
 
-    function revealAdjacentIndices(index, frame) {
-        adjacentIndices.map(function(d) {
+    function revealAdjacentChoices(index, frame) {
+        adjacentChoices.map(function(d) {
             return d.index;
         })
         .filter(function() {
@@ -117,14 +116,14 @@ function createNewFrame(lastFrame) {
         newFrame.direction = tuple.direction;
         newFrame.topography[tuple.index].explored = true;
         newFrame.topography[tuple.index].revealed = revealFactor;
-        newFrame = revealAdjacentIndices(tuple.index, newFrame);
+        newFrame = revealAdjacentChoices(tuple.index, newFrame);
         return newFrame;
     }
 
     /**
      * Same direction
      */
-    var sameDirIndices = adjacentIndices.filter(function(d) {
+    var sameDirIndices = adjacentChoices.filter(function(d) {
         return d.direction === lastFrame.direction;
     })
     .map(function(d) {
@@ -141,7 +140,7 @@ function createNewFrame(lastFrame) {
     /**
      * Unexplored
      */
-    var unexploredIndices = adjacentIndices.filter(function(d) {
+    var unexploredIndices = adjacentChoices.filter(function(d) {
         return !lastFrame.topography[d.index].explored;
     });
 
@@ -152,7 +151,7 @@ function createNewFrame(lastFrame) {
     /**
      * Explored
      */
-    var exploredIndices = adjacentIndices.filter(function(d) {
+    var exploredIndices = adjacentChoices.filter(function(d) {
         return lastFrame.topography[d.index].explored;
     });
 
