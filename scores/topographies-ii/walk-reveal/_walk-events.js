@@ -1,25 +1,32 @@
 /**
  * Reveal a starting point, chosen from an extreme high or low
  */
-// function getScoreRange(data) {
-//     return {
-//         min: Math.min.apply(null, data),
-//         max: Math.max.apply(null, data)
-//     };
-// }
-// score.range = getScoreRange(topography);
-// var startingIndex = (function() {
-//     var extremaIndices = topography.reduce(function(indices, d, i) {
-//         ((d.height === score.range.min) || (d.height === score.range.max)) && indices.push(i);
-//         return indices;
-//     }, []);
+function getScoreRange(data) {
+    return {
+        min: Math.min.apply(null, data),
+        max: Math.max.apply(null, data)
+    };
+}
+var startingIndex = (function() {
+    var range = getScoreRange(topography);
 
-//     return VS.getItem(extremaIndices);
-// }());
+    var extremaIndices = topography
+        .map(function(d, i) {
+            return {
+                height: d,
+                index: i
+            };
+        })
+        .filter(function(d) {
+            return (d.height === range.min) || (d.height === range.max);
+        });
+
+    return VS.getItem(extremaIndices).index;
+}());
 
 function createEmptyFrame(duration) {
     return {
-        walkerIndex: VS.getRandIntIncl(0, 63), // TODO starting index
+        walkerIndex: startingIndex,
         direction: '',
         duration: duration,
         topography: topography.map(function(d) {
