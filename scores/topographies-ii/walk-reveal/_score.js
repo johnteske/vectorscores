@@ -3,10 +3,6 @@
  */
 VS.score.preroll = transitionTime;
 
-function randDuration() {
-    return 1200; // 600 + (Math.random() * 600);
-}
-
 /**
  * Fade text in and out
  */
@@ -27,7 +23,7 @@ var textEventList = [
 
 var walkEventList = walkEvents.map(function(frame, frameIndex) {
     return {
-        duration: randDuration(),
+        duration: frame.duration,
         action: updateText,
         parameters: [600, frameIndex]
     };

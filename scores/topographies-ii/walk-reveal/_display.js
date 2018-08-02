@@ -15,6 +15,7 @@ function update(selection, dur, frameIndex) {
         });
 }
 
+// TODO rename function to reflect it updates the symbols not the instructions
 function updateText(dur, index) {
     topo.selectAll('text').call(update, dur, index);
 }

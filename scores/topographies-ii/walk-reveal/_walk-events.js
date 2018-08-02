@@ -17,33 +17,35 @@
 //     return VS.getItem(extremaIndices);
 // }());
 
-/**
- * list of height, revealed, explored data at each point in walk
- */
-var emptyFrame = {
-    walkerIndex: VS.getRandIntIncl(0, 63), // TODO starting index
-    direction: '',
-    topography: topography.map(function(d) {
-        return {
-            height: d,
-            revealed: 0,
-            explored: false
-        };
-    })
-};
+function createEmptyFrame(duration) {
+    return {
+        walkerIndex: VS.getRandIntIncl(0, 63), // TODO starting index
+        direction: '',
+        duration: duration,
+        topography: topography.map(function(d) {
+            return {
+                height: d,
+                revealed: 0,
+                explored: false
+            };
+        })
+    };
+}
+
+var firstFrame = createEmptyFrame(0);
 
 var walkEvents = [].concat(
-    emptyFrame,
+    firstFrame,
     walkFrames(),
-    emptyFrame
+    createEmptyFrame(6000)
 );
 
 function walkFrames() {
     var frames = [];
 
     for (var i = 0, lastFrame; i < nEvents; i++) {
-        lastFrame = (i > 0) ? frames[i - 1] : emptyFrame;
-        frames.push(moveWalkerIndex(lastFrame));
+        lastFrame = (i > 0) ? frames[i - 1] : firstFrame;
+        frames.push(createNewFrame(lastFrame));
     }
 
     return frames;
@@ -56,9 +58,14 @@ function pointIsInBounds(point) {
     return numberIsInBounds(point.x) && numberIsInBounds(point.y);
 }
 
+// With 100 events, will be between 90-120s total duration
+function randDuration() {
+    return VS.getRandIntIncl(900, 1200);
+}
+
 // TODO if all adjacent points are explored, perhaps move to the point with the lowest "reveal"
 // as in, fulling the "trying to remember" instruction
-function moveWalkerIndex(lastFrame) {
+function createNewFrame(lastFrame) {
 
     var lastPoint = indexToPoint(lastFrame.walkerIndex);
 
@@ -105,6 +112,7 @@ function moveWalkerIndex(lastFrame) {
                 };
             })
         };
+        newFrame.duration = randDuration();
         newFrame.walkerIndex = tuple.index;
         newFrame.direction = tuple.direction;
         newFrame.topography[tuple.index].explored = true;
