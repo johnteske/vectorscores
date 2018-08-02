@@ -63,8 +63,6 @@ function randDuration() {
     return VS.getRandIntIncl(900, 1200);
 }
 
-// TODO if all adjacent points are explored, perhaps move to the point with the lowest "reveal"
-// as in, fulling the "trying to remember" instruction
 function createNewFrame(lastFrame) {
 
     var lastPoint = indexToPoint(lastFrame.walkerIndex);
@@ -150,12 +148,25 @@ function createNewFrame(lastFrame) {
 
     /**
      * Explored
+     * If all adjacent points are explored, move to the point with the lowest "reveal",
+     * aligned with the "try to remember the past" instruction.
      */
     var exploredIndices = adjacentChoices.filter(function(d) {
         return lastFrame.topography[d.index].explored;
     });
 
-    if (exploredIndices.length) {
-        return createNewFrame(VS.getItem(exploredIndices));
+    // In theory, this should never be thrown--but may be helpful catching errors in experimentation.
+    if (!exploredIndices.length) {
+        throw new Error('No available indices of any type');
     }
+
+    function getRevealed(index) {
+        return lastFrame.topography[index].revealed;
+    }
+
+    var exploredIndexLeastRevealed = [].concat(exploredIndices).sort(function(a, b) {
+        return getRevealed(a.index) > getRevealed(b.index);
+    })[0];
+
+    return createNewFrame(exploredIndexLeastRevealed);
 }

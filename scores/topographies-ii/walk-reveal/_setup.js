@@ -11,8 +11,8 @@ var main = d3.select('.main'),
     score = {
         width: 8 // currently used in creation, not display
     },
-    revealFactor = 62,
-    nearbyRevealFactor = 38,
+    revealFactor = 38,
+    nearbyRevealFactor = 23,
     transitionTime = 600,
     nEvents = 100;
 
