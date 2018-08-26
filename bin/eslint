@@ -22,15 +22,19 @@ done
 # Create temp files from source files with frontmatter
 node bin/js/eslint-tmp-files.js
 
+ESLINT_BIN="bin/js/node_modules/.bin/eslint"
+RULE_FLAGS=(--rule "no-undef: 0" --rule "no-unused-vars: 0")
+
 # Lint source files with frontmatter
-[[ -n $FRONTMATTER ]] && bin/js/node_modules/.bin/eslint './.tmp/**/*.js'
+[[ -n $FRONTMATTER ]] && $ESLINT_BIN './.tmp/**/*.js' "${RULE_FLAGS[@]}"
 
 # Lint source files without frontmatter
-[[ -n $SOURCE ]] && bin/js/node_modules/.bin/eslint './assets/**/*.js' --ignore-path './.tmp-eslintignore'
-[[ -n $SOURCE ]] && bin/js/node_modules/.bin/eslint './scores/**/*.js' --ignore-path './.tmp-eslintignore'
+IGNORE_PATH=(--ignore-path "./.tmp-eslintignore")
+[[ -n $SOURCE ]] && $ESLINT_BIN './assets/**/*.js' "${IGNORE_PATH[@]}" "${RULE_FLAGS[@]}"
+[[ -n $SOURCE ]] && $ESLINT_BIN './scores/**/*.js' "${IGNORE_PATH[@]}" "${RULE_FLAGS[@]}"
 
 # Lint built files
-[[ -n $BUILT ]] && bin/js/node_modules/.bin/eslint './_site/**/*.js' --no-eslintrc
+[[ -n $BUILT ]] && $ESLINT_BIN './_site/**/*.js' --no-eslintrc
 
 # TODO lint tests
 

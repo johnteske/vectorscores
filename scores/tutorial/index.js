@@ -89,8 +89,8 @@ function addTime(bar, i, score) {
 }
 
 score.forEach(function(bar) {
-    VS.score.add(bar.time, describeControl, [bar.ids, bar.message])
-})
+    VS.score.add(bar.time, describeControl, [bar.ids, bar.message]);
+});
 
 /**
  * Controls
