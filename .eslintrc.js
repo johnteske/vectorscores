@@ -1,6 +1,9 @@
 module.exports = {
     'extends': 'eslint:recommended',
     'rules': {
+        //
+        'no-undef': 1,
+        'no-unused-vars': 1,
         // Clarity
         'eqeqeq': 'error',
         'block-scoped-var': 'error',

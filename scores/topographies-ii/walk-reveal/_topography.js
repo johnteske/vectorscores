@@ -1,7 +1,7 @@
 /**
  * @returns {Array} - row-major order data
  */
-function generateValues() {
+var topography = (function generateValues() {
     var values = [];
     var width = score.width;
     var height = score.width;
@@ -9,7 +9,6 @@ function generateValues() {
     var featureSize = 4;
     var sampleSize = featureSize;
 
-    var initScale = 4;
     var scale = 4;
 
     function frand() {
@@ -23,12 +22,11 @@ function generateValues() {
     }
 
     function sample(x, y) {
-        return values[(x & (width - 1)) + (y & (height - 1)) * width];
+        return values[xyToIndex(x, y)];
     }
 
     function setSample(x, y, value) {
-        // value = VS.clamp(value, -initScale, initScale);
-        values[(x & (width - 1)) + (y & (height - 1)) * width] = value;
+        values[xyToIndex(x, y)] = value;
     }
 
     function sampleSquare(x, y, size, value) {
@@ -78,6 +76,4 @@ function generateValues() {
     }
 
     return values;
-}
-
-topoData = generateValues();
+})();
