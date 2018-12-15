@@ -1,0 +1,12 @@
+{
+  "title": "vectorscores",
+  "email": "john@johnteskemusic.com",
+  "description": "A new series of dynamic compositions.",
+  "url": "http://vectorscores.org",
+  "twitter_username": "johnteske",
+  "github_username":  "johnteske/vectorscores",
+  "website": "http://johnteskemusic.com",
+  "baseurl": "/vectorscores",
+  "assetsurl": "/assets"
+}
+
