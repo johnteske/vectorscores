@@ -6,4 +6,4 @@ permalink: /
 
 ## Scores
 
-{% include work-list/index.html %}
+{% include 'work-list/index.html' %}

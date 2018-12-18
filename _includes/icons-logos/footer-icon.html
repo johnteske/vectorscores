@@ -1,1 +1,4 @@
-{% capture svg_icon %}{% include icons-logos/{{include.icon}} %}{% endcapture %}<a href="{{include.url}}/{{ include.username }}"><span class="icon">{{ svg_icon | strip }}</span><span class="username">{{ include.username }}</span></a>
+<a href="{{ url }}/{{ username }}">
+  <span class="icon"><img src="assets/svg/{{ icon }}" /></span>
+  <span class="username">{{ username }}</span>
+</a>

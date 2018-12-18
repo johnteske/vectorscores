@@ -1,13 +1,13 @@
 ---
-layout: compress
+#layout: compress
 ---
 {% assign assets_url = site.assetsurl | prepend: site.baseurl %}
 
 <!DOCTYPE html>
 <html>
-    {% include page/head.html %}
+    {% include 'page/head.html' %}
     <body>
-        {% include page/header.html %}
+        {% include 'page/header.html' %}
 
         <div class="page-content">
             <div class="wrapper">
@@ -15,6 +15,6 @@ layout: compress
             </div>
         </div>
 
-        {% include page/footer.html %}
+        {% include 'page/footer.html' %}
     </body>
 </html>
