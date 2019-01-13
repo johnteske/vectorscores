@@ -1,7 +1,16 @@
-<header class="site-header">
-    <div class="wrapper">
-        <a class="site-title vectorscores" href="{{ site.baseurl }}/">{{ site.title }}</a>
+const menuItem = currentPageUrl => page => {
+  return `<a class="page-link ${
+    page.url === currentPageUrl ? "active" : ""
+  } href="${page.data.site.baseUrl + page.data.page.url}">${
+    page.data.title
+  }</a>`;
+};
 
+module.exports = data => `<header class="site-header">
+    <div class="wrapper">
+        <a class="site-title vectorscores" href="${data.site.baseurl}/">${
+  data.site.title
+}</a>
         <nav class="site-nav">
             <a href="#" class="menu-icon">
                 <svg viewBox="0 0 18 15">
@@ -12,12 +21,8 @@
             </a>
 
             <div class="trigger">
-            {% for pg in site.pages %}
-                {% if pg.menu %}
-                <a class="page-link {% if pg.url == page.url %}active{% endif %}" href="{{ pg.url | prepend: site.baseurl }}">{{ pg.title }}</a>
-                {% endif %}
-            {% endfor %}
+            ${data.collections.topNav.map(menuItem(data.page.url)).join("")}
             </div>
         </nav>
     </div>
-</header>
+</header>`;

@@ -27,7 +27,10 @@
     "url": "https://github.com/johnteske/vectorscores/issues"
   },
   "homepage": "https://github.com/johnteske/vectorscores#readme",
+  "dependencies": {
+    "@11ty/eleventy": "^0.7.0"
+  },
   "devDependencies": {
-    "@11ty/eleventy": "^0.6.0"
+    "prettier": "^1.15.3"
   }
 }
