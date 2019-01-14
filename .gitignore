@@ -9,6 +9,7 @@
 _site/
 .sass-cache/
 .jekyll-metadata
+_includes/docs
 
 # Node
 node_modules

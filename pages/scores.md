@@ -2,6 +2,5 @@
 layout: page
 title: Scores
 permalink: /scores/
-menu: true
+tags: topNav
 ---
-{% include 'work-list/index.html' %}

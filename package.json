@@ -7,9 +7,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "rm -rf _site && eleventy",
-    "build:debug": "rm -rf _site && DEBUG=Eleventy* eleventy",
-    "serve": "eleventy --serve --port=8081",
+    "clean": "rm -rf _site",
+    "build": "npm run clean && eleventy",
+    "build:debug": "npm run clean && DEBUG=Eleventy* eleventy",
+    "serve": "npm run clean && mkdir -p _includes/docs && cp docs/README.md _includes/docs/README.md && eleventy --serve --port=8081",
     "test": "test"
   },
   "repository": {

@@ -21,7 +21,8 @@ module.exports = data => `<header class="site-header">
             </a>
 
             <div class="trigger">
-            ${data.collections.topNav.map(menuItem(data.page.url)).join("")}
+            ${data.collections.topNav &&
+              data.collections.topNav.map(menuItem(data.page.url)).join("")}
             </div>
         </nav>
     </div>
