@@ -1,5 +1,4 @@
 ---
-tags: topNav
 layout: default
 permalink: /
 ---

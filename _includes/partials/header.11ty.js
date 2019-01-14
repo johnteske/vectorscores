@@ -1,5 +1,5 @@
 const menuItem = currentPageUrl => page => {
-  return `<a class="page-link ${
+  return `<a class="page-link" ${
     page.url === currentPageUrl ? "active" : ""
   } href="${page.data.site.baseUrl + page.data.page.url}">${
     page.data.title
@@ -8,7 +8,7 @@ const menuItem = currentPageUrl => page => {
 
 module.exports = data => `<header class="site-header">
     <div class="wrapper">
-        <a class="site-title vectorscores" href="${data.site.baseurl}/">${
+        <a class="site-title vectorscores" href="${data.site.baseUrl}/">${
   data.site.title
 }</a>
         <nav class="site-nav">
