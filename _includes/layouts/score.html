@@ -1,5 +1,5 @@
 ---
-layout: compress
+layout: default
 ---
 {% assign dirs_to_root = page.url | split: '/' | size | minus: 1 %}
 {% capture assets_url %}{% for i in (1..dirs_to_root) %}../{% endfor %}assets{% endcapture %}

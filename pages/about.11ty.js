@@ -6,7 +6,7 @@ const readme = fs.readFileSync(
   "utf8"
 );
 
-class Bruh {
+module.exports = class {
   data() {
     return {
       templateEngineOverride: "11ty.js,md",
@@ -23,6 +23,4 @@ class Bruh {
       '<span class="vectorscores">*vectorscores*</span>'
     );
   }
-}
-
-module.exports = Bruh;
+};

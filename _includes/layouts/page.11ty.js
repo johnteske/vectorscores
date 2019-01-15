@@ -1,7 +1,12 @@
-const defaultTemplate = require("./default.11ty.js");
+module.exports = class {
+  data() {
+    return {
+      layout: "default"
+    };
+  }
 
-module.exports = data => {
-  const pageContent = `<article class="post">
+  render(data) {
+    return `<article class="post">
     <header class="post-header">
         <h1 class="post-title">${data.title}</h1>
     </header>
@@ -9,6 +14,5 @@ module.exports = data => {
         ${data.content}
     </div>
   </article>`;
-
-  return defaultTemplate({ ...data, content: pageContent });
+  }
 };
