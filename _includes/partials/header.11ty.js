@@ -6,6 +6,11 @@ const menuItem = currentPageUrl => page => {
   }</a>`;
 };
 
+const menu = data =>
+  data.collections.topNav
+    ? `${data.collections.topNav.map(menuItem(data.page.url)).join("")}`
+    : "";
+
 module.exports = data => `<header class="site-header">
     <div class="wrapper">
         <a class="site-title vectorscores" href="${data.site.baseUrl}/">${
@@ -21,8 +26,7 @@ module.exports = data => `<header class="site-header">
             </a>
 
             <div class="trigger">
-            ${data.collections.topNav &&
-              data.collections.topNav.map(menuItem(data.page.url)).join("")}
+            ${menu(data)}
             </div>
         </nav>
     </div>

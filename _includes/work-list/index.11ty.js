@@ -1,1 +1,0 @@
-module.exports = `WORKS LIST`;

@@ -1,4 +1,4 @@
-const workList = require("./../_includes/work-list/index.11ty.js");
+const workList = require("./../_includes/partials/work-list.11ty.js");
 
 module.exports = class {
   data() {
@@ -11,7 +11,7 @@ module.exports = class {
     };
   }
 
-  render() {
-    return workList;
+  render(data) {
+    return workList(data);
   }
 };
