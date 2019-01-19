@@ -1,7 +1,7 @@
 # Installing locally
 
 ## Requirements
-- Node (TODO: specify version)
+- Node 8
 
 ## Set up
 
