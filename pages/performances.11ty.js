@@ -29,7 +29,7 @@ const dateFormat = yyyymmdd => {
 const performance = perf => {
   return `<h4 class="perf-date"><a href="${perf.url}">${dateFormat(
     perf.dateStart
-  )}</a></h4><h3>${perf.title}</h3>`;
+  )}</a></h4><h3>${perf.title}</h3>${perf.works ? perf.works.map(work => work) : ""}`;
 };
 
 // <p>
