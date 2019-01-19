@@ -1,8 +1,4 @@
-language: ruby
-install:
-  - bin/install
-  - bin/install_dev
-script: bin/test
-env:
-  global:
-  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+language: node_js
+node_js:
+  - "lts/*"
+  - "8"
