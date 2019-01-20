@@ -46,6 +46,13 @@ const performanceList = (category, data) => {
     const url = getWorkUrl(data, title);
     return url ? `<a href="${url}" class="work-title">${title}/a>` : title;
   };
+  const details = perf => {
+    return `
+<p>${perf.address}</p>
+<p>${perf.time}${perf.price ? ", " + perf.price : ""}</p>
+`;
+  };
+
   const renderPerformance = perf => {
     return `
 <h4 class="perf-date">
@@ -53,25 +60,12 @@ const performanceList = (category, data) => {
 </h4>
 <h3>${perf.title}</h3>
   ${handleUndefined(perf.works && catMap(workLink, perf.works))}
+${details(perf)}
 `;
   };
 
   return catMap(renderPerformance, performances);
 };
-
-// <p>
-// {% for work in perf.works %}
-// {% for pg in site.pages %}
-// {% if pg.title == work %}
-// <a href="{{ pg.url | relative_url }}" class="work-title">{{ work }}</a>
-// {% endif %}
-// {% endfor %}
-// {% endfor %}
-// </p>
-
-// <p>{{ perf.address }}</p>
-// <p>{{ perf.time }}{% if perf.price %}, {{ perf.price }}{% endif %}</p>
-// {% endfor %}
 
 module.exports = class {
   data() {
