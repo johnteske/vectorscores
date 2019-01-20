@@ -1,3 +1,6 @@
+const handleUndefined = input => input || "";
+const catMap = (f, a) => a.map(f).join("");
+
 const monthNames = [
   "January",
   "February",
@@ -17,19 +20,43 @@ const upcoming = data =>
   data.performances.upcoming ? `<h2>Upcoming</h2>` : "";
 
 const past = data =>
-  data.performances.past
-    ? `<h2>Past</h2>${data.performances.past.map(performance).join("")}`
-    : "";
+  data.performances.past ? `<h2>Past</h2>${performanceList("past", data)}` : "";
 
 const dateFormat = yyyymmdd => {
   const [yyyy, mm, dd] = yyyymmdd.split("-").map(Number);
   return `${monthNames[mm - 1]} ${dd}, ${yyyy}`;
 };
 
-const performance = perf => {
-  return `<h4 class="perf-date"><a href="${perf.url}">${dateFormat(
-    perf.dateStart
-  )}</a></h4><h3>${perf.title}</h3>${perf.works ? perf.works.map(work => work) : ""}`;
+const getWorkUrl = (data, title) => {
+  // TODO also set, movement, etc.
+  const scores = data.collections.score;
+  if (!scores) {
+    return;
+  }
+  for (let i = 0; i < scores.length; i++) {
+    if (scores[i].title === title) {
+      return scores[i].url;
+    }
+  }
+};
+
+const performanceList = (category, data) => {
+  const performances = data.performances[category];
+  const workLink = title => {
+    const url = getWorkUrl(data, title);
+    return url ? `<a href="${url}" class="work-title">${title}/a>` : title;
+  };
+  const renderPerformance = perf => {
+    return `
+<h4 class="perf-date">
+  <a href="${perf.url}">${dateFormat(perf.dateStart)}</a>
+</h4>
+<h3>${perf.title}</h3>
+  ${handleUndefined(perf.works && catMap(workLink, perf.works))}
+`;
+  };
+
+  return catMap(renderPerformance, performances);
 };
 
 // <p>
