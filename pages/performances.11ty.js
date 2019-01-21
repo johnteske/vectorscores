@@ -1,5 +1,4 @@
-const handleUndefined = input => input || "";
-const catMap = (f, a) => a.map(f).join("");
+const { catMap, handleUndefined } = require("../render-utils")
 
 const monthNames = [
   "January",
