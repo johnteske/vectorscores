@@ -1,4 +1,4 @@
-const { catMap, handleUndefined } = require("../render-utils")
+const { catMap, handleUndefined } = require("../render-utils");
 
 const monthNames = [
   "January",
