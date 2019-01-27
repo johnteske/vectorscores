@@ -14,10 +14,10 @@ module.exports = ({ site, page, title }) => {
       <title>${titleValue(title)}</title>
       <meta name="description" content="${site.description}">
 
-      <!--<link rel="stylesheet" type="text/css" href="${assetsUrl(
+      <link rel="stylesheet" type="text/css" href="${assetsUrl(
         site,
         "/css/main.css"
-      )}">-->
+      )}">
       <link rel="canonical" href="${canonicalUrl(site, page.url)}">
     </head>`;
 };

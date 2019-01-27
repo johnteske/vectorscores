@@ -7,12 +7,13 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "npm run clean && npm run copy && eleventy",
-    "build:debug": "npm run clean && npm run copy && DEBUG=Eleventy* eleventy",
+    "build": "npm run clean && npm run copy && npm run css && eleventy",
+    "build:debug": "DEBUG=Eleventy* npm run build",
     "clean": "rm -rf _site",
+    "css": "postcss assets/css/main.scss --use precss -o _site/assets/css/main.css",
     "copy": "mkdir -p _includes/docs && cp docs/README.md _includes/docs/README.md",
     "lint:fix": "prettier --write {.,pages}/*.js",
-    "serve": "npm run clean && npm run copy && eleventy --serve --port=8081",
+    "serve": "npm run build -- --serve --port=8081",
     "test": "test"
   },
   "repository": {
@@ -31,7 +32,10 @@
   },
   "homepage": "https://github.com/johnteske/vectorscores#readme",
   "dependencies": {
-    "@11ty/eleventy": "^0.7.0"
+    "@11ty/eleventy": "^0.7.0",
+    "postcss": "^7.0.14",
+    "postcss-cli": "^6.1.1",
+    "precss": "^4.0.0"
   },
   "devDependencies": {
     "prettier": "^1.15.3"
