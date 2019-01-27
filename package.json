@@ -11,7 +11,7 @@
     "build:debug": "npm run clean && npm run copy && DEBUG=Eleventy* eleventy",
     "clean": "rm -rf _site",
     "copy": "mkdir -p _includes/docs && cp docs/README.md _includes/docs/README.md",
-    "lint:fix": "prettier --write pages/*.js",
+    "lint:fix": "prettier --write {.,pages}/*.js",
     "serve": "npm run clean && npm run copy && eleventy --serve --port=8081",
     "test": "test"
   },
