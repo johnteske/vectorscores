@@ -69,7 +69,6 @@ ${details(perf)}
 module.exports = class {
   data() {
     return {
-      templateEngineOverride: "11ty.js,md",
       title: "Performances",
       layout: "page",
       permalink: "/performances/",
