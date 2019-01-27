@@ -1,4 +1,5 @@
-const assetsUrl = (site, url) => site.assetsUrl + url;
+const { assetsUrl } = require("../../render-utils.js");
+
 const canonicalUrl = (site, url) =>
   [site.url, site.baseurl, url.replace("index.html", "")].join("");
 
