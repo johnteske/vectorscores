@@ -1,6 +1,4 @@
-const { catMap, handleUndefined } = require("../render-utils");
-
-const slugify = todo => todo.toLowerCase().replace(/ /g, "-");
+const { catMap, handleUndefined, slugify } = require("../render-utils");
 
 module.exports = class {
   data() {
