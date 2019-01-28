@@ -10,7 +10,7 @@
     "build": "npm run clean && npm run copy && npm run css && eleventy",
     "build:debug": "DEBUG=Eleventy* npm run build",
     "clean": "rm -rf _site",
-    "css": "postcss assets/css/main.scss --use precss -o _site/assets/css/main.css",
+    "css": "postcss assets/css/main.css --use postcss-import postcss-custom-properties -o _site/assets/css/main.css",
     "copy": "mkdir -p _includes/docs && cp docs/README.md _includes/docs/README.md",
     "lint:fix": "prettier --write {.,pages}/*.js",
     "serve": "npm run build -- --serve --port=8081",
@@ -35,7 +35,7 @@
     "@11ty/eleventy": "^0.7.0",
     "postcss": "^7.0.14",
     "postcss-cli": "^6.1.1",
-    "precss": "^4.0.0"
+    "postcss-custom-properties": "^8.0.9"
   },
   "devDependencies": {
     "prettier": "^1.15.3"

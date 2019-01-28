@@ -1,0 +1,41 @@
+@charset "utf-8";
+@import url("base.css");
+
+:root {
+  --font-size-scale: 1.25;
+  --base-font-family: Courier, monospace;
+  --head-font-family: 'Times New Roman', serif;
+  --base-font-size: 15px;
+  --base-font-weight: 400;
+  --small-font-size: calc(var(--base-font-size) / var(--font-size-scale));
+  --base-line-height: 1.5;
+  --spacing-unit: 30px;
+
+  --text-color: #222222;
+  --background-color: #fdfdfd;
+  
+  --grey-color: #828282;
+  --grey-color-light: lighten($grey-color, 40%);
+  --grey-color-dark: darken($grey-color, 25%);
+  
+  --content-width: 800px;
+  
+  --on-palm: 600px;
+  --on-laptop: 800px;
+}
+
+/*
+@mixin media-query($device) {
+    @media screen and (max-width: $device) {
+        @content;
+    }
+}
+@import
+    "base",
+    "typography",
+    "layout",
+    "description-list",
+    "work-list",
+    "syntax-highlighting"
+;
+*/
