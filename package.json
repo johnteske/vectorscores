@@ -11,6 +11,8 @@
     "build:debug": "DEBUG=Eleventy* npm run build",
     "clean": "rm -rf _site",
     "css": "postcss assets/css/main.css --use postcss-import postcss-custom-properties -o _site/assets/css/main.css",
+    "css:lint": "stylelint assets/css/*.css",
+    "css:fix": "npm run css:lint -- --fix",
     "copy": "mkdir -p _includes/docs && cp docs/README.md _includes/docs/README.md",
     "lint:fix": "prettier --write {.,pages}/*.js",
     "serve": "npm run build -- --serve --port=8081",
@@ -38,6 +40,11 @@
     "postcss-custom-properties": "^8.0.9"
   },
   "devDependencies": {
-    "prettier": "^1.15.3"
+    "prettier": "^1.15.3",
+    "stylelint": "^9.10.1",
+    "stylelint-config-standard": "^18.2.0"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard"
   }
 }
