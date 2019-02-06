@@ -1,0 +1,18 @@
+:root {
+  --font-size-scale: 1.25;
+  --base-font-family: Courier, monospace;
+  --head-font-family: 'Times New Roman', serif;
+  --base-font-size: 15px;
+  --base-font-weight: 400;
+  --small-font-size: calc(var(--base-font-size) / var(--font-size-scale));
+  --base-line-height: 1.5;
+  --spacing-unit: 30px;
+  --text-color: #222;
+  --background-color: #fdfdfd;
+  --grey-color: #828282;
+  --grey-color-light: #e8e8e8;
+  --grey-color-dark: #424242;
+  --content-width: 800px;
+  --on-palm: 600px;
+  --on-laptop: 800px;
+}

@@ -10,7 +10,7 @@
     "build": "npm run clean && npm run copy && npm run css && eleventy",
     "build:debug": "DEBUG=Eleventy* npm run build",
     "clean": "rm -rf _site",
-    "css": "postcss assets/css/main.css --use postcss-import postcss-custom-properties -o _site/assets/css/main.css",
+    "css": "postcss assets/css/main.css --no-map --use postcss-import postcss-custom-properties -o _site/assets/css/main.css",
     "css:lint": "stylelint assets/css/*.css",
     "css:fix": "npm run css:lint -- --fix",
     "copy": "mkdir -p _includes/docs && cp docs/README.md _includes/docs/README.md",
@@ -37,7 +37,8 @@
     "@11ty/eleventy": "^0.7.0",
     "postcss": "^7.0.14",
     "postcss-cli": "^6.1.1",
-    "postcss-custom-properties": "^8.0.9"
+    "postcss-custom-properties": "^8.0.9",
+    "postcss-import": "^12.0.1"
   },
   "devDependencies": {
     "prettier": "^1.15.3",

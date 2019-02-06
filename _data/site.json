@@ -16,6 +16,6 @@
     },
     { "name": "johnteskemusic.com", "url": "http://johnteskemusic.com" }
   ],
-  "baseUrl": "/vectorscores",
+  "baseUrl": "",
   "assetsUrl": "/assets"
 }

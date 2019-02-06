@@ -1,5 +1,5 @@
 module.exports = function(config) {
-  config.addPassthroughCopy("assets");
+  config.addPassthroughCopy("assets/svg");
 
   // Aliases are in relation to the _includes folder
   const pages = ["default", "page", "works"];
