@@ -8,6 +8,7 @@
   --base-line-height: 1.5;
   --spacing-unit: 30px;
   --text-color: #222;
+  --text-color-heading: #2f2f2f;
   --background-color: #fdfdfd;
   --grey-color: #828282;
   --grey-color-light: #e8e8e8;
@@ -15,4 +16,7 @@
   --content-width: 800px;
   --on-palm: 600px;
   --on-laptop: 800px;
+  --link-color: #00f;
+  --link-color-hover: var(--text-color);
+  --link-color-visited: #0000a0;
 }

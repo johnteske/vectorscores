@@ -2,6 +2,7 @@
 
 @import url("variables.css");
 @import url("base.css");
+@import url("typography.css");
 
 /*
 @mixin media-query($device) {
@@ -10,8 +11,6 @@
     }
 }
 @import
-    "base",
-    "typography",
     "layout",
     "description-list",
     "work-list",
