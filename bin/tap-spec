@@ -1,5 +1,0 @@
-#!/bin/bash
-#
-# Run tape tests through tap-spec
-
-bin/tape | bin/js/node_modules/.bin/tap-spec

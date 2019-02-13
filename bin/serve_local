@@ -1,8 +1,0 @@
-#!/bin/bash
-#
-# Start Jekyll, binding to all available IPs on port 4000
-
-printf 'Serving at: '
-bin/url_local
-
-BUNDLE_GEMFILE=bin/servers/Gemfile JEKYLL_ENV=offline bundle exec jekyll serve --host 0.0.0.0

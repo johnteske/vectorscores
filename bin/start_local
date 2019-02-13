@@ -1,5 +1,0 @@
-#!/bin/bash
-#
-# Start Jekyll in background, then WebSocket server. Kill Jekyll after exiting WebSocket server.
-
-bin/serve_local & bin/websockets && kill %-

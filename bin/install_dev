@@ -1,5 +1,0 @@
-#!/bin/bash
-#
-# Install development dependencies
-
-npm --prefix bin/js install
