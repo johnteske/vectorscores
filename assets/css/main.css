@@ -5,6 +5,7 @@
 @import url("typography.css");
 @import url("layout.css");
 @import url("description-list.css");
+@import url("work-list.css");
 
 /*
 @mixin media-query($device) {
@@ -12,7 +13,4 @@
         @content;
     }
 }
-@import
-    "work-list",
-;
 */
