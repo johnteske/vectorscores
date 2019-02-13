@@ -2,17 +2,19 @@ dt {
     display: inline-block;
     font-weight: bold;
 }
+
 dd {
     margin: 0;
 }
+
 dt {
     margin-top: 1em;
-    &:first-child {
-        margin-top: 0;
-    }
 }
-dt + dt {
-    &::before {
+
+dt:first-child {
+        margin-top: 0;
+}
+
+dt + dt::before {
         content: ', ';
-    }
 }
