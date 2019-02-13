@@ -1,0 +1,8 @@
+.preventTapHighlight {
+  /* prevent iOS flash on tap */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.preventUserSelect {
+  user-select: none;
+}
