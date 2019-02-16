@@ -1,4 +1,5 @@
-const workList = require("./../_includes/partials/work-list.11ty.js");
+const requireRoot = require('app-root-path').require
+const workList = requireRoot("_includes/partials/page/work-list.11ty.js");
 
 module.exports = class {
   data() {

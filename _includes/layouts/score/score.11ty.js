@@ -1,5 +1,6 @@
-const { assetsUrl, handleUndefined } = require("../../render-utils.js");
-const { scoreTitle } = require("../../_eleventy/title.js")
+const requireRoot = require('app-root-path').require
+const { assetsUrl, handleUndefined } = requireRoot("render-utils.js");
+const { scoreTitle } = requireRoot("_eleventy/title.js")
 
 module.exports = data =>
     `<!DOCTYPE html>
