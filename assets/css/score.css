@@ -1,5 +1,4 @@
----
----
+/*
 $layout-color-bg: white; // transparent;
 $layout-color-light: #eeeeee;
 $layout-trans-time: 0.6s;
@@ -25,3 +24,4 @@ $layout-border: 2px solid $layout-color-light;
 .score-set #score-header {
     opacity: 1;
 }
+*/

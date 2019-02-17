@@ -1,7 +1,3 @@
----
-layout: compress-js
----
-
 d3.select('svg').remove();
 
 var messageElement = document.getElementsByClassName('tutorial-message')[0];

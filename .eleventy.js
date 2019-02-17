@@ -1,5 +1,6 @@
 module.exports = function(config) {
   config.addPassthroughCopy("assets/svg");
+  config.addPassthroughCopy("scores");
 
   // Aliases are in relation to the _includes folder
   const pageLayouts = ["default", "page"];

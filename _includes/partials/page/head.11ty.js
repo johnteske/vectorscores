@@ -16,7 +16,7 @@ module.exports = ({ site, page, title }) => {
 
       <link rel="stylesheet" type="text/css" href="${assetsUrl(
         site,
-        "/css/main.css"
+        "/css/page.css"
       )}">
       <link rel="canonical" href="${canonicalUrl(site, page.url)}">
     </head>`;
