@@ -1,0 +1,15 @@
+.work-list a {
+    text-decoration: none;
+}
+
+.work-list a:hover {
+    text-decoration: underline;
+}
+
+.work-title {
+    font-family: var(--layout-header-font-stack);
+    font-style: italic;
+    letter-spacing: 0.2px;
+    font-size: 16px;
+    line-height: 1.40625;
+}

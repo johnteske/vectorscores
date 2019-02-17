@@ -1,13 +1,13 @@
 @import url("score/variables.css");
+@import url("score/layout.css");
+@import url("score/set-layout.css");
 
 /*
-@import "mixins";
-@import "score/layout";
-@import "score/controls";
-@import "score/modal";
-@import "score/main";
-@import "score/settings";
-@import "work-list";
+@import url("score/controls.css");
+@import url("score/modal");
+@import url("score/main");
+@import url("score/settings");
+@import url("work-list");
 
 .score-set .work-list {
     margin: 0;

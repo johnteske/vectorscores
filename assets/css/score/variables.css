@@ -5,4 +5,6 @@
     --layout-header-font-stack: 'Times New Roman', serif;
     --layout-font-stack: Courier, monospace;
     --layout-border: 2px solid var(--layout-color-light);
+    --layout-unit: 16px;
+    --footer-height: calc(4 * var(--layout-unit));
 }
