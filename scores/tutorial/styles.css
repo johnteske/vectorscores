@@ -1,0 +1,17 @@
+body {
+    font-family: monospace;
+}
+
+.tutorial-message {
+    font-size: 16px;
+    line-height: 2;
+    padding: 16px;
+}
+
+p {
+    margin: 0;
+}
+
+.highlight {
+    outline: 1px solid blue;
+}
