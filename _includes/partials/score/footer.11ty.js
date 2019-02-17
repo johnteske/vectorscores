@@ -1,4 +1,5 @@
-<footer id="score-footer"><!--
+module.exports = data =>
+`<footer id="score-footer"><!--
 --><button id="score-back" class="score-button" title="Step score pointer -1">
         <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <g id="back">
@@ -32,7 +33,7 @@
         </svg>
     </button><!--
  --><input id="score-pointer" type="number" value="0" pattern="\d*" readonly="true" title="Score pointer" /><!-- step="1" --><!--
- -->{% if page.options or page.options_file %}<button id="score-options-open" class="score-button" title="Score options">
+ -->${(data.options || data.options_file) ? `<button id="score-options-open" class="score-button" title="Score options">
          <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
              <g id="score-options-icon">
                  <path d="M17,10 L17,118.57"></path>
@@ -45,5 +46,5 @@
                  <path d="M95.73,64.285 L127.23,64.285"></path>
              </g>
          </svg>
-    </button>{% endif %}
-</footer>
+    </button>` : ''}
+</footer>`;

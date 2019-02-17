@@ -4,7 +4,7 @@ const { scoreTitle } = requireRoot("_eleventy/title.js")
 
 const partialPath = "_includes/partials/score";
 const header = requireRoot(`${partialPath}/header.11ty.js`);
-//const footer = requireRoot(`${partialPath}/footer.11ty.js`);
+const footer = requireRoot(`${partialPath}/footer.11ty.js`);
 
 module.exports = data =>
     `<!DOCTYPE html>
@@ -23,7 +23,7 @@ module.exports = data =>
             <svg class="main"></svg>
             ${ data.content }
         </main>
-        {% include score/footer.html %}
+        ${footer(data)}
         {% include score/modals.html %}
         {% include score/scripts.html %}
         <script src="index.js" charset="utf-8"></script>
