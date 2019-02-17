@@ -6,6 +6,7 @@ const partialPath = "_includes/partials/score";
 const header = requireRoot(`${partialPath}/header.11ty.js`);
 const footer = requireRoot(`${partialPath}/footer.11ty.js`);
 const modals = requireRoot(`${partialPath}/modals.11ty.js`);
+const scripts = requireRoot(`${partialPath}/scripts.11ty.js`);
 
 module.exports = data =>
     `<!DOCTYPE html>
@@ -26,7 +27,7 @@ module.exports = data =>
         </main>
         ${footer(data)}
         ${modals(data)}
-        {% include score/scripts.html %}
+        ${scripts(data)}
         <script src="index.js" charset="utf-8"></script>
     </body>
     </html>`;
