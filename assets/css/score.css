@@ -1,11 +1,6 @@
-/*
-$layout-color-bg: white; // transparent;
-$layout-color-light: #eeeeee;
-$layout-trans-time: 0.6s;
-$layout-header-font-stack: 'Times New Roman', serif;
-$layout-font-stack: Courier, monospace;
-$layout-border: 2px solid $layout-color-light;
+@import url("score/variables.css");
 
+/*
 @import "mixins";
 @import "score/layout";
 @import "score/controls";
