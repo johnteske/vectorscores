@@ -1,4 +1,5 @@
 module.exports = function(config) {
+  config.addPassthroughCopy("assets/js/lib/d3.v4.min.js");
   config.addPassthroughCopy("assets/svg");
   config.addPassthroughCopy("scores");
 
