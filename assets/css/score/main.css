@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+svg.main {
+    display: block;
+    margin: 0 auto;
+    /* @include preventTapHighlight(); */
+    /* @include preventUserSelect(); */
+}
