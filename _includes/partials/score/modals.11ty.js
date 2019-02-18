@@ -11,14 +11,14 @@ const infoModal = data =>
         </p>
 	${data.instrumentation ? '<p>for ${data.instrumentation}</p>' : ''}
         <p>${handleUndefined(data.dedication)}</p>
-        ${data.info ? '<div>${data.info}</div>' : ''}
+        ${data.info ? `<div>${data.info}</div>` : ''}
     </div>`; 
 
 const optionsModal = data => data.options ?
     `<div id="score-options-modal" class="modal-content">
         <span id="score-options-close" class="modal-close">×</span>
         <h2>Options</h2>
-        ${data.options ? '<div>${data.options}</div>' : ''}
+        ${data.options ? `<div>${data.options}</div>` : ''}
     </div>` :
     '';
 
