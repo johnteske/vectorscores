@@ -1,0 +1,81 @@
+.score-button,
+#score-pointer {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: var(--footer-height);
+  max-width: 20%;
+  height: calc(var(--footer-height) - 2px);
+  display: inline-block;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.score-button:hover {
+  outline: 2px solid var(--layout-color-light);
+}
+
+.score-button:active,
+.score-buttons:focus {
+  outline: 2px solid #ddd;
+}
+
+.score-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.score-button g {
+  stroke: #000;
+  stroke-width: 10;
+  fill: none;
+}
+
+.score-button:disabled g {
+  stroke: #ddd;
+}
+
+.score-button g#pause {
+  display: none;
+}
+
+.score-button.pause g#play {
+  display: none;
+}
+
+.score-button.pause g#pause {
+  display: inline;
+}
+
+#score-pointer {
+  vertical-align: top;
+  font-size: 18px;
+  padding-bottom: 4px;
+}
+
+@media (max-width: calc(var(--footer-height) * 6)) {
+  #score-pointer {
+    display: none;
+  }
+}
+
+input {
+  font-family: var(--layout-font-stack);
+  text-align: center;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#score-info-open {
+  float: right;
+  font-family: var(--layout-font-stack);
+  font-size: var(--layout-unit);
+}
+
+#score-options-open {
+  float: right;
+}

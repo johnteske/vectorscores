@@ -1,9 +1,9 @@
 @import url("score/variables.css");
 @import url("score/layout.css");
 @import url("score/set-layout.css");
+@import url("score/controls.css");
 
 /*
-@import url("score/controls.css");
 @import url("score/modal");
 @import url("score/main");
 @import url("score/settings");

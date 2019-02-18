@@ -11,7 +11,7 @@
     "build:debug": "DEBUG=Eleventy* npm run build",
     "clean": "rm -rf _site",
     "css": "postcss assets/css/*.css --no-map --use postcss-import postcss-custom-properties --dir _site/assets/css",
-    "css:lint": "stylelint assets/css/*.css",
+    "css:lint": "stylelint assets/css/**/*.css",
     "css:fix": "npm run css:lint -- --fix",
     "copy": "mkdir -p _includes/docs && cp docs/README.md _includes/docs/README.md",
     "lint:fix": "prettier --write {.,pages}/*.js",

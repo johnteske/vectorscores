@@ -1,76 +1,81 @@
 html {
-    position: relative;
-    min-height: 100%;
+  position: relative;
+  min-height: 100%;
 }
 
 body {
-    margin: 0;
+  margin: 0;
 }
 
 main {
-    margin: var(--footer-height) 0;
-    /* @include preventTapHighlight(); */
-    /* @include preventUserSelect(); */
+  margin: var(--footer-height) 0;
+
+  /* @include preventTapHighlight(); */
+
+  /* @include preventUserSelect(); */
 }
 
-header, footer {
-    position: fixed;
-    left: 0;
-    right: 0;
-    height: var(--footer-height);
-    margin: 0;
-    box-sizing: border-box;
+header,
+footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: var(--footer-height);
+  margin: 0;
+  box-sizing: border-box;
+  font-family: var(--layout-font-stack);
+  cursor: default;
 
-    font-family: var(--layout-font-stack);
-    cursor: default;
-    /* @include preventTapHighlight(); */
-    /* @include preventUserSelect(); */
+  /* @include preventTapHighlight(); */
 
-    background-color: var(--layout-color-bg);
-    transition: var(--layout-trans-time) opacity;
+  /* @include preventUserSelect(); */
+
+  background-color: var(--layout-color-bg);
+  transition: var(--layout-trans-time) opacity;
 }
 
-header.hide, footer.hide {
-    opacity: 0;
+header.hide,
+footer.hide {
+  opacity: 0;
 }
 
-header.show, footer.show {
-    opacity: 1;
+header.show,
+footer.show {
+  opacity: 1;
 }
 
 header {
-    padding: 0;
-    top: 0;
-    border-bottom: var(--layout-border);
+  padding: 0;
+  top: 0;
+  border-bottom: var(--layout-border);
 }
 
 footer {
-    padding: 0;
-    bottom: 0;
-    border-top: var(--layout-border);
+  padding: 0;
+  bottom: 0;
+  border-top: var(--layout-border);
 }
 
 h1 {
-    margin: 0;
-    padding: var(--layout-unit);
-    display: inline-block;
-    box-sizing: border-box;
-
-    font-size: calc(var(--layout-unit * 2));
-    line-height: 1;
-    white-space: nowrap;
-    max-width: 85%;
+  margin: 0;
+  padding: var(--layout-unit);
+  display: inline-block;
+  box-sizing: border-box;
+  font-size: calc(var(--layout-unit * 2));
+  line-height: 1;
+  white-space: nowrap;
+  max-width: 85%;
 }
 
 @media (max-width: 599px) {
-    h1 {
-        font-size: var(--layout-unit);
-    }
+  h1 {
+    font-size: var(--layout-unit);
+  }
 }
 
 .score-title,
 .modal-content .score-title {
-    font-family: var(--layout-header-font-stack);
-    font-style: italic;
-    font-weight: bold;
+  font-family: var(--layout-header-font-stack);
+  font-style: italic;
+  font-weight: bold;
 }
