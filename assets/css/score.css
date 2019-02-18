@@ -3,20 +3,6 @@
 @import url("score/set-layout.css");
 @import url("score/controls.css");
 @import url("score/modal.css");
-@import url("score/main");
-
-/*
-@import url("score/settings");
-@import url("work-list");
-
-.score-set .work-list {
-    margin: 0;
-    padding: $unit (2 * $unit);
-
-    list-style: none;
-}
-
-.score-set #score-header {
-    opacity: 1;
-}
-*/
+@import url("score/main.css");
+@import url("score/settings.css");
+@import url("score/work-list.css");
