@@ -1,4 +1,4 @@
-VS.enableModal = function(idPrefix) {
+export const enableModal = function(idPrefix) {
     var modal = document.getElementById(idPrefix + '-modal');
     var openTrigger = document.getElementById(idPrefix + '-open');
     var closeTrigger = document.getElementById(idPrefix + '-close');

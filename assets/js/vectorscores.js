@@ -5,6 +5,7 @@ import * as layout from './vs/layout.js';
 import * as score from './vs/score.js';
 import * as scoreOptions from './vs/score-options.js';
 import * as controls from './vs/controls.js';
+import * as modals from './vs/modals.js';
 
 window.VS = {
     ...util,
@@ -13,9 +14,6 @@ window.VS = {
     ...layout,
     ...score,
     ...scoreOptions,
-    ...controls
+    ...controls,
+    ...modals
 };
-
-/*
-require('modals')
-*/
