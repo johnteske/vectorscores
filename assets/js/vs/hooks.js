@@ -2,7 +2,7 @@
  * Factory function to create methods to add and trigger hooks
  * @param {array} keys : keys of hooks
  */
-VS.createHooks = function(keys) {
+export const createHooks = function(keys) {
 
     var hooks = {};
 
