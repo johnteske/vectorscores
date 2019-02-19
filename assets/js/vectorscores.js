@@ -1,7 +1,10 @@
-const VS = {};
+import * as util from './vs/helpers.util.js';
+
+window.VS = {
+    ...util
+};
 
 /*
-require('helpers.util')
 require('helpers.math')
 require('hooks')
 require('layout')

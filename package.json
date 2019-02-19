@@ -15,6 +15,7 @@
     "css:fix": "npm run css:lint -- --fix",
     "copy": "mkdir -p _includes/docs && cp docs/README.md _includes/docs/README.md",
     "lint:fix": "prettier --write {.,pages}/*.js",
+    "rollup": "rollup assets/js/vectorscores.js --format iife --name \"vectorscores\" --file _site/assets/js/vectorscores.js",
     "serve": "npm run build -- --serve --port=8081",
     "test": "test"
   },
@@ -39,7 +40,8 @@
     "postcss": "^7.0.14",
     "postcss-cli": "^6.1.1",
     "postcss-custom-properties": "^8.0.9",
-    "postcss-import": "^12.0.1"
+    "postcss-import": "^12.0.1",
+    "rollup": "^1.2.1"
   },
   "devDependencies": {
     "prettier": "^1.15.3",

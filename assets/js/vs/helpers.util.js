@@ -4,7 +4,7 @@
  * @param {string} [url=window.location.href] : URL string to extract query parameter value from
  * @returns {string} : query parameter value
  */
-VS.getQueryString = function(param, url) {
+export function getQueryString(param, url) {
     var href = url || window.location.href;
     var match = new RegExp('[?&]' + param + '=([^&#]*)', 'i').exec(href);
 
@@ -16,7 +16,7 @@ VS.getQueryString = function(param, url) {
  * @param {object} params : query parameters as key-value pairs
  * @returns {string} : query string, joined by '&'
  */
-VS.makeQueryString = function(params) {
+export function makeQueryString(params) {
     return Object.keys(params).map(function(key) {
         return key + '=' + params[key];
     }).join('&');
@@ -27,7 +27,7 @@ VS.makeQueryString = function(params) {
  * @param {*} val : value to set as constant
  * @returns {*} : value
  */
-VS.constant = function(val) {
+export function constant(val) {
     return function constant() {
         return val;
     };
@@ -37,7 +37,7 @@ VS.constant = function(val) {
  * Generate unique id
  * @returns {number} : id
  */
-VS.id = (function() {
+export const id = (function() {
     var id = 0;
 
     return function() {
