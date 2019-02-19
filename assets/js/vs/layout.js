@@ -1,4 +1,4 @@
-VS.layout = (function() {
+export const layout = (function() {
     var layout = {};
 
     var header = document.getElementById('score-header');
