@@ -61,7 +61,7 @@ h1 {
   padding: var(--layout-unit);
   display: inline-block;
   box-sizing: border-box;
-  font-size: calc(var(--layout-unit * 2));
+  font-size: calc(var(--layout-unit) * 2);
   line-height: 1;
   white-space: nowrap;
   max-width: 85%;
@@ -70,6 +70,7 @@ h1 {
 @media (max-width: 599px) {
   h1 {
     font-size: var(--layout-unit);
+    line-height: 2;
   }
 }
 
