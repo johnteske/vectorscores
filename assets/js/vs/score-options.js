@@ -1,4 +1,4 @@
-VS.score.options = (function() {
+export const scoreOptions = (function() {
 
     var options = {};
     var elements = {};
