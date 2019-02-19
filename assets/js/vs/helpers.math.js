@@ -4,7 +4,7 @@
  * @param {number} max : upper limit (excluded)
  * @returns {number} float value between min and max, excluding max
  */
-VS.getRandExcl = function(min, max) {
+export const getRandExcl = function(min, max) {
     return Math.random() * (max - min) + min;
 };
 
@@ -15,7 +15,7 @@ VS.getRandExcl = function(min, max) {
  * @param {number} max : upper limit (included)
  * @returns {number} integer value between min and max, including max
  */
-VS.getRandIntIncl = function(min, max) {
+export const getRandIntIncl = function(min, max) {
     return Math.floor(VS.getRandExcl(min, max + 1));
 };
 
@@ -24,7 +24,7 @@ VS.getRandIntIncl = function(min, max) {
  * @param {array} items
  * @returns {*}
  */
-VS.getItem = function(items) {
+export const getItem = function(items) {
     return items[Math.floor(Math.random() * items.length)];
 };
 
@@ -33,7 +33,7 @@ VS.getItem = function(items) {
  * @param {array} items
  * @returns {*}
  */
-VS.getWeightedItem = function(items, weights) {
+export const getWeightedItem = function(items, weights) {
     var totalWeight = weights.reduce(function(a, b) {
         return a + b;
     });
@@ -56,7 +56,7 @@ VS.getWeightedItem = function(items, weights) {
  * @param {number} val
  * @returns {number}
  */
-VS.clamp = function(val, min, max) {
+export const clamp = function(val, min, max) {
     return Math.min(Math.max(val, min), max);
 };
 
@@ -67,7 +67,7 @@ VS.clamp = function(val, min, max) {
  * @param {number} val
  * @returns {number}
  */
-VS.normalize = function(val, min, max) {
+export const normalize = function(val, min, max) {
     return (val - min) / (max - min);
 };
 
@@ -77,6 +77,6 @@ VS.normalize = function(val, min, max) {
  * @param {number} mod
  * @returns {number}
  */
-VS.mod = function(val, mod) {
+export const mod = function(val, mod) {
     return ((val % mod) + mod) % mod;
 };

@@ -1,11 +1,12 @@
 import * as util from './vs/helpers.util.js';
+import * as math from './vs/helpers.math.js';
 
 window.VS = {
-    ...util
+    ...util,
+    ...math
 };
 
 /*
-require('helpers.math')
 require('hooks')
 require('layout')
 require('score')
