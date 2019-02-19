@@ -1,3 +1,5 @@
+import { createHooks } from './hooks.js';
+
 export const control = (function() {
 
     var control = {};
@@ -88,7 +90,7 @@ export const control = (function() {
     /**
      * Hooks and keyboard control
      */
-    var hooks = control.hooks = VS.createHooks(['play', 'pause', 'stop', 'step']);
+    var hooks = control.hooks = createHooks(['play', 'pause', 'stop', 'step']);
 
     function keydownListener(event) {
         if (event.defaultPrevented || event.metaKey) { return; }

@@ -1,3 +1,5 @@
+import { createHooks } from './hooks.js';
+
 export const score = (function() {
 
     var events = [];
@@ -18,7 +20,7 @@ export const score = (function() {
     }
 
     // Add a hook for the stop event, triggered after a score ends or by the user
-    var hooks = VS.createHooks(['stop']);
+    var hooks = createHooks(['stop']);
 
     function updatePointer(index) {
         pointer = index;

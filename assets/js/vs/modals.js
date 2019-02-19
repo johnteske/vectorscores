@@ -61,8 +61,8 @@ export const enableModal = function(idPrefix) {
 
 // TODO separate definition from instantiation
 if (document.getElementById('score-info-open')) {
-    VS.enableModal('score-info');
+    enableModal('score-info');
 }
 if (document.getElementById('score-options-open')) {
-    VS.enableModal('score-options');
+    enableModal('score-options');
 }
