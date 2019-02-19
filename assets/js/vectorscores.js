@@ -4,6 +4,7 @@ import * as hooks from './vs/hooks.js';
 import * as layout from './vs/layout.js';
 import * as score from './vs/score.js';
 import * as scoreOptions from './vs/score-options.js';
+import * as controls from './vs/controls.js';
 
 window.VS = {
     ...util,
@@ -11,10 +12,10 @@ window.VS = {
     ...hooks,
     ...layout,
     ...score,
-    ...scoreOptions
+    ...scoreOptions,
+    ...controls
 };
 
 /*
-require('controls')
 require('modals')
 */

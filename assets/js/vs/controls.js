@@ -1,4 +1,4 @@
-VS.control = (function() {
+export const control = (function() {
 
     var control = {};
 
