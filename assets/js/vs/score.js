@@ -1,4 +1,4 @@
-VS.score = (function() {
+export const score = (function() {
 
     var events = [];
 
