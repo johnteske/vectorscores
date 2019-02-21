@@ -1,5 +1,6 @@
-const maybe = (value) => value ? value : ''
-const maybeTemplate = (template, value) => value ? template : ''
+const requireRoot = require('app-root-path').require
+
+const { maybe, maybeTemplate } = requireRoot('render-utils')
 
 const infoModal = data => 
     `<div id="score-info-modal" class="modal-content">
