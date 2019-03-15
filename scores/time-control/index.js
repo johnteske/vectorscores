@@ -1,7 +1,3 @@
----
-layout: compress-js
----
-
 // Remove unused element
 d3.select('svg').remove();
 
