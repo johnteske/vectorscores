@@ -2,13 +2,14 @@
 module.exports = class {
     data() {
         return {
-	    layout: 'score',
-	    title: 'Bravura test',
-	    status: 'unlisted'
+            layout: 'score',
+            title: 'Bravura test',
+            status: 'unlisted',
+            inline_bravura: true
 	}
     }
 
     render(data) {
-        return `<link rel="stylesheet" type="text/css" href="/assets/fonts/bravura-woff.css">`
+        return ``
     }
 };

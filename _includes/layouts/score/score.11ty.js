@@ -16,7 +16,7 @@ module.exports = data =>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>${ scoreTitle(data.site.title, data.title) }</title>
         <link rel="stylesheet" href="${assetsUrl(data.site, '/css/score.css')}">
-        ${handleUndefined(data.inline_bravura && `<link rel="stylesheet" href="${assetsUrl(data.site, '/fonts/Bravura-woff.css')}">`)}
+        ${handleUndefined(data.inline_bravura && `<link rel="stylesheet" href="${assetsUrl(data.site, '/fonts/bravura-woff.css')}">`)}
         <link rel="stylesheet" href="styles.css")
     </head>
     <body>
