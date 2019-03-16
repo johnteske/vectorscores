@@ -1,13 +1,7 @@
----
----
-
-@import "mixins";
-@include BravuraFont();
+/* @import "mixins"; */
+/* @include BravuraFont(); */
 
 main {
-    -webkit-user-select: inherit; // Chrome, Safari
-    -moz-user-select: inherit; // Firefox
-    -ms-user-select: inherit; // IE 10+
     user-select: inherit;
 }
 

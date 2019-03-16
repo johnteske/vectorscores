@@ -1,9 +1,0 @@
----
----
-{% capture font_base64 %}{% include_relative _Bravura-woff-base64 %}{% endcapture %}
-
-@font-face {
-  font-family: "Bravura";
-  src: url("data:application/x-font-woff;charset=utf-8;base64,{{ font_base64 }}") format("woff");
-  font-style: normal;
-}
