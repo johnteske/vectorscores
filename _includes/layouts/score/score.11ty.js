@@ -1,5 +1,5 @@
 const requireRoot = require('app-root-path').require
-const { assetsUrl, catMap, handleUndefined } = requireRoot("render-utils.js");
+const { assetsUrl, catMap, forEachModuleWithFile, handleUndefined } = requireRoot("render-utils.js");
 const { scoreTitle } = requireRoot("_eleventy/title.js")
 
 const partialPath = "_includes/partials/score";
@@ -16,7 +16,7 @@ module.exports = data =>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>${ scoreTitle(data.site.title, data.title) }</title>
         <link rel="stylesheet" href="${assetsUrl(data.site, '/css/score.css')}">
-        ${data.modules && catMap(module => `<link rel="stylesheet" href="${assetsUrl(data.site, `/modules/${module}/styles.css`)}">`, data.modules)}
+        ${forEachModuleWithFile('styles.css', path => `<link rel="stylesheet" href="${path}">`, data)}
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
