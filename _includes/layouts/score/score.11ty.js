@@ -1,5 +1,5 @@
 const requireRoot = require('app-root-path').require
-const { assetsUrl, handleUndefined } = requireRoot("render-utils.js");
+const { assetsUrl, catMap, handleUndefined } = requireRoot("render-utils.js");
 const { scoreTitle } = requireRoot("_eleventy/title.js")
 
 const partialPath = "_includes/partials/score";
@@ -16,8 +16,8 @@ module.exports = data =>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>${ scoreTitle(data.site.title, data.title) }</title>
         <link rel="stylesheet" href="${assetsUrl(data.site, '/css/score.css')}">
-        ${handleUndefined(data.inline_bravura && `<link rel="stylesheet" href="${assetsUrl(data.site, '/fonts/bravura-woff.css')}">`)}
-        <link rel="stylesheet" href="styles.css")
+        ${data.modules && catMap(module => `<link rel="stylesheet" href="${assetsUrl(data.site, `/modules/${module}/styles.css`)}">`, data.modules)}
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body>
         ${header(data)}
