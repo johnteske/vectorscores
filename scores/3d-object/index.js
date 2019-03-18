@@ -1,10 +1,6 @@
----
-layout: compress-js
----
-
 // generate (placeholder) score
-{% include_relative _score.js %}
-{% include_relative _matrices.js %}
+import createScore from './_score.js'
+import render from './_render.js';
 
 var score = {
     width: VS.getItem([3, 4, 5]),
@@ -61,7 +57,4 @@ var performer = new Performer();
 // also update query string so bookmarks/share/reloads retain current settings
 performer.setAngle(45);
 
-{% comment %}{% include_relative _indicator.js %}{% endcomment %}
-
-{% include_relative _render.js %}
-render();
+render(score);

@@ -2,7 +2,6 @@ module.exports = function(config) {
   config.addPassthroughCopy("assets/js/lib/d3.v4.min.js");
   config.addPassthroughCopy("assets/modules");
   config.addPassthroughCopy("assets/svg");
-  config.addPassthroughCopy("scores");
 
   // Aliases are in relation to the _includes folder
   const pageLayouts = ["default", "page"];

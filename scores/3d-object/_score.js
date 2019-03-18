@@ -1,4 +1,4 @@
-function createScore() {
+export default function createScore() {
     var score = [
         // cube, for testing
         [0, 0, 0],

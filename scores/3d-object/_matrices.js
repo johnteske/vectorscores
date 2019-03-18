@@ -1,4 +1,4 @@
-function multiplyMatrices(m1, m2) {
+export default function multiplyMatrices(m1, m2) {
     var result = [];
     for (var i = 0; i < m1.length; i++) {
         result[i] = [];

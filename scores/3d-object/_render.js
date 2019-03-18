@@ -1,3 +1,5 @@
+import multiplyMatrices from './_matrices.js'
+
 function flatten(array) {
     return array.reduce(function(a, b) { return a.concat(b); }, []);
 }
@@ -10,7 +12,7 @@ function makePoint(array) {
      };
 }
 
-function render() {
+export default function render(score) {
     // remove existing elements, if any
     score.container.selectAll('.rendered').remove();
 
