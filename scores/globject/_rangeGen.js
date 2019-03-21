@@ -1,4 +1,4 @@
-function rangeGen(length, min, max) {
+export function rangeGen(length, min, max) {
     var pcs = [];
     for (var i = 0; i < length; i++) {
         pcs.push(Math.floor(Math.random() * (max - min)) + min);
@@ -6,7 +6,7 @@ function rangeGen(length, min, max) {
     return pcs;
 }
 
-function wedgeRangeGen(length, min, max) {
+export function wedgeRangeGen(length, min, max) {
     var pcs = [],
         band = (max - min) / length;
     for (var i = 0; i < length; i++) {
@@ -15,7 +15,7 @@ function wedgeRangeGen(length, min, max) {
     return pcs;
 }
 
-function stepRangeGen(length, min, max) {
+export function stepRangeGen(length, min, max) {
     var pcs = [], thispc, lmax, lmin,
         disp = 10;
     min += disp;

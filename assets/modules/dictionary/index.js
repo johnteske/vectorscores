@@ -1,6 +1,3 @@
----
-layout: compress-js
----
 VS.dictionary = VS.dictionary || {};
 
 VS.dictionary.Bravura = (function() {

@@ -1,3 +1,5 @@
+import { rangeGen, stepRangeGen, wedgeRangeGen } from "./_rangeGen.js"
+
 function randRangeGenerator() {
     return VS.getItem([rangeGen, wedgeRangeGen, stepRangeGen]);
 }
@@ -68,7 +70,7 @@ function makeGlobject() {
     return globject;
 }
 
-var score = (function() {
+export default (function() {
     var _score = [];
     for (var i = 0; i < 8; i++) {
         _score.push([makeGlobject()]);

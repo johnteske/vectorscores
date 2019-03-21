@@ -1,6 +1,4 @@
----
-layout: compress-js
----
+import score from "./_score.js"
 
 var width = 480,
     maxwidth = 480,
@@ -10,9 +8,6 @@ var width = 480,
     debug = +VS.getQueryString('debug') === 1 || false;
 
 var noteheads = VS.dictionary.Bravura.durations.stemless;
-
-{% include_relative _rangeGen.js %}
-{% include_relative _score.js %}
 
 var main = d3.select('.main')
     .classed('debug', debug)
