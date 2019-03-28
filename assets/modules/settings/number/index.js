@@ -1,6 +1,3 @@
----
-layout: compress-js
----
 // TODO coerce number
 /**
  * @param {string} name : name attribute of input, type="number"

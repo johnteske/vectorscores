@@ -1,6 +1,5 @@
-var score = [];
-
-(function() {
+export default function(update, tt) {
+    var score = [];
     var bars = [
         // <
         {
@@ -172,9 +171,9 @@ var score = [];
             pitch: bar.pitch
         });
 
-        VS.score.add(time, update, [transitionTime.long, score[i]]);
+        VS.score.add(time, update, [tt, score[i]]);
 
-        time += (bar.duration || globInterval);
+        time += (bar.duration || tt);
 
         // transpose +/- within range of pitch class set in normal form
         transpose += VS.getItem([-1, 1]) * Math.floor(Math.random() * (bar.pitch.set[bar.pitch.set.length - 1] || 0));
@@ -182,4 +181,6 @@ var score = [];
 
     // final, empty event
     VS.score.add(time);
-}());
+
+    return score;
+};

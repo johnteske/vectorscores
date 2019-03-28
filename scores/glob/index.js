@@ -1,6 +1,7 @@
----
-layout: compress-js
----
+import generateScore from './_score.js'
+import Glob from './_glob.js'
+import * as meta from './_meta.js'
+import scoreOptions from './_options.js'
 
 var canvas = {
         width: 400,
@@ -12,7 +13,7 @@ var canvas = {
         margin: {}
     },
     transitionTime = {
-        // long: 5000,
+        long: 20000,
         short: 600
     },
     scoreLength = 12,
@@ -21,27 +22,16 @@ var canvas = {
     svg = d3.select('.main'),
     wrapper = svg.append('g');
 
-transitionTime.long = 20000;
-var globInterval = transitionTime.long;
+var pitchClassSet = meta.pitchClassSet(canvas, wrapper, scoreOptions);
+var dynamics = meta.dynamics(canvas, wrapper);
 
-// transitionTime.long = 5000;
-// var globInterval = transitionTime.long * 3;
+var glob0 = new Glob(wrapper, canvas);
+var glob1 = new Glob(wrapper, canvas);
+var glob2 = new Glob(wrapper, canvas);
 
-var durationDict = VS.dictionary.Bravura.durations.stemless;
-var dynamicsDict = VS.dictionary.Bravura.dynamics;
-
-{% include_relative _options.js %}
-
-{% include_relative _glob.js %}
-
-var glob0 = new Glob(wrapper);
-var glob1 = new Glob(wrapper);
-var glob2 = new Glob(wrapper);
-
-{% include_relative _meta.js %}
-
-function update(dur, bar) {
-    var pcSet = VS.pitchClass.transpose(bar.pitch.set, bar.pitch.transpose + scoreOptions.transposition);
+var update = (function (options) {
+  return function(dur, bar) {
+    var pcSet = VS.pitchClass.transpose(bar.pitch.set, bar.pitch.transpose + options.transposition);
     pitchClassSet.update(pcSet);
 
     glob0.move(dur, bar.globs[0]);
@@ -49,11 +39,10 @@ function update(dur, bar) {
     glob2.move(dur, bar.globs[2]);
 
     dynamics.update(bar.dynamics);
-}
+  }
+})(scoreOptions)
 
-{% include_relative _score.js %}
-{% include_relative _controls.js %}
-
+var score = generateScore(update, transitionTime.long)
 update(0, score[0]);
 
 /**
@@ -107,3 +96,14 @@ function resize() {
 }
 
 resize();
+
+var updateAtPointer = function() {
+  var pointer = VS.score.getPointer();
+
+  if (!VS.score.pointerAtLastEvent()) {
+    update(transitionTime.short, score[pointer]);
+  }
+};
+
+VS.score.hooks.add('stop', updateAtPointer);
+VS.control.hooks.add('step', updateAtPointer);

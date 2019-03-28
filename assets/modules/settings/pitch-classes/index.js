@@ -1,6 +1,3 @@
----
-layout: compress-js
----
 /**
  * Creates a set of inputs:
  * - pitch-classes (display pitch classes by numbers or note names)

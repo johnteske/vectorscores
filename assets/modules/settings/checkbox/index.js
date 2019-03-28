@@ -1,6 +1,3 @@
----
-layout: compress-js
----
 /**
  * @param {string} name : name attribute of input, type="checkbox"
  */

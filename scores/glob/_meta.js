@@ -1,7 +1,7 @@
 /**
  * Pitch class set
  */
-var pitchClassSet = (function() {
+export function pitchClassSet (canvas, wrapper, options) {
     var selection = wrapper.append('text')
         .attr('class', 'pc-set')
         .attr('x', canvas.center)
@@ -9,7 +9,7 @@ var pitchClassSet = (function() {
 
     function update(set) {
         var formatted = set.map(function(pc) {
-            return VS.pitchClass.format(pc, scoreOptions.pitchClasses.display, scoreOptions.pitchClasses.preference);
+            return VS.pitchClass.format(pc, options.pitchClasses.display, options.pitchClasses.preference);
         }).join(', ');
 
         selection.text(function() {
@@ -20,12 +20,13 @@ var pitchClassSet = (function() {
     return {
         update: update
     };
-})();
+};
 
 /**
  * Dynamics
  */
-var dynamics = (function() {
+var dynamicsDict = VS.dictionary.Bravura.dynamics;
+export function dynamics(canvas, wrapper) {
     var selection = wrapper.append('text')
         .attr('class', 'dynamics')
         .attr('x', canvas.center)
@@ -39,4 +40,4 @@ var dynamics = (function() {
     return {
         update: update
     };
-})();
+};

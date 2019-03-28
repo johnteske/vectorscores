@@ -1,3 +1,4 @@
+var durationDict = VS.dictionary.Bravura.durations.stemless;
 var radius = 96;
 
 function newPoint(x, y) {
@@ -15,7 +16,7 @@ function newPoint(x, y) {
  * @constructor
  * @param {D3Selection} parent - Parent element to which the Glob is appended
 */
-function Glob(parent, args) {
+function Glob(parent, canvas, args) {
     args = args || {};
 
     this.group = parent.append('g')
@@ -89,3 +90,5 @@ Glob.prototype.move = function(dur, data) {
         .attr('transform', transform)
         .style('opacity', 1);
 };
+
+export default Glob
