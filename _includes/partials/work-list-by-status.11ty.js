@@ -26,16 +26,21 @@ module.exports = data => {
     return `
     <h3>Published</h3>
     <table class="work-list">
-        ${catMap(workLink, filterByStatus(works, 'published'))}
+        ${catMap(workRow, filterByStatus(works, 'published'))}
     </table>
     
     <h3>Works in progress</h3>
     <table class="work-list">
-        ${catMap(workLink, filterByStatus(works, 'wip'))}
+        ${catMap(workRow, filterByStatus(works, 'wip'))}
     </table>
     
     <h3>Examples and tests</h3>
     <table class="work-list">
-        ${catMap(workLink, filterByStatus(works, 'test'))}
+        ${catMap(workRow, filterByStatus(works, 'test'))}
+    </table>
+
+    <h3>Unlisted (shown during Node update)</h3>
+    <table class="work-list">
+        ${catMap(workRow, filterByStatus(works, 'unlisted'))}
     </table>`
 }
