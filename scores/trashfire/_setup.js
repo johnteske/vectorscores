@@ -1,4 +1,4 @@
-var TrashFire = (function() {
+export const TrashFire = (function() {
     var tf = {};
 
     tf.view = {
@@ -26,14 +26,9 @@ var TrashFire = (function() {
     return tf;
 })();
 
-var layout = {
+export const layout = {
     width: TrashFire.view.width,
     height: TrashFire.view.height,
     margin: {},
     main: d3.select('main')
 };
-
-d3.select(window).on('load', function() {
-    resize();
-    TrashFire.noiseLayer.render();
-});

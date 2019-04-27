@@ -3,6 +3,8 @@ module.exports = function(config) {
   config.addPassthroughCopy("assets/modules");
   config.addPassthroughCopy("assets/svg");
 
+  config.addPassthroughCopy("scores/trashfire/dumpster.svg");
+
   // Aliases are in relation to the _includes folder
   const pageLayouts = ["default", "page"];
   pageLayouts.forEach(template =>

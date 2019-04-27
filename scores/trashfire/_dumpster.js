@@ -1,7 +1,7 @@
 /**
  * Draw front and back groups so objects can emerge between the layers
  */
-var dumpster = (function(tf) {
+export default function(tf) {
     var dumpster = {};
 
     var group = tf.wrapper.append('g')
@@ -38,4 +38,4 @@ var dumpster = (function(tf) {
     }
 
     return dumpster;
-})(TrashFire);
+};

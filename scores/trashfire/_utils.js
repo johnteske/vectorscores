@@ -1,6 +1,4 @@
-var TrashUtils = {};
-
-TrashUtils.buildArray = function(n, fn) {
+export function buildArray(n, fn) {
     var array = [];
 
     for (var i = 0; i < n; i++) {
@@ -10,22 +8,22 @@ TrashUtils.buildArray = function(n, fn) {
     return array;
 };
 
-TrashUtils.flatten = function(target, array) {
+export function flattern(target, array) {
     return target.concat(array);
 };
 
-TrashUtils.last = function(array) {
+export function last(array) {
     return array.slice(-1)[0] || [];
 };
 
-TrashUtils.lineGenerator = d3.line()
+export const lineGenerator = d3.line()
     .x(function(d) { return d[0]; })
     .y(function(d) { return d[1]; });
 
-TrashUtils.push = function(array, item) {
+export function push(array, item) {
     return [].concat(array, item);
 };
 
-TrashUtils.sum = function(a, b) {
+export function sum(a, b) {
     return a + b;
 };
