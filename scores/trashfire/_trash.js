@@ -1,7 +1,7 @@
 /**
  * Generate trash
  */
-var trash = (function(tf) {
+export default function(tf) {
     var trash = {};
 
     var xOffset = 10;
@@ -64,7 +64,7 @@ var trash = (function(tf) {
     }
 
     return trash;
-})(TrashFire);
+};
 
 function makePath(selection) {
     selection.each(function(d) {

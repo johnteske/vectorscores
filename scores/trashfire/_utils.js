@@ -8,7 +8,7 @@ export function buildArray(n, fn) {
     return array;
 };
 
-export function flattern(target, array) {
+export function flatten(target, array) {
     return target.concat(array);
 };
 

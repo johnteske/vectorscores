@@ -1,4 +1,6 @@
-TrashFire.scrapeDrone = (function(tf) {
+import { buildArray, lineGenerator } from './_utils'
+
+export default function(tf) {
     var drone = {};
 
     var width = tf.view.width * 0.75;
@@ -9,7 +11,7 @@ TrashFire.scrapeDrone = (function(tf) {
         .attr('fill', 'none')
         .attr('stroke', '#444')
         .attr('d', function() {
-            return TrashUtils.lineGenerator(makePath());
+            return lineGenerator(makePath());
         });
 
     function makePath() {
@@ -17,7 +19,7 @@ TrashFire.scrapeDrone = (function(tf) {
         var slice = width / (points + 1);
         var height = 3;
 
-        return TrashUtils.buildArray(points, function(i) {
+        return buildArray(points, function(i) {
             return [
                 i * slice,
                 (height * 0.5) + (Math.random() * height)
@@ -43,4 +45,4 @@ TrashFire.scrapeDrone = (function(tf) {
     };
 
     return drone;
-})(TrashFire);
+};

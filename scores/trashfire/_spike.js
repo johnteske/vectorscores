@@ -1,4 +1,4 @@
-TrashFire.spike = (function(tf) {
+export default function(tf) {
     var spike = {};
 
     var x = tf.view.width * 0.5;
@@ -42,4 +42,4 @@ TrashFire.spike = (function(tf) {
     }
 
     return spike;
-})(TrashFire);
+};

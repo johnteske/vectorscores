@@ -1,7 +1,7 @@
 /**
  * TODO make noise noisier, similar to trash/fire paths
  */
-TrashFire.noiseLayer = (function(tf) {
+export default function(tf) {
     var noiseLayer = {};
 
     var group = tf.wrapper.append('g');
@@ -54,4 +54,4 @@ TrashFire.noiseLayer = (function(tf) {
     }
 
     return noiseLayer;
-})(TrashFire);
+};

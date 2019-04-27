@@ -5,10 +5,14 @@ import * as utils from "./_utils"
 import makeDumpster from "./_dumpster.js"
 const dumpster = makeDumpster(TrashFire)
 
-//import trash from "./_trash.js"
-//import spike from "./_spike.js"
-//import noise from "./_noise.js"
-//import scrapeDrone from "./_scrape-done.js"
+import makeTrash from "./_trash.js"
+const trash = makeTrash(TrashFire)
+import makeSpike from "./_spike.js"
+const spike = makeSpike(TrashFire)
+import makeNoise from "./_noise.js"
+const noise = makeNoise(TrashFire)
+import makeScrapeDrone from "./_scrape-drone.js"
+const scrapeDrone = makeScrapeDrone(TrashFire)
 
 //import fireCycle from "./_score.fire-cycle.js"
 //import noise from "./_score.noise.js"
