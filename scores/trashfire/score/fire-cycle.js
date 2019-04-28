@@ -1,3 +1,8 @@
+import { addTimeFromDurations, timeOffset } from './time'
+import { buildArray, flatten, last, push } from '../_utils'
+import spike from '../_spike'
+import trash from '../_trash'
+
 function makeTrash(type, min, max) {
     return {
         id: VS.id(),
@@ -7,24 +12,24 @@ function makeTrash(type, min, max) {
 }
 
 function addTrash(acc, bar, fn) {
-    var lastTrashList = TrashUtils.last(acc);
-    var newTrashList = TrashUtils.push(lastTrashList, fn(bar));
-    return TrashUtils.push(acc, [newTrashList]);
+    var lastTrashList = last(acc);
+    var newTrashList = push(lastTrashList, fn(bar));
+    return push(acc, [newTrashList]);
 }
 
 function removeTrash(acc) {
-    var lastTrashList = TrashUtils.last(acc);
+    var lastTrashList = last(acc);
     var newTrashList = lastTrashList.slice(1);
-    return TrashUtils.push(acc, [newTrashList]);
+    return push(acc, [newTrashList]);
 }
 
 function emptyTrash(acc) {
-    return TrashUtils.push(acc, [[]]);
+    return push(acc, [[]]);
 }
 
 function copyTrash(acc) {
-    var lastTrashList = TrashUtils.last(acc);
-    return TrashUtils.push(acc, [lastTrashList]);
+    var lastTrashList = last(acc);
+    return push(acc, [lastTrashList]);
 }
 
 /**
@@ -33,7 +38,7 @@ function copyTrash(acc) {
 function fireCycle() {
 
     // Build 3-5 flames
-    var flames = TrashUtils.buildArray(VS.getItem([3, 4, 5]), function(index, n) {
+    var flames = buildArray(VS.getItem([3, 4, 5]), function(index, n) {
         var type = (index > 2) ? 'blaze' : 'crackle';
 
         return {
@@ -50,23 +55,23 @@ function fireCycle() {
     // Hit dumpster, 0-3 times
     // TODO reduce trash to last 3 items if no spike?
     var nSpikes = VS.getWeightedItem([0, 1, 2, 3], [15, 60, 15, 10]);
-    var spikes = TrashUtils.buildArray(nSpikes, function() {
+    var spikes = buildArray(nSpikes, function() {
         return [
             {
                 duration: 600,
                 action: 'copy',
-                fn: TrashFire.spike.show,
+                fn: spike.show,
                 transitionDuration: 600
             },
             {
                 duration: 750,
                 action: 'empty',
-                fn: TrashFire.spike.hit,
+                fn: spike.hit,
                 transitionDuration: 750
             }
         ];
     })
-    .reduce(TrashUtils.flatten, []);
+    .reduce(flatten, []);
 
     var tailType = VS.getItem(['resume', 'embers', 'multi', '']);
     var tailFns = {
@@ -92,7 +97,7 @@ function fireCycle() {
     function embers() {
         var n = VS.getItem([1, 2, 3]);
 
-        var grow = TrashUtils.buildArray(n, function(i) {
+        var grow = buildArray(n, function(i) {
             return {
                 duration: ((7 - i) * 1000), // duration: 7-5 seconds
                 action: 'add',
@@ -104,7 +109,7 @@ function fireCycle() {
             };
         });
 
-        var die = TrashUtils.buildArray(n, function(i, n) {
+        var die = buildArray(n, function(i, n) {
             return {
                 duration: ((n - i + 4) * 1000),
                 action: 'remove',
@@ -119,7 +124,7 @@ function fireCycle() {
     function multi() {
         var n = VS.getItem([1, 2, 3]);
 
-        var trashes = TrashUtils.buildArray(n, function() {
+        var trashes = buildArray(n, function() {
             return makeTrash('crackle', 25, 75);
         });
 
@@ -133,7 +138,7 @@ function fireCycle() {
         };
 
         // Then die away
-        var dieAway = TrashUtils.buildArray(n, function(i, n) {
+        var dieAway = buildArray(n, function(i, n) {
             return {
                 duration: ((n - i + 4) * 1000),
                 action: 'remove',
@@ -176,7 +181,7 @@ function fireCycle() {
     .map(addTimeFromDurations);
 }
 
-var fireEvents = TrashUtils.buildArray(5, fireCycle)
+var fireEvents = buildArray(5, fireCycle)
     .map(function(cycle, i, cycles) {
         if (i === 0) {
             return cycle;
@@ -188,6 +193,6 @@ var fireEvents = TrashUtils.buildArray(5, fireCycle)
 
         return cycle.map(timeOffset(offset));
     })
-    .reduce(TrashUtils.flatten, []);
+    .reduce(flatten, []);
 
-var lastTime = fireEvents[fireEvents.length - 1].time;
+export default fireEvents
