@@ -17,8 +17,8 @@
     "css:lint": "stylelint assets/css/**/*.css",
     "css:fix": "npm run css:lint -- --fix",
     "copy": "npm run copy:docs; npm run copy:scores",
-    "copy:docs": "cp --parents docs/README.md _includes",
-    "copy:scores": "cp --parents scores/**/*.css _site",
+    "copy:docs": "rsync -R docs/README.md _includes",
+    "copy:scores": "rsync -R scores/**/*.css _site",
     "lint:fix": "prettier --write {.,pages}/*.js",
     "serve": "npm run build -- --serve --port=8081",
     "test": "test"
