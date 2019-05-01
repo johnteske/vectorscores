@@ -1,0 +1,9 @@
+.cue-test svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.cue-test button {
+  display: block;
+  margin: 1em auto 0;
+}
