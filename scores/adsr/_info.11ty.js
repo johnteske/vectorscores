@@ -1,3 +1,4 @@
+module.exports = () => `
 ### Time
 Time is written proportionally.
 <!--, including durations. The release of notes is not shown—musicians should release in time. Play duration/phrase only once, not repeated. -->
@@ -71,3 +72,4 @@ D<i class="symbol">&#xe262;</i> for each note in the phrase.
         {{ glossary_term.description }}
     </dd>
 </dl>
+`;

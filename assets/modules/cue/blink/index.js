@@ -5,7 +5,6 @@
  * TODO set interval by tempo
  * TODO re-consider duration method's usefulness or rename totalDuration to avoid confusion with setting on/off durations
  */
-console.log("it me");
 VS.cueBlink = function(cueSelection) {
   var beats = 3;
   var interval = 1000; // period, T
