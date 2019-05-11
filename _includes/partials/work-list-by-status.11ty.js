@@ -20,8 +20,10 @@ const workRow = d =>
         </td>
      </tr>`
 
+const scoreLayouts = ['score', 'score-set'];
+
 module.exports = data => {
-    const works = data.collections.all.filter(f => f.data.layout === 'score');
+    const works = data.collections.all.filter(f => scoreLayouts.includes(f.data.layout));
 
     return `
     <h3>Published</h3>
