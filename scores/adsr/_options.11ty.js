@@ -16,6 +16,7 @@ module.exports = () => `
     <div class="settings-group">
         <label>Show parameters on each measure: <input name="verbose" type="checkbox"></label>
     </div>
+    ${generateButton()}
  </form>
  ${websocketsSettings()}
 `;
