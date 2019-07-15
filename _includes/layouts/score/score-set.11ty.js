@@ -22,7 +22,7 @@ module.exports = data => {
         <main>
             ${ data.content }
             <ul class="work-list">
-                ${works.map(work => `<li>${work.title}</li>`)}
+                ${catMap(work => `<li>${work.title}</li>`, works)}
             </ul>
         </main>
     </body>

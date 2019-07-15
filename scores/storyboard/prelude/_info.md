@@ -4,7 +4,7 @@
 
 ### Timbre and Techniques
 <dl>
-    <dt>{% include glossary/term_link.html name="glassy" %}</dt>
+    <dt>include glossary/term_link.html name="glassy"</dt>
     <dd>
         {{ glossary_term.description }}
     </dd>

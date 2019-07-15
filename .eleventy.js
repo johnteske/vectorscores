@@ -11,12 +11,10 @@ module.exports = function(config) {
     config.addLayoutAlias(template, `layouts/page/${template}.11ty.js`)
   );
 
-  const scoreLayouts = ["score", "score-set"];
+  const scoreLayouts = ["score", "score-set", "movement"];
   scoreLayouts.forEach(template =>
     config.addLayoutAlias(template, `layouts/score/${template}.11ty.js`)
   );
-
-  // config.addLayoutAlias('movement', 'layouts/movement.html');
 
   return {
     dir: {
