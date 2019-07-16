@@ -2,11 +2,12 @@ const requireRoot = require('app-root-path').require
 const { assetsUrl, catMap, forEachModuleWithFile, handleUndefined } = requireRoot("render-utils.js");
 const { scoreTitle } = requireRoot("_eleventy/title.js")
 
-const partialPath = "_includes/partials/score";
-const header = requireRoot(`${partialPath}/header.11ty.js`);
+const partialPath = "_includes/partials";
+const header = requireRoot(`${partialPath}/score/header.11ty.js`);
+const workLink = requireRoot(`${partialPath}/work-link.11ty.js`)
 
 module.exports = data => {
-  const works = data.collections.all.filter(f => f.data.layout === 'movement');
+  const works = data.collections.all.filter(w => w.data.layout === 'movement');
 
   return `
     <!DOCTYPE html>
@@ -22,7 +23,7 @@ module.exports = data => {
         <main>
             ${ data.content }
             <ul class="work-list">
-                ${catMap(work => `<li>${work.data.title} add link</li>`, works)}
+                ${catMap(work => `<li>${workLink(work)}</li>`, works)}
             </ul>
         </main>
     </body>
