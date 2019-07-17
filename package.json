@@ -12,7 +12,7 @@
     "build:css": "postcss assets/css/*.css --no-map --use postcss-import postcss-custom-properties --dir _site/assets/css",
     "build:js": "npm run build:js:vs; npm run build:js:scores",
     "build:js:vs": "rollup assets/js/vectorscores.js --format iife --name \"vectorscores\" --file _site/assets/js/vectorscores.js",
-    "build:js:scores": "for s in scores/**/index.js; do rollup \"${s}\" --format iife --file \"_site/${s}\"; done",
+    "build:js:scores": "find scores -name 'index.js' | xargs -I {} rollup {} --format iife --file _site/{}",
     "clean": "rm -rf _site && mkdir _site",
     "css:lint": "stylelint assets/css/**/*.css",
     "css:fix": "npm run css:lint -- --fix",
