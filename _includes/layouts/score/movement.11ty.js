@@ -1,2 +1,1 @@
-const score = require('./score.11ty.js')
-return score
+module.exports = require('./score.11ty.js')
