@@ -1,11 +1,20 @@
-VS.score.options.add('pitchClasses', { 'pitch-classes': 'numbers', 'prefer': 'te' }, new VS.PitchClassSettings());
-VS.score.options.add('transposition', 0, new VS.NumberSetting('transposition'));
+const requireRoot = require("app-root-path").require;
 
-var scoreOptions = VS.score.options.setFromQueryString();
+const pitchClasses = requireRoot(
+  "./assets/modules/settings/pitch-classes/index.11ty.js"
+);
 
-// TODO working with old property names in score, for now
-scoreOptions.pitchClasses.display = scoreOptions.pitchClasses['pitch-classes'];
-scoreOptions.pitchClasses.preference = scoreOptions.pitchClasses['prefer'];
+const transposition = requireRoot(
+  "./assets/modules/settings/transposition.11ty.js"
+);
 
-// TODO should coerce internally
-scoreOptions.transposition = +scoreOptions.transposition;
+const generateButton = requireRoot(
+  "./assets/modules/settings/generate-button.11ty.js"
+);
+
+module.exports = () => `
+<form class="score-options">
+  ${pitchClasses()}
+  ${transposition()}
+  ${generateButton()}
+</form>`
