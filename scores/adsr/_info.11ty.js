@@ -1,4 +1,16 @@
-module.exports = () => `
+const requireRoot = require('app-root-path').require
+
+const partialPath = "_includes/partials";
+const glossaryLink = requireRoot(`${partialPath}/glossary.11ty.js`)
+
+const glossary = requireRoot(`_data/glossary.json`)
+
+const getTermDescription = termName => {
+  const term = glossary.find(t => t.name === termName);
+  return term.description;
+}
+
+module.exports = data => `
 ### Time
 Time is written proportionally.
 <!--, including durations. The release of notes is not shown—musicians should release in time. Play duration/phrase only once, not repeated. -->
@@ -37,39 +49,38 @@ D<i class="symbol">&#xe262;</i> for each note in the phrase.
 ### Other symbols
 <ul>
     <li>
-        <span class="symbol">&#xe630;</span> {% include glossary/term_link.html name="snap" %} : {{ glossary_term.description }}
+        <span class="symbol">&#xe630;</span> ${glossaryLink('snap')} : ${getTermDescription('snap')}
     </li>
     <li>
         <span class="symbol">&#xe0a9;</span> ghost note : muted, pitch deemphasized
     </li>
     <li>
         <svg class="info-ghost"></svg>
-        beams: after initial attack, rapidly {% include glossary/term_link.html name="hammer-on" %} additional notes
+        beams: after initial attack, rapidly ${glossaryLink('hammer-on')} additional notes
     </li>
 </ul>
 
 ### Timbre and Techniques
 <dl>
-    <dt>{% include glossary/term_link.html name="rolling" %}</dt>
+    <dt>${glossaryLink('rolling')}</dt>
     <dd>
-        {{ glossary_term.description }}
+        ${getTermDescription('rolling')}
     </dd>
     <dd>
-        {% include glossary/term_link.html name="rolling pizzicato" %} for string instruments
-    </dd>
-
-    <dt>{% include glossary/term_link.html name="rolling" %}</dt>
-    <dt>{% include glossary/term_link.html name="glassy" %}</dt>
-    <dd>
-        {{ glossary_term.description }}
-    </dd>
-    <dd>
-        {% include glossary/term_link.html name="bow hair pull" %} for string instruments
+        ${glossaryLink('rolling pizzicato')} for string instruments
     </dd>
 
-    <dt>{% include glossary/term_link.html name="flutter" %}</dt>
+    <dt>${glossaryLink('glassy')}</dt>
     <dd>
-        {{ glossary_term.description }}
+        ${getTermDescription('glassy')}
+    </dd>
+    <dd>
+        ${glossaryLink('bow hair pull')} for string instruments
+    </dd>
+
+    <dt>${glossaryLink('flutter')}</dt>
+    <dd>
+        ${getTermDescription('flutter')}
     </dd>
 </dl>
 `;
