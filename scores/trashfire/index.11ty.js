@@ -3,6 +3,7 @@ module.exports = class {
         return {
 	    layout: 'score',
 	    title: 'trashfire',
+            composer: "John Teske",
             instrumentation: 'any ensemble',
 	    status: 'wip',
             formats: 'score'

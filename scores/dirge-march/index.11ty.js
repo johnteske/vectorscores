@@ -6,6 +6,7 @@ module.exports = class {
     return {
       layout: "score",
       title: "dirge,,march",
+      composer: "John Teske",
       instrumentation: "any ensemble (3+ pitched, 2+ percussive)",
       duration: "5&prime;39&Prime;",
       status: "wip",

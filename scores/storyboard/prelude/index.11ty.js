@@ -6,6 +6,7 @@ module.exports = class {
     return {
       layout: 'movement',
       title: 'prelude',
+      composer: 'John Teske',
       status: 'wip',
       info: info(),
       options: options(),

@@ -3,6 +3,7 @@ module.exports = class {
     return {
       layout: "movement",
       title: "walk reveal",
+      composer: 'John Teske',
       status: "wip",
       info: `
         <p>

@@ -7,7 +7,7 @@ const infoModal = data =>
         <span id="score-info-close" class="modal-close">×</span>
         <h2 class="score-title">${data.title}</h2>
         <p>
-            ${data.composer}
+            ${maybe(data.composer)}
             ${maybe(data.publish_date)}
         </p>
 	${maybeTemplate(`<p>for ${data.instrumentation}</p>`, data.instrumentation)}

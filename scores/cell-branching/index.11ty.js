@@ -16,6 +16,7 @@ module.exports = class {
     return {
       layout: "score",
       title: "cell branching",
+      composer: "John Teske",
       instrumentation: "any ensemble",
       formats: ["parts"],
       status: "wip",
