@@ -17,4 +17,4 @@ module.exports = () => `
   ${pitchClasses()}
   ${transposition()}
   ${generateButton()}
-</form>`
+</form>`;

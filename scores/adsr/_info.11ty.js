@@ -1,8 +1,10 @@
-const requireRoot = require('app-root-path').require
+const requireRoot = require("app-root-path").require;
 
 const partialPath = "_includes/partials";
-const termLink = requireRoot(`${partialPath}/glossary/term-link.11ty.js`)
-const termDescription = requireRoot(`${partialPath}/glossary/term-description.11ty.js`)
+const termLink = requireRoot(`${partialPath}/glossary/term-link.11ty.js`);
+const termDescription = requireRoot(
+  `${partialPath}/glossary/term-description.11ty.js`
+);
 
 module.exports = () => `
 ### Time
@@ -43,38 +45,42 @@ D<i class="symbol">&#xe262;</i> for each note in the phrase.
 ### Other symbols
 <ul>
     <li>
-        <span class="symbol">&#xe630;</span> ${termLink('snap')} : ${termDescription('snap')}
+        <span class="symbol">&#xe630;</span> ${termLink(
+          "snap"
+        )} : ${termDescription("snap")}
     </li>
     <li>
         <span class="symbol">&#xe0a9;</span> ghost note : muted, pitch deemphasized
     </li>
     <li>
         <svg class="info-ghost"></svg>
-        beams: after initial attack, rapidly ${termLink('hammer-on')} additional notes
+        beams: after initial attack, rapidly ${termLink(
+          "hammer-on"
+        )} additional notes
     </li>
 </ul>
 
 ### Timbre and Techniques
 <dl>
-    <dt>${termLink('rolling')}</dt>
+    <dt>${termLink("rolling")}</dt>
     <dd>
-        ${termDescription('rolling')}
+        ${termDescription("rolling")}
     </dd>
     <dd>
-        ${termLink('rolling pizzicato')} for string instruments
-    </dd>
-
-    <dt>${termLink('glassy')}</dt>
-    <dd>
-        ${termDescription('glassy')}
-    </dd>
-    <dd>
-        ${termLink('bow hair pull')} for string instruments
+        ${termLink("rolling pizzicato")} for string instruments
     </dd>
 
-    <dt>${termLink('flutter')}</dt>
+    <dt>${termLink("glassy")}</dt>
     <dd>
-        ${termDescription('flutter')}
+        ${termDescription("glassy")}
+    </dd>
+    <dd>
+        ${termLink("bow hair pull")} for string instruments
+    </dd>
+
+    <dt>${termLink("flutter")}</dt>
+    <dd>
+        ${termDescription("flutter")}
     </dd>
 </dl>
 `;

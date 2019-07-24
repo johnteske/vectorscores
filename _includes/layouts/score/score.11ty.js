@@ -1,6 +1,11 @@
-const requireRoot = require('app-root-path').require
-const { assetsUrl, catMap, forEachModuleWithFile, handleUndefined } = requireRoot("render-utils.js");
-const { scoreTitle } = requireRoot("_eleventy/title.js")
+const requireRoot = require("app-root-path").require;
+const {
+  assetsUrl,
+  catMap,
+  forEachModuleWithFile,
+  handleUndefined
+} = requireRoot("render-utils.js");
+const { scoreTitle } = requireRoot("_eleventy/title.js");
 
 const partialPath = "_includes/partials/score";
 const header = requireRoot(`${partialPath}/header.11ty.js`);
@@ -9,21 +14,25 @@ const modals = requireRoot(`${partialPath}/modals.11ty.js`);
 const scripts = requireRoot(`${partialPath}/scripts.11ty.js`);
 
 module.exports = data =>
-    `<!DOCTYPE html>
+  `<!DOCTYPE html>
     <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>${ scoreTitle(data.site.title, data.title) }</title>
-        <link rel="stylesheet" href="${assetsUrl(data.site, '/css/score.css')}">
-        ${forEachModuleWithFile('styles.css', path => `<link rel="stylesheet" href="${path}">`, data)}
+        <title>${scoreTitle(data.site.title, data.title)}</title>
+        <link rel="stylesheet" href="${assetsUrl(data.site, "/css/score.css")}">
+        ${forEachModuleWithFile(
+          "styles.css",
+          path => `<link rel="stylesheet" href="${path}">`,
+          data
+        )}
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
         ${header(data)}
         <main>
             <svg class="main"></svg>
-            ${ data.content }
+            ${data.content}
         </main>
         ${footer(data)}
         ${modals(data)}

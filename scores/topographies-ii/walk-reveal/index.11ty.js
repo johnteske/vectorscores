@@ -3,7 +3,7 @@ module.exports = class {
     return {
       layout: "movement",
       title: "walk reveal",
-      composer: 'John Teske',
+      composer: "John Teske",
       status: "wip",
       info: `
         <p>
@@ -14,14 +14,11 @@ module.exports = class {
           You may choose to rest at times during your travels to allow room for variety in instrumentation and texture.
         </p>
       `,
-      modules: [
-        "dictionary",
-        "bravura"
-      ]
-    }
+      modules: ["dictionary", "bravura"]
+    };
   }
 
   render(data) {
     return ``;
   }
-}
+};

@@ -1,8 +1,10 @@
-const requireRoot = require('app-root-path').require
+const requireRoot = require("app-root-path").require;
 
 const partialPath = "_includes/partials";
-const termLink = requireRoot(`${partialPath}/glossary/term-link.11ty.js`)
-const termDescription = requireRoot(`${partialPath}/glossary/term-description.11ty.js`)
+const termLink = requireRoot(`${partialPath}/glossary/term-link.11ty.js`);
+const termDescription = requireRoot(
+  `${partialPath}/glossary/term-description.11ty.js`
+);
 
 module.exports = () => `
 <h4>Scenes</h3>
@@ -11,10 +13,10 @@ module.exports = () => `
 
 <h3>Timbre and Techniques</h3>
 <dl>
-    <dt>${termLink('glassy')}</dt>
+    <dt>${termLink("glassy")}</dt>
     <dd>
 D
-        ${termDescription('glassy')}
+        ${termDescription("glassy")}
     </dd>
 </dl>
-`
+`;

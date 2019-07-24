@@ -1,15 +1,16 @@
-d3.select('svg').remove();
-var group = d3.select('main');
+d3.select("svg").remove();
+var group = d3.select("main");
 
 for (var i = 57344; i < 65535; i++) {
-    group.append('div')
-        .classed('codepoint', true)
-    .append('p')
-        .classed('symbol', true)
-        .text(String.fromCharCode(i))
-    .append('p')
-        .classed('unicode', true)
-        .text('\\u' + i.toString(16));
+  group
+    .append("div")
+    .classed("codepoint", true)
+    .append("p")
+    .classed("symbol", true)
+    .text(String.fromCharCode(i))
+    .append("p")
+    .classed("unicode", true)
+    .text("\\u" + i.toString(16));
 }
 
 // h = 0xE000;

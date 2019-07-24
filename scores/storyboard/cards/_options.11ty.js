@@ -5,4 +5,4 @@ Display pitch classes as:
   <input type="radio" name="settings-pc-display" value="name"> Note names<br>
 </div>
 <button id="settings-generate">Generate new score</button>
-`
+`;

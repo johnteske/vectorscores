@@ -5,11 +5,11 @@ module.exports = class {
       title: "Storyboard",
       instrumentation: "any ensemble",
       status: "wip",
-      formats: ["score"]  
-    }
+      formats: ["score"]
+    };
   }
 
   render(data) {
     return ``;
   }
-}
+};

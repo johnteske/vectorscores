@@ -1,1 +1,1 @@
-module.exports = require('./score.11ty.js')
+module.exports = require("./score.11ty.js");

@@ -1,13 +1,13 @@
-const info = require('./_info')
-const options = require('./_options')
+const info = require("./_info");
+const options = require("./_options");
 
 module.exports = class {
   data() {
     return {
-      layout: 'movement',
-      title: 'prelude',
-      composer: 'John Teske',
-      status: 'wip',
+      layout: "movement",
+      title: "prelude",
+      composer: "John Teske",
+      status: "wip",
       info: info(),
       options: options(),
       modules: [
@@ -20,8 +20,10 @@ module.exports = class {
         "line-cloud",
         "cue/blink"
       ]
-    }
+    };
   }
 
-  render(data) { return `` }
-}
+  render(data) {
+    return ``;
+  }
+};

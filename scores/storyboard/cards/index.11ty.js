@@ -14,8 +14,10 @@ module.exports = class {
         "pitch-class",
         "settings/radio"
       ]
-    }
+    };
   }
 
-  render(data) { return ``; }
-}
+  render(data) {
+    return ``;
+  }
+};
