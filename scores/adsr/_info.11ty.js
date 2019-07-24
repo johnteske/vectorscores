@@ -1,7 +1,7 @@
 const requireRoot = require('app-root-path').require
 
 const partialPath = "_includes/partials";
-const glossaryLink = requireRoot(`${partialPath}/glossary.11ty.js`)
+const glossaryLink = requireRoot(`${partialPath}/glossary-link.11ty.js`)
 
 const glossary = requireRoot(`_data/glossary.json`)
 
