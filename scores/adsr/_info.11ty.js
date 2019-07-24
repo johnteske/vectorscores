@@ -1,16 +1,10 @@
 const requireRoot = require('app-root-path').require
 
 const partialPath = "_includes/partials";
-const glossaryLink = requireRoot(`${partialPath}/glossary-link.11ty.js`)
+const termLink = requireRoot(`${partialPath}/glossary/term-link.11ty.js`)
+const termDescription = requireRoot(`${partialPath}/glossary/term-description.11ty.js`)
 
-const glossary = requireRoot(`_data/glossary.json`)
-
-const getTermDescription = termName => {
-  const term = glossary.find(t => t.name === termName);
-  return term.description;
-}
-
-module.exports = data => `
+module.exports = () => `
 ### Time
 Time is written proportionally.
 <!--, including durations. The release of notes is not shown—musicians should release in time. Play duration/phrase only once, not repeated. -->
@@ -49,38 +43,38 @@ D<i class="symbol">&#xe262;</i> for each note in the phrase.
 ### Other symbols
 <ul>
     <li>
-        <span class="symbol">&#xe630;</span> ${glossaryLink('snap')} : ${getTermDescription('snap')}
+        <span class="symbol">&#xe630;</span> ${termLink('snap')} : ${termDescription('snap')}
     </li>
     <li>
         <span class="symbol">&#xe0a9;</span> ghost note : muted, pitch deemphasized
     </li>
     <li>
         <svg class="info-ghost"></svg>
-        beams: after initial attack, rapidly ${glossaryLink('hammer-on')} additional notes
+        beams: after initial attack, rapidly ${termLink('hammer-on')} additional notes
     </li>
 </ul>
 
 ### Timbre and Techniques
 <dl>
-    <dt>${glossaryLink('rolling')}</dt>
+    <dt>${termLink('rolling')}</dt>
     <dd>
-        ${getTermDescription('rolling')}
+        ${termDescription('rolling')}
     </dd>
     <dd>
-        ${glossaryLink('rolling pizzicato')} for string instruments
-    </dd>
-
-    <dt>${glossaryLink('glassy')}</dt>
-    <dd>
-        ${getTermDescription('glassy')}
-    </dd>
-    <dd>
-        ${glossaryLink('bow hair pull')} for string instruments
+        ${termLink('rolling pizzicato')} for string instruments
     </dd>
 
-    <dt>${glossaryLink('flutter')}</dt>
+    <dt>${termLink('glassy')}</dt>
     <dd>
-        ${getTermDescription('flutter')}
+        ${termDescription('glassy')}
+    </dd>
+    <dd>
+        ${termLink('bow hair pull')} for string instruments
+    </dd>
+
+    <dt>${termLink('flutter')}</dt>
+    <dd>
+        ${termDescription('flutter')}
     </dd>
 </dl>
 `;
