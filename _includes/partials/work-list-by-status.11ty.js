@@ -48,10 +48,5 @@ module.exports = data => {
     <h3>Examples and tests</h3>
     <table class="work-list">
         ${catMap(workRow, filterByStatus(works, "test"))}
-    </table>
-
-    <h3>Unlisted (shown during Node update)</h3>
-    <table class="work-list">
-        ${catMap(workRow, filterByStatus(works, "unlisted"))}
     </table>`;
 };
