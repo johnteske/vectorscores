@@ -1,0 +1,55 @@
+<h1>WebSockets</h1>
+<h2>Running WebSocket server</h2>
+<p>Run <code>bin/start_local</code> to run both web server and WebSockets server</p>
+<p>Run <code>bin/websockets</code> to run standalone WebSocket server</p>
+<h2>Message format</h2>
+<p>[<em>id</em>, <em>type</em>, <em>msg</em>[, <em>data</em>]]</p>
+<p>Example (play from score event 2):
+<code>[&quot;1b2d3f&quot;, &quot;vs&quot;, &quot;play&quot;, 2]</code></p>
+<h3>Message types</h3>
+<h4><code>ws</code> (WebSocket)</h4>
+<p>[<em>id</em>, <em>type</em>, <em>msg</em>[, <em>data</em>]]</p>
+<ul>
+<li>
+<p>connection open
+<code>[&quot;id&quot;, &quot;ws&quot;, &quot;open&quot;]</code></p>
+</li>
+<li>
+<p>number of connections
+<code>[&quot;id&quot;, &quot;ws&quot;, &quot;n&quot;, &quot;2&quot;]</code></p>
+</li>
+<li>
+<p>connection closed
+<code>[&quot;id&quot;, &quot;ws&quot;, closed&quot;]</code></p>
+</li>
+<li>
+<p>reload all pages
+<code>[&quot;id&quot;, &quot;ws&quot;, &quot;reload&quot;]</code></p>
+</li>
+</ul>
+<h4><code>vs</code> (vectorscores)</h4>
+<p>[<em>id</em>, <em>type</em>, <em>msg</em>[, <em>pointer</em>]]</p>
+<ul>
+<li>
+<p>play
+<code>[&quot;id&quot;, &quot;vs&quot;, &quot;play&quot;, 0]</code></p>
+</li>
+<li>
+<p>pause
+<code>[&quot;id&quot;, &quot;vs&quot;, &quot;pause&quot;, 6]</code></p>
+</li>
+<li>
+<p>stop
+<code>[&quot;id&quot;, &quot;vs&quot;, &quot;stop&quot;]</code></p>
+</li>
+<li>
+<p>step
+<code>[&quot;id&quot;, &quot;vs&quot;, &quot;step&quot;, 4]</code></p>
+</li>
+</ul>
+<h4>Custom messages</h4>
+<p>[<em>id</em>, <em>type</em>, <em>msg</em>[, <em>data</em> ...]]</p>
+<ul>
+<li>choice
+<code>[&quot;id&quot;, &quot;choice&quot;, &quot;F#&quot;]</code></li>
+</ul>

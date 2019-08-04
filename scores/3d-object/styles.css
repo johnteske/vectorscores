@@ -1,0 +1,32 @@
+main {
+    font-family: monospace;
+}
+h3 {
+    text-align: center;
+}
+
+div.position-controls {
+    padding: 0 25%;
+    div {
+        display: inline-block;
+        width: 50%;
+        vertical-align: middle;
+        text-align: center;
+    }
+}
+circle {
+    fill: none;
+    stroke: black;
+}
+path {
+    stroke: black;
+}
+.performer {
+    stroke: blue;
+}
+
+input#performer-angle {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+}

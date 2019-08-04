@@ -1,0 +1,8 @@
+<h1>Bravura</h1>
+<h2>Encoding Bravura for inlining as data URI</h2>
+<p>Certain scores rely on the dimensions of rendered fonts for additional calculations.
+With <code>@font-face</code>, the font will not load before the score begins to render, giving inaccurate calculations.
+Detecting the font load may require a polyfill until the CSS font loading API has more support.
+In the meantime, the font can be inlined by adding <code>inline_bravura: true</code> to a score's frontmatter.</p>
+<p>To encode the font, if updated, run:
+<code>openssl base64 -A -in assets/fonts/Bravura.woff &gt; assets/fonts/Bravura-woff-base64</code></p>

@@ -1,0 +1,29 @@
+:root {
+    --t-time: 300ms;
+}
+
+main {
+    padding: 8px;
+}
+
+#events span {
+    font-family: Courier;
+    display: inline-block;
+    padding: 0.5em;
+    margin: 6px;
+    border: 2px solid #eee;
+    border-radius: 20px;
+    transition: border-radius var(--t-time), border-color var(--t-time);
+}
+
+#events .green {
+    border-color: rgba(0, 255, 0, 0.75);
+}
+
+#events .blue {
+    border-color: rgba(0, 0, 255, 0.75);
+}
+
+#events .box {
+    border-radius: 0px;
+}

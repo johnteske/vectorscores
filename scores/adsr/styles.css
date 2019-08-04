@@ -1,0 +1,110 @@
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  position: relative;
+}
+main {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+main,
+svg.main {
+  overflow-x: hidden;
+}
+
+.layout line {
+  stroke: black;
+  stroke-opacity: 0.25;
+}
+.layout text {
+  font-family: serif;
+}
+.layout text.bar-duration {
+  font-style: italic;
+}
+.layout rect {
+  fill: none;
+  stroke: black;
+}
+
+.pitch-range,
+.articulations,
+.durations,
+.dynamics,
+.bartok {
+  font-family: "Bravura";
+  font-size: 16px;
+}
+.bartok {
+  font-size: 26px;
+}
+
+.pitch-range-numeric {
+  font-family: "Courier", monospace;
+  font-size: 13px;
+}
+
+.timbre,
+.pitch-range,
+.pitch-range-numeric {
+  text-shadow: 0 -1px 1px white, 1px 0 1px white, 0 1px 1px white,
+    -1px 0 1px white;
+}
+
+.articulations,
+.durations,
+.dynamics {
+  font-size: 21px;
+}
+
+.timbre {
+  font-family: serif;
+  font-style: italic;
+  font-size: 15px;
+}
+
+.ghost-beam,
+.ghost-attack {
+  shape-rendering: crispEdges;
+  stroke: #333333;
+}
+.ghost-beam {
+  stroke-width: 2;
+}
+
+line[class^="debug-center"] {
+  stroke: red;
+}
+
+.modal-content a[target="_blank"],
+.modal-content a[target="VS_glossary"] {
+  padding-right: 0.4em;
+}
+.modal-content a[target="_blank"]::after,
+.modal-content a[target="VS_glossary"]::after {
+  content: "°";
+  position: absolute;
+}
+
+.modal-content .symbol {
+  font-family: "Bravura";
+  line-height: 1;
+  position: relative;
+  top: -4px;
+  width: 1em;
+  font-style: normal;
+  font-size: 150%;
+}
+
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+}
+.modal-content li {
+  padding-bottom: 1em;
+}
