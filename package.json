@@ -13,7 +13,7 @@
     "build:js": "npm run build:js:vs; npm run build:js:scores",
     "build:js:vs": "rollup assets/js/vectorscores.js --format iife --name \"vectorscores\" --file _site/assets/js/vectorscores.js",
     "build:js:scores": "find scores -name 'index.js' | xargs -I {} rollup {} --format iife --file _site/{}",
-    "clean": "rm -rf _site && mkdir _site",
+    "clean": "#rm -rf _site && mkdir _site",
     "css:lint": "stylelint assets/css/**/*.css",
     "css:fix": "npm run css:lint -- --fix",
     "copy": "npm run copy:docs; npm run copy:scores",

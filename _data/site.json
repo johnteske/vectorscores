@@ -17,5 +17,5 @@
     { "name": "johnteskemusic.com", "url": "http://johnteskemusic.com" }
   ],
   "baseUrl": "",
-  "assetsUrl": "/assets"
+  "assetsUrl": "assets"
 }
