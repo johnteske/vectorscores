@@ -3,6 +3,7 @@
 
 # Static site
 _site/
+_includes/docs
 
 # Node
 node_modules
