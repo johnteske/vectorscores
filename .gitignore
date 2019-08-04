@@ -1,20 +1,9 @@
 # System files
 .DS_Store
 
-# Generated files
-.tmp
-.tmp-eslintignore
-
-# Jekyll
+# Static site
 _site/
-.sass-cache/
-.jekyll-metadata
-_includes/docs
 
 # Node
 node_modules
-bin/js/etc
 npm-debug.log
-
-# Local development
-_workspace/
