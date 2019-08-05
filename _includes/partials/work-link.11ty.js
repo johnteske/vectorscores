@@ -1,2 +1,2 @@
 module.exports = d =>
-  `<a href="${d.url}" class="work-title">${d.data.title}</a>`;
+  `<a href="${d.site.baseUrl}${d.url}" class="work-title">${d.data.title}</a>`;
