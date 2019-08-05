@@ -4,7 +4,7 @@ const handleUndefined = input => input || "";
 const catMap = (f, a) => a.map(f).join("");
 const slugify = todo => todo.toLowerCase().replace(/ /g, "-");
 
-const assetsUrl = (site, url) => site.assetsUrl + url;
+const assetsUrl = (site, url) => site.baseUrl + site.assetsUrl + url;
 
 const fileExists = path => fs.existsSync(path);
 
