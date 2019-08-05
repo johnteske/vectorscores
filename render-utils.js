@@ -4,7 +4,8 @@ const handleUndefined = input => input || "";
 const catMap = (f, a) => a.map(f).join("");
 const slugify = todo => todo.toLowerCase().replace(/ /g, "-");
 
-const assetsUrl = (site, url) => site.baseUrl + site.assetsUrl + url;
+const withBaseUrl = (site, url) => `/${site.baseUrl}/${url}`.replace(/\/+/g, "/")
+const assetsUrl = (site, url) => withBaseUrl(site, site.assetsUrl + url);
 
 const fileExists = path => fs.existsSync(path);
 
@@ -27,6 +28,7 @@ module.exports = {
   handleUndefined,
   catMap,
   slugify,
+  withBaseUrl,
   assetsUrl,
   fileExists,
   maybe,
