@@ -16,6 +16,11 @@ module.exports = function(config) {
     config.addLayoutAlias(template, `layouts/score/${template}.11ty.js`)
   );
 
+  config.setBrowserSyncConfig({
+    codeSync: false,
+    ghostMode: false
+  });
+
   return {
     dir: {
       input: "./",
