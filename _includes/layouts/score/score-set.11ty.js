@@ -3,7 +3,8 @@ const {
   assetsUrl,
   catMap,
   forEachModuleWithFile,
-  handleUndefined
+  handleUndefined,
+  movementsFromUrl
 } = requireRoot("render-utils.js");
 const { scoreTitle } = requireRoot("_eleventy/title.js");
 
@@ -12,9 +13,7 @@ const header = requireRoot(`${partialPath}/score/header.11ty.js`);
 const workLink = requireRoot(`${partialPath}/work-link.11ty.js`);
 
 module.exports = data => {
-  const works = data.collections.all.filter(
-    w => w.data.layout === "movement" && w.url.includes(data.page.url)
-  );
+  const work = movementsFromUrl(data.page.url, data);
 
   return `
     <!DOCTYPE html>

@@ -11,6 +11,7 @@ const fileExists = path => fs.existsSync(path);
 
 const maybe = value => (value ? value : "");
 const maybeTemplate = (template, value) => (value ? template : "");
+const maybeFunction = (template, value) => (value ? template(value) : "");
 
 const forEachModuleWithFile = (basename, render, data) => {
   return data.modules
@@ -24,6 +25,10 @@ const forEachModuleWithFile = (basename, render, data) => {
     : "";
 };
 
+const movementsFromUrl = (url, data) => data.data.collections.all.filter(
+  page => page.data.layout === "movement" && page.url.includes(url)
+);
+
 module.exports = {
   handleUndefined,
   catMap,
@@ -33,5 +38,7 @@ module.exports = {
   fileExists,
   maybe,
   maybeTemplate,
-  forEachModuleWithFile
+  maybeFunction,
+  forEachModuleWithFile,
+  movementsFromUrl
 };

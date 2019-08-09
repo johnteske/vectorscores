@@ -1,5 +1,5 @@
 const requireRoot = require("app-root-path").require;
-const { catMap, maybe, maybeTemplate } = requireRoot("render-utils");
+const { catMap, maybe, maybeTemplate, maybeFunction, movementsFromUrl } = requireRoot("render-utils");
 
 const workLink = require("./work-link.11ty.js");
 
@@ -18,6 +18,9 @@ const workRow = d =>
         </td>
         <td class="work-list-duration">
             ${maybe(d.data.duration)}
+        </td>
+        <td class="work-list-duration">
+            ${maybeFunction(mvts => `${mvts} mvts`, movementsFromUrl(d.url, d).length)}
         </td>
         <td class="work-list-formats">
             ${maybeTemplate("score", hasFormat(d, "score"))}
