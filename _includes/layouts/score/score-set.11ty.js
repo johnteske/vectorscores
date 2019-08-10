@@ -13,7 +13,7 @@ const header = requireRoot(`${partialPath}/score/header.11ty.js`);
 const workLink = requireRoot(`${partialPath}/work-link.11ty.js`);
 
 module.exports = data => {
-  const work = movementsFromUrl(data.page.url, data);
+  const works = movementsFromUrl(data.page.url, data);
 
   return `
     <!DOCTYPE html>

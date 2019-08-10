@@ -20,7 +20,7 @@ const workRow = d =>
             ${maybe(d.data.duration)}
         </td>
         <td class="work-list-duration">
-            ${maybeFunction(mvts => `${mvts} mvts`, movementsFromUrl(d.url, d).length)}
+            ${maybeFunction(mvts => `${mvts} mvts`, movementsFromUrl(d.url, d.data).length)}
         </td>
         <td class="work-list-formats">
             ${maybeTemplate("score", hasFormat(d, "score"))}
