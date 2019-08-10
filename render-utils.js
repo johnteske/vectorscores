@@ -4,7 +4,8 @@ const handleUndefined = input => input || "";
 const catMap = (f, a) => a.map(f).join("");
 const slugify = todo => todo.toLowerCase().replace(/ /g, "-");
 
-const withBaseUrl = (site, url) => `/${site.baseUrl}/${url}`.replace(/\/+/g, "/")
+const withBaseUrl = (site, url) =>
+  `/${site.baseUrl}/${url}`.replace(/\/+/g, "/");
 const assetsUrl = (site, url) => withBaseUrl(site, site.assetsUrl + url);
 
 const fileExists = path => fs.existsSync(path);
@@ -25,9 +26,10 @@ const forEachModuleWithFile = (basename, render, data) => {
     : "";
 };
 
-const movementsFromUrl = (url, data) => data.collections.all.filter(
-  page => page.data.layout === "movement" && page.url.includes(url)
-);
+const movementsFromUrl = (url, data) =>
+  data.collections.all.filter(
+    page => page.data.layout === "movement" && page.url.includes(url)
+  );
 
 module.exports = {
   handleUndefined,

@@ -1,4 +1,4 @@
-const data = [ {x:0, y:50}, {x:0, y:100} ]
+const data = [{ x: 0, y: 50 }, { x: 0, y: 100 }];
 
 export default function(selection) {
   selection
