@@ -5,7 +5,7 @@ module.exports = class {
       title: "trashfire",
       composer: "John Teske",
       instrumentation: "any ensemble",
-      status: "wip",
+      status: "published",
       formats: "score"
     };
   }

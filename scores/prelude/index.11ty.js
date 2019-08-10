@@ -4,10 +4,13 @@ const options = require("./_options");
 module.exports = class {
   data() {
     return {
-      layout: "movement",
+      layout: "score",
       title: "prelude",
       composer: "John Teske",
-      status: "wip",
+      status: "published",
+      instrumentation: "for any ensemble",
+      duration: "5&prime;", // TODO calculate more precisely
+      formats: ["score"],
       info: info(),
       options: options(),
       modules: [
