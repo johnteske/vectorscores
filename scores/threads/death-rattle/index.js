@@ -16,8 +16,6 @@
       .attr("y2", d => d.y);
   }
 
-  // const drone = require("../drone")
-
   const main = d3.select(".main");
   const wrapper = main.append("g");
 
