@@ -16,7 +16,7 @@ const monthNames = [
 ];
 
 const upcoming = data =>
-  data.performances.upcoming ? `<h2>Upcoming</h2>` : "";
+  data.performances.upcoming ? `<h2>Upcoming</h2>${performanceList("upcoming", data)}` : "";
 
 const past = data =>
   data.performances.past ? `<h2>Past</h2>${performanceList("past", data)}` : "";
