@@ -1,0 +1,102 @@
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  position: relative;
+}
+
+main {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+}
+
+/**
+ * Cards
+ */
+.card rect {
+  fill: none;
+  stroke: #888;
+  stroke-width: 1px;
+
+  /*
+  shape-rendering: geometricPrecision;
+  shape-rendering: crispEdges;
+  */
+}
+
+.card .barline {
+  stroke: #888;
+  stroke-width: 1px;
+}
+
+.card text {
+  fill: #111;
+}
+
+/**
+ * Card meta
+ */
+.monospace,
+.card-duration,
+.card-timbre,
+.pitch-class-set {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.card-timbre, {
+  font-style: italic;
+}
+
+/**
+ * Card content
+ */
+.bravura,
+.card .dynamics text,
+.card .duration,
+.card .chord,
+.card .chord-flag,
+.card .chord-art,
+.card .time-sig,
+.card .lnp,
+.card .chord-fermata {
+  font-size: 24px;
+  font-family: 'Bravura';
+}
+
+.card .chord-fermata {
+  text-anchor: middle;
+}
+
+/* _info */
+.modal-content a[target="_blank"],
+.modal-content a[target="VS_glossary"] {
+  padding-right: 0.4em;
+}
+
+.modal-content a[target="_blank"]::after,
+.modal-content a[target="VS_glossary"]::after {
+  content: '°';
+  position: absolute;
+}
+
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.modal-content li {
+  padding-bottom: 1em;
+}
+
+/* @import "description-list"; */
