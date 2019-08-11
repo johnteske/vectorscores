@@ -1,14 +1,19 @@
-const fs = require('fs');
-const rootPath = require('app-root-path');
+const fs = require("fs");
+const rootPath = require("app-root-path");
 const { maybeTemplate } = require(`${rootPath}/render-utils`);
 
-const getRawSVG = basename => fs.readFileSync(`${rootPath}/assets/svg/${basename}.svg`, 'utf-8');
-const linkListIcon = icon => icon ? `<span class="icon">${getRawSVG(icon).replace('\n', '')}</span>` : ''
+const getRawSVG = basename =>
+  fs.readFileSync(`${rootPath}/assets/svg/${basename}.svg`, "utf-8");
+const linkListIcon = icon =>
+  icon ? `<span class="icon">${getRawSVG(icon).replace("\n", "")}</span>` : "";
 
 const linkListItem = ({ name, url, icon }) =>
   `<li><a href="${url}">
-    ${maybeTemplate(linkListIcon(icon), icon)}<span class="username">${name}</span>
-  </a></li>`
+    ${maybeTemplate(
+      linkListIcon(icon),
+      icon
+    )}<span class="username">${name}</span>
+  </a></li>`;
 
 module.exports = data => `<footer class="site-footer">
     <div class="wrapper">

@@ -18,7 +18,7 @@
     "copy": "npm run copy:docs; npm run copy:scores",
     "copy:docs": "rsync -R docs/README.md _includes",
     "copy:scores": "rsync -R scores/{*,*/*}/styles.css _site",
-    "lint:fix": "prettier --write {.,_includes/layouts/*,pages,scores/*,scores/*/*}/*.js",
+    "lint:fix": "prettier --write {.,_includes/*/*,pages,scores/*,scores/*/*}/*.js",
     "serve": "npm run build -- --serve --port=8081",
     "test": "test"
   },

@@ -1,7 +1,5 @@
 const requireRoot = require("app-root-path").require;
-const {
-  withBaseUrl
-} = requireRoot("render-utils.js");
+const { withBaseUrl } = requireRoot("render-utils.js");
 
 const menuItem = currentPageUrl => page => {
   return `<a class="page-link" ${

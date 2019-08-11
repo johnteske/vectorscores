@@ -1,4 +1,4 @@
-const requireRoot = require('app-root-path').require;
+const requireRoot = require("app-root-path").require;
 const { assetsUrl } = requireRoot("render-utils.js");
 const canonicalUrl = (site, url) =>
   [site.url, site.baseurl, url.replace("index.html", "")].join("");
