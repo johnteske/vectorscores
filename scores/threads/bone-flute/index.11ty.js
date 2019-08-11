@@ -4,7 +4,8 @@ module.exports = class {
       layout: "movement",
       title: "bone flute",
       composer: "John Teske",
-      status: "wip"
+      status: "wip",
+      modules: ["line-cloud"]
     };
   }
 
