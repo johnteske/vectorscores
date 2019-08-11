@@ -26,3 +26,12 @@ function shiver(selection) {
 }
 
 shiver(wrapper);
+
+function moan(selection) {
+  selection
+    .append("text")
+    .text("LNP, subharmonic")
+    .attr("dy", "2em");
+}
+
+moan(wrapper);
