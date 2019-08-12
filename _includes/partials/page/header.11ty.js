@@ -16,9 +16,10 @@ const menu = data =>
 
 module.exports = data => `<header class="site-header">
     <div class="wrapper">
-        <a class="site-title vectorscores" href="${data.site.baseUrl}/">${
-  data.site.title
-}</a>
+        <a class="site-title vectorscores" href="${withBaseUrl(
+          data.site,
+          "/"
+        )}">${data.site.title}</a>
         <nav class="site-nav">
             <a href="#" class="menu-icon">
                 <svg viewBox="0 0 18 15">
