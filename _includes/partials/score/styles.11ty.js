@@ -6,7 +6,7 @@ const { assetsUrl, forEachModuleWithFile, maybeTemplate } = requireRoot(
 module.exports = data => ` 
   <link rel="stylesheet" href="${assetsUrl(data.site, "/css/score.css")}">
   ${maybeTemplate(
-    `<link rel="stylesheet" href="../styles.css")}">`,
+    `<link rel="stylesheet" href="../styles.css">`,
     data.layout === "movement"
   )}
   ${forEachModuleWithFile(
