@@ -16,7 +16,7 @@
     "copy:scores": "copyfiles -a scores/{*,*/*}/styles.css _site",
     "fix:css": "stylelint assets/css/**/*.css --fix",
     "fix:format": "prettier --write {.,_includes/*/*,pages,scores/*,scores/*/*}/*.js",
-    "serve": "npm run build -- --serve --port=8081"
+    "serve": "serve -n -l 8081 _site"
   },
   "repository": {
     "type": "git",
