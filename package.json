@@ -2,7 +2,9 @@
   "name": "vectorscores",
   "version": "2.0.0",
   "description": "A series of new compositions built on the web",
-  "main": "index.js",
+  "engines": {
+    "node": "8"
+  },
   "directories": {
     "doc": "docs"
   },
