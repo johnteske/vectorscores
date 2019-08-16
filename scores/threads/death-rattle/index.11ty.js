@@ -4,7 +4,10 @@ module.exports = class {
       layout: "movement",
       title: "death rattle",
       composer: "John Teske",
-      status: "wip"
+      status: "wip",
+      modules: [
+        "bravura"
+      ]
     };
   }
 
