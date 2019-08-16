@@ -9,18 +9,13 @@
   "scripts": {
     "build": "mkdir -p _site && npm run copy && npm run build:js && npm run build:css && eleventy",
     "build:debug": "DEBUG=Eleventy* npm run build",
-
     "build:css": "postcss assets/css/*.css --no-map --use postcss-import postcss-custom-properties --dir _site/assets/css",
-
     "build:js": "find {assets/js,scores} -name 'vectorscores.js' -o -name 'index.js' | xargs -I {} rollup {} --format iife --file _site/{}",
-
     "copy": "npm run copy:docs; npm run copy:scores",
-    "copy:docs": "rsync -R docs/README.md _includes",
-    "copy:scores": "rsync -R scores/{*,*/*}/styles.css _site",
-
+    "copy:docs": "copyfiles docs/README.md _includes",
+    "copy:scores": "copyfiles -a scores/{*,*/*}/styles.css _site",
     "fix:css": "stylelint assets/css/**/*.css --fix",
     "fix:format": "prettier --write {.,_includes/*/*,pages,scores/*,scores/*/*}/*.js",
-
     "serve": "npm run build -- --serve --port=8081"
   },
   "repository": {
@@ -41,6 +36,7 @@
   "dependencies": {
     "@11ty/eleventy": "^0.7.0",
     "app-root-path": "^2.2.1",
+    "copyfiles": "^2.1.1",
     "postcss": "^7.0.17",
     "postcss-cli": "^6.1.3",
     "postcss-custom-properties": "^8.0.11",
