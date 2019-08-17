@@ -32,7 +32,8 @@
 
     group
       .append("text")
-      .text("///")
+      .text("\ue227")
+      .attr("class", "bravura")
       .attr("x", 50);
 
     group
