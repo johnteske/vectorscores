@@ -5,9 +5,7 @@ module.exports = class {
       title: "rail spike",
       composer: "John Teske",
       status: "wip",
-      modules: [
-        "bravura"
-      ]
+      modules: ["bravura"]
     };
   }
 

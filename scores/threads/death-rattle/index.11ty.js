@@ -5,9 +5,7 @@ module.exports = class {
       title: "death rattle",
       composer: "John Teske",
       status: "wip",
-      modules: [
-        "bravura"
-      ]
+      modules: ["bravura"]
     };
   }
 
