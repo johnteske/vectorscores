@@ -4,6 +4,10 @@ const layout = {
   centerX: null
 };
 
+function timeScale(t) {
+  return t / 15; // TODO
+}
+
 const main = d3.select(".main");
 const resizeAndScrollGroup = main.append("g");
 const scoreGroup = resizeAndScrollGroup.append("g");
@@ -35,7 +39,10 @@ const score = [
     startTime: null,
     duration: null,
     render: ({ startTime, duration }) => {
-      const g = longTone(scoreGroup, startTime, 50, duration);
+      const startX = timeScale(startTime);
+      const length = timeScale(duration);
+
+      const g = longTone(scoreGroup, startX, 50, length);
       g.append("text")
         .text(">")
         .attr("dy", "1em");
@@ -48,14 +55,17 @@ const score = [
     startTime: null,
     duration: null,
     render: ({ startTime, duration }) => {
+      const startX = timeScale(startTime);
+      const length = timeScale(duration);
+
       const g = scoreGroup
         .append("g")
-        .attr("transform", `translate(${startTime},50)`);
+        .attr("transform", `translate(${startX},50)`);
 
       g.append("text").text("cluster");
       g.append("text")
         .text("//")
-        .attr("x", duration)
+        .attr("x", length)
         .attr("dx", "-2em");
     }
   },
@@ -63,9 +73,12 @@ const score = [
     startTime: null,
     duration: null,
     render: ({ startTime, duration }) => {
+      const startX = timeScale(startTime);
+      const length = timeScale(duration);
+
       const g = scoreGroup
         .append("g")
-        .attr("transform", `translate(${startTime},50)`);
+        .attr("transform", `translate(${startX},50)`);
 
       // should this start as sffz, with excessive pressure?
       // and also irregular tremolo?
@@ -73,7 +86,7 @@ const score = [
       // top line
       g.append("line")
         .attr("x1", 0)
-        .attr("x2", duration);
+        .attr("x2", length);
       g.append("text")
         .text("sfz, decres. to niente")
         .attr("dy", "-1em");
@@ -84,7 +97,7 @@ const score = [
       // bottom line
       g.append("line")
         .attr("x1", 0)
-        .attr("x2", duration)
+        .attr("x2", length)
         .attr("y2", 50); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
       g.append("text")
         .text("sfz, mf, decres. to p")
@@ -100,36 +113,45 @@ const score = [
     startTime: null,
     duration: null,
     render: ({ startTime, duration }) => {
+      const startX = timeScale(startTime);
+      const length = timeScale(duration);
+
       const g = scoreGroup
         .append("g")
-        .attr("transform", `translate(${startTime},50)`);
+        .attr("transform", `translate(${startX},50)`);
 
       // bottom line
       g.append("line")
         .attr("x1", 0)
-        .attr("x2", duration)
+        .attr("x2", length)
         .attr("y1", 50)
         .attr("y2", 50);
 
       // threads
       for (let i = 0; i < 10; i++) {
-        let halfDur = duration * 0.5;
-        let x = Math.random() * halfDur;
-        let dur = x + halfDur;
+        let halfLength = length * 0.5;
+        let x = Math.random() * halfLength;
+        let l = x + halfLength;
         let y = Math.random() * 50;
         g.append("line")
           .attr("x1", x)
-          .attr("x2", dur)
+          .attr("x2", l)
           .attr("y1", y)
           .attr("y2", y);
       }
     }
   }
 ].map((bar, i) => {
-  // TODO each bar is saet to the same duration during sketching
-  const length = 150;
+  // TODO each bar is set to the same duration during sketching
+  const length = 1500;
   return { ...bar, duration: length, startTime: length * i };
 });
+
+score.forEach((bar, i) => {
+  const callback = i < score.length - 1 ? scrollToNextBar : null;
+  VS.score.add(bar.startTime, callback, [i, bar.duration]);
+});
+
 function renderScore() {
   score.forEach(bar => {
     const { render, ...barData } = bar;
@@ -137,8 +159,23 @@ function renderScore() {
   });
 }
 
-function setScoreToIndex(index = 0) {
-  resizeAndScrollGroup.attr("transform", `translate(${layout.centerX},0)`);
+function setScorePosition() {
+  const index = VS.score.getPointer();
+  centerScoreByIndex(index, 0);
+}
+
+function centerScoreByIndex(index, duration) {
+  const x = timeScale(score[index].startTime);
+
+  resizeAndScrollGroup
+    .transition()
+    .ease(d3.easeLinear)
+    .duration(duration)
+    .attr("transform", `translate(${layout.centerX - x},0)`);
+}
+
+function scrollToNextBar(index, duration) {
+  centerScoreByIndex(index + 1, duration);
 }
 
 function resize() {
@@ -149,6 +186,11 @@ function resize() {
 d3.select(window).on("resize", resize);
 d3.select(window).on("load", () => {
   resize();
-  setScoreToIndex();
+  setScorePosition();
   renderScore();
 });
+
+VS.control.hooks.add("stop", setScorePosition);
+VS.score.hooks.add("stop", setScorePosition);
+VS.control.hooks.add("step", setScorePosition);
+VS.control.hooks.add("pause", setScorePosition);
