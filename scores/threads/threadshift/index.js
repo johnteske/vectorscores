@@ -61,15 +61,20 @@ const score = [
         .attr("x2", duration);
       g.append("text").text("sfz, decres. to niente")
         .attr("dy", "-1em")
+      g.append("text").text("becoming airy, three noisy patches")
+        .attr("dy", "-2em")
 
       // bottom line
       g.append("line")
         .attr("x1", 0)
         .attr("x2", duration)
-        .attr("y2", 50); // TODO curve and draw out, for more beating
+        .attr("y2", 50); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
       g.append("text").text("sfz, mf, decres. to p")
         .attr("y", 50)
         .attr("dy", "1em")
+      g.append("text").text("texture, three cluster hits")
+        .attr("y", 50)
+        .attr("dy", "2em")
     }
   }
   // threads are revealed by ensemble as the solo line becomes stable
