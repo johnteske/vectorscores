@@ -6,12 +6,21 @@ const wrapper = main.append("g");
 // drone(wrapper);
 
 var durations = VS.dictionary.Bravura.durations.stemless;
-console.log(durations);
+
 function longTone(selection) {
-  selection
+  const group = selection.append("g");
+
+  group.attr("transform", "translate(0, 50)")
+
+  group
     .append("text")
     .attr("class", "bravura")
     .text(durations[4]);
+
+  group
+    .append("line")
+    .attr("x1", "0.5em")
+    .attr("x2", 50)
 }
 
 longTone(wrapper);
