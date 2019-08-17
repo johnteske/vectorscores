@@ -3,9 +3,18 @@ import drone from "../drone";
 const main = d3.select(".main");
 const wrapper = main.append("g");
 
-drone(wrapper);
+// drone(wrapper);
 
-// TODO import spike from trashfire?
+var durations = VS.dictionary.Bravura.durations.stemless;
+console.log(durations);
+function longTone(selection) {
+  selection
+    .append("text")
+    .attr("class", "bravura")
+    .text(durations[4]);
+}
+
+longTone(wrapper);
 
 const score = [
   // solo long tone (p), with accent

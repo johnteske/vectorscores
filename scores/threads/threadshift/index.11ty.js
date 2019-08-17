@@ -2,10 +2,10 @@ module.exports = class {
   data() {
     return {
       layout: "movement",
-      title: "rail spike",
+      title: "threadshift",
       composer: "John Teske",
       status: "wip",
-      modules: ["bravura"]
+      modules: ["bravura", "dictionary"]
     };
   }
 
