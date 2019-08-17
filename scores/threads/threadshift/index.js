@@ -1,11 +1,16 @@
 import drone from "../drone";
 
+const layout = {
+  centerX: null
+};
+
 const main = d3.select(".main");
-const wrapper = main.append("g");
+const resizeAndScrollGroup = main.append("g");
+const scoreGroup = resizeAndScrollGroup.append("g");
 
-// drone(wrapper); // TODO
+// drone(scoreGroup); // TODO: how do these integrate with the ending
 
-var durations = VS.dictionary.Bravura.durations.stemless;
+const durations = VS.dictionary.Bravura.durations.stemless;
 
 function longTone(selection, x, y, duration) {
   const group = selection.append("g");
@@ -30,7 +35,7 @@ const score = [
     startTime: null,
     duration: null,
     render: ({ startTime, duration }) => {
-      const g = longTone(wrapper, startTime, 50, duration);
+      const g = longTone(scoreGroup, startTime, 50, duration);
       g.append("text")
         .text(">")
         .attr("dy", "1em");
@@ -43,7 +48,7 @@ const score = [
     startTime: null,
     duration: null,
     render: ({ startTime, duration }) => {
-      const g = wrapper
+      const g = scoreGroup
         .append("g")
         .attr("transform", `translate(${startTime},50)`);
 
@@ -58,7 +63,7 @@ const score = [
     startTime: null,
     duration: null,
     render: ({ startTime, duration }) => {
-      const g = wrapper
+      const g = scoreGroup
         .append("g")
         .attr("transform", `translate(${startTime},50)`);
 
@@ -95,7 +100,7 @@ const score = [
     startTime: null,
     duration: null,
     render: ({ startTime, duration }) => {
-      const g = wrapper
+      const g = scoreGroup
         .append("g")
         .attr("transform", `translate(${startTime},50)`);
 
@@ -125,8 +130,25 @@ const score = [
   const length = 150;
   return { ...bar, duration: length, startTime: length * i };
 });
+function renderScore() {
+  score.forEach(bar => {
+    const { render, ...barData } = bar;
+    render(barData);
+  });
+}
 
-score.forEach(bar => {
-  const { render, ...barData } = bar;
-  render(barData);
+function setScoreToIndex(index = 0) {
+  resizeAndScrollGroup.attr("transform", `translate(${layout.centerX},0)`);
+}
+
+function resize() {
+  const w = parseInt(main.style("width"), 10);
+  layout.centerX = w * 0.5;
+}
+
+d3.select(window).on("resize", resize);
+d3.select(window).on("load", () => {
+  resize();
+  setScoreToIndex();
+  renderScore();
 });
