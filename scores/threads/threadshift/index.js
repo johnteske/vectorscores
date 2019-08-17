@@ -1,4 +1,5 @@
 import drone from "../drone";
+import longTone from "./longTone";
 
 const layout = {
   centerX: null
@@ -13,26 +14,6 @@ const resizeAndScrollGroup = main.append("g");
 const scoreGroup = resizeAndScrollGroup.append("g");
 
 // drone(scoreGroup); // TODO: how do these integrate with the ending
-
-const durations = VS.dictionary.Bravura.durations.stemless;
-
-function longTone(selection, x, y, duration) {
-  const group = selection.append("g");
-
-  group.attr("transform", `translate(${x}, ${y})`);
-
-  group
-    .append("text")
-    .attr("class", "bravura")
-    .text(durations[4]);
-
-  group
-    .append("line")
-    .attr("x1", "0.5em")
-    .attr("x2", x + duration);
-
-  return group;
-}
 
 const score = [
   {
