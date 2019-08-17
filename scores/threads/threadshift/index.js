@@ -1,4 +1,5 @@
 import drone from "../drone";
+import makeIndicator from "./indicator";
 import longTone from "./longTone";
 
 const layout = {
@@ -6,12 +7,14 @@ const layout = {
 };
 
 function timeScale(t) {
-  return t / 15; // TODO
+  return t / 20; // TODO
 }
 
-const main = d3.select(".main");
-const resizeAndScrollGroup = main.append("g");
+const svg = d3.select(".main");
+const resizeAndScrollGroup = svg.append("g");
 const scoreGroup = resizeAndScrollGroup.append("g");
+
+const indicator = makeIndicator(svg);
 
 // drone(scoreGroup); // TODO: how do these integrate with the ending
 
@@ -124,7 +127,7 @@ const score = [
   }
 ].map((bar, i) => {
   // TODO each bar is set to the same duration during sketching
-  const length = 1500;
+  const length = 3000;
   return { ...bar, duration: length, startTime: length * i };
 });
 
@@ -160,8 +163,10 @@ function scrollToNextBar(index, duration) {
 }
 
 function resize() {
-  const w = parseInt(main.style("width"), 10);
+  const w = parseInt(svg.style("width"), 10);
   layout.centerX = w * 0.5;
+  indicator.translateX(layout.centerX);
+  // TODO need to center score--how to deal with playing/not playing?
 }
 
 d3.select(window).on("resize", resize);
