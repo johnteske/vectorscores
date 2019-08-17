@@ -2,7 +2,7 @@ module.exports = class {
   data() {
     return {
       layout: "movement",
-      title: "dirge",
+      title: "dead march",
       composer: "John Teske",
       status: "wip"
     };
