@@ -1,3 +1,5 @@
+import translate from "../translate";
+
 export default function(selection) {
   const indicator = selection
     .append("line")
@@ -7,19 +9,19 @@ export default function(selection) {
   let x = 0;
   let y = 0;
 
-  function translate(x, y) {
-    indicator.attr("transform", `translate(${x},${y})`);
+  function translateX(_) {
+    x = _;
+    translate(x, y, indicator);
+  }
+
+  function translateY(_) {
+    y = _;
+    translate(x, y, indicator);
   }
 
   return {
     element: indicator,
-    translateX: newX => {
-      x = newX;
-      translate(newX, y);
-    },
-    translateY: newY => {
-      y = newY;
-      translate(x, newY);
-    }
+    translateX,
+    translateY
   };
 }

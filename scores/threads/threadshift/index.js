@@ -1,4 +1,6 @@
 import drone from "../drone";
+import translate from "../translate";
+
 import makePage from "./page";
 import makeIndicator from "./indicator";
 import longTone from "./longTone";
@@ -9,10 +11,6 @@ const margin = {
 
 function timeScale(t) {
   return t / 20; // TODO
-}
-
-function translate(x, y, selection) {
-  return selection.attr("transform", `translate(${x}, ${y})`);
 }
 
 const svg = d3.select("svg.main");
