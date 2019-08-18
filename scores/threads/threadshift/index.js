@@ -3,6 +3,7 @@ import translate from "../translate";
 
 import makePage from "./page";
 import makeIndicator from "./indicator";
+import drawDynamics from "./dynamics";
 import longTone from "./longTone";
 
 const margin = {
@@ -35,26 +36,33 @@ const score = [
       const length = timeScale(duration);
 
       const g = longTone(scoreGroup, startX, 0, length);
+
       g.append("text")
         .text(articulations[">"])
         .attr("class", "bravura")
         .attr("dy", "0.66em");
-      g.append("text")
-        .text(dynamics["p"])
-        .attr("class", "bravura")
-        .attr("dy", "2em");
-      g.append("text")
-        .text("cres.")
-        .attr("class", "text-dynamic")
-        .attr("text-anchor", "middle")
-        .attr("x", length * 0.5)
-        .attr("dy", "3.5em");
-      g.append("text")
-        .text(dynamics["mf"])
-        .attr("class", "bravura")
-        .attr("text-anchor", "end")
-        .attr("x", length)
-        .attr("dy", "2em");
+
+      drawDynamics(
+        [
+          {
+            type: "symbol",
+            value: "p",
+            x: 0
+          },
+          {
+            type: "text",
+            value: "cres.",
+            x: 0.5
+          },
+          {
+            type: "symbol",
+            value: "mf",
+            x: 1
+          }
+        ],
+        length,
+        g
+      );
     }
   },
   {
