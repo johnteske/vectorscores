@@ -7,7 +7,7 @@ function timeScale(t) {
   return t / 20; // TODO
 }
 
-const svg = d3.select(".main");
+const svg = d3.select("svg.main");
 const page = makePage(svg);
 const scoreGroup = page.element.append("g");
 
@@ -161,8 +161,11 @@ function scrollToNextBar(index, duration) {
 
 function resize() {
   const x = page.calculateCenter();
+
   indicator.translateX(x);
-  // TODO need to center score--how to deal with playing/not playing?
+
+  VS.score.isPlaying() && VS.score.pause()
+  setScorePosition()
 }
 
 d3.select(window).on("resize", resize);
