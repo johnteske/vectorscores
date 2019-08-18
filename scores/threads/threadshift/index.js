@@ -24,7 +24,7 @@ indicator.translateY(margin.top - 50);
 
 // drone(scoreGroup); // TODO: how do these integrate with the ending
 
-const dynamics = VS.dictionary.Bravura.dynamics;
+const { articulations, dynamics } = VS.dictionary.Bravura;
 
 const score = [
   {
@@ -36,17 +36,19 @@ const score = [
 
       const g = longTone(scoreGroup, startX, 0, length);
       g.append("text")
-        .text(">")
-        .attr("dy", "1em");
+        .text(articulations[">"])
+        .attr("class", "bravura")
+        .attr("dy", "0.66em");
       g.append("text")
         .text(dynamics["p"])
         .attr("class", "bravura")
         .attr("dy", "2em");
       g.append("text")
         .text("cres.")
+        .attr("class", "text-dynamic")
         .attr("text-anchor", "middle")
         .attr("x", length * 0.5)
-        .attr("dy", "2em");
+        .attr("dy", "3.5em");
       g.append("text")
         .text(dynamics["mf"])
         .attr("class", "bravura")
@@ -83,7 +85,7 @@ const score = [
 
       translate(startX, 0, g);
 
-      // should this start as sffz, with excessive pressure?
+      // should this start as sffz \ue53b, with excessive pressure?
       // and also irregular tremolo?
 
       // top line
