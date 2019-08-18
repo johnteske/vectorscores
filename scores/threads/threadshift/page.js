@@ -12,7 +12,7 @@ export default function(parent) {
     return center;
   }
 
-  function scrollTo(x) {
+  function scrollTo(x, duration) {
     page
       .transition()
       .ease(d3.easeLinear)

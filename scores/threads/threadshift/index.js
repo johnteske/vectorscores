@@ -121,6 +121,11 @@ const score = [
           .attr("y2", y);
       }
     }
+  },
+  {
+    startTime: null,
+    duration: null,
+    render: () => {}
   }
 ].map((bar, i) => {
   // TODO each bar is set to the same duration during sketching
@@ -147,8 +152,7 @@ function setScorePosition() {
 
 function centerScoreByIndex(index, duration) {
   const x = timeScale(score[index].startTime);
-
-  page.scrollTo(x);
+  page.scrollTo(x, duration);
 }
 
 function scrollToNextBar(index, duration) {
