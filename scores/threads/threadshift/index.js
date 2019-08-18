@@ -1,19 +1,98 @@
 (function () {
   'use strict';
 
+  function translate(x, y, selection) {
+    return selection.attr("transform", `translate(${x}, ${y})`);
+  }
+
+  function makePage(parent) {
+    const page = parent.append("g");
+    let center = null;
+
+    function calculateCenter() {
+      const width = parseInt(parent.style("width"), 10);
+      center = width * 0.5;
+      return center;
+    }
+
+    function getCenter() {
+      return center;
+    }
+
+    function scrollTo(x, duration) {
+      page
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(duration)
+        .attr("transform", `translate(${center - x},0)`);
+    }
+
+    return {
+      element: page,
+      calculateCenter,
+      getCenter,
+      scrollTo
+    };
+  }
+
   function makeIndicator(selection) {
     const indicator = selection
       .append("line")
       .attr("y1", 0)
       .attr("y2", 100);
 
-    function translateX(x) {
-      indicator.attr("transform", `translate(${x},0)`);
+    let x = 0;
+    let y = 0;
+
+    function translateX(_) {
+      x = _;
+      translate(x, y, indicator);
+    }
+
+    function translateY(_) {
+      y = _;
+      translate(x, y, indicator);
     }
 
     return {
-      translateX
+      element: indicator,
+      translateX,
+      translateY
     };
+  }
+
+  const { dynamics } = VS.dictionary.Bravura;
+
+  function drawDynamics(data, scale, selection) {
+    data.forEach(d => {
+      const text = selection.append("text").attr("x", d.x * scale);
+
+      switch (d.x) {
+        case 0:
+          text.attr("text-anchor", "start");
+          break;
+        case 1:
+          text.attr("text-anchor", "end");
+          break;
+        default:
+          text.attr("text-anchor", "middle");
+      }
+
+      switch (d.type) {
+        case "symbol":
+          text
+            .text(dynamics[d.value])
+            .attr("class", "bravura")
+            .attr("dy", "2em");
+          break;
+        case "text":
+          text
+            .text(d.value)
+            .attr("class", "text-dynamic")
+            .attr("dy", "3.5em");
+          break;
+      }
+    });
   }
 
   const durations = VS.dictionary.Bravura.durations.stemless;
@@ -36,21 +115,26 @@
     return group;
   }
 
-  const layout = {
-    centerX: null
+  const margin = {
+    top: 100
   };
 
   function timeScale(t) {
     return t / 20; // TODO
   }
 
-  const svg = d3.select(".main");
-  const resizeAndScrollGroup = svg.append("g");
-  const scoreGroup = resizeAndScrollGroup.append("g");
+  const svg = d3.select("svg.main");
+  const page = makePage(svg);
+
+  const scoreGroup = page.element.append("g");
+  translate(0, margin.top, scoreGroup);
 
   const indicator = makeIndicator(svg);
+  indicator.translateY(margin.top - 50);
 
   // drone(scoreGroup); // TODO: how do these integrate with the ending
+
+  const { articulations, dynamics: dynamics$1 } = VS.dictionary.Bravura;
 
   const score = [
     {
@@ -60,13 +144,34 @@
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = longTone(scoreGroup, startX, 50, length);
+        const g = longTone(scoreGroup, startX, 0, length);
+
         g.append("text")
-          .text(">")
-          .attr("dy", "1em");
-        g.append("text")
-          .text("p, cres., mf")
-          .attr("dy", "2em");
+          .text(articulations[">"])
+          .attr("class", "bravura")
+          .attr("dy", "0.66em");
+
+        drawDynamics(
+          [
+            {
+              type: "symbol",
+              value: "p",
+              x: 0
+            },
+            {
+              type: "text",
+              value: "cres.",
+              x: 0.5
+            },
+            {
+              type: "symbol",
+              value: "mf",
+              x: 1
+            }
+          ],
+          length,
+          g
+        );
       }
     },
     {
@@ -76,9 +181,8 @@
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = scoreGroup
-          .append("g")
-          .attr("transform", `translate(${startX},50)`);
+        const g = scoreGroup.append("g");
+        translate(startX, 0, g);
 
         g.append("text").text("cluster");
         g.append("text")
@@ -94,11 +198,11 @@
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = scoreGroup
-          .append("g")
-          .attr("transform", `translate(${startX},50)`);
+        const g = scoreGroup.append("g");
 
-        // should this start as sffz, with excessive pressure?
+        translate(startX, 0, g);
+
+        // should this start as sffz \ue53b, with excessive pressure?
         // and also irregular tremolo?
 
         // top line
@@ -134,9 +238,9 @@
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = scoreGroup
-          .append("g")
-          .attr("transform", `translate(${startX},50)`);
+        const g = scoreGroup.append("g");
+
+        translate(startX, 0, g);
 
         // bottom line
         g.append("line")
@@ -158,6 +262,11 @@
             .attr("y2", y);
         }
       }
+    },
+    {
+      startTime: null,
+      duration: null,
+      render: () => {}
     }
   ].map((bar, i) => {
     // TODO each bar is set to the same duration during sketching
@@ -184,12 +293,7 @@
 
   function centerScoreByIndex(index, duration) {
     const x = timeScale(score[index].startTime);
-
-    resizeAndScrollGroup
-      .transition()
-      .ease(d3.easeLinear)
-      .duration(duration)
-      .attr("transform", `translate(${layout.centerX - x},0)`);
+    page.scrollTo(x, duration);
   }
 
   function scrollToNextBar(index, duration) {
@@ -197,10 +301,12 @@
   }
 
   function resize() {
-    const w = parseInt(svg.style("width"), 10);
-    layout.centerX = w * 0.5;
-    indicator.translateX(layout.centerX);
-    // TODO need to center score--how to deal with playing/not playing?
+    const x = page.calculateCenter();
+
+    indicator.translateX(x);
+
+    VS.score.isPlaying() && VS.score.pause();
+    setScorePosition();
   }
 
   d3.select(window).on("resize", resize);

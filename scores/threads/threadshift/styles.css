@@ -1,5 +1,12 @@
 .bravura {
   font-family: 'Bravura';
+  font-size: 20px;
+}
+
+.text-dynamic {
+  font-family: serif;
+  font-size: 12px;
+  font-style: italic;
 }
 
 line {
