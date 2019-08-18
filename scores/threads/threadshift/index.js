@@ -1,18 +1,15 @@
 import drone from "../drone";
+import makePage from "./page";
 import makeIndicator from "./indicator";
 import longTone from "./longTone";
-
-const layout = {
-  centerX: null
-};
 
 function timeScale(t) {
   return t / 20; // TODO
 }
 
 const svg = d3.select(".main");
-const resizeAndScrollGroup = svg.append("g");
-const scoreGroup = resizeAndScrollGroup.append("g");
+const page = makePage(svg);
+const scoreGroup = page.element.append("g");
 
 const indicator = makeIndicator(svg);
 
@@ -151,11 +148,7 @@ function setScorePosition() {
 function centerScoreByIndex(index, duration) {
   const x = timeScale(score[index].startTime);
 
-  resizeAndScrollGroup
-    .transition()
-    .ease(d3.easeLinear)
-    .duration(duration)
-    .attr("transform", `translate(${layout.centerX - x},0)`);
+  page.scrollTo(x);
 }
 
 function scrollToNextBar(index, duration) {
@@ -163,9 +156,8 @@ function scrollToNextBar(index, duration) {
 }
 
 function resize() {
-  const w = parseInt(svg.style("width"), 10);
-  layout.centerX = w * 0.5;
-  indicator.translateX(layout.centerX);
+  const x = page.calculateCenter();
+  indicator.translateX(x);
   // TODO need to center score--how to deal with playing/not playing?
 }
 
