@@ -12,13 +12,13 @@
     "postcss_options": "--no-map --use postcss-import postcss-custom-properties"
   },
   "scripts": {
-    "build": "mkdir -p _site; npm run build:js & npm run build:css & npm run copy && eleventy; wait",
+    "build": "mkdir -p _site; npm run build:js & npm run build:css & npm run copy && eleventy --quiet; wait",
 
     "build:css": "npm run build:css:assets & npm run build:css:scores",
     "build:css:assets": "postcss assets/css/*.css --dir _site/assets/css $npm_package_config_postcss_options",
     "build:css:scores": "postcss scores/{*,*/*}/styles.css --base scores --dir _site/scores $npm_package_config_postcss_options",
 
-    "build:js": "find {assets/js,scores} -name 'vectorscores.js' -o -name 'index.js' | xargs -I {} rollup {} --format iife --file _site/{}",
+    "build:js": "find {assets/js,scores} -name 'vectorscores.js' -o -name 'index.js' | xargs -I {} rollup {} --silent --format iife --file _site/{}",
 
     "copy": "copyfiles docs/README.md _includes",
 
