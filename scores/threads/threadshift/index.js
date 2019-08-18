@@ -24,6 +24,8 @@ indicator.translateY(margin.top - 50);
 
 // drone(scoreGroup); // TODO: how do these integrate with the ending
 
+const dynamics = VS.dictionary.Bravura.dynamics;
+
 const score = [
   {
     startTime: null,
@@ -37,7 +39,19 @@ const score = [
         .text(">")
         .attr("dy", "1em");
       g.append("text")
-        .text("p, cres., mf")
+        .text(dynamics["p"])
+        .attr("class", "bravura")
+        .attr("dy", "2em");
+      g.append("text")
+        .text("cres.")
+        .attr("text-anchor", "middle")
+        .attr("x", length * 0.5)
+        .attr("dy", "2em");
+      g.append("text")
+        .text(dynamics["mf"])
+        .attr("class", "bravura")
+        .attr("text-anchor", "end")
+        .attr("x", length)
         .attr("dy", "2em");
     }
   },
