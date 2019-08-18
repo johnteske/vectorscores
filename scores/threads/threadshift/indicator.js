@@ -4,11 +4,22 @@ export default function(selection) {
     .attr("y1", 0)
     .attr("y2", 100);
 
-  function translateX(x) {
-    indicator.attr("transform", `translate(${x},0)`);
+  let x = 0;
+  let y = 0;
+
+  function translate(x, y) {
+    indicator.attr("transform", `translate(${x},${y})`);
   }
 
   return {
-    translateX
+    element: indicator,
+    translateX: newX => {
+      x = newX;
+      translate(newX, y);
+    },
+    translateY: newY => {
+      y = newY;
+      translate(x, newY);
+    }
   };
 }

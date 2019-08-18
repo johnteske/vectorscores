@@ -3,15 +3,26 @@ import makePage from "./page";
 import makeIndicator from "./indicator";
 import longTone from "./longTone";
 
+const margin = {
+  top: 100
+};
+
 function timeScale(t) {
   return t / 20; // TODO
 }
 
+function translate(x, y, selection) {
+  return selection.attr("transform", `translate(${x}, ${y})`);
+}
+
 const svg = d3.select("svg.main");
 const page = makePage(svg);
+
 const scoreGroup = page.element.append("g");
+translate(0, margin.top, scoreGroup);
 
 const indicator = makeIndicator(svg);
+indicator.translateY(margin.top - 50);
 
 // drone(scoreGroup); // TODO: how do these integrate with the ending
 
@@ -23,7 +34,7 @@ const score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = longTone(scoreGroup, startX, 50, length);
+      const g = longTone(scoreGroup, startX, 0, length);
       g.append("text")
         .text(">")
         .attr("dy", "1em");
@@ -39,9 +50,8 @@ const score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = scoreGroup
-        .append("g")
-        .attr("transform", `translate(${startX},50)`);
+      const g = scoreGroup.append("g");
+      translate(startX, 0, g);
 
       g.append("text").text("cluster");
       g.append("text")
@@ -57,9 +67,9 @@ const score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = scoreGroup
-        .append("g")
-        .attr("transform", `translate(${startX},50)`);
+      const g = scoreGroup.append("g");
+
+      translate(startX, 0, g);
 
       // should this start as sffz, with excessive pressure?
       // and also irregular tremolo?
@@ -97,9 +107,9 @@ const score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = scoreGroup
-        .append("g")
-        .attr("transform", `translate(${startX},50)`);
+      const g = scoreGroup.append("g");
+
+      translate(startX, 0, g);
 
       // bottom line
       g.append("line")
@@ -164,8 +174,8 @@ function resize() {
 
   indicator.translateX(x);
 
-  VS.score.isPlaying() && VS.score.pause()
-  setScorePosition()
+  VS.score.isPlaying() && VS.score.pause();
+  setScorePosition();
 }
 
 d3.select(window).on("resize", resize);
