@@ -75,9 +75,15 @@ const score = [
       const g = scoreGroup.append("g");
       translate(startX, 0, g);
 
-      g.append("text").text("cluster");
+      // cluster
       g.append("text")
-        .text("//")
+        .text("\ue123")
+        .attr("class", "bravura");
+
+      // caesura
+      g.append("text")
+        .text("\ue4d2")
+        .attr("class", "bravura")
         .attr("x", length)
         .attr("dx", "-2em");
     }
