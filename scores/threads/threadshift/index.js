@@ -115,6 +115,44 @@
     return group;
   }
 
+  function makeEmptyArray(n) {
+    let array = [];
+    for (let i = 0; i < n; i++) {
+      array.push(null);
+    }
+    return array;
+  }
+
+  const lineGenerator = d3
+    .line()
+    .x(d => d.x)
+    .y(d => d.y);
+
+  function lineBecomingAir(length, selection) {
+    const n = 50;
+
+    const points = makeEmptyArray(n).map((_, i) => ({
+      x: (i / n) * length,
+      y: 0
+    }));
+    const segments = points.reduce((accumulator, point, i) => {
+      const index = Math.floor(i / 5);
+      const target = accumulator[index] || [];
+      target.push(point);
+      accumulator[index] = target;
+      return accumulator;
+    }, []);
+
+    const g = selection.append("g");
+    g.selectAll("path")
+      .data(segments)
+      .enter()
+      .append("path")
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("d", d => console.log(d) || lineGenerator(d));
+  }
+
   const margin = {
     top: 100
   };
@@ -184,11 +222,17 @@
         const g = scoreGroup.append("g");
         translate(startX, 0, g);
 
-        g.append("text").text("cluster");
+        // cluster
         g.append("text")
-          .text("//")
+          .text("\ue123")
+          .attr("class", "bravura");
+
+        // caesura
+        g.append("text")
+          .text("\ue4d2")
+          .attr("class", "bravura")
           .attr("x", length)
-          .attr("dx", "-2em");
+          .attr("text-anchor", "end");
       }
     },
     {
@@ -202,19 +246,42 @@
 
         translate(startX, 0, g);
 
-        // should this start as sffz \ue53b, with excessive pressure?
-        // and also irregular tremolo?
+        // start as sffz
+        // with excessive pressure and air TODO
+        // and also irregular tremolo TODO
 
         // top line
-        g.append("line")
-          .attr("x1", 0)
-          .attr("x2", length);
-        g.append("text")
-          .text("sfz, decres. to niente")
-          .attr("dy", "-1em");
+        lineBecomingAir(length, g);
         g.append("text")
           .text("becoming airy, three noisy patches")
           .attr("dy", "-2em");
+        drawDynamics(
+          [
+            {
+              // TODO sfzmf?
+              type: "symbol",
+              value: "sfz",
+              x: 0
+            },
+            {
+              type: "symbol",
+              value: "mf",
+              x: 0.2
+            },
+            {
+              type: "text",
+              value: "decres.",
+              x: 0.5
+            },
+            {
+              type: "symbol",
+              value: "n",
+              x: 1
+            }
+          ],
+          length,
+          translate(0, -50, g.append("g"))
+        );
 
         // bottom line
         g.append("line")
@@ -222,13 +289,36 @@
           .attr("x2", length)
           .attr("y2", 50); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
         g.append("text")
-          .text("sfz, mf, decres. to p")
-          .attr("y", 50)
-          .attr("dy", "1em");
-        g.append("text")
           .text("texture, three cluster hits")
           .attr("y", 50)
           .attr("dy", "2em");
+        drawDynamics(
+          [
+            {
+              // TODO sfzmf?
+              type: "symbol",
+              value: "sfz",
+              x: 0
+            },
+            {
+              type: "symbol",
+              value: "mf",
+              x: 0.2
+            },
+            {
+              type: "text",
+              value: "decres.",
+              x: 0.5
+            },
+            {
+              type: "symbol",
+              value: "p",
+              x: 1
+            }
+          ],
+          length,
+          translate(0, 50, g.append("g"))
+        );
       }
     },
     {

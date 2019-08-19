@@ -56,6 +56,8 @@ VS.dictionary.Bravura = (function() {
         'f':    '\ue522',
         'ff':   '\ue52f',
         'fff':  '\ue530',
+        'sfz':  '\ue539',
+        'sffz': '\ue53b',
         '<':    '\ue53e',
         '>':    '\ue53f'
         // "<>":   "\ue540" // hairpin

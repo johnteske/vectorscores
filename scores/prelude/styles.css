@@ -23,6 +23,7 @@ svg {
 /**
  * Cards
  */
+
 .card rect {
   fill: none;
   stroke: #888;
@@ -46,6 +47,7 @@ svg {
 /**
  * Card meta
  */
+
 .monospace,
 .card-duration,
 .card-timbre,
@@ -61,6 +63,7 @@ svg {
 /**
  * Card content
  */
+
 .bravura,
 .card .dynamics text,
 .card .duration,
@@ -79,6 +82,7 @@ svg {
 }
 
 /* _info */
+
 .modal-content a[target="_blank"],
 .modal-content a[target="VS_glossary"] {
   padding-right: 0.4em;

@@ -4,7 +4,6 @@ main {
 h3 {
     text-align: center;
 }
-
 div.position-controls {
     padding: 0 25%;
     div {
@@ -24,7 +23,6 @@ path {
 .performer {
     stroke: blue;
 }
-
 input#performer-angle {
     width: 48px;
     height: 48px;

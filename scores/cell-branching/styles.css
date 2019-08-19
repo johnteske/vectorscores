@@ -16,17 +16,14 @@ svg {
   width: 100%;
   height: 100%;
 }
-
 g {
   cursor: pointer;
 }
-
 .phrase-container {
   stroke: black;
   stroke-width: 1px;
   fill: white;
 }
-
 /* prevent accidental click on line-height outside rect */
 text {
   pointer-events: none;
@@ -35,13 +32,11 @@ text {
   font-family: Courier;
   font-size: 12px;
 }
-
 .bravura {
   font-family: Bravura;
   font-size: 22px;
   line-height: 22px;
 }
-
 .phrase,
 .dynamic {
   text-anchor: middle;

@@ -13,6 +13,7 @@ main {
     margin: 6px;
     border: 2px solid #eee;
     border-radius: 20px;
+    transition: border-radius 300ms, border-color 300ms;
     transition: border-radius var(--t-time), border-color var(--t-time);
 }
 

@@ -16,7 +16,6 @@ main,
 svg.main {
   overflow-x: hidden;
 }
-
 .layout line {
   stroke: black;
   stroke-opacity: 0.25;
@@ -31,7 +30,6 @@ svg.main {
   fill: none;
   stroke: black;
 }
-
 .pitch-range,
 .articulations,
 .durations,
@@ -43,31 +41,26 @@ svg.main {
 .bartok {
   font-size: 26px;
 }
-
 .pitch-range-numeric {
   font-family: "Courier", monospace;
   font-size: 13px;
 }
-
 .timbre,
 .pitch-range,
 .pitch-range-numeric {
   text-shadow: 0 -1px 1px white, 1px 0 1px white, 0 1px 1px white,
     -1px 0 1px white;
 }
-
 .articulations,
 .durations,
 .dynamics {
   font-size: 21px;
 }
-
 .timbre {
   font-family: serif;
   font-style: italic;
   font-size: 15px;
 }
-
 .ghost-beam,
 .ghost-attack {
   shape-rendering: crispEdges;
@@ -76,11 +69,9 @@ svg.main {
 .ghost-beam {
   stroke-width: 2;
 }
-
 line[class^="debug-center"] {
   stroke: red;
 }
-
 .modal-content a[target="_blank"],
 .modal-content a[target="VS_glossary"] {
   padding-right: 0.4em;
@@ -90,7 +81,6 @@ line[class^="debug-center"] {
   content: "°";
   position: absolute;
 }
-
 .modal-content .symbol {
   font-family: "Bravura";
   line-height: 1;
@@ -100,7 +90,6 @@ line[class^="debug-center"] {
   font-style: normal;
   font-size: 150%;
 }
-
 .modal-content ul {
   list-style: none;
   padding: 0;
