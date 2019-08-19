@@ -5,6 +5,7 @@ import makePage from "./page";
 import makeIndicator from "./indicator";
 import drawDynamics from "./dynamics";
 import longTone from "./longTone";
+import lineBecomingAir from "./lineBecomingAir";
 
 const margin = {
   top: 100
@@ -99,13 +100,12 @@ const score = [
 
       translate(startX, 0, g);
 
-      // should this start as sffz \ue53b, with excessive pressure?
-      // and also irregular tremolo?
+      // start as sffz
+      // with excessive pressure and air TODO
+      // and also irregular tremolo TODO
 
       // top line
-      g.append("line")
-        .attr("x1", 0)
-        .attr("x2", length);
+      lineBecomingAir(length, g);
       g.append("text")
         .text("becoming airy, three noisy patches")
         .attr("dy", "-2em");
