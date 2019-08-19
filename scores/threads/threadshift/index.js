@@ -107,11 +107,35 @@ const score = [
         .attr("x1", 0)
         .attr("x2", length);
       g.append("text")
-        .text("sfz, decres. to niente")
-        .attr("dy", "-1em");
-      g.append("text")
         .text("becoming airy, three noisy patches")
         .attr("dy", "-2em");
+      drawDynamics(
+        [
+          {
+            // TODO sfzmf?
+            type: "symbol",
+            value: "sfz",
+            x: 0
+          },
+          {
+            type: "symbol",
+            value: "mf",
+            x: 0.2
+          },
+          {
+            type: "text",
+            value: "decres.",
+            x: 0.5
+          },
+          {
+            type: "symbol",
+            value: "n",
+            x: 1
+          }
+        ],
+        length,
+        translate(0, -50, g.append("g"))
+      );
 
       // bottom line
       g.append("line")
@@ -119,13 +143,36 @@ const score = [
         .attr("x2", length)
         .attr("y2", 50); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
       g.append("text")
-        .text("sfz, mf, decres. to p")
-        .attr("y", 50)
-        .attr("dy", "1em");
-      g.append("text")
         .text("texture, three cluster hits")
         .attr("y", 50)
         .attr("dy", "2em");
+      drawDynamics(
+        [
+          {
+            // TODO sfzmf?
+            type: "symbol",
+            value: "sfz",
+            x: 0
+          },
+          {
+            type: "symbol",
+            value: "mf",
+            x: 0.2
+          },
+          {
+            type: "text",
+            value: "decres.",
+            x: 0.5
+          },
+          {
+            type: "symbol",
+            value: "p",
+            x: 1
+          }
+        ],
+        length,
+        translate(0, 50, g.append("g"))
+      );
     }
   },
   {
