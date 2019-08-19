@@ -26,7 +26,7 @@
     "fix:format": "prettier --write {.,_includes/*/*,pages,scores/*,scores/*/*}/*.js",
 
     "serve": "serve -n -l 8081 _site",
-    "watch": "chokidar *.* -i 'node_modules' -i '_site' -c \"npm run build && echo 'done'\""
+    "watch": "chokidar '**/*.*' -i 'node_modules' -i '_site' -i '_includes/docs/README.md' -c \"npm run build && echo 'done'\""
   },
   "repository": {
     "type": "git",
