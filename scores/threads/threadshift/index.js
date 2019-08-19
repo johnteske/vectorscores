@@ -85,7 +85,7 @@ const score = [
         .text("\ue4d2")
         .attr("class", "bravura")
         .attr("x", length)
-        .attr("dx", "-2em");
+        .attr("text-anchor", "end");
     }
   },
   {
