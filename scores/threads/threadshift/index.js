@@ -11,6 +11,15 @@ const margin = {
   top: 100
 };
 
+function pitchScale(midi) {
+  // MIDI 21/A0 to 108/C8
+  // 64.5/Eq#4 is center
+  const [min, max] = [21, 108]
+  const range = max - min
+
+  return midi/range
+}
+
 function timeScale(t) {
   return t / 20; // TODO
 }
@@ -36,7 +45,7 @@ const score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = longTone(scoreGroup, startX, 0, length);
+      const g = longTone(scoreGroup, startX, pitchScale(69), length); // TODO set this as 0.5 of pitch space, not MIDI pitched
 
       g.append("text")
         .text(articulations[">"])
