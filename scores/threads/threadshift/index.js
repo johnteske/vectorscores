@@ -85,7 +85,7 @@ const score = [
       const length = timeScale(duration);
 
       const g = scoreGroup.append("g");
-      translate(startX, 0.5 * pitchRange, g);
+      translate(startX, 0, g);
 
       // cluster
       g.append("text")
@@ -108,7 +108,7 @@ const score = [
       const length = timeScale(duration);
 
       const g = scoreGroup.append("g");
-      translate(startX, 0.5 * pitchRange, g);
+      translate(startX, 0, g);
 
       // start as sffz
       // with excessive pressure and air TODO
@@ -154,7 +154,7 @@ const score = [
       g.append("line")
         .attr("x1", 0)
         .attr("x2", length)
-        .attr("y2", 50); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
+        .attr("y2", pitchRange * 0.25); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
 
       noisePatch(length * 0.25, length, g);
 
@@ -204,21 +204,21 @@ const score = [
       const length = timeScale(duration);
 
       const g = scoreGroup.append("g");
-      translate(startX, 0.5 * pitchRange, g);
+      translate(startX, 0, g);
 
       // bottom line
       g.append("line")
         .attr("x1", 0)
         .attr("x2", length)
-        .attr("y1", 50)
-        .attr("y2", 50);
+        .attr("y1", pitchRange * 0.25)
+        .attr("y2", pitchRange * 0.25);
 
       // threads
       for (let i = 0; i < 10; i++) {
         let halfLength = length * 0.5;
-        let x = Math.random() * halfLength;
+        let x = VS.getRandExcl(0, halfLength);
         let l = x + halfLength;
-        let y = Math.random() * 50;
+        let y = VS.getRandExcl(0, pitchRange);
         g.append("line")
           .attr("x1", x)
           .attr("x2", l)
@@ -267,7 +267,7 @@ function scrollToNextBar(index, duration) {
 function resize() {
   const x = page.calculateCenter();
 
-  console.log(scoreGroupHeight);
+  // console.log(scoreGroupHeight);
 
   indicator.translateX(x);
 
