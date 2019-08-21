@@ -8,9 +8,10 @@ import longTone from "./longTone";
 import lineBecomingAir from "./lineBecomingAir";
 
 const margin = {
-  top: 100
+  top: 64
 };
 
+const pitchRange = 87;
 function pitchScale(midi) {
   // MIDI 21/A0 to 108/C8
   // 64.5/Eq#4 is center
@@ -28,7 +29,7 @@ const svg = d3.select("svg.main");
 const page = makePage(svg);
 
 const scoreGroup = page.element.append("g");
-scoreGroup.style("outline", "1px dotted red");
+// scoreGroup.style("outline", "1px dotted red");
 translate(0, margin.top, scoreGroup);
 
 const indicator = makeIndicator(svg);
@@ -45,7 +46,7 @@ const score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = longTone(scoreGroup, startX, 0.5 * 87, length);
+      const g = longTone(scoreGroup, startX, 0.5 * pitchRange, length);
 
       g.append("text")
         .text(articulations[">"])
@@ -83,7 +84,7 @@ const score = [
       const length = timeScale(duration);
 
       const g = scoreGroup.append("g");
-      translate(startX, 0, g);
+      translate(startX, 0.5 * pitchRange, g);
 
       // cluster
       g.append("text")
@@ -106,8 +107,7 @@ const score = [
       const length = timeScale(duration);
 
       const g = scoreGroup.append("g");
-
-      translate(startX, 0, g);
+      translate(startX, 0.5 * pitchRange, g);
 
       // start as sffz
       // with excessive pressure and air TODO
@@ -192,8 +192,7 @@ const score = [
       const length = timeScale(duration);
 
       const g = scoreGroup.append("g");
-
-      translate(startX, 0, g);
+      translate(startX, 0.5 * pitchRange, g);
 
       // bottom line
       g.append("line")
