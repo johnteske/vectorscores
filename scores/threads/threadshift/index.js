@@ -151,19 +151,23 @@ const score = [
         .attr("x1", 0)
         .attr("x2", length)
         .attr("y2", 50); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
-      g.append("text")
-        .text("texture, three cluster hits")
-        .attr("y", 50)
-        .attr("dy", "2em");
+
+      // TODO shape as path
+      g.append("rect")
+        .attr("x", length * 0.25)
+        .attr("width", length * 0.5)
+        .attr("y", 10)
+        .attr("height", 50)
+        .attr("fill", "#888888");
 
       [0.2, 0.4, 0.6].forEach(x => {
-       g.append("text") // TODO also add flag
-        .text("\ue123")
-        .attr("x", length * x)
-        .attr("y", 50 * x)
-        .attr("dy", "1em")
-        .attr("class", "bravura");
-      })
+        g.append("text") // TODO also add flag
+          .text("\ue123")
+          .attr("x", length * x)
+          .attr("y", 50 * x)
+          .attr("dy", "1em")
+          .attr("class", "bravura");
+      });
 
       drawDynamics(
         [
