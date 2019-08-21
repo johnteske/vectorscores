@@ -14,10 +14,10 @@ const margin = {
 function pitchScale(midi) {
   // MIDI 21/A0 to 108/C8
   // 64.5/Eq#4 is center
-  const [min, max] = [21, 108]
-  const range = max - min
+  const [min, max] = [21, 108];
+  const range = max - min;
 
-  return midi/range
+  return 1 - midi / range;
 }
 
 function timeScale(t) {
@@ -28,10 +28,10 @@ const svg = d3.select("svg.main");
 const page = makePage(svg);
 
 const scoreGroup = page.element.append("g");
+scoreGroup.style("outline", "1px dotted red");
 translate(0, margin.top, scoreGroup);
 
 const indicator = makeIndicator(svg);
-indicator.translateY(margin.top - 50);
 
 // drone(scoreGroup); // TODO: how do these integrate with the ending
 
@@ -45,7 +45,7 @@ const score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = longTone(scoreGroup, startX, pitchScale(69), length); // TODO set this as 0.5 of pitch space, not MIDI pitched
+      const g = longTone(scoreGroup, startX, 0.5 * 87, length);
 
       g.append("text")
         .text(articulations[">"])
@@ -256,6 +256,8 @@ function scrollToNextBar(index, duration) {
 function resize() {
   const x = page.calculateCenter();
 
+  console.log(scoreGroupHeight);
+
   indicator.translateX(x);
 
   VS.score.isPlaying() && VS.score.pause();
@@ -263,10 +265,12 @@ function resize() {
 }
 
 d3.select(window).on("resize", resize);
+let scoreGroupHeight; // TODO
 d3.select(window).on("load", () => {
+  renderScore();
+  scoreGroupHeight = scoreGroup.node().getBBox().height; // TODO
   resize();
   setScorePosition();
-  renderScore();
 });
 
 VS.control.hooks.add("stop", setScorePosition);

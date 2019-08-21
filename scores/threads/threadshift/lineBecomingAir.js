@@ -33,5 +33,5 @@ export default function(length, selection) {
     .append("path")
     .attr("fill", "none")
     .attr("stroke", "black")
-    .attr("d", d => console.log(d) || lineGenerator(d));
+    .attr("d", d => lineGenerator(d));
 }
