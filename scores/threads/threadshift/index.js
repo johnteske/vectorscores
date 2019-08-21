@@ -155,6 +155,16 @@ const score = [
         .text("texture, three cluster hits")
         .attr("y", 50)
         .attr("dy", "2em");
+
+      [0.2, 0.4, 0.6].forEach(x => {
+       g.append("text") // TODO also add flag
+        .text("\ue123")
+        .attr("x", length * x)
+        .attr("y", 50 * x)
+        .attr("dy", "1em")
+        .attr("class", "bravura");
+      })
+
       drawDynamics(
         [
           {
