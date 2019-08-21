@@ -4,6 +4,7 @@ import translate from "../translate";
 import makePage from "./page";
 import makeIndicator from "./indicator";
 import drawDynamics from "./dynamics";
+import noisePatch from "./noisePatch";
 import longTone from "./longTone";
 import lineBecomingAir from "./lineBecomingAir";
 
@@ -115,9 +116,12 @@ const score = [
 
       // top line
       lineBecomingAir(length, g);
-      g.append("text")
-        .text("becoming airy, three noisy patches")
-        .attr("dy", "-2em");
+
+      const patches = translate(0, -50, g.append("g"));
+      [0.2, 0.4, 0.8].forEach(x => {
+        noisePatch(x * length, length * 0.1, patches);
+      });
+
       drawDynamics(
         [
           {
@@ -152,13 +156,7 @@ const score = [
         .attr("x2", length)
         .attr("y2", 50); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
 
-      // TODO shape as path
-      g.append("rect")
-        .attr("x", length * 0.25)
-        .attr("width", length * 0.5)
-        .attr("y", 10)
-        .attr("height", 50)
-        .attr("fill", "#888888");
+      noisePatch(length * 0.25, length, g);
 
       [0.2, 0.4, 0.6].forEach(x => {
         g.append("text") // TODO also add flag
