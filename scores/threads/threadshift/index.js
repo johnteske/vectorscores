@@ -36,10 +36,15 @@
   }
 
   function makeIndicator(selection) {
+    // TODO from dirge,,march
     const indicator = selection
-      .append("line")
-      .attr("y1", 0)
-      .attr("y2", 100);
+      .append("path")
+      .attr("class", "indicator")
+      .attr("d", "M-6.928,0 L0,2 6.928,0 0,12 Z")
+      .style("stroke", "black")
+      .style("stroke-width", "1")
+      .style("fill", "black")
+      .style("fill-opacity", "0");
 
     let x = 0;
     let y = 0;
@@ -150,12 +155,14 @@
       .append("path")
       .attr("fill", "none")
       .attr("stroke", "black")
-      .attr("d", d => console.log(d) || lineGenerator(d));
+      .attr("d", d => lineGenerator(d));
   }
 
   const margin = {
-    top: 100
+    top: 64
   };
+
+  const pitchRange = 87;
 
   function timeScale(t) {
     return t / 20; // TODO
@@ -165,10 +172,10 @@
   const page = makePage(svg);
 
   const scoreGroup = page.element.append("g");
+  // scoreGroup.style("outline", "1px dotted red");
   translate(0, margin.top, scoreGroup);
 
   const indicator = makeIndicator(svg);
-  indicator.translateY(margin.top - 50);
 
   // drone(scoreGroup); // TODO: how do these integrate with the ending
 
@@ -182,7 +189,7 @@
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = longTone(scoreGroup, startX, 0, length);
+        const g = longTone(scoreGroup, startX, 0.5 * pitchRange, length);
 
         g.append("text")
           .text(articulations[">"])
@@ -220,7 +227,7 @@
         const length = timeScale(duration);
 
         const g = scoreGroup.append("g");
-        translate(startX, 0, g);
+        translate(startX, 0.5 * pitchRange, g);
 
         // cluster
         g.append("text")
@@ -243,8 +250,7 @@
         const length = timeScale(duration);
 
         const g = scoreGroup.append("g");
-
-        translate(startX, 0, g);
+        translate(startX, 0.5 * pitchRange, g);
 
         // start as sffz
         // with excessive pressure and air TODO
@@ -329,8 +335,7 @@
         const length = timeScale(duration);
 
         const g = scoreGroup.append("g");
-
-        translate(startX, 0, g);
+        translate(startX, 0.5 * pitchRange, g);
 
         // bottom line
         g.append("line")
@@ -393,6 +398,8 @@
   function resize() {
     const x = page.calculateCenter();
 
+    console.log(scoreGroupHeight);
+
     indicator.translateX(x);
 
     VS.score.isPlaying() && VS.score.pause();
@@ -400,10 +407,12 @@
   }
 
   d3.select(window).on("resize", resize);
+  let scoreGroupHeight; // TODO
   d3.select(window).on("load", () => {
+    renderScore();
+    scoreGroupHeight = scoreGroup.node().getBBox().height; // TODO
     resize();
     setScorePosition();
-    renderScore();
   });
 
   VS.control.hooks.add("stop", setScorePosition);
