@@ -310,4 +310,4 @@ function saveSvg() {
   dl.click();
   dl.remove();
 }
-d3.select("#save-svg").on("click", saveSvg)
+d3.select("#save-svg").on("click", saveSvg);

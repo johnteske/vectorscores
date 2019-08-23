@@ -5,7 +5,7 @@ module.exports = class {
       title: "mauler",
       composer: "John Teske",
       status: "wip",
-      modules: ["bravura"]
+      modules: ["bravura", "dictionary"]
     };
   }
 
