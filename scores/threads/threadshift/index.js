@@ -168,7 +168,7 @@ const score = [
         g.append("text") // TODO also add flag
           .text("\ue123")
           .attr("x", length * x)
-          .attr("y", pitchScale(0.5 - (x / 4)))
+          .attr("y", pitchScale(0.5 - x / 4))
           .attr("dy", "1em")
           .attr("class", "bravura");
       });
@@ -288,9 +288,25 @@ d3.select(window).on("load", () => {
   scoreGroupHeight = scoreGroup.node().getBBox().height; // TODO
   resize();
   setScorePosition();
+  // saveSvg(); // TODO add to info or setting modal
 });
 
 VS.control.hooks.add("stop", setScorePosition);
 VS.score.hooks.add("stop", setScorePosition);
 VS.control.hooks.add("step", setScorePosition);
 VS.control.hooks.add("pause", setScorePosition);
+
+// TODO include stylesheet or inline all styles
+// TODO serialize font?
+function saveSvg() {
+  var svgXML = new XMLSerializer().serializeToString(svg.node());
+  var encoded = encodeURI(svgXML);
+  var dataURI = `data:image/svg+xml;utf8,${encoded}`;
+
+  var dl = document.createElement("a");
+  document.body.appendChild(dl); // This line makes it work in Firefox.
+  dl.setAttribute("href", dataURI);
+  dl.setAttribute("download", "test.svg");
+  dl.click();
+  dl.remove();
+}
