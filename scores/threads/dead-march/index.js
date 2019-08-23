@@ -6,9 +6,17 @@ const wrapper = main.append("g");
 drone(wrapper);
 
 // as low, slow (breath, bow speed) as possible/audible
-wrapper
+const lnp = wrapper.append("g")
+.attr("transform", "translate(0, 80)")
+
+lnp
   .append("text")
-  .text("LNP ->")
-  .attr("dy", "2em");
+  .text("LNP")
+  .attr("dy", "-1em")
+
+lnp
+  .append("text")
+  .style("font-family", "'Bravura'")
+  .text("\ue0c7") // \ue0c7 or \ue0f4
 
 // ensemble comes in and out of LNP for highlighting threads?

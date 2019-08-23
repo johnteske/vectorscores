@@ -4,7 +4,8 @@ module.exports = class {
       layout: "movement",
       title: "dead march",
       composer: "John Teske",
-      status: "wip"
+      status: "wip",
+      modules: ["bravura"]
     };
   }
 
