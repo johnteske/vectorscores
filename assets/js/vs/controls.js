@@ -99,9 +99,13 @@ export const control = (function() {
         case ' ':
             playPause();
             break;
+        case 'h':
+        case 'k':
         case 'ArrowLeft':
             !VS.score.isPlaying() && decrementPointer();
             break;
+        case 'l':
+        case 'j':
         case 'ArrowRight':
             !VS.score.isPlaying() && incrementPointer();
             break;
