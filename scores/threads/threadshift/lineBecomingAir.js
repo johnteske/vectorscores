@@ -34,4 +34,5 @@ export default function(length, selection) {
     .attr("fill", "none")
     .attr("stroke", "black")
     .attr("d", d => lineGenerator(d));
+  return g;
 }

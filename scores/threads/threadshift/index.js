@@ -13,14 +13,17 @@ const margin = {
 };
 
 const pitchRange = 87;
-function pitchScale(midi) {
-  // MIDI 21/A0 to 108/C8
-  // 64.5/Eq#4 is center
-  const [min, max] = [21, 108];
-  const range = max - min;
-
-  return 1 - midi / range;
+function pitchScale(value) {
+  return (1 - value) * pitchRange;
 }
+// function pitchScale(midi) {
+//   // MIDI 21/A0 to 108/C8
+//   // 64.5/Eq#4 is center
+//   const [min, max] = [21, 108];
+//   const range = max - min;
+//
+//   return 1 - midi / range;
+// }
 
 function timeScale(t) {
   return t / 20; // TODO
@@ -47,7 +50,7 @@ const score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = longTone(scoreGroup, startX, 0.5 * pitchRange, length);
+      const g = longTone(scoreGroup, startX, pitchScale(0.5), length);
 
       g.append("text")
         .text(articulations[">"])
@@ -85,7 +88,7 @@ const score = [
       const length = timeScale(duration);
 
       const g = scoreGroup.append("g");
-      translate(startX, 0, g);
+      translate(startX, pitchScale(0.5), g);
 
       // cluster
       g.append("text")
@@ -115,10 +118,11 @@ const score = [
       // and also irregular tremolo TODO
 
       // top line
-      lineBecomingAir(length, g);
+      const line = lineBecomingAir(length, g);
+      translate(0, pitchScale(0.5), line);
 
-      const patches = translate(0, -50, g.append("g"));
-      [0.2, 0.4, 0.8].forEach(x => {
+      const patches = translate(0, pitchScale(0.5), g.append("g"));
+      [0.2, 0.4, 0.6].forEach(x => {
         noisePatch(x * length, length * 0.1, patches);
       });
 
@@ -154,15 +158,17 @@ const score = [
       g.append("line")
         .attr("x1", 0)
         .attr("x2", length)
-        .attr("y2", pitchRange * 0.25); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
+        .attr("y1", pitchScale(0.5))
+        .attr("y2", pitchScale(0.25)); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
 
-      noisePatch(length * 0.25, length, g);
+      const bottomNoise = noisePatch(length * 0.25, length, g);
+      translate(0, pitchScale(0.25), bottomNoise);
 
       [0.2, 0.4, 0.6].forEach(x => {
         g.append("text") // TODO also add flag
           .text("\ue123")
           .attr("x", length * x)
-          .attr("y", 50 * x)
+          .attr("y", pitchScale(0.5 - (x / 4)))
           .attr("dy", "1em")
           .attr("class", "bravura");
       });
@@ -210,15 +216,15 @@ const score = [
       g.append("line")
         .attr("x1", 0)
         .attr("x2", length)
-        .attr("y1", pitchRange * 0.25)
-        .attr("y2", pitchRange * 0.25);
+        .attr("y1", pitchScale(0.25))
+        .attr("y2", pitchScale(0.25));
 
       // threads
       for (let i = 0; i < 10; i++) {
         let halfLength = length * 0.5;
         let x = VS.getRandExcl(0, halfLength);
         let l = x + halfLength;
-        let y = VS.getRandExcl(0, pitchRange);
+        let y = pitchScale(VS.getRandExcl(0, 1));
         g.append("line")
           .attr("x1", x)
           .attr("x2", l)
