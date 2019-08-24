@@ -13,6 +13,8 @@ const margin = {
   top: 64
 };
 
+const seconds = t => t * 1000
+
 const pitchRange = 87;
 function pitchScale(value) {
   return (1 - value) * pitchRange;
@@ -27,7 +29,7 @@ function pitchScale(value) {
 // }
 
 function timeScale(t) {
-  return t / 20; // TODO
+  return t / 150;
 }
 
 const svg = d3.select("svg.main");
@@ -43,10 +45,11 @@ const indicator = makeIndicator(svg);
 
 const { articulations, dynamics } = VS.dictionary.Bravura;
 
-const score = [
+// const score = [
+let score = [
   {
     startTime: null,
-    duration: null,
+    duration: seconds(60),
     render: ({ startTime, duration }) => {
       const startX = timeScale(startTime);
       const length = timeScale(duration);
@@ -83,7 +86,7 @@ const score = [
   },
   {
     startTime: null,
-    duration: null,
+    duration: seconds(5),
     render: ({ startTime, duration }) => {
       const startX = timeScale(startTime);
       const length = timeScale(duration);
@@ -106,7 +109,7 @@ const score = [
   },
   {
     startTime: null,
-    duration: null,
+    duration: seconds(45),
     render: ({ startTime, duration }) => {
       const startX = timeScale(startTime);
       const length = timeScale(duration);
@@ -205,7 +208,7 @@ const score = [
   },
   {
     startTime: null,
-    duration: null,
+    duration: seconds(120),
     render: ({ startTime, duration }) => {
       const startX = timeScale(startTime);
       const length = timeScale(duration);
@@ -236,14 +239,30 @@ const score = [
   },
   {
     startTime: null,
-    duration: null,
+    duration: 0,
     render: () => {}
   }
-].map((bar, i) => {
-  // TODO each bar is set to the same duration during sketching
-  const length = 3000;
-  return { ...bar, duration: length, startTime: length * i };
+];
+
+const startTimes = score.reduce(
+  ({ sum, times }, bar) => {
+    return {
+      sum: sum + bar.duration,
+      times: [...times, sum]
+    };
+  },
+  { sum: 0, times: [] }
+).times;
+
+score = score.map((bar, i) => {
+  return { ...bar, startTime: startTimes[i] };
 });
+// .map((bar, i) => {
+//   // TODO each bar is set to the same duration during sketching
+//   // const length = 3000;
+//   const length = bar.duration * 1000;
+//   return { ...bar, duration: length, startTime: length * i };
+// });
 
 score.forEach((bar, i) => {
   const callback = i < score.length - 1 ? scrollToNextBar : null;
