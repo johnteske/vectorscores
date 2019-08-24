@@ -9,11 +9,6 @@ module.exports = {
       "url": "https://github.com/johnteske/vectorscores",
       "icon": "github"
     },
-    {
-      "name": "johnteske",
-      "url": "https://twitter.com/johnteske",
-      "icon": "twitter"
-    },
     { "name": "johnteskemusic.com", "url": "http://johnteskemusic.com" }
   ],
   "baseUrl": process.env.VS_BASE_URL || "",
