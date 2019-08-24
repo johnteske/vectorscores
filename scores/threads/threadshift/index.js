@@ -1,6 +1,7 @@
 import drone from "../drone";
 import translate from "../translate";
 
+import bravura from "./bravura";
 import makePage from "./page";
 import makeIndicator from "./indicator";
 import drawDynamics from "./dynamics";
@@ -54,7 +55,7 @@ const score = [
 
       g.append("text")
         .text(articulations[">"])
-        .attr("class", "bravura")
+        .call(bravura)
         .attr("dy", "0.66em");
 
       drawDynamics(
@@ -93,12 +94,12 @@ const score = [
       // cluster
       g.append("text")
         .text("\ue123")
-        .attr("class", "bravura");
+        .call(bravura);
 
       // caesura
       g.append("text")
         .text("\ue4d2")
-        .attr("class", "bravura")
+        .call(bravura)
         .attr("x", length)
         .attr("text-anchor", "end");
     }
@@ -170,7 +171,7 @@ const score = [
           .attr("x", length * x)
           .attr("y", pitchScale(0.5 - x / 4))
           .attr("dy", "1em")
-          .attr("class", "bravura");
+          .call(bravura);
       });
 
       drawDynamics(
