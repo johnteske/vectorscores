@@ -5,6 +5,9 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
+  const bravura = selection =>
+    selection.style("font-family", "'Bravura'").style("font-size", 20);
+
   function makePage(parent) {
     const page = parent.append("g");
     let center = null;
@@ -87,17 +90,32 @@
         case "symbol":
           text
             .text(dynamics[d.value])
-            .attr("class", "bravura")
+            .call(bravura)
             .attr("dy", "2em");
           break;
         case "text":
           text
             .text(d.value)
             .attr("class", "text-dynamic")
+            .style("font-family", "serif")
+            .style("font-size", 12)
+            .style("font-style", "italic")
             .attr("dy", "3.5em");
           break;
       }
     });
+  }
+
+  function noisePatch(x, length, selection) {
+    // TODO length will become path data?
+    // TODO shape as path
+    return selection
+      .append("rect")
+      .attr("x", x)
+      .attr("width", length * 0.5)
+      .attr("y", -10) // center
+      .attr("height", 20)
+      .attr("fill", "pink");
   }
 
   const durations = VS.dictionary.Bravura.durations.stemless;
@@ -109,7 +127,7 @@
 
     group
       .append("text")
-      .attr("class", "bravura")
+      .call(bravura)
       .text(durations[4]);
 
     group
@@ -156,16 +174,30 @@
       .attr("fill", "none")
       .attr("stroke", "black")
       .attr("d", d => lineGenerator(d));
+    return g;
   }
 
   const margin = {
     top: 64
   };
 
+  const seconds = t => t * 1000;
+
   const pitchRange = 87;
+  function pitchScale(value) {
+    return (1 - value) * pitchRange;
+  }
+  // function pitchScale(midi) {
+  //   // MIDI 21/A0 to 108/C8
+  //   // 64.5/Eq#4 is center
+  //   const [min, max] = [21, 108];
+  //   const range = max - min;
+  //
+  //   return 1 - midi / range;
+  // }
 
   function timeScale(t) {
-    return t / 20; // TODO
+    return t / 200;
   }
 
   const svg = d3.select("svg.main");
@@ -181,19 +213,20 @@
 
   const { articulations, dynamics: dynamics$1 } = VS.dictionary.Bravura;
 
-  const score = [
+  // const score = [
+  let score = [
     {
       startTime: null,
-      duration: null,
+      duration: seconds(60),
       render: ({ startTime, duration }) => {
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = longTone(scoreGroup, startX, 0.5 * pitchRange, length);
+        const g = longTone(scoreGroup, startX, pitchScale(0.5), length);
 
         g.append("text")
           .text(articulations[">"])
-          .attr("class", "bravura")
+          .call(bravura)
           .attr("dy", "0.66em");
 
         drawDynamics(
@@ -221,46 +254,50 @@
     },
     {
       startTime: null,
-      duration: null,
+      duration: seconds(5),
       render: ({ startTime, duration }) => {
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
         const g = scoreGroup.append("g");
-        translate(startX, 0.5 * pitchRange, g);
+        translate(startX, pitchScale(0.5), g);
 
         // cluster
         g.append("text")
           .text("\ue123")
-          .attr("class", "bravura");
+          .call(bravura);
 
         // caesura
         g.append("text")
           .text("\ue4d2")
-          .attr("class", "bravura")
+          .call(bravura)
           .attr("x", length)
           .attr("text-anchor", "end");
       }
     },
     {
       startTime: null,
-      duration: null,
+      duration: seconds(45),
       render: ({ startTime, duration }) => {
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
         const g = scoreGroup.append("g");
-        translate(startX, 0.5 * pitchRange, g);
+        translate(startX, 0, g);
 
         // start as sffz
         // with excessive pressure and air TODO
         // and also irregular tremolo TODO
 
         // top line
-        lineBecomingAir(length, g);
-        g.append("text")
-          .text("becoming airy, three noisy patches")
-          .attr("dy", "-2em");
+        const line = lineBecomingAir(length, g);
+        translate(0, pitchScale(0.5), line);
+
+        const patches = translate(0, pitchScale(0.5), g.append("g"));
+        [0.2, 0.4, 0.6].forEach(x => {
+          noisePatch(x * length, length * 0.1, patches);
+        });
+
         drawDynamics(
           [
             {
@@ -293,11 +330,21 @@
         g.append("line")
           .attr("x1", 0)
           .attr("x2", length)
-          .attr("y2", 50); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
-        g.append("text")
-          .text("texture, three cluster hits")
-          .attr("y", 50)
-          .attr("dy", "2em");
+          .attr("y1", pitchScale(0.5))
+          .attr("y2", pitchScale(0.25)); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
+
+        const bottomNoise = noisePatch(length * 0.25, length, g);
+        translate(0, pitchScale(0.25), bottomNoise);
+
+        [0.2, 0.4, 0.6].forEach(x => {
+          g.append("text") // TODO also add flag
+            .text("\ue123")
+            .attr("x", length * x)
+            .attr("y", pitchScale(0.5 - x / 4))
+            .attr("dy", "1em")
+            .call(bravura);
+        });
+
         drawDynamics(
           [
             {
@@ -329,27 +376,27 @@
     },
     {
       startTime: null,
-      duration: null,
+      duration: seconds(120),
       render: ({ startTime, duration }) => {
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
         const g = scoreGroup.append("g");
-        translate(startX, 0.5 * pitchRange, g);
+        translate(startX, 0, g);
 
         // bottom line
         g.append("line")
           .attr("x1", 0)
           .attr("x2", length)
-          .attr("y1", 50)
-          .attr("y2", 50);
+          .attr("y1", pitchScale(0.25))
+          .attr("y2", pitchScale(0.25));
 
         // threads
         for (let i = 0; i < 10; i++) {
           let halfLength = length * 0.5;
-          let x = Math.random() * halfLength;
+          let x = VS.getRandExcl(0, halfLength);
           let l = x + halfLength;
-          let y = Math.random() * 50;
+          let y = pitchScale(VS.getRandExcl(0, 1));
           g.append("line")
             .attr("x1", x)
             .attr("x2", l)
@@ -360,14 +407,30 @@
     },
     {
       startTime: null,
-      duration: null,
+      duration: 0,
       render: () => {}
     }
-  ].map((bar, i) => {
-    // TODO each bar is set to the same duration during sketching
-    const length = 3000;
-    return { ...bar, duration: length, startTime: length * i };
+  ];
+
+  const startTimes = score.reduce(
+    ({ sum, times }, bar) => {
+      return {
+        sum: sum + bar.duration,
+        times: [...times, sum]
+      };
+    },
+    { sum: 0, times: [] }
+  ).times;
+
+  score = score.map((bar, i) => {
+    return { ...bar, startTime: startTimes[i] };
   });
+  // .map((bar, i) => {
+  //   // TODO each bar is set to the same duration during sketching
+  //   // const length = 3000;
+  //   const length = bar.duration * 1000;
+  //   return { ...bar, duration: length, startTime: length * i };
+  // });
 
   score.forEach((bar, i) => {
     const callback = i < score.length - 1 ? scrollToNextBar : null;
@@ -398,7 +461,7 @@
   function resize() {
     const x = page.calculateCenter();
 
-    console.log(scoreGroupHeight);
+    // console.log(scoreGroupHeight);
 
     indicator.translateX(x);
 
@@ -413,11 +476,28 @@
     scoreGroupHeight = scoreGroup.node().getBBox().height; // TODO
     resize();
     setScorePosition();
+    // saveSvg(); // TODO add to info or setting modal
   });
 
   VS.control.hooks.add("stop", setScorePosition);
   VS.score.hooks.add("stop", setScorePosition);
   VS.control.hooks.add("step", setScorePosition);
   VS.control.hooks.add("pause", setScorePosition);
+
+  // TODO include stylesheet or inline all styles
+  // TODO serialize font?
+  function saveSvg() {
+    var svgXML = new XMLSerializer().serializeToString(svg.node());
+    var encoded = encodeURI(svgXML);
+    var dataURI = `data:image/svg+xml;utf8,${encoded}`;
+
+    var dl = document.createElement("a");
+    document.body.appendChild(dl); // This line makes it work in Firefox.
+    dl.setAttribute("href", dataURI);
+    dl.setAttribute("download", "test.svg");
+    dl.click();
+    dl.remove();
+  }
+  d3.select("#save-svg").on("click", saveSvg);
 
 }());
