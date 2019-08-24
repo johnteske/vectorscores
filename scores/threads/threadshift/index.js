@@ -29,7 +29,7 @@ function pitchScale(value) {
 // }
 
 function timeScale(t) {
-  return t / 150;
+  return t / 200;
 }
 
 const svg = d3.select("svg.main");
