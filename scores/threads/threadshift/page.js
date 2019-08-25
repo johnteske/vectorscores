@@ -1,7 +1,16 @@
 export default function(selection) {
   const page = selection.append("g");
 
+  let _height = null;
   let _scale = 1;
+
+  function calculateHeight() {
+    _height = page.node().getBBox().height;
+  }
+
+  function height() {
+    return _height;
+  }
 
   function scale(_) {
     _scale = _;
@@ -10,6 +19,8 @@ export default function(selection) {
 
   return {
     element: page,
+    calculateHeight,
+    height,
     scale
   };
 }

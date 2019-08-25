@@ -291,7 +291,7 @@ function resize() {
   const w = parseInt(svg.style("width"), 10);
   const h = parseInt(svg.style("height"), 10);
 
-  const scale = h / pageHeight;
+  const scale = h / page.height();
   page.scale(scale);
 
   const center = (w / scale) * 0.5;
@@ -301,10 +301,10 @@ function resize() {
 }
 
 d3.select(window).on("resize", resize);
-let pageHeight; // TODO handle this internally
+
 d3.select(window).on("load", () => {
   renderScore();
-  pageHeight = page.element.node().getBBox().height; // TODO
+  page.calculateHeight();
   resize();
 });
 
