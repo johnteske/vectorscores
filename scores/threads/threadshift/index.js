@@ -32,13 +32,16 @@ function timeScale(t) {
   return t / 200;
 }
 
-const bravura = selection => selection.attr("class", "bravura")
-
 const svg = d3.select("svg.main");
 svg.append("style").text(`
   line { stroke: black; }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
-`);
+  .text-dynamic {
+    font-family: serif;
+    font-size: 12px;
+    font-style: italic;
+  }
+ `);
 
 const page = makePage(svg);
 
@@ -65,7 +68,7 @@ let score = [
 
       g.append("text")
         .text(articulations[">"])
-        .call(bravura)
+        .attr("class", "bravura")
         .attr("dy", "0.66em");
 
       drawDynamics(
@@ -104,12 +107,12 @@ let score = [
       // cluster
       g.append("text")
         .text("\ue123")
-        .call(bravura);
+        .attr("class", "bravura");
 
       // caesura
       g.append("text")
         .text("\ue4d2")
-        .call(bravura)
+        .attr("class", "bravura")
         .attr("x", length)
         .attr("text-anchor", "end");
     }
@@ -181,7 +184,7 @@ let score = [
           .attr("x", length * x)
           .attr("y", pitchScale(0.5 - x / 4))
           .attr("dy", "1em")
-          .call(bravura);
+          .attr("class", "bravura");
       });
 
       drawDynamics(
