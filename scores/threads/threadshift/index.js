@@ -1,7 +1,6 @@
 import drone from "../drone";
 import translate from "../translate";
 
-import bravura from "./bravura";
 import makePage from "./page";
 import makeScroll from "./scroll";
 import makeIndicator from "./indicator";
@@ -33,7 +32,14 @@ function timeScale(t) {
   return t / 200;
 }
 
+const bravura = selection => selection.attr("class", "bravura")
+
 const svg = d3.select("svg.main");
+svg.append("style").text(`
+  line { stroke: black; }
+  .bravura { font-family: 'Bravura'; font-size: 20px; }
+`);
+
 const page = makePage(svg);
 
 const scoreGroup = makeScroll(page.element);
