@@ -37,8 +37,8 @@ const svg = d3.select("svg.main");
 const page = makePage(svg);
 
 const scoreGroup = makeScroll(page.element);
+scoreGroup.y(margin.top); // TODO allow chaining
 scoreGroup.element.style("outline", "1px dotted red");
-translate(0, margin.top, scoreGroup.element); // TODO set y margin, currently is wiped every resize
 
 const indicator = makeIndicator(page.element);
 

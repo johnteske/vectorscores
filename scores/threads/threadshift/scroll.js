@@ -1,10 +1,11 @@
 export default function(selection) {
   const scroll = selection.append("g");
 
-  let center = null;
+  let _center = null;
+  let _y = 0;
 
   function setCenter(_) {
-    center = _;
+    _center = _;
   }
 
   function scrollTo(x, duration) {
@@ -12,12 +13,17 @@ export default function(selection) {
       .transition()
       .ease(d3.easeLinear)
       .duration(duration)
-      .attr("transform", `translate(${center - x},0)`);
+      .attr("transform", `translate(${_center - x},${_y})`);
+  }
+
+  function y(_) {
+    _y = _;
   }
 
   return {
     element: scroll,
     setCenter,
-    scrollTo
+    scrollTo,
+    y
   };
 }
