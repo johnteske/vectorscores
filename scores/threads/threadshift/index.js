@@ -3,6 +3,7 @@ import translate from "../translate";
 
 import bravura from "./bravura";
 import makePage from "./page";
+import makeScroll from "./scroll";
 import makeIndicator from "./indicator";
 import drawDynamics from "./dynamics";
 import noisePatch from "./noisePatch";
@@ -13,7 +14,7 @@ const margin = {
   top: 64
 };
 
-const seconds = t => t * 1000
+const seconds = t => t * 1000;
 
 const pitchRange = 87;
 function pitchScale(value) {
@@ -35,13 +36,13 @@ function timeScale(t) {
 const svg = d3.select("svg.main");
 const page = makePage(svg);
 
-const scoreGroup = page.element.append("g");
-// scoreGroup.style("outline", "1px dotted red");
-translate(0, margin.top, scoreGroup);
+const scoreGroup = makeScroll(page.element);
+scoreGroup.element.style("outline", "1px dotted red");
+translate(0, margin.top, scoreGroup.element); // TODO set y margin, currently is wiped every resize
 
-const indicator = makeIndicator(svg);
+const indicator = makeIndicator(page.element);
 
-// drone(scoreGroup); // TODO: how do these integrate with the ending
+// drone(scoreGroup.element); // TODO: how do these integrate with the ending
 
 const { articulations, dynamics } = VS.dictionary.Bravura;
 
@@ -54,7 +55,7 @@ let score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = longTone(scoreGroup, startX, pitchScale(0.5), length);
+      const g = longTone(scoreGroup.element, startX, pitchScale(0.5), length);
 
       g.append("text")
         .text(articulations[">"])
@@ -91,7 +92,7 @@ let score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = scoreGroup.append("g");
+      const g = scoreGroup.element.append("g");
       translate(startX, pitchScale(0.5), g);
 
       // cluster
@@ -114,7 +115,7 @@ let score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = scoreGroup.append("g");
+      const g = scoreGroup.element.append("g");
       translate(startX, 0, g);
 
       // start as sffz
@@ -213,7 +214,7 @@ let score = [
       const startX = timeScale(startTime);
       const length = timeScale(duration);
 
-      const g = scoreGroup.append("g");
+      const g = scoreGroup.element.append("g");
       translate(startX, 0, g);
 
       // bottom line
@@ -257,12 +258,6 @@ const startTimes = score.reduce(
 score = score.map((bar, i) => {
   return { ...bar, startTime: startTimes[i] };
 });
-// .map((bar, i) => {
-//   // TODO each bar is set to the same duration during sketching
-//   // const length = 3000;
-//   const length = bar.duration * 1000;
-//   return { ...bar, duration: length, startTime: length * i };
-// });
 
 score.forEach((bar, i) => {
   const callback = i < score.length - 1 ? scrollToNextBar : null;
@@ -283,7 +278,7 @@ function setScorePosition() {
 
 function centerScoreByIndex(index, duration) {
   const x = timeScale(score[index].startTime);
-  page.scrollTo(x, duration);
+  scoreGroup.scrollTo(x, duration);
 }
 
 function scrollToNextBar(index, duration) {
@@ -291,24 +286,26 @@ function scrollToNextBar(index, duration) {
 }
 
 function resize() {
-  const x = page.calculateCenter();
-
-  // console.log(scoreGroupHeight);
-
-  indicator.translateX(x);
-
   VS.score.isPlaying() && VS.score.pause();
+
+  const w = parseInt(svg.style("width"), 10);
+  const h = parseInt(svg.style("height"), 10);
+
+  const scale = h / pageHeight;
+  page.scale(scale);
+
+  const center = (w / scale) * 0.5;
+  indicator.translateX(center);
+  scoreGroup.setCenter(center);
   setScorePosition();
 }
 
 d3.select(window).on("resize", resize);
-let scoreGroupHeight; // TODO
+let pageHeight; // TODO handle this internally
 d3.select(window).on("load", () => {
   renderScore();
-  scoreGroupHeight = scoreGroup.node().getBBox().height; // TODO
+  pageHeight = page.element.node().getBBox().height; // TODO
   resize();
-  setScorePosition();
-  // saveSvg(); // TODO add to info or setting modal
 });
 
 VS.control.hooks.add("stop", setScorePosition);
