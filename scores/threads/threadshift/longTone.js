@@ -1,5 +1,3 @@
-import bravura from "./bravura";
-
 const durations = VS.dictionary.Bravura.durations.stemless;
 
 export default function longTone(selection, x, y, length) {
@@ -9,7 +7,7 @@ export default function longTone(selection, x, y, length) {
 
   group
     .append("text")
-    .call(bravura)
+    .attr("class", "bravura")
     .text(durations[4]);
 
   group
