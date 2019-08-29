@@ -9,3 +9,7 @@ function wail() {
   // long, periodic
   // accented, falling off
 }
+
+function alert() {
+  // shorter, periodic
+}
