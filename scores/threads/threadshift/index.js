@@ -185,11 +185,25 @@ let score = [
       );
 
       // bottom line
-      g.append("line")
-        .attr("x1", 0)
-        .attr("x2", length)
-        .attr("y1", pitchScale(0.5))
-        .attr("y2", pitchScale(0.25)); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
+      // TODO curve and draw out, for more beating
+      // also not a linear descent
+      const lineGenerator = d3
+        .line()
+        .x(d => d.x)
+        .y(d => d.y);
+      const n = 50;
+      let points = [];
+      for (let i = 0; i < 50; i++) {
+        let ratio = i / n;
+        points[i] = {
+          x: ratio * length,
+          y: pitchScale(0.5 - 0.25 * ratio)
+        };
+      }
+      points.push({ x: length, y: pitchScale(0.25) });
+      g.append("path")
+        .attr("d", lineGenerator(points))
+        .attr("stroke", "red");
 
       const bottomNoise = noisePatch(length * 0.25, length, g);
       translate(0, pitchScale(0.25), bottomNoise);

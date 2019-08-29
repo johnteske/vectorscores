@@ -1,7 +1,7 @@
 import translate from "../translate";
 
 export default function(selection) {
-  // TODO from dirge,,march
+  // TODO from dirge,,march AND ad;sr
   const indicator = selection
     .append("path")
     .attr("class", "indicator")
