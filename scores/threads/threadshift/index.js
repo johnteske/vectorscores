@@ -46,16 +46,17 @@ svg.append("style").text(`
 const page = makePage(svg);
 
 // Create hidden line to ensure page fits margins
-page.element.append("line")
-.attr("y1", 0)
-//.attr("y2", margin.top + pitchRange)
-.attr("y2", margin.top + pitchRange + 32) // TODO
-//.attr("y2", margin.top + pitchRange + margin.top)
-.style("visibility", "hidden")
+page.element
+  .append("line")
+  .attr("y1", 0)
+  //.attr("y2", margin.top + pitchRange)
+  .attr("y2", margin.top + pitchRange + 32) // TODO
+  //.attr("y2", margin.top + pitchRange + margin.top)
+  .style("visibility", "hidden");
 
 const scoreGroup = makeScroll(page.element);
 scoreGroup.y(margin.top); // TODO allow chaining
-scoreGroup.element.style("outline", "1px dotted red");
+//scoreGroup.element.style("outline", "1px dotted red");
 
 const indicator = makeIndicator(page.element);
 
@@ -258,7 +259,27 @@ let score = [
   {
     startTime: null,
     duration: 0,
-    render: () => {}
+    render: ({ startTime }) => {
+      const startX = timeScale(startTime);
+
+      const g = scoreGroup.element.append("g");
+      translate(startX, 0, g);
+
+      g.append("line")
+        .attr("y1", 0)
+        .attr("y2", pitchRange)
+        .attr("stroke-width", 1);
+
+      translate(
+        3,
+        0,
+        g
+          .append("line")
+          .attr("y1", 0)
+          .attr("y2", pitchRange)
+          .attr("stroke-width", 2)
+      );
+    }
   }
 ];
 
