@@ -1,3 +1,10 @@
+// make descent less linear
+// make held tone less predictable/gated
+// replace pink with noisy texture
+// add pressure, irr trem
+// add stems/flags to cluster hits (subsequent hits are not cluster?)
+// add accent to main hit
+
 import drone from "../drone";
 import translate from "../translate";
 
@@ -160,7 +167,7 @@ let score = [
           {
             type: "symbol",
             value: "mf",
-            x: 0.2
+            x: 0.1
           },
           {
             type: "text",
@@ -207,7 +214,7 @@ let score = [
           {
             type: "symbol",
             value: "mf",
-            x: 0.2
+            x: 0.1
           },
           {
             type: "text",
