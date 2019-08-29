@@ -45,6 +45,14 @@ svg.append("style").text(`
 
 const page = makePage(svg);
 
+// Create hidden line to ensure page fits margins
+page.element.append("line")
+.attr("y1", 0)
+//.attr("y2", margin.top + pitchRange)
+.attr("y2", margin.top + pitchRange + 32) // TODO
+//.attr("y2", margin.top + pitchRange + margin.top)
+.style("visibility", "hidden")
+
 const scoreGroup = makeScroll(page.element);
 scoreGroup.y(margin.top); // TODO allow chaining
 scoreGroup.element.style("outline", "1px dotted red");
