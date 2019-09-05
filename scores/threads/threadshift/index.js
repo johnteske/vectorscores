@@ -56,7 +56,6 @@ const page = makePage(svg);
 page.element
   .append("line")
   .attr("y1", 0)
-  //.attr("y2", margin.top + pitchRange)
   .attr("y2", margin.top + pitchRange + 32) // TODO
   //.attr("y2", margin.top + pitchRange + margin.top)
   .style("visibility", "hidden");
@@ -93,17 +92,17 @@ let score = [
             type: "symbol",
             value: "p",
             x: 0
-          },
-          {
-            type: "text",
-            value: "cres.",
-            x: 0.5
-          },
-          {
-            type: "symbol",
-            value: "mf",
-            x: 1
           }
+          //          {
+          //            type: "text",
+          //            value: "cres.",
+          //            x: 0.5
+          //          },
+          //          {
+          //            type: "symbol",
+          //            value: "mf",
+          //            x: 1
+          //          }
         ],
         length,
         g
@@ -112,7 +111,7 @@ let score = [
   },
   {
     startTime: null,
-    duration: seconds(5),
+    duration: seconds(5), // TODO 2 seconds time, more display
     render: ({ startTime, duration }) => {
       const startX = timeScale(startTime);
       const length = timeScale(duration);
@@ -125,11 +124,24 @@ let score = [
         .text("\ue123")
         .attr("class", "bravura");
 
+      drawDynamics(
+        [
+          {
+            type: "symbol",
+            value: "sffz", // sfffz?
+            x: 0
+          }
+        ],
+        length,
+        g
+      );
+
       // caesura
       g.append("text")
         .text("\ue4d2")
         .attr("class", "bravura")
         .attr("x", length)
+        .attr("dy", "-1em")
         .attr("text-anchor", "end");
     }
   },
@@ -143,9 +155,24 @@ let score = [
       const g = scoreGroup.element.append("g");
       translate(startX, 0, g);
 
-      // start as sffz
-      // with excessive pressure and air TODO
-      // and also irregular tremolo TODO
+      // with excessive pressure and air
+      translate(
+      0,
+      pitchScale(0.5),
+      g.append("text")
+        //.text("\ue61b")
+        .text("\ue61d")
+        .attr("dy", "-1em")
+        .attr("class", "bravura"));
+
+      // irregular tremolo
+      translate(
+      0,
+      pitchScale(0.5),
+      g.append("text")
+        .text("\uE22B")
+        .attr("dy", "-0.5em")
+        .attr("class", "bravura"));
 
       // top line
       const line = lineBecomingAir(length, g);
@@ -161,7 +188,7 @@ let score = [
           {
             // TODO sfzmf?
             type: "symbol",
-            value: "sfz",
+            value: "sffz", // sfffz?
             x: 0
           },
           {
