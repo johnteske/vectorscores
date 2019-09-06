@@ -70,6 +70,29 @@ const indicator = makeIndicator(page.element);
 
 const { articulations, dynamics } = VS.dictionary.Bravura;
 
+const splitDynamics = endDynamic => [
+  {
+    type: "symbol",
+    value: "sffz", // sfffz?
+    x: 0
+  },
+  {
+    type: "symbol",
+    value: "mf",
+    x: 0.15
+  },
+  {
+    type: "text",
+    value: "decres.",
+    x: 0.5
+  },
+  {
+    type: "symbol",
+    value: endDynamic,
+    x: 1
+  }
+];
+
 // const score = [
 let score = [
   {
@@ -157,22 +180,26 @@ let score = [
 
       // with excessive pressure and air
       translate(
-      0,
-      pitchScale(0.5),
-      g.append("text")
-        //.text("\ue61b")
-        .text("\ue61d")
-        .attr("dy", "-1em")
-        .attr("class", "bravura"));
+        0,
+        pitchScale(0.5),
+        g
+          .append("text")
+          //.text("\ue61b")
+          .text("\ue61d")
+          .attr("dy", "-1em")
+          .attr("class", "bravura")
+      );
 
       // irregular tremolo
       translate(
-      0,
-      pitchScale(0.5),
-      g.append("text")
-        .text("\uE22B")
-        .attr("dy", "-0.5em")
-        .attr("class", "bravura"));
+        0,
+        pitchScale(0.5),
+        g
+          .append("text")
+          .text("\uE22B")
+          .attr("dy", "-0.5em")
+          .attr("class", "bravura")
+      );
 
       // top line
       const line = lineBecomingAir(length, g);
@@ -184,29 +211,7 @@ let score = [
       });
 
       drawDynamics(
-        [
-          {
-            // TODO sfzmf?
-            type: "symbol",
-            value: "sffz", // sfffz?
-            x: 0
-          },
-          {
-            type: "symbol",
-            value: "mf",
-            x: 0.1
-          },
-          {
-            type: "text",
-            value: "decres.",
-            x: 0.5
-          },
-          {
-            type: "symbol",
-            value: "n",
-            x: 1
-          }
-        ],
+        splitDynamics("n"),
         length,
         translate(0, -50, g.append("g"))
       );
@@ -263,33 +268,7 @@ let score = [
           .attr("class", "bravura");
       });
 
-      drawDynamics(
-        [
-          {
-            // TODO sfzmf?
-            type: "symbol",
-            value: "sfz",
-            x: 0
-          },
-          {
-            type: "symbol",
-            value: "mf",
-            x: 0.1
-          },
-          {
-            type: "text",
-            value: "decres.",
-            x: 0.5
-          },
-          {
-            type: "symbol",
-            value: "p",
-            x: 1
-          }
-        ],
-        length,
-        translate(0, 50, g.append("g"))
-      );
+      drawDynamics(splitDynamics("p"), length, translate(0, 50, g.append("g")));
     }
   },
   {
