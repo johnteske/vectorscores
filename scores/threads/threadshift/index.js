@@ -289,15 +289,41 @@ let score = [
         .attr("y2", pitchScale(0.25));
 
       // threads
+      const makeThread = (x, y, length, selection) => {
+        const group = translate(x, y, selection.append("g"));
+
+        group
+          .append("line")
+          .attr("x1", 0)
+          .attr("x2", length);
+
+        drawDynamics(
+          [
+            {
+              type: "symbol",
+              value: "n",
+              x: 0
+            },
+            {
+              type: "text",
+              value: "cres.",
+              x: 0.5
+            },
+            {
+              type: "symbol",
+              value: "mf",
+              x: 1
+            }
+          ],
+          length,
+          group
+        );
+      };
+
       for (let i = 0; i < 10; i++) {
-        let halfLength = length * 0.5;
-        let x = VS.getRandExcl(0, halfLength);
+        let x = VS.getRandExcl(0.25, 0.5) * length;
         let y = pitchScale(VS.getRandExcl(0, 1));
-        g.append("line")
-          .attr("x1", x)
-          .attr("x2", length)
-          .attr("y1", y)
-          .attr("y2", y);
+        makeThread(x, y, length - x, g);
       }
     }
   },
