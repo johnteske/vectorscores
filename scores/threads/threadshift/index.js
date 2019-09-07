@@ -6,6 +6,7 @@
 
 import drone from "../drone";
 import translate from "../translate";
+import pathAlongPath from "../pathAlongPath";
 
 import makePage from "./page";
 import makeScroll from "./scroll";
@@ -14,7 +15,6 @@ import drawDynamics from "./dynamics";
 import noisePatch from "./noisePatch";
 import longTone from "./longTone";
 import lineBecomingAir from "./lineBecomingAir";
-import pathAlongPath from "./pathAlongPath";
 
 const margin = {
   top: 64

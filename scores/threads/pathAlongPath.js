@@ -30,5 +30,7 @@ export default function(guideCurve, pathCurve) {
       .attr("d", lineGenerator(mappedPoints))
       .attr("fill", "none")
       .attr("stroke", "black"); // TODO allow custom style
+
+    return g;
   };
 }
