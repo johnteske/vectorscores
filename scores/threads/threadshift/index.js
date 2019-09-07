@@ -1,4 +1,3 @@
-// make descent less linear
 // make held tone less predictable/gated
 // replace pink with noisy texture
 // add pressure, irr trem
@@ -15,6 +14,7 @@ import drawDynamics from "./dynamics";
 import noisePatch from "./noisePatch";
 import longTone from "./longTone";
 import lineBecomingAir from "./lineBecomingAir";
+import pathAlongPath from "./pathAlongPath";
 
 const margin = {
   top: 64
@@ -217,44 +217,17 @@ let score = [
       );
 
       // bottom line
-      const lineGenerator = d3
-        .line()
-        .x(d => d.x)
-        .y(d => d.y)
-        .curve(d3.curveBasis);
-
-      const guide = g
-        .append("path")
-        .attr(
-          "d",
-          lineGenerator([
-            { x: 0, y: pitchScale(0.5) },
-            { x: length * 0.33, y: pitchScale(0.485) },
-            { x: length * 0.66, y: pitchScale(0.265) },
-            { x: length, y: pitchScale(0.25) }
-          ])
-        )
-        .attr("fill", "none")
-        .attr("stroke", "none");
-
-      const n = 50;
-      let points = [];
-      for (let i = 0; i < n; i++) {
-        let ratio = i / n;
-        const l = guide.node().getTotalLength();
-        const { x, y } = guide.node().getPointAtLength(l * ratio);
-        console.log(x, y);
-        points[i] = {
-          x,
-          y: y + VS.getRandExcl(-1, 1)
-        };
-      }
-      points.push({ x: length, y: pitchScale(0.25) });
-
-      g.append("path")
-        .attr("d", lineGenerator(points))
-        .attr("fill", "none")
-        .attr("stroke", "black");
+      pathAlongPath(d3.curveBasis, d3.curveBasis)(
+        [
+          { x: 0, y: pitchScale(0.5) },
+          { x: length * 0.33, y: pitchScale(0.485) },
+          { x: length * 0.66, y: pitchScale(0.265) },
+          { x: length, y: pitchScale(0.25) }
+        ],
+        [...new Array(50)],
+        (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-1, 1) }),
+        g
+      );
 
       const bottomNoise = noisePatch(length * 0.25, length, g);
       translate(0, pitchScale(0.25), bottomNoise);
