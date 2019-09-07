@@ -292,11 +292,10 @@ let score = [
       for (let i = 0; i < 10; i++) {
         let halfLength = length * 0.5;
         let x = VS.getRandExcl(0, halfLength);
-        let l = x + halfLength;
         let y = pitchScale(VS.getRandExcl(0, 1));
         g.append("line")
           .attr("x1", x)
-          .attr("x2", l)
+          .attr("x2", length)
           .attr("y1", y)
           .attr("y2", y);
       }
