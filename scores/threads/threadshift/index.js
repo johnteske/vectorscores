@@ -5,41 +5,65 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  const bravura = selection =>
-    selection.style("font-family", "'Bravura'").style("font-size", 20);
+  function makePage(selection) {
+    const page = selection.append("g");
 
-  function makePage(parent) {
-    const page = parent.append("g");
-    let center = null;
+    let _height = null;
+    let _scale = 1;
 
-    function calculateCenter() {
-      const width = parseInt(parent.style("width"), 10);
-      center = width * 0.5;
-      return center;
+    function calculateHeight() {
+      _height = page.node().getBBox().height;
     }
 
-    function getCenter() {
-      return center;
+    function height() {
+      return _height;
     }
 
-    function scrollTo(x, duration) {
-      page
-        .transition()
-        .ease(d3.easeLinear)
-        .duration(duration)
-        .attr("transform", `translate(${center - x},0)`);
+    function scale(_) {
+      _scale = _;
+      page.attr("transform", `scale(${_scale})`);
     }
 
     return {
       element: page,
-      calculateCenter,
-      getCenter,
-      scrollTo
+      calculateHeight,
+      height,
+      scale
+    };
+  }
+
+  function makeScroll(selection) {
+    const scroll = selection.append("g");
+
+    let _center = null;
+    let _y = 0;
+
+    function setCenter(_) {
+      _center = _;
+    }
+
+    function scrollTo(x, duration) {
+      scroll
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(duration)
+        .attr("transform", `translate(${_center - x},${_y})`);
+    }
+
+    function y(_) {
+      _y = _;
+    }
+
+    return {
+      element: scroll,
+      setCenter,
+      scrollTo,
+      y
     };
   }
 
   function makeIndicator(selection) {
-    // TODO from dirge,,march
+    // TODO from dirge,,march AND ad;sr
     const indicator = selection
       .append("path")
       .attr("class", "indicator")
@@ -90,16 +114,13 @@
         case "symbol":
           text
             .text(dynamics[d.value])
-            .call(bravura)
+            .attr("class", "bravura")
             .attr("dy", "2em");
           break;
         case "text":
           text
             .text(d.value)
             .attr("class", "text-dynamic")
-            .style("font-family", "serif")
-            .style("font-size", 12)
-            .style("font-style", "italic")
             .attr("dy", "3.5em");
           break;
       }
@@ -115,7 +136,8 @@
       .attr("width", length * 0.5)
       .attr("y", -10) // center
       .attr("height", 20)
-      .attr("fill", "pink");
+      .attr("fill", "pink")
+      .style("opacity", "0.5");
   }
 
   const durations = VS.dictionary.Bravura.durations.stemless;
@@ -127,7 +149,7 @@
 
     group
       .append("text")
-      .call(bravura)
+      .attr("class", "bravura")
       .text(durations[4]);
 
     group
@@ -177,6 +199,8 @@
     return g;
   }
 
+  // make descent less linear
+
   const margin = {
     top: 64
   };
@@ -201,17 +225,58 @@
   }
 
   const svg = d3.select("svg.main");
+  svg.append("style").text(`
+  line { stroke: black; }
+  .bravura { font-family: 'Bravura'; font-size: 20px; }
+  .text-dynamic {
+    font-family: serif;
+    font-size: 12px;
+    font-style: italic;
+  }
+ `);
+
   const page = makePage(svg);
 
-  const scoreGroup = page.element.append("g");
-  // scoreGroup.style("outline", "1px dotted red");
-  translate(0, margin.top, scoreGroup);
+  // Create hidden line to ensure page fits margins
+  page.element
+    .append("line")
+    .attr("y1", 0)
+    .attr("y2", margin.top + pitchRange + 32) // TODO
+    //.attr("y2", margin.top + pitchRange + margin.top)
+    .style("visibility", "hidden");
 
-  const indicator = makeIndicator(svg);
+  const scoreGroup = makeScroll(page.element);
+  scoreGroup.y(margin.top); // TODO allow chaining
+  //scoreGroup.element.style("outline", "1px dotted red");
 
-  // drone(scoreGroup); // TODO: how do these integrate with the ending
+  const indicator = makeIndicator(page.element);
+
+  // drone(scoreGroup.element); // TODO: how do these integrate with the ending
 
   const { articulations, dynamics: dynamics$1 } = VS.dictionary.Bravura;
+
+  const splitDynamics = endDynamic => [
+    {
+      type: "symbol",
+      value: "sffz", // sfffz?
+      x: 0
+    },
+    {
+      type: "symbol",
+      value: "mf",
+      x: 0.15
+    },
+    {
+      type: "text",
+      value: "decres.",
+      x: 0.5
+    },
+    {
+      type: "symbol",
+      value: endDynamic,
+      x: 1
+    }
+  ];
 
   // const score = [
   let score = [
@@ -222,11 +287,11 @@
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = longTone(scoreGroup, startX, pitchScale(0.5), length);
+        const g = longTone(scoreGroup.element, startX, pitchScale(0.5), length);
 
         g.append("text")
           .text(articulations[">"])
-          .call(bravura)
+          .attr("class", "bravura")
           .attr("dy", "0.66em");
 
         drawDynamics(
@@ -235,17 +300,17 @@
               type: "symbol",
               value: "p",
               x: 0
-            },
-            {
-              type: "text",
-              value: "cres.",
-              x: 0.5
-            },
-            {
-              type: "symbol",
-              value: "mf",
-              x: 1
             }
+            //          {
+            //            type: "text",
+            //            value: "cres.",
+            //            x: 0.5
+            //          },
+            //          {
+            //            type: "symbol",
+            //            value: "mf",
+            //            x: 1
+            //          }
           ],
           length,
           g
@@ -254,24 +319,37 @@
     },
     {
       startTime: null,
-      duration: seconds(5),
+      duration: seconds(5), // TODO 2 seconds time, more display
       render: ({ startTime, duration }) => {
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = scoreGroup.append("g");
+        const g = scoreGroup.element.append("g");
         translate(startX, pitchScale(0.5), g);
 
         // cluster
         g.append("text")
           .text("\ue123")
-          .call(bravura);
+          .attr("class", "bravura");
+
+        drawDynamics(
+          [
+            {
+              type: "symbol",
+              value: "sffz", // sfffz?
+              x: 0
+            }
+          ],
+          length,
+          g
+        );
 
         // caesura
         g.append("text")
           .text("\ue4d2")
-          .call(bravura)
+          .attr("class", "bravura")
           .attr("x", length)
+          .attr("dy", "-1em")
           .attr("text-anchor", "end");
       }
     },
@@ -282,12 +360,31 @@
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = scoreGroup.append("g");
+        const g = scoreGroup.element.append("g");
         translate(startX, 0, g);
 
-        // start as sffz
-        // with excessive pressure and air TODO
-        // and also irregular tremolo TODO
+        // with excessive pressure and air
+        translate(
+          0,
+          pitchScale(0.5),
+          g
+            .append("text")
+            //.text("\ue61b")
+            .text("\ue61d")
+            .attr("dy", "-1em")
+            .attr("class", "bravura")
+        );
+
+        // irregular tremolo
+        translate(
+          0,
+          pitchScale(0.5),
+          g
+            .append("text")
+            .text("\uE22B")
+            .attr("dy", "-0.5em")
+            .attr("class", "bravura")
+        );
 
         // top line
         const line = lineBecomingAir(length, g);
@@ -299,39 +396,50 @@
         });
 
         drawDynamics(
-          [
-            {
-              // TODO sfzmf?
-              type: "symbol",
-              value: "sfz",
-              x: 0
-            },
-            {
-              type: "symbol",
-              value: "mf",
-              x: 0.2
-            },
-            {
-              type: "text",
-              value: "decres.",
-              x: 0.5
-            },
-            {
-              type: "symbol",
-              value: "n",
-              x: 1
-            }
-          ],
+          splitDynamics("n"),
           length,
           translate(0, -50, g.append("g"))
         );
 
         // bottom line
-        g.append("line")
-          .attr("x1", 0)
-          .attr("x2", length)
-          .attr("y1", pitchScale(0.5))
-          .attr("y2", pitchScale(0.25)); // TODO curve and draw out, for more beating--also not a linear descent, meaning this should be a path, not a line
+        const lineGenerator = d3
+          .line()
+          .x(d => d.x)
+          .y(d => d.y)
+          .curve(d3.curveBasis);
+
+        const guide = g
+          .append("path")
+          .attr(
+            "d",
+            lineGenerator([
+              { x: 0, y: pitchScale(0.5) },
+              { x: length * 0.33, y: pitchScale(0.485) },
+              { x: length * 0.66, y: pitchScale(0.265) },
+              { x: length, y: pitchScale(0.25) }
+            ])
+          )
+          .attr("fill", "none")
+          .attr("stroke", "none");
+
+        const n = 50;
+        let points = [];
+        for (let i = 0; i < n; i++) {
+          let ratio = i / n;
+          const l = guide.node().getTotalLength();
+          const { x, y } = guide.node().getPointAtLength(l * ratio);
+          console.log(x, y);
+          points[i] = {
+            x,
+            y: y + VS.getRandExcl(-1, 1)
+          };
+        }
+        points.push({ x: length, y: pitchScale(0.25) });
+
+        g.append("path")
+          .attr("d", lineGenerator(points))
+          .attr("fill", "none")
+          .attr("stroke", "black");
 
         const bottomNoise = noisePatch(length * 0.25, length, g);
         translate(0, pitchScale(0.25), bottomNoise);
@@ -342,36 +450,10 @@
             .attr("x", length * x)
             .attr("y", pitchScale(0.5 - x / 4))
             .attr("dy", "1em")
-            .call(bravura);
+            .attr("class", "bravura");
         });
 
-        drawDynamics(
-          [
-            {
-              // TODO sfzmf?
-              type: "symbol",
-              value: "sfz",
-              x: 0
-            },
-            {
-              type: "symbol",
-              value: "mf",
-              x: 0.2
-            },
-            {
-              type: "text",
-              value: "decres.",
-              x: 0.5
-            },
-            {
-              type: "symbol",
-              value: "p",
-              x: 1
-            }
-          ],
-          length,
-          translate(0, 50, g.append("g"))
-        );
+        drawDynamics(splitDynamics("p"), length, translate(0, 50, g.append("g")));
       }
     },
     {
@@ -381,7 +463,7 @@
         const startX = timeScale(startTime);
         const length = timeScale(duration);
 
-        const g = scoreGroup.append("g");
+        const g = scoreGroup.element.append("g");
         translate(startX, 0, g);
 
         // bottom line
@@ -392,23 +474,68 @@
           .attr("y2", pitchScale(0.25));
 
         // threads
+        const makeThread = (x, y, length, selection) => {
+          const group = translate(x, y, selection.append("g"));
+
+          group
+            .append("line")
+            .attr("x1", 0)
+            .attr("x2", length);
+
+          drawDynamics(
+            [
+              {
+                type: "symbol",
+                value: "n",
+                x: 0
+              },
+              {
+                type: "text",
+                value: "cres.",
+                x: 0.5
+              },
+              {
+                type: "symbol",
+                value: "mf",
+                x: 1
+              }
+            ],
+            length,
+            group
+          );
+        };
+
         for (let i = 0; i < 10; i++) {
-          let halfLength = length * 0.5;
-          let x = VS.getRandExcl(0, halfLength);
-          let l = x + halfLength;
+          let x = VS.getRandExcl(0.25, 0.5) * length;
           let y = pitchScale(VS.getRandExcl(0, 1));
-          g.append("line")
-            .attr("x1", x)
-            .attr("x2", l)
-            .attr("y1", y)
-            .attr("y2", y);
+          makeThread(x, y, length - x, g);
         }
       }
     },
     {
       startTime: null,
       duration: 0,
-      render: () => {}
+      render: ({ startTime }) => {
+        const startX = timeScale(startTime);
+
+        const g = scoreGroup.element.append("g");
+        translate(startX, 0, g);
+
+        g.append("line")
+          .attr("y1", 0)
+          .attr("y2", pitchRange)
+          .attr("stroke-width", 1);
+
+        translate(
+          3,
+          0,
+          g
+            .append("line")
+            .attr("y1", 0)
+            .attr("y2", pitchRange)
+            .attr("stroke-width", 2)
+        );
+      }
     }
   ];
 
@@ -425,12 +552,6 @@
   score = score.map((bar, i) => {
     return { ...bar, startTime: startTimes[i] };
   });
-  // .map((bar, i) => {
-  //   // TODO each bar is set to the same duration during sketching
-  //   // const length = 3000;
-  //   const length = bar.duration * 1000;
-  //   return { ...bar, duration: length, startTime: length * i };
-  // });
 
   score.forEach((bar, i) => {
     const callback = i < score.length - 1 ? scrollToNextBar : null;
@@ -451,7 +572,7 @@
 
   function centerScoreByIndex(index, duration) {
     const x = timeScale(score[index].startTime);
-    page.scrollTo(x, duration);
+    scoreGroup.scrollTo(x, duration);
   }
 
   function scrollToNextBar(index, duration) {
@@ -459,24 +580,26 @@
   }
 
   function resize() {
-    const x = page.calculateCenter();
-
-    // console.log(scoreGroupHeight);
-
-    indicator.translateX(x);
-
     VS.score.isPlaying() && VS.score.pause();
+
+    const w = parseInt(svg.style("width"), 10);
+    const h = parseInt(svg.style("height"), 10);
+
+    const scale = h / page.height();
+    page.scale(scale);
+
+    const center = (w / scale) * 0.5;
+    indicator.translateX(center);
+    scoreGroup.setCenter(center);
     setScorePosition();
   }
 
   d3.select(window).on("resize", resize);
-  let scoreGroupHeight; // TODO
+
   d3.select(window).on("load", () => {
     renderScore();
-    scoreGroupHeight = scoreGroup.node().getBBox().height; // TODO
+    page.calculateHeight();
     resize();
-    setScorePosition();
-    // saveSvg(); // TODO add to info or setting modal
   });
 
   VS.control.hooks.add("stop", setScorePosition);
