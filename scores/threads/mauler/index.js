@@ -97,7 +97,7 @@ const score = [
       // spike
       g.append("path").attr("d", "M-15,0 L15,0 L0,60 Z");
       // wall/tremolo--is it around the pitch center?
-      //translate(100, 50, sixteenths(wrapper));
+      translate(100, pitchScale(0.5), sixteenths(wrapper));
     }
   }
   //drone(wrapper);
