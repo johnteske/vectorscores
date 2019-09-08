@@ -5,15 +5,15 @@
 // add accent to main hit
 
 import drone from "../drone";
-import translate from "../translate";
+import makeIndicator from "../indicator";
+import longTone from "../longTone";
+import makePage from "../page";
 import pathAlongPath from "../pathAlongPath";
+import makeScroll from "../scroll";
+import translate from "../translate";
 
-import makePage from "./page";
-import makeScroll from "./scroll";
-import makeIndicator from "./indicator";
 import drawDynamics from "./dynamics";
 import noisePatch from "./noisePatch";
-import longTone from "./longTone";
 import lineBecomingAir from "./lineBecomingAir";
 
 const margin = {
