@@ -4,9 +4,22 @@ import translate from "../translate";
 const durations = VS.dictionary.Bravura.durations.stemless;
 
 const main = d3.select(".main");
+main.append("style").text(`
+  .bravura { font-family: 'Bravura'; font-size: 20px; }
+`);
 const wrapper = main.append("g");
 
 //drone(wrapper);
+
+// 3/4
+translate(
+  0,
+  50,
+  wrapper
+    .append("text")
+    .text("\uf58c")
+    .attr("class", "bravura")
+);
 
 function sixteenths(selection) {
   const g = selection.append("g").attr("stroke", "black");
@@ -47,9 +60,7 @@ sixteenths(wrapper).attr("transform", "translate(0, 50) scale(2,2)");
 translate(100, 50, sixteenths(wrapper));
 
 // spike
-wrapper
-  .append("path")
-  .attr("d", "M-15,0 L15,0 L0,60 Z")
+wrapper.append("path").attr("d", "M-15,0 L15,0 L0,60 Z");
 
 const score = [
   // existing drone/s?
