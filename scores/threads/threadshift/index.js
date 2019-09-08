@@ -5,6 +5,57 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
+  function makeIndicator(selection) {
+    // TODO from dirge,,march AND ad;sr
+    const indicator = selection
+      .append("path")
+      .attr("class", "indicator")
+      .attr("d", "M-6.928,0 L0,2 6.928,0 0,12 Z")
+      .style("stroke", "black")
+      .style("stroke-width", "1")
+      .style("fill", "black")
+      .style("fill-opacity", "0");
+
+    let x = 0;
+    let y = 0;
+
+    function translateX(_) {
+      x = _;
+      translate(x, y, indicator);
+    }
+
+    function translateY(_) {
+      y = _;
+      translate(x, y, indicator);
+    }
+
+    return {
+      element: indicator,
+      translateX,
+      translateY
+    };
+  }
+
+  const durations = VS.dictionary.Bravura.durations.stemless;
+
+  function longTone(selection, x, y, length) {
+    const group = selection.append("g");
+
+    group.attr("transform", `translate(${x}, ${y})`);
+
+    group
+      .append("text")
+      .attr("class", "bravura")
+      .text(durations[4]);
+
+    group
+      .append("line")
+      .attr("x1", "0.5em")
+      .attr("x2", length);
+
+    return group;
+  }
+
   function makePage(selection) {
     const page = selection.append("g");
 
@@ -29,6 +80,43 @@
       calculateHeight,
       height,
       scale
+    };
+  }
+
+  function pathAlongPath(guideCurve, pathCurve) {
+    const lineGenerator = d3
+      .line()
+      .x(d => d.x)
+      .y(d => d.y);
+
+    const guideGenerator = lineGenerator.curve(guideCurve);
+    const pathGenerator = lineGenerator.curve(pathCurve);
+
+    return function(guidePoints, pathPoints, pathPointMap, selection) {
+      const g = selection.append("g");
+
+      const guide = g
+        .append("path")
+        .attr("d", guideGenerator(guidePoints))
+        .attr("fill", "none")
+        .attr("stroke", "none");
+
+      const guideLength = guide.node().getTotalLength();
+      const nPoints = pathPoints.length;
+      const mappedPoints = pathPoints.map((point, i) => {
+        const { x, y } = guide
+          .node()
+          .getPointAtLength(guideLength * (i / nPoints));
+        return pathPointMap(point, i, x, y);
+      });
+      mappedPoints.push(guide.node().getPointAtLength(guideLength)); // add final point
+
+      g.append("path")
+        .attr("d", lineGenerator(mappedPoints))
+        .attr("fill", "none")
+        .attr("stroke", "black"); // TODO allow custom style
+
+      return g;
     };
   }
 
@@ -59,37 +147,6 @@
       setCenter,
       scrollTo,
       y
-    };
-  }
-
-  function makeIndicator(selection) {
-    // TODO from dirge,,march AND ad;sr
-    const indicator = selection
-      .append("path")
-      .attr("class", "indicator")
-      .attr("d", "M-6.928,0 L0,2 6.928,0 0,12 Z")
-      .style("stroke", "black")
-      .style("stroke-width", "1")
-      .style("fill", "black")
-      .style("fill-opacity", "0");
-
-    let x = 0;
-    let y = 0;
-
-    function translateX(_) {
-      x = _;
-      translate(x, y, indicator);
-    }
-
-    function translateY(_) {
-      y = _;
-      translate(x, y, indicator);
-    }
-
-    return {
-      element: indicator,
-      translateX,
-      translateY
     };
   }
 
@@ -140,26 +197,6 @@
       .style("opacity", "0.5");
   }
 
-  const durations = VS.dictionary.Bravura.durations.stemless;
-
-  function longTone(selection, x, y, length) {
-    const group = selection.append("g");
-
-    group.attr("transform", `translate(${x}, ${y})`);
-
-    group
-      .append("text")
-      .attr("class", "bravura")
-      .text(durations[4]);
-
-    group
-      .append("line")
-      .attr("x1", "0.5em")
-      .attr("x2", length);
-
-    return group;
-  }
-
   function makeEmptyArray(n) {
     let array = [];
     for (let i = 0; i < n; i++) {
@@ -199,7 +236,7 @@
     return g;
   }
 
-  // make descent less linear
+  // make held tone less predictable/gated
 
   const margin = {
     top: 64
@@ -402,44 +439,17 @@
         );
 
         // bottom line
-        const lineGenerator = d3
-          .line()
-          .x(d => d.x)
-          .y(d => d.y)
-          .curve(d3.curveBasis);
-
-        const guide = g
-          .append("path")
-          .attr(
-            "d",
-            lineGenerator([
-              { x: 0, y: pitchScale(0.5) },
-              { x: length * 0.33, y: pitchScale(0.485) },
-              { x: length * 0.66, y: pitchScale(0.265) },
-              { x: length, y: pitchScale(0.25) }
-            ])
-          )
-          .attr("fill", "none")
-          .attr("stroke", "none");
-
-        const n = 50;
-        let points = [];
-        for (let i = 0; i < n; i++) {
-          let ratio = i / n;
-          const l = guide.node().getTotalLength();
-          const { x, y } = guide.node().getPointAtLength(l * ratio);
-          console.log(x, y);
-          points[i] = {
-            x,
-            y: y + VS.getRandExcl(-1, 1)
-          };
-        }
-        points.push({ x: length, y: pitchScale(0.25) });
-
-        g.append("path")
-          .attr("d", lineGenerator(points))
-          .attr("fill", "none")
-          .attr("stroke", "black");
+        pathAlongPath(d3.curveBasis, d3.curveBasis)(
+          [
+            { x: 0, y: pitchScale(0.5) },
+            { x: length * 0.33, y: pitchScale(0.485) },
+            { x: length * 0.66, y: pitchScale(0.265) },
+            { x: length, y: pitchScale(0.25) }
+          ],
+          [...new Array(50)],
+          (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-1, 1) }),
+          g
+        );
 
         const bottomNoise = noisePatch(length * 0.25, length, g);
         translate(0, pitchScale(0.25), bottomNoise);
