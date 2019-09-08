@@ -46,6 +46,11 @@ sixteenths(wrapper).attr("transform", "translate(0, 50) scale(2,2)");
 
 translate(100, 50, sixteenths(wrapper));
 
+// spike
+wrapper
+  .append("path")
+  .attr("d", "M-15,0 L15,0 L0,60 Z")
+
 const score = [
   // existing drone/s?
   // sixteenth notes: 0 e 0 2 3 (Mahler 2 opening)--is there a pitch center?
