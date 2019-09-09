@@ -61,7 +61,7 @@ const score = [
         .attr("dx", "-1em")
         .attr("class", "bravura");
 
-      sixteenths(g).attr("transform", "scale(1.5)");
+      sixteenths(g).attr("transform", "scale(1)");
 
       g.append("text")
         .attr("class", "bravura")
@@ -76,16 +76,24 @@ const score = [
   },
   {
     startTime: null,
-    duration: 3000,
-    render: ({ x }) => {
+    duration: 30000,
+    render: ({ x, length }) => {
       const g = translate(x, 0, wrapper.append("g"));
       // spike
       g.append("path").attr("d", "M-5,0 L5,0 L0,60 Z");
       // wall/tremolo--is it around the pitch center?
 
       for (let i = 0; i < 25; i++) {
-        translate(i, pitchScale(0.33), tremoloLongTone(g));
-        translate(i, pitchScale(0.66), sixteenths(g));
+        translate(
+          Math.random() * length,
+          Math.random() * pitchRange,
+          tremoloLongTone(g)
+        );
+        translate(
+          Math.random() * length,
+          Math.random() * pitchRange,
+          sixteenths(g)
+        );
       }
     }
   },
