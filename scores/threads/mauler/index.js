@@ -5,6 +5,37 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
+  function makeIndicator(selection) {
+    // TODO from dirge,,march AND ad;sr
+    const indicator = selection
+      .append("path")
+      .attr("class", "indicator")
+      .attr("d", "M-6.928,0 L0,2 6.928,0 0,12 Z")
+      .style("stroke", "black")
+      .style("stroke-width", "1")
+      .style("fill", "black")
+      .style("fill-opacity", "0");
+
+    let x = 0;
+    let y = 0;
+
+    function translateX(_) {
+      x = _;
+      translate(x, y, indicator);
+    }
+
+    function translateY(_) {
+      y = _;
+      translate(x, y, indicator);
+    }
+
+    return {
+      element: indicator,
+      translateX,
+      translateY
+    };
+  }
+
   const durations = VS.dictionary.Bravura.durations.stemless;
 
   function makePage(selection) {
@@ -64,6 +95,56 @@
     };
   }
 
+  var startTimeFromDuration = (bar, i, score) => {
+    // Calculate and set startTimes
+    const startTime = score
+      .slice(0, i)
+      .reduce((sum, b, j) => sum + b.duration, 0);
+    return { ...bar, startTime };
+  };
+
+  function sixteenths(selection) {
+    const g = selection.append("g").attr("stroke", "black");
+
+    const stemHeight = 10;
+    const spacing = 5;
+
+    [0, -1, 0, 2, 3].forEach((y, i) => {
+      const x = i * spacing;
+
+      g.append("line")
+        .attr("x1", x)
+        .attr("x2", x)
+        .attr("y1", -1 * y)
+        .attr("y2", -1 * y - stemHeight);
+    });
+
+    g.append("line")
+      .attr("x1", 0)
+      .attr("x2", 3 * spacing)
+      .attr("y1", -stemHeight)
+      .attr("y2", -stemHeight - 2)
+      .attr("stroke-width", 2);
+
+    g.append("line")
+      .attr("x1", 0)
+      .attr("x2", 3 * spacing)
+      .attr("y1", 0)
+      .attr("y1", -stemHeight + 3)
+      .attr("y2", -stemHeight + 3 - 2)
+      .attr("stroke-width", 2);
+
+    return g;
+  }
+
+  function tremoloLongTone(selection) {
+    const g = selection.append("g");
+
+    g.append("text").text("///");
+
+    return g;
+  }
+
   const durations$1 = VS.dictionary.Bravura.durations.stemless;
 
   const margin = {
@@ -75,9 +156,17 @@
     return (1 - value) * pitchRange;
   }
 
+  function timeScale(t) {
+    return t / 80;
+  }
+
+  function callTranslate(selection, x, y) {
+    return translate(x, y, selection);
+  }
+
   const svg = d3.select("svg.main");
   svg.append("style").text(`
-  .bravura { font-family: 'Bravura'; font-size: 20px; }
+  .bravura { font-family: 'Bravura'; font-size: 30px; }
 `);
 
   const page = makePage(svg);
@@ -93,86 +182,94 @@
   scoreGroup.y(margin.top); // TODO allow chaining
   const wrapper = scoreGroup.element;
 
-  function sixteenths(selection) {
-    const g = selection.append("g").attr("stroke", "black");
-
-    const spacing = 5;
-
-    [0, -1, 0, 2, 3].forEach((y, i) => {
-      const x = i * spacing;
-
-      g.append("line")
-        .attr("x1", x)
-        .attr("x2", x)
-        .attr("y1", 0 - y)
-        .attr("y2", 10 - y);
-    });
-
-    g.append("line")
-      .attr("x1", 0)
-      .attr("x2", 3 * spacing)
-      .attr("y1", 0)
-      .attr("y2", 0 - 2)
-      .attr("stroke-width", 2);
-
-    g.append("line")
-      .attr("x1", 0)
-      .attr("x2", 3 * spacing)
-      .attr("y1", 0)
-      .attr("y1", 3)
-      .attr("y2", 3 - 2)
-      .attr("stroke-width", 2);
-
-    return g;
-  }
+  const indicator = makeIndicator(page.element);
 
   const score = [
     {
       startTime: null,
       duration: 3000,
-      render: ({ startTime }) => {
-        //const g = translate(startTime, 0, wrapper.append("g"))
-        const g = translate(0, 0, wrapper.append("g"));
+      render: ({ x }) => {
+        const g = translate(x, pitchScale(0.5), wrapper.append("g"));
 
-        const y = pitchScale(0.5);
-        translate(
-          0,
-          y,
-          g
-            .append("text")
-            .text("\uf58c")
-            .attr("class", "bravura")
-        );
+        // 3/4 time signature
+        g.append("text")
+          .text("\uf58c")
+          .attr("dx", "-1em")
+          .attr("class", "bravura");
 
-        sixteenths(g).attr("transform", `translate(25, ${y}) scale(2,2)`);
+        sixteenths(g).attr("transform", "scale(1)");
+
+        g.append("text")
+          .attr("class", "bravura")
+          .text("\ue4e6")
+          .call(callTranslate, timeScale(1500), 0);
+
+        g.append("text")
+          .attr("class", "bravura")
+          .text("\ue4e5")
+          .call(callTranslate, timeScale(2000), 0);
       }
     },
     {
       startTime: null,
-      duration: 3000,
-      render: ({ startTime }) => {
-        //const g = translate(startTime, 0, wrapper.append("g"))
-        const g = translate(100, 0, wrapper.append("g"));
+      duration: 30000,
+      render: ({ x, length }) => {
+        const g = translate(x, 0, wrapper.append("g"));
         // spike
-        g.append("path").attr("d", "M-15,0 L15,0 L0,60 Z");
+        g.append("path").attr("d", "M-5,0 L5,0 L0,60 Z");
         // wall/tremolo--is it around the pitch center?
-        //translate(100, 50, sixteenths(wrapper));
-      }
-    }
-    //drone(wrapper);
-    // semitone falls around drones, maybe the wall/texture fades over time
-  ];
 
-  //score.forEach((bar, i) => {
-  //  const callback = i < score.length - 1 ? scrollToNextBar : null;
-  //  VS.score.add(bar.startTime, callback, [i, bar.duration]);
-  //});
+        for (let i = 0; i < 25; i++) {
+          translate(
+            Math.random() * length,
+            Math.random() * pitchRange,
+            tremoloLongTone(g)
+          );
+          translate(
+            Math.random() * length,
+            Math.random() * pitchRange,
+            sixteenths(g)
+          );
+        }
+      }
+    },
+    // drone(wrapper);
+    // semitone falls around drones, maybe the wall/texture fades over time
+    {
+      startTime: 0,
+      duration: 0,
+      render: () => {}
+    }
+  ].map(startTimeFromDuration);
+
+  score.forEach((bar, i) => {
+    const callback = i < score.length - 1 ? scrollToNextBar : null;
+    VS.score.add(bar.startTime, callback, [i, bar.duration]);
+  });
 
   function renderScore() {
     score.forEach(bar => {
-      const { render, ...barData } = bar;
-      render(barData);
+      const { render, ...meta } = bar;
+      const renderData = {
+        x: timeScale(bar.startTime),
+        length: timeScale(bar.duration)
+      };
+      render({ ...meta, ...renderData });
     });
+  }
+
+  function setScorePosition() {
+    const index = VS.score.getPointer();
+    centerScoreByIndex(index, 0);
+  }
+
+  function centerScoreByIndex(index, duration) {
+    const x = timeScale(score[index].startTime);
+    scoreGroup.scrollTo(x, duration);
+  }
+
+  function scrollToNextBar(index, duration) {
+    centerScoreByIndex(index + 1, duration);
   }
 
   function resize() {
@@ -185,9 +282,9 @@
     page.scale(scale);
 
     const center = (w / scale) * 0.5;
-    //  indicator.translateX(center);
+    indicator.translateX(center);
     scoreGroup.setCenter(center);
-    //  setScorePosition();
+    setScorePosition();
   }
 
   d3.select(window).on("resize", resize);
@@ -197,5 +294,10 @@
     page.calculateHeight();
     resize();
   });
+
+  VS.control.hooks.add("stop", setScorePosition);
+  VS.score.hooks.add("stop", setScorePosition);
+  VS.control.hooks.add("step", setScorePosition);
+  VS.control.hooks.add("pause", setScorePosition);
 
 }());

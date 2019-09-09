@@ -150,6 +150,14 @@
     };
   }
 
+  var startTimeFromDuration = (bar, i, score) => {
+    // Calculate and set startTimes
+    const startTime = score
+      .slice(0, i)
+      .reduce((sum, b, j) => sum + b.duration, 0);
+    return { ...bar, startTime };
+  };
+
   const { dynamics } = VS.dictionary.Bravura;
 
   function drawDynamics(data, scale, selection) {
@@ -270,7 +278,7 @@
     font-size: 12px;
     font-style: italic;
   }
- `);
+`);
 
   const page = makePage(svg);
 
@@ -315,16 +323,12 @@
     }
   ];
 
-  // const score = [
-  let score = [
+  const score = [
     {
       startTime: null,
       duration: seconds(60),
-      render: ({ startTime, duration }) => {
-        const startX = timeScale(startTime);
-        const length = timeScale(duration);
-
-        const g = longTone(scoreGroup.element, startX, pitchScale(0.5), length);
+      render: ({ x, length }) => {
+        const g = longTone(scoreGroup.element, x, pitchScale(0.5), length);
 
         g.append("text")
           .text(articulations[">"])
@@ -357,12 +361,9 @@
     {
       startTime: null,
       duration: seconds(5), // TODO 2 seconds time, more display
-      render: ({ startTime, duration }) => {
-        const startX = timeScale(startTime);
-        const length = timeScale(duration);
-
+      render: ({ x, length }) => {
         const g = scoreGroup.element.append("g");
-        translate(startX, pitchScale(0.5), g);
+        translate(x, pitchScale(0.5), g);
 
         // cluster
         g.append("text")
@@ -393,12 +394,9 @@
     {
       startTime: null,
       duration: seconds(45),
-      render: ({ startTime, duration }) => {
-        const startX = timeScale(startTime);
-        const length = timeScale(duration);
-
+      render: ({ x, length }) => {
         const g = scoreGroup.element.append("g");
-        translate(startX, 0, g);
+        translate(x, 0, g);
 
         // with excessive pressure and air
         translate(
@@ -469,12 +467,9 @@
     {
       startTime: null,
       duration: seconds(120),
-      render: ({ startTime, duration }) => {
-        const startX = timeScale(startTime);
-        const length = timeScale(duration);
-
+      render: ({ x, length }) => {
         const g = scoreGroup.element.append("g");
-        translate(startX, 0, g);
+        translate(x, 0, g);
 
         // bottom line
         g.append("line")
@@ -525,11 +520,10 @@
     {
       startTime: null,
       duration: 0,
-      render: ({ startTime }) => {
-        const startX = timeScale(startTime);
-
+      render: ({ x }) => {
+        // Double bar
         const g = scoreGroup.element.append("g");
-        translate(startX, 0, g);
+        translate(x, 0, g);
 
         g.append("line")
           .attr("y1", 0)
@@ -547,21 +541,7 @@
         );
       }
     }
-  ];
-
-  const startTimes = score.reduce(
-    ({ sum, times }, bar) => {
-      return {
-        sum: sum + bar.duration,
-        times: [...times, sum]
-      };
-    },
-    { sum: 0, times: [] }
-  ).times;
-
-  score = score.map((bar, i) => {
-    return { ...bar, startTime: startTimes[i] };
-  });
+  ].map(startTimeFromDuration);
 
   score.forEach((bar, i) => {
     const callback = i < score.length - 1 ? scrollToNextBar : null;
@@ -570,8 +550,12 @@
 
   function renderScore() {
     score.forEach(bar => {
-      const { render, ...barData } = bar;
-      render(barData);
+      const { render, ...meta } = bar;
+      const renderData = {
+        x: timeScale(bar.startTime),
+        length: timeScale(bar.duration)
+      };
+      render({ ...meta, ...renderData });
     });
   }
 
@@ -619,18 +603,18 @@
 
   // TODO include stylesheet or inline all styles
   // TODO serialize font?
-  function saveSvg() {
-    var svgXML = new XMLSerializer().serializeToString(svg.node());
-    var encoded = encodeURI(svgXML);
-    var dataURI = `data:image/svg+xml;utf8,${encoded}`;
-
-    var dl = document.createElement("a");
-    document.body.appendChild(dl); // This line makes it work in Firefox.
-    dl.setAttribute("href", dataURI);
-    dl.setAttribute("download", "test.svg");
-    dl.click();
-    dl.remove();
-  }
-  d3.select("#save-svg").on("click", saveSvg);
+  //function saveSvg() {
+  //  var svgXML = new XMLSerializer().serializeToString(svg.node());
+  //  var encoded = encodeURI(svgXML);
+  //  var dataURI = `data:image/svg+xml;utf8,${encoded}`;
+  //
+  //  var dl = document.createElement("a");
+  //  document.body.appendChild(dl); // This line makes it work in Firefox.
+  //  dl.setAttribute("href", dataURI);
+  //  dl.setAttribute("download", "test.svg");
+  //  dl.click();
+  //  dl.remove();
+  //}
+  //d3.select("#save-svg").on("click", saveSvg);
 
 }());
