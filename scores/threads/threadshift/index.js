@@ -98,11 +98,8 @@ const score = [
   {
     startTime: null,
     duration: seconds(60),
-    render: ({ startTime, duration }) => {
-      const startX = timeScale(startTime);
-      const length = timeScale(duration);
-
-      const g = longTone(scoreGroup.element, startX, pitchScale(0.5), length);
+    render: ({ x, length }) => {
+      const g = longTone(scoreGroup.element, x, pitchScale(0.5), length);
 
       g.append("text")
         .text(articulations[">"])
@@ -135,12 +132,9 @@ const score = [
   {
     startTime: null,
     duration: seconds(5), // TODO 2 seconds time, more display
-    render: ({ startTime, duration }) => {
-      const startX = timeScale(startTime);
-      const length = timeScale(duration);
-
+    render: ({ x, length }) => {
       const g = scoreGroup.element.append("g");
-      translate(startX, pitchScale(0.5), g);
+      translate(x, pitchScale(0.5), g);
 
       // cluster
       g.append("text")
@@ -171,12 +165,9 @@ const score = [
   {
     startTime: null,
     duration: seconds(45),
-    render: ({ startTime, duration }) => {
-      const startX = timeScale(startTime);
-      const length = timeScale(duration);
-
+    render: ({ x, length }) => {
       const g = scoreGroup.element.append("g");
-      translate(startX, 0, g);
+      translate(x, 0, g);
 
       // with excessive pressure and air
       translate(
@@ -247,12 +238,9 @@ const score = [
   {
     startTime: null,
     duration: seconds(120),
-    render: ({ startTime, duration }) => {
-      const startX = timeScale(startTime);
-      const length = timeScale(duration);
-
+    render: ({ x, length }) => {
       const g = scoreGroup.element.append("g");
-      translate(startX, 0, g);
+      translate(x, 0, g);
 
       // bottom line
       g.append("line")
@@ -303,11 +291,10 @@ const score = [
   {
     startTime: null,
     duration: 0,
-    render: ({ startTime }) => {
-      const startX = timeScale(startTime);
-
+    render: ({ x }) => {
+      // Double bar
       const g = scoreGroup.element.append("g");
-      translate(startX, 0, g);
+      translate(x, 0, g);
 
       g.append("line")
         .attr("y1", 0)
@@ -334,8 +321,12 @@ score.forEach((bar, i) => {
 
 function renderScore() {
   score.forEach(bar => {
-    const { render, ...barData } = bar;
-    render(barData);
+    const { render, ...meta } = bar;
+    const renderData = {
+      x: timeScale(bar.startTime),
+      length: timeScale(bar.duration)
+    };
+    render({ ...meta, ...renderData });
   });
 }
 
