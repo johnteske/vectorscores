@@ -7,6 +7,7 @@ import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 
 import sixteenths from "./sixteenths";
+import tremoloLongTone from "./tremoloLongTone";
 
 const durations = VS.dictionary.Bravura.durations.stemless;
 
@@ -21,6 +22,10 @@ function pitchScale(value) {
 
 function timeScale(t) {
   return t / 80;
+}
+
+function callTranslate(selection, x, y) {
+  return translate(x, y, selection);
 }
 
 const svg = d3.select("svg.main");
@@ -58,8 +63,15 @@ const score = [
 
       sixteenths(g).attr("transform", "scale(1.5)");
 
-      // TODO eighth rest
-      // TODO quarter rest
+      g.append("text")
+        .attr("class", "bravura")
+        .text("\ue4e6")
+        .call(callTranslate, timeScale(1500), 0);
+
+      g.append("text")
+        .attr("class", "bravura")
+        .text("\ue4e5")
+        .call(callTranslate, timeScale(2000), 0);
     }
   },
   {
@@ -72,7 +84,8 @@ const score = [
       // wall/tremolo--is it around the pitch center?
 
       for (let i = 0; i < 25; i++) {
-        translate(i, pitchScale(0.5), sixteenths(g));
+        translate(i, pitchScale(0.33), tremoloLongTone(g));
+        translate(i, pitchScale(0.66), sixteenths(g));
       }
     }
   },
