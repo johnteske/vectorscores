@@ -3,6 +3,7 @@ import makeIndicator from "../indicator";
 import longTone from "../longTone";
 import makePage from "../page";
 import makeScroll from "../scroll";
+import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 
 const durations = VS.dictionary.Bravura.durations.stemless;
@@ -14,6 +15,10 @@ const margin = {
 const pitchRange = 87;
 function pitchScale(value) {
   return (1 - value) * pitchRange;
+}
+
+function timeScale(t) {
+  return t / 200;
 }
 
 const svg = d3.select("svg.main");
@@ -72,9 +77,7 @@ const score = [
     startTime: null,
     duration: 3000,
     render: ({ startTime }) => {
-      //const g = translate(startTime, 0, wrapper.append("g"))
-      const g = translate(0, 0, wrapper.append("g"));
-
+      const g = translate(startTime, 0, wrapper.append("g"));
       const y = pitchScale(0.5);
       translate(
         0,
@@ -85,35 +88,57 @@ const score = [
           .attr("class", "bravura")
       );
 
-      sixteenths(g).attr("transform", `translate(25, ${y}) scale(2,2)`);
+      sixteenths(g).attr("transform", `translate(0, ${y}) scale(2,2)`);
     }
   },
   {
     startTime: null,
     duration: 3000,
-    render: ({ startTime }) => {
-      //const g = translate(startTime, 0, wrapper.append("g"))
-      const g = translate(100, 0, wrapper.append("g"));
+    render: ({ x }) => {
+      const g = translate(x, 0, wrapper.append("g"));
       // spike
       g.append("path").attr("d", "M-15,0 L15,0 L0,60 Z");
       // wall/tremolo--is it around the pitch center?
       translate(100, pitchScale(0.5), sixteenths(wrapper));
     }
-  }
+  },
   //drone(wrapper);
   // semitone falls around drones, maybe the wall/texture fades over time
-];
+  {
+    startTime: 0,
+    duration: 0,
+    render: () => {}
+  }
+].map(startTimeFromDuration);
 
-//score.forEach((bar, i) => {
-//  const callback = i < score.length - 1 ? scrollToNextBar : null;
-//  VS.score.add(bar.startTime, callback, [i, bar.duration]);
-//});
+score.forEach((bar, i) => {
+  const callback = i < score.length - 1 ? scrollToNextBar : null;
+  VS.score.add(bar.startTime, callback, [i, bar.duration]);
+});
 
 function renderScore() {
   score.forEach(bar => {
-    const { render, ...barData } = bar;
-    render(barData);
+    const { render, ...meta } = bar;
+    const renderData = {
+      x: timeScale(bar.startTime),
+      length: timeScale(bar.duration)
+    };
+    render({ ...meta, ...renderData });
   });
+}
+
+function setScorePosition() {
+  const index = VS.score.getPointer();
+  centerScoreByIndex(index, 0);
+}
+
+function centerScoreByIndex(index, duration) {
+  const x = timeScale(score[index].startTime);
+  scoreGroup.scrollTo(x, duration);
+}
+
+function scrollToNextBar(index, duration) {
+  centerScoreByIndex(index + 1, duration);
 }
 
 function resize() {
@@ -128,7 +153,7 @@ function resize() {
   const center = (w / scale) * 0.5;
   //  indicator.translateX(center);
   scoreGroup.setCenter(center);
-  //  setScorePosition();
+  setScorePosition();
 }
 
 d3.select(window).on("resize", resize);
@@ -138,3 +163,8 @@ d3.select(window).on("load", () => {
   page.calculateHeight();
   resize();
 });
+
+VS.control.hooks.add("stop", setScorePosition);
+VS.score.hooks.add("stop", setScorePosition);
+VS.control.hooks.add("step", setScorePosition);
+VS.control.hooks.add("pause", setScorePosition);

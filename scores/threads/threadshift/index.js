@@ -10,6 +10,7 @@ import longTone from "../longTone";
 import makePage from "../page";
 import pathAlongPath from "../pathAlongPath";
 import makeScroll from "../scroll";
+import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 
 import drawDynamics from "./dynamics";
@@ -324,13 +325,7 @@ const score = [
       );
     }
   }
-].map((bar, i, score) => {
-  // Calculate and set startTimes
-  const startTime = score
-    .slice(0, i)
-    .reduce((sum, b, j) => sum + b.duration, 0);
-  return { ...bar, startTime };
-});
+].map(startTimeFromDuration);
 
 score.forEach((bar, i) => {
   const callback = i < score.length - 1 ? scrollToNextBar : null;
