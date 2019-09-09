@@ -6,6 +6,8 @@ import makeScroll from "../scroll";
 import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 
+import sixteenths from "./sixteenths";
+
 const durations = VS.dictionary.Bravura.durations.stemless;
 
 const margin = {
@@ -18,12 +20,12 @@ function pitchScale(value) {
 }
 
 function timeScale(t) {
-  return t / 200;
+  return t / 80;
 }
 
 const svg = d3.select("svg.main");
 svg.append("style").text(`
-  .bravura { font-family: 'Bravura'; font-size: 20px; }
+  .bravura { font-family: 'Bravura'; font-size: 30px; }
 `);
 
 const page = makePage(svg);
@@ -39,56 +41,25 @@ const scoreGroup = makeScroll(page.element);
 scoreGroup.y(margin.top); // TODO allow chaining
 const wrapper = scoreGroup.element;
 
-function sixteenths(selection) {
-  const g = selection.append("g").attr("stroke", "black");
-
-  const spacing = 5;
-
-  [0, -1, 0, 2, 3].forEach((y, i) => {
-    const x = i * spacing;
-
-    g.append("line")
-      .attr("x1", x)
-      .attr("x2", x)
-      .attr("y1", 0 - y)
-      .attr("y2", 10 - y);
-  });
-
-  g.append("line")
-    .attr("x1", 0)
-    .attr("x2", 3 * spacing)
-    .attr("y1", 0)
-    .attr("y2", 0 - 2)
-    .attr("stroke-width", 2);
-
-  g.append("line")
-    .attr("x1", 0)
-    .attr("x2", 3 * spacing)
-    .attr("y1", 0)
-    .attr("y1", 3)
-    .attr("y2", 3 - 2)
-    .attr("stroke-width", 2);
-
-  return g;
-}
+const indicator = makeIndicator(page.element);
 
 const score = [
   {
     startTime: null,
     duration: 3000,
-    render: ({ startTime }) => {
-      const g = translate(startTime, 0, wrapper.append("g"));
-      const y = pitchScale(0.5);
-      translate(
-        0,
-        y,
-        g
-          .append("text")
-          .text("\uf58c")
-          .attr("class", "bravura")
-      );
+    render: ({ x }) => {
+      const g = translate(x, pitchScale(0.5), wrapper.append("g"));
 
-      sixteenths(g).attr("transform", `translate(0, ${y}) scale(2,2)`);
+      // 3/4 time signature
+      g.append("text")
+        .text("\uf58c")
+        .attr("dx", "-1em")
+        .attr("class", "bravura");
+
+      sixteenths(g).attr("transform", "scale(1.5)");
+
+      // TODO eighth rest
+      // TODO quarter rest
     }
   },
   {
@@ -97,12 +68,15 @@ const score = [
     render: ({ x }) => {
       const g = translate(x, 0, wrapper.append("g"));
       // spike
-      g.append("path").attr("d", "M-15,0 L15,0 L0,60 Z");
+      g.append("path").attr("d", "M-5,0 L5,0 L0,60 Z");
       // wall/tremolo--is it around the pitch center?
-      translate(100, pitchScale(0.5), sixteenths(wrapper));
+
+      for (let i = 0; i < 25; i++) {
+        translate(i, pitchScale(0.5), sixteenths(g));
+      }
     }
   },
-  //drone(wrapper);
+  // drone(wrapper);
   // semitone falls around drones, maybe the wall/texture fades over time
   {
     startTime: 0,
@@ -151,7 +125,7 @@ function resize() {
   page.scale(scale);
 
   const center = (w / scale) * 0.5;
-  //  indicator.translateX(center);
+  indicator.translateX(center);
   scoreGroup.setCenter(center);
   setScorePosition();
 }
