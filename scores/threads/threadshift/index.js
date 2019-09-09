@@ -93,8 +93,7 @@ const splitDynamics = endDynamic => [
   }
 ];
 
-// const score = [
-let score = [
+const score = [
   {
     startTime: null,
     duration: seconds(60),
@@ -325,20 +324,12 @@ let score = [
       );
     }
   }
-];
-
-const startTimes = score.reduce(
-  ({ sum, times }, bar) => {
-    return {
-      sum: sum + bar.duration,
-      times: [...times, sum]
-    };
-  },
-  { sum: 0, times: [] }
-).times;
-
-score = score.map((bar, i) => {
-  return { ...bar, startTime: startTimes[i] };
+].map((bar, i, score) => {
+  // Calculate and set startTimes
+  const startTime = score
+    .slice(0, i)
+    .reduce((sum, b, j) => sum + b.duration, 0);
+  return { ...bar, startTime };
 });
 
 score.forEach((bar, i) => {
