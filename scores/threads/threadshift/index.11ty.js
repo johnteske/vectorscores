@@ -5,7 +5,7 @@ module.exports = class {
       title: "threadshift",
       composer: "John Teske",
       status: "wip",
-      options: `<button id="save-svg">Save SVG</button>`,
+      // options: `<button id="save-svg">Save SVG</button>`,
       modules: ["bravura", "dictionary"]
     };
   }

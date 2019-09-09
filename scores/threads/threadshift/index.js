@@ -48,7 +48,7 @@ svg.append("style").text(`
     font-size: 12px;
     font-style: italic;
   }
- `);
+`);
 
 const page = makePage(svg);
 
@@ -388,16 +388,16 @@ VS.control.hooks.add("pause", setScorePosition);
 
 // TODO include stylesheet or inline all styles
 // TODO serialize font?
-function saveSvg() {
-  var svgXML = new XMLSerializer().serializeToString(svg.node());
-  var encoded = encodeURI(svgXML);
-  var dataURI = `data:image/svg+xml;utf8,${encoded}`;
-
-  var dl = document.createElement("a");
-  document.body.appendChild(dl); // This line makes it work in Firefox.
-  dl.setAttribute("href", dataURI);
-  dl.setAttribute("download", "test.svg");
-  dl.click();
-  dl.remove();
-}
-d3.select("#save-svg").on("click", saveSvg);
+//function saveSvg() {
+//  var svgXML = new XMLSerializer().serializeToString(svg.node());
+//  var encoded = encodeURI(svgXML);
+//  var dataURI = `data:image/svg+xml;utf8,${encoded}`;
+//
+//  var dl = document.createElement("a");
+//  document.body.appendChild(dl); // This line makes it work in Firefox.
+//  dl.setAttribute("href", dataURI);
+//  dl.setAttribute("download", "test.svg");
+//  dl.click();
+//  dl.remove();
+//}
+//d3.select("#save-svg").on("click", saveSvg);
