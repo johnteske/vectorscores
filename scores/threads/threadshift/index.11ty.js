@@ -1,3 +1,5 @@
+const options = require("./_options.11ty.js");
+
 module.exports = class {
   data() {
     return {
@@ -6,7 +8,8 @@ module.exports = class {
       composer: "John Teske",
       status: "wip",
       // options: `<button id="save-svg">Save SVG</button>`,
-      modules: ["bravura", "dictionary"]
+      options: options(),
+      modules: ["bravura", "dictionary", "websockets"]
     };
   }
 

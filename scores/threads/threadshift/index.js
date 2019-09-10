@@ -393,10 +393,16 @@ d3.select(window).on("load", () => {
   resize();
 });
 
-VS.control.hooks.add("stop", setScorePosition);
-VS.score.hooks.add("stop", setScorePosition);
+
 VS.control.hooks.add("step", setScorePosition);
+VS.WebSocket.hooks.add("step", setScorePosition);
+
 VS.control.hooks.add("pause", setScorePosition);
+VS.WebSocket.hooks.add("pause", setScorePosition);
+
+VS.score.hooks.add("stop", setScorePosition);
+
+VS.WebSocket.connect();
 
 // TODO include stylesheet or inline all styles
 // TODO serialize font?
