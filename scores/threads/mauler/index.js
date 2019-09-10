@@ -21,7 +21,7 @@ function pitchScale(value) {
 }
 
 function timeScale(t) {
-  return t / 80;
+  return t / 50;
 }
 
 function callTranslate(selection, x, y) {
@@ -30,6 +30,7 @@ function callTranslate(selection, x, y) {
 
 const svg = d3.select("svg.main");
 svg.append("style").text(`
+  text.wip { fill: blue }
   .bravura { font-family: 'Bravura'; font-size: 30px; }
 `);
 
@@ -47,6 +48,15 @@ scoreGroup.y(margin.top); // TODO allow chaining
 const wrapper = scoreGroup.element;
 
 const indicator = makeIndicator(page.element);
+
+const makeCue = function(selection) {
+  return selection
+    .append("text")
+    .attr("class", "bravura wip")
+    .attr("text-anchor", "middle")
+    .attr("y", -87)
+    .text("\ue890");
+};
 
 const score = [
   {
@@ -72,6 +82,8 @@ const score = [
         .attr("class", "bravura")
         .text("\ue4e5")
         .call(callTranslate, timeScale(2000), 0);
+
+      makeCue(g);
     }
   },
   {
@@ -95,6 +107,8 @@ const score = [
           sixteenths(g)
         );
       }
+
+      translate(0, pitchScale(0.5), makeCue(g));
     }
   },
   // drone(wrapper);
@@ -142,7 +156,8 @@ function resize() {
   const w = parseInt(svg.style("width"), 10);
   const h = parseInt(svg.style("height"), 10);
 
-  const scale = h / page.height();
+  // const scale = h / page.height(); // TODO remove
+  const scale = h / (64 + 87 + 64);
   page.scale(scale);
 
   const center = (w / scale) * 0.5;
