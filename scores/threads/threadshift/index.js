@@ -194,6 +194,7 @@ const score = [
           .attr("class", "bravura")
           .attr("text-anchor", "middle")
       );
+      // TODO add transition to ord/norm
 
       // irregular tremolo
       translate(
@@ -206,6 +207,7 @@ const score = [
           .attr("class", "bravura")
           .attr("text-anchor", "middle")
       );
+      // TODO add transition to ord/norm
 
       // top line
       const line = lineBecomingAir(length, g);
@@ -266,6 +268,8 @@ const score = [
         .attr("y1", pitchScale(0.25))
         .attr("y2", pitchScale(0.25));
 
+      g.append("text").text("(solo)");
+
       // threads
       const makeThread = (x, y, length, selection) => {
         const group = translate(x, y, selection.append("g"));
@@ -303,6 +307,10 @@ const score = [
         let y = pitchScale(VS.getRandExcl(0, 1));
         makeThread(x, y, length - x, g);
       }
+
+      g.append("text")
+        .text("(tutti)")
+        .attr("x", length * 0.25);
     }
   },
   {
