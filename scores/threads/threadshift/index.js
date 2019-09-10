@@ -42,6 +42,7 @@ const svg = d3.select("svg.main");
 svg.append("style").text(`
   line { stroke: black; }
   line.wip { stroke: blue; }
+  text.wip { fill: blue; }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
   .text-dynamic {
     font-family: serif;
@@ -65,6 +66,15 @@ scoreGroup.y(margin.top); // TODO allow chaining
 //scoreGroup.element.style("outline", "1px dotted red");
 
 const indicator = makeIndicator(page.element);
+
+const makeCue = function(selection) {
+  return selection
+    .append("text")
+    .attr("class", "bravura wip")
+    .attr("text-anchor", "middle")
+    .attr("y", -87)
+    .text("\ue890");
+};
 
 // drone(scoreGroup.element); // TODO: how do these integrate with the ending
 
@@ -127,12 +137,7 @@ const score = [
         g
       );
 
-      // cue
-      //g.append("text")
-      //  .attr("class", "bravura")
-      //  .attr("text-anchor", "middle")
-      //  .attr("y", -87)
-      //  .text("\ue890");
+      makeCue(g);
     }
   },
   {
@@ -166,6 +171,8 @@ const score = [
         .attr("x", length)
         .attr("dy", "-1em")
         .attr("text-anchor", "end");
+
+      makeCue(g);
     }
   },
   {
@@ -183,7 +190,6 @@ const score = [
           .append("text")
           //.text("\ue61b")
           .text("\ue61d")
-          .attr("fill", "blue")
           .attr("dy", "-1em")
           .attr("class", "bravura")
           .attr("text-anchor", "middle")
@@ -196,7 +202,6 @@ const score = [
         g
           .append("text")
           .text("\uE22B")
-          .attr("fill", "blue")
           .attr("dy", "-0.5em")
           .attr("class", "bravura")
           .attr("text-anchor", "middle")
@@ -243,6 +248,8 @@ const score = [
       });
 
       drawDynamics(splitDynamics("p"), length, translate(0, 50, g.append("g")));
+
+      translate(0, pitchScale(0.5), makeCue(g));
     }
   },
   {
@@ -360,7 +367,8 @@ function resize() {
   const w = parseInt(svg.style("width"), 10);
   const h = parseInt(svg.style("height"), 10);
 
-  const scale = h / page.height();
+  const scale = h / (64 + 87 + 64);
+  //const scale = h / page.height(); // TODO remove
   page.scale(scale);
 
   const center = (w / scale) * 0.5;

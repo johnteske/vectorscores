@@ -32,7 +32,7 @@ export default function(length, selection) {
     .enter()
     .append("path")
     .attr("fill", "none")
-    .attr("stroke", "black")
+    .attr("stroke", "blue")
     .attr("d", d => lineGenerator(d));
   return g;
 }
