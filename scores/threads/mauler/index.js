@@ -1,4 +1,5 @@
 import drone from "../drone";
+import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
 import longTone from "../longTone";
 import makePage from "../page";
@@ -20,8 +21,17 @@ function pitchScale(value) {
   return (1 - value) * pitchRange;
 }
 
+function durationInBeats(beats) {
+  const bpm = 120;
+  return beats * (60 / bpm) * 1000;
+}
+
+function durationInSeconds(seconds) {
+  return seconds * 1000;
+}
+
 function timeScale(t) {
-  return t / 50;
+  return t / 20;
 }
 
 function callTranslate(selection, x, y) {
@@ -47,6 +57,15 @@ const scoreGroup = makeScroll(page.element);
 scoreGroup.y(margin.top); // TODO allow chaining
 const wrapper = scoreGroup.element;
 
+//// TODO for alignment only
+//wrapper
+//  .append("line")
+//  .attr("stroke", "red")
+//  .attr("x1", -9999)
+//  .attr("x2", 9999)
+//  .attr("y1", pitchScale(0.5))
+//  .attr("y2", pitchScale(0.5));
+
 const indicator = makeIndicator(page.element);
 
 const makeCue = function(selection) {
@@ -61,39 +80,63 @@ const makeCue = function(selection) {
 const score = [
   {
     startTime: null,
-    duration: 3000,
-    render: ({ x }) => {
+    duration: durationInBeats(3),
+    render: ({ x, length }) => {
+      const beatLength = length / 3;
       const g = translate(x, pitchScale(0.5), wrapper.append("g"));
 
       // 3/4 time signature
       g.append("text")
         .text("\uf58c")
         .attr("dx", "-1em")
+        .attr("dy", "0.5em")
         .attr("class", "bravura");
 
       sixteenths(g).attr("transform", "scale(1)");
 
       g.append("text")
         .attr("class", "bravura")
+        //.attr("text-anchor", "middle")
         .text("\ue4e6")
-        .call(callTranslate, timeScale(1500), 0);
+        .call(callTranslate, beatLength * 1, 0);
 
       g.append("text")
         .attr("class", "bravura")
+        //.attr("text-anchor", "middle")
         .text("\ue4e5")
-        .call(callTranslate, timeScale(2000), 0);
+        .call(callTranslate, beatLength * 2, 0);
+
+      drawDynamics([{ x: 0, type: "text", value: "ff" }], length, g);
 
       makeCue(g);
     }
   },
   {
     startTime: null,
-    duration: 30000,
+    duration: durationInSeconds(30),
     render: ({ x, length }) => {
       const g = translate(x, 0, wrapper.append("g"));
       // spike
-      g.append("path").attr("d", "M-5,0 L5,0 L0,60 Z");
+      g.append("path").attr("d", `M-5,0 L5,0 L0,${pitchRange} Z`);
       // wall/tremolo--is it around the pitch center?
+
+      g.append("text")
+        .attr("class", "wip")
+        .attr("dy", "-2em")
+        .text("col legno, slapping");
+
+      for (let i = 0; i < 25; i++) {
+        translate(
+          Math.random() * length * 0.25,
+          Math.random() * pitchRange,
+          tremoloLongTone(g)
+        );
+        translate(
+          Math.random() * length * 0.25,
+          Math.random() * pitchRange,
+          sixteenths(g)
+        );
+      }
 
       for (let i = 0; i < 25; i++) {
         translate(
@@ -108,11 +151,47 @@ const score = [
         );
       }
 
+      // drone(g);
+      const makeThread = (x, y, length, selection) => {
+        selection
+          .append("line")
+          .attr("stroke", "black")
+          .attr("x1", x)
+          .attr("x2", x + length)
+          .attr("y1", y)
+          .attr("y2", y);
+      };
+
+      for (let i = 0; i < 10; i++) {
+        let x = VS.getRandExcl(0.25, 0.5) * length;
+        let y = pitchScale(VS.getRandExcl(0, 1));
+        makeThread(x, y, length * 0.5, g);
+      }
+
+      g.append("text")
+        .attr("class", "wip")
+        .attr("dy", "-1em")
+        .text("semitone falls around long tones")
+        .attr("x", length * 0.25);
+
+      translate(
+        0,
+        pitchScale(0.5),
+
+        drawDynamics(
+          [
+            { x: 0, type: "text", value: "sffz" },
+            { x: 0.5, type: "text", value: "decres." },
+            { x: 1, type: "text", value: "mp" }
+          ],
+          length,
+          g
+        )
+      );
+
       translate(0, pitchScale(0.5), makeCue(g));
     }
   },
-  // drone(wrapper);
-  // semitone falls around drones, maybe the wall/texture fades over time
   {
     startTime: 0,
     duration: 0,

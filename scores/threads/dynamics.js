@@ -1,8 +1,10 @@
 const { dynamics } = VS.dictionary.Bravura;
 
 export default function(data, scale, selection) {
+  const g = selection.append("g");
+
   data.forEach(d => {
-    const text = selection.append("text").attr("x", d.x * scale);
+    const text = g.append("text").attr("x", d.x * scale);
 
     switch (d.x) {
       case 0:
@@ -30,4 +32,6 @@ export default function(data, scale, selection) {
         break;
     }
   });
+
+  return g;
 }

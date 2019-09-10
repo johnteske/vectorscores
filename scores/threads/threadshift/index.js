@@ -3,6 +3,7 @@
 // add accent to main hit
 
 import drone from "../drone";
+import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
 import longTone from "../longTone";
 import makePage from "../page";
@@ -11,7 +12,6 @@ import makeScroll from "../scroll";
 import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 
-import drawDynamics from "./dynamics";
 import noisePatch from "./noisePatch";
 import lineBecomingAir from "./lineBecomingAir";
 
