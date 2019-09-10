@@ -393,7 +393,6 @@ d3.select(window).on("load", () => {
   resize();
 });
 
-
 VS.control.hooks.add("step", setScorePosition);
 VS.WebSocket.hooks.add("step", setScorePosition);
 

@@ -4,4 +4,4 @@ const websocketsSettings = requireRoot(
   "./assets/modules/settings/websockets.11ty.js"
 );
 
-module.exports = () => websocketsSettings()
+module.exports = () => websocketsSettings();
