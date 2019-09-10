@@ -1,6 +1,4 @@
 // make held tone less predictable/gated
-// replace pink with noisy texture
-// add pressure, irr trem
 // add stems/flags to cluster hits (subsequent hits are not cluster?)
 // add accent to main hit
 
@@ -43,6 +41,7 @@ function timeScale(t) {
 const svg = d3.select("svg.main");
 svg.append("style").text(`
   line { stroke: black; }
+  line.wip { stroke: blue; }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
   .text-dynamic {
     font-family: serif;
@@ -127,6 +126,13 @@ const score = [
         length,
         g
       );
+
+      // cue
+      //g.append("text")
+      //  .attr("class", "bravura")
+      //  .attr("text-anchor", "middle")
+      //  .attr("y", -87)
+      //  .text("\ue890");
     }
   },
   {
@@ -177,8 +183,10 @@ const score = [
           .append("text")
           //.text("\ue61b")
           .text("\ue61d")
+          .attr("fill", "blue")
           .attr("dy", "-1em")
           .attr("class", "bravura")
+          .attr("text-anchor", "middle")
       );
 
       // irregular tremolo
@@ -188,8 +196,10 @@ const score = [
         g
           .append("text")
           .text("\uE22B")
+          .attr("fill", "blue")
           .attr("dy", "-0.5em")
           .attr("class", "bravura")
+          .attr("text-anchor", "middle")
       );
 
       // top line
