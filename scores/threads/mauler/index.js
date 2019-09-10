@@ -96,13 +96,12 @@ const score = [
 
       g.append("text")
         .attr("class", "bravura")
-        //.attr("text-anchor", "middle")
+        .attr("dx", "0.25em")
         .text("\ue4e6")
         .call(callTranslate, beatLength * 1, 0);
 
       g.append("text")
         .attr("class", "bravura")
-        //.attr("text-anchor", "middle")
         .text("\ue4e5")
         .call(callTranslate, beatLength * 2, 0);
 
