@@ -105,7 +105,7 @@ const score = [
         .text("\ue4e5")
         .call(callTranslate, beatLength * 2, 0);
 
-      drawDynamics([{ x: 0, type: "text", value: "ff" }], length, g);
+      drawDynamics([{ x: 0, type: "symbol", value: "ff" }], length, g);
 
       makeCue(g);
     }
@@ -179,7 +179,7 @@ const score = [
 
         drawDynamics(
           [
-            { x: 0, type: "text", value: "sffz" },
+            { x: 0, type: "symbol", value: "sffz" },
             { x: 0.5, type: "text", value: "decres." },
             { x: 1, type: "text", value: "mp" }
           ],
