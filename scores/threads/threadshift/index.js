@@ -121,17 +121,12 @@ const score = [
             type: "symbol",
             value: "p",
             x: 0
+          },
+          {
+            type: "text",
+            value: "siempre",
+            x: 0.25
           }
-          //          {
-          //            type: "text",
-          //            value: "cres.",
-          //            x: 0.5
-          //          },
-          //          {
-          //            type: "symbol",
-          //            value: "mf",
-          //            x: 1
-          //          }
         ],
         length,
         g
