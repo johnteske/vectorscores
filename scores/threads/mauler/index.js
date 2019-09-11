@@ -8,6 +8,7 @@ import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 
 import sixteenths from "./sixteenths";
+import { repeated } from "./sixteenths";
 import tremoloLongTone from "./tremoloLongTone";
 
 const durations = VS.dictionary.Bravura.durations.stemless;
@@ -129,6 +130,11 @@ const score = [
           Math.random() * length * 0.25,
           Math.random() * pitchRange,
           tremoloLongTone(g)
+        );
+        translate(
+          Math.random() * length * 0.25,
+          Math.random() * pitchRange,
+          repeated(g)
         );
         translate(
           Math.random() * length * 0.25,
