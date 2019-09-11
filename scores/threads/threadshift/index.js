@@ -330,6 +330,8 @@ const score = [
           .attr("y2", pitchRange)
           .attr("stroke-width", 2)
       );
+
+      translate(0, pitchScale(0.5), makeCue(g));
     }
   }
 ].map(startTimeFromDuration);
