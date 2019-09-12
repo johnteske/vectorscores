@@ -3,17 +3,17 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>threadshift | vectorscores</title>
+        <title>chant | vectorscores</title>
          
   <link rel="stylesheet" href="/vectorscores/assets/css/score.css">
   <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="/vectorscores/assets/modules/bravura/styles.css">
+  
   <link rel="stylesheet" href="styles.css">
  
     </head>
     <body>
         <header id="score-header">
-        <h1 class="score-title">threadshift</h1>
+        <h1 class="score-title">chant</h1>
         
     </header>
         <main>
@@ -54,25 +54,12 @@
         </svg>
     </button><!--
  --><input id="score-pointer" type="number" value="0" pattern="d*" readonly="true" title="Score pointer" /><!-- step="1" --><!--
- --><button id="score-options-open" class="score-button" title="Score options">
-         <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-             <g id="score-options-icon">
-                 <path d="M17,10 L17,118.57"></path>
-                 <path d="M1.25,25.75 L32.75,25.75"></path>
-
-                 <path d="M64.24,10 L64.24,118.57"></path>
-                 <path d="M48.49,102.82 L79.99,102.82"></path>
-
-                 <path d="M111.48,10 L111.48,118.57"></path>
-                 <path d="M95.73,64.285 L127.23,64.285"></path>
-             </g>
-         </svg>
-    </button>
+ -->
 </footer>
         <div id="score-modal-overlay" class="modal-overlay">
         <div id="score-info-modal" class="modal-content">
         <span id="score-info-close" class="modal-close">×</span>
-        <h2 class="score-title">threadshift</h2>
+        <h2 class="score-title">chant</h2>
         <p>
             John Teske
             
@@ -81,19 +68,11 @@
         <p></p>
 	
     </div>
-	<div id="score-options-modal" class="modal-content">
-            <span id="score-options-close" class="modal-close">×</span>
-            <h2>Options</h2>
-            <div>
-<div>
-  <h4>WebSocket Connection:</h4>
-  <p id="ws-log"></p>
-</div></div>
-        </div>
+	
     </div>
         <script src="/vectorscores/assets/js/lib/d3.v4.min.js" charset="utf-8"></script>
     <script src="/vectorscores/assets/js/vectorscores.js" charset="utf-8"></script>
-    <script src="/vectorscores/assets/modules/dictionary/index.js" charset="utf-8"></script><script src="/vectorscores/assets/modules/websockets/index.js" charset="utf-8"></script>
+    <script src="/vectorscores/assets/modules/line-cloud/index.js" charset="utf-8"></script>
         <script src="index.js" charset="utf-8"></script>
     </body>
     </html>

@@ -1,6 +1,44 @@
 (function () {
   'use strict';
 
+  const { dynamics } = VS.dictionary.Bravura;
+
+  function drawDynamics(data, scale, selection) {
+    const g = selection.append("g");
+
+    data.forEach(d => {
+      const text = g.append("text").attr("x", d.x * scale);
+
+      switch (d.x) {
+        case 0:
+          text.attr("text-anchor", "start");
+          break;
+        case 1:
+          text.attr("text-anchor", "end");
+          break;
+        default:
+          text.attr("text-anchor", "middle");
+      }
+
+      switch (d.type) {
+        case "symbol":
+          text
+            .text(dynamics[d.value])
+            .attr("class", "bravura")
+            .attr("dy", "2em");
+          break;
+        case "text":
+          text
+            .text(d.value)
+            .attr("class", "text-dynamic")
+            .attr("dy", "3.5em");
+          break;
+      }
+    });
+
+    return g;
+  }
+
   function translate(x, y, selection) {
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
@@ -158,51 +196,40 @@
     return { ...bar, startTime };
   };
 
-  const { dynamics } = VS.dictionary.Bravura;
-
-  function drawDynamics(data, scale, selection) {
-    data.forEach(d => {
-      const text = selection.append("text").attr("x", d.x * scale);
-
-      switch (d.x) {
-        case 0:
-          text.attr("text-anchor", "start");
-          break;
-        case 1:
-          text.attr("text-anchor", "end");
-          break;
-        default:
-          text.attr("text-anchor", "middle");
-      }
-
-      switch (d.type) {
-        case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
-          break;
-        case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
-          break;
-      }
-    });
-  }
-
   function noisePatch(x, length, selection) {
     // TODO length will become path data?
     // TODO shape as path
-    return selection
-      .append("rect")
+    const h = 20; // TODO set height, for now
+    const y = -0.5 * h; // to center
+
+    const g = selection.append("g");
+
+    g.append("rect")
       .attr("x", x)
       .attr("width", length * 0.5)
-      .attr("y", -10) // center
-      .attr("height", 20)
-      .attr("fill", "pink")
-      .style("opacity", "0.5");
+      .attr("y", y)
+      .attr("height", h)
+      .attr("stroke", "blue")
+      .attr("fill", "none");
+
+    const x2 = x + length * 0.5;
+    const y2 = y + h;
+
+    g.append("line")
+      .attr("class", "wip")
+      .attr("x1", x)
+      .attr("x2", x2)
+      .attr("y1", y)
+      .attr("y2", y2);
+
+    g.append("line")
+      .attr("class", "wip")
+      .attr("x1", x)
+      .attr("x2", x2)
+      .attr("y1", y2)
+      .attr("y2", y);
+
+    return g;
   }
 
   function makeEmptyArray(n) {
@@ -239,7 +266,7 @@
       .enter()
       .append("path")
       .attr("fill", "none")
-      .attr("stroke", "black")
+      .attr("stroke", "blue")
       .attr("d", d => lineGenerator(d));
     return g;
   }
@@ -272,6 +299,8 @@
   const svg = d3.select("svg.main");
   svg.append("style").text(`
   line { stroke: black; }
+  line.wip { stroke: blue; }
+  text.wip { fill: blue; }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
   .text-dynamic {
     font-family: serif;
@@ -295,6 +324,15 @@
   //scoreGroup.element.style("outline", "1px dotted red");
 
   const indicator = makeIndicator(page.element);
+
+  const makeCue = function(selection) {
+    return selection
+      .append("text")
+      .attr("class", "bravura wip")
+      .attr("text-anchor", "middle")
+      .attr("y", -87)
+      .text("\ue890");
+  };
 
   // drone(scoreGroup.element); // TODO: how do these integrate with the ending
 
@@ -341,21 +379,18 @@
               type: "symbol",
               value: "p",
               x: 0
+            },
+            {
+              type: "text",
+              value: "siempre",
+              x: 0.25
             }
-            //          {
-            //            type: "text",
-            //            value: "cres.",
-            //            x: 0.5
-            //          },
-            //          {
-            //            type: "symbol",
-            //            value: "mf",
-            //            x: 1
-            //          }
           ],
           length,
           g
         );
+
+        makeCue(g);
       }
     },
     {
@@ -389,6 +424,8 @@
           .attr("x", length)
           .attr("dy", "-1em")
           .attr("text-anchor", "end");
+
+        makeCue(g);
       }
     },
     {
@@ -408,7 +445,9 @@
             .text("\ue61d")
             .attr("dy", "-1em")
             .attr("class", "bravura")
+            .attr("text-anchor", "middle")
         );
+        // TODO add transition to ord/norm
 
         // irregular tremolo
         translate(
@@ -419,7 +458,9 @@
             .text("\uE22B")
             .attr("dy", "-0.5em")
             .attr("class", "bravura")
+            .attr("text-anchor", "middle")
         );
+        // TODO add transition to ord/norm
 
         // top line
         const line = lineBecomingAir(length, g);
@@ -462,6 +503,8 @@
         });
 
         drawDynamics(splitDynamics("p"), length, translate(0, 50, g.append("g")));
+
+        translate(0, pitchScale(0.5), makeCue(g));
       }
     },
     {
@@ -477,6 +520,8 @@
           .attr("x2", length)
           .attr("y1", pitchScale(0.25))
           .attr("y2", pitchScale(0.25));
+
+        g.append("text").text("(solo)");
 
         // threads
         const makeThread = (x, y, length, selection) => {
@@ -515,6 +560,10 @@
           let y = pitchScale(VS.getRandExcl(0, 1));
           makeThread(x, y, length - x, g);
         }
+
+        g.append("text")
+          .text("(tutti)")
+          .attr("x", length * 0.25);
       }
     },
     {
@@ -539,6 +588,8 @@
             .attr("y2", pitchRange)
             .attr("stroke-width", 2)
         );
+
+        translate(0, pitchScale(0.5), makeCue(g));
       }
     }
   ].map(startTimeFromDuration);
@@ -579,7 +630,8 @@
     const w = parseInt(svg.style("width"), 10);
     const h = parseInt(svg.style("height"), 10);
 
-    const scale = h / page.height();
+    const scale = h / (64 + 87 + 64);
+    //const scale = h / page.height(); // TODO remove
     page.scale(scale);
 
     const center = (w / scale) * 0.5;
@@ -596,10 +648,15 @@
     resize();
   });
 
-  VS.control.hooks.add("stop", setScorePosition);
-  VS.score.hooks.add("stop", setScorePosition);
   VS.control.hooks.add("step", setScorePosition);
+  VS.WebSocket.hooks.add("step", setScorePosition);
+
   VS.control.hooks.add("pause", setScorePosition);
+  VS.WebSocket.hooks.add("pause", setScorePosition);
+
+  VS.score.hooks.add("stop", setScorePosition);
+
+  VS.WebSocket.connect();
 
   // TODO include stylesheet or inline all styles
   // TODO serialize font?
