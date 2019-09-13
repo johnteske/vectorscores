@@ -34,12 +34,16 @@ VS.WebSocket = (function() {
     var cid = data[0];
     var content = data[2];
 
-    if (content === "connected") {
-      ws.cid = cid;
-    } else if (content === "connections") {
-      log("Open, " + data[3] + " connection(s) total");
-    } else if (content === "reload") {
-      window.location.reload(true);
+    switch (content) {
+      case "connected":
+        ws.cid = cid;
+        break;
+      case "n":
+        log("Open, " + data[3] + " connection(s) total");
+        break;
+      case "reload":
+        window.location.reload(true);
+        break;
     }
   }
 
