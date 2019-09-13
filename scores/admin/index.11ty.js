@@ -6,6 +6,7 @@ module.exports = class {
       layout: "score",
       title: "admin",
       status: "unlisted",
+      options: "noop",
       modules: ["websockets"]
     };
   }

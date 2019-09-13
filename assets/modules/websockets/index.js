@@ -11,6 +11,14 @@ VS.WebSocket = (function() {
     };
   })();
 
+  var notify = (function() {
+    var element = document.getElementById("score-options-open");
+
+    return function(color) {
+      element.style.background = color;
+    };
+  })();
+
   log("Not connected");
 
   ws.hooks = VS.createHooks(["play", "pause", "stop", "step", "message"]);
@@ -81,6 +89,7 @@ VS.WebSocket = (function() {
 
       socket.onopen = function() {
         log("Open");
+        notify("transparent");
         addControlHooks();
       };
 
@@ -90,6 +99,7 @@ VS.WebSocket = (function() {
         } else {
           log("Not connected");
         }
+        notify("red");
       };
 
       socket.onmessage = function(msg) {
