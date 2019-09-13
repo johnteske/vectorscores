@@ -52,6 +52,7 @@ VS.WebSocket = (function() {
         window.location.reload(true);
         break;
       case "redirect":
+        // TODO push history instead
         // Redirect all others, assuming message is coming from /admin
         if (cid !== ws.cid) {
           window.location.href = msg;
