@@ -39,18 +39,23 @@ VS.WebSocket = (function() {
   }
 
   function handleWebSocketMsg(data) {
-    var cid = data[0];
-    var content = data[2];
+    const [cid, _, content, msg] = data
 
     switch (content) {
       case "connected":
         ws.cid = cid;
         break;
       case "n":
-        log("Open, " + data[3] + " connection(s) total");
+        log("Open, " + msg + " connection(s) total");
         break;
       case "reload":
         window.location.reload(true);
+        break;
+      case "redirect":
+        // Redirect all others, assuming message is coming from /admin
+        if (cid !== ws.cid) {
+          window.location.href = msg;
+        }
         break;
     }
   }
