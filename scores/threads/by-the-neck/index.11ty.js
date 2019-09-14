@@ -8,7 +8,7 @@ module.exports = class {
       composer: "John Teske",
       status: "wip",
       options: options(),
-      modules: ["bravura", "websockets"]
+      modules: ["bravura", "dictionary", "websockets"]
     };
   }
 

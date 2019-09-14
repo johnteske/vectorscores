@@ -1,7 +1,7 @@
 import { margin } from "../layout";
 import doubleBar from "../double-bar";
 import { pitchRange } from "../scale";
-//import drawDynamics from "../dynamics";
+import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
 import makePage from "../page";
 import makeScroll from "../scroll";
@@ -71,8 +71,41 @@ const breath = [
   // start with intense breath sounds
   {
     duration: 30000,
-    render: ({ x }) => {
-      translate(x, 0, heavyBreath(wrapper));
+    render: ({ x, length }) => {
+      const g = wrapper.append("g");
+
+      translate(x, 0, heavyBreath(g));
+      drawDynamics(
+        [
+          {
+            type: "symbol",
+            value: "p",
+            x: 0
+          },
+          {
+            type: "text",
+            value: "cres.",
+            x: 0.25
+          },
+          {
+            type: "symbol",
+            value: "ff",
+            x: 0.5
+          },
+          {
+            type: "text",
+            value: "decres.",
+            x: 0.75
+          },
+          {
+            type: "symbol",
+            value: "n",
+            x: 1
+          }
+        ],
+        length,
+        g
+      );
     }
   },
   {
