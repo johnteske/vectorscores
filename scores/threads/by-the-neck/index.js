@@ -3,6 +3,7 @@ import doubleBar from "../double-bar";
 import { pitchRange } from "../scale";
 import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
+import makeCue from "../cue";
 import makePage from "../page";
 import makeScroll from "../scroll";
 import startTimeFromDuration from "../startTimeFromDuration";
@@ -111,7 +112,10 @@ const breath = [
   {
     duration: 0,
     render: ({ x }) => {
-      translate(x, 0, doubleBar(wrapper, pitchRange).attr("stroke", "black"));
+      const g = wrapper.append("g");
+      translate(x, 0, g);
+      makeCue(g, "open");
+      doubleBar(g, pitchRange).attr("stroke", "black");
     }
   }
   // double bar
