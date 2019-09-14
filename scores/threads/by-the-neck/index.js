@@ -1,6 +1,6 @@
 import { margin } from "../layout";
 import doubleBar from "../double-bar";
-import { pitchRange } from "../scale";
+import { pitchRange, pitchScale } from "../scale";
 import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
 import makeCue from "../cue";
@@ -10,7 +10,7 @@ import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 
 function timeScale(t) {
-  return t / 200;
+  return t / 50;
 }
 
 const svg = d3.select("svg.main");
@@ -60,8 +60,7 @@ function heavyBreath(selection) {
   return g;
 }
 
-function lowDrone() {
-  // LNP, trem.
+function lowDrone(selection) {
 }
 
 function growl() {
@@ -122,7 +121,21 @@ const breath = [
 ].map(startTimeFromDuration);
 
 const texture = [
+  {
+    duration: 15000,
+    render: () => {}
+  },
   // add low scrape
+  {
+    duration: 15000,
+    render: ({ x, length }) => {
+      const g = wrapper.append("g");
+      translate(x, pitchScale(0.25), g);
+      g.append("text").text("scrape").attr("fill", "blue")
+      g.append("line").attr("x2", length).attr("stroke", "blue")
+      // TODO dynamics?
+    }
+  }
   // add low drone
   // scrape and drone cres., more pressure
   // wall of texture, frantic, growling
