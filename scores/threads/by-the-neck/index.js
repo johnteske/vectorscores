@@ -40,7 +40,22 @@ const indicator = makeIndicator(page.element);
 
 function heavyBreath(selection) {
   const g = selection.append("g");
-  g.append("text").text("\ue0b8");
+
+  const rect = g
+    .append("rect")
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("height", "1em");
+
+  // g.append("text").text("\ue0b8"); // Bravura
+  g.append("text")
+    .attr("dy", "1em")
+    .text("intense breaths")
+    .attr("fill", "blue");
+
+  const box = g.node().getBBox();
+  rect.attr("width", box.width);
+
   return g;
 }
 
