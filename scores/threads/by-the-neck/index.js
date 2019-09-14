@@ -142,7 +142,8 @@ const texture = [
   // double bar
 ].map(startTimeFromDuration);
 
-const score = [...breath, ...texture];
+// TODO dedup and/or sort? display vs playback
+const score = [...breath, ...texture].sort((a, b) => { return a.startTime - b.startTime });
 
 score.forEach((bar, i) => {
   const callback = i < score.length - 1 ? scrollToNextBar : null;
@@ -195,3 +196,13 @@ d3.select(window).on("load", () => {
   renderScore();
   resize();
 });
+
+VS.control.hooks.add("step", setScorePosition);
+VS.WebSocket.hooks.add("step", setScorePosition);
+
+VS.control.hooks.add("pause", setScorePosition);
+VS.WebSocket.hooks.add("pause", setScorePosition);
+
+VS.score.hooks.add("stop", setScorePosition);
+
+VS.WebSocket.connect();
