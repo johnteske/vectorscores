@@ -1,9 +1,34 @@
-import drone from "../drone";
+import { margin } from "../layout";
+import doubleBar from "../double-bar";
+import { pitchRange } from "../scale";
+//import drawDynamics from "../dynamics";
+import makeIndicator from "../indicator";
+import makePage from "../page";
+import makeScroll from "../scroll";
+import startTimeFromDuration from "../startTimeFromDuration";
+import translate from "../translate";
 
-const main = d3.select(".main");
-const wrapper = main.append("g");
+function timeScale(t) {
+  return t / 200;
+}
 
-drone(wrapper);
+const svg = d3.select("svg.main");
+const page = makePage(svg);
+
+// Create hidden line to ensure page fits margins
+page.element
+  .append("line")
+  .attr("y1", 0)
+  .attr("y2", margin.top + pitchRange + 32) // TODO
+  //.attr("y2", margin.top + pitchRange + margin.top)
+  .style("visibility", "hidden");
+
+const scoreGroup = makeScroll(page.element);
+scoreGroup.y(margin.top); // TODO allow chaining
+
+const wrapper = scoreGroup.element;
+
+const indicator = makeIndicator(page.element);
 
 // what does it sound like when
 // Satan grabs the back of your neck
@@ -13,6 +38,12 @@ drone(wrapper);
 // ear, never words. never seeing,
 // only feeling
 
+function heavyBreath(selection) {
+  const g = selection.append("g");
+  g.append("text").text("\ue0b8");
+  return g;
+}
+
 function lowDrone() {
   // LNP, trem.
 }
@@ -21,10 +52,81 @@ function growl() {
   // exponential cres.
 }
 
-const score = [
-  // start with intense breath sounds (or maybe they come in later?)
+const breath = [
+  // start with intense breath sounds
+  {
+    duration: 30000,
+    render: ({ x }) => {
+      translate(x, 0, heavyBreath(wrapper));
+    }
+  },
+  {
+    duration: 0,
+    render: ({ x }) => {
+      translate(x, 0, doubleBar(wrapper, pitchRange).attr("stroke", "black"));
+    }
+  }
+  // double bar
+].map(startTimeFromDuration);
+
+const texture = [
   // add low scrape
   // add low drone
   // scrape and drone cres., more pressure
   // wall of texture, frantic, growling
-];
+  // double bar
+].map(startTimeFromDuration);
+
+const score = [...breath, ...texture];
+
+score.forEach((bar, i) => {
+  const callback = i < score.length - 1 ? scrollToNextBar : null;
+  VS.score.add(bar.startTime, callback, [i, bar.duration]);
+});
+
+function renderScore() {
+  score.forEach(bar => {
+    const { render, ...meta } = bar;
+    const renderData = {
+      x: timeScale(bar.startTime),
+      length: timeScale(bar.duration)
+    };
+    render({ ...meta, ...renderData });
+  });
+}
+
+function setScorePosition() {
+  const index = VS.score.getPointer();
+  centerScoreByIndex(index, 0);
+}
+
+function centerScoreByIndex(index, duration) {
+  const x = timeScale(score[index].startTime);
+  scoreGroup.scrollTo(x, duration);
+}
+
+function scrollToNextBar(index, duration) {
+  centerScoreByIndex(index + 1, duration);
+}
+
+function resize() {
+  VS.score.isPlaying() && VS.score.pause();
+
+  const w = parseInt(svg.style("width"), 10);
+  const h = parseInt(svg.style("height"), 10);
+
+  const scale = h / (64 + 87 + 64);
+  page.scale(scale);
+
+  const center = (w / scale) * 0.5;
+  indicator.translateX(center);
+  scoreGroup.setCenter(center);
+  setScorePosition();
+}
+
+d3.select(window).on("resize", resize);
+
+d3.select(window).on("load", () => {
+  renderScore();
+  resize();
+});

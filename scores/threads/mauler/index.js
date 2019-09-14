@@ -240,7 +240,6 @@ function resize() {
   const w = parseInt(svg.style("width"), 10);
   const h = parseInt(svg.style("height"), 10);
 
-  // const scale = h / page.height(); // TODO remove
   const scale = h / (64 + 87 + 64);
   page.scale(scale);
 
@@ -254,7 +253,6 @@ d3.select(window).on("resize", resize);
 
 d3.select(window).on("load", () => {
   renderScore();
-  page.calculateHeight();
   resize();
 });
 

@@ -2,7 +2,8 @@
 // add stems/flags to cluster hits (subsequent hits are not cluster?)
 // add accent to main hit
 
-import drone from "../drone";
+//import drone from "../drone";
+import doubleBar from "../double-bar";
 import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
 import longTone from "../longTone";
@@ -316,20 +317,7 @@ const score = [
       const g = scoreGroup.element.append("g");
       translate(x, 0, g);
 
-      g.append("line")
-        .attr("y1", 0)
-        .attr("y2", pitchRange)
-        .attr("stroke-width", 1);
-
-      translate(
-        3,
-        0,
-        g
-          .append("line")
-          .attr("y1", 0)
-          .attr("y2", pitchRange)
-          .attr("stroke-width", 2)
-      );
+      doubleBar(g, pitchRange);
 
       translate(0, pitchScale(0.5), makeCue(g));
     }
@@ -386,7 +374,6 @@ d3.select(window).on("resize", resize);
 
 d3.select(window).on("load", () => {
   renderScore();
-  page.calculateHeight();
   resize();
 });
 
