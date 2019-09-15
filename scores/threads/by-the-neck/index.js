@@ -31,7 +31,7 @@ const wrapper = scoreGroup.element;
 const indicator = makeIndicator(page.element);
 
 // taking hold
-// the claws dig in
+// the claw digs in
 // hot, abrasive breath
 
 function heavyBreath(selection) {
@@ -46,7 +46,7 @@ function heavyBreath(selection) {
   // g.append("text").text("\ue0b8"); // Bravura
   g.append("text")
     .attr("dy", "1em")
-    .text("intense breaths")
+    .text("intense breaths ->")
     .attr("fill", "blue");
 
   const box = g.node().getBBox();
@@ -59,8 +59,24 @@ function scrapeDrone(selection) {
   return selection.append("line").attr("stroke", "blue");
 }
 
-function growl() {
-  // exponential cres.
+function growl(selection) {
+  const g = selection.append("g");
+
+  const rect = g
+    .append("rect")
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("height", "1em");
+
+  g.append("text")
+    .attr("dy", "1em")
+    .text("trem, exp. cres. growl ->")
+    .attr("fill", "blue");
+
+  const box = g.node().getBBox();
+  rect.attr("width", box.width);
+
+  return g;
 }
 
 const breath = [
@@ -111,10 +127,10 @@ const breath = [
       const g = wrapper.append("g");
       translate(g, x, 0);
       makeCue(g, "open");
+      // TODO if all fades/moriendo, is a double bar needed?
       doubleBar(g, pitchRange).attr("stroke", "black");
     }
   }
-  // double bar
 ].map(startTimeFromDuration);
 
 const texture = [
@@ -133,8 +149,10 @@ const texture = [
         .attr("fill", "blue");
       scrapeDrone(g).attr("x2", length);
       // TODO dynamics?
+      makeCue(g);
     }
   },
+  // scrape cluster
   {
     duration: 5000,
     render: ({ x, length }) => {
@@ -149,20 +167,35 @@ const texture = [
         .call(translate, 0, 2);
       // TODO dynamics?
     }
+  },
+  // TODO scrape and drone cres., more pressure
+  // growl
+  {
+    duration: 5000,
+    render: ({ x, length }) => {
+      const g = wrapper.append("g");
+      translate(g, x, pitchScale(0.25));
+      growl(g);
+      // TODO dynamics?
+    }
   }
-  // add low drone
-  // scrape and drone cres., more pressure
-  // wall of texture, frantic, growling
-  // double bar
 ].map(startTimeFromDuration);
 
-// TODO dedup and/or sort? display vs playback
-const score = [...breath, ...texture].sort((a, b) => {
-  return a.startTime - b.startTime;
-});
+// TODO wall of texture, frantic
 
-score.forEach((bar, i) => {
-  const callback = i < score.length - 1 ? scrollToNextBar : null;
+const score = [...breath, ...texture];
+
+const scoreTiming = score
+  .map(bar => bar.startTime)
+  .filter((startTime, i, times) => times.indexOf(startTime) === i)
+  .sort((a, b) => a - b)
+  .map((startTime, i, times) => ({
+    startTime,
+    duration: times[i + 1] - times[i] || 0
+  }));
+
+scoreTiming.forEach((bar, i) => {
+  const callback = i < scoreTiming.length - 1 ? scrollToNextBar : null;
   VS.score.add(bar.startTime, callback, [i, bar.duration]);
 });
 
@@ -183,7 +216,7 @@ function setScorePosition() {
 }
 
 function centerScoreByIndex(index, duration) {
-  const x = timeScale(score[index].startTime);
+  const x = timeScale(scoreTiming[index].startTime); // TODO note this is timing
   scoreGroup.scrollTo(x, duration);
 }
 
