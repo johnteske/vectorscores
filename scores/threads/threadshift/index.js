@@ -291,23 +291,23 @@ const scoreWithRenderData = score.map(bar => {
 });
 
 function renderScore() {
-  score.forEach(bar => {
-    const { render, ...meta } = bar;
-    const renderData = {
-      x: timeScale(bar.startTime),
-      length: timeScale(bar.duration)
-    };
-    render({ ...meta, ...renderData });
+  scoreWithRenderData.forEach(bar => {
+    const { render, ...data } = bar;
+    render(data);
   });
 }
 
-const {setScorePosition, scrollToNextBar} = makeScrollHelpers(scoreGroup, scoreWithRenderData.map(bar => bar.x));
+const { setScorePosition, scrollToNextBar } = makeScrollHelpers(
+  scoreGroup,
+  scoreWithRenderData.map(bar => bar.x)
+);
 
 score.forEach((bar, i) => {
   const callback = i < score.length - 1 ? scrollToNextBar : null;
   VS.score.add(bar.startTime, callback, [i, bar.duration]);
 });
 
+// dependencies: svg, page, margin, range, indicator, scoreGroup, setScorePosition
 function resize() {
   VS.score.isPlaying() && VS.score.pause();
 
@@ -330,7 +330,7 @@ d3.select(window).on("load", () => {
   resize();
 });
 
-addHooks(setScorePosition)
+addHooks(setScorePosition);
 
 VS.WebSocket.connect();
 
