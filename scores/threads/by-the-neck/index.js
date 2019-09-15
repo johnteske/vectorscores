@@ -181,9 +181,30 @@ const texture = [
   }
 ].map(startTimeFromDuration);
 
+const noise = [
+  {
+    duration: 15000,
+    render: () => {}
+  },
+  {
+    duration: 5000,
+    render: ({ x, length }) => {
+      const g = wrapper.append("g");
+      translate(g, x, 0);
+      for (let i = 0; i < 50; i++) {
+        g.append("text")
+          .text(".")
+          .attr("fill", "blue")
+          .attr("x", Math.random() * length)
+          .attr("y", Math.random() * pitchRange);
+      }
+    }
+  }
+].map(startTimeFromDuration);
+
 // TODO wall of texture, frantic
 
-const score = [...breath, ...texture];
+const score = [...noise, ...breath, ...texture];
 
 const scoreTiming = score
   .map(bar => bar.startTime)
