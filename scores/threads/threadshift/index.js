@@ -5,7 +5,7 @@
 import { margin } from "../layout";
 import { seconds, pitchRange, pitchScale } from "../scale";
 import doubleBar from "../double-bar";
-import makeCue from "../cue";
+import cue from "../cue";
 import drawDynamics from "../dynamics";
 import longTone from "../longTone";
 import pathAlongPath from "../pathAlongPath";
@@ -18,6 +18,8 @@ import lineBecomingAir from "./lineBecomingAir";
 function timeScale(t) {
   return t / 200;
 }
+
+const makeCue = selection => cue(selection).attr("y", -87);
 
 const { svg, page, scoreGroup, indicator } = makeScrollingScore();
 
