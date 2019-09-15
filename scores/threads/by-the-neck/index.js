@@ -7,7 +7,7 @@ import makeCue from "../cue";
 import makePage from "../page";
 import makeScroll from "../scroll";
 import startTimeFromDuration from "../startTimeFromDuration";
-import translate from "../translate";
+import { translate } from "../translate";
 
 function timeScale(t) {
   return t / 50;
@@ -20,8 +20,7 @@ const page = makePage(svg);
 page.element
   .append("line")
   .attr("y1", 0)
-  .attr("y2", margin.top + pitchRange + 32) // TODO
-  //.attr("y2", margin.top + pitchRange + margin.top)
+  .attr("y2", margin.top + pitchRange + margin.top) // TODO
   .style("visibility", "hidden");
 
 const scoreGroup = makeScroll(page.element);
@@ -31,13 +30,9 @@ const wrapper = scoreGroup.element;
 
 const indicator = makeIndicator(page.element);
 
-// what does it sound like when
-// Satan grabs the back of your neck
-// with his right hand, with nails, and
-// leans over your left shoulder?
-// you can feel his breath in your
-// ear, never words. never seeing,
-// only feeling
+// taking hold
+// the claws dig in
+// hot, abrasive breath
 
 function heavyBreath(selection) {
   const g = selection.append("g");
@@ -60,7 +55,8 @@ function heavyBreath(selection) {
   return g;
 }
 
-function lowDrone(selection) {
+function scrapeDrone(selection) {
+  return selection.append("line").attr("stroke", "blue");
 }
 
 function growl() {
@@ -74,7 +70,8 @@ const breath = [
     render: ({ x, length }) => {
       const g = wrapper.append("g");
 
-      translate(x, 0, heavyBreath(g));
+      translate(heavyBreath(g), x, 0);
+
       drawDynamics(
         [
           {
@@ -112,7 +109,7 @@ const breath = [
     duration: 0,
     render: ({ x }) => {
       const g = wrapper.append("g");
-      translate(x, 0, g);
+      translate(g, x, 0);
       makeCue(g, "open");
       doubleBar(g, pitchRange).attr("stroke", "black");
     }
@@ -122,17 +119,34 @@ const breath = [
 
 const texture = [
   {
-    duration: 15000,
+    duration: 5000,
     render: () => {}
   },
   // add low scrape
   {
-    duration: 15000,
+    duration: 5000,
     render: ({ x, length }) => {
       const g = wrapper.append("g");
-      translate(x, pitchScale(0.25), g);
-      g.append("text").text("scrape").attr("fill", "blue")
-      g.append("line").attr("x2", length).attr("stroke", "blue")
+      translate(g, x, pitchScale(0.25));
+      g.append("text")
+        .text("scrape")
+        .attr("fill", "blue");
+      scrapeDrone(g).attr("x2", length);
+      // TODO dynamics?
+    }
+  },
+  {
+    duration: 5000,
+    render: ({ x, length }) => {
+      const g = wrapper.append("g");
+      translate(g, x, pitchScale(0.25));
+      scrapeDrone(g)
+        .attr("x2", length)
+        .call(translate, 0, -2);
+      scrapeDrone(g).attr("x2", length);
+      scrapeDrone(g)
+        .attr("x2", length)
+        .call(translate, 0, 2);
       // TODO dynamics?
     }
   }
@@ -143,7 +157,9 @@ const texture = [
 ].map(startTimeFromDuration);
 
 // TODO dedup and/or sort? display vs playback
-const score = [...breath, ...texture].sort((a, b) => { return a.startTime - b.startTime });
+const score = [...breath, ...texture].sort((a, b) => {
+  return a.startTime - b.startTime;
+});
 
 score.forEach((bar, i) => {
   const callback = i < score.length - 1 ? scrollToNextBar : null;
