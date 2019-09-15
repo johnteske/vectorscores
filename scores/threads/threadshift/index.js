@@ -12,6 +12,7 @@ import pathAlongPath from "../pathAlongPath";
 import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 import makeScrollingScore from "../scrolling-score";
+import makeResize from "../scroll-resize";
 import makeScrollHelpers from "../scroll-center";
 import addHooks from "../scroll-hooks";
 import noisePatch from "./noisePatch";
@@ -307,21 +308,15 @@ score.forEach((bar, i) => {
   VS.score.add(bar.startTime, callback, [i, bar.duration]);
 });
 
-// dependencies: svg, page, margin, range, indicator, scoreGroup, setScorePosition
-function resize() {
-  VS.score.isPlaying() && VS.score.pause();
-
-  const w = parseInt(svg.style("width"), 10);
-  const h = parseInt(svg.style("height"), 10);
-
-  const scale = h / (margin.top + pitchRange + margin.top);
-  page.scale(scale);
-
-  const center = (w / scale) * 0.5;
-  indicator.translateX(center);
-  scoreGroup.setCenter(center);
-  setScorePosition();
-}
+const resize = makeResize(
+  svg,
+  page,
+  margin,
+  pitchRange,
+  indicator,
+  scoreGroup,
+  setScorePosition
+);
 
 d3.select(window).on("resize", resize);
 

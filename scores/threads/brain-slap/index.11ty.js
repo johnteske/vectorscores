@@ -1,3 +1,5 @@
+const options = require("./_options.11ty.js");
+
 module.exports = class {
   data() {
     return {
@@ -5,7 +7,8 @@ module.exports = class {
       title: "brain slap",
       composer: "John Teske",
       status: "wip",
-      modules: ["bravura"]
+      options: options(),
+      modules: ["bravura", "websockets"]
     };
   }
 
