@@ -1,11 +1,12 @@
+const baseTemplateData = require("../base-template-data");
+
 module.exports = class {
   data() {
     return {
-      layout: "movement",
+      ...baseTemplateData,
       title: "mauler",
-      composer: "John Teske",
       status: "wip",
-      modules: ["bravura", "dictionary"]
+      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
     };
   }
 

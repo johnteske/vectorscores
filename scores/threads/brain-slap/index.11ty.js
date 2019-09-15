@@ -1,12 +1,11 @@
-const baseTemplateData = require("../base-template-data")
+const baseTemplateData = require("../base-template-data");
 
 module.exports = class {
   data() {
     return {
       ...baseTemplateData,
       title: "brain slap",
-      status: "wip",
-      modules: [ ...baseTemplateData.modules, "websockets" ]
+      status: "wip"
     };
   }
 

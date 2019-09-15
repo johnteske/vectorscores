@@ -1,15 +1,12 @@
-const options = require("./_options.11ty.js");
+const baseTemplateData = require("../base-template-data");
 
 module.exports = class {
   data() {
     return {
-      layout: "movement",
+      ...baseTemplateData,
       title: "threadshift",
-      composer: "John Teske",
       status: "wip",
-      // options: `<button id="save-svg">Save SVG</button>`,
-      options: options(),
-      modules: ["bravura", "dictionary", "websockets"]
+      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
     };
   }
 

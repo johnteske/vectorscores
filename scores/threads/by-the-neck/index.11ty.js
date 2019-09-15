@@ -1,14 +1,12 @@
-const options = require("./_options.11ty.js");
+const baseTemplateData = require("../base-template-data");
 
 module.exports = class {
   data() {
     return {
-      layout: "movement",
+      ...baseTemplateData,
       title: "by the fucking neck",
-      composer: "John Teske",
       status: "wip",
-      options: options(),
-      modules: ["bravura", "dictionary", "websockets"]
+      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
     };
   }
 
