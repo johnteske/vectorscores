@@ -2,44 +2,25 @@
 // add stems/flags to cluster hits (subsequent hits are not cluster?)
 // add accent to main hit
 
-//import drone from "../drone";
+import { margin } from "../layout";
+import { seconds, pitchRange, pitchScale } from "../scale";
 import doubleBar from "../double-bar";
+import makeCue from "../cue";
 import drawDynamics from "../dynamics";
-import makeIndicator from "../indicator";
 import longTone from "../longTone";
-import makePage from "../page";
 import pathAlongPath from "../pathAlongPath";
-import makeScroll from "../scroll";
 import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
-
+import makeScrollingScore from "../scrolling-score";
 import noisePatch from "./noisePatch";
 import lineBecomingAir from "./lineBecomingAir";
-
-const margin = {
-  top: 64
-};
-
-const seconds = t => t * 1000;
-
-const pitchRange = 87;
-function pitchScale(value) {
-  return (1 - value) * pitchRange;
-}
-// function pitchScale(midi) {
-//   // MIDI 21/A0 to 108/C8
-//   // 64.5/Eq#4 is center
-//   const [min, max] = [21, 108];
-//   const range = max - min;
-//
-//   return 1 - midi / range;
-// }
 
 function timeScale(t) {
   return t / 200;
 }
 
-const svg = d3.select("svg.main");
+const { svg, page, scoreGroup, indicator } = makeScrollingScore();
+
 svg.append("style").text(`
   line { stroke: black; }
   line.wip { stroke: blue; }
@@ -51,33 +32,6 @@ svg.append("style").text(`
     font-style: italic;
   }
 `);
-
-const page = makePage(svg);
-
-// Create hidden line to ensure page fits margins
-page.element
-  .append("line")
-  .attr("y1", 0)
-  .attr("y2", margin.top + pitchRange + 32) // TODO
-  //.attr("y2", margin.top + pitchRange + margin.top)
-  .style("visibility", "hidden");
-
-const scoreGroup = makeScroll(page.element);
-scoreGroup.y(margin.top); // TODO allow chaining
-//scoreGroup.element.style("outline", "1px dotted red");
-
-const indicator = makeIndicator(page.element);
-
-const makeCue = function(selection) {
-  return selection
-    .append("text")
-    .attr("class", "bravura wip")
-    .attr("text-anchor", "middle")
-    .attr("y", -87)
-    .text("\ue890");
-};
-
-// drone(scoreGroup.element); // TODO: how do these integrate with the ending
 
 const { articulations, dynamics } = VS.dictionary.Bravura;
 
