@@ -12,6 +12,8 @@ import pathAlongPath from "../pathAlongPath";
 import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 import makeScrollingScore from "../scrolling-score";
+import makeScrollHelpers from "../scroll-center";
+import addHooks from "../scroll-hooks";
 import noisePatch from "./noisePatch";
 import lineBecomingAir from "./lineBecomingAir";
 
@@ -19,7 +21,7 @@ function timeScale(t) {
   return t / 200;
 }
 
-const makeCue = selection => cue(selection).attr("y", -87);
+const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
 
 const { svg, page, scoreGroup, indicator } = makeScrollingScore();
 
@@ -280,9 +282,12 @@ const score = [
   }
 ].map(startTimeFromDuration);
 
-score.forEach((bar, i) => {
-  const callback = i < score.length - 1 ? scrollToNextBar : null;
-  VS.score.add(bar.startTime, callback, [i, bar.duration]);
+const scoreWithRenderData = score.map(bar => {
+  return {
+    ...bar,
+    x: timeScale(bar.startTime),
+    length: timeScale(bar.duration)
+  };
 });
 
 function renderScore() {
@@ -296,19 +301,12 @@ function renderScore() {
   });
 }
 
-function setScorePosition() {
-  const index = VS.score.getPointer();
-  centerScoreByIndex(index, 0);
-}
+const {setScorePosition, scrollToNextBar} = makeScrollHelpers(scoreGroup, scoreWithRenderData.map(bar => bar.x));
 
-function centerScoreByIndex(index, duration) {
-  const x = timeScale(score[index].startTime);
-  scoreGroup.scrollTo(x, duration);
-}
-
-function scrollToNextBar(index, duration) {
-  centerScoreByIndex(index + 1, duration);
-}
+score.forEach((bar, i) => {
+  const callback = i < score.length - 1 ? scrollToNextBar : null;
+  VS.score.add(bar.startTime, callback, [i, bar.duration]);
+});
 
 function resize() {
   VS.score.isPlaying() && VS.score.pause();
@@ -316,8 +314,7 @@ function resize() {
   const w = parseInt(svg.style("width"), 10);
   const h = parseInt(svg.style("height"), 10);
 
-  const scale = h / (64 + 87 + 64);
-  //const scale = h / page.height(); // TODO remove
+  const scale = h / (margin.top + pitchRange + margin.top);
   page.scale(scale);
 
   const center = (w / scale) * 0.5;
@@ -333,13 +330,7 @@ d3.select(window).on("load", () => {
   resize();
 });
 
-VS.control.hooks.add("step", setScorePosition);
-VS.WebSocket.hooks.add("step", setScorePosition);
-
-VS.control.hooks.add("pause", setScorePosition);
-VS.WebSocket.hooks.add("pause", setScorePosition);
-
-VS.score.hooks.add("stop", setScorePosition);
+addHooks(setScorePosition)
 
 VS.WebSocket.connect();
 

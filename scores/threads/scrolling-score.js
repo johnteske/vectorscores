@@ -16,7 +16,7 @@ export default function() {
     .style("visibility", "hidden");
 
   const scoreGroup = makeScroll(page.element);
-  scoreGroup.y(margin.top); // TODO allow chaining
+  scoreGroup.y(margin.top);
 
   const indicator = makeIndicator(page.element);
 
