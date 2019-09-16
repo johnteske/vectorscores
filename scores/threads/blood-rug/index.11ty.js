@@ -6,7 +6,7 @@ module.exports = class {
       ...baseTemplateData,
       title: "blood rug",
       status: "wip",
-      modules: [...baseTemplateData.modules, "bravura"]
+      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
     };
   }
 
