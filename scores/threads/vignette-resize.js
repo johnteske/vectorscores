@@ -5,9 +5,14 @@ export default function resize(svg, wrapper, pitchRange) {
 
     const scaleX = w / pitchRange;
     const scaleY = h / pitchRange;
-
     const scale = Math.min(scaleX, scaleY);
 
-    wrapper.attr("transform", `scale(${scale})`);
+    const leftMargin = w * 0.5 - pitchRange * 0.5 * scale;
+    const topMargin = h * 0.5 - pitchRange * 0.5 * scale;
+
+    wrapper.attr(
+      "transform",
+      `translate(${leftMargin}, ${topMargin}) scale(${scale})`
+    );
   };
 }
