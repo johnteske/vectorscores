@@ -1,7 +1,7 @@
 import { pitchRange, pitchScale } from "../scale";
 import makeVignetteScore from "../vignette-score";
 import makeVignetteResize from "../vignette-resize";
-import translate from "../translate";
+import { translate } from "../translate";
 import pathAlongPath from "../pathAlongPath";
 
 const { svg, page, scoreGroup } = makeVignetteScore();
@@ -9,18 +9,35 @@ const wrapper = scoreGroup;
 
 function textureOfBones(selection) {
   const g = selection.append("g").attr("fill", "darkRed");
-  for (let i = 0; i < 666; i++) {
+
+  g.append("text")
+    .text("crushing bones")
+    .attr("dy", "1em")
+    .attr("fill", "black");
+  // TODO mf
+
+  for (let i = 0; i < 66; i++) {
     g.append("text")
       .text("\u2620")
       .attr("x", pitchScale(Math.random() * 1))
       .attr("y", pitchScale(Math.random() * 0.25));
   }
+
   return g;
 }
 
 textureOfBones(wrapper);
 
+// high, cheerful, taunting
+// solo
+// TODO also needs bounding box
 const boneFlutePhraseGenerator = pathAlongPath(d3.curveBasis, d3.curveBasis);
+// take the easy path
+// take comfort in the release
+// it can be so easy
+// it can be so simple
+// it's the right thing to do
+// it's the right thing for everyone
 
 function boneFlute(selection) {
   return boneFlutePhraseGenerator(
@@ -31,7 +48,12 @@ function boneFlute(selection) {
   );
 }
 
-translate(0, 0, boneFlute(wrapper));
+boneFlute(wrapper);
+
+// mid-range drones
+translate(wrapper.append("line"), 0, pitchScale(0.5))
+  .attr("x2", pitchRange)
+  .attr("stroke", "black");
 
 const resize = makeVignetteResize(svg, wrapper, pitchRange);
 
