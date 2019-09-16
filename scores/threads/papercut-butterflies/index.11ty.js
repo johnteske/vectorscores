@@ -1,11 +1,12 @@
+const baseTemplateData = require("../base-template-data");
+
 module.exports = class {
   data() {
     return {
-      layout: "movement",
+      ...baseTemplateData,
       title: "papercut butterflies",
-      composer: "John Teske",
       status: "wip",
-      modules: ["bravura"]
+      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
     };
   }
 
