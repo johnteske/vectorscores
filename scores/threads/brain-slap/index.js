@@ -2,38 +2,140 @@ import { margin } from "../layout";
 import { seconds, pitchRange, pitchScale } from "../scale";
 import doubleBar from "../double-bar";
 import cue from "../cue";
-// import drawDynamics from "../dynamics";
+import longTone from "../longTone";
+import drawDynamics from "../dynamics";
 import startTimeFromDuration from "../startTimeFromDuration";
-import translate from "../translate";
+import { translate } from "../translate";
 import makeScrollingScore from "../scrolling-score";
 import makeResize from "../scroll-resize";
 import makeScrollHelpers from "../scroll-center";
 import addHooks from "../scroll-hooks";
+
+const articulationGlyph = VS.dictionary.Bravura.articulations;
+const durationGlyph = VS.dictionary.Bravura.durations.stemless;
 
 function timeScale(t) {
   return t / 200;
 }
 
 const { svg, page, scoreGroup, indicator } = makeScrollingScore();
+
+svg.append("style").text(`
+  line { stroke: black; }
+  line.wip { stroke: blue; }
+  text.wip { fill: blue; }
+  .bravura { font-family: 'Bravura'; font-size: 20px; }
+  .text-dynamic {
+    font-family: serif;
+    font-size: 12px;
+    font-style: italic;
+  }
+`);
+
 const wrapper = scoreGroup.element;
+const group = (selection = wrapper) => selection.append("g");
 
-// wet slaps:
-// tongue slap
-// col legno battuto
+const text = (selection, str) => selection.append("text").text(str);
+const bravura = (selection, str) =>
+  text(selection, str).attr("class", "bravura");
 
-// sloshing:
-// bow hair rotating?
-
-// after slaps, drones are more meandering?
 const score = [
   {
-    duration: 5000,
-    render: () => {}
+    duration: 15000,
+    render: ({ x, length }) => {
+      const g = translate(group(), x, pitchScale(0.5));
+
+      cue(g);
+
+      longTone(g, 0, 0, length);
+      bravura(g, articulationGlyph[">"]);
+      text(g, "th");
+
+      drawDynamics(
+        [
+          {
+            type: "symbol",
+            value: "mp",
+            x: 0
+          },
+          {
+            type: "text",
+            value: "cres.",
+            x: 0.5
+          },
+          {
+            type: "symbol",
+            value: "f",
+            x: 1
+          }
+        ],
+        length,
+        g
+      );
+    }
+  },
+  {
+    duration: 15000,
+    render: ({ x }) => {
+      const g = translate(group(), x, 0);
+
+      cue(g);
+
+      bravura(g, durationGlyph["0.5"]);
+      bravura(g, articulationGlyph[">"]);
+      text(g, "slap/snap"); // TODO bartok
+
+      drawDynamics(
+        [
+          {
+            type: "symbol",
+            value: "ff",
+            x: 0
+          }
+        ],
+        length,
+        g
+      );
+    }
+  },
+  {
+    duration: 15000,
+    render: ({ x }) => {
+      const g = translate(group(), x, 0);
+
+      // wet slaps:
+      // tongue slap
+      // col legno battuto
+
+      // sloshing:
+      // bow hair rotating?
+
+      text(g, "wet slaps: tongue slap, col legno battuto, etc.");
+      text(g, "sloshing: water sounds, bow hair rotating, etc.");
+
+      text(
+        g,
+        "meandering lines: microtonal steps, larger skips (been slapped)"
+      ); // TODO
+
+      drawDynamics(
+        [
+          {
+            type: "symbol",
+            value: "p",
+            x: 0
+          }
+        ],
+        length,
+        g
+      );
+    }
   },
   {
     duration: 0,
     render: ({ x }) => {
-      doubleBar(wrapper, pitchRange);
+      const g = translate(group(), x, 0);
+      doubleBar(g, pitchRange);
     }
   }
 ].map(startTimeFromDuration);

@@ -5,7 +5,8 @@ module.exports = class {
     return {
       ...baseTemplateData,
       title: "brain slap",
-      status: "wip"
+      status: "wip",
+      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
     };
   }
 
