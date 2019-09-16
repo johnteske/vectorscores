@@ -1,17 +1,17 @@
-import drone from "../drone";
+import makeVignetteScore from "../vignette-score";
 import translate from "../translate";
 import pathAlongPath from "../pathAlongPath";
 
-const main = d3.select(".main");
-const wrapper = main.append("g");
-
-drone(wrapper);
+const { svg, page, scoreGroup } = makeVignetteScore();
+const wrapper = scoreGroup;
 
 function textureOfBones(selection) {
   for (let i = 0; i < 666; i++) {
     selection
       .append("text")
       .text("\u2620")
+      .attr("fill", "darkRed")
+      //.attr("fill", "#8B0000")
       .attr("dx", `${Math.random() * 33}em`)
       .attr("dy", `${Math.random() * 2}em`);
   }
