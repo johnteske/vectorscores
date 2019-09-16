@@ -4,8 +4,8 @@ import makeVignetteResize from "../vignette-resize";
 import { translate } from "../translate";
 import pathAlongPath from "../pathAlongPath";
 
-const { svg, page, scoreGroup } = makeVignetteScore();
-const wrapper = scoreGroup;
+const { svg, page } = makeVignetteScore();
+const wrapper = page.element;
 
 function textureOfBones(selection) {
   const g = selection.append("g").attr("fill", "darkRed");
@@ -25,8 +25,6 @@ function textureOfBones(selection) {
 
   return g;
 }
-
-textureOfBones(wrapper);
 
 // high, cheerful, taunting
 // solo
@@ -48,18 +46,22 @@ function boneFlute(selection) {
   );
 }
 
-boneFlute(wrapper);
+function renderScore() {
+  boneFlute(wrapper);
 
-// mid-range drones
-translate(wrapper.append("line"), 0, pitchScale(0.5))
-  .attr("x2", pitchRange)
-  .attr("stroke", "black");
+  // mid-range drones
+  translate(wrapper.append("line"), 0, pitchScale(0.5))
+    .attr("x2", pitchRange)
+    .attr("stroke", "black");
+
+  textureOfBones(wrapper);
+}
 
 const resize = makeVignetteResize(svg, wrapper, pitchRange);
 
 d3.select(window).on("resize", resize);
 
 d3.select(window).on("load", () => {
-  // renderScore();
+  renderScore();
   resize();
 });
