@@ -19,6 +19,8 @@ svg.append("style").text(`
 
 const wrapper = page.element;
 
+const text = (selection, str) => selection.append("text").text(str);
+
 function makeFrame(selection) {
   return selection
     .append("rect")
@@ -79,6 +81,10 @@ function boneFlute(selection) {
     (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-5, 5) }),
     g
   );
+
+  text(g, "it can be so easy")
+    .attr("dy", "1em")
+    .attr("fill", "darkred");
 
   drawDynamics(
     [
