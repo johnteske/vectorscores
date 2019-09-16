@@ -19,6 +19,15 @@ svg.append("style").text(`
 
 const wrapper = page.element;
 
+function makeFrame(selection) {
+  return selection
+    .append("rect")
+    .attr("width", pitchRange)
+    .attr("height", pitchRange)
+    .attr("fill", "none")
+    .attr("stroke", "blue");
+}
+
 function textureOfBones(selection) {
   const g = selection.append("g").attr("fill", "darkRed");
 
@@ -119,6 +128,7 @@ const score = [
     duration: 15000,
     render: () => {
       const g = wrapper.append("g");
+      makeFrame(g);
       boneFlute(g);
       drone(g);
       textureOfBones(g);
@@ -129,6 +139,7 @@ const score = [
     duration: 15000,
     render: () => {
       const g = wrapper.append("g");
+      makeFrame(g);
       boneFlute(g);
       drone(g);
       textureOfBones(g);

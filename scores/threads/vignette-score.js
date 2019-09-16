@@ -7,12 +7,6 @@ export default function() {
   const svg = d3.select("svg.main");
 
   const page = makePage(svg);
-  page.element
-    .append("rect")
-    .attr("width", pitchRange)
-    .attr("height", pitchRange)
-    .attr("fill", "none")
-    .attr("stroke", "blue");
 
   return {
     svg,
