@@ -65,3 +65,5 @@ d3.select(window).on("load", () => {
   renderScore();
   resize();
 });
+
+VS.WebSocket.connect();

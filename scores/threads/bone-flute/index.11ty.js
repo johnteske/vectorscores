@@ -1,11 +1,12 @@
+const baseTemplateData = require("../base-template-data");
+
 module.exports = class {
   data() {
     return {
-      layout: "movement",
+      ...baseTemplateData,
       title: "bone flute",
-      composer: "John Teske",
       status: "wip",
-      modules: ["line-cloud"]
+      modules: [...baseTemplateData.modules, "line-cloud"]
     };
   }
 
