@@ -6,7 +6,12 @@ module.exports = class {
       ...baseTemplateData,
       title: "bone flute",
       status: "wip",
-      modules: [...baseTemplateData.modules, "line-cloud"]
+      modules: [
+        ...baseTemplateData.modules,
+        "bravura",
+        "dictionary",
+        "line-cloud"
+      ]
     };
   }
 
