@@ -4,7 +4,7 @@ module.exports = class {
   data() {
     return {
       ...baseTemplateData,
-      title: "blood rug",
+      title: "blood on the hearth",
       status: "wip",
       modules: [...baseTemplateData.modules, "bravura", "dictionary"]
     };

@@ -44,7 +44,9 @@ const score = [
     render: ({ x, length }) => {
       const g = translate(wrapper.append("g"), x, pitchScale(0.5));
 
-      longTone(g, 0, 0, length);
+      g.append("line")
+        .attr("x2", length)
+        .attr("class", "wip");
 
       g.append("text").text("solo");
 
@@ -90,7 +92,48 @@ const score = [
       dynamic(g, "symbol", "mf", length);
     }
   },
-  // dissonant cluster, within an octave or octave and a half
+  {
+    duration: 15000,
+    render: ({ x, length }) => {
+      const g = translate(group(), x, pitchScale(0.5));
+
+      makeCue(g);
+
+      g.append("text").text("tutti");
+
+      // dissonant cluster, within an octave or octave and a half
+      function cluster(selection, x, yOffset, length) {
+        const relativePitches = [-6, -3, 0, 3].map(y => y + yOffset);
+
+        relativePitches.forEach(y => {
+          longTone(g, x, y, VS.getRandExcl(length, length * 1.5)); // up to 1.5x length // TODO set min bounds
+        });
+      }
+
+      cluster(g, 0, 0, length);
+      cluster(g, 3, 3, length);
+
+      dynamic(g, "symbol", "mf", length);
+    }
+  },
+  {
+    // more open long tones
+    // TODO give space around pitches/y values from previous bar?
+    duration: 15000,
+    render: ({ x, length }) => {
+      const g = translate(group(), x, 0);
+
+      for (let i = 0; i < 8; i++) {
+        let y = pitchScale(Math.random());
+        g.append("line")
+          .attr("x1", VS.getRandExcl(0, length * 0.25))
+          .attr("x2", VS.getRandExcl(length * 0.75, length))
+          .attr("y1", y)
+          .attr("y2", y)
+          .attr("class", "wip");
+      }
+    }
+  },
   {
     duration: 0,
     render: ({ x }) => {
