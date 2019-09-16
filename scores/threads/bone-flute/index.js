@@ -1,3 +1,4 @@
+import startTimeFromDuration from "../startTimeFromDuration";
 import { pitchRange, pitchScale } from "../scale";
 import makeVignetteScore from "../vignette-score";
 import makeVignetteResize from "../vignette-resize";
@@ -21,6 +22,7 @@ const wrapper = page.element;
 function textureOfBones(selection) {
   const g = selection.append("g").attr("fill", "darkRed");
 
+  // TODO these could be animated to emphasize the crushing
   for (let i = 0; i < 66; i++) {
     g.append("text")
       .text("\u2620")
@@ -63,7 +65,7 @@ function boneFlute(selection) {
   const g = selection.append("g");
 
   boneFlutePhraseGenerator(
-    [{ x: 0, y: 0 }, { x: 50, y: 20 }, { x: 100, y: 10 }],
+    [{ x: 0, y: 0 }, { x: pitchRange * 0.5, y: 20 }, { x: pitchRange, y: 10 }],
     [...new Array(10)],
     (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-5, 5) }),
     g
@@ -106,11 +108,61 @@ function drone(selection) {
   return g;
 }
 
+const score = [
+  {
+    duration: 0,
+    render: () => {
+      return wrapper.append("g");
+    }
+  },
+  {
+    duration: 15000,
+    render: () => {
+      const g = wrapper.append("g");
+      boneFlute(g);
+      drone(g);
+      textureOfBones(g);
+      return g;
+    }
+  },
+  {
+    duration: 15000,
+    render: () => {
+      const g = wrapper.append("g");
+      boneFlute(g);
+      drone(g);
+      textureOfBones(g);
+      return g;
+    }
+  },
+  {
+    duration: 0,
+    render: () => {
+      return wrapper.append("g");
+    }
+  }
+].map(startTimeFromDuration);
+
 function renderScore() {
-  boneFlute(wrapper);
-  drone(wrapper);
-  textureOfBones(wrapper);
+  score.forEach((bar, i) => {
+    const { render, ...data } = bar;
+    render(data)
+      .attr("class", `frame frame-${i}`)
+      .style("opacity", 0);
+  });
 }
+
+const showFrame = i => {
+  d3.selectAll(".frame").style("opacity", 0);
+  d3.selectAll(`.frame-${i}`).style("opacity", 1);
+};
+
+score.forEach((bar, i) => {
+  const callback = () => {
+    showFrame(i);
+  };
+  VS.score.add(bar.startTime, callback, [i, bar.duration]);
+});
 
 const resize = makeVignetteResize(svg, wrapper, pitchRange);
 
@@ -120,5 +172,18 @@ d3.select(window).on("load", () => {
   renderScore();
   resize();
 });
+
+const showFrameAtPointer = () => {
+  const index = VS.score.getPointer();
+  showFrame(index);
+};
+
+VS.control.hooks.add("step", showFrameAtPointer);
+VS.WebSocket.hooks.add("step", showFrameAtPointer);
+
+VS.control.hooks.add("pause", showFrameAtPointer);
+VS.WebSocket.hooks.add("pause", showFrameAtPointer);
+
+VS.score.hooks.add("stop", showFrameAtPointer);
 
 VS.WebSocket.connect();
