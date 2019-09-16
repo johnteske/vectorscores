@@ -181,6 +181,7 @@ d3.select(window).on("resize", resize);
 
 d3.select(window).on("load", () => {
   renderScore();
+  showFrame(0);
   resize();
 });
 
