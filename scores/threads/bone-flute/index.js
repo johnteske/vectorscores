@@ -1,4 +1,6 @@
+import { pitchRange, pitchScale } from "../scale";
 import makeVignetteScore from "../vignette-score";
+import makeVignetteResize from "../vignette-resize";
 import translate from "../translate";
 import pathAlongPath from "../pathAlongPath";
 
@@ -6,18 +8,17 @@ const { svg, page, scoreGroup } = makeVignetteScore();
 const wrapper = scoreGroup;
 
 function textureOfBones(selection) {
+  const g = selection.append("g").attr("fill", "darkRed");
   for (let i = 0; i < 666; i++) {
-    selection
-      .append("text")
+    g.append("text")
       .text("\u2620")
-      .attr("fill", "darkRed")
-      //.attr("fill", "#8B0000")
-      .attr("dx", `${Math.random() * 33}em`)
-      .attr("dy", `${Math.random() * 2}em`);
+      .attr("x", pitchScale(Math.random() * 1))
+      .attr("y", pitchScale(Math.random() * 0.25));
   }
+  return g;
 }
 
-textureOfBones(wrapper.append("g").attr("transform", "translate(0, 100)"));
+textureOfBones(wrapper);
 
 const boneFlutePhraseGenerator = pathAlongPath(d3.curveBasis, d3.curveBasis);
 
@@ -30,4 +31,13 @@ function boneFlute(selection) {
   );
 }
 
-translate(50, 50, boneFlute(wrapper));
+translate(0, 0, boneFlute(wrapper));
+
+const resize = makeVignetteResize(svg, wrapper, pitchRange);
+
+d3.select(window).on("resize", resize);
+
+d3.select(window).on("load", () => {
+  // renderScore();
+  resize();
+});
