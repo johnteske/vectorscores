@@ -24,7 +24,7 @@ svg.append("style").text(`
   line { stroke: black; }
   line.wip { stroke: blue; }
   text {
-    font-size: 12px;
+    font-size: 10px;
   }
   text.wip { fill: blue; }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
@@ -32,6 +32,9 @@ svg.append("style").text(`
     font-family: serif;
     font-size: 12px;
     font-style: italic;
+  }
+  .text-duration {
+    font-size: 12px;
   }
 `);
 
@@ -42,20 +45,30 @@ const cues = wrapper.append("g");
 const makeCue = (x, type) => cue(cues, type).attr("x", x);
 
 const text = (selection, str) => selection.append("text").text(str);
+const wip = (selection, str) => text(selection, str).attr("class", "wip");
 const bravura = (selection, str) =>
   text(selection, str).attr("class", "bravura");
 
+const durations = translate(group(), 0, -24);
+const makeDuration = (x, duration) =>
+  durations
+    .append("text")
+    .text(`${duration / 1000}"`)
+    .attr("x", x)
+    .attr("class", "text-duration");
+
 const score = [
   {
-    duration: 15000,
-    render: ({ x, length }) => {
+    duration: seconds(30),
+    render: ({ x, length, duration }) => {
       const g = translate(group(), x, pitchScale(0.5));
 
       makeCue(x);
+      makeDuration(x, duration);
 
       longTone(g, 0, 0, length);
       bravura(g, articulationGlyph[">"]).attr("dy", "0.5em");
-      text(g, '"th"').attr("dy", "2em");
+      wip(g, '"th"').attr("dy", "2em");
 
       drawDynamics(
         [
@@ -76,11 +89,12 @@ const score = [
     }
   },
   {
-    duration: 15000,
-    render: ({ x }) => {
+    duration: seconds(3),
+    render: ({ x, duration }) => {
       const g = translate(group(), x, pitchScale(0.5));
 
       makeCue(x);
+      makeDuration(x, duration);
 
       bravura(g, durationGlyph["0.5"]).attr("dy", "-0.666em");
       bravura(g, articulationGlyph[">"]).attr("dy", "0.5em");
@@ -100,9 +114,11 @@ const score = [
     }
   },
   {
-    duration: 15000,
-    render: ({ x }) => {
+    duration: seconds(60),
+    render: ({ x, duration }) => {
       const g = translate(group(), x, 0);
+
+      makeDuration(x, duration);
 
       // wet slaps:
       // tongue slap
@@ -111,13 +127,11 @@ const score = [
       // sloshing:
       // bow hair rotating?
 
-      text(g, "wet slaps: tongue slap, col legno battuto, etc.");
-      text(g, "sloshing: water sounds, bow hair rotating, etc.");
-
-      text(
-        g,
-        "meandering lines: microtonal steps, larger skips (been slapped)"
-      ); // TODO
+      wip(g, "wet slaps: tongue slap, col legno battuto)").attr("dy", "1em");
+      wip(g, "sloshing: water sounds, bow hair rotating)").attr("dy", "2em");
+      wip(g, "meandering lines (microtonal steps, larger skips/got slapped)")
+        //TODO show
+        .attr("dy", "3em");
 
       drawDynamics(
         [
@@ -129,7 +143,7 @@ const score = [
         ],
         length,
         g
-      );
+      ).call(translate, 0, 20);
     }
   },
   {
