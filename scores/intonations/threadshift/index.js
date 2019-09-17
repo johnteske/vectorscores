@@ -24,17 +24,25 @@ function timeScale(t) {
 
 const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
 
+const ensemble = (selection, str) =>
+  selection
+    .append("text")
+    .text(str)
+    .attr("class", "text-ensemble");
+
 const { svg, page, scoreGroup, indicator } = makeScrollingScore();
 
 svg.append("style").text(`
   line { stroke: black; }
   line.wip { stroke: blue; }
-  text.wip { fill: blue; }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
   .text-dynamic {
     font-family: serif;
     font-size: 12px;
     font-style: italic;
+  }
+  .text-ensemble {
+    font-size: 12px;
   }
 `);
 
@@ -145,6 +153,7 @@ const score = [
           .append("text")
           //.text("\ue61b")
           .text("\ue61d")
+          .attr("dx", "0.2em")
           .attr("dy", "-1em")
           .attr("class", "bravura")
           .attr("text-anchor", "middle")
@@ -158,6 +167,7 @@ const score = [
         g
           .append("text")
           .text("\uE22B")
+          .attr("dx", "0.25em")
           .attr("dy", "-0.5em")
           .attr("class", "bravura")
           .attr("text-anchor", "middle")
@@ -223,7 +233,7 @@ const score = [
         .attr("y1", pitchScale(0.25))
         .attr("y2", pitchScale(0.25));
 
-      g.append("text").text("(solo)");
+      ensemble(g, "(solo)");
 
       // threads
       const makeThread = (x, y, length, selection) => {
@@ -263,9 +273,7 @@ const score = [
         makeThread(x, y, length - x, g);
       }
 
-      g.append("text")
-        .text("(tutti)")
-        .attr("x", length * 0.25);
+      ensemble(g, "(tutti)").attr("x", length * 0.25);
     }
   },
   {
