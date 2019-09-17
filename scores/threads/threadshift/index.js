@@ -1,6 +1,49 @@
 (function () {
   'use strict';
 
+  const margin = {
+    top: 64
+  };
+
+  const seconds = t => t * 1000;
+
+  const pitchRange = 87;
+
+  function pitchScale(value) {
+    return (1 - value) * pitchRange;
+  }
+
+  function doubleBar(selection, height) {
+    const g = selection.append("g");
+
+    g.append("line")
+      .attr("y1", 0)
+      .attr("y2", height)
+      .attr("stroke-width", 1);
+
+    g.append("line")
+      .attr("x1", 3)
+      .attr("x2", 3)
+      .attr("y1", 0)
+      .attr("y2", height)
+      .attr("stroke-width", 2);
+
+    return g;
+  }
+
+  const glyphs = {
+    open: "\ue893",
+    closed: "\ue890"
+  };
+
+  function cue(selection, type = "closed") {
+    return selection
+      .append("text")
+      .attr("class", "bravura wip")
+      .attr("text-anchor", "middle")
+      .text(glyphs[type]);
+  }
+
   const { dynamics } = VS.dictionary.Bravura;
 
   function drawDynamics(data, scale, selection) {
@@ -39,41 +82,6 @@
     return g;
   }
 
-  function translate(x, y, selection) {
-    return selection.attr("transform", `translate(${x}, ${y})`);
-  }
-
-  function makeIndicator(selection) {
-    // TODO from dirge,,march AND ad;sr
-    const indicator = selection
-      .append("path")
-      .attr("class", "indicator")
-      .attr("d", "M-6.928,0 L0,2 6.928,0 0,12 Z")
-      .style("stroke", "black")
-      .style("stroke-width", "1")
-      .style("fill", "black")
-      .style("fill-opacity", "0");
-
-    let x = 0;
-    let y = 0;
-
-    function translateX(_) {
-      x = _;
-      translate(x, y, indicator);
-    }
-
-    function translateY(_) {
-      y = _;
-      translate(x, y, indicator);
-    }
-
-    return {
-      element: indicator,
-      translateX,
-      translateY
-    };
-  }
-
   const durations = VS.dictionary.Bravura.durations.stemless;
 
   function longTone(selection, x, y, length) {
@@ -92,33 +100,6 @@
       .attr("x2", length);
 
     return group;
-  }
-
-  function makePage(selection) {
-    const page = selection.append("g");
-
-    let _height = null;
-    let _scale = 1;
-
-    function calculateHeight() {
-      _height = page.node().getBBox().height;
-    }
-
-    function height() {
-      return _height;
-    }
-
-    function scale(_) {
-      _scale = _;
-      page.attr("transform", `scale(${_scale})`);
-    }
-
-    return {
-      element: page,
-      calculateHeight,
-      height,
-      scale
-    };
   }
 
   function pathAlongPath(guideCurve, pathCurve) {
@@ -158,6 +139,49 @@
     };
   }
 
+  var startTimeFromDuration = (bar, i, score) => {
+    // Calculate and set startTimes
+    const startTime = score
+      .slice(0, i)
+      .reduce((sum, b, j) => sum + b.duration, 0);
+    return { ...bar, startTime };
+  };
+
+  function DEPRECATED_translate(x, y, selection) {
+    return selection.attr("transform", `translate(${x}, ${y})`);
+  }
+
+  function makeIndicator(selection) {
+    // TODO from dirge,,march AND ad;sr
+    const indicator = selection
+      .append("path")
+      .attr("class", "indicator")
+      .attr("d", "M-6.928,0 L0,2 6.928,0 0,12 Z")
+      .style("stroke", "black")
+      .style("stroke-width", "1")
+      .style("fill", "black")
+      .style("fill-opacity", "0");
+
+    let x = 0;
+    let y = 0;
+
+    function translateX(_) {
+      x = _;
+      DEPRECATED_translate(x, y, indicator);
+    }
+
+    function translateY(_) {
+      y = _;
+      DEPRECATED_translate(x, y, indicator);
+    }
+
+    return {
+      element: indicator,
+      translateX,
+      translateY
+    };
+  }
+
   function makeScroll(selection) {
     const scroll = selection.append("g");
 
@@ -188,13 +212,91 @@
     };
   }
 
-  var startTimeFromDuration = (bar, i, score) => {
-    // Calculate and set startTimes
-    const startTime = score
-      .slice(0, i)
-      .reduce((sum, b, j) => sum + b.duration, 0);
-    return { ...bar, startTime };
-  };
+  function makePage(selection) {
+    const page = selection.append("g");
+
+    let _scale = 1;
+
+    function scale(_) {
+      _scale = _;
+      page.attr("transform", `scale(${_scale})`);
+    }
+
+    return {
+      element: page,
+      scale
+    };
+  }
+
+  function makeScrollingScore() {
+    const svg = d3.select("svg.main");
+
+    const page = makePage(svg);
+
+    const scoreGroup = makeScroll(page.element);
+    scoreGroup.y(margin.top);
+
+    const indicator = makeIndicator(page.element);
+
+    return {
+      svg,
+      page,
+      scoreGroup,
+      indicator
+    };
+  }
+
+  function makeResize(
+    svg,
+    page,
+    margin,
+    pitchRange,
+    indicator,
+    scoreGroup,
+    setScorePosition
+  ) {
+    return function() {
+      VS.score.isPlaying() && VS.score.pause();
+
+      const w = parseInt(svg.style("width"), 10);
+      const h = parseInt(svg.style("height"), 10);
+
+      const scale = h / (margin.top + pitchRange + margin.top);
+      page.scale(scale);
+
+      const center = (w / scale) * 0.5;
+      indicator.translateX(center);
+      scoreGroup.setCenter(center);
+      setScorePosition();
+    };
+  }
+
+  function makeScrollFunctions(scoreGroup, xValues) {
+    function centerScoreByIndex(index, duration) {
+      const x = xValues[index];
+      scoreGroup.scrollTo(x, duration);
+    }
+
+    return {
+      setScorePosition: function() {
+        const index = VS.score.getPointer();
+        centerScoreByIndex(index, 0);
+      },
+      scrollToNextBar: function(index, duration) {
+        centerScoreByIndex(index + 1, duration);
+      }
+    };
+  }
+
+  function addHooks(setScorePosition) {
+    VS.control.hooks.add("step", setScorePosition);
+    VS.WebSocket.hooks.add("step", setScorePosition);
+
+    VS.control.hooks.add("pause", setScorePosition);
+    VS.WebSocket.hooks.add("pause", setScorePosition);
+
+    VS.score.hooks.add("stop", setScorePosition);
+  }
 
   function noisePatch(x, length, selection) {
     // TODO length will become path data?
@@ -273,30 +375,14 @@
 
   // make held tone less predictable/gated
 
-  const margin = {
-    top: 64
-  };
-
-  const seconds = t => t * 1000;
-
-  const pitchRange = 87;
-  function pitchScale(value) {
-    return (1 - value) * pitchRange;
-  }
-  // function pitchScale(midi) {
-  //   // MIDI 21/A0 to 108/C8
-  //   // 64.5/Eq#4 is center
-  //   const [min, max] = [21, 108];
-  //   const range = max - min;
-  //
-  //   return 1 - midi / range;
-  // }
-
   function timeScale(t) {
     return t / 200;
   }
 
-  const svg = d3.select("svg.main");
+  const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
+
+  const { svg, page, scoreGroup, indicator } = makeScrollingScore();
+
   svg.append("style").text(`
   line { stroke: black; }
   line.wip { stroke: blue; }
@@ -308,33 +394,6 @@
     font-style: italic;
   }
 `);
-
-  const page = makePage(svg);
-
-  // Create hidden line to ensure page fits margins
-  page.element
-    .append("line")
-    .attr("y1", 0)
-    .attr("y2", margin.top + pitchRange + 32) // TODO
-    //.attr("y2", margin.top + pitchRange + margin.top)
-    .style("visibility", "hidden");
-
-  const scoreGroup = makeScroll(page.element);
-  scoreGroup.y(margin.top); // TODO allow chaining
-  //scoreGroup.element.style("outline", "1px dotted red");
-
-  const indicator = makeIndicator(page.element);
-
-  const makeCue = function(selection) {
-    return selection
-      .append("text")
-      .attr("class", "bravura wip")
-      .attr("text-anchor", "middle")
-      .attr("y", -87)
-      .text("\ue890");
-  };
-
-  // drone(scoreGroup.element); // TODO: how do these integrate with the ending
 
   const { articulations, dynamics: dynamics$1 } = VS.dictionary.Bravura;
 
@@ -398,7 +457,7 @@
       duration: seconds(5), // TODO 2 seconds time, more display
       render: ({ x, length }) => {
         const g = scoreGroup.element.append("g");
-        translate(x, pitchScale(0.5), g);
+        DEPRECATED_translate(x, pitchScale(0.5), g);
 
         // cluster
         g.append("text")
@@ -433,10 +492,10 @@
       duration: seconds(45),
       render: ({ x, length }) => {
         const g = scoreGroup.element.append("g");
-        translate(x, 0, g);
+        DEPRECATED_translate(x, 0, g);
 
         // with excessive pressure and air
-        translate(
+        DEPRECATED_translate(
           0,
           pitchScale(0.5),
           g
@@ -450,7 +509,7 @@
         // TODO add transition to ord/norm
 
         // irregular tremolo
-        translate(
+        DEPRECATED_translate(
           0,
           pitchScale(0.5),
           g
@@ -464,9 +523,9 @@
 
         // top line
         const line = lineBecomingAir(length, g);
-        translate(0, pitchScale(0.5), line);
+        DEPRECATED_translate(0, pitchScale(0.5), line);
 
-        const patches = translate(0, pitchScale(0.5), g.append("g"));
+        const patches = DEPRECATED_translate(0, pitchScale(0.5), g.append("g"));
         [0.2, 0.4, 0.6].forEach(x => {
           noisePatch(x * length, length * 0.1, patches);
         });
@@ -474,7 +533,7 @@
         drawDynamics(
           splitDynamics("n"),
           length,
-          translate(0, -50, g.append("g"))
+          DEPRECATED_translate(0, -50, g.append("g"))
         );
 
         // bottom line
@@ -491,7 +550,7 @@
         );
 
         const bottomNoise = noisePatch(length * 0.25, length, g);
-        translate(0, pitchScale(0.25), bottomNoise);
+        DEPRECATED_translate(0, pitchScale(0.25), bottomNoise);
 
         [0.2, 0.4, 0.6].forEach(x => {
           g.append("text") // TODO also add flag
@@ -502,9 +561,9 @@
             .attr("class", "bravura");
         });
 
-        drawDynamics(splitDynamics("p"), length, translate(0, 50, g.append("g")));
+        drawDynamics(splitDynamics("p"), length, DEPRECATED_translate(0, 50, g.append("g")));
 
-        translate(0, pitchScale(0.5), makeCue(g));
+        DEPRECATED_translate(0, pitchScale(0.5), makeCue(g));
       }
     },
     {
@@ -512,7 +571,7 @@
       duration: seconds(120),
       render: ({ x, length }) => {
         const g = scoreGroup.element.append("g");
-        translate(x, 0, g);
+        DEPRECATED_translate(x, 0, g);
 
         // bottom line
         g.append("line")
@@ -525,7 +584,7 @@
 
         // threads
         const makeThread = (x, y, length, selection) => {
-          const group = translate(x, y, selection.append("g"));
+          const group = DEPRECATED_translate(x, y, selection.append("g"));
 
           group
             .append("line")
@@ -572,89 +631,58 @@
       render: ({ x }) => {
         // Double bar
         const g = scoreGroup.element.append("g");
-        translate(x, 0, g);
+        DEPRECATED_translate(x, 0, g);
 
-        g.append("line")
-          .attr("y1", 0)
-          .attr("y2", pitchRange)
-          .attr("stroke-width", 1);
+        doubleBar(g, pitchRange);
 
-        translate(
-          3,
-          0,
-          g
-            .append("line")
-            .attr("y1", 0)
-            .attr("y2", pitchRange)
-            .attr("stroke-width", 2)
-        );
-
-        translate(0, pitchScale(0.5), makeCue(g));
+        DEPRECATED_translate(0, pitchScale(0.5), makeCue(g));
       }
     }
   ].map(startTimeFromDuration);
+
+  const scoreWithRenderData = score.map(bar => {
+    return {
+      ...bar,
+      x: timeScale(bar.startTime),
+      length: timeScale(bar.duration)
+    };
+  });
+
+  function renderScore() {
+    scoreWithRenderData.forEach(bar => {
+      const { render, ...data } = bar;
+      render(data);
+    });
+  }
+
+  const { setScorePosition, scrollToNextBar } = makeScrollFunctions(
+    scoreGroup,
+    scoreWithRenderData.map(bar => bar.x)
+  );
 
   score.forEach((bar, i) => {
     const callback = i < score.length - 1 ? scrollToNextBar : null;
     VS.score.add(bar.startTime, callback, [i, bar.duration]);
   });
 
-  function renderScore() {
-    score.forEach(bar => {
-      const { render, ...meta } = bar;
-      const renderData = {
-        x: timeScale(bar.startTime),
-        length: timeScale(bar.duration)
-      };
-      render({ ...meta, ...renderData });
-    });
-  }
-
-  function setScorePosition() {
-    const index = VS.score.getPointer();
-    centerScoreByIndex(index, 0);
-  }
-
-  function centerScoreByIndex(index, duration) {
-    const x = timeScale(score[index].startTime);
-    scoreGroup.scrollTo(x, duration);
-  }
-
-  function scrollToNextBar(index, duration) {
-    centerScoreByIndex(index + 1, duration);
-  }
-
-  function resize() {
-    VS.score.isPlaying() && VS.score.pause();
-
-    const w = parseInt(svg.style("width"), 10);
-    const h = parseInt(svg.style("height"), 10);
-
-    const scale = h / (64 + 87 + 64);
-    //const scale = h / page.height(); // TODO remove
-    page.scale(scale);
-
-    const center = (w / scale) * 0.5;
-    indicator.translateX(center);
-    scoreGroup.setCenter(center);
-    setScorePosition();
-  }
+  const resize = makeResize(
+    svg,
+    page,
+    margin,
+    pitchRange,
+    indicator,
+    scoreGroup,
+    setScorePosition
+  );
 
   d3.select(window).on("resize", resize);
 
   d3.select(window).on("load", () => {
     renderScore();
-    page.calculateHeight();
     resize();
   });
 
-  VS.control.hooks.add("step", setScorePosition);
-  VS.WebSocket.hooks.add("step", setScorePosition);
-
-  VS.control.hooks.add("pause", setScorePosition);
-  VS.WebSocket.hooks.add("pause", setScorePosition);
-
-  VS.score.hooks.add("stop", setScorePosition);
+  addHooks(setScorePosition);
 
   VS.WebSocket.connect();
 

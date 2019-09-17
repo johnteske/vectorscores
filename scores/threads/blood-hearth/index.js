@@ -1,6 +1,26 @@
 (function () {
   'use strict';
 
+  const durations = VS.dictionary.Bravura.durations.stemless;
+
+  function longTone(selection, x, y, length) {
+    const group = selection.append("g");
+
+    group.attr("transform", `translate(${x}, ${y})`);
+
+    group
+      .append("text")
+      .attr("class", "bravura")
+      .text(durations[4]);
+
+    group
+      .append("line")
+      .attr("x1", "0.5em")
+      .attr("x2", length);
+
+    return group;
+  }
+
   const margin = {
     top: 64
   };
@@ -40,26 +60,6 @@
       .attr("class", "bravura wip")
       .attr("text-anchor", "middle")
       .text(glyphs[type]);
-  }
-
-  const durations = VS.dictionary.Bravura.durations.stemless;
-
-  function longTone(selection, x, y, length) {
-    const group = selection.append("g");
-
-    group.attr("transform", `translate(${x}, ${y})`);
-
-    group
-      .append("text")
-      .attr("class", "bravura")
-      .text(durations[4]);
-
-    group
-      .append("line")
-      .attr("x1", "0.5em")
-      .attr("x2", length);
-
-    return group;
   }
 
   const { dynamics } = VS.dictionary.Bravura;
@@ -263,9 +263,6 @@
     VS.score.hooks.add("stop", setScorePosition);
   }
 
-  const articulationGlyph = VS.dictionary.Bravura.articulations;
-  const durationGlyph = VS.dictionary.Bravura.durations.stemless;
-
   function timeScale(t) {
     return t / 200;
   }
@@ -285,13 +282,68 @@
 `);
 
   const wrapper = scoreGroup.element;
-  const group = (selection = wrapper) => selection.append("g");
+  const group = () => wrapper.append("g");
 
-  const text = (selection, str) => selection.append("text").text(str);
-  const bravura = (selection, str) =>
-    text(selection, str).attr("class", "bravura");
+  const articulationGlyph = VS.dictionary.Bravura.articulations;
+  const durationGlyph = VS.dictionary.Bravura.durations.stemless;
+
+  const dynamic = (selection, type, value, length) =>
+    drawDynamics([{ type, value, x: 0 }], length, selection);
 
   const score = [
+    {
+      duration: 15000,
+      render: ({ x, length }) => {
+        const g = translate(wrapper.append("g"), x, pitchScale(0.5));
+
+        g.append("line")
+          .attr("x2", length)
+          .attr("class", "wip");
+
+        g.append("text").text("solo");
+
+        dynamic(g, "symbol", "pp", length);
+      }
+    },
+    {
+      duration: 15000,
+      render: ({ x, length }) => {
+        const g = translate(wrapper.append("g"), x, pitchScale(0.5));
+
+        cue(g);
+
+        g.append("text").text("bell-like");
+        g.append("text").text("tutti");
+        g.append("text").text("let vibrate");
+
+        g.append("text")
+          .text(articulationGlyph[">"])
+          .attr("class", "bravura wip")
+          .attr("dy", "0.66em");
+
+        g.append("text")
+          .text(durationGlyph[1])
+          .attr("class", "bravura wip")
+          .attr("y", 5);
+
+        g.append("text")
+          .text(durationGlyph[1])
+          .attr("class", "bravura wip")
+          .attr("y", 2);
+
+        g.append("text")
+          .text(durationGlyph[1])
+          .attr("class", "bravura wip")
+          .attr("y", -2);
+
+        g.append("text")
+          .text(durationGlyph[1])
+          .attr("class", "bravura wip")
+          .attr("y", -5);
+
+        dynamic(g, "symbol", "mf", length);
+      }
+    },
     {
       duration: 15000,
       render: ({ x, length }) => {
@@ -299,88 +351,39 @@
 
         cue(g);
 
-        longTone(g, 0, 0, length);
-        bravura(g, articulationGlyph[">"]);
-        text(g, "th");
+        g.append("text").text("tutti");
 
-        drawDynamics(
-          [
-            {
-              type: "symbol",
-              value: "mp",
-              x: 0
-            },
-            {
-              type: "text",
-              value: "cres.",
-              x: 0.5
-            },
-            {
-              type: "symbol",
-              value: "f",
-              x: 1
-            }
-          ],
-          length,
-          g
-        );
+        // dissonant cluster, within an octave or octave and a half
+        function cluster(selection, x, yOffset, length) {
+          const relativePitches = [-6, -3, 0, 3].map(y => y + yOffset);
+
+          relativePitches.forEach(y => {
+            longTone(g, x, y, VS.getRandExcl(length, length * 1.5)); // up to 1.5x length // TODO set min bounds
+          });
+        }
+
+        cluster(g, 0, 0, length);
+        cluster(g, 3, 3, length);
+
+        dynamic(g, "symbol", "mf", length);
       }
     },
     {
+      // more open long tones
+      // TODO give space around pitches/y values from previous bar?
       duration: 15000,
-      render: ({ x }) => {
+      render: ({ x, length }) => {
         const g = translate(group(), x, 0);
 
-        cue(g);
-
-        bravura(g, durationGlyph["0.5"]);
-        bravura(g, articulationGlyph[">"]);
-        text(g, "slap/snap"); // TODO bartok
-
-        drawDynamics(
-          [
-            {
-              type: "symbol",
-              value: "ff",
-              x: 0
-            }
-          ],
-          length,
-          g
-        );
-      }
-    },
-    {
-      duration: 15000,
-      render: ({ x }) => {
-        const g = translate(group(), x, 0);
-
-        // wet slaps:
-        // tongue slap
-        // col legno battuto
-
-        // sloshing:
-        // bow hair rotating?
-
-        text(g, "wet slaps: tongue slap, col legno battuto, etc.");
-        text(g, "sloshing: water sounds, bow hair rotating, etc.");
-
-        text(
-          g,
-          "meandering lines: microtonal steps, larger skips (been slapped)"
-        ); // TODO
-
-        drawDynamics(
-          [
-            {
-              type: "symbol",
-              value: "p",
-              x: 0
-            }
-          ],
-          length,
-          g
-        );
+        for (let i = 0; i < 8; i++) {
+          let y = pitchScale(Math.random());
+          g.append("line")
+            .attr("x1", VS.getRandExcl(0, length * 0.25))
+            .attr("x2", VS.getRandExcl(length * 0.75, length))
+            .attr("y1", y)
+            .attr("y2", y)
+            .attr("class", "wip");
+        }
       }
     },
     {

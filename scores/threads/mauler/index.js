@@ -39,7 +39,7 @@
     return g;
   }
 
-  function translate(x, y, selection) {
+  function DEPRECATED_translate(x, y, selection) {
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
@@ -59,12 +59,12 @@
 
     function translateX(_) {
       x = _;
-      translate(x, y, indicator);
+      DEPRECATED_translate(x, y, indicator);
     }
 
     function translateY(_) {
       y = _;
-      translate(x, y, indicator);
+      DEPRECATED_translate(x, y, indicator);
     }
 
     return {
@@ -79,16 +79,7 @@
   function makePage(selection) {
     const page = selection.append("g");
 
-    let _height = null;
     let _scale = 1;
-
-    function calculateHeight() {
-      _height = page.node().getBBox().height;
-    }
-
-    function height() {
-      return _height;
-    }
 
     function scale(_) {
       _scale = _;
@@ -97,8 +88,6 @@
 
     return {
       element: page,
-      calculateHeight,
-      height,
       scale
     };
   }
@@ -240,7 +229,7 @@
   }
 
   function callTranslate(selection, x, y) {
-    return translate(x, y, selection);
+    return DEPRECATED_translate(x, y, selection);
   }
 
   const svg = d3.select("svg.main");
@@ -288,7 +277,7 @@
       duration: durationInBeats(3),
       render: ({ x, length }) => {
         const beatLength = length / 3;
-        const g = translate(x, pitchScale(0.5), wrapper.append("g"));
+        const g = DEPRECATED_translate(x, pitchScale(0.5), wrapper.append("g"));
 
         // 3/4 time signature
         g.append("text")
@@ -319,7 +308,7 @@
       startTime: null,
       duration: durationInSeconds(30),
       render: ({ x, length }) => {
-        const g = translate(x, 0, wrapper.append("g"));
+        const g = DEPRECATED_translate(x, 0, wrapper.append("g"));
         // spike
         g.append("path").attr("d", `M-5,0 L5,0 L0,${pitchRange} Z`);
         // wall/tremolo--is it around the pitch center?
@@ -330,17 +319,17 @@
           .text("col legno, slapping");
 
         for (let i = 0; i < 25; i++) {
-          translate(
+          DEPRECATED_translate(
             Math.random() * length * 0.25,
             Math.random() * pitchRange,
             tremoloLongTone(g)
           );
-          translate(
+          DEPRECATED_translate(
             Math.random() * length * 0.25,
             Math.random() * pitchRange,
             repeated(g)
           );
-          translate(
+          DEPRECATED_translate(
             Math.random() * length * 0.25,
             Math.random() * pitchRange,
             sixteenths(g)
@@ -348,12 +337,12 @@
         }
 
         for (let i = 0; i < 25; i++) {
-          translate(
+          DEPRECATED_translate(
             Math.random() * length,
             Math.random() * pitchRange,
             tremoloLongTone(g)
           );
-          translate(
+          DEPRECATED_translate(
             Math.random() * length,
             Math.random() * pitchRange,
             sixteenths(g)
@@ -383,7 +372,7 @@
           .text("semitone falls around long tones")
           .attr("x", length * 0.25);
 
-        translate(
+        DEPRECATED_translate(
           0,
           pitchScale(0.5),
 
@@ -398,7 +387,7 @@
           )
         );
 
-        translate(0, pitchScale(0.5), makeCue(g));
+        DEPRECATED_translate(0, pitchScale(0.5), makeCue(g));
       }
     },
     {
@@ -444,7 +433,6 @@
     const w = parseInt(svg.style("width"), 10);
     const h = parseInt(svg.style("height"), 10);
 
-    // const scale = h / page.height(); // TODO remove
     const scale = h / (64 + 87 + 64);
     page.scale(scale);
 
@@ -458,7 +446,6 @@
 
   d3.select(window).on("load", () => {
     renderScore();
-    page.calculateHeight();
     resize();
   });
 

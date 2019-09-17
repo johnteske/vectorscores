@@ -11,6 +11,14 @@ VS.WebSocket = (function() {
     };
   })();
 
+  var notify = (function() {
+    var element = document.getElementById("score-options-open");
+
+    return function(color) {
+      element.style.background = color;
+    };
+  })();
+
   log("Not connected");
 
   ws.hooks = VS.createHooks(["play", "pause", "stop", "step", "message"]);
@@ -31,15 +39,25 @@ VS.WebSocket = (function() {
   }
 
   function handleWebSocketMsg(data) {
-    var cid = data[0];
-    var content = data[2];
+    const [cid, _, content, msg] = data
 
-    if (content === "connected") {
-      ws.cid = cid;
-    } else if (content === "connections") {
-      log("Open, " + data[3] + " connection(s) total");
-    } else if (content === "reload") {
-      window.location.reload(true);
+    switch (content) {
+      case "connected":
+        ws.cid = cid;
+        break;
+      case "n":
+        log("Open, " + msg + " connection(s) total");
+        break;
+      case "reload":
+        window.location.reload(true);
+        break;
+      case "redirect":
+        // TODO push history instead
+        // Redirect all others, assuming message is coming from /admin
+        if (cid !== ws.cid) {
+          window.location.href = msg;
+        }
+        break;
     }
   }
 
@@ -77,6 +95,7 @@ VS.WebSocket = (function() {
 
       socket.onopen = function() {
         log("Open");
+        notify("transparent");
         addControlHooks();
       };
 
@@ -86,6 +105,7 @@ VS.WebSocket = (function() {
         } else {
           log("Not connected");
         }
+        notify("red");
       };
 
       socket.onmessage = function(msg) {

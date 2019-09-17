@@ -1,23 +1,106 @@
 (function () {
   'use strict';
 
-  const data = [{ x: 0, y: 50 }, { x: 0, y: 100 }];
+  var startTimeFromDuration = (bar, i, score) => {
+    // Calculate and set startTimes
+    const startTime = score
+      .slice(0, i)
+      .reduce((sum, b, j) => sum + b.duration, 0);
+    return { ...bar, startTime };
+  };
 
-  function drone(selection) {
-    selection
-      .selectAll(".drone")
-      .data(data)
-      .enter()
-      .append("line")
-      .attr("class", "drone")
-      .attr("x1", 0)
-      .attr("x2", 100)
-      .attr("y1", d => d.y)
-      .attr("y2", d => d.y);
+  const pitchRange = 87;
+
+  function pitchScale(value) {
+    return (1 - value) * pitchRange;
   }
 
-  function translate(x, y, selection) {
+  function translate(selection, x, y) {
     return selection.attr("transform", `translate(${x}, ${y})`);
+  }
+
+  function makePage(selection) {
+    const page = selection.append("g");
+
+    let _scale = 1;
+
+    function scale(_) {
+      _scale = _;
+      page.attr("transform", `scale(${_scale})`);
+    }
+
+    return {
+      element: page,
+      scale
+    };
+  }
+
+  function makeVignetteScore() {
+    const svg = d3.select("svg.main");
+
+    const page = makePage(svg);
+
+    return {
+      svg,
+      page
+    };
+  }
+
+  function resize(svg, wrapper, pitchRange) {
+    return function() {
+      const w = parseInt(svg.style("width"), 10);
+      const h = parseInt(svg.style("height"), 10);
+
+      const scaleX = w / pitchRange;
+      const scaleY = h / pitchRange;
+      const scale = Math.min(scaleX, scaleY);
+
+      const leftMargin = w * 0.5 - pitchRange * 0.5 * scale;
+      const topMargin = h * 0.5 - pitchRange * 0.5 * scale;
+
+      wrapper.attr(
+        "transform",
+        `translate(${leftMargin}, ${topMargin}) scale(${scale})`
+      );
+    };
+  }
+
+  const { dynamics } = VS.dictionary.Bravura;
+
+  function drawDynamics(data, scale, selection) {
+    const g = selection.append("g");
+
+    data.forEach(d => {
+      const text = g.append("text").attr("x", d.x * scale);
+
+      switch (d.x) {
+        case 0:
+          text.attr("text-anchor", "start");
+          break;
+        case 1:
+          text.attr("text-anchor", "end");
+          break;
+        default:
+          text.attr("text-anchor", "middle");
+      }
+
+      switch (d.type) {
+        case "symbol":
+          text
+            .text(dynamics[d.value])
+            .attr("class", "bravura")
+            .attr("dy", "2em");
+          break;
+        case "text":
+          text
+            .text(d.value)
+            .attr("class", "text-dynamic")
+            .attr("dy", "3.5em");
+          break;
+      }
+    });
+
+    return g;
   }
 
   function pathAlongPath(guideCurve, pathCurve) {
@@ -57,34 +140,204 @@
     };
   }
 
-  const main = d3.select(".main");
-  const wrapper = main.append("g");
+  const { svg, page } = makeVignetteScore();
 
-  drone(wrapper);
+  svg.append("style").text(`
+  .bravura { font-family: 'Bravura'; font-size: 20px; }
+  .text-dynamic {
+    font-family: serif;
+    font-size: 12px;
+    font-style: italic;
+  }
+`);
+
+  const wrapper = page.element;
+
+  const text = (selection, str) => selection.append("text").text(str);
+
+  function makeFrame(selection) {
+    return selection
+      .append("rect")
+      .attr("width", pitchRange)
+      .attr("height", pitchRange)
+      .attr("fill", "none")
+      .attr("stroke", "blue");
+  }
 
   function textureOfBones(selection) {
-    for (let i = 0; i < 666; i++) {
-      selection
-        .append("text")
+    const g = selection.append("g").attr("fill", "darkRed");
+
+    // TODO these could be animated to emphasize the crushing
+    for (let i = 0; i < 66; i++) {
+      g.append("text")
         .text("\u2620")
-        .attr("dx", `${Math.random() * 33}em`)
-        .attr("dy", `${Math.random() * 2}em`);
+        .attr("x", pitchScale(Math.random() * 1))
+        .attr("y", pitchScale(Math.random() * 0.25));
     }
+
+    g.append("text")
+      .text("crushing bones")
+      .attr("dy", "1em")
+      .attr("fill", "black");
+
+    drawDynamics(
+      [
+        {
+          type: "symbol",
+          value: "mf",
+          x: 0
+        }
+      ],
+      0,
+      g
+    ).attr("fill", "black");
+
+    return g;
   }
 
-  textureOfBones(wrapper.append("g").attr("transform", "translate(0, 100)"));
-
+  // high, cheerful, taunting
+  // solo
+  // TODO also needs bounding box
   const boneFlutePhraseGenerator = pathAlongPath(d3.curveBasis, d3.curveBasis);
+  // take the easy path
+  // take comfort in the release
+  // it can be so easy
+  // it can be so simple
+  // it's the right thing to do
+  // it's the right thing for everyone
 
   function boneFlute(selection) {
-    return boneFlutePhraseGenerator(
-      [{ x: 0, y: 0 }, { x: 50, y: 20 }, { x: 100, y: 10 }],
+    const g = selection.append("g");
+
+    boneFlutePhraseGenerator(
+      [{ x: 0, y: 0 }, { x: pitchRange * 0.5, y: 20 }, { x: pitchRange, y: 10 }],
       [...new Array(10)],
       (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-5, 5) }),
-      selection
+      g
     );
+
+    text(g, "it can be so easy")
+      .attr("dy", "1em")
+      .attr("fill", "darkred");
+
+    drawDynamics(
+      [
+        {
+          type: "symbol",
+          value: "f",
+          x: 0
+        }
+      ],
+      0,
+      g
+    ).attr("fill", "black");
+
+    return g;
   }
 
-  translate(50, 50, boneFlute(wrapper));
+  function drone(selection) {
+    const g = selection.append("g");
+
+    // mid-range drones
+    translate(g.append("line"), 0, pitchScale(0.5))
+      .attr("x2", pitchRange)
+      .attr("stroke", "black");
+    drawDynamics(
+      [
+        {
+          type: "symbol",
+          value: "mf",
+          x: 0
+        }
+      ],
+      0,
+      g
+    ).attr("fill", "black");
+
+    return g;
+  }
+
+  const score = [
+    {
+      duration: 0,
+      render: () => {
+        return wrapper.append("g");
+      }
+    },
+    {
+      duration: 15000,
+      render: () => {
+        const g = wrapper.append("g");
+        makeFrame(g);
+        boneFlute(g);
+        drone(g);
+        textureOfBones(g);
+        return g;
+      }
+    },
+    {
+      duration: 15000,
+      render: () => {
+        const g = wrapper.append("g");
+        makeFrame(g);
+        boneFlute(g);
+        drone(g);
+        textureOfBones(g);
+        return g;
+      }
+    },
+    {
+      duration: 0,
+      render: () => {
+        return wrapper.append("g");
+      }
+    }
+  ].map(startTimeFromDuration);
+
+  function renderScore() {
+    score.forEach((bar, i) => {
+      const { render, ...data } = bar;
+      render(data)
+        .attr("class", `frame frame-${i}`)
+        .style("opacity", 0);
+    });
+  }
+
+  const showFrame = i => {
+    d3.selectAll(".frame").style("opacity", 0);
+    d3.selectAll(`.frame-${i}`).style("opacity", 1);
+  };
+
+  score.forEach((bar, i) => {
+    const callback = () => {
+      showFrame(i);
+    };
+    VS.score.add(bar.startTime, callback, [i, bar.duration]);
+  });
+
+  const resize$1 = resize(svg, wrapper, pitchRange);
+
+  d3.select(window).on("resize", resize$1);
+
+  d3.select(window).on("load", () => {
+    renderScore();
+    showFrame(0);
+    resize$1();
+  });
+
+  const showFrameAtPointer = () => {
+    const index = VS.score.getPointer();
+    showFrame(index);
+  };
+
+  VS.control.hooks.add("step", showFrameAtPointer);
+  VS.WebSocket.hooks.add("step", showFrameAtPointer);
+
+  VS.control.hooks.add("pause", showFrameAtPointer);
+  VS.WebSocket.hooks.add("pause", showFrameAtPointer);
+
+  VS.score.hooks.add("stop", showFrameAtPointer);
+
+  VS.WebSocket.connect();
 
 }());
