@@ -293,6 +293,11 @@ d3.select(window).on("load", () => {
 });
 
 VS.score.preroll = seconds(3);
+function prerollAnimateCue() {
+  VS.score.schedule(0, indicator.blinker.start());
+}
+VS.control.hooks.add("play", prerollAnimateCue);
+VS.WebSocket.hooks.add("play", prerollAnimateCue);
 
 VS.control.hooks.add("step", setScorePosition);
 VS.WebSocket.hooks.add("step", setScorePosition);

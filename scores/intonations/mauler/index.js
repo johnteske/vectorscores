@@ -56,27 +56,9 @@ scoreGroup.y(margin.top); // TODO allow chaining
 const wrapper = scoreGroup.element;
 
 const indicator = makeIndicator(page.element);
-var cueIndicator = VS.cueBlink(indicator.element)
-  .beats(3)
+indicator.blinker = indicator.blinker
   .interval(durationInBeats(1))
-  //.onDuration(durationInBeats(0.75))
-  .offDuration(durationInBeats(0.5))
-  .inactive(function(selection) {
-    selection.style("fill-opacity", 0);
-  })
-  .on(function(selection) {
-    selection.style("fill-opacity", 1);
-  })
-  .off(function(selection) {
-    selection.style("fill-opacity", 0);
-  })
-  .down(function(selection) {
-    selection.style("fill-opacity", 1);
-  });
-
-function cueBlink() {
-  cueIndicator.start();
-}
+  .offDuration(durationInBeats(0.5));
 
 const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
 
@@ -299,8 +281,7 @@ d3.select(window).on("load", () => {
 
 VS.score.preroll = durationInBeats(3);
 function prerollAnimateCue() {
-  VS.score.schedule(0, cueBlink);
-  //VS.score.schedule(VS.score.preroll - 3000, cueBlink);
+  VS.score.schedule(0, indicator.blinker.start());
 }
 VS.control.hooks.add("play", prerollAnimateCue);
 VS.WebSocket.hooks.add("play", prerollAnimateCue);

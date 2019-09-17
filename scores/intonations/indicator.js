@@ -26,7 +26,25 @@ export default function(selection) {
 
   return {
     element: indicator,
+    blinker: blinker(indicator),
     translateX,
     translateY
   };
+}
+
+function blinker(selection) {
+  return VS.cueBlink(selection)
+    .beats(3)
+    .inactive(function(selection) {
+      selection.style("fill-opacity", 0);
+    })
+    .on(function(selection) {
+      selection.style("fill-opacity", 1);
+    })
+    .off(function(selection) {
+      selection.style("fill-opacity", 0);
+    })
+    .down(function(selection) {
+      selection.style("fill-opacity", 1);
+    });
 }

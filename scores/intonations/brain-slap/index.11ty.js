@@ -6,7 +6,12 @@ module.exports = class {
       ...baseTemplateData,
       title: "brain slap",
       status: "wip",
-      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
+      modules: [
+        ...baseTemplateData.modules,
+        "bravura",
+        "dictionary",
+        "cue/blink"
+      ]
     };
   }
 

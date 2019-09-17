@@ -6,7 +6,12 @@ module.exports = class {
       ...baseTemplateData,
       title: "blood on the hearth",
       status: "wip",
-      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
+      modules: [
+        ...baseTemplateData.modules,
+        "bravura",
+        "dictionary",
+        "cue/blink"
+      ]
     };
   }
 
