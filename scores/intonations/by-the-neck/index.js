@@ -3,7 +3,7 @@ import doubleBar from "../double-bar";
 import { pitchRange, pitchScale } from "../scale";
 import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
-import makeCue from "../cue";
+import cue from "../cue";
 import makePage from "../page";
 import makeScroll from "../scroll";
 import startTimeFromDuration from "../startTimeFromDuration";
@@ -16,12 +16,14 @@ function timeScale(t) {
 const svg = d3.select("svg.main");
 const page = makePage(svg);
 
-// Create hidden line to ensure page fits margins
-page.element
-  .append("line")
-  .attr("y1", 0)
-  .attr("y2", margin.top + pitchRange + margin.top) // TODO
-  .style("visibility", "hidden");
+svg.append("style").text(`
+  .bravura { font-family: 'Bravura'; font-size: 20px; }
+  .text-dynamic {
+    font-family: serif;
+    font-size: 12px;
+    font-style: italic;
+  }
+`);
 
 const scoreGroup = makeScroll(page.element);
 scoreGroup.y(margin.top); // TODO allow chaining
@@ -29,6 +31,15 @@ scoreGroup.y(margin.top); // TODO allow chaining
 const wrapper = scoreGroup.element;
 
 const indicator = makeIndicator(page.element);
+
+const cues = wrapper.append("g");
+const makeCue = (x, type) => cue(cues, type).attr("x", x);
+
+const bloodText = (selection, str) =>
+  selection
+    .append("text")
+    .text(str)
+    .attr("fill", "darkRed");
 
 // taking hold
 // the claw digs in
@@ -126,7 +137,7 @@ const breath = [
     render: ({ x }) => {
       const g = wrapper.append("g");
       translate(g, x, 0);
-      makeCue(g, "open");
+      makeCue(x, "open");
       // TODO if all fades/moriendo, is a double bar needed?
       doubleBar(g, pitchRange).attr("stroke", "black");
     }
@@ -148,8 +159,9 @@ const texture = [
         .text("scrape")
         .attr("fill", "blue");
       scrapeDrone(g).attr("x2", length);
+      bloodText(g, "choke hold").attr("y", -0.75 * pitchRange); // TODO y pos
       // TODO dynamics?
-      makeCue(g);
+      makeCue(x); // TODO dotted line pointing to this
     }
   },
   // scrape cluster
@@ -166,6 +178,7 @@ const texture = [
         .attr("x2", length)
         .call(translate, 0, 2);
       // TODO dynamics?
+      bloodText(g, "the claws dig in").attr("y", -0.75 * pitchRange); // TODO y pos
     }
   },
   // TODO scrape and drone cres., more pressure
@@ -193,8 +206,8 @@ const noise = [
       translate(g, x, 0);
       for (let i = 0; i < 50; i++) {
         g.append("text")
-          .text(".")
-          .attr("fill", "blue")
+          .text("/")
+          .attr("fill", "darkred")
           .attr("x", Math.random() * length)
           .attr("y", Math.random() * pitchRange);
       }
