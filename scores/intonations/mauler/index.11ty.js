@@ -6,7 +6,12 @@ module.exports = class {
       ...baseTemplateData,
       title: "mauler",
       status: "wip",
-      modules: [...baseTemplateData.modules, "bravura", "dictionary", "cue/blink"]
+      modules: [
+        ...baseTemplateData.modules,
+        "bravura",
+        "dictionary",
+        "cue/blink"
+      ]
     };
   }
 

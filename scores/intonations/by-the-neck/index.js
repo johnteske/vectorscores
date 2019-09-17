@@ -10,7 +10,7 @@ import startTimeFromDuration from "../startTimeFromDuration";
 import { translate } from "../translate";
 
 function timeScale(t) {
-  return t / 50;
+  return t / 150;
 }
 
 const svg = d3.select("svg.main");
@@ -41,10 +41,6 @@ const bloodText = (selection, str) =>
     .text(str)
     .attr("fill", "darkRed");
 
-// taking hold
-// the claw digs in
-// hot, abrasive breath
-
 function heavyBreath(selection) {
   const g = selection.append("g");
 
@@ -57,7 +53,7 @@ function heavyBreath(selection) {
   // g.append("text").text("\ue0b8"); // Bravura
   g.append("text")
     .attr("dy", "1em")
-    .text("intense breaths ->")
+    .text("intense breaths")
     .attr("fill", "blue");
 
   const box = g.node().getBBox();
@@ -81,7 +77,8 @@ function growl(selection) {
 
   g.append("text")
     .attr("dy", "1em")
-    .text("trem, exp. cres. growl ->")
+    .text("LNP growl")
+    //.text("trem, exp. cres. growl ->")
     .attr("fill", "blue");
 
   const box = g.node().getBBox();
@@ -93,11 +90,18 @@ function growl(selection) {
 const breath = [
   // start with intense breath sounds
   {
-    duration: 30000,
+    duration: seconds(120),
     render: ({ x, length }) => {
       const g = wrapper.append("g");
 
       translate(heavyBreath(g), x, 0);
+
+      g.append("line")
+        .attr("x1", 0)
+        .attr("x2", length)
+        .attr("stroke", "black")
+        .attr("stroke-dasharray", "3")
+        .call(translate, 0, 10);
 
       drawDynamics(
         [
@@ -135,23 +139,23 @@ const breath = [
   {
     duration: 0,
     render: ({ x }) => {
-      const g = wrapper.append("g");
-      translate(g, x, 0);
-      makeCue(x, "open");
+      //const g = wrapper.append("g");
+      //translate(g, x, 0);
+      //appendmakeCue(x, "open");
       // TODO if all fades/moriendo, is a double bar needed?
-      doubleBar(g, pitchRange).attr("stroke", "black");
+      //doubleBar(g, pitchRange).attr("stroke", "black");
     }
   }
 ].map(startTimeFromDuration);
 
 const texture = [
   {
-    duration: 5000,
+    duration: seconds(30),
     render: () => {}
   },
   // add low scrape
   {
-    duration: 5000,
+    duration: seconds(30),
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, pitchScale(0.25));
@@ -161,12 +165,12 @@ const texture = [
       scrapeDrone(g).attr("x2", length);
       bloodText(g, "choke hold").attr("y", -0.75 * pitchRange); // TODO y pos
       // TODO dynamics?
-      makeCue(x); // TODO dotted line pointing to this
+      //makeCue(x); // TODO dotted line pointing to this
     }
   },
   // scrape cluster
   {
-    duration: 5000,
+    duration: seconds(30),
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, pitchScale(0.25));
@@ -184,11 +188,19 @@ const texture = [
   // TODO scrape and drone cres., more pressure
   // growl
   {
-    duration: 5000,
+    duration: seconds(30),
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, pitchScale(0.25));
       growl(g);
+
+      g.append("line")
+        .attr("x1", 0)
+        .attr("x2", length)
+        .attr("stroke", "black")
+        .attr("stroke-dasharray", "3")
+        .call(translate, 0, 10);
+
       // TODO dynamics?
     }
   }
@@ -196,15 +208,15 @@ const texture = [
 
 const noise = [
   {
-    duration: 15000,
+    duration: seconds(50),
     render: () => {}
   },
   {
-    duration: 5000,
+    duration: seconds(20),
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, 0);
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 100; i++) {
         g.append("text")
           .text("/")
           .attr("fill", "darkred")
