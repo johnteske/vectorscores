@@ -23,6 +23,9 @@ const { svg, page, scoreGroup, indicator } = makeScrollingScore();
 svg.append("style").text(`
   line { stroke: black; }
   line.wip { stroke: blue; }
+  text {
+    font-size: 12px;
+  }
   text.wip { fill: blue; }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
   .text-dynamic {
@@ -35,6 +38,9 @@ svg.append("style").text(`
 const wrapper = scoreGroup.element;
 const group = (selection = wrapper) => selection.append("g");
 
+const cues = wrapper.append("g");
+const makeCue = (x, type) => cue(cues, type).attr("x", x);
+
 const text = (selection, str) => selection.append("text").text(str);
 const bravura = (selection, str) =>
   text(selection, str).attr("class", "bravura");
@@ -45,11 +51,11 @@ const score = [
     render: ({ x, length }) => {
       const g = translate(group(), x, pitchScale(0.5));
 
-      cue(g);
+      makeCue(x);
 
       longTone(g, 0, 0, length);
-      bravura(g, articulationGlyph[">"]);
-      text(g, "th");
+      bravura(g, articulationGlyph[">"]).attr("dy", "0.5em");
+      text(g, '"th"').attr("dy", "2em");
 
       drawDynamics(
         [
@@ -62,11 +68,6 @@ const score = [
             type: "text",
             value: "cres.",
             x: 0.5
-          },
-          {
-            type: "symbol",
-            value: "f",
-            x: 1
           }
         ],
         length,
@@ -77,13 +78,13 @@ const score = [
   {
     duration: 15000,
     render: ({ x }) => {
-      const g = translate(group(), x, 0);
+      const g = translate(group(), x, pitchScale(0.5));
 
-      cue(g);
+      makeCue(x);
 
-      bravura(g, durationGlyph["0.5"]);
-      bravura(g, articulationGlyph[">"]);
-      text(g, "slap/snap"); // TODO bartok
+      bravura(g, durationGlyph["0.5"]).attr("dy", "-0.666em");
+      bravura(g, articulationGlyph[">"]).attr("dy", "0.5em");
+      bravura(g, articulationGlyph["bartok"]).attr("dy", "-1em");
 
       drawDynamics(
         [
