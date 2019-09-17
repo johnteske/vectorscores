@@ -3,29 +3,22 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>admin | vectorscores</title>
+        <title>chant | vectorscores</title>
          
   <link rel="stylesheet" href="/vectorscores/assets/css/score.css">
-  
+  <link rel="stylesheet" href="../styles.css">
   
   <link rel="stylesheet" href="styles.css">
  
     </head>
     <body>
         <header id="score-header">
-        <h1 class="score-title">admin</h1>
+        <h1 class="score-title">chant</h1>
         
     </header>
         <main>
             <svg class="main"></svg>
             
-      
-<div>
-  <h4>WebSocket Connection:</h4>
-  <p id="ws-log"></p>
-</div>
-      <button>/scores/adsr/</button><button>/scores/cell-branching/</button><button>/scores/dirge-march/</button><button>/scores/glob/</button><button>/scores/time-control/</button><button>/scores/topographies-ii/</button><button>/scores/topographies-ii/walk-reveal/</button><button>/scores/tutorial/</button><button>/scores/trashfire/</button><button>/scores/prelude/</button><button>/scores/intonations/chant/</button><button>/scores/intonations/threadshift/</button><button>/scores/intonations/mauler/</button><button>/scores/intonations/by-the-neck/</button><button>/scores/intonations/bone-flute/</button><button>/scores/intonations/blood-hearth/</button><button>/scores/intonations/brain-slap/</button><button>/scores/intonations/klaxon-wail/</button><button>/scores/intonations/papercut-butterflies/</button><button>/scores/intonations/death-rattle/</button><button>/scores/swell/</button><button>/scores/intonations/</button>
-    
         </main>
         <footer id="score-footer"><!--
 --><button id="score-back" class="score-button" title="Step score pointer -1">
@@ -61,42 +54,25 @@
         </svg>
     </button><!--
  --><input id="score-pointer" type="number" value="0" pattern="d*" readonly="true" title="Score pointer" /><!-- step="1" --><!--
- --><button id="score-options-open" class="score-button" title="Score options">
-         <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-             <g id="score-options-icon">
-                 <path d="M17,10 L17,118.57"></path>
-                 <path d="M1.25,25.75 L32.75,25.75"></path>
-
-                 <path d="M64.24,10 L64.24,118.57"></path>
-                 <path d="M48.49,102.82 L79.99,102.82"></path>
-
-                 <path d="M111.48,10 L111.48,118.57"></path>
-                 <path d="M95.73,64.285 L127.23,64.285"></path>
-             </g>
-         </svg>
-    </button>
+ -->
 </footer>
         <div id="score-modal-overlay" class="modal-overlay">
         <div id="score-info-modal" class="modal-content">
         <span id="score-info-close" class="modal-close">×</span>
-        <h2 class="score-title">admin</h2>
+        <h2 class="score-title">chant</h2>
         <p>
-            
+            John Teske
             
         </p>
 	
         <p></p>
 	
     </div>
-	<div id="score-options-modal" class="modal-content">
-            <span id="score-options-close" class="modal-close">×</span>
-            <h2>Options</h2>
-            <div>noop</div>
-        </div>
+	
     </div>
         <script src="/vectorscores/assets/js/lib/d3.v4.min.js" charset="utf-8"></script>
     <script src="/vectorscores/assets/js/vectorscores.js" charset="utf-8"></script>
-    <script src="/vectorscores/assets/modules/websockets/index.js" charset="utf-8"></script>
+    <script src="/vectorscores/assets/modules/line-cloud/index.js" charset="utf-8"></script>
         <script src="index.js" charset="utf-8"></script>
     </body>
     </html>
