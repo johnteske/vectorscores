@@ -6,7 +6,7 @@ const glyphs = {
 export default function cue(selection, type = "closed") {
   return selection
     .append("text")
-    .attr("class", "bravura wip")
+    .attr("class", "bravura")
     .attr("text-anchor", "middle")
     .text(glyphs[type]);
 }

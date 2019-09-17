@@ -1,14 +1,14 @@
+import longTone from "../longTone";
+
 export default function(selection) {
-  const g = selection.append("g");
+  const g = longTone(selection, 0, 0, 100) // TODO length TODO
+    .attr("stroke", "black");
 
   g.append("text")
     .text("\ue227")
+    .attr("dx", "0.25em")
     .attr("dy", "-0.5em")
-    .attr("class", "bravura wip");
-
-  g.append("line")
-    .attr("stroke", "black")
-    .attr("x2", 100); // TODO
+    .attr("class", "bravura");
 
   return g;
 }

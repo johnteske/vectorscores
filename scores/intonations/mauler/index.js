@@ -1,8 +1,8 @@
 import addHooks from "../scroll-hooks";
 import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
-import longTone from "../longTone";
 import makePage from "../page";
+import cue from "../cue";
 import makeScroll from "../scroll";
 import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
@@ -39,6 +39,12 @@ function callTranslate(selection, x, y) {
   return translate(x, y, selection);
 }
 
+const bloodText = (selection, str) =>
+  selection
+    .append("text")
+    .text(str)
+    .attr("fill", "darkRed");
+
 const svg = d3.select("svg.main");
 svg.append("style").text(`
   text.wip { fill: blue }
@@ -69,14 +75,7 @@ const wrapper = scoreGroup.element;
 
 const indicator = makeIndicator(page.element);
 
-const makeCue = function(selection) {
-  return selection
-    .append("text")
-    .attr("class", "bravura wip")
-    .attr("text-anchor", "middle")
-    .attr("y", -87)
-    .text("\ue890");
-};
+const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
 
 const score = [
   {
@@ -113,16 +112,17 @@ const score = [
   },
   {
     startTime: null,
-    duration: durationInSeconds(30),
+    duration: durationInSeconds(60),
     render: ({ x, length }) => {
       const g = translate(x, 0, wrapper.append("g"));
       // spike
       g.append("path").attr("d", `M-5,0 L5,0 L0,${pitchRange} Z`);
       // wall/tremolo--is it around the pitch center?
 
+      bloodText(g, "MAUL").attr("dy", "-2em");
+
       g.append("text")
-        .attr("class", "wip")
-        .attr("dy", "-2em")
+        .attr("dy", "-1em")
         .text("col legno, slapping");
 
       for (let i = 0; i < 25; i++) {
@@ -159,8 +159,16 @@ const score = [
       const makeThread = (x, y, length, selection) => {
         selection
           .append("line")
-          .attr("stroke", "black")
+          .attr("stroke", "darkred")
           .attr("x1", x)
+          .attr("x2", x + length * 0.5)
+          .attr("y1", y - 1)
+          .attr("y2", y - 1);
+
+        selection
+          .append("line")
+          .attr("stroke", "black")
+          .attr("x1", x + length * 0.5)
           .attr("x2", x + length)
           .attr("y1", y)
           .attr("y2", y);
@@ -172,10 +180,8 @@ const score = [
         makeThread(x, y, length * 0.5, g);
       }
 
-      g.append("text")
-        .attr("class", "wip")
-        .attr("dy", "-1em")
-        .text("semitone falls around long tones")
+      bloodText(g, "weep")
+        .attr("dy", "-2em")
         .attr("x", length * 0.25);
 
       translate(
@@ -186,7 +192,7 @@ const score = [
           [
             { x: 0, type: "symbol", value: "sffz" },
             { x: 0.5, type: "text", value: "decres." },
-            { x: 1, type: "text", value: "mp" }
+            { x: 1, type: "symbol", value: "mp" }
           ],
           length,
           g
