@@ -5,9 +5,10 @@ module.exports = class {
     return {
       layout: "score",
       title: "swell", // 2013
+      duration: "8&prime;20&Prime;",
       composer: "John Teske",
       status: "published",
-      instrumentation: "for any ensemble, (4+)",
+      instrumentation: "any ensemble (4+)",
       formats: ["score"],
       // info: info(),
       // within each bar, play the given pitches, in any order
