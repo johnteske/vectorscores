@@ -1,8 +1,8 @@
-import startTimeFromDuration from "../threads/startTimeFromDuration";
-import { seconds, pitchRange, pitchScale } from "../threads/scale";
-import makeVignetteScore from "../threads/vignette-score";
-import makeVignetteResize from "../threads/vignette-resize";
-import { translate } from "../threads/translate";
+import startTimeFromDuration from "../intonations/startTimeFromDuration";
+import { seconds, pitchRange, pitchScale } from "../intonations/scale";
+import makeVignetteScore from "../intonations/vignette-score";
+import makeVignetteResize from "../intonations/vignette-resize";
+import { translate } from "../intonations/translate";
 
 const { svg, page } = makeVignetteScore();
 

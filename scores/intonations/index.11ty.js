@@ -2,7 +2,7 @@ module.exports = class {
   data() {
     return {
       layout: "score-set",
-      title: "threads",
+      title: "intonations",
       instrumentation: "any ensemble",
       status: "wip",
       formats: ["score"]
