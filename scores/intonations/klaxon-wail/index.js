@@ -3,7 +3,7 @@
 // offset klaxon (exit before alarm)
 // tight drone becomes chaotic and noisy
 import startTimeFromDuration from "../startTimeFromDuration";
-import { pitchRange, pitchScale } from "../scale";
+import { seconds, pitchRange, pitchScale } from "../scale";
 import makeVignetteScore from "../vignette-score";
 import makeVignetteResize from "../vignette-resize";
 import drawDynamics from "../dynamics";
@@ -37,15 +37,14 @@ const dynamic = (selection, type, value) =>
 function wail(selection) {
   const g = group(selection).call(translate, 0, pitchScale(0.75));
 
-  text(g, "wail");
-  text(g, "growl/scream though instrument");
-  bravura(g, articulationGlyph[">"]);
+  text(g, "wail").attr("dy", "1em");
+  //text(g, "growl/scream though instrument");
+  //bravura(g, articulationGlyph[">"]);
 
-  dynamic(g, "symbol", "f");
+  dynamic(g, "symbol", "f").call(translate, 0, -12);
 
   // long, periodic TODO how many seconds? how much rest?
   // TODO add line
-  //
   return g;
 }
 
@@ -55,10 +54,10 @@ function alarm(selection) {
 
   const g = group(selection).call(translate, 0, pitchScale(1));
 
-  text(g, "alarm");
-  text(g, "doit");
+  text(g, "alarm").attr("dy", "1em");
+  //text(g, "doit");
 
-  dynamic(g, "symbol", "mf");
+  dynamic(g, "symbol", "mf").call(translate, 0, -12);
 
   return g;
 }
@@ -66,27 +65,53 @@ function alarm(selection) {
 function droneCluster(selection, length) {
   const g = group(selection).call(translate, 0, pitchScale(0.25));
 
-  line(g, length).call(translate, 0, VS.getRandExcl(-2, 2));
-  line(g, length).call(translate, 0, VS.getRandExcl(-2, 2));
-  line(g, length).call(translate, 0, VS.getRandExcl(-2, 2));
-  dynamic(g, "symbol", "mp");
+  const p = [-2, -1, 0, 1, 2].sort(() => Math.random() - 0.5);
+
+  line(g, length).call(translate, 0, p.pop());
+  line(g, length).call(translate, 0, p.pop());
+  line(g, length).call(translate, 0, p.pop());
+
+  dynamic(g, "symbol", "mp").call(translate, 0, -24);
 
   return g;
 }
 
 const score = [
-  // {
-  //    duration: 0,
-  //    render: () => group()
-  //
-  //  },
   {
-    duration: 15000,
+    duration: 0,
+    render: () => group()
+  },
+  {
+    duration: seconds(20),
+    render: ({ length }) => {
+      const g = group();
+
+      //      alarm(g);
+      wail(g);
+      droneCluster(g, length);
+
+      return g;
+    }
+  },
+  {
+    duration: seconds(20),
     render: ({ length }) => {
       const g = group();
 
       alarm(g);
       wail(g);
+      droneCluster(g, length);
+
+      return g;
+    }
+  },
+  {
+    duration: seconds(20),
+    render: ({ length }) => {
+      const g = group();
+
+      alarm(g);
+      //wail(g);
       droneCluster(g, length);
 
       return g;
