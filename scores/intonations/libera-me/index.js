@@ -1,5 +1,5 @@
 import startTimeFromDuration from "../startTimeFromDuration";
-import { pitchRange, pitchScale } from "../scale";
+import { seconds, pitchRange, pitchScale } from "../scale";
 import makeVignetteScore from "../vignette-score";
 import makeVignetteResize from "../vignette-resize";
 import { translate } from "../translate";
@@ -44,9 +44,16 @@ function chant(selection, length) {
   return selection;
 }
 
+const group = (selection = wrapper) => selection.append("g");
+const phraseLength = seconds(20);
+
 const score = [
   {
-    duration: seconds(20),
+    duration: 0,
+    render: () => group()
+  },
+  {
+    duration: phraseLength,
     render: ({ length }) => {
       const g = wrapper.append("g");
       chant(g, length);
@@ -54,7 +61,7 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: phraseLength,
     render: ({ length }) => {
       const g = wrapper.append("g");
       chant(g, length);
@@ -62,7 +69,7 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: phraseLength,
     render: ({ length }) => {
       const g = wrapper.append("g");
       chant(g, length);
@@ -70,7 +77,7 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: phraseLength,
     render: ({ length }) => {
       const g = wrapper.append("g");
       chant(g, length);
@@ -78,12 +85,16 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: phraseLength,
     render: ({ length }) => {
       const g = wrapper.append("g");
       chant(g, length);
       return g;
     }
+  },
+  {
+    duration: 0,
+    render: () => group()
   }
 ]
   .map(startTimeFromDuration)
