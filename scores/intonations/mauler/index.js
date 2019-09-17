@@ -1,4 +1,4 @@
-import drone from "../drone";
+import addHooks from "../scroll-hooks";
 import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
 import longTone from "../longTone";
@@ -156,7 +156,6 @@ const score = [
         );
       }
 
-      // drone(g);
       const makeThread = (x, y, length, selection) => {
         selection
           .append("line")
@@ -256,7 +255,6 @@ d3.select(window).on("load", () => {
   resize();
 });
 
-VS.control.hooks.add("stop", setScorePosition);
-VS.score.hooks.add("stop", setScorePosition);
-VS.control.hooks.add("step", setScorePosition);
-VS.control.hooks.add("pause", setScorePosition);
+addHooks(setScorePosition);
+
+VS.WebSocket.connect();
