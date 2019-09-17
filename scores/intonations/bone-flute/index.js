@@ -1,5 +1,5 @@
 import startTimeFromDuration from "../startTimeFromDuration";
-import { pitchRange, pitchScale } from "../scale";
+import { seconds, pitchRange, pitchScale } from "../scale";
 import makeVignetteScore from "../vignette-score";
 import makeVignetteResize from "../vignette-resize";
 import drawDynamics from "../dynamics";
@@ -9,6 +9,9 @@ import pathAlongPath from "../pathAlongPath";
 const { svg, page } = makeVignetteScore();
 
 svg.append("style").text(`
+  text {
+    font-size: 8px;
+  }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
   .text-dynamic {
     font-family: serif;
@@ -37,12 +40,15 @@ function textureOfBones(selection) {
   for (let i = 0; i < 66; i++) {
     g.append("text")
       .text("\u2620")
+      .style("font-size", "20px")
       .attr("x", pitchScale(Math.random() * 1))
       .attr("y", pitchScale(Math.random() * 0.25));
   }
 
   g.append("text")
-    .text("crushing bones")
+    .text("crushing")
+    //.text("crushing bones")
+    .attr("y", pitchScale(0.25))
     .attr("dy", "1em")
     .attr("fill", "black");
 
@@ -56,33 +62,43 @@ function textureOfBones(selection) {
     ],
     0,
     g
-  ).attr("fill", "black");
+  )
+    .call(translate, 0, pitchScale(0.5))
+    .attr("fill", "black");
 
   return g;
 }
 
 // high, cheerful, taunting
 // solo
+// taunting
 // TODO also needs bounding box
 const boneFlutePhraseGenerator = pathAlongPath(d3.curveBasis, d3.curveBasis);
-// take the easy path
-// take comfort in the release
-// it can be so easy
-// it can be so simple
-// it's the right thing to do
-// it's the right thing for everyone
+
+const encouragement = [
+  "worry not, friend",
+  "it can be so easy",
+  "embrace the release",
+  "it's time to rest",
+  "accept the inevitable"
+].sort(() => Math.random() - 0.5);
 
 function boneFlute(selection) {
   const g = selection.append("g");
 
   boneFlutePhraseGenerator(
-    [{ x: 0, y: 0 }, { x: pitchRange * 0.5, y: 20 }, { x: pitchRange, y: 10 }],
+    [
+      { x: 10, y: VS.getRandExcl(0, 20) },
+      { x: pitchRange * 0.5, y: VS.getRandExcl(0, 20) },
+      { x: pitchRange - 10, y: VS.getRandExcl(0, 20) }
+    ],
     [...new Array(10)],
     (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-5, 5) }),
     g
   );
 
-  text(g, "it can be so easy")
+  text(g, encouragement.pop())
+    //text(g, "it can be so easy")
     .attr("dy", "1em")
     .attr("fill", "darkred");
 
@@ -96,7 +112,9 @@ function boneFlute(selection) {
     ],
     0,
     g
-  ).attr("fill", "black");
+  )
+    .attr("fill", "black")
+    .call(translate, 0, -20);
 
   return g;
 }
@@ -118,10 +136,23 @@ function drone(selection) {
     ],
     0,
     g
-  ).attr("fill", "black");
+  )
+    .attr("fill", "black")
+    .call(translate, 0, pitchScale(0.5))
+    .select("text")
+    .attr("dy", "0.5em");
 
   return g;
 }
+
+const boneFluteFrame = () => {
+  const g = wrapper.append("g");
+  makeFrame(g);
+  boneFlute(g);
+  drone(g);
+  textureOfBones(g);
+  return g;
+};
 
 const score = [
   {
@@ -131,26 +162,24 @@ const score = [
     }
   },
   {
-    duration: 15000,
-    render: () => {
-      const g = wrapper.append("g");
-      makeFrame(g);
-      boneFlute(g);
-      drone(g);
-      textureOfBones(g);
-      return g;
-    }
+    duration: seconds(20),
+    render: boneFluteFrame
   },
   {
-    duration: 15000,
-    render: () => {
-      const g = wrapper.append("g");
-      makeFrame(g);
-      boneFlute(g);
-      drone(g);
-      textureOfBones(g);
-      return g;
-    }
+    duration: seconds(20),
+    render: boneFluteFrame
+  },
+  {
+    duration: seconds(20),
+    render: boneFluteFrame
+  },
+  {
+    duration: seconds(20),
+    render: boneFluteFrame
+  },
+  {
+    duration: seconds(20),
+    render: boneFluteFrame
   },
   {
     duration: 0,
