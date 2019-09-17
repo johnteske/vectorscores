@@ -2,9 +2,7 @@ import startTimeFromDuration from "../startTimeFromDuration";
 import { pitchRange, pitchScale } from "../scale";
 import makeVignetteScore from "../vignette-score";
 import makeVignetteResize from "../vignette-resize";
-//import drawDynamics from "../dynamics";
 import { translate } from "../translate";
-//import pathAlongPath from "../pathAlongPath";
 
 const { svg, page } = makeVignetteScore();
 
@@ -27,32 +25,63 @@ function phrase() {
   return notes;
 }
 
+function chant(selection, length) {
+  var lineCloud = VS.lineCloud()
+    .duration(10)
+    .phrase(phrase())
+    .curve(d3.curveLinear)
+    .width(length)
+    .height(pitchRange * 0.333);
+
+  selection
+    .call(lineCloud, { n: 2 })
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .call(translate, 0, pitchScale(0.666))
+    // line-cloud has issues, not to be solved now
+    .select(".line-cloud-path:last-child")
+    .remove();
+  return selection;
+}
+
 const score = [
   {
-    duration: 0,
+    duration: seconds(20),
     render: ({ length }) => {
       const g = wrapper.append("g");
-
-      //const lineGenerator = d3
-      //  .line()
-      //  .x(d => d.x)
-      //  .y(d => d.y);
-
-      var lineCloud = VS.lineCloud()
-        .duration(10)
-        .phrase(phrase())
-        .curve(d3.curveLinear)
-        .width(length)
-        .height(pitchRange * 0.333);
-
-      g.call(lineCloud, { n: 2 })
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .call(translate, 0, pitchScale(0.666))
-        // line-cloud has issues, not to be solved now
-        .select(".line-cloud-path:last-child")
-        .remove();
-
+      chant(g, length);
+      return g;
+    }
+  },
+  {
+    duration: seconds(20),
+    render: ({ length }) => {
+      const g = wrapper.append("g");
+      chant(g, length);
+      return g;
+    }
+  },
+  {
+    duration: seconds(20),
+    render: ({ length }) => {
+      const g = wrapper.append("g");
+      chant(g, length);
+      return g;
+    }
+  },
+  {
+    duration: seconds(20),
+    render: ({ length }) => {
+      const g = wrapper.append("g");
+      chant(g, length);
+      return g;
+    }
+  },
+  {
+    duration: seconds(20),
+    render: ({ length }) => {
+      const g = wrapper.append("g");
+      chant(g, length);
       return g;
     }
   }
