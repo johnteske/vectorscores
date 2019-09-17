@@ -1,8 +1,7 @@
 import longTone from "../longTone";
 
-export default function(selection) {
-  const g = longTone(selection, 0, 0, 100) // TODO length TODO
-    .attr("stroke", "black");
+export default function(selection, length) {
+  const g = longTone(selection, 0, 0, length).attr("stroke", "black");
 
   g.append("text")
     .text("\ue227")

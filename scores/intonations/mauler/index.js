@@ -1,3 +1,6 @@
+// sixteenths are not proportional to real time
+import { seconds, pitchRange, pitchScale } from "../scale";
+import longTone from "../longTone";
 import addHooks from "../scroll-hooks";
 import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
@@ -10,6 +13,7 @@ import translate from "../translate";
 import sixteenths from "./sixteenths";
 import { repeated } from "./sixteenths";
 import tremoloLongTone from "./tremoloLongTone";
+import maul from "./maul";
 
 const durations = VS.dictionary.Bravura.durations.stemless;
 
@@ -17,18 +21,9 @@ const margin = {
   top: 64
 };
 
-const pitchRange = 87;
-function pitchScale(value) {
-  return (1 - value) * pitchRange;
-}
-
 function durationInBeats(beats) {
   const bpm = 120;
   return beats * (60 / bpm) * 1000;
-}
-
-function durationInSeconds(seconds) {
-  return seconds * 1000;
 }
 
 function timeScale(t) {
@@ -38,6 +33,9 @@ function timeScale(t) {
 function callTranslate(selection, x, y) {
   return translate(x, y, selection);
 }
+
+const dynamic = (selection, type, value) =>
+  drawDynamics([{ type, value, x: 0 }], 0, selection);
 
 const bloodText = (selection, str) =>
   selection
@@ -52,26 +50,10 @@ svg.append("style").text(`
 `);
 
 const page = makePage(svg);
-// Create hidden line to ensure page fits margins
-page.element
-  .append("line")
-  .attr("y1", 0)
-  .attr("y2", margin.top + pitchRange + 32) // TODO
-  //.attr("y2", margin.top + pitchRange + margin.top)
-  .style("visibility", "hidden");
 
 const scoreGroup = makeScroll(page.element);
 scoreGroup.y(margin.top); // TODO allow chaining
 const wrapper = scoreGroup.element;
-
-//// TODO for alignment only
-//wrapper
-//  .append("line")
-//  .attr("stroke", "red")
-//  .attr("x1", -9999)
-//  .attr("x2", 9999)
-//  .attr("y1", pitchScale(0.5))
-//  .attr("y2", pitchScale(0.5));
 
 const indicator = makeIndicator(page.element);
 
@@ -105,19 +87,31 @@ const score = [
         .text("\ue4e5")
         .call(callTranslate, beatLength * 2, 0);
 
-      drawDynamics([{ x: 0, type: "symbol", value: "ff" }], length, g);
+      dynamic(g, "symbol", "ff");
 
       makeCue(g);
     }
   },
   {
     startTime: null,
-    duration: durationInSeconds(60),
+    duration: seconds(0.25), // TODO
     render: ({ x, length }) => {
       const g = translate(x, 0, wrapper.append("g"));
+
       // spike
       g.append("path").attr("d", `M-5,0 L5,0 L0,${pitchRange} Z`);
-      // wall/tremolo--is it around the pitch center?
+      translate(0, pitchScale(0.5), dynamic(g, "symbol", "sffz"));
+
+      maul(g, 87, pitchRange);
+
+      translate(0, pitchScale(0.5), makeCue(g));
+    }
+  },
+  {
+    startTime: null,
+    duration: seconds(60),
+    render: ({ x, length }) => {
+      const g = translate(x, 0, wrapper.append("g"));
 
       bloodText(g, "MAUL").attr("dy", "-2em");
 
@@ -129,7 +123,7 @@ const score = [
         translate(
           Math.random() * length * 0.25,
           Math.random() * pitchRange,
-          tremoloLongTone(g)
+          tremoloLongTone(g, timeScale(seconds(3)))
         );
         translate(
           Math.random() * length * 0.25,
@@ -147,7 +141,7 @@ const score = [
         translate(
           Math.random() * length,
           Math.random() * pitchRange,
-          tremoloLongTone(g)
+          tremoloLongTone(g, timeScale(seconds(3)))
         );
         translate(
           Math.random() * length,
@@ -156,33 +150,56 @@ const score = [
         );
       }
 
-      const makeThread = (x, y, length, selection) => {
+      for (let i = 0; i < 25; i++) {
+        longTone(
+          g,
+          VS.getRandExcl(length * 0.75, length),
+          Math.random() * pitchRange,
+          timeScale(5000)
+        ).attr("stroke", "black");
+      }
+
+      translate(
+        0,
+        pitchScale(0.5),
+
+        drawDynamics([{ x: 0.5, type: "text", value: "decres." }], length, g)
+      );
+    }
+  },
+  {
+    startTime: null,
+    duration: seconds(60),
+    render: ({ x, length }) => {
+      const g = translate(x, 0, wrapper.append("g"));
+
+      const makeThread = (x, y, selection) => {
+        const x2 = x + timeScale(seconds(3));
+
         selection
           .append("line")
           .attr("stroke", "darkred")
           .attr("x1", x)
-          .attr("x2", x + length * 0.5)
+          .attr("x2", x2)
           .attr("y1", y - 1)
           .attr("y2", y - 1);
 
         selection
           .append("line")
           .attr("stroke", "black")
-          .attr("x1", x + length * 0.5)
-          .attr("x2", x + length)
+          .attr("x1", x2)
+          .attr("x2", x2 + timeScale(seconds(1)))
           .attr("y1", y)
           .attr("y2", y);
       };
 
-      for (let i = 0; i < 10; i++) {
-        let x = VS.getRandExcl(0.25, 0.5) * length;
+      for (let i = 0; i < 25; i++) {
+        let x = VS.getRandExcl(0, length - timeScale(seconds(4))); // minus 4 seconds
         let y = pitchScale(VS.getRandExcl(0, 1));
-        makeThread(x, y, length * 0.5, g);
+        makeThread(x, y, g);
       }
 
-      bloodText(g, "weep")
-        .attr("dy", "-2em")
-        .attr("x", length * 0.25);
+      bloodText(g, "(weep)").attr("dy", "-2em");
 
       translate(
         0,
@@ -190,16 +207,14 @@ const score = [
 
         drawDynamics(
           [
-            { x: 0, type: "symbol", value: "sffz" },
+            { x: 0, type: "symbol", value: "mp" },
             { x: 0.5, type: "text", value: "decres." },
-            { x: 1, type: "symbol", value: "mp" }
+            { x: 1, type: "symbol", value: "n" }
           ],
           length,
           g
         )
       );
-
-      translate(0, pitchScale(0.5), makeCue(g));
     }
   },
   {
