@@ -183,6 +183,8 @@ d3.select(window).on("load", () => {
   resize();
 });
 
+VS.score.preroll = seconds(3);
+
 addHooks(setScorePosition);
 
 VS.WebSocket.connect();

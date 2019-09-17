@@ -1,6 +1,6 @@
 import { margin } from "../layout";
 import doubleBar from "../double-bar";
-import { pitchRange, pitchScale } from "../scale";
+import { seconds, pitchRange, pitchScale } from "../scale";
 import drawDynamics from "../dynamics";
 import makeIndicator from "../indicator";
 import cue from "../cue";
@@ -279,6 +279,8 @@ d3.select(window).on("load", () => {
   renderScore();
   resize();
 });
+
+VS.score.preroll = seconds(3);
 
 VS.control.hooks.add("step", setScorePosition);
 VS.WebSocket.hooks.add("step", setScorePosition);
