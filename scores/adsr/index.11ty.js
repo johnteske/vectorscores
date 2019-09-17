@@ -4,6 +4,7 @@ const options = require("./_options.11ty.js");
 module.exports = class {
   data() {
     return {
+      order: 2,
       layout: "score",
       title: "ad;sr",
       // publish_date: 2015, rev. 2017
