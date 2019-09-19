@@ -11,7 +11,7 @@ import startTimeFromDuration from "../startTimeFromDuration";
 import translate from "../translate";
 
 import sixteenths from "./sixteenths";
-import { repeated } from "./sixteenths";
+import { variations } from "./sixteenths";
 import tremoloLongTone from "./tremoloLongTone";
 import maul from "./maul";
 
@@ -131,12 +131,12 @@ const score = [
         translate(
           Math.random() * length * 0.25,
           Math.random() * pitchRange,
-          repeated(g)
+          variations(g)
         );
         translate(
           Math.random() * length * 0.25,
           Math.random() * pitchRange,
-          sixteenths(g)
+          variations(g)
         );
       }
 
@@ -149,7 +149,7 @@ const score = [
         translate(
           Math.random() * length,
           Math.random() * pitchRange,
-          sixteenths(g)
+          variations(g)
         );
       }
 

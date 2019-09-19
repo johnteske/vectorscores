@@ -47,11 +47,14 @@ export default function sixteenths(selection) {
   return g;
 }
 
-export function repeated(selection) {
+export function variations(selection) {
   const g = selection.append("g").attr("stroke", "black");
 
-  const pcs = [0, -1, 0, 2, 0, -1, 0, 2];
+  const pcs = [0, -1, 0, 2, 0, -1, 0, 2]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, VS.getRandIntIncl(5, 8));
   stems(g, pcs);
+  pcs.pop();
   doubleBeam(g, pcs);
 
   return g;
