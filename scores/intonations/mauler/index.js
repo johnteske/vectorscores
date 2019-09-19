@@ -1,6 +1,44 @@
 (function () {
   'use strict';
 
+  const seconds = t => t * 1000;
+
+  const pitchRange = 87;
+
+  function pitchScale(value) {
+    return (1 - value) * pitchRange;
+  }
+
+  const durations = VS.dictionary.Bravura.durations.stemless;
+
+  function longTone(selection, x, y, length) {
+    const group = selection.append("g");
+
+    group.attr("transform", `translate(${x}, ${y})`);
+
+    group
+      .append("text")
+      .attr("class", "bravura")
+      .text(durations[4]);
+
+    group
+      .append("line")
+      .attr("x1", "0.5em")
+      .attr("x2", length);
+
+    return group;
+  }
+
+  function addHooks(setScorePosition) {
+    VS.control.hooks.add("step", setScorePosition);
+    VS.WebSocket.hooks.add("step", setScorePosition);
+
+    VS.control.hooks.add("pause", setScorePosition);
+    VS.WebSocket.hooks.add("pause", setScorePosition);
+
+    VS.score.hooks.add("stop", setScorePosition);
+  }
+
   const { dynamics } = VS.dictionary.Bravura;
 
   function drawDynamics(data, scale, selection) {
@@ -69,12 +107,28 @@
 
     return {
       element: indicator,
+      blinker: blinker(indicator),
       translateX,
       translateY
     };
   }
 
-  const durations = VS.dictionary.Bravura.durations.stemless;
+  function blinker(selection) {
+    return VS.cueBlink(selection)
+      .beats(3)
+      .inactive(function(selection) {
+        selection.style("fill-opacity", 0);
+      })
+      .on(function(selection) {
+        selection.style("fill-opacity", 1);
+      })
+      .off(function(selection) {
+        selection.style("fill-opacity", 0);
+      })
+      .down(function(selection) {
+        selection.style("fill-opacity", 1);
+      });
+  }
 
   function makePage(selection) {
     const page = selection.append("g");
@@ -90,6 +144,19 @@
       element: page,
       scale
     };
+  }
+
+  const glyphs = {
+    open: "\ue893",
+    closed: "\ue890"
+  };
+
+  function cue(selection, type = "closed") {
+    return selection
+      .append("text")
+      .attr("class", "bravura")
+      .attr("text-anchor", "middle")
+      .text(glyphs[type]);
   }
 
   function makeScroll(selection) {
@@ -189,20 +256,33 @@
     return g;
   }
 
-  function tremoloLongTone(selection) {
-    const g = selection.append("g");
+  function tremoloLongTone(selection, length) {
+    const g = longTone(selection, 0, 0, length).attr("stroke", "black");
 
     g.append("text")
       .text("\ue227")
+      .attr("dx", "0.25em")
       .attr("dy", "-0.5em")
-      .attr("class", "bravura wip");
-
-    g.append("line")
-      .attr("stroke", "black")
-      .attr("x2", 100); // TODO
+      .attr("class", "bravura");
 
     return g;
   }
+
+  function maul(selection, w, h) {
+    const g = selection.append("g");
+
+    for (let i = 0; i < 50; i++) {
+      g.append("text")
+        .text("/")
+        .attr("fill", "darkred")
+        .attr("x", Math.random() * Math.random() * w)
+        .attr("y", Math.random() * h);
+    }
+
+    return g;
+  }
+
+  // sixteenths are not proportional to real time
 
   const durations$1 = VS.dictionary.Bravura.durations.stemless;
 
@@ -210,18 +290,9 @@
     top: 64
   };
 
-  const pitchRange = 87;
-  function pitchScale(value) {
-    return (1 - value) * pitchRange;
-  }
-
   function durationInBeats(beats) {
     const bpm = 120;
     return beats * (60 / bpm) * 1000;
-  }
-
-  function durationInSeconds(seconds) {
-    return seconds * 1000;
   }
 
   function timeScale(t) {
@@ -232,6 +303,15 @@
     return DEPRECATED_translate(x, y, selection);
   }
 
+  const dynamic = (selection, type, value) =>
+    drawDynamics([{ type, value, x: 0 }], 0, selection);
+
+  const bloodText = (selection, str) =>
+    selection
+      .append("text")
+      .text(str)
+      .attr("fill", "darkRed");
+
   const svg = d3.select("svg.main");
   svg.append("style").text(`
   text.wip { fill: blue }
@@ -239,37 +319,17 @@
 `);
 
   const page = makePage(svg);
-  // Create hidden line to ensure page fits margins
-  page.element
-    .append("line")
-    .attr("y1", 0)
-    .attr("y2", margin.top + pitchRange + 32) // TODO
-    //.attr("y2", margin.top + pitchRange + margin.top)
-    .style("visibility", "hidden");
 
   const scoreGroup = makeScroll(page.element);
   scoreGroup.y(margin.top); // TODO allow chaining
   const wrapper = scoreGroup.element;
 
-  //// TODO for alignment only
-  //wrapper
-  //  .append("line")
-  //  .attr("stroke", "red")
-  //  .attr("x1", -9999)
-  //  .attr("x2", 9999)
-  //  .attr("y1", pitchScale(0.5))
-  //  .attr("y2", pitchScale(0.5));
-
   const indicator = makeIndicator(page.element);
+  indicator.blinker = indicator.blinker
+    .interval(durationInBeats(1))
+    .offDuration(durationInBeats(0.5));
 
-  const makeCue = function(selection) {
-    return selection
-      .append("text")
-      .attr("class", "bravura wip")
-      .attr("text-anchor", "middle")
-      .attr("y", -87)
-      .text("\ue890");
-  };
+  const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
 
   const score = [
     {
@@ -299,30 +359,43 @@
           .text("\ue4e5")
           .call(callTranslate, beatLength * 2, 0);
 
-        drawDynamics([{ x: 0, type: "symbol", value: "ff" }], length, g);
+        dynamic(g, "symbol", "ff");
 
         makeCue(g);
       }
     },
     {
       startTime: null,
-      duration: durationInSeconds(30),
+      duration: seconds(0.25), // TODO
       render: ({ x, length }) => {
         const g = DEPRECATED_translate(x, 0, wrapper.append("g"));
+
         // spike
         g.append("path").attr("d", `M-5,0 L5,0 L0,${pitchRange} Z`);
-        // wall/tremolo--is it around the pitch center?
+        DEPRECATED_translate(0, pitchScale(0.5), dynamic(g, "symbol", "sffz"));
+
+        maul(g, 87, pitchRange);
+
+        DEPRECATED_translate(0, pitchScale(0.5), makeCue(g));
+      }
+    },
+    {
+      startTime: null,
+      duration: seconds(60),
+      render: ({ x, length }) => {
+        const g = DEPRECATED_translate(x, 0, wrapper.append("g"));
+
+        bloodText(g, "MAUL").attr("dy", "-2em");
 
         g.append("text")
-          .attr("class", "wip")
-          .attr("dy", "-2em")
+          .attr("dy", "-1em")
           .text("col legno, slapping");
 
         for (let i = 0; i < 25; i++) {
           DEPRECATED_translate(
             Math.random() * length * 0.25,
             Math.random() * pitchRange,
-            tremoloLongTone(g)
+            tremoloLongTone(g, timeScale(seconds(3)))
           );
           DEPRECATED_translate(
             Math.random() * length * 0.25,
@@ -340,7 +413,7 @@
           DEPRECATED_translate(
             Math.random() * length,
             Math.random() * pitchRange,
-            tremoloLongTone(g)
+            tremoloLongTone(g, timeScale(seconds(3)))
           );
           DEPRECATED_translate(
             Math.random() * length,
@@ -349,28 +422,56 @@
           );
         }
 
-        // drone(g);
-        const makeThread = (x, y, length, selection) => {
+        for (let i = 0; i < 25; i++) {
+          longTone(
+            g,
+            VS.getRandExcl(length * 0.75, length),
+            Math.random() * pitchRange,
+            timeScale(5000)
+          ).attr("stroke", "black");
+        }
+
+        DEPRECATED_translate(
+          0,
+          pitchScale(0.5),
+
+          drawDynamics([{ x: 0.5, type: "text", value: "decres." }], length, g)
+        );
+      }
+    },
+    {
+      startTime: null,
+      duration: seconds(60),
+      render: ({ x, length }) => {
+        const g = DEPRECATED_translate(x, 0, wrapper.append("g"));
+
+        const makeThread = (x, y, selection) => {
+          const x2 = x + timeScale(seconds(3));
+
+          selection
+            .append("line")
+            .attr("stroke", "darkred")
+            .attr("x1", x)
+            .attr("x2", x2)
+            .attr("y1", y - 1)
+            .attr("y2", y - 1);
+
           selection
             .append("line")
             .attr("stroke", "black")
-            .attr("x1", x)
-            .attr("x2", x + length)
+            .attr("x1", x2)
+            .attr("x2", x2 + timeScale(seconds(1)))
             .attr("y1", y)
             .attr("y2", y);
         };
 
-        for (let i = 0; i < 10; i++) {
-          let x = VS.getRandExcl(0.25, 0.5) * length;
+        for (let i = 0; i < 25; i++) {
+          let x = VS.getRandExcl(0, length - timeScale(seconds(4))); // minus 4 seconds
           let y = pitchScale(VS.getRandExcl(0, 1));
-          makeThread(x, y, length * 0.5, g);
+          makeThread(x, y, g);
         }
 
-        g.append("text")
-          .attr("class", "wip")
-          .attr("dy", "-1em")
-          .text("semitone falls around long tones")
-          .attr("x", length * 0.25);
+        bloodText(g, "(weep)").attr("dy", "-2em");
 
         DEPRECATED_translate(
           0,
@@ -378,16 +479,14 @@
 
           drawDynamics(
             [
-              { x: 0, type: "symbol", value: "sffz" },
+              { x: 0, type: "symbol", value: "mp" },
               { x: 0.5, type: "text", value: "decres." },
-              { x: 1, type: "text", value: "mp" }
+              { x: 1, type: "symbol", value: "n" }
             ],
             length,
             g
           )
         );
-
-        DEPRECATED_translate(0, pitchScale(0.5), makeCue(g));
       }
     },
     {
@@ -449,9 +548,15 @@
     resize();
   });
 
-  VS.control.hooks.add("stop", setScorePosition);
-  VS.score.hooks.add("stop", setScorePosition);
-  VS.control.hooks.add("step", setScorePosition);
-  VS.control.hooks.add("pause", setScorePosition);
+  VS.score.preroll = durationInBeats(3);
+  function prerollAnimateCue() {
+    VS.score.schedule(0, indicator.blinker.start());
+  }
+  VS.control.hooks.add("play", prerollAnimateCue);
+  VS.WebSocket.hooks.add("play", prerollAnimateCue);
+
+  addHooks(setScorePosition);
+
+  VS.WebSocket.connect();
 
 }());

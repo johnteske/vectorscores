@@ -9,6 +9,8 @@
     return { ...bar, startTime };
   };
 
+  const seconds = t => t * 1000;
+
   const pitchRange = 87;
 
   function pitchScale(value) {
@@ -113,6 +115,7 @@
   svg.append("style").text(`
   line { stroke: black }
   .blood { fill: darkred; }
+  text { font-size: 8px }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
   .text-dynamic {
     font-family: serif;
@@ -138,20 +141,21 @@
   // control the density and rate of this balance of the piece
 
   function supportingTexture(selection, length) {
-    const g = group(selection).call(translate, 0, pitchScale(0.33));
+    const g = group(selection).call(translate, 0, pitchScale(0.25)); // TODO giving more room for other gestures
+    //const g = group(selection).call(translate, 0, pitchScale(0.33));
 
-    text(g, "open, consonant");
+    text(g, "open, consonant").attr("fill", "blue");
 
     // TODO map the pitches to prevent y overlaps
     for (let i = 0; i < 6; i++) {
-      line(g, VS.getRandExcl(length * 0.25, length * 0.75)).call(
+      line(g, VS.getRandExcl(length * 0.25, length * 0.5)).call(
         translate,
-        0,
+        Math.random() * length * 0.25,
         VS.getItem([-7, -5, 0, 5, 7])
       );
     }
 
-    dynamic(g, "symbol", "p").call(translate, 0, -20); //TODO
+    dynamic(g, "symbol", "p").call(translate, 0, -24); //TODO
   }
 
   function cell(selection) {
@@ -166,23 +170,32 @@
 
   function flutter(selection) {
     const g = group(selection);
-    const length = 20;
 
     cell(g);
-    bravura(g, "\ue0b8");
-    bravura(g, "\ue227");
-    bloodText(g, "delicate flutter");
-    text(g, "1-3x"); // or show repeats?
-
-    drawDynamics(
-      [
-        // { type: "symbol", value: "p", x: 0 },
-        { type: "text", value: "decres.", x: 0.5 },
-        { type: "symbol", value: "n", x: 1 }
-      ],
-      length,
-      g
-    );
+    bravura(g, "\ue227").attr("x", 8);
+    bravura(g, "\ue0b8")
+      .attr("x", 5)
+      .attr("dy", "0.5em");
+    //bloodText(g, "delicate flutter").attr("dy", "1em");
+    bloodText(g, "flutter")
+      .attr("dy", "1em")
+      .attr("text-anchor", "end");
+    text(g, "1-3x")
+      .attr("dy", "2em")
+      .attr("text-anchor", "end"); // or show repeats?
+    bravura(g, "\ue53f")
+      .attr("x", 3)
+      .attr("y", 20); // dim.
+    //  drawDynamics(
+    //    [
+    //      // { type: "symbol", value: "p", x: 0 },
+    //      { type: "text", value: "decres.", x: 0.5 },
+    //      { type: "symbol", value: "n", x: 1 }
+    //    ],
+    //    length,
+    //    g
+    //  );
+    return g;
   }
   function papercuts(selection) {
     // one to three times each phrase
@@ -192,52 +205,99 @@
     const length = 20;
 
     cell(g);
-    bloodText(g, "papercut");
-    text(g, "1-3x"); // or show repeats?
+    bloodText(g, "papercut")
+      .attr("dy", "1em")
+      .attr("text-anchor", "end");
+    text(g, "1-3x")
+      .attr("dy", "2em")
+      .attr("text-anchor", "end"); // or show repeats?
 
-    // attack
-    g.append("line")
-      .attr("x2", length)
-      .attr("y2", -10); //
-    drawDynamics(
-      [
-        { type: "symbol", value: "sfz", x: 0 },
-        { type: "text", value: "decres.", x: 0.5 }
-      ],
-      length,
-      g
-    );
+    // attack // TODO separate the attack and articulated release
+    //  g.append("line")
+    //    .attr("x2", length)
+    //    .attr("y2", -10); //
+
+    bravura(g, "\ue53e")
+      .attr("x", 3)
+      .attr("y", 20); // cres.
+    //  drawDynamics(
+    //    [
+    //      { type: "symbol", value: "sfz", x: 0 },
+    //      { type: "text", value: "decres.", x: 0.5 }
+    //    ],
+    //    length,
+    //    g
+    //  );
 
     // articulated release
     g.append("line")
-      .attr("x2", length)
-      .attr("y2", -10); //
-    bravura(g, articulationGlyph[">"]);
-    bravura(g, durationGlyph[0.5]);
-    drawDynamics(
-      [
-        { type: "symbol", value: "n", x: 0 },
-        { type: "text", value: "cres.", x: 0.5 }
-      ],
-      length,
-      g
-    );
+      .attr("x1", 2)
+      .attr("x2", length - 2)
+      .attr("y1", 14)
+      .attr("y2", 2);
+    //  bravura(g, articulationGlyph[">"]);
+    //  bravura(g, durationGlyph[0.5]);
+    //  drawDynamics(
+    //    [
+    //      { type: "symbol", value: "n", x: 0 },
+    //      { type: "text", value: "cres.", x: 0.5 }
+    //    ],
+    //    length,
+    //    g
+    //  );
+    return g;
   }
 
   const score = [
-    //   {
-    //    duration: 0,
-    //    render: () => group()
-    //  },
     {
-      duration: 15000,
+      duration: 0,
+      render: () => group()
+    },
+    {
+      duration: seconds(20),
       render: ({ length }) => {
         const g = group();
 
-        flutter(g);
-        papercuts(g);
+        // flutter(g);
+        // papercuts(g);
 
         supportingTexture(g, length);
+        return g;
+      }
+    },
+    {
+      duration: seconds(20),
+      render: ({ length }) => {
+        const g = group();
+
+        flutter(g).call(translate, length * 0.5, 1);
+        //     papercuts(g);
+
+        supportingTexture(g, length);
+        return g;
+      }
+    },
+    {
+      duration: seconds(20),
+      render: ({ length }) => {
+        const g = group();
+
+        flutter(g).call(translate, length * 0.5, 1);
+        papercuts(g).call(translate, length * 0.5, 23);
+
+        supportingTexture(g, length);
+        return g;
+      }
+    },
+    {
+      duration: seconds(20),
+      render: ({ length }) => {
+        const g = group();
+
+        //flutter(g).call(translate, length * 0.5, 1);
+        papercuts(g).call(translate, length * 0.5, 23);
+
+        //supportingTexture(g, length);
         return g;
       }
     },

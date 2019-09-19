@@ -39,7 +39,7 @@
   function cue(selection, type = "closed") {
     return selection
       .append("text")
-      .attr("class", "bravura wip")
+      .attr("class", "bravura")
       .attr("text-anchor", "middle")
       .text(glyphs[type]);
   }
@@ -177,9 +177,27 @@
 
     return {
       element: indicator,
+      blinker: blinker(indicator),
       translateX,
       translateY
     };
+  }
+
+  function blinker(selection) {
+    return VS.cueBlink(selection)
+      .beats(3)
+      .inactive(function(selection) {
+        selection.style("fill-opacity", 0);
+      })
+      .on(function(selection) {
+        selection.style("fill-opacity", 1);
+      })
+      .off(function(selection) {
+        selection.style("fill-opacity", 0);
+      })
+      .down(function(selection) {
+        selection.style("fill-opacity", 1);
+      });
   }
 
   function makeScroll(selection) {
@@ -381,19 +399,35 @@
 
   const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
 
+  const ensemble = (selection, str) =>
+    selection
+      .append("text")
+      .text(str)
+      .attr("class", "text-ensemble");
+
   const { svg, page, scoreGroup, indicator } = makeScrollingScore();
 
   svg.append("style").text(`
   line { stroke: black; }
   line.wip { stroke: blue; }
-  text.wip { fill: blue; }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
   .text-dynamic {
     font-family: serif;
     font-size: 12px;
     font-style: italic;
   }
+  .text-ensemble, .text-duration {
+    font-size: 12px;
+  }
 `);
+
+  const durations$1 = DEPRECATED_translate(0, -24, scoreGroup.element.append("g"));
+  const makeDuration = (x, duration) =>
+    durations$1
+      .append("text")
+      .text(`${duration / 1000}"`)
+      .attr("x", x)
+      .attr("class", "text-duration");
 
   const { articulations, dynamics: dynamics$1 } = VS.dictionary.Bravura;
 
@@ -424,7 +458,7 @@
     {
       startTime: null,
       duration: seconds(60),
-      render: ({ x, length }) => {
+      render: ({ x, length, duration }) => {
         const g = longTone(scoreGroup.element, x, pitchScale(0.5), length);
 
         g.append("text")
@@ -450,12 +484,15 @@
         );
 
         makeCue(g);
+
+        makeDuration(x, duration);
       }
     },
     {
       startTime: null,
-      duration: seconds(5), // TODO 2 seconds time, more display
-      render: ({ x, length }) => {
+      duration: seconds(2),
+      addPaddingAfter: true, // hack to keep dur but add visual space
+      render: ({ x, length, duration }) => {
         const g = scoreGroup.element.append("g");
         DEPRECATED_translate(x, pitchScale(0.5), g);
 
@@ -485,12 +522,13 @@
           .attr("text-anchor", "end");
 
         makeCue(g);
+        makeDuration(x, duration);
       }
     },
     {
       startTime: null,
       duration: seconds(45),
-      render: ({ x, length }) => {
+      render: ({ x, length, duration }) => {
         const g = scoreGroup.element.append("g");
         DEPRECATED_translate(x, 0, g);
 
@@ -502,6 +540,7 @@
             .append("text")
             //.text("\ue61b")
             .text("\ue61d")
+            .attr("dx", "0.2em")
             .attr("dy", "-1em")
             .attr("class", "bravura")
             .attr("text-anchor", "middle")
@@ -515,6 +554,7 @@
           g
             .append("text")
             .text("\uE22B")
+            .attr("dx", "0.25em")
             .attr("dy", "-0.5em")
             .attr("class", "bravura")
             .attr("text-anchor", "middle")
@@ -564,12 +604,13 @@
         drawDynamics(splitDynamics("p"), length, DEPRECATED_translate(0, 50, g.append("g")));
 
         DEPRECATED_translate(0, pitchScale(0.5), makeCue(g));
+        makeDuration(x, duration);
       }
     },
     {
       startTime: null,
       duration: seconds(120),
-      render: ({ x, length }) => {
+      render: ({ x, length, duration }) => {
         const g = scoreGroup.element.append("g");
         DEPRECATED_translate(x, 0, g);
 
@@ -580,7 +621,7 @@
           .attr("y1", pitchScale(0.25))
           .attr("y2", pitchScale(0.25));
 
-        g.append("text").text("(solo)");
+        ensemble(g, "(solo)");
 
         // threads
         const makeThread = (x, y, length, selection) => {
@@ -620,9 +661,8 @@
           makeThread(x, y, length - x, g);
         }
 
-        g.append("text")
-          .text("(tutti)")
-          .attr("x", length * 0.25);
+        ensemble(g, "(tutti)").attr("x", length * 0.25);
+        makeDuration(x, duration);
       }
     },
     {
@@ -640,10 +680,15 @@
     }
   ].map(startTimeFromDuration);
 
-  const scoreWithRenderData = score.map(bar => {
+  const indexOfAttackBar = score
+    .map((bar, index) => ({ ...bar, index }))
+    .find(bar => bar.addPaddingAfter).index;
+
+  const scoreWithRenderData = score.map((bar, i) => {
+    const padding = i > indexOfAttackBar ? timeScale(3000) : 0;
     return {
       ...bar,
-      x: timeScale(bar.startTime),
+      x: timeScale(bar.startTime) + padding,
       length: timeScale(bar.duration)
     };
   });
@@ -681,6 +726,13 @@
     renderScore();
     resize();
   });
+
+  VS.score.preroll = seconds(3);
+  function prerollAnimateCue() {
+    VS.score.schedule(0, indicator.blinker.start());
+  }
+  VS.control.hooks.add("play", prerollAnimateCue);
+  VS.WebSocket.hooks.add("play", prerollAnimateCue);
 
   addHooks(setScorePosition);
 

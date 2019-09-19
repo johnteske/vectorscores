@@ -1,6 +1,10 @@
 (function () {
   'use strict';
 
+  d3.selectAll("footer button").attr("disabled", true);
+  d3.select("#score-header").style("opacity", 1);
+  d3.select("#score-footer").style("opacity", 1);
+
   const main = d3.select("main");
   main.select("svg").remove();
 

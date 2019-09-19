@@ -25,6 +25,8 @@
     top: 64
   };
 
+  const seconds = t => t * 1000;
+
   const pitchRange = 87;
 
   function pitchScale(value) {
@@ -57,7 +59,7 @@
   function cue(selection, type = "closed") {
     return selection
       .append("text")
-      .attr("class", "bravura wip")
+      .attr("class", "bravura")
       .attr("text-anchor", "middle")
       .text(glyphs[type]);
   }
@@ -142,9 +144,27 @@
 
     return {
       element: indicator,
+      blinker: blinker(indicator),
       translateX,
       translateY
     };
+  }
+
+  function blinker(selection) {
+    return VS.cueBlink(selection)
+      .beats(3)
+      .inactive(function(selection) {
+        selection.style("fill-opacity", 0);
+      })
+      .on(function(selection) {
+        selection.style("fill-opacity", 1);
+      })
+      .off(function(selection) {
+        selection.style("fill-opacity", 0);
+      })
+      .down(function(selection) {
+        selection.style("fill-opacity", 1);
+      });
   }
 
   function makeScroll(selection) {
@@ -273,11 +293,20 @@
   line { stroke: black; }
   line.wip { stroke: blue; }
   text.wip { fill: blue; }
-  .bravura { font-family: 'Bravura'; font-size: 20px; }
-  .text-dynamic {
+ .bravura { font-family: 'Bravura'; font-size: 20px; }
+  .cluster .bravura {
+    font-size: 16px;
+  }
+   .text-dynamic {
     font-family: serif;
     font-size: 12px;
     font-style: italic;
+  }
+  text {
+    font-size: 10px;
+  }
+  .text-ensemble, .text-duration {
+    font-size: 12px;
   }
 `);
 
@@ -287,75 +316,104 @@
   const articulationGlyph = VS.dictionary.Bravura.articulations;
   const durationGlyph = VS.dictionary.Bravura.durations.stemless;
 
+  const ensemble = (selection, str) =>
+    selection
+      .append("text")
+      .text(str)
+      .attr("dy", "-3em") // TODO
+      .attr("class", "text-ensemble");
+
   const dynamic = (selection, type, value, length) =>
     drawDynamics([{ type, value, x: 0 }], length, selection);
 
+  const cues = wrapper.append("g").call(translate, 0, -24);
+  const makeCue = (x, type) => cue(cues, type).attr("x", x);
+
+  const durations$1 = translate(group(), 0, -12);
+  const makeDuration = (x, duration) =>
+    durations$1
+      .append("text")
+      .text(`${duration / 1000}"`)
+      .attr("x", x)
+      .attr("class", "text-duration");
+
   const score = [
     {
-      duration: 15000,
-      render: ({ x, length }) => {
+      duration: seconds(12),
+      render: ({ x, length, duration }) => {
         const g = translate(wrapper.append("g"), x, pitchScale(0.5));
+
+        makeDuration(x, duration);
 
         g.append("line")
           .attr("x2", length)
           .attr("class", "wip");
 
-        g.append("text").text("solo");
+        ensemble(g, "solo");
 
         dynamic(g, "symbol", "pp", length);
       }
     },
     {
-      duration: 15000,
-      render: ({ x, length }) => {
-        const g = translate(wrapper.append("g"), x, pitchScale(0.5));
+      duration: seconds(8),
+      render: ({ x, length, duration }) => {
+        const g = translate(wrapper.append("g"), x, pitchScale(0.5)).attr(
+          "class",
+          "cluster"
+        );
 
-        cue(g);
+        makeCue(x);
+        makeDuration(x, duration);
 
-        g.append("text").text("bell-like");
-        g.append("text").text("tutti");
-        g.append("text").text("let vibrate");
+        ensemble(g, "tutti");
+        g.append("text")
+          .text("bell-like")
+          .attr("dy", "-2.5em");
+        g.append("text")
+          .text("let vibrate")
+          .attr("dy", "-1.5em");
 
         g.append("text")
           .text(articulationGlyph[">"])
-          .attr("class", "bravura wip")
-          .attr("dy", "0.66em");
+          .attr("class", "bravura")
+          .attr("dy", "1.25em");
 
         g.append("text")
           .text(durationGlyph[1])
-          .attr("class", "bravura wip")
-          .attr("y", 5);
+          .attr("class", "bravura")
+          .attr("y", 10);
 
         g.append("text")
           .text(durationGlyph[1])
-          .attr("class", "bravura wip")
-          .attr("y", 2);
+          .attr("class", "bravura")
+          .attr("y", 4);
 
         g.append("text")
           .text(durationGlyph[1])
-          .attr("class", "bravura wip")
-          .attr("y", -2);
+          .attr("class", "bravura")
+          .attr("y", -4);
 
         g.append("text")
           .text(durationGlyph[1])
-          .attr("class", "bravura wip")
-          .attr("y", -5);
+          .attr("class", "bravura")
+          .attr("y", -10);
 
         dynamic(g, "symbol", "mf", length);
       }
     },
     {
-      duration: 15000,
-      render: ({ x, length }) => {
-        const g = translate(group(), x, pitchScale(0.5));
+      duration: seconds(36),
+      render: ({ x, length, duration }) => {
+        const g = translate(group(), x, pitchScale(0.5)).attr("class", "cluster");
 
-        cue(g);
+        makeCue(x);
+        makeDuration(x, duration);
 
-        g.append("text").text("tutti");
+        // g.append("text").text("tutti");
 
         // dissonant cluster, within an octave or octave and a half
         function cluster(selection, x, yOffset, length) {
-          const relativePitches = [-6, -3, 0, 3].map(y => y + yOffset);
+          const relativePitches = [-6, -3, 0, 3].map(y => 2 * y + yOffset);
 
           relativePitches.forEach(y => {
             longTone(g, x, y, VS.getRandExcl(length, length * 1.5)); // up to 1.5x length // TODO set min bounds
@@ -363,7 +421,7 @@
         }
 
         cluster(g, 0, 0, length);
-        cluster(g, 3, 3, length);
+        cluster(g, 9, 3, length);
 
         dynamic(g, "symbol", "mf", length);
       }
@@ -371,9 +429,11 @@
     {
       // more open long tones
       // TODO give space around pitches/y values from previous bar?
-      duration: 15000,
-      render: ({ x, length }) => {
+      duration: seconds(64),
+      render: ({ x, length, duration }) => {
         const g = translate(group(), x, 0);
+
+        makeDuration(x, duration);
 
         for (let i = 0; i < 8; i++) {
           let y = pitchScale(Math.random());
@@ -436,6 +496,13 @@
     renderScore();
     resize();
   });
+
+  VS.score.preroll = seconds(3);
+  function prerollAnimateCue() {
+    VS.score.schedule(0, indicator.blinker.start());
+  }
+  VS.control.hooks.add("play", prerollAnimateCue);
+  VS.WebSocket.hooks.add("play", prerollAnimateCue);
 
   addHooks(setScorePosition);
 

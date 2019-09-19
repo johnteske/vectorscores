@@ -9,6 +9,8 @@
     return { ...bar, startTime };
   };
 
+  const seconds = t => t * 1000;
+
   const pitchRange = 87;
 
   function pitchScale(value) {
@@ -111,6 +113,9 @@
   svg.append("style").text(`
   line { stroke: black }
   .blood { fill: darkred; }
+  text { font-size: 8px }
+  text { font-size: 8px }
+  text { font-size: 8px }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
   .text-dynamic {
     font-family: serif;
@@ -137,14 +142,14 @@
 
     // TODO map the pitches to prevent y overlaps
     for (let i = 0; i < 6; i++) {
-      line(g, VS.getRandExcl(length * 0.25, length * 0.75)).call(
+      line(g, VS.getRandExcl(length * 0.5, length * 0.75)).call(
         translate,
-        0,
+        VS.getRandExcl(0, 0.25) * length,
         VS.getItem([-3, -2, -1, 0, 1, 2, 3])
       );
     }
 
-    dynamic(g, "symbol", "mp").call(translate, 0, -20); //TODO
+    dynamic(g, "symbol", "mp").call(translate, 0, -28); //TODO
   }
 
   function cell(selection) {
@@ -159,55 +164,81 @@
 
   // shiver--or shudder?
   function shiver(selection) {
-    const g = group(selection);
-    const length = 20;
+    const g = group(selection).call(translate, 0, 1);
 
     cell(g);
 
-    bravura(g, "\ue0b8");
-    bravura(g, "\ue227");
-    bloodText(g, "shiver");
+    bravura(g, "\ue227").attr("x", 8);
+    bravura(g, "\ue0b8")
+      .attr("x", 5)
+      .attr("dy", "0.5em");
+    bloodText(g, "shiver/shudder").attr("dy", 19);
 
-    drawDynamics(
-      [
-        { type: "text", value: "n cres.", x: 0 },
-        { type: "text", value: "decres. n", x: 1 }
-      ],
-      length,
-      g
-    );
+    bravura(g, "\ue540").attr("y", 30); // hairpin
+
+    //  drawDynamics(
+    //    [
+    //      { type: "text", value: "n cres.", x: 0 },
+    //      { type: "text", value: "decres. n", x: 1 }
+    //    ],
+    //    length,
+    //    g
+    //  );
   }
 
   function moan(selection) {
-    const g = group(selection);
+    const g = group(selection).call(translate, 0, pitchRange - 20 - 1);
 
     cell(g);
 
-    bloodText(g, "moan");
+    bloodText(g, "moan").attr("dy", "1em");
 
     // TODO fall away dotted line
     // mf
     // how long?
-    selection
-      .append("text")
-      .text("LNP, subharmonic")
+    g.append("text")
+      .text("dying LNP/subharmonic")
       .attr("dy", "2em");
   }
 
   const score = [
-    //   {
-    //    duration: 0,
-    //    render: () => group()
-    //  },
     {
-      duration: 15000,
+      duration: 0,
+      render: () => group()
+    },
+    {
+      duration: seconds(20),
       render: ({ length }) => {
         const g = group();
-
+        shiver(g);
+        return g;
+      }
+    },
+    {
+      duration: seconds(20),
+      render: ({ length }) => {
+        const g = group();
+        shiver(g);
+        centerDrone(g, length);
+        return g;
+      }
+    },
+    {
+      duration: seconds(20),
+      render: ({ length }) => {
+        const g = group();
         shiver(g);
         moan(g);
-
         centerDrone(g, length);
+        return g;
+      }
+    },
+    {
+      duration: seconds(20),
+      render: ({ length }) => {
+        const g = group();
+        centerDrone(g, length);
+        moan(g);
         return g;
       }
     },

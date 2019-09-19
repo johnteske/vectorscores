@@ -67,110 +67,48 @@
     };
   }
 
-  const { dynamics } = VS.dictionary.Bravura;
-
-  function drawDynamics(data, scale, selection) {
-    const g = selection.append("g");
-
-    data.forEach(d => {
-      const text = g.append("text").attr("x", d.x * scale);
-
-      switch (d.x) {
-        case 0:
-          text.attr("text-anchor", "start");
-          break;
-        case 1:
-          text.attr("text-anchor", "end");
-          break;
-        default:
-          text.attr("text-anchor", "middle");
-      }
-
-      switch (d.type) {
-        case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
-          break;
-        case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
-          break;
-      }
-    });
-
-    return g;
-  }
-
-  // noise in the middle?
-
-  const articulationGlyph = VS.dictionary.Bravura.articulations;
-
   const { svg, page } = makeVignetteScore();
 
-  svg.append("style").text(`
-  line { stroke: black }
-  .bravura { font-family: 'Bravura'; font-size: 20px; }
-  .text-dynamic {
-    font-family: serif;
-    font-size: 12px;
-    font-style: italic;
-  }
-`);
-
   const wrapper = page.element;
+
+  function phrase() {
+    var notes = [{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }];
+
+    function addNote() {
+      var dir = VS.getItem([-1, 1, -2, 2, -3, 3]);
+      dir = dir * 2;
+      notes.push({ pitch: 2 * dir, duration: 1 });
+      notes.push({ pitch: 2 * dir, duration: 0 });
+    }
+
+    for (var i = 0; i < 8; i++) {
+      addNote();
+    }
+
+    return notes;
+  }
+
+  function chant(selection, length) {
+    var lineCloud = VS.lineCloud()
+      .duration(10)
+      .phrase(phrase())
+      .curve(d3.curveLinear)
+      .width(length)
+      .height(pitchRange * 0.333);
+
+    selection
+      .call(lineCloud, { n: 2 })
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .call(translate, 0, pitchScale(0.666))
+      // line-cloud has issues, not to be solved now
+      .select(".line-cloud-path:last-child")
+      .remove();
+    return selection;
+  }
+
   const group = (selection = wrapper) => selection.append("g");
-
-  const line = (selection, length) => selection.append("line").attr("x2", length);
-  const text = (selection, str) => selection.append("text").text(str);
-
-  const dynamic = (selection, type, value) =>
-    drawDynamics([{ type, value, x: 0 }], 0, selection);
-
-  function wail(selection) {
-    const g = group(selection).call(translate, 0, pitchScale(0.75));
-
-    text(g, "wail").attr("dy", "1em");
-    //text(g, "growl/scream though instrument");
-    //bravura(g, articulationGlyph[">"]);
-
-    dynamic(g, "symbol", "f").call(translate, 0, -12);
-
-    // long, periodic TODO how many seconds? how much rest?
-    // TODO add line
-    return g;
-  }
-
-  function alarm(selection) {
-    // shorter, periodic
-    // TODO how many seconds? how much rest?
-
-    const g = group(selection).call(translate, 0, pitchScale(1));
-
-    text(g, "alarm").attr("dy", "1em");
-    //text(g, "doit");
-
-    dynamic(g, "symbol", "mf").call(translate, 0, -12);
-
-    return g;
-  }
-
-  function droneCluster(selection, length) {
-    const g = group(selection).call(translate, 0, pitchScale(0.25));
-
-    const p = [-2, -1, 0, 1, 2].sort(() => Math.random() - 0.5);
-
-    line(g, length).call(translate, 0, p.pop());
-    line(g, length).call(translate, 0, p.pop());
-    line(g, length).call(translate, 0, p.pop());
-
-    dynamic(g, "symbol", "mp").call(translate, 0, -24);
-
-    return g;
-  }
+  const phraseLength = seconds(20);
 
   const score = [
     {
@@ -178,38 +116,42 @@
       render: () => group()
     },
     {
-      duration: seconds(20),
+      duration: phraseLength,
       render: ({ length }) => {
-        const g = group();
-
-        //      alarm(g);
-        wail(g);
-        droneCluster(g, length);
-
+        const g = wrapper.append("g");
+        chant(g, length);
         return g;
       }
     },
     {
-      duration: seconds(20),
+      duration: phraseLength,
       render: ({ length }) => {
-        const g = group();
-
-        alarm(g);
-        wail(g);
-        droneCluster(g, length);
-
+        const g = wrapper.append("g");
+        chant(g, length);
         return g;
       }
     },
     {
-      duration: seconds(20),
+      duration: phraseLength,
       render: ({ length }) => {
-        const g = group();
-
-        alarm(g);
-        //wail(g);
-        droneCluster(g, length);
-
+        const g = wrapper.append("g");
+        chant(g, length);
+        return g;
+      }
+    },
+    {
+      duration: phraseLength,
+      render: ({ length }) => {
+        const g = wrapper.append("g");
+        chant(g, length);
+        return g;
+      }
+    },
+    {
+      duration: phraseLength,
+      render: ({ length }) => {
+        const g = wrapper.append("g");
+        chant(g, length);
         return g;
       }
     },

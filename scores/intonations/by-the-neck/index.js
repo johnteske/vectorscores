@@ -5,23 +5,7 @@
     top: 64
   };
 
-  function doubleBar(selection, height) {
-    const g = selection.append("g");
-
-    g.append("line")
-      .attr("y1", 0)
-      .attr("y2", height)
-      .attr("stroke-width", 1);
-
-    g.append("line")
-      .attr("x1", 3)
-      .attr("x2", 3)
-      .attr("y1", 0)
-      .attr("y2", height)
-      .attr("stroke-width", 2);
-
-    return g;
-  }
+  const seconds = t => t * 1000;
 
   const pitchRange = 87;
 
@@ -101,22 +85,27 @@
 
     return {
       element: indicator,
+      blinker: blinker(indicator),
       translateX,
       translateY
     };
   }
 
-  const glyphs = {
-    open: "\ue893",
-    closed: "\ue890"
-  };
-
-  function cue(selection, type = "closed") {
-    return selection
-      .append("text")
-      .attr("class", "bravura wip")
-      .attr("text-anchor", "middle")
-      .text(glyphs[type]);
+  function blinker(selection) {
+    return VS.cueBlink(selection)
+      .beats(3)
+      .inactive(function(selection) {
+        selection.style("fill-opacity", 0);
+      })
+      .on(function(selection) {
+        selection.style("fill-opacity", 1);
+      })
+      .off(function(selection) {
+        selection.style("fill-opacity", 0);
+      })
+      .down(function(selection) {
+        selection.style("fill-opacity", 1);
+      });
   }
 
   function makePage(selection) {
@@ -174,18 +163,20 @@
   };
 
   function timeScale(t) {
-    return t / 50;
+    return t / 150;
   }
 
   const svg = d3.select("svg.main");
   const page = makePage(svg);
 
-  // Create hidden line to ensure page fits margins
-  page.element
-    .append("line")
-    .attr("y1", 0)
-    .attr("y2", margin.top + pitchRange + margin.top) // TODO
-    .style("visibility", "hidden");
+  svg.append("style").text(`
+  .bravura { font-family: 'Bravura'; font-size: 20px; }
+  .text-dynamic {
+    font-family: serif;
+    font-size: 12px;
+    font-style: italic;
+  }
+`);
 
   const scoreGroup = makeScroll(page.element);
   scoreGroup.y(margin.top); // TODO allow chaining
@@ -194,9 +185,13 @@
 
   const indicator = makeIndicator(page.element);
 
-  // taking hold
-  // the claw digs in
-  // hot, abrasive breath
+  const cues = wrapper.append("g");
+
+  const bloodText = (selection, str) =>
+    selection
+      .append("text")
+      .text(str)
+      .attr("fill", "darkRed");
 
   function heavyBreath(selection) {
     const g = selection.append("g");
@@ -210,7 +205,7 @@
     // g.append("text").text("\ue0b8"); // Bravura
     g.append("text")
       .attr("dy", "1em")
-      .text("intense breaths ->")
+      .text("intense breaths")
       .attr("fill", "blue");
 
     const box = g.node().getBBox();
@@ -234,7 +229,8 @@
 
     g.append("text")
       .attr("dy", "1em")
-      .text("trem, exp. cres. growl ->")
+      .text("LNP growl")
+      //.text("trem, exp. cres. growl ->")
       .attr("fill", "blue");
 
     const box = g.node().getBBox();
@@ -246,11 +242,18 @@
   const breath = [
     // start with intense breath sounds
     {
-      duration: 30000,
+      duration: seconds(120),
       render: ({ x, length }) => {
         const g = wrapper.append("g");
 
         translate(heavyBreath(g), x, 0);
+
+        g.append("line")
+          .attr("x1", 0)
+          .attr("x2", length)
+          .attr("stroke", "black")
+          .attr("stroke-dasharray", "3")
+          .call(translate, 0, 10);
 
         drawDynamics(
           [
@@ -288,23 +291,23 @@
     {
       duration: 0,
       render: ({ x }) => {
-        const g = wrapper.append("g");
-        translate(g, x, 0);
-        cue(g, "open");
+        //const g = wrapper.append("g");
+        //translate(g, x, 0);
+        //appendmakeCue(x, "open");
         // TODO if all fades/moriendo, is a double bar needed?
-        doubleBar(g, pitchRange).attr("stroke", "black");
+        //doubleBar(g, pitchRange).attr("stroke", "black");
       }
     }
   ].map(startTimeFromDuration);
 
   const texture = [
     {
-      duration: 5000,
+      duration: seconds(30),
       render: () => {}
     },
     // add low scrape
     {
-      duration: 5000,
+      duration: seconds(30),
       render: ({ x, length }) => {
         const g = wrapper.append("g");
         translate(g, x, pitchScale(0.25));
@@ -312,13 +315,14 @@
           .text("scrape")
           .attr("fill", "blue");
         scrapeDrone(g).attr("x2", length);
+        bloodText(g, "choke hold").attr("y", -0.75 * pitchRange); // TODO y pos
         // TODO dynamics?
-        cue(g);
+        //makeCue(x); // TODO dotted line pointing to this
       }
     },
     // scrape cluster
     {
-      duration: 5000,
+      duration: seconds(30),
       render: ({ x, length }) => {
         const g = wrapper.append("g");
         translate(g, x, pitchScale(0.25));
@@ -330,16 +334,25 @@
           .attr("x2", length)
           .call(translate, 0, 2);
         // TODO dynamics?
+        bloodText(g, "the claws dig in").attr("y", -0.75 * pitchRange); // TODO y pos
       }
     },
     // TODO scrape and drone cres., more pressure
     // growl
     {
-      duration: 5000,
+      duration: seconds(30),
       render: ({ x, length }) => {
         const g = wrapper.append("g");
         translate(g, x, pitchScale(0.25));
         growl(g);
+
+        g.append("line")
+          .attr("x1", 0)
+          .attr("x2", length)
+          .attr("stroke", "black")
+          .attr("stroke-dasharray", "3")
+          .call(translate, 0, 10);
+
         // TODO dynamics?
       }
     }
@@ -347,18 +360,18 @@
 
   const noise = [
     {
-      duration: 15000,
+      duration: seconds(50),
       render: () => {}
     },
     {
-      duration: 5000,
+      duration: seconds(20),
       render: ({ x, length }) => {
         const g = wrapper.append("g");
         translate(g, x, 0);
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 100; i++) {
           g.append("text")
-            .text(".")
-            .attr("fill", "blue")
+            .text("/")
+            .attr("fill", "darkred")
             .attr("x", Math.random() * length)
             .attr("y", Math.random() * pitchRange);
         }
@@ -430,6 +443,13 @@
     renderScore();
     resize();
   });
+
+  VS.score.preroll = seconds(3);
+  function prerollAnimateCue() {
+    VS.score.schedule(0, indicator.blinker.start());
+  }
+  VS.control.hooks.add("play", prerollAnimateCue);
+  VS.WebSocket.hooks.add("play", prerollAnimateCue);
 
   VS.control.hooks.add("step", setScorePosition);
   VS.WebSocket.hooks.add("step", setScorePosition);
