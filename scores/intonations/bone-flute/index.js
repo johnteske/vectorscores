@@ -56,7 +56,7 @@ function textureOfBones(selection) {
     [
       {
         type: "symbol",
-        value: "mf",
+        value: "mp",
         x: 0
       }
     ],
@@ -130,7 +130,7 @@ function drone(selection) {
     [
       {
         type: "symbol",
-        value: "mf",
+        value: "mp",
         x: 0
       }
     ],
