@@ -40,7 +40,13 @@ const dynamic = (selection, type, value) =>
 
 function centerDrone(selection, length) {
   const g = group(selection).call(translate, 0, pitchScale(0.9));
+
   g.append("text").text("glassy");
+  g.append("text")
+    .text("John,Greg")
+    .attr("fill", "blue")
+    .attr("text-anchor", "end")
+    .attr("x", length);
 
   // TODO map the pitches to prevent y overlaps
   for (let i = 0; i < 6; i++) {
