@@ -10,16 +10,19 @@ const wrapper = page.element;
 
 const lcg = seed => () => ((seed = Math.imul(741103597, seed)) >>> 0) / 2 ** 32;
 
+const prng = lcg(1234);
+
+const steps = [-1, 1, -2, 2, -3, 3];
+
 function phrase() {
-  var notes = [{ pitch: 0, duration: 1 }];
+  let notes = [{ pitch: 0, duration: 1 }];
 
   function addNote() {
-    var dir = VS.getItem([-1, 1, -2, 2, -3, 3]);
-    dir = dir * 2;
-    notes.push({ pitch: 2 * dir, duration: 1 });
+    const pitch = Math.floor(prng() * steps.length) * 2;
+    notes.push({ pitch, duration: 1 });
   }
 
-  for (var i = 0; i < 8; i++) {
+  for (let i = 0; i < 8; i++) {
     addNote();
   }
 
