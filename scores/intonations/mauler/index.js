@@ -176,8 +176,8 @@ const score = [
     render: ({ x, length }) => {
       const g = translate(x, 0, wrapper.append("g"));
 
-      const makeThread = (x, y, selection) => {
-        const x2 = x + timeScale(seconds(3));
+      const makeThread = (x, y, selection, durations) => {
+        const x2 = x + timeScale(durations[0]);
 
         selection
           .append("line")
@@ -191,15 +191,18 @@ const score = [
           .append("line")
           .attr("stroke", "black")
           .attr("x1", x2)
-          .attr("x2", x2 + timeScale(seconds(1)))
+          .attr("x2", x2 + timeScale(durations[1]))
           .attr("y1", y)
           .attr("y2", y);
       };
 
       for (let i = 0; i < 25; i++) {
+        let durations = [VS.getRandIntIncl(2, 4), VS.getRandIntIncl(1, 2)].map(
+          durationInBeats
+        );
         let x = VS.getRandExcl(0, length - timeScale(seconds(4))); // minus 4 seconds
         let y = pitchScale(VS.getRandExcl(0, 1));
-        makeThread(x, y, g);
+        makeThread(x, y, g, durations);
       }
 
       bloodText(g, "(weep)").attr("dy", "-2em");
