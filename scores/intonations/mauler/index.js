@@ -22,7 +22,7 @@ const margin = {
 };
 
 function durationInBeats(beats) {
-  const bpm = 120;
+  const bpm = 140;
   return beats * (60 / bpm) * 1000;
 }
 
