@@ -12,9 +12,14 @@ const generateButton = requireRoot(
   "./assets/modules/settings/generate-button.11ty.js"
 );
 
+const websocketsSettings = requireRoot(
+  "./assets/modules/settings/websockets.11ty.js"
+);
+
 module.exports = () => `
 <form class="score-options">
   ${pitchClasses()}
   ${transposition()}
   ${generateButton()}
-</form>`;
+</form>
+${websocketsSettings()}`;

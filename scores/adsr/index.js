@@ -13,8 +13,8 @@ var scaleX = 3,
   view = {};
 
 // {% include_relative _options.js %}
-VS.scoreOptions.add("parts", 4, new VS.NumberSetting("parts"));
-VS.scoreOptions.add("verbose", "off", new VS.CheckboxSetting("verbose"));
+VS.scoreOptions.add("parts", 1, new VS.NumberSetting("parts"));
+VS.scoreOptions.add("verbose", "on", new VS.CheckboxSetting("verbose"));
 
 var scoreOptions = VS.scoreOptions.setFromQueryString();
 scoreOptions.parts = VS.clamp(scoreOptions.parts, 1, 16);

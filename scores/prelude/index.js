@@ -649,17 +649,30 @@ function makeCue(data, index) {
   cues[index] = VS.cueBlink(selection)
     .beats(data.cue)
     .inactive(function(selection) {
-      selection.style("fill", "#888").style("opacity", 1);
+      selection
+        .style("fill", "#888")
+        .style("stroke-width", 0)
+        .style("opacity", 1);
     })
     .on(function(selection) {
-      selection.style("fill", "blue").style("opacity", 1);
+      selection
+        .style("fill", "blue")
+        .style("stroke", "blue")
+        .style("stroke-width", 2)
+        .style("opacity", 1);
     })
     .off(function(selection) {
-      selection.style("fill", "#888").style("opacity", 0.25);
+      selection
+        .style("fill", "#888")
+        .style("stroke-width", 0)
+        .style("opacity", 0.25);
     })
     // Do not blink on downbeat--card position animation signals downbeat
     .down(function(selection) {
-      selection.style("fill", "#888").style("opacity", 0.25);
+      selection
+        .style("fill", "#888")
+        .style("stroke-width", 0)
+        .style("opacity", 0.25);
     });
 }
 
@@ -909,7 +922,7 @@ VS.score.add(score[score.length - 1].time);
 
 VS.score.preroll = scoreConfig.cueDuration; // cardTransTime;
 
-VS.control.hooks.add("play", function() {
+function playHook() {
   var pointer = VS.score.getPointer();
   goToCard(pointer - 1, "play");
   // VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
@@ -918,7 +931,8 @@ VS.control.hooks.add("play", function() {
     cueBlink,
     pointer - 1
   );
-});
+}
+VS.control.hooks.add("play", playHook);
 
 function cancelAndGoToCard() {
   cueCancelAll();
@@ -954,3 +968,10 @@ function resize() {
 resize();
 
 d3.select(window).on("resize", resize);
+
+VS.WebSocket.hooks.add("pause", cancelAndGoToCard);
+VS.WebSocket.hooks.add("stop", cancelAndGoToCard);
+VS.WebSocket.hooks.add("step", goToCard);
+VS.WebSocket.hooks.add("play", playHook);
+
+VS.WebSocket.connect();
