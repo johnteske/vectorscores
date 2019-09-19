@@ -93,7 +93,8 @@ const score = [
 
       ensemble(g, "J,Neil,H,G").attr("dy", "-5em");
       g.append("text")
-        .text("bell").attr("fill", "darkred")
+        .text("bell")
+        .attr("fill", "darkred")
         .attr("dy", "-3em");
       g.append("text")
         .text("l.v.")
@@ -147,7 +148,10 @@ const score = [
         const relativePitches = [-6, -3, 0, 3].map(y => 2 * y + yOffset);
 
         relativePitches.forEach(y => {
-          longTone(g, x, y, VS.getRandExcl(length, length * 1.5)).attr("class", "cluster"); // up to 1.5x length // TODO set min bounds
+          longTone(g, x, y, VS.getRandExcl(length, length * 1.5)).attr(
+            "class",
+            "cluster"
+          ); // up to 1.5x length // TODO set min bounds
         });
       }
 

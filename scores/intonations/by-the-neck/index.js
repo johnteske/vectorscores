@@ -47,14 +47,19 @@ function heavyBreath(selection) {
   const rect = g
     .append("rect")
     .attr("fill", "none")
-    .attr("stroke", "black")
+    .attr("stroke", "blue")
     .attr("height", "1em");
 
   // g.append("text").text("\ue0b8"); // Bravura
   g.append("text")
     .attr("dy", "1em")
-    .text("intense breaths")
-    .attr("fill", "blue");
+    .attr("fill", "blue")
+    .text("intense breaths");
+
+  g.append("text")
+    .attr("dy", "0em")
+    .attr("fill", "blue")
+    .text("John");
 
   const box = g.node().getBBox();
   rect.attr("width", box.width);
@@ -63,7 +68,7 @@ function heavyBreath(selection) {
 }
 
 function scrapeDrone(selection) {
-  return selection.append("line").attr("stroke", "blue");
+  return selection.append("line");
 }
 
 function growl(selection) {
@@ -77,9 +82,8 @@ function growl(selection) {
 
   g.append("text")
     .attr("dy", "1em")
-    .text("LNP growl")
-    //.text("trem, exp. cres. growl ->")
-    .attr("fill", "blue");
+    .text("LNP growl");
+  //.text("trem, exp. cres. growl ->")
 
   const box = g.node().getBBox();
   rect.attr("width", box.width);
@@ -99,7 +103,7 @@ const breath = [
       g.append("line")
         .attr("x1", 0)
         .attr("x2", length)
-        .attr("stroke", "black")
+        .attr("stroke", "blue")
         .attr("stroke-dasharray", "3")
         .call(translate, 0, 10);
 
@@ -159,9 +163,7 @@ const texture = [
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, pitchScale(0.25));
-      g.append("text")
-        .text("scrape")
-        .attr("fill", "blue");
+      g.append("text").text("scrape");
       scrapeDrone(g).attr("x2", length);
       bloodText(g, "choke hold").attr("y", -0.75 * pitchRange); // TODO y pos
       // TODO dynamics?
