@@ -8,14 +8,15 @@ const { svg, page } = makeVignetteScore();
 
 const wrapper = page.element;
 
+const lcg = seed => () => ((seed = Math.imul(741103597, seed)) >>> 0) / 2 ** 32;
+
 function phrase() {
-  var notes = [{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }];
+  var notes = [{ pitch: 0, duration: 1 }];
 
   function addNote() {
     var dir = VS.getItem([-1, 1, -2, 2, -3, 3]);
     dir = dir * 2;
     notes.push({ pitch: 2 * dir, duration: 1 });
-    notes.push({ pitch: 2 * dir, duration: 0 });
   }
 
   for (var i = 0; i < 8; i++) {
@@ -25,22 +26,37 @@ function phrase() {
   return notes;
 }
 
+const lineGen = d3
+  .line()
+  .x(d => d.x)
+  .y(d => d.y);
+
 function chant(selection, length) {
-  var lineCloud = VS.lineCloud()
-    .duration(10)
-    .phrase(phrase())
-    .curve(d3.curveLinear)
-    .width(length)
-    .height(pitchRange * 0.333);
+  const notes = phrase();
+  const points = notes.reduce(
+    (acc, note) => {
+      const t = acc.t + note.duration;
+      return {
+        t,
+        points: [
+          ...acc.points,
+          { x: acc.t, y: note.pitch },
+          { x: t, y: note.pitch }
+        ]
+      };
+    },
+    { t: 0, points: [] }
+  ).points;
+  const xScale = length / notes.length;
+  const scaledPoints = points.map(({ x, y }) => ({ x: x * xScale, y }));
 
   selection
-    .call(lineCloud, { n: 2 })
+    .append("path")
+    .attr("d", lineGen(scaledPoints))
     .attr("fill", "none")
     .attr("stroke", "black")
-    .call(translate, 0, pitchScale(0.666))
-    // line-cloud has issues, not to be solved now
-    .select(".line-cloud-path:last-child")
-    .remove();
+    .call(translate, 0, pitchScale(0.5));
+
   return selection;
 }
 
