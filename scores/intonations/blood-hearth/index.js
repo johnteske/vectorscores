@@ -20,21 +20,21 @@ const { svg, page, scoreGroup, indicator } = makeScrollingScore();
 svg.append("style").text(`
   line { stroke: black; }
   line.wip { stroke: blue; }
+  line.ensemble { stroke: blue; }
   text.wip { fill: blue; }
- .bravura { font-family: 'Bravura'; font-size: 20px; }
-  .cluster .bravura {
-    font-size: 16px;
-  }
-   .text-dynamic {
+  .bravura { font-family: 'Bravura'; font-size: 20px; }
+  .cluster.bravura { font-family: 'Bravura'; font-size: 16px; }
+  .cluster .bravura { font-family: 'Bravura'; font-size: 16px; }
+  .text-dynamic {
     font-family: serif;
     font-size: 12px;
     font-style: italic;
   }
   text {
-    font-size: 10px;
+    font-size: 8px;
   }
-  .text-ensemble, .text-duration {
-    font-size: 12px;
+  .text-duration {
+    font-size: 10px;
   }
 `);
 
@@ -48,7 +48,8 @@ const ensemble = (selection, str) =>
   selection
     .append("text")
     .text(str)
-    .attr("dy", "-3em") // TODO
+    .attr("dy", "-4em") // TODO
+    .attr("fill", "blue")
     .attr("class", "text-ensemble");
 
 const dynamic = (selection, type, value, length) =>
@@ -75,9 +76,9 @@ const score = [
 
       g.append("line")
         .attr("x2", length)
-        .attr("class", "wip");
+        .attr("class", "ensemble");
 
-      ensemble(g, "solo");
+      ensemble(g, "John").attr("dy", "-5em");
 
       dynamic(g, "symbol", "pp", length);
     }
@@ -85,45 +86,47 @@ const score = [
   {
     duration: seconds(8),
     render: ({ x, length, duration }) => {
-      const g = translate(wrapper.append("g"), x, pitchScale(0.5)).attr(
-        "class",
-        "cluster"
-      );
+      const g = translate(wrapper.append("g"), x, pitchScale(0.5));
 
       makeCue(x);
       makeDuration(x, duration);
 
-      ensemble(g, "tutti");
+      ensemble(g, "J,Neil,H,G").attr("dy", "-5em");
       g.append("text")
-        .text("bell-like")
-        .attr("dy", "-2.5em");
+        .text("bell").attr("fill", "darkred")
+        .attr("dy", "-3em");
       g.append("text")
-        .text("let vibrate")
-        .attr("dy", "-1.5em");
+        .text("l.v.")
+        .attr("dy", "-2em");
 
       g.append("text")
         .text(articulationGlyph[">"])
-        .attr("class", "bravura")
+        .attr("class", "cluster bravura")
+        .attr("fill", "blue")
         .attr("dy", "1.25em");
 
       g.append("text")
         .text(durationGlyph[1])
-        .attr("class", "bravura")
+        .attr("class", "cluster bravura")
+        .attr("fill", "blue")
         .attr("y", 10);
 
       g.append("text")
         .text(durationGlyph[1])
-        .attr("class", "bravura")
-        .attr("y", 4);
+        .attr("class", "cluster bravura")
+        .attr("fill", "blue")
+        .attr("y", 2);
 
       g.append("text")
         .text(durationGlyph[1])
-        .attr("class", "bravura")
-        .attr("y", -4);
+        .attr("class", "cluster bravura")
+        .attr("fill", "blue")
+        .attr("y", -2);
 
       g.append("text")
         .text(durationGlyph[1])
-        .attr("class", "bravura")
+        .attr("class", "cluster bravura")
+        .attr("fill", "blue")
         .attr("y", -10);
 
       dynamic(g, "symbol", "mf", length);
@@ -132,19 +135,19 @@ const score = [
   {
     duration: seconds(36),
     render: ({ x, length, duration }) => {
-      const g = translate(group(), x, pitchScale(0.5)).attr("class", "cluster");
+      const g = translate(group(), x, pitchScale(0.5));
 
       makeCue(x);
       makeDuration(x, duration);
 
-      // g.append("text").text("tutti");
+      ensemble(g, "tutti").attr("fill", "black");
 
       // dissonant cluster, within an octave or octave and a half
       function cluster(selection, x, yOffset, length) {
         const relativePitches = [-6, -3, 0, 3].map(y => 2 * y + yOffset);
 
         relativePitches.forEach(y => {
-          longTone(g, x, y, VS.getRandExcl(length, length * 1.5)); // up to 1.5x length // TODO set min bounds
+          longTone(g, x, y, VS.getRandExcl(length, length * 1.5)).attr("class", "cluster"); // up to 1.5x length // TODO set min bounds
         });
       }
 
@@ -169,8 +172,7 @@ const score = [
           .attr("x1", VS.getRandExcl(0, length * 0.25))
           .attr("x2", VS.getRandExcl(length * 0.75, length))
           .attr("y1", y)
-          .attr("y2", y)
-          .attr("class", "wip");
+          .attr("y2", y);
       }
     }
   },
