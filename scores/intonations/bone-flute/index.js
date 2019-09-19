@@ -23,6 +23,12 @@ svg.append("style").text(`
 const wrapper = page.element;
 
 const text = (selection, str) => selection.append("text").text(str);
+const ensemble = (selection, str) =>
+  selection
+    .append("text")
+    .text(str)
+    .attr("fill", "blue")
+    .attr("text-anchor", "end");
 
 function makeFrame(selection) {
   return selection
@@ -45,6 +51,7 @@ function textureOfBones(selection) {
       .attr("y", pitchScale(Math.random() * 0.25));
   }
 
+  ensemble(g, "L,H,G").call(translate, 0, pitchScale(0.25));
   g.append("text")
     .text("crushing")
     //.text("crushing bones")
@@ -56,7 +63,7 @@ function textureOfBones(selection) {
     [
       {
         type: "symbol",
-        value: "mf",
+        value: "mp",
         x: 0
       }
     ],
@@ -97,6 +104,8 @@ function boneFlute(selection) {
     g
   );
 
+  ensemble(g, "Neil:").attr("dy", "1em");
+
   text(g, encouragement.pop())
     //text(g, "it can be so easy")
     .attr("dy", "1em")
@@ -123,6 +132,7 @@ function drone(selection) {
   const g = selection.append("g");
 
   // mid-range drones
+  ensemble(g, "NK,J").call(translate, 0, pitchScale(0.5));
   translate(g.append("line"), 0, pitchScale(0.5))
     .attr("x2", pitchRange)
     .attr("stroke", "black");
@@ -130,7 +140,7 @@ function drone(selection) {
     [
       {
         type: "symbol",
-        value: "mf",
+        value: "mp",
         x: 0
       }
     ],
@@ -147,7 +157,7 @@ function drone(selection) {
 
 const boneFluteFrame = () => {
   const g = wrapper.append("g");
-  makeFrame(g);
+  //makeFrame(g);
   boneFlute(g);
   drone(g);
   textureOfBones(g);
