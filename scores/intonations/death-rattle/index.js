@@ -39,7 +39,8 @@ const dynamic = (selection, type, value) =>
   drawDynamics([{ type, value, x: 0 }], 0, selection);
 
 function centerDrone(selection, length) {
-  const g = group(selection).call(translate, 0, pitchScale(0.5));
+  const g = group(selection).call(translate, 0, pitchScale(0.9));
+  g.append("text").text("glassy");
 
   // TODO map the pitches to prevent y overlaps
   for (let i = 0; i < 6; i++) {
@@ -50,7 +51,7 @@ function centerDrone(selection, length) {
     );
   }
 
-  dynamic(g, "symbol", "mp").call(translate, 0, -28); //TODO
+  dynamic(g, "symbol", "p").call(translate, 0, -28); //TODO
 }
 
 function cell(selection) {
@@ -65,7 +66,7 @@ function cell(selection) {
 
 // shiver--or shudder?
 function shiver(selection) {
-  const g = group(selection).call(translate, 0, 1);
+  const g = group(selection).call(translate, 0, pitchScale(0.6));
   const length = 20;
 
   cell(g);
