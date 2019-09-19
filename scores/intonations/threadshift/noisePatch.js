@@ -11,7 +11,7 @@ export default function noisePatch(x, length, selection) {
     .attr("width", length * 0.5)
     .attr("y", y)
     .attr("height", h)
-    .attr("stroke", "blue")
+    .attr("stroke", "darkred")
     .attr("fill", "none");
 
   const x2 = x + length * 0.5;

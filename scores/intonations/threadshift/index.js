@@ -28,14 +28,16 @@ const ensemble = (selection, str) =>
   selection
     .append("text")
     .text(str)
-    .attr("class", "text-ensemble");
+    .attr("class", "text-ensemble")
+    .attr("fill", "blue");
 
 const { svg, page, scoreGroup, indicator } = makeScrollingScore();
 
 svg.append("style").text(`
   line { stroke: black; }
-  line.wip { stroke: blue; }
+  line.wip { stroke: darkred; }
   .bravura { font-family: 'Bravura'; font-size: 20px; }
+  text { font-size: 12px; }
   .text-dynamic {
     font-family: serif;
     font-size: 12px;
@@ -85,6 +87,11 @@ const score = [
     duration: seconds(60),
     render: ({ x, length, duration }) => {
       const g = longTone(scoreGroup.element, x, pitchScale(0.5), length);
+
+      g.append("text")
+        .text("tutti, on D")
+        .attr("fill", "blue")
+        .attr("dy", "-2em");
 
       g.append("text")
         .text(articulations[">"])
@@ -246,7 +253,7 @@ const score = [
         .attr("y1", pitchScale(0.25))
         .attr("y2", pitchScale(0.25));
 
-      ensemble(g, "(solo)");
+      ensemble(g, "John");
 
       // threads
       const makeThread = (x, y, length, selection) => {
@@ -286,7 +293,7 @@ const score = [
         makeThread(x, y, length - x, g);
       }
 
-      ensemble(g, "(tutti)").attr("x", length * 0.25);
+      ensemble(g, "tutti").attr("x", length * 0.25);
       makeDuration(x, duration);
     }
   },
