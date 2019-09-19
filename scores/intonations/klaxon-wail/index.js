@@ -38,6 +38,7 @@ function wail(selection) {
   const g = group(selection).call(translate, 0, pitchScale(0.75));
 
   text(g, "wail").attr("dy", "1em");
+  text(g, "Haley,Neil").attr("dy", "2em").attr("fill", "blue").style("font-size", 8);
   //text(g, "growl/scream though instrument");
   //bravura(g, articulationGlyph[">"]);
 
