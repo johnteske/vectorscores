@@ -84,8 +84,11 @@ const pitchClassSequence = [
   // TODO add empty end
 ];
 
-const score = pitchClassSequence
-  .map(staves => ({
+const emptyBar = { duration: 0, render: () => group() };
+
+const score = [
+  emptyBar,
+  ...pitchClassSequence.map(staves => ({
     duration: seconds(20),
     render: () => {
       const g = group(); // .call(translate, 0, pitchScale(0.5));
@@ -96,8 +99,9 @@ const score = pitchClassSequence
 
       return g;
     }
-  }))
-  .map(startTimeFromDuration);
+  })),
+  emptyBar
+].map(startTimeFromDuration);
 
 function renderScore() {
   score.forEach((bar, i) => {
