@@ -24,12 +24,14 @@ module.exports = class {
       //.filter(w => w.data.status !== "test")
       //.filter(w => w.data.status !== "unlisted");
       .sort((a, b) => {
-        return a.data.order - b.data.order;
+        const aOrder = a.data.order || -1;
+        const bOrder = b.data.order || -1;
+        return aOrder - bOrder;
       });
 
     return `
       ${options()}
-      ${catMap(work => `<button>${work.url}</button>`, works)}
+      ${catMap(work => `${work.data.order} <button>${work.url}</button>`, works)}
     `;
   }
 };

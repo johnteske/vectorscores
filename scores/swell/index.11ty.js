@@ -3,7 +3,7 @@ const options = require("./_options");
 module.exports = class {
   data() {
     return {
-      order: 1,
+      order: 1.01,
       layout: "score",
       title: "swell", // 2013
       duration: "8&prime;20&Prime;",

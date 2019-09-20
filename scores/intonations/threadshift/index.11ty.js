@@ -4,6 +4,7 @@ module.exports = class {
   data() {
     return {
       ...baseTemplateData,
+      order: 2.01,
       title: "threadshift",
       status: "wip",
       modules: [

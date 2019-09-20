@@ -4,7 +4,7 @@ const options = require("./_options");
 module.exports = class {
   data() {
     return {
-      order: 3,
+      order: 1.03,
       layout: "score",
       title: "prelude",
       composer: "John Teske",
