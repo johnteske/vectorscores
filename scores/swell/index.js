@@ -8,7 +8,48 @@ const { svg, page } = makeVignetteScore();
 
 const wrapper = page.element;
 const group = (selection = wrapper) => selection.append("g");
-const text = (selection, str) => selection.append("text").text(str);
+const text = (selection, str) =>
+  selection
+    .append("text")
+    .text(str)
+    .style("font-size", "monospace")
+    .style("font-size", 20);
+
+//
+
+VS.scoreOptions.add(
+  "pitchClasses",
+  { "pitch-classes": "numbers", prefer: "te" },
+  new VS.PitchClassSettings()
+);
+VS.scoreOptions.add("transposition", 0, new VS.NumberSetting("transposition"));
+
+var scoreOptions = VS.scoreOptions.setFromQueryString();
+
+// TODO working with old property names in score, for now
+scoreOptions.pitchClasses.display = scoreOptions.pitchClasses["pitch-classes"];
+scoreOptions.pitchClasses.preference = scoreOptions.pitchClasses["prefer"];
+
+// TODO should coerce internally
+scoreOptions.transposition = +scoreOptions.transposition;
+
+//
+
+const transposeSet = set =>
+  VS.pitchClass.transpose(set, scoreOptions.transposition);
+
+const formatSet = set => {
+  const formatted = set.map(pc =>
+    VS.pitchClass.format(
+      pc,
+      scoreOptions.pitchClasses.display,
+      scoreOptions.pitchClasses.preference
+    )
+  );
+
+  return "{" + formatted.join(",") + "}";
+};
+//
 
 const pitchClassSequence = [
   // TODO add empty start
@@ -47,19 +88,10 @@ const score = pitchClassSequence
   .map(staves => ({
     duration: seconds(20),
     render: () => {
-      const g = group().call(translate, 0, pitchScale(0.5));
-
-      translate(
-        g
-          .append("line")
-          .attr("x2", 999)
-          .attr("stroke", "red"),
-        0,
-        pitchScale(0.5)
-      );
+      const g = group(); // .call(translate, 0, pitchScale(0.5));
 
       staves.forEach((pitchClasses, i) => {
-        text(g, `[${pitchClasses.join(",")}]`).attr("dy", `${i - 1}em`);
+        text(g, formatSet(transposeSet(pitchClasses))).attr("dy", `${i + 1}em`);
       });
 
       return g;
