@@ -8,7 +8,12 @@ const { svg, page } = makeVignetteScore();
 
 const wrapper = page.element;
 const group = (selection = wrapper) => selection.append("g");
-const text = (selection, str) => selection.append("text").text(str);
+const text = (selection, str) =>
+  selection
+    .append("text")
+    .text(str)
+    .style("font-size", "monospace")
+    .style("font-size", 20);
 
 //
 
@@ -83,19 +88,10 @@ const score = pitchClassSequence
   .map(staves => ({
     duration: seconds(20),
     render: () => {
-      const g = group().call(translate, 0, pitchScale(0.5));
-
-      translate(
-        g
-          .append("line")
-          .attr("x2", 999)
-          .attr("stroke", "red"),
-        0,
-        pitchScale(0.5)
-      );
+      const g = group(); // .call(translate, 0, pitchScale(0.5));
 
       staves.forEach((pitchClasses, i) => {
-        text(g, formatSet(transposeSet(pitchClasses))).attr("dy", `${i - 1}em`);
+        text(g, formatSet(transposeSet(pitchClasses))).attr("dy", `${i + 1}em`);
       });
 
       return g;
