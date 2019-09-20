@@ -708,14 +708,15 @@ score.forEach(function(bar) {
 });
 
 // {% include_relative _controls.js %}
-VS.score.hooks.add("stop", function() {
+function stopHook() {
   trash.set(1000, []);
   TrashFire.noiseLayer.hide(0);
   TrashFire.scrapeDrone.hide(0);
   dumpster.shake();
-});
+}
+VS.score.hooks.add("stop", stopHook);
 
-VS.control.hooks.add("step", function() {
+function stepHook() {
   var pointer = VS.score.getPointer();
   var argsWithZeroDuration = [].concat(0, score[pointer].args.slice(1));
   score[pointer].fn.apply(null, argsWithZeroDuration);
@@ -726,7 +727,9 @@ VS.control.hooks.add("step", function() {
     TrashFire.noiseLayer.hide(0);
   score[pointer].fn !== TrashFire.scrapeDrone.show &&
     TrashFire.scrapeDrone.hide(0);
-});
+}
+
+VS.control.hooks.add("step", stepHook);
 
 // {% include_relative _resize.js %}
 /**
@@ -761,3 +764,8 @@ function resize() {
 }
 
 d3.select(window).on("resize", resize);
+
+VS.WebSocket.hooks.add("stop", stopHook);
+VS.WebSocket.hooks.add("step", stepHook);
+
+VS.WebSocket.connect();
