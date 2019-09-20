@@ -4,6 +4,7 @@ module.exports = class {
   data() {
     return {
       ...baseTemplateData,
+      order: 2.09,
       title: "blood on the hearth",
       status: "wip",
       modules: [
