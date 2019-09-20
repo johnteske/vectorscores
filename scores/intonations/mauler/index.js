@@ -112,7 +112,7 @@ const score = [
   },
   {
     startTime: null,
-    duration: seconds(60),
+    duration: durationInBeats(128),
     render: ({ x, length }) => {
       const g = translate(x, 0, wrapper.append("g"));
 
@@ -129,34 +129,30 @@ const score = [
           tremoloLongTone(g, timeScale(seconds(3)))
         );
         translate(
-          Math.random() * length * 0.25,
-          Math.random() * pitchRange,
-          variations(g)
-        );
-        translate(
-          Math.random() * length * 0.25,
-          Math.random() * pitchRange,
-          variations(g)
-        );
-      }
-
-      for (let i = 0; i < 25; i++) {
-        translate(
-          Math.random() * length,
+          Math.random() * length * 0.75,
           Math.random() * pitchRange,
           tremoloLongTone(g, timeScale(seconds(3)))
         );
+
         translate(
-          Math.random() * length,
+          Math.random() * length * 0.25,
           Math.random() * pitchRange,
           variations(g)
         );
-      }
+        translate(
+          Math.random() * length * 0.75,
+          Math.random() * pitchRange,
+          variations(g)
+        );
+        translate(
+          Math.random() * length * 1.5,
+          Math.random() * pitchRange,
+          variations(g)
+        );
 
-      for (let i = 0; i < 25; i++) {
         longTone(
           g,
-          VS.getRandExcl(length * 0.75, length),
+          VS.getRandExcl(length * 0.75, length * 1.5),
           Math.random() * pitchRange,
           timeScale(5000)
         ).attr("stroke", "black");
@@ -172,7 +168,7 @@ const score = [
   },
   {
     startTime: null,
-    duration: seconds(60),
+    duration: durationInBeats(128),
     render: ({ x, length }) => {
       const g = translate(x, 0, wrapper.append("g"));
 
@@ -200,7 +196,7 @@ const score = [
         let durations = [VS.getRandIntIncl(2, 4), VS.getRandIntIncl(1, 2)].map(
           durationInBeats
         );
-        let x = VS.getRandExcl(0, length - timeScale(seconds(4))); // minus 4 seconds
+        let x = VS.getRandExcl(0, length * 1.5 - timeScale(seconds(4))); // minus 4 seconds
         let y = pitchScale(VS.getRandExcl(0, 1));
         makeThread(x, y, g, durations);
       }
@@ -214,6 +210,46 @@ const score = [
         drawDynamics(
           [
             { x: 0, type: "symbol", value: "mp" },
+            { x: 0.5, type: "text", value: "decres." }
+          ],
+          length,
+          g
+        )
+      );
+    }
+  },
+  {
+    startTime: null,
+    duration: durationInBeats(128),
+    render: ({ x, length }) => {
+      const g = translate(x, 0, wrapper.append("g"));
+
+      bloodText(g, "(let the lightness tear through you)").attr("dy", "-2em");
+
+      function ascendingLine(selection) {
+        const l = timeScale(durationInBeats(VS.getRandIntIncl(18, 24)));
+        const x1 = Math.random() * (length - l);
+        const x2 = x1 + l;
+        selection
+          .append("line")
+          .attr("stroke", "darkred")
+          .attr("stroke-dasharray", 1)
+          .attr("x1", x1)
+          .attr("x2", x2)
+          .attr("y1", pitchScale(VS.getRandExcl(0, 0.5)))
+          .attr("y2", pitchScale(VS.getRandExcl(0.5, 1)));
+      }
+
+      for (let i = 0; i < 16; i++) {
+        ascendingLine(g);
+      }
+
+      translate(
+        0,
+        pitchScale(0.5),
+
+        drawDynamics(
+          [
             { x: 0.5, type: "text", value: "decres." },
             { x: 1, type: "symbol", value: "n" }
           ],
