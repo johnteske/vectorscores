@@ -1,6 +1,34 @@
 (function () {
   'use strict';
 
+  const lcg = seed => () =>
+    ((seed = Math.imul(741103597, seed)) >>> 0) / 2 ** 32;
+
+  // Excludes max
+  const floatBetween = (lcg, min, max) => lcg() * (max - min) + min;
+
+  // Includes max
+  const integerBetween = (lcg, min, max) =>
+    Math.floor(floatBetween(lcg, min, max));
+
+  const itemFrom = (lcg, items) => items[Math.floor(lcg() * items.length)];
+
+  const itemFromWeighted = (lcg, items, weights) => {
+    const totalWeight = weights.reduce((a, b) => a + b, 0);
+
+    const rand = floatBetween(lcg, 0, totalWeight);
+
+    for (let i = 0, acc = 0; i < items.length; i++) {
+      acc += weights[i];
+
+      if (rand <= acc) {
+        return items[i];
+      }
+    }
+  };
+
+  const prng = lcg(Date.now());
+
   // {% include_relative _setup.js %}
   var TrashFire = (function() {
     var tf = {};
@@ -223,14 +251,14 @@
       function makeFlamePoint(i) {
         return [
           margin + i * slice,
-          d.size * 0.5 - height * 0.5 + Math.random() * height
+          d.size * 0.5 - height * 0.5 + prng() * height
         ];
       }
 
       function makeEmberPoint(i) {
         return [
           margin + i * slice,
-          d.size - margin - i * slice + Math.random() * height
+          d.size - margin - i * slice + prng() * height
         ];
       }
     });
@@ -315,19 +343,19 @@
     var n = 200; // fixed size, for now
 
     function x() {
-      return Math.random() * layout.main.width - layout.main.width * 0.25;
+      return prng() * layout.main.width - layout.main.width * 0.25;
     }
 
     function y() {
-      return Math.random() * layout.main.height;
+      return prng() * layout.main.height;
     }
 
     function w() {
-      return Math.random() * layout.main.width;
+      return prng() * layout.main.width;
     }
 
     function h() {
-      return Math.random() * 2;
+      return prng() * 2;
     }
 
     noiseLayer.render = function() {
@@ -389,7 +417,7 @@
       var height = 3;
 
       return TrashUtils.buildArray(points, function(i) {
-        return [i * slice, height * 0.5 + Math.random() * height];
+        return [i * slice, height * 0.5 + prng() * height];
       });
     }
 
@@ -419,7 +447,7 @@
   function makeTrash(type, min, max) {
     return {
       id: VS.id(),
-      size: VS.getRandIntIncl(min, max),
+      size: integerBetween(prng, min, max),
       type: type
     };
   }
@@ -450,7 +478,10 @@
    */
   function fireCycle() {
     // Build 3-5 flames
-    var flames = TrashUtils.buildArray(VS.getItem([3, 4, 5]), function(index, n) {
+    var flames = TrashUtils.buildArray(itemFrom(prng, [3, 4, 5]), function(
+      index,
+      n
+    ) {
       var type = index > 2 ? "blaze" : "crackle";
 
       return {
@@ -464,7 +495,7 @@
 
     // Hit dumpster, 0-3 times
     // TODO reduce trash to last 3 items if no spike?
-    var nSpikes = VS.getWeightedItem([0, 1, 2, 3], [15, 60, 15, 10]);
+    var nSpikes = itemFromWeighted(prng, [0, 1, 2, 3], [15, 60, 15, 10]);
     var spikes = TrashUtils.buildArray(nSpikes, function() {
       return [
         {
@@ -482,7 +513,7 @@
       ];
     }).reduce(TrashUtils.flatten, []);
 
-    var tailType = VS.getItem(["resume", "embers", "multi", ""]);
+    var tailType = itemFrom(prng, ["resume", "embers", "multi", ""]);
     var tailFns = {
       resume: resume,
       embers: embers,
@@ -502,7 +533,7 @@
     }
 
     function embers() {
-      var n = VS.getItem([1, 2, 3]);
+      var n = itemFrom(prng, [1, 2, 3]);
 
       var grow = TrashUtils.buildArray(n, function(i) {
         return {
@@ -527,7 +558,7 @@
     }
 
     function multi() {
-      var n = VS.getItem([1, 2, 3]);
+      var n = itemFrom(prng, [1, 2, 3]);
 
       var trashes = TrashUtils.buildArray(n, function() {
         return makeTrash("crackle", 25, 75);
@@ -610,7 +641,7 @@
    * Noise
    */
   var noiseEvents = TrashUtils.buildArray(5, function() {
-    var duration = VS.getRandIntIncl(1600, 3200);
+    var duration = integerBetween(prng, 1600, 3200);
 
     return [
       {
@@ -634,7 +665,7 @@
    */
   var droneEvents = TrashUtils.buildArray(3, function(i, n) {
     var timeWindow = Math.floor(lastTime / n);
-    var duration = timeWindow * VS.getRandIntIncl(0.5, 0.75);
+    var duration = timeWindow * floatBetween(prng, 0.5, 0.75);
 
     return [
       {
@@ -672,7 +703,7 @@
   function timeWindowOffset(endTime) {
     return function(d, i, list) {
       var timeWindow = Math.floor(endTime / list.length);
-      var offset = timeWindow * i + VS.getRandIntIncl(0, timeWindow);
+      var offset = timeWindow * i + integerBetween(prng, 0, timeWindow);
 
       return d.map(timeOffset(offset));
     };

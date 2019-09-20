@@ -246,11 +246,14 @@
     return g;
   }
 
-  function repeated(selection) {
+  function variations(selection) {
     const g = selection.append("g").attr("stroke", "black");
 
-    const pcs = [0, -1, 0, 2, 0, -1, 0, 2];
+    const pcs = [0, -1, 0, 2, 0, -1, 0, 2]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, VS.getRandIntIncl(5, 8));
     stems(g, pcs);
+    pcs.pop();
     doubleBeam(g, pcs);
 
     return g;
@@ -291,7 +294,7 @@
   };
 
   function durationInBeats(beats) {
-    const bpm = 120;
+    const bpm = 140;
     return beats * (60 / bpm) * 1000;
   }
 
@@ -400,12 +403,12 @@
           DEPRECATED_translate(
             Math.random() * length * 0.25,
             Math.random() * pitchRange,
-            repeated(g)
+            variations(g)
           );
           DEPRECATED_translate(
             Math.random() * length * 0.25,
             Math.random() * pitchRange,
-            sixteenths(g)
+            variations(g)
           );
         }
 
@@ -418,7 +421,7 @@
           DEPRECATED_translate(
             Math.random() * length,
             Math.random() * pitchRange,
-            sixteenths(g)
+            variations(g)
           );
         }
 
@@ -445,8 +448,8 @@
       render: ({ x, length }) => {
         const g = DEPRECATED_translate(x, 0, wrapper.append("g"));
 
-        const makeThread = (x, y, selection) => {
-          const x2 = x + timeScale(seconds(3));
+        const makeThread = (x, y, selection, durations) => {
+          const x2 = x + timeScale(durations[0]);
 
           selection
             .append("line")
@@ -460,15 +463,18 @@
             .append("line")
             .attr("stroke", "black")
             .attr("x1", x2)
-            .attr("x2", x2 + timeScale(seconds(1)))
+            .attr("x2", x2 + timeScale(durations[1]))
             .attr("y1", y)
             .attr("y2", y);
         };
 
         for (let i = 0; i < 25; i++) {
+          let durations = [VS.getRandIntIncl(2, 4), VS.getRandIntIncl(1, 2)].map(
+            durationInBeats
+          );
           let x = VS.getRandExcl(0, length - timeScale(seconds(4))); // minus 4 seconds
           let y = pitchScale(VS.getRandExcl(0, 1));
-          makeThread(x, y, g);
+          makeThread(x, y, g, durations);
         }
 
         bloodText(g, "(weep)").attr("dy", "-2em");
