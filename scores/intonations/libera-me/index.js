@@ -3,12 +3,11 @@ import { seconds, pitchRange, pitchScale } from "../scale";
 import makeVignetteScore from "../vignette-score";
 import makeVignetteResize from "../vignette-resize";
 import { translate } from "../translate";
+import { lcg } from "../prng";
 
 const { svg, page } = makeVignetteScore();
 
 const wrapper = page.element;
-
-const lcg = seed => () => ((seed = Math.imul(741103597, seed)) >>> 0) / 2 ** 32;
 
 const prng = lcg(1234);
 
