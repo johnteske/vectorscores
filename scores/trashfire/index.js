@@ -5,7 +5,8 @@ import {
   itemFrom,
   itemFromWeighted
 } from "../intonations/prng";
-const prng = lcg(1234);
+
+const prng = lcg(Date.now());
 
 // {% include_relative _setup.js %}
 var TrashFire = (function() {
