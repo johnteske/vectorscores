@@ -3,7 +3,7 @@ const { catMap } = requireRoot("render-utils");
 
 const options = require("./_options.11ty.js");
 
-const whitelist = ["adsr", "prelude", "swell", "intonations"];
+const whitelist = ["adsr", "prelude", "swell", "trashfire", "intonations"];
 
 module.exports = class {
   data() {
