@@ -609,7 +609,7 @@
     },
     {
       startTime: null,
-      duration: seconds(120),
+      duration: seconds(30),
       render: ({ x, length, duration }) => {
         const g = scoreGroup.element.append("g");
         DEPRECATED_translate(x, 0, g);
@@ -622,6 +622,22 @@
           .attr("y2", pitchScale(0.25));
 
         ensemble(g, "(solo)");
+        makeDuration(x, duration);
+      }
+    },
+    {
+      startTime: null,
+      duration: seconds(90),
+      render: ({ x, length, duration }) => {
+        const g = scoreGroup.element.append("g");
+        DEPRECATED_translate(x, 0, g);
+
+        // bottom line
+        g.append("line")
+          .attr("x1", 0)
+          .attr("x2", length)
+          .attr("y1", pitchScale(0.25))
+          .attr("y2", pitchScale(0.25));
 
         // threads
         const makeThread = (x, y, length, selection) => {
@@ -656,12 +672,12 @@
         };
 
         for (let i = 0; i < 10; i++) {
-          let x = VS.getRandExcl(0.25, 0.5) * length;
+          let x = VS.getRandExcl(0, 0.5) * length;
           let y = pitchScale(VS.getRandExcl(0, 1));
           makeThread(x, y, length - x, g);
         }
 
-        ensemble(g, "(tutti)").attr("x", length * 0.25);
+        ensemble(g, "(tutti)");
         makeDuration(x, duration);
       }
     },
