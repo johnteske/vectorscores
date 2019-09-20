@@ -90,7 +90,7 @@ function growl(selection) {
 const breath = [
   // start with intense breath sounds
   {
-    duration: seconds(120),
+    duration: seconds(180),
     render: ({ x, length }) => {
       const g = wrapper.append("g");
 
@@ -170,7 +170,7 @@ const texture = [
   },
   // scrape cluster
   {
-    duration: seconds(30),
+    duration: seconds(60),
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, pitchScale(0.25));
@@ -182,13 +182,12 @@ const texture = [
         .attr("x2", length)
         .call(translate, 0, 2);
       // TODO dynamics?
-      bloodText(g, "the claws dig in").attr("y", -0.75 * pitchRange); // TODO y pos
     }
   },
   // TODO scrape and drone cres., more pressure
   // growl
   {
-    duration: seconds(30),
+    duration: seconds(60),
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, pitchScale(0.25));
@@ -208,14 +207,15 @@ const texture = [
 
 const noise = [
   {
-    duration: seconds(50),
+    duration: seconds(90),
     render: () => {}
   },
   {
-    duration: seconds(20),
+    duration: seconds(30),
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, 0);
+      bloodText(g, "the claws dig in");
       for (let i = 0; i < 100; i++) {
         g.append("text")
           .text("/")
