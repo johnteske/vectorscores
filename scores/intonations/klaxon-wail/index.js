@@ -39,6 +39,7 @@ function wail(selection) {
   const g = group(selection).call(translate, 0, pitchScale(0.75));
 
   text(g, "Haley,Neil")
+    .attr("dx", "4em")
     .attr("dy", "2em")
     .attr("fill", "blue")
     .style("font-size", 8);
@@ -62,7 +63,12 @@ function alarm(selection) {
   const g = group(selection).call(translate, 0, pitchScale(1));
 
   //text(g, "alarm").attr("dy", "1em");
-  text(g, "0")
+  text(g, "Luke,Noel")
+    .attr("dx", "4em")
+    .attr("dy", "2em")
+    .attr("fill", "blue")
+    .style("font-size", 8);
+   text(g, "0")
     .attr("dy", "1em")
     .style("font-size", 8);
   text(g, "2")
@@ -88,7 +94,12 @@ function droneCluster(selection, length) {
   line(g, length).call(translate, 0, p.pop());
   line(g, length).call(translate, 0, p.pop());
 
-  dynamic(g, "symbol", "mp").call(translate, 0, -24);
+  text(g, "Greg,John")
+    .attr("dx", "4em")
+    .attr("dy", "2em")
+    .attr("fill", "blue")
+    .style("font-size", 8);
+   dynamic(g, "symbol", "mp").call(translate, 0, -24);
 
   return g;
 }
