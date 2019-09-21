@@ -108,6 +108,7 @@
   // noise in the middle?
 
   const articulationGlyph = VS.dictionary.Bravura.articulations;
+  const durationGlyph = VS.dictionary.Bravura.durations.stemless;
 
   const { svg, page } = makeVignetteScore();
 
@@ -126,6 +127,8 @@
 
   const line = (selection, length) => selection.append("line").attr("x2", length);
   const text = (selection, str) => selection.append("text").text(str);
+  const bravura = (selection, str) =>
+    text(selection, str).attr("class", "bravura");
 
   const dynamic = (selection, type, value) =>
     drawDynamics([{ type, value, x: 0 }], 0, selection);
@@ -133,7 +136,9 @@
   function wail(selection) {
     const g = group(selection).call(translate, 0, pitchScale(0.75));
 
-    text(g, "wail").attr("dy", "1em");
+    text(g, "wail")
+      .attr("dy", "1.66em")
+      .style("font-size", 10);
     //text(g, "growl/scream though instrument");
     //bravura(g, articulationGlyph[">"]);
 
@@ -150,8 +155,18 @@
 
     const g = group(selection).call(translate, 0, pitchScale(1));
 
-    text(g, "alarm").attr("dy", "1em");
-    //text(g, "doit");
+    //text(g, "alarm").attr("dy", "1em");
+    text(g, "0")
+      .attr("dy", "1em")
+      .style("font-size", 8);
+    text(g, "2")
+      .attr("dy", "1em")
+      .attr("dx", 16)
+      .style("font-size", 8);
+    bravura(g, durationGlyph[2]).attr("dy", "0.8em");
+    bravura(g, durationGlyph[1])
+      .attr("dy", "0.7em")
+      .attr("dx", 16);
 
     dynamic(g, "symbol", "mf").call(translate, 0, -12);
 
@@ -182,8 +197,8 @@
       render: ({ length }) => {
         const g = group();
 
-        //      alarm(g);
-        wail(g);
+        alarm(g);
+        // wail(g);
         droneCluster(g, length);
 
         return g;
@@ -206,8 +221,8 @@
       render: ({ length }) => {
         const g = group();
 
-        alarm(g);
-        //wail(g);
+        //alarm(g);
+        wail(g);
         droneCluster(g, length);
 
         return g;

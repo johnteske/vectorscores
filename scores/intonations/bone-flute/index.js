@@ -186,7 +186,8 @@
       //.text("crushing bones")
       .attr("y", pitchScale(0.25))
       .attr("dy", "1em")
-      .attr("fill", "black");
+      .attr("fill", "black")
+      .style("font-family", "monospace");
 
     drawDynamics(
       [
