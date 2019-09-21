@@ -170,7 +170,7 @@ const score = [
     render: () => group()
   },
   {
-    duration: seconds(20),
+    duration: seconds(30),
     render: ({ length }) => {
       const g = group();
 
@@ -182,7 +182,7 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: seconds(30),
     render: ({ length }) => {
       const g = group();
 
@@ -194,7 +194,7 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: seconds(30),
     render: ({ length }) => {
       const g = group();
 
@@ -206,7 +206,7 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: seconds(30),
     render: ({ length }) => {
       const g = group();
 
