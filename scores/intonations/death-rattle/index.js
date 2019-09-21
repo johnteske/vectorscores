@@ -116,7 +116,7 @@ const score = [
     render: () => group()
   },
   {
-    duration: seconds(20),
+    duration: seconds(30),
     render: ({ length }) => {
       const g = group();
       shiver(g);
@@ -124,7 +124,7 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: seconds(30),
     render: ({ length }) => {
       const g = group();
       shiver(g);
@@ -133,7 +133,7 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: seconds(30),
     render: ({ length }) => {
       const g = group();
       shiver(g);
@@ -143,7 +143,7 @@ const score = [
     }
   },
   {
-    duration: seconds(20),
+    duration: seconds(30),
     render: ({ length }) => {
       const g = group();
       centerDrone(g, length);
