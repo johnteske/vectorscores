@@ -54,13 +54,19 @@ module.exports = class {
 
 <h2>Program</h2>
   <ul>
-      ${catMap(work => `<li class="work-title">${work.data.title}</li>`, works.filter(w => w.data.order < 2))}
+      ${catMap(
+        work => `<li class="work-title">${work.data.title}</li>`,
+        works.filter(w => w.data.order < 2)
+      )}
   </ul>
   <div style="margin-left: 1em">
   <p>brief intermission</p>
   <h3 class="work-title">intonations</h3>
   <ul>
-      ${catMap(work => `<li class="work-title">${work.data.title}</li>`, works.filter(w => w.data.order > 2))}
+      ${catMap(
+        work => `<li class="work-title">${work.data.title}</li>`,
+        works.filter(w => w.data.order > 2)
+      )}
   </ul>
   </div>
 `;

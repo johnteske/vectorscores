@@ -31,7 +31,10 @@ module.exports = class {
 
     return `
       ${options()}
-      ${catMap(work => `${work.data.order} <button>${work.url}</button>`, works)}
+      ${catMap(
+        work => `${work.data.order} <button>${work.url}</button>`,
+        works
+      )}
     `;
   }
 };

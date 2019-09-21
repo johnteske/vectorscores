@@ -4,7 +4,7 @@ module.exports = class {
   data() {
     return {
       ...baseTemplateData,
-      order: 2.10,
+      order: 2.1,
       title: "death rattle",
       status: "wip",
       modules: [...baseTemplateData.modules, "bravura", "dictionary"]

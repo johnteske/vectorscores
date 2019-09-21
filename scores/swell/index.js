@@ -19,7 +19,7 @@ const text = (selection, str) =>
 
 VS.scoreOptions.add(
   "pitchClasses",
-  { "pitch-classes": "numbers", prefer: "te" },
+  { "pitch-classes": "names", prefer: "sharps" },
   new VS.PitchClassSettings()
 );
 VS.scoreOptions.add("transposition", 0, new VS.NumberSetting("transposition"));
@@ -96,7 +96,10 @@ const score = [
       const parts = ["LF", "NK", "NW", "HF"];
       staves.forEach((pitchClasses, i) => {
         text(g, formatSet(transposeSet(pitchClasses))).attr("dy", `${i + 1}em`);
-        text(g, parts[i]).attr("fill", "blue").attr("text-anchor", "end").attr("dy", `${i + 1}em`);
+        text(g, parts[i])
+          .attr("fill", "blue")
+          .attr("text-anchor", "end")
+          .attr("dy", `${i + 1}em`);
       });
 
       return g;

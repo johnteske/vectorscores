@@ -586,7 +586,7 @@ var cues = [];
 // include_relative _options.js
 VS.scoreOptions.add(
   "pitchClasses",
-  { "pitch-classes": "numbers", prefer: "te" },
+  { "pitch-classes": "names", prefer: "sharps" },
   new VS.PitchClassSettings()
 );
 VS.scoreOptions.add("transposition", 0, new VS.NumberSetting("transposition"));
