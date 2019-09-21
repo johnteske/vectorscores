@@ -93,8 +93,10 @@ const score = [
     render: () => {
       const g = group(); // .call(translate, 0, pitchScale(0.5));
 
+      const parts = ["LF", "NK", "NW", "HF"];
       staves.forEach((pitchClasses, i) => {
         text(g, formatSet(transposeSet(pitchClasses))).attr("dy", `${i + 1}em`);
+        text(g, parts[i]).attr("fill", "blue").attr("text-anchor", "end").attr("dy", `${i + 1}em`);
       });
 
       return g;
