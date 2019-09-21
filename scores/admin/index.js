@@ -18,3 +18,6 @@ main
   });
 
 VS.WebSocket.connect();
+
+
+VS.control.listenForKeydown(false);
