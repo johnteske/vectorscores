@@ -7,7 +7,6 @@ const readme = fs.readFileSync(
 );
 
 const vectorscores = "*vectorscores*";
-const vectorscoresRE = vectorscores.replace(/\*/g, "\\*");
 
 module.exports = class {
   data() {
@@ -22,10 +21,6 @@ module.exports = class {
 
   render() {
     return readme
-      .substring(readme.indexOf(vectorscores) + vectorscores.length)
-      .replace(
-        new RegExp(vectorscoresRE),
-        '<span class="vectorscores">*vectorscores*</span>'
-      );
+      .substring(readme.indexOf(vectorscores) + vectorscores.length);
   }
 };
