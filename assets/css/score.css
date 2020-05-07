@@ -38,7 +38,9 @@ footer {
   height: var(--footer-height);
   margin: 0;
   box-sizing: border-box;
-  font-family: Courier, monospace;
+  font-family: Courier
+,
+monospace;
   font-family: var(--layout-font-stack);
   cursor: default;
 
@@ -66,14 +68,18 @@ footer.show {
 header {
   padding: 0;
   top: 0;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px
+solid
+#eee;
   border-bottom: var(--layout-border);
 }
 
 footer {
   padding: 0;
   bottom: 0;
-  border-top: 2px solid #eee;
+  border-top: 2px
+solid
+#eee;
   border-top: var(--layout-border);
 }
 
@@ -100,7 +106,9 @@ h1 {
 
 .score-title,
 .modal-content .score-title {
-  font-family: 'Times New Roman', serif;
+  font-family: 'Times New Roman'
+,
+serif;
   font-family: var(--layout-header-font-stack);
   font-style: italic;
   font-weight: bold;
@@ -115,7 +123,9 @@ h1 {
 }
 
 .work-title {
-  font-family: 'Times New Roman', serif;
+  font-family: 'Times New Roman'
+,
+serif;
   font-family: var(--layout-header-font-stack);
   font-style: italic;
   letter-spacing: 0.2px;
@@ -188,7 +198,9 @@ h1 {
 }
 
 input {
-  font-family: Courier, monospace;
+  font-family: Courier
+,
+monospace;
   font-family: var(--layout-font-stack);
   text-align: center;
 }
@@ -201,7 +213,9 @@ input[type=number]::-webkit-outer-spin-button {
 
 #score-info-open {
   float: right;
-  font-family: Courier, monospace;
+  font-family: Courier
+,
+monospace;
   font-family: var(--layout-font-stack);
   font-size: 16px;
   font-size: var(--layout-unit);
@@ -231,7 +245,9 @@ input[type=number]::-webkit-outer-spin-button {
 
 .modal-content {
   background: #fff;
-  font-family: Courier, monospace;
+  font-family: Courier
+,
+monospace;
   font-family: var(--layout-font-stack);
   font-weight: normal;
   padding: 16px;

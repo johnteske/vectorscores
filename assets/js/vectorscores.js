@@ -46,6 +46,7 @@
     }());
 
     var util = /*#__PURE__*/Object.freeze({
+        __proto__: null,
         getQueryString: getQueryString,
         makeQueryString: makeQueryString,
         constant: constant,
@@ -136,6 +137,7 @@
     };
 
     var math = /*#__PURE__*/Object.freeze({
+        __proto__: null,
         getRandExcl: getRandExcl,
         getRandIntIncl: getRandIntIncl,
         getItem: getItem,
@@ -189,6 +191,7 @@
     };
 
     var hooks = /*#__PURE__*/Object.freeze({
+        __proto__: null,
         createHooks: createHooks
     });
 
@@ -224,6 +227,7 @@
     })();
 
     var layout$1 = /*#__PURE__*/Object.freeze({
+        __proto__: null,
         layout: layout
     });
 
@@ -316,6 +320,7 @@
     })();
 
     var score$1 = /*#__PURE__*/Object.freeze({
+        __proto__: null,
         score: score
     });
 
@@ -367,6 +372,7 @@
     })();
 
     var scoreOptions$1 = /*#__PURE__*/Object.freeze({
+        __proto__: null,
         scoreOptions: scoreOptions
     });
 
@@ -505,6 +511,7 @@
     })();
 
     var controls = /*#__PURE__*/Object.freeze({
+        __proto__: null,
         control: control
     });
 
@@ -578,6 +585,7 @@
     }
 
     var modals = /*#__PURE__*/Object.freeze({
+        __proto__: null,
         enableModal: enableModal
     });
 

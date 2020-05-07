@@ -163,7 +163,9 @@ a:hover svg path {
 }
 
 body {
-  font-family: Courier, monospace;
+  font-family: Courier
+,
+monospace;
   font-family: var(--base-font-family);
   font-weight: 400;
   font-weight: var(--base-font-weight);
@@ -181,7 +183,9 @@ body {
 }
 
 .vectorscores {
-  font-family: 'Times New Roman', serif;
+  font-family: 'Times New Roman'
+,
+serif;
   font-family: var(--head-font-family);
   font-weight: bold;
   font-style: italic;
@@ -197,7 +201,9 @@ body {
 }
 
 .work-title {
-  font-family: 'Times New Roman', serif;
+  font-family: 'Times New Roman'
+,
+serif;
   font-family: var(--head-font-family);
   font-style: italic;
   letter-spacing: 0.2px;
@@ -320,7 +326,9 @@ a:hover {
 
 .site-title {
   font-size: 26px;
-  font-family: 'Times New Roman', serif;
+  font-family: 'Times New Roman'
+,
+serif;
   font-family: var(--head-font-family);
   line-height: 56px;
   margin-bottom: 0;
