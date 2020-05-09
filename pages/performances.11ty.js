@@ -1,31 +1,7 @@
 const { catMap, handleUndefined } = require("../render-utils");
 
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
-
-const upcoming = data =>
-  data.performances.upcoming
-    ? `<h2>Upcoming</h2>${performanceList("upcoming", data)}`
-    : "";
-
-const past = data =>
-  data.performances.past ? `<h2>Past</h2>${performanceList("past", data)}` : "";
-
-const dateFormat = yyyymmdd => {
-  const [yyyy, mm, dd] = yyyymmdd.split("-").map(Number);
-  return `${monthNames[mm - 1]} ${dd}, ${yyyy}`;
+const dateFormat = (yyyymmdd) => {
+  return yyyymmdd;
 };
 
 const getWorkUrl = (data, title) => {
@@ -41,23 +17,25 @@ const getWorkUrl = (data, title) => {
   }
 };
 
-const performanceList = (category, data) => {
-  const performances = data.performances[category];
-  const workLink = title => {
+const performanceList = (data) => {
+  const performances = data.performances.reverse().filter((p) =>
+    p.tags != null && p.tags.includes("vectorscores")
+  );
+  const workLink = (title) => {
     const url = getWorkUrl(data, title);
     return url ? `<a href="${url}" class="work-title">${title}/a>` : title;
   };
-  const details = perf => {
+  const details = (perf) => {
     return `
 <p>${perf.address}</p>
 <p>${perf.time}${perf.price ? ", " + perf.price : ""}</p>
 `;
   };
 
-  const renderPerformance = perf => {
+  const renderPerformance = (perf) => {
     return `
 <h4 class="perf-date">
-  <a href="${perf.url}">${dateFormat(perf.dateStart)}</a>
+  <a href="${perf.url}">${dateFormat(perf.date)}</a>
 </h4>
 <h3>${perf.title}</h3>
   ${handleUndefined(perf.works && catMap(workLink, perf.works))}
@@ -74,11 +52,11 @@ module.exports = class {
       title: "Performances",
       layout: "page",
       permalink: "/performances/",
-      tags: ["topNav"]
+      tags: ["topNav"],
     };
   }
 
   render(data) {
-    return upcoming(data) + past(data);
+    return performanceList(data);
   }
 };
