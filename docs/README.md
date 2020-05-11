@@ -18,7 +18,7 @@ John has been exploring ways to express complex ideas to musicians given limitat
 ## How to Perform
 
 ### Server options
-- View and perform the scores from [vectorscores.org](http://vectorscores.org/)
+- View and perform the scores from [vectorscores.org](https://vectorscores.org/)
 - Clone the repository and run a local webserver
 
 ### Viewing options
@@ -36,7 +36,7 @@ John has been exploring ways to express complex ideas to musicians given limitat
 
 
 ## Licenses
-The *vectorscores* framework is released under the [MIT License](http://opensource.org/licenses/MIT). Copyright of compositions resulting from code and parameters using the framework belong to the composer.
+The *vectorscores* framework is released under the [MIT License](https://opensource.org/licenses/MIT). Copyright of compositions resulting from code and parameters using the framework belong to the composer.
 
 
 ## Support
