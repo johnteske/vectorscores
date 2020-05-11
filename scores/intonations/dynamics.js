@@ -1,9 +1,9 @@
 const { dynamics } = VS.dictionary.Bravura;
 
-export default function(data, scale, selection) {
+export default function (data, scale, selection) {
   const g = selection.append("g");
 
-  data.forEach(d => {
+  data.forEach((d) => {
     const text = g.append("text").attr("x", d.x * scale);
 
     switch (d.x) {
@@ -19,16 +19,10 @@ export default function(data, scale, selection) {
 
     switch (d.type) {
       case "symbol":
-        text
-          .text(dynamics[d.value])
-          .attr("class", "bravura")
-          .attr("dy", "2em");
+        text.text(dynamics[d.value]).attr("class", "bravura").attr("dy", "2em");
         break;
       case "text":
-        text
-          .text(d.value)
-          .attr("class", "text-dynamic")
-          .attr("dy", "3.5em");
+        text.text(d.value).attr("class", "text-dynamic").attr("dy", "3.5em");
         break;
     }
   });

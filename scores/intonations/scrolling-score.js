@@ -4,7 +4,7 @@ import { pitchRange } from "./scale";
 import makeScroll from "./scroll";
 import makePage from "./page";
 
-export default function() {
+export default function () {
   const svg = d3.select("svg.main");
 
   const page = makePage(svg);
@@ -18,6 +18,6 @@ export default function() {
     svg,
     page,
     scoreGroup,
-    indicator
+    indicator,
   };
 }

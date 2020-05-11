@@ -1,7 +1,7 @@
 import multiplyMatrices from "./_matrices.js";
 
 function flatten(array) {
-  return array.reduce(function(a, b) {
+  return array.reduce(function (a, b) {
     return a.concat(b);
   }, []);
 }
@@ -10,7 +10,7 @@ function makePoint(array) {
   return {
     x: array[0],
     y: array[1],
-    z: array[2]
+    z: array[2],
   };
 }
 
@@ -24,20 +24,32 @@ export default function render(score) {
   // var c = makePoint([0, 0, -5]); // 3D point representing the camera
   // var theta = makePoint([Math.PI, 0, Math.PI]); // orientation of the camera (Tait–Bryan angles) NOTE x, y, z?
 
-  var xMatrix = (function() {
+  var xMatrix = (function () {
     var cosOx = Math.cos(theta.x),
       sinOx = Math.sin(theta.x);
-    return [[1, 0, 0], [0, cosOx, sinOx], [0, -sinOx, cosOx]];
+    return [
+      [1, 0, 0],
+      [0, cosOx, sinOx],
+      [0, -sinOx, cosOx],
+    ];
   })();
-  var yMatrix = (function() {
+  var yMatrix = (function () {
     var cosOy = Math.cos(theta.y),
       sinOy = Math.sin(theta.y);
-    return [[cosOy, 0, -sinOy], [0, 1, 0], [sinOy, 0, cosOy]];
+    return [
+      [cosOy, 0, -sinOy],
+      [0, 1, 0],
+      [sinOy, 0, cosOy],
+    ];
   })();
-  var zMatrix = (function() {
+  var zMatrix = (function () {
     var cosOz = Math.cos(theta.z),
       sinOz = Math.sin(theta.z);
-    return [[cosOz, sinOz, 0], [-sinOz, cosOz, 0], [0, 0, 1]];
+    return [
+      [cosOz, sinOz, 0],
+      [-sinOz, cosOz, 0],
+      [0, 0, 1],
+    ];
   })();
 
   var cameraRotationMatrix = multiplyMatrices(
@@ -57,7 +69,7 @@ export default function render(score) {
 
     var b = {
       x: (d.x / d.z) * rz,
-      y: (d.y / d.z) * rz
+      y: (d.y / d.z) * rz,
     };
 
     score.container

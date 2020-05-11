@@ -58,8 +58,8 @@ function textureOfBones(selection) {
       {
         type: "symbol",
         value: "mp",
-        x: 0
-      }
+        x: 0,
+      },
     ],
     0,
     g
@@ -81,7 +81,7 @@ const encouragement = [
   "it can be so easy",
   "embrace the release",
   "it's time to rest",
-  "accept the inevitable"
+  "accept the inevitable",
 ].sort(() => Math.random() - 0.5);
 
 function boneFlute(selection) {
@@ -91,7 +91,7 @@ function boneFlute(selection) {
     [
       { x: 10, y: VS.getRandExcl(0, 20) },
       { x: pitchRange * 0.5, y: VS.getRandExcl(0, 20) },
-      { x: pitchRange - 10, y: VS.getRandExcl(0, 20) }
+      { x: pitchRange - 10, y: VS.getRandExcl(0, 20) },
     ],
     [...new Array(10)],
     (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-5, 5) }),
@@ -108,8 +108,8 @@ function boneFlute(selection) {
       {
         type: "symbol",
         value: "f",
-        x: 0
-      }
+        x: 0,
+      },
     ],
     0,
     g
@@ -132,8 +132,8 @@ function drone(selection) {
       {
         type: "symbol",
         value: "mp",
-        x: 0
-      }
+        x: 0,
+      },
     ],
     0,
     g
@@ -160,46 +160,44 @@ const score = [
     duration: 0,
     render: () => {
       return wrapper.append("g");
-    }
+    },
   },
   {
     duration: seconds(20),
-    render: boneFluteFrame
+    render: boneFluteFrame,
   },
   {
     duration: seconds(20),
-    render: boneFluteFrame
+    render: boneFluteFrame,
   },
   {
     duration: seconds(20),
-    render: boneFluteFrame
+    render: boneFluteFrame,
   },
   {
     duration: seconds(20),
-    render: boneFluteFrame
+    render: boneFluteFrame,
   },
   {
     duration: seconds(20),
-    render: boneFluteFrame
+    render: boneFluteFrame,
   },
   {
     duration: 0,
     render: () => {
       return wrapper.append("g");
-    }
-  }
+    },
+  },
 ].map(startTimeFromDuration);
 
 function renderScore() {
   score.forEach((bar, i) => {
     const { render, ...data } = bar;
-    render(data)
-      .attr("class", `frame frame-${i}`)
-      .style("opacity", 0);
+    render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
   });
 }
 
-const showFrame = i => {
+const showFrame = (i) => {
   d3.selectAll(".frame").style("opacity", 0);
   d3.selectAll(`.frame-${i}`).style("opacity", 1);
 };

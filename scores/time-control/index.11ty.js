@@ -4,7 +4,7 @@ module.exports = class {
       layout: "score",
       title: "timing controls",
       status: "test",
-      info: "<h3>Playground for event timing</h3>"
+      info: "<h3>Playground for event timing</h3>",
     };
   }
 

@@ -3,18 +3,18 @@ import {
   floatBetween,
   integerBetween,
   itemFrom,
-  itemFromWeighted
+  itemFromWeighted,
 } from "../intonations/prng";
 
 const prng = lcg(Date.now());
 
 // {% include_relative _setup.js %}
-var TrashFire = (function() {
+var TrashFire = (function () {
   var tf = {};
 
   tf.view = {
     width: 480,
-    height: 480
+    height: 480,
   };
 
   tf.svg = d3
@@ -27,12 +27,12 @@ var TrashFire = (function() {
   tf.dumpster = {
     y: 200,
     width: 312,
-    height: 204
+    height: 204,
   };
 
   tf.trashOrigin = {
     x: tf.dumpster.width * 0.5,
-    y: tf.dumpster.height * 0.5
+    y: tf.dumpster.height * 0.5,
   };
 
   return tf;
@@ -42,10 +42,10 @@ var layout = {
   width: TrashFire.view.width,
   height: TrashFire.view.height,
   margin: {},
-  main: d3.select("main")
+  main: d3.select("main"),
 };
 
-d3.select(window).on("load", function() {
+d3.select(window).on("load", function () {
   resize();
   TrashFire.noiseLayer.render();
 });
@@ -53,7 +53,7 @@ d3.select(window).on("load", function() {
 // {% include_relative _helpers.js %}
 var TrashUtils = {};
 
-TrashUtils.buildArray = function(n, fn) {
+TrashUtils.buildArray = function (n, fn) {
   var array = [];
 
   for (var i = 0; i < n; i++) {
@@ -63,28 +63,28 @@ TrashUtils.buildArray = function(n, fn) {
   return array;
 };
 
-TrashUtils.flatten = function(target, array) {
+TrashUtils.flatten = function (target, array) {
   return target.concat(array);
 };
 
-TrashUtils.last = function(array) {
+TrashUtils.last = function (array) {
   return array.slice(-1)[0] || [];
 };
 
 TrashUtils.lineGenerator = d3
   .line()
-  .x(function(d) {
+  .x(function (d) {
     return d[0];
   })
-  .y(function(d) {
+  .y(function (d) {
     return d[1];
   });
 
-TrashUtils.push = function(array, item) {
+TrashUtils.push = function (array, item) {
   return [].concat(array, item);
 };
 
-TrashUtils.sum = function(a, b) {
+TrashUtils.sum = function (a, b) {
   return a + b;
 };
 
@@ -92,7 +92,7 @@ TrashUtils.sum = function(a, b) {
 /**
  * Draw front and back groups so objects can emerge between the layers
  */
-var dumpster = (function(tf) {
+var dumpster = (function (tf) {
   var dumpster = {};
 
   var group = tf.wrapper
@@ -105,7 +105,7 @@ var dumpster = (function(tf) {
 
   group.call(addDumpsterLayer, "front");
 
-  dumpster.shake = function() {
+  dumpster.shake = function () {
     group
       .transition()
       .duration(300)
@@ -118,7 +118,7 @@ var dumpster = (function(tf) {
   };
 
   function translateDumpsterWithYOffset(yOffset) {
-    return function() {
+    return function () {
       return (
         "translate(" +
         (tf.view.width - tf.dumpster.width) * 0.5 +
@@ -143,7 +143,7 @@ var dumpster = (function(tf) {
 /**
  * Generate trash
  */
-var trash = (function(tf) {
+var trash = (function (tf) {
   var trash = {};
 
   var xOffset = 10;
@@ -151,7 +151,7 @@ var trash = (function(tf) {
 
   var _trash = [];
 
-  trash.set = function(t, trashArray) {
+  trash.set = function (t, trashArray) {
     _trash = trashArray;
     update(t);
   };
@@ -159,7 +159,7 @@ var trash = (function(tf) {
   function update(dur) {
     // var dur = duration || 1000;
 
-    var trashWidths = _trash.map(function(t) {
+    var trashWidths = _trash.map(function (t) {
       return t.size;
     });
 
@@ -177,7 +177,7 @@ var trash = (function(tf) {
 
     var trashSelection = dumpster.trashGroup
       .selectAll(".trash")
-      .data(_trash, function(d) {
+      .data(_trash, function (d) {
         return d.id;
       });
 
@@ -191,10 +191,7 @@ var trash = (function(tf) {
       .remove();
 
     // UPDATE
-    trashSelection
-      .transition()
-      .duration(dur)
-      .attr("transform", trashPosition);
+    trashSelection.transition().duration(dur).attr("transform", trashPosition);
 
     // ENTER
     trashSelection
@@ -216,7 +213,7 @@ var trash = (function(tf) {
 })(TrashFire);
 
 function makePath(selection) {
-  selection.each(function(d) {
+  selection.each(function (d) {
     var nPoints = 60;
     var margin = 10;
     var slice = (d.size - margin * 2) / (nPoints + 1);
@@ -230,14 +227,14 @@ function makePath(selection) {
     function makeFlamePoint(i) {
       return [
         margin + i * slice,
-        d.size * 0.5 - height * 0.5 + prng() * height
+        d.size * 0.5 - height * 0.5 + prng() * height,
       ];
     }
 
     function makeEmberPoint(i) {
       return [
         margin + i * slice,
-        d.size - margin - i * slice + prng() * height
+        d.size - margin - i * slice + prng() * height,
       ];
     }
   });
@@ -246,19 +243,19 @@ function makePath(selection) {
     .append("path")
     .attr("fill", "none")
     .attr("stroke", "black")
-    .attr("stroke-width", function(d) {
+    .attr("stroke-width", function (d) {
       return d.type !== "embers" ? 2 : 1;
     })
-    .style("opacity", function(d) {
+    .style("opacity", function (d) {
       return d.type === "blaze" || d.type === "scrape" ? 1 : 0.5;
     })
-    .attr("d", function(d) {
+    .attr("d", function (d) {
       return TrashUtils.lineGenerator(d.pathPoints);
     });
 }
 
 // {% include_relative _spike.js %}
-TrashFire.spike = (function(tf) {
+TrashFire.spike = (function (tf) {
   var spike = {};
 
   var x = tf.view.width * 0.5;
@@ -268,7 +265,7 @@ TrashFire.spike = (function(tf) {
     .attr("d", "M-15,0 L15,0 L0,60 Z")
     .style("opacity", 0);
 
-  spike.show = function(t, trashes) {
+  spike.show = function (t, trashes) {
     trash.set(0, trashes);
 
     path
@@ -279,7 +276,7 @@ TrashFire.spike = (function(tf) {
       .style("opacity", 1);
   };
 
-  spike.hit = function(t, trashes) {
+  spike.hit = function (t, trashes) {
     trash.set(t * 0.4, trashes);
 
     path
@@ -296,12 +293,12 @@ TrashFire.spike = (function(tf) {
   };
 
   // Used for step control hook only
-  spike.hide = function() {
+  spike.hide = function () {
     path.style("opacity", 0);
   };
 
   function translateY(y) {
-    return function() {
+    return function () {
       return "translate(" + x + ", " + y + ")";
     };
   }
@@ -313,7 +310,7 @@ TrashFire.spike = (function(tf) {
 /**
  * TODO make noise noisier, similar to trash/fire paths
  */
-TrashFire.noiseLayer = (function(tf) {
+TrashFire.noiseLayer = (function (tf) {
   var noiseLayer = {};
 
   var group = tf.wrapper.append("g");
@@ -337,7 +334,7 @@ TrashFire.noiseLayer = (function(tf) {
     return prng() * 2;
   }
 
-  noiseLayer.render = function() {
+  noiseLayer.render = function () {
     noiseElements = group
       .selectAll(".noise")
       .data(d3.range(0, n))
@@ -357,11 +354,11 @@ TrashFire.noiseLayer = (function(tf) {
   noiseLayer.hide = delayedOpacityTransition(0);
 
   function delayedOpacityTransition(opacity) {
-    return function(delay) {
+    return function (delay) {
       noiseElements
         .transition()
         .duration(0)
-        .delay(function(d, i) {
+        .delay(function (d, i) {
           return i * delay;
         })
         .style("opacity", opacity);
@@ -372,7 +369,7 @@ TrashFire.noiseLayer = (function(tf) {
 })(TrashFire);
 
 // {% include_relative _scrape-drone.js %}
-TrashFire.scrapeDrone = (function(tf) {
+TrashFire.scrapeDrone = (function (tf) {
   var drone = {};
 
   var width = tf.view.width * 0.75;
@@ -386,7 +383,7 @@ TrashFire.scrapeDrone = (function(tf) {
     .style("opacity", 0)
     .attr("fill", "none")
     .attr("stroke", "#444")
-    .attr("d", function() {
+    .attr("d", function () {
       return TrashUtils.lineGenerator(makePath());
     });
 
@@ -395,12 +392,12 @@ TrashFire.scrapeDrone = (function(tf) {
     var slice = width / (points + 1);
     var height = 3;
 
-    return TrashUtils.buildArray(points, function(i) {
+    return TrashUtils.buildArray(points, function (i) {
       return [i * slice, height * 0.5 + prng() * height];
     });
   }
 
-  drone.show = function(t) {
+  drone.show = function (t) {
     var dur = typeof t === "undefined" ? 7000 : t;
     selection
       .attr("stroke-width", 0)
@@ -410,7 +407,7 @@ TrashFire.scrapeDrone = (function(tf) {
       .style("opacity", 1);
   };
 
-  drone.hide = function(t) {
+  drone.hide = function (t) {
     var dur = typeof t === "undefined" ? 7000 : t;
     selection
       .transition()
@@ -427,7 +424,7 @@ function makeTrash(type, min, max) {
   return {
     id: VS.id(),
     size: integerBetween(prng, min, max),
-    type: type
+    type: type,
   };
 }
 
@@ -457,7 +454,7 @@ function copyTrash(acc) {
  */
 function fireCycle() {
   // Build 3-5 flames
-  var flames = TrashUtils.buildArray(itemFrom(prng, [3, 4, 5]), function(
+  var flames = TrashUtils.buildArray(itemFrom(prng, [3, 4, 5]), function (
     index,
     n
   ) {
@@ -468,27 +465,27 @@ function fireCycle() {
       action: "add",
       fn: trash.set,
       transitionDuration: 1000,
-      trashes: [makeTrash(type, 25, 25 + index * (50 / n))]
+      trashes: [makeTrash(type, 25, 25 + index * (50 / n))],
     };
   });
 
   // Hit dumpster, 0-3 times
   // TODO reduce trash to last 3 items if no spike?
   var nSpikes = itemFromWeighted(prng, [0, 1, 2, 3], [15, 60, 15, 10]);
-  var spikes = TrashUtils.buildArray(nSpikes, function() {
+  var spikes = TrashUtils.buildArray(nSpikes, function () {
     return [
       {
         duration: 600,
         action: "copy",
         fn: TrashFire.spike.show,
-        transitionDuration: 600
+        transitionDuration: 600,
       },
       {
         duration: 750,
         action: "empty",
         fn: TrashFire.spike.hit,
-        transitionDuration: 750
-      }
+        transitionDuration: 750,
+      },
     ];
   }).reduce(TrashUtils.flatten, []);
 
@@ -496,7 +493,7 @@ function fireCycle() {
   var tailFns = {
     resume: resume,
     embers: embers,
-    multi: multi
+    multi: multi,
   };
   var tail = tailType !== "" ? tailFns[tailType]() : [];
 
@@ -507,29 +504,29 @@ function fireCycle() {
       action: "add",
       fn: trash.set,
       transitionDuration: 1000,
-      trashes: [makeTrash("blaze", 25, 75)]
+      trashes: [makeTrash("blaze", 25, 75)],
     };
   }
 
   function embers() {
     var n = itemFrom(prng, [1, 2, 3]);
 
-    var grow = TrashUtils.buildArray(n, function(i) {
+    var grow = TrashUtils.buildArray(n, function (i) {
       return {
         duration: (7 - i) * 1000, // duration: 7-5 seconds
         action: "add",
         fn: trash.set,
         transitionDuration: 1000,
-        trashes: [makeTrash("embers", 25, 75)]
+        trashes: [makeTrash("embers", 25, 75)],
       };
     });
 
-    var die = TrashUtils.buildArray(n, function(i, n) {
+    var die = TrashUtils.buildArray(n, function (i, n) {
       return {
         duration: (n - i + 4) * 1000,
         action: "remove",
         fn: trash.set,
-        transitionDuration: 1000
+        transitionDuration: 1000,
       };
     });
 
@@ -539,7 +536,7 @@ function fireCycle() {
   function multi() {
     var n = itemFrom(prng, [1, 2, 3]);
 
-    var trashes = TrashUtils.buildArray(n, function() {
+    var trashes = TrashUtils.buildArray(n, function () {
       return makeTrash("crackle", 25, 75);
     });
 
@@ -549,16 +546,16 @@ function fireCycle() {
       action: "add",
       fn: trash.set,
       transitionDuration: 1000,
-      trashes: trashes
+      trashes: trashes,
     };
 
     // Then die away
-    var dieAway = TrashUtils.buildArray(n, function(i, n) {
+    var dieAway = TrashUtils.buildArray(n, function (i, n) {
       return {
         duration: (n - i + 4) * 1000,
         action: "remove",
         fn: trash.set,
-        transitionDuration: 1000
+        transitionDuration: 1000,
       };
     });
 
@@ -570,37 +567,37 @@ function fireCycle() {
     duration: 3000,
     action: "empty",
     fn: trash.set,
-    transitionDuration: 1000
+    transitionDuration: 1000,
   };
 
   var cycle = [].concat(flames, spikes, tail, empty);
 
-  var trashes = cycle.reduce(function(acc, bar) {
+  var trashes = cycle.reduce(function (acc, bar) {
     var actions = {
       add: addTrash,
       remove: removeTrash,
       empty: emptyTrash,
-      copy: copyTrash
+      copy: copyTrash,
     };
-    return actions[bar.action](acc, bar, function(bar) {
+    return actions[bar.action](acc, bar, function (bar) {
       return bar.trashes;
     });
   }, []);
 
   // Zip the events and trash together, then add time, for a valid VS.score event
   return cycle
-    .map(function(d, i) {
+    .map(function (d, i) {
       return {
         duration: d.duration,
         fn: d.fn,
-        args: [d.transitionDuration, trashes[i]]
+        args: [d.transitionDuration, trashes[i]],
       };
     })
     .map(addTimeFromDurations);
 }
 
 var fireEvents = TrashUtils.buildArray(5, fireCycle)
-  .map(function(cycle, i, cycles) {
+  .map(function (cycle, i, cycles) {
     if (i === 0) {
       return cycle;
     }
@@ -619,20 +616,20 @@ var lastTime = fireEvents[fireEvents.length - 1].time;
 /**
  * Noise
  */
-var noiseEvents = TrashUtils.buildArray(5, function() {
+var noiseEvents = TrashUtils.buildArray(5, function () {
   var duration = integerBetween(prng, 1600, 3200);
 
   return [
     {
       duration: duration,
       fn: TrashFire.noiseLayer.show,
-      args: [8]
+      args: [8],
     },
     {
       duration: 0,
       fn: TrashFire.noiseLayer.hide,
-      args: [32]
-    }
+      args: [32],
+    },
   ].map(addTimeFromDurations);
 })
   .map(timeWindowOffset(lastTime))
@@ -642,7 +639,7 @@ var noiseEvents = TrashUtils.buildArray(5, function() {
 /**
  * Drone
  */
-var droneEvents = TrashUtils.buildArray(3, function(i, n) {
+var droneEvents = TrashUtils.buildArray(3, function (i, n) {
   var timeWindow = Math.floor(lastTime / n);
   var duration = timeWindow * floatBetween(prng, 0.5, 0.75);
 
@@ -650,13 +647,13 @@ var droneEvents = TrashUtils.buildArray(3, function(i, n) {
     {
       duration: duration,
       fn: TrashFire.scrapeDrone.show,
-      args: []
+      args: [],
     },
     {
       duration: 0,
       fn: TrashFire.scrapeDrone.hide,
-      args: []
-    }
+      args: [],
+    },
   ].map(addTimeFromDurations);
 })
   .map(timeWindowOffset(lastTime))
@@ -665,7 +662,7 @@ var droneEvents = TrashUtils.buildArray(3, function(i, n) {
 // {% include_relative _score.js %}
 // NOTE this mutates its input
 function addTimeFromDurations(currentBar, i, score) {
-  currentBar.time = score.slice(0, i).reduce(function(sum, bar) {
+  currentBar.time = score.slice(0, i).reduce(function (sum, bar) {
     return (sum += bar.duration);
   }, 0);
 
@@ -673,14 +670,14 @@ function addTimeFromDurations(currentBar, i, score) {
 }
 
 function timeOffset(ms) {
-  return function(bar) {
+  return function (bar) {
     bar.time += ms;
     return bar;
   };
 }
 
 function timeWindowOffset(endTime) {
-  return function(d, i, list) {
+  return function (d, i, list) {
     var timeWindow = Math.floor(endTime / list.length);
     var offset = timeWindow * i + integerBetween(prng, 0, timeWindow);
 
@@ -691,7 +688,7 @@ function timeWindowOffset(endTime) {
 var firstEvent = {
   time: 0,
   fn: trash.set,
-  args: [0, []]
+  args: [0, []],
 };
 
 /**
@@ -699,23 +696,23 @@ var firstEvent = {
  */
 var score = []
   .concat(firstEvent, fireEvents, noiseEvents, droneEvents)
-  .sort(function(a, b) {
+  .sort(function (a, b) {
     return a.time - b.time;
   });
 
-score.forEach(function(bar) {
+score.forEach(function (bar) {
   VS.score.add(bar.time, bar.fn, bar.args);
 });
 
 // {% include_relative _controls.js %}
-VS.score.hooks.add("stop", function() {
+VS.score.hooks.add("stop", function () {
   trash.set(1000, []);
   TrashFire.noiseLayer.hide(0);
   TrashFire.scrapeDrone.hide(0);
   dumpster.shake();
 });
 
-VS.control.hooks.add("step", function() {
+VS.control.hooks.add("step", function () {
   var pointer = VS.score.getPointer();
   var argsWithZeroDuration = [].concat(0, score[pointer].args.slice(1));
   score[pointer].fn.apply(null, argsWithZeroDuration);

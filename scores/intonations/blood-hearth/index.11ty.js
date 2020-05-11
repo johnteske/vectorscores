@@ -10,8 +10,8 @@ module.exports = class {
         ...baseTemplateData.modules,
         "bravura",
         "dictionary",
-        "cue/blink"
-      ]
+        "cue/blink",
+      ],
     };
   }
 

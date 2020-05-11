@@ -36,7 +36,7 @@ loadDomThenTest(
       "buildArray should create new array using callback"
     );
 
-    const incremented1 = buildArray(5, i => i + 1);
+    const incremented1 = buildArray(5, (i) => i + 1);
     t.deepEquals(
       incremented1,
       [1, 2, 3, 4, 5],

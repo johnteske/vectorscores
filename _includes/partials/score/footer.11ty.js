@@ -1,4 +1,4 @@
-module.exports = data =>
+module.exports = (data) =>
   `<footer id="score-footer"><!--
 --><button id="score-back" class="score-button" title="Step score pointer -1">
         <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

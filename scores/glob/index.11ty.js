@@ -15,8 +15,8 @@ module.exports = class {
         "pitch-class",
         "settings/radio",
         "settings/number",
-        "settings/pitch-classes"
-      ]
+        "settings/pitch-classes",
+      ],
     };
   }
 

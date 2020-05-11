@@ -5,7 +5,7 @@ VS.scoreOptions.add(
 );
 VS.scoreOptions.add("transposition", 0, new VS.NumberSetting("transposition"));
 
-export default (function() {
+export default (function () {
   var options = VS.scoreOptions.setFromQueryString();
 
   // TODO working with old property names in score, for now

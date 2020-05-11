@@ -22,8 +22,8 @@ module.exports = class {
         "settings/number",
         "settings/pitch-classes",
         "line-cloud",
-        "cue/blink"
-      ]
+        "cue/blink",
+      ],
     };
   }
 

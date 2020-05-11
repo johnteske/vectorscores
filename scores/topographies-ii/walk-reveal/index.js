@@ -7,10 +7,10 @@ var main = d3.select(".main"),
   tileHeightHalf = tileWidthHalf * 0.5,
   heightScale = {
     revealed: 2.5,
-    hidden: 1
+    hidden: 1,
   },
   score = {
-    width: 8 // currently used in creation, not display
+    width: 8, // currently used in creation, not display
   },
   revealFactor = 38,
   nearbyRevealFactor = 23,
@@ -21,7 +21,7 @@ var layout = {
   width: 400,
   height: 300,
   scale: 1,
-  margin: {}
+  margin: {},
 };
 
 // {% include_relative _utils.js %}
@@ -34,7 +34,7 @@ function indexToPoint(i) {
 
   return {
     x: x,
-    y: y
+    y: y,
   };
 }
 
@@ -48,10 +48,10 @@ function pointToIndex(point) {
 
 // {% include_relative _point.js %}
 function shift(axis, step) {
-  return function(point) {
+  return function (point) {
     var newPoint = {
       x: point.x,
-      y: point.y
+      y: point.y,
     };
     newPoint[axis] += step;
     return newPoint;
@@ -59,7 +59,7 @@ function shift(axis, step) {
 }
 
 function compose(f, g) {
-  return function(x) {
+  return function (x) {
     return f(g(x));
   };
 }
@@ -68,17 +68,11 @@ var directions = {
   west: shift("x", -1),
   east: shift("x", 1),
   north: shift("y", -1),
-  south: shift("y", 1)
+  south: shift("y", 1),
 };
 
-directions.northWest = compose(
-  directions.north,
-  directions.west
-);
-directions.southEast = compose(
-  directions.south,
-  directions.east
-);
+directions.northWest = compose(directions.north, directions.west);
+directions.southEast = compose(directions.south, directions.east);
 
 // {% include_relative _symbol-sets.js %}
 var symbolSet = {};
@@ -90,7 +84,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
       VS.dictionary.Bravura.durations.stemless,
       {
         min: "\uE4E5", // quarter rest
-        max: "\uE4C4" // short fermata
+        max: "\uE4C4", // short fermata
       }
     );
 
@@ -104,7 +98,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
       "1": { x: -0.175, y: 0 },
       "0.5": { x: -0.025, y: -0.25 },
       "0.25": { x: -0.025, y: -0.35 },
-      max: { x: -0.3, y: 0.175 }
+      max: { x: -0.3, y: 0.175 },
     };
 
     symbolSet.scale = ["-1.5", "-1", "-0.5", "0", "2", "1", "0.5", "0.25"];
@@ -115,7 +109,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
       min: "\uE4C1", // long fermata, flipped
       under: "\uE4BA",
       over: "\uE4BB",
-      max: "\uE4C4" // short fermata
+      max: "\uE4C4", // short fermata
     });
 
     symbolSet.offsets = {
@@ -126,7 +120,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
       "0.5": { x: -0.09, y: -0.025 }, // quarter sharp (single vertical stroke)
       "1": { x: -0.125, y: 0 }, // sharp
       "1.5": { x: -0.1625, y: 0 }, // three-quarter sharp (three vertical strokes)
-      max: { x: -0.3, y: 0.175 }
+      max: { x: -0.3, y: 0.175 },
     };
 
     symbolSet.scale = [
@@ -137,7 +131,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
       "0",
       "0.5",
       "1",
-      "1.5"
+      "1.5",
     ];
 
     break;
@@ -150,7 +144,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
         graceApp: "\uE562",
         irrTremolo: "\uE22B",
         mordent: "\uE56C",
-        max: "\uE537" // sfp
+        max: "\uE537", // sfp
       }
     );
 
@@ -164,7 +158,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
       mordent: { x: -0.35, y: 0.125 },
       graceApp: { x: -0.1, y: 0 },
       graceAcc: { x: -0.1, y: 0 },
-      max: { x: -0.4, y: 0.135 }
+      max: { x: -0.4, y: 0.135 },
     };
 
     symbolSet.scale = [
@@ -175,7 +169,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
       "irrTremolo",
       "mordent",
       "graceApp",
-      "graceAcc"
+      "graceAcc",
     ];
 
     break;
@@ -186,7 +180,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
       VS.dictionary.Bravura.articulations,
       {
         min: "\uE4C1", // long fermata, flipped
-        max: "\uE4C4" // short fermata
+        max: "\uE4C4", // short fermata
       }
     );
 
@@ -199,7 +193,7 @@ switch (+VS.getQueryString("symbols") || VS.getRandIntIncl(1, 4)) {
       "1": { x: -0.175, y: 0 },
       "0.5": { x: -0.025, y: -0.25 },
       "0.25": { x: -0.025, y: -0.35 },
-      max: { x: -0.3, y: 0.175 }
+      max: { x: -0.3, y: 0.175 },
     };
 
     symbolSet.scale = ["-", "-", ">", ".", 2, 1, 0.5, 0.25];
@@ -293,20 +287,20 @@ var topography = (function generateValues() {
 function getScoreRange(data) {
   return {
     min: Math.min.apply(null, data),
-    max: Math.max.apply(null, data)
+    max: Math.max.apply(null, data),
   };
 }
-var startingIndex = (function() {
+var startingIndex = (function () {
   var range = getScoreRange(topography);
 
   var extremaIndices = topography
-    .map(function(d, i) {
+    .map(function (d, i) {
       return {
         height: d,
-        index: i
+        index: i,
       };
     })
-    .filter(function(d) {
+    .filter(function (d) {
       return d.height === range.min || d.height === range.max;
     });
 
@@ -318,13 +312,13 @@ function createEmptyFrame(duration) {
     walkerIndex: startingIndex,
     direction: "",
     duration: duration,
-    topography: topography.map(function(d) {
+    topography: topography.map(function (d) {
       return {
         height: d,
         revealed: 0,
-        explored: false
+        explored: false,
       };
-    })
+    }),
   };
 }
 
@@ -364,33 +358,33 @@ function createNewFrame(lastFrame) {
     "east",
     "west",
     "northWest",
-    "southEast"
+    "southEast",
   ]
-    .map(function(dir) {
+    .map(function (dir) {
       return {
         direction: dir,
-        point: directions[dir](lastPoint)
+        point: directions[dir](lastPoint),
       };
     })
-    .filter(function(d) {
+    .filter(function (d) {
       return pointIsInBounds(d.point);
     })
-    .map(function(d) {
+    .map(function (d) {
       return {
         direction: d.direction,
-        index: pointToIndex(d.point)
+        index: pointToIndex(d.point),
       };
     });
 
   function revealAdjacentChoices(index, frame) {
     adjacentChoices
-      .map(function(d) {
+      .map(function (d) {
         return d.index;
       })
-      .filter(function() {
+      .filter(function () {
         return Math.random() < 0.2;
       })
-      .forEach(function(index) {
+      .forEach(function (index) {
         frame.topography[index].revealed += nearbyRevealFactor;
       });
 
@@ -399,15 +393,15 @@ function createNewFrame(lastFrame) {
 
   function createNewFrame(tuple) {
     var newFrame = {
-      topography: lastFrame.topography.map(function(d) {
+      topography: lastFrame.topography.map(function (d) {
         // copy
         return {
           height: d.height,
           // decrement reveal, if not 0
           revealed: d.revealed ? d.revealed - 1 : 0,
-          explored: d.explored
+          explored: d.explored,
         };
-      })
+      }),
     };
     newFrame.duration = randDuration();
     newFrame.walkerIndex = tuple.index;
@@ -422,13 +416,13 @@ function createNewFrame(lastFrame) {
    * Same direction
    */
   var sameDirIndices = adjacentChoices
-    .filter(function(d) {
+    .filter(function (d) {
       return d.direction === lastFrame.direction;
     })
-    .map(function(d) {
+    .map(function (d) {
       return {
         direction: "",
-        index: d.index
+        index: d.index,
       };
     });
 
@@ -439,7 +433,7 @@ function createNewFrame(lastFrame) {
   /**
    * Unexplored
    */
-  var unexploredIndices = adjacentChoices.filter(function(d) {
+  var unexploredIndices = adjacentChoices.filter(function (d) {
     return !lastFrame.topography[d.index].explored;
   });
 
@@ -452,7 +446,7 @@ function createNewFrame(lastFrame) {
    * If all adjacent points are explored, move to the point with the lowest "reveal",
    * aligned with the "try to remember the past" instruction.
    */
-  var exploredIndices = adjacentChoices.filter(function(d) {
+  var exploredIndices = adjacentChoices.filter(function (d) {
     return lastFrame.topography[d.index].explored;
   });
 
@@ -467,7 +461,7 @@ function createNewFrame(lastFrame) {
 
   var exploredIndexLeastRevealed = []
     .concat(exploredIndices)
-    .sort(function(a, b) {
+    .sort(function (a, b) {
       return getRevealed(a.index) > getRevealed(b.index);
     })[0];
 
@@ -490,8 +484,8 @@ function toggleText(duration, toggle) {
     .attr("opacity", toggle ? 1 : 0);
 }
 
-var makeTextToggler = function(toggle) {
-  return function(duration) {
+var makeTextToggler = function (toggle) {
+  return function (duration) {
     toggleText(duration, toggle);
   };
 };
@@ -503,11 +497,11 @@ topo
   .data(walkEvents[0].topography)
   .enter()
   .append("text")
-  .attr("x", function(d, i) {
+  .attr("x", function (d, i) {
     var c = indexToPoint(i);
     return (c.x - c.y) * tileWidthHalf;
   })
-  .each(function(d, i) {
+  .each(function (d, i) {
     var symbolIndex = ~~topography[i] + 4; // NOTE get symbols from topography, not own data
     var symbolKey = getStringByIndex(symbolIndex);
     var offsets = symbolSet.offsets[symbolKey];
@@ -535,7 +529,7 @@ function update(selection, dur, frameIndex) {
     .data(walkEvents[frameIndex].topography)
     .transition()
     .duration(dur)
-    .attr("y", function(d, i) {
+    .attr("y", function (d, i) {
       var c = indexToPoint(i);
       var hScale = d.revealed ? heightScale.revealed : heightScale.hidden;
 
@@ -543,7 +537,7 @@ function update(selection, dur, frameIndex) {
 
       return (c.x + c.y) * tileHeightHalf - scaledHeight;
     })
-    .style("opacity", function(d) {
+    .style("opacity", function (d) {
       return d.revealed / revealFactor;
     });
 }
@@ -564,48 +558,48 @@ VS.score.preroll = transitionTime;
 var textEventList = [
   {
     duration: 0,
-    action: makeTextToggler(false)
+    action: makeTextToggler(false),
   },
   {
     duration: 3600,
-    action: makeTextToggler(true)
+    action: makeTextToggler(true),
   },
   {
     duration: 3600,
-    action: makeTextToggler(false)
-  }
+    action: makeTextToggler(false),
+  },
 ];
 
-var walkEventList = walkEvents.map(function(frame, frameIndex) {
+var walkEventList = walkEvents.map(function (frame, frameIndex) {
   return {
     duration: frame.duration,
     action: updateSymbols,
-    parameters: [600, frameIndex]
+    parameters: [600, frameIndex],
   };
 });
 
 var finalEventList = [
   {
     duration: 0,
-    action: function() {}
-  }
+    action: function () {},
+  },
 ];
 
 var eventList = []
   .concat(textEventList, walkEventList, finalEventList)
-  .map(function(bar, i, list) {
-    bar.time = list.slice(0, i).reduce(function(sum, bar2) {
+  .map(function (bar, i, list) {
+    bar.time = list.slice(0, i).reduce(function (sum, bar2) {
       return (sum += bar2.duration);
     }, 0);
     return bar;
   });
 
-eventList.forEach(function(bar) {
+eventList.forEach(function (bar) {
   VS.score.add(bar.time, bar.action, bar.parameters);
 });
 
 // {% include_relative _controls.js %}
-VS.control.hooks.add("step", function() {
+VS.control.hooks.add("step", function () {
   var pointer = VS.score.getPointer();
   var scoreEvent = eventList[pointer];
   var parameters = [].concat(
@@ -615,7 +609,7 @@ VS.control.hooks.add("step", function() {
   scoreEvent.action.apply(null, parameters);
 });
 
-VS.control.hooks.add("stop", function() {
+VS.control.hooks.add("stop", function () {
   makeTextToggler(false)(150);
   updateSymbols(150, 0);
 });

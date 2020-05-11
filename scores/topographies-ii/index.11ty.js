@@ -5,7 +5,7 @@ module.exports = class {
       title: "topographies, book ii",
       instrumentation: "any ensemble",
       status: "wip",
-      formats: ["score"]
+      formats: ["score"],
     };
   }
 

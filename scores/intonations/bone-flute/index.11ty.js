@@ -10,8 +10,8 @@ module.exports = class {
         ...baseTemplateData.modules,
         "bravura",
         "dictionary",
-        "line-cloud"
-      ]
+        "line-cloud",
+      ],
     };
   }
 

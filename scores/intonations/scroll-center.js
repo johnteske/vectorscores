@@ -5,12 +5,12 @@ export default function makeScrollFunctions(scoreGroup, xValues) {
   }
 
   return {
-    setScorePosition: function() {
+    setScorePosition: function () {
       const index = VS.score.getPointer();
       centerScoreByIndex(index, 0);
     },
-    scrollToNextBar: function(index, duration) {
+    scrollToNextBar: function (index, duration) {
       centerScoreByIndex(index + 1, duration);
-    }
+    },
   };
 }

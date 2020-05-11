@@ -1,23 +1,22 @@
-const requireRoot = require("app-root-path").require;
-const { withBaseUrl } = requireRoot("render-utils.js");
+const { url } = require("eleventy-lib");
 
-const menuItem = currentPageUrl => page => {
+const menuItem = (currentPageUrl) => (page) => {
   return `<a class="page-link" ${
     page.url === currentPageUrl ? "active" : ""
-  } href="${withBaseUrl(page.data.site, page.data.page.url)}">${
+  } href="${url.base(page.data.site.baseUrl, page.data.page.url)}">${
     page.data.title
   }</a>`;
 };
 
-const menu = data =>
+const menu = (data) =>
   data.collections.topNav
     ? `${data.collections.topNav.map(menuItem(data.page.url)).join("")}`
     : "";
 
-module.exports = data => `<header class="site-header">
+module.exports = (data) => `<header class="site-header">
     <div class="wrapper">
-        <a class="site-title vectorscores" href="${withBaseUrl(
-          data.site,
+        <a class="site-title vectorscores" href="${url.base(
+          data.site.baseUrl,
           "/"
         )}">${data.site.title}</a>
         <nav class="site-nav">

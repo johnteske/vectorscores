@@ -3,7 +3,7 @@ module.exports = class {
     return {
       layout: "score",
       title: "3D object",
-      status: "unlisted"
+      status: "unlisted",
     };
   }
 

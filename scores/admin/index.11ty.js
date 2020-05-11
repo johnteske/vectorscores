@@ -1,5 +1,4 @@
-const requireRoot = require("app-root-path").require;
-const { catMap } = requireRoot("render-utils");
+const { catMap } = require("eleventy-lib");
 
 const options = require("./_options.11ty.js");
 
@@ -12,15 +11,15 @@ module.exports = class {
       title: "admin",
       status: "unlisted",
       options: "noop",
-      modules: ["websockets"]
+      modules: ["websockets"],
     };
   }
 
   render(data) {
     const works = data.collections.all
       //.filter(w => ["score", "score-set", "movement"].includes(w.data.layout))
-      .filter(w => ["score", "movement"].includes(w.data.layout))
-      .filter(w => whitelist.some(name => w.url.includes(name)))
+      .filter((w) => ["score", "movement"].includes(w.data.layout))
+      .filter((w) => whitelist.some((name) => w.url.includes(name)))
       //.filter(w => w.data.status !== "test")
       //.filter(w => w.data.status !== "unlisted");
       .sort((a, b) => {
@@ -29,7 +28,7 @@ module.exports = class {
 
     return `
       ${options()}
-      ${catMap(work => `<button>${work.url}</button>`, works)}
+      ${catMap((work) => `<button>${work.url}</button>`, works)}
     `;
   }
 };

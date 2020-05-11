@@ -6,7 +6,7 @@ module.exports = class {
       composer: "John Teske",
       instrumentation: "any ensemble",
       status: "published",
-      formats: "score"
+      formats: "score",
     };
   }
 

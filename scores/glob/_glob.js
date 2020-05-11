@@ -7,7 +7,7 @@ function newPoint(x, y) {
     d = Math.random() - Math.random();
   return {
     x: Math.cos(angle) * r * d + x,
-    y: Math.sin(angle) * r * d + y
+    y: Math.sin(angle) * r * d + y,
   };
 }
 
@@ -30,19 +30,16 @@ function Glob(parent, canvas, args) {
 
   this.center = {
     x: 0,
-    y: 0
+    y: 0,
   };
 
   // this.data = d3.range(this.size); // fallback if no data
 }
 
-Glob.prototype.move = function(dur, data) {
+Glob.prototype.move = function (dur, data) {
   var self = this,
     type = data.type,
-    t = d3
-      .transition()
-      .duration(dur)
-      .ease(d3.easeCubic);
+    t = d3.transition().duration(dur).ease(d3.easeCubic);
 
   // this.data = data;
 
@@ -54,7 +51,7 @@ Glob.prototype.move = function(dur, data) {
 
   this.center = {
     x: VS.getRandExcl(-radius, radius),
-    y: VS.getRandExcl(-radius, radius)
+    y: VS.getRandExcl(-radius, radius),
   };
 
   function transform() {
@@ -78,17 +75,14 @@ Glob.prototype.move = function(dur, data) {
     .remove();
 
   // update
-  globules
-    .transition(t)
-    .style("opacity", 1)
-    .attr("transform", transform);
+  globules.transition(t).style("opacity", 1).attr("transform", transform);
 
   // enter
   globules
     .enter()
     .append("text")
     .attr("class", "globule")
-    .text(function(d) {
+    .text(function (d) {
       return durationDict[d];
     })
     .attr("transform", "translate(" + oldCenter.x + "," + oldCenter.y + ")")

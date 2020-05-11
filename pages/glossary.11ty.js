@@ -1,20 +1,21 @@
-const { catMap, handleUndefined, slugify } = require("../render-utils");
+const slugify = require("slugify");
+const { catMap, maybe } = require("eleventy-lib");
 
 module.exports = class {
   data() {
     return {
       title: "Glossary",
       layout: "page",
-      permalink: "/glossary/"
+      permalink: "/glossary/",
     };
   }
 
   render(data) {
     return `<dl>
-      ${handleUndefined(
+      ${maybe(
         data.glossary &&
           catMap(
-            term =>
+            (term) =>
               `<dt id="${slugify(term.name)}">${term.name}</dt><dd>${
                 term.description
               }</dd>`,

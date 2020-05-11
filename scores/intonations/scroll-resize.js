@@ -7,7 +7,7 @@ export default function makeResize(
   scoreGroup,
   setScorePosition
 ) {
-  return function() {
+  return function () {
     VS.score.isPlaying() && VS.score.pause();
 
     const w = parseInt(svg.style("width"), 10);

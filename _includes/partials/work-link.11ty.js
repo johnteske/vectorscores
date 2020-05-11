@@ -1,5 +1,4 @@
-const requireRoot = require("app-root-path").require;
-const { withBaseUrl } = requireRoot("render-utils");
+const { url } = require("eleventy-lib");
 
-module.exports = d =>
-  `<a href="${withBaseUrl(d.data.site, d.url)}" class="work-title">${d.data.title}</a>`;
+module.exports = data =>
+  `<a href="${url.base(data.data.site.baseUrl, data.url)}" class="work-title">${data.data.title}</a>`;

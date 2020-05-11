@@ -9,11 +9,11 @@ var score = {
     .select(".main")
     .attr("width", 640)
     .attr("height", 640)
-    .append("g")
+    .append("g"),
 };
 score.center = {
   x: score.width * 0.5 - 0.5,
-  y: score.height * 0.5 - 0.5
+  y: score.height * 0.5 - 0.5,
 };
 score.radius = Math.sqrt(Math.pow(score.width, 2) + Math.pow(score.height, 2)); // distance of player from center of score
 score.obj = createScore();
@@ -26,30 +26,30 @@ function Performer() {
     _position = {};
 
   return {
-    setAngle: function(newAngle) {
+    setAngle: function (newAngle) {
       // substract 90 degress so origin is top, then convert to radians
       _angle = (newAngle - 90) * (Math.PI / 180);
 
       _position = {
         x: score.center.x + score.radius * Math.cos(_angle),
-        y: score.center.y + score.radius * Math.sin(_angle)
+        y: score.center.y + score.radius * Math.sin(_angle),
       };
 
       return _angle;
     },
-    getAngle: function() {
+    getAngle: function () {
       return _angle;
     },
-    getPosition: function() {
+    getPosition: function () {
       return _position;
     },
-    get: function() {
+    get: function () {
       return {
         x: _position.x,
         y: _position.y,
-        angle: _angle
+        angle: _angle,
       };
-    }
+    },
   };
 }
 

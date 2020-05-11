@@ -1,4 +1,4 @@
-export default function(update, tt) {
+export default function (update, tt) {
   var score = [];
   var bars = [
     // <
@@ -7,109 +7,109 @@ export default function(update, tt) {
       types: ["glob"],
       range: [0, 0],
       dynamics: "n",
-      pitch: { set: [] }
+      pitch: { set: [] },
     },
     // A
     {
       types: ["glob"],
       range: [1, 4],
       dynamics: "pp",
-      pitch: { set: [0, 1, 2] }
+      pitch: { set: [0, 1, 2] },
     },
     {
       types: ["glob"],
       range: [1, 4],
       dynamics: "p",
-      pitch: { set: [0, 1, 4] }
+      pitch: { set: [0, 1, 4] },
     },
     // B
     {
       types: ["glob", "chord"],
       range: [3, 7],
       dynamics: "mf",
-      pitch: { set: [0, 1, 6] }
+      pitch: { set: [0, 1, 6] },
     },
     {
       types: ["glob", "chord"],
       range: [3, 7],
       dynamics: "mf",
-      pitch: { set: [0, 2, 6] }
+      pitch: { set: [0, 2, 6] },
     },
     {
       types: ["glob", "chord"],
       range: [3, 7],
       dynamics: "mf",
-      pitch: { set: [0, 1, 3] }
+      pitch: { set: [0, 1, 3] },
     },
     // C
     {
       types: ["glob"],
       range: [3, 13],
       dynamics: "mp",
-      pitch: { set: [0, 1, 4] }
+      pitch: { set: [0, 1, 4] },
     },
     {
       types: ["rhythm"],
       range: [3, 13],
       dynamics: "p",
-      pitch: { set: [0, 2, 5] }
+      pitch: { set: [0, 2, 5] },
     },
     {
       types: ["glob", "rhythm"],
       range: [3, 13],
       dynamics: "mp",
-      pitch: { set: [0, 1, 5] }
+      pitch: { set: [0, 1, 5] },
     },
     // D
     {
       types: ["glob"],
       range: [12, 19],
       dynamics: "mf",
-      pitch: { set: [0, 1, 3] }
+      pitch: { set: [0, 1, 3] },
     },
     {
       types: ["glob"],
       range: [12, 25],
       dynamics: "ff",
-      pitch: { set: [0, 1, 4, 6] }
+      pitch: { set: [0, 1, 4, 6] },
     },
     {
       types: ["glob"],
       range: [12, 25],
       dynamics: "f",
-      pitch: { set: [0, 1, 4] }
+      pitch: { set: [0, 1, 4] },
     },
     // E
     {
       types: ["glob", "chord", "rhythm"],
       range: [12, 25],
       dynamics: "mf",
-      pitch: { set: [0, 2, 6] }
+      pitch: { set: [0, 2, 6] },
     },
     {
       types: ["glob", "chord", "rhythm"],
       range: [12, 25],
       dynamics: "mp",
-      pitch: { set: [0, 1, 6] }
+      pitch: { set: [0, 1, 6] },
     },
     {
       types: ["glob", "chord", "rhythm"],
       range: [12, 25],
       dynamics: "p",
-      pitch: { set: [0, 2, 5] }
+      pitch: { set: [0, 2, 5] },
     },
     // F
     {
       types: ["glob", "chord"],
       range: [1, 25],
       dynamics: "pp",
-      pitch: { set: [0, 1, 5] }
+      pitch: { set: [0, 1, 5] },
     },
     {
       types: ["glob", "rhythm"],
       range: [1, 4],
       dynamics: "ppp",
-      pitch: { set: [0, 1, 3] }
+      pitch: { set: [0, 1, 3] },
     },
     // >
     {
@@ -117,8 +117,8 @@ export default function(update, tt) {
       types: ["glob"],
       range: [0, 0],
       dynamics: "n",
-      pitch: { set: [] }
-    }
+      pitch: { set: [] },
+    },
   ];
 
   var globules0 = [],
@@ -156,19 +156,19 @@ export default function(update, tt) {
       globs: [
         {
           type: VS.getItem(bar.types),
-          durations: globules0
+          durations: globules0,
         },
         {
           type: VS.getItem(bar.types),
-          durations: globules1
+          durations: globules1,
         },
         {
           type: VS.getItem(bar.types),
-          durations: globules2
-        }
+          durations: globules2,
+        },
       ],
       dynamics: bar.dynamics,
-      pitch: bar.pitch
+      pitch: bar.pitch,
     });
 
     VS.score.add(time, update, [tt, score[i]]);

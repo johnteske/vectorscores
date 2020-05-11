@@ -24,8 +24,8 @@ module.exports = class {
         "dictionary",
         "websockets",
         "settings/number",
-        "settings/checkbox"
-      ]
+        "settings/checkbox",
+      ],
     };
   }
 

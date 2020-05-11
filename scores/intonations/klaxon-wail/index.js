@@ -38,9 +38,7 @@ const dynamic = (selection, type, value) =>
 function wail(selection) {
   const g = group(selection).call(translate, 0, pitchScale(0.75));
 
-  text(g, "wail")
-    .attr("dy", "1.66em")
-    .style("font-size", 10);
+  text(g, "wail").attr("dy", "1.66em").style("font-size", 10);
   //text(g, "growl/scream though instrument");
   //bravura(g, articulationGlyph[">"]);
 
@@ -58,17 +56,10 @@ function alarm(selection) {
   const g = group(selection).call(translate, 0, pitchScale(1));
 
   //text(g, "alarm").attr("dy", "1em");
-  text(g, "0")
-    .attr("dy", "1em")
-    .style("font-size", 8);
-  text(g, "2")
-    .attr("dy", "1em")
-    .attr("dx", 16)
-    .style("font-size", 8);
+  text(g, "0").attr("dy", "1em").style("font-size", 8);
+  text(g, "2").attr("dy", "1em").attr("dx", 16).style("font-size", 8);
   bravura(g, durationGlyph[2]).attr("dy", "0.8em");
-  bravura(g, durationGlyph[1])
-    .attr("dy", "0.7em")
-    .attr("dx", 16);
+  bravura(g, durationGlyph[1]).attr("dy", "0.7em").attr("dx", 16);
 
   dynamic(g, "symbol", "mf").call(translate, 0, -12);
 
@@ -92,7 +83,7 @@ function droneCluster(selection, length) {
 const score = [
   {
     duration: 0,
-    render: () => group()
+    render: () => group(),
   },
   {
     duration: seconds(20),
@@ -104,7 +95,7 @@ const score = [
       droneCluster(g, length);
 
       return g;
-    }
+    },
   },
   {
     duration: seconds(20),
@@ -116,7 +107,7 @@ const score = [
       droneCluster(g, length);
 
       return g;
-    }
+    },
   },
   {
     duration: seconds(20),
@@ -128,26 +119,24 @@ const score = [
       droneCluster(g, length);
 
       return g;
-    }
+    },
   },
   {
     duration: 0,
-    render: () => group()
-  }
+    render: () => group(),
+  },
 ]
   .map(startTimeFromDuration)
-  .map(bar => ({ ...bar, length: pitchRange }));
+  .map((bar) => ({ ...bar, length: pitchRange }));
 
 function renderScore() {
   score.forEach((bar, i) => {
     const { render, ...data } = bar;
-    render(data)
-      .attr("class", `frame frame-${i}`)
-      .style("opacity", 0);
+    render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
   });
 }
 
-const showFrame = i => {
+const showFrame = (i) => {
   d3.selectAll(".frame").style("opacity", 0);
   d3.selectAll(`.frame-${i}`).style("opacity", 1);
 };
