@@ -47,12 +47,10 @@ The *vectorscores* framework is released under the [MIT License](https://opensou
 
 ## Roadmap
 
-### Scope
-The current scope of this project is to require as few dependencies as possible for ease of performances and contribution.
-
 ### Public access to works
-- viewing and contribution via GitHub
-- download generated vector files and pdfs of scores
-- download pre-selected vector files and pdfs of scores
+- public-facing website
+- open source repository
 - clone or download repository to run on local machine or WLAN
 - documentation of premiere performances and other performances as available
+- download pre-selected vector files and pdfs of scores (TODO)
+- download generated vector files and pdfs of scores (TODO)
