@@ -8,5 +8,5 @@ module.exports = {
   layout: "movement",
   composer: "John Teske",
   options: websocketsSettings(),
-  modules: ["websockets"]
+  modules: ["websockets"],
 };

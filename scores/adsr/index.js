@@ -19,7 +19,7 @@ VS.scoreOptions.add("verbose", "off", new VS.CheckboxSetting("verbose"));
 var scoreOptions = VS.scoreOptions.setFromQueryString();
 scoreOptions.parts = VS.clamp(scoreOptions.parts, 1, 16);
 
-var score = (function() {
+var score = (function () {
   var _score = {};
 
   _score.totalDuration = 360; // TODO recommend length based on *total* number in ensemble, i.e. 8 parts = 600 seconds
@@ -31,7 +31,7 @@ var score = (function() {
     .attr("transform", "scale(" + _score.scale + "," + _score.scale + ")");
   _score.group = _score.wrapper.append("g");
   _score.layout = {
-    group: _score.group.append("g").attr("class", "layout")
+    group: _score.group.append("g").attr("class", "layout"),
   };
   // to help track overall part height
   _score.partLayersY = {
@@ -39,11 +39,11 @@ var score = (function() {
     pitch: -2.5 * unitY,
     // if flag without notehead, offset y position
     // TODO do not offset dot? would require a separate text element for the dot
-    durations: function(d) {
+    durations: function (d) {
       return 0 < d && d < 1 ? -0.5 * unitY : 0;
     },
     articulations: 1.25 * unitY,
-    dynamics: 3.5 * unitY
+    dynamics: 3.5 * unitY,
   };
   // calculated from above/rendered
   _score.partHeight = 12 * unitY;
@@ -52,9 +52,9 @@ var score = (function() {
     rehearsalLetters: unitY * -2,
     barlines: {
       y1: 3 * unitY,
-      y2: scoreOptions.parts * _score.partHeight + 6 * unitY
+      y2: scoreOptions.parts * _score.partHeight + 6 * unitY,
     },
-    barDurations: unitY
+    barDurations: unitY,
   };
   _score.height =
     _score.layoutLayersY.rehearsalLetters + _score.layoutLayersY.barlines.y2;
@@ -65,13 +65,13 @@ var score = (function() {
 })();
 
 // symbol dictionary
-var dict = (function() {
+var dict = (function () {
   var db = VS.dictionary.Bravura;
   return {
     acc: db.accidentals,
     art: db.articulations,
     dur: db.durations.stemless,
-    dyn: db.dynamics
+    dyn: db.dynamics,
   };
 })();
 
@@ -143,8 +143,8 @@ score.bars = [
   283.28157299975,
   289.66744387541,
   293.61412912434,
-  300
-].map(function(bar) {
+  300,
+].map(function (bar) {
   return bar * score.timeScale;
 });
 
@@ -158,7 +158,7 @@ score.structure = [
   0.381924,
   0.618,
   0.763970968,
-  1
+  1,
 ];
 
 score.rehearsalLetters = [
@@ -166,7 +166,7 @@ score.rehearsalLetters = [
   { letter: "B", index: 12 },
   { letter: "C", index: 18 },
   { letter: "D", index: 24 },
-  { letter: "E", index: 27 }
+  { letter: "E", index: 27 },
 ];
 
 var durations = [0.2, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6, 8];
@@ -180,7 +180,7 @@ var timbres = [
   "flutter",
   "vib.",
   "ord.",
-  "l.v."
+  "l.v.",
 ];
 var dynamics = ["f", "mf", "mp", "p", "pp", "pp", "p", "mp", "mf", "f", "ff"];
 
@@ -189,13 +189,13 @@ var envelopes = {
   timeDispersion: [0, 0, 1, 1.5, 2, 2.5, 3],
   pitch: {
     high: [0, 0, 0.5, 1, 1.5, 2, 2],
-    low: [0, -0.5, -1, -1.5, -2, -2, -2]
+    low: [0, -0.5, -1, -1.5, -2, -2, -2],
   },
   duration: {
     high: [0.2, 0.75, 1.5, 3, 6, 4, 4],
-    low: [0.2, 0.5, 0.5, 1.0, 2, 3, 3]
+    low: [0.2, 0.5, 0.5, 1.0, 2, 3, 3],
   },
-  timbre: [0, 2, 4, 5, 6, 8, 9]
+  timbre: [0, 2, 4, 5, 6, 8, 9],
 };
 
 var parts = [];
@@ -213,7 +213,7 @@ for (var p = 0; p < scoreOptions.parts; p++) {
     var endLastPhrase = 0;
     if (i > 0) {
       var lastIndex = i - 1,
-        lastPhraseDuration = part[lastIndex].durations.reduce(function(a, b) {
+        lastPhraseDuration = part[lastIndex].durations.reduce(function (a, b) {
           return a + b;
         }, 0);
       // TODO last dur is not incuded in sum?
@@ -248,13 +248,13 @@ for (var p = 0; p < scoreOptions.parts; p++) {
       phrase.pitch = {
         // pitch center
         high: 0,
-        low: 0
+        low: 0,
       };
     } else if (i === lastBar) {
       phrase.pitch = {
         // full range
         high: 2,
-        low: -2
+        low: -2,
       };
     } else {
       phrase.pitch = {
@@ -271,7 +271,7 @@ for (var p = 0; p < scoreOptions.parts; p++) {
           ),
           -2,
           0
-        )
+        ),
       };
     }
 
@@ -349,7 +349,7 @@ score.layout.group
   .attr("y1", score.layoutLayersY.barlines.y1)
   .attr("x2", 0)
   .attr("y2", score.layoutLayersY.barlines.y2)
-  .attr("transform", function(d) {
+  .attr("transform", function (d) {
     return "translate(" + getBarlineX(d) + ", " + 0 + ")";
   });
 
@@ -360,13 +360,13 @@ score.layout.group
   .data(score.bars)
   .enter()
   .append("text")
-  .text(function(d, i) {
+  .text(function (d, i) {
     var dur = getBarDuration(i);
     // do not display last bar's duration
     return i < score.bars.length - 1 ? decimalRound(dur, 1) + "\u2033" : "";
   })
   .classed("bar-duration", 1)
-  .attr("transform", function(d) {
+  .attr("transform", function (d) {
     return (
       "translate(" +
       getBarlineX(d) +
@@ -383,7 +383,7 @@ score.layout.letters = score.layout.group
   .data(score.rehearsalLetters)
   .enter()
   .append("g")
-  .attr("transform", function(d) {
+  .attr("transform", function (d) {
     return (
       "translate(" +
       getBarlineX(score.bars[d.index]) +
@@ -392,18 +392,14 @@ score.layout.letters = score.layout.group
       ")"
     );
   });
-score.layout.letters.each(function() {
+score.layout.letters.each(function () {
   var thisLetter = d3.select(this);
 
-  thisLetter
-    .append("rect")
-    .attr("y", -15)
-    .attr("width", 20)
-    .attr("height", 20);
+  thisLetter.append("rect").attr("y", -15).attr("width", 20).attr("height", 20);
 
   thisLetter
     .append("text")
-    .text(function(d) {
+    .text(function (d) {
       return d.letter;
     })
     .attr("dx", "0.25em");
@@ -426,16 +422,16 @@ var cueTriangle = score.wrapper.append("path").call(makeCueTriangle);
 
 var cueIndicator = VS.cueBlink(cueTriangle)
   .beats(3)
-  .inactive(function(selection) {
+  .inactive(function (selection) {
     selection.style("fill-opacity", 0);
   })
-  .on(function(selection) {
+  .on(function (selection) {
     selection.style("fill-opacity", 1);
   })
-  .off(function(selection) {
+  .off(function (selection) {
     selection.style("fill-opacity", 0);
   })
-  .down(function(selection) {
+  .down(function (selection) {
     selection.style("fill-opacity", 1);
   });
 
@@ -446,7 +442,7 @@ function cueBlink() {
 /**
  * Cue indicators up to section A
  */
-(function() {
+(function () {
   var i,
     len = score.rehearsalLetters[0].index;
   for (i = 0; i <= len; i++) {
@@ -552,12 +548,12 @@ for (p = 0; p < scoreOptions.parts; p++) {
     .data(score.bars)
     .enter()
     .append("g")
-    .attr("transform", function(d, i) {
+    .attr("transform", function (d, i) {
       var x = thisPart[i].startTime * unitX;
       return "translate(" + x + ", " + 0 + ")";
     })
     // add phrase content
-    .each(function(d, i) {
+    .each(function (d, i) {
       var thisPartGroup = d3.select(this);
       var thisPhrase = thisPart[i];
       var prevPhrase = thisPart[i - 1];
@@ -572,7 +568,7 @@ for (p = 0; p < scoreOptions.parts; p++) {
       }
 
       function getNestedProp(prop, obj) {
-        return prop.split(".").reduce(function(prev, curr) {
+        return prop.split(".").reduce(function (prev, curr) {
           return prev[curr];
         }, obj || this);
       }
@@ -607,7 +603,7 @@ for (p = 0; p < scoreOptions.parts; p++) {
 
       var pitchDisplay, pitchDisplayClass;
       // if (scoreOptions.pitchDisplay === 'accidentals') {
-      pitchDisplay = function() {
+      pitchDisplay = function () {
         var lo = thisPhrase.pitch.low,
           hi = thisPhrase.pitch.high;
         return (
@@ -645,7 +641,7 @@ for (p = 0; p < scoreOptions.parts; p++) {
         .data(durations)
         .enter()
         .append("text")
-        .text(function(d) {
+        .text(function (d) {
           if (!d) {
             return dict.art["x"]; // x notehead is an articulation, not a duration
           } else if (d === 1.1) {
@@ -682,16 +678,16 @@ for (p = 0; p < scoreOptions.parts; p++) {
         .data(articulations)
         .enter()
         .append("text")
-        .text(function(d) {
+        .text(function (d) {
           return dict.art[d];
         })
         .classed("articulations", true)
         .attr("y", layersY.articulations)
         .call(phraseSpacing)
-        .attr("dx", function(d) {
+        .attr("dx", function (d) {
           return d === "l.v." ? 12 : 0;
         })
-        .attr("dy", function(d) {
+        .attr("dy", function (d) {
           return d === "l.v." ? unitY * -0.5 : 0;
         });
 
@@ -702,10 +698,10 @@ for (p = 0; p < scoreOptions.parts; p++) {
           .data(dynamics)
           .enter()
           .append("text")
-          .text(function(d) {
+          .text(function (d) {
             return d === "dim." ? "dim." : dict.dyn[d];
           })
-          .attr("class", function(d) {
+          .attr("class", function (d) {
             return d === "dim." ? "timbre" : "dynamics";
           })
           .attr("y", layersY.dynamics)
@@ -742,7 +738,7 @@ function scrollScore(index, dur, goToNextBar) {
 // add final event 30 seconds after last bar, for playback
 score.bars.push(score.bars[score.bars.length - 1] + 30);
 
-(function() {
+(function () {
   var i,
     len = score.bars.length;
 
@@ -751,7 +747,7 @@ score.bars.push(score.bars[score.bars.length - 1] + 30);
     VS.score.add(score.bars[i] * 1000, i < len - 1 && scrollScore, [
       i,
       getBarDuration(i) * 1000,
-      true
+      true,
     ]);
   }
 })();
@@ -836,10 +832,7 @@ var infoCue = d3
 infoCue.append("path").call(makeCueTriangle);
 
 // add ghost
-var infoGhost = d3
-  .select(".info-ghost")
-  .attr("width", 58)
-  .attr("height", 52);
+var infoGhost = d3.select(".info-ghost").attr("width", 58).attr("height", 52);
 
 makeGhost.call(infoGhost.node());
 

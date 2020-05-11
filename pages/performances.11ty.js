@@ -18,9 +18,9 @@ const getWorkUrl = (data, title) => {
 };
 
 const performanceList = (data) => {
-  const performances = data.performances.reverse().filter((p) =>
-    p.tags != null && p.tags.includes("vectorscores")
-  );
+  const performances = data.performances
+    .reverse()
+    .filter((p) => p.tags != null && p.tags.includes("vectorscores"));
   const workLink = (title) => {
     const url = getWorkUrl(data, title);
     return url ? `<a href="${url}" class="work-title">${title}/a>` : title;

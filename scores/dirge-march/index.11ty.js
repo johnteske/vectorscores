@@ -24,8 +24,8 @@ module.exports = class {
         "settings/radio",
         "settings/pitch-classes",
         "settings/number",
-        "line-cloud"
-      ]
+        "line-cloud",
+      ],
     };
   }
   render(data) {

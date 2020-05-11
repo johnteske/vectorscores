@@ -6,7 +6,7 @@ module.exports = class {
     return {
       title: "Glossary",
       layout: "page",
-      permalink: "/glossary/"
+      permalink: "/glossary/",
     };
   }
 
@@ -15,7 +15,7 @@ module.exports = class {
       ${maybe(
         data.glossary &&
           catMap(
-            term =>
+            (term) =>
               `<dt id="${slugify(term.name)}">${term.name}</dt><dd>${
                 term.description
               }</dd>`,

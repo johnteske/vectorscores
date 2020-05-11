@@ -1,4 +1,4 @@
-module.exports = data =>
+module.exports = (data) =>
   `<header id="score-header">
         <h1 class="score-title">${data.title}</h1>
         ${

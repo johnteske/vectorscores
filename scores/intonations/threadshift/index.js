@@ -22,13 +22,10 @@ function timeScale(t) {
   return t / 200;
 }
 
-const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
+const makeCue = (selection) => cue(selection).attr("y", -1 * pitchRange);
 
 const ensemble = (selection, str) =>
-  selection
-    .append("text")
-    .text(str)
-    .attr("class", "text-ensemble");
+  selection.append("text").text(str).attr("class", "text-ensemble");
 
 const { svg, page, scoreGroup, indicator } = makeScrollingScore();
 
@@ -56,27 +53,27 @@ const makeDuration = (x, duration) =>
 
 const { articulations, dynamics } = VS.dictionary.Bravura;
 
-const splitDynamics = endDynamic => [
+const splitDynamics = (endDynamic) => [
   {
     type: "symbol",
     value: "sffz", // sfffz?
-    x: 0
+    x: 0,
   },
   {
     type: "symbol",
     value: "mf",
-    x: 0.15
+    x: 0.15,
   },
   {
     type: "text",
     value: "decres.",
-    x: 0.5
+    x: 0.5,
   },
   {
     type: "symbol",
     value: endDynamic,
-    x: 1
-  }
+    x: 1,
+  },
 ];
 
 const score = [
@@ -96,13 +93,13 @@ const score = [
           {
             type: "symbol",
             value: "p",
-            x: 0
+            x: 0,
           },
           {
             type: "text",
             value: "siempre",
-            x: 0.25
-          }
+            x: 0.25,
+          },
         ],
         length,
         g
@@ -111,7 +108,7 @@ const score = [
       makeCue(g);
 
       makeDuration(x, duration);
-    }
+    },
   },
   {
     startTime: null,
@@ -122,17 +119,15 @@ const score = [
       translate(x, pitchScale(0.5), g);
 
       // cluster
-      g.append("text")
-        .text("\ue123")
-        .attr("class", "bravura");
+      g.append("text").text("\ue123").attr("class", "bravura");
 
       drawDynamics(
         [
           {
             type: "symbol",
             value: "sffz", // sfffz?
-            x: 0
-          }
+            x: 0,
+          },
         ],
         length,
         g
@@ -148,7 +143,7 @@ const score = [
 
       makeCue(g);
       makeDuration(x, duration);
-    }
+    },
   },
   {
     startTime: null,
@@ -191,7 +186,7 @@ const score = [
       translate(0, pitchScale(0.5), line);
 
       const patches = translate(0, pitchScale(0.5), g.append("g"));
-      [0.2, 0.4, 0.6].forEach(x => {
+      [0.2, 0.4, 0.6].forEach((x) => {
         noisePatch(x * length, length * 0.1, patches);
       });
 
@@ -207,7 +202,7 @@ const score = [
           { x: 0, y: pitchScale(0.5) },
           { x: length * 0.33, y: pitchScale(0.485) },
           { x: length * 0.66, y: pitchScale(0.265) },
-          { x: length, y: pitchScale(0.25) }
+          { x: length, y: pitchScale(0.25) },
         ],
         [...new Array(50)],
         (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-1, 1) }),
@@ -217,7 +212,7 @@ const score = [
       const bottomNoise = noisePatch(length * 0.25, length, g);
       translate(0, pitchScale(0.25), bottomNoise);
 
-      [0.2, 0.4, 0.6].forEach(x => {
+      [0.2, 0.4, 0.6].forEach((x) => {
         g.append("text") // TODO also add flag
           .text("\ue123")
           .attr("x", length * x)
@@ -230,7 +225,7 @@ const score = [
 
       translate(0, pitchScale(0.5), makeCue(g));
       makeDuration(x, duration);
-    }
+    },
   },
   {
     startTime: null,
@@ -248,7 +243,7 @@ const score = [
 
       ensemble(g, "(solo)");
       makeDuration(x, duration);
-    }
+    },
   },
   {
     startTime: null,
@@ -268,28 +263,25 @@ const score = [
       const makeThread = (x, y, length, selection) => {
         const group = translate(x, y, selection.append("g"));
 
-        group
-          .append("line")
-          .attr("x1", 0)
-          .attr("x2", length);
+        group.append("line").attr("x1", 0).attr("x2", length);
 
         drawDynamics(
           [
             {
               type: "symbol",
               value: "n",
-              x: 0
+              x: 0,
             },
             {
               type: "text",
               value: "cres.",
-              x: 0.5
+              x: 0.5,
             },
             {
               type: "symbol",
               value: "mf",
-              x: 1
-            }
+              x: 1,
+            },
           ],
           length,
           group
@@ -304,7 +296,7 @@ const score = [
 
       ensemble(g, "(tutti)");
       makeDuration(x, duration);
-    }
+    },
   },
   {
     startTime: null,
@@ -317,25 +309,25 @@ const score = [
       doubleBar(g, pitchRange);
 
       translate(0, pitchScale(0.5), makeCue(g));
-    }
-  }
+    },
+  },
 ].map(startTimeFromDuration);
 
 const indexOfAttackBar = score
   .map((bar, index) => ({ ...bar, index }))
-  .find(bar => bar.addPaddingAfter).index;
+  .find((bar) => bar.addPaddingAfter).index;
 
 const scoreWithRenderData = score.map((bar, i) => {
   const padding = i > indexOfAttackBar ? timeScale(3000) : 0;
   return {
     ...bar,
     x: timeScale(bar.startTime) + padding,
-    length: timeScale(bar.duration)
+    length: timeScale(bar.duration),
   };
 });
 
 function renderScore() {
-  scoreWithRenderData.forEach(bar => {
+  scoreWithRenderData.forEach((bar) => {
     const { render, ...data } = bar;
     render(data);
   });
@@ -343,7 +335,7 @@ function renderScore() {
 
 const { setScorePosition, scrollToNextBar } = makeScrollHelpers(
   scoreGroup,
-  scoreWithRenderData.map(bar => bar.x)
+  scoreWithRenderData.map((bar) => bar.x)
 );
 
 score.forEach((bar, i) => {

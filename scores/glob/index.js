@@ -6,15 +6,15 @@ import scoreOptions from "./_options.js";
 var canvas = {
     width: 400,
     height: 400,
-    center: 200
+    center: 200,
   },
   layout = {
     width: 240,
-    margin: {}
+    margin: {},
   },
   transitionTime = {
     long: 20000,
-    short: 600
+    short: 600,
   },
   scoreLength = 12,
   textoffset = 5,
@@ -29,8 +29,8 @@ var glob0 = new Glob(wrapper, canvas);
 var glob1 = new Glob(wrapper, canvas);
 var glob2 = new Glob(wrapper, canvas);
 
-var update = (function(options) {
-  return function(dur, bar) {
+var update = (function (options) {
+  return function (dur, bar) {
     var pcSet = VS.pitchClass.transpose(
       bar.pitch.set,
       bar.pitch.transpose + options.transposition
@@ -114,7 +114,7 @@ function resize() {
 
 resize();
 
-var updateAtPointer = function() {
+var updateAtPointer = function () {
   var pointer = VS.score.getPointer();
 
   if (!VS.score.pointerAtLastEvent()) {

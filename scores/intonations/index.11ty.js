@@ -5,7 +5,7 @@ module.exports = class {
       title: "intonations",
       instrumentation: "any ensemble",
       status: "wip",
-      formats: ["score"]
+      formats: ["score"],
     };
   }
 

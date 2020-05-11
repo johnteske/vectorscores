@@ -36,10 +36,7 @@ const cues = wrapper.append("g");
 const makeCue = (x, type) => cue(cues, type).attr("x", x);
 
 const bloodText = (selection, str) =>
-  selection
-    .append("text")
-    .text(str)
-    .attr("fill", "darkRed");
+  selection.append("text").text(str).attr("fill", "darkRed");
 
 function heavyBreath(selection) {
   const g = selection.append("g");
@@ -108,33 +105,33 @@ const breath = [
           {
             type: "symbol",
             value: "p",
-            x: 0
+            x: 0,
           },
           {
             type: "text",
             value: "cres.",
-            x: 0.25
+            x: 0.25,
           },
           {
             type: "symbol",
             value: "ff",
-            x: 0.5
+            x: 0.5,
           },
           {
             type: "text",
             value: "decres.",
-            x: 0.75
+            x: 0.75,
           },
           {
             type: "symbol",
             value: "n",
-            x: 1
-          }
+            x: 1,
+          },
         ],
         length,
         g
       );
-    }
+    },
   },
   {
     duration: 0,
@@ -144,14 +141,14 @@ const breath = [
       //appendmakeCue(x, "open");
       // TODO if all fades/moriendo, is a double bar needed?
       //doubleBar(g, pitchRange).attr("stroke", "black");
-    }
-  }
+    },
+  },
 ].map(startTimeFromDuration);
 
 const texture = [
   {
     duration: seconds(30),
-    render: () => {}
+    render: () => {},
   },
   // add low scrape
   {
@@ -159,14 +156,12 @@ const texture = [
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, pitchScale(0.25));
-      g.append("text")
-        .text("scrape")
-        .attr("fill", "blue");
+      g.append("text").text("scrape").attr("fill", "blue");
       scrapeDrone(g).attr("x2", length);
       bloodText(g, "choke hold").attr("y", -0.75 * pitchRange); // TODO y pos
       // TODO dynamics?
       //makeCue(x); // TODO dotted line pointing to this
-    }
+    },
   },
   // scrape cluster
   {
@@ -174,15 +169,11 @@ const texture = [
     render: ({ x, length }) => {
       const g = wrapper.append("g");
       translate(g, x, pitchScale(0.25));
-      scrapeDrone(g)
-        .attr("x2", length)
-        .call(translate, 0, -2);
+      scrapeDrone(g).attr("x2", length).call(translate, 0, -2);
       scrapeDrone(g).attr("x2", length);
-      scrapeDrone(g)
-        .attr("x2", length)
-        .call(translate, 0, 2);
+      scrapeDrone(g).attr("x2", length).call(translate, 0, 2);
       // TODO dynamics?
-    }
+    },
   },
   // TODO scrape and drone cres., more pressure
   // growl
@@ -201,14 +192,14 @@ const texture = [
         .call(translate, 0, 10);
 
       // TODO dynamics?
-    }
-  }
+    },
+  },
 ].map(startTimeFromDuration);
 
 const noise = [
   {
     duration: seconds(90),
-    render: () => {}
+    render: () => {},
   },
   {
     duration: seconds(30),
@@ -223,8 +214,8 @@ const noise = [
           .attr("x", Math.random() * length)
           .attr("y", Math.random() * pitchRange);
       }
-    }
-  }
+    },
+  },
 ].map(startTimeFromDuration);
 
 // TODO wall of texture, frantic
@@ -232,12 +223,12 @@ const noise = [
 const score = [...noise, ...breath, ...texture];
 
 const scoreTiming = score
-  .map(bar => bar.startTime)
+  .map((bar) => bar.startTime)
   .filter((startTime, i, times) => times.indexOf(startTime) === i)
   .sort((a, b) => a - b)
   .map((startTime, i, times) => ({
     startTime,
-    duration: times[i + 1] - times[i] || 0
+    duration: times[i + 1] - times[i] || 0,
   }));
 
 scoreTiming.forEach((bar, i) => {
@@ -246,11 +237,11 @@ scoreTiming.forEach((bar, i) => {
 });
 
 function renderScore() {
-  score.forEach(bar => {
+  score.forEach((bar) => {
     const { render, ...meta } = bar;
     const renderData = {
       x: timeScale(bar.startTime),
-      length: timeScale(bar.duration)
+      length: timeScale(bar.duration),
     };
     render({ ...meta, ...renderData });
   });

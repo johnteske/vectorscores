@@ -8,7 +8,7 @@ const footer = requireRoot(`${partialPath}/footer.11ty.js`);
 const modals = requireRoot(`${partialPath}/modals.11ty.js`);
 const scripts = requireRoot(`${partialPath}/scripts.11ty.js`);
 
-module.exports = data => {
+module.exports = (data) => {
   return `<!DOCTYPE html>
     <html>
     <head>
@@ -28,4 +28,5 @@ module.exports = data => {
         ${scripts(data)}
         <script src="index.js" charset="utf-8"></script>
     </body>
-    </html>`; }
+    </html>`;
+};

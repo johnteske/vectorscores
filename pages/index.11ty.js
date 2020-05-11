@@ -5,7 +5,7 @@ module.exports = class {
   data() {
     return {
       layout: "default",
-      permalink: "/"
+      permalink: "/",
     };
   }
 

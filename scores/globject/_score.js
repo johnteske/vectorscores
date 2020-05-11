@@ -17,7 +17,7 @@ function makeGlobject() {
     type: "midi",
     hi: hiRangeGen(4, 64, 127),
     lo: loRangeGen(4, 0, 63),
-    times: [0, 0.3, 0.5, 1]
+    times: [0, 0.3, 0.5, 1],
   };
 
   var pcset = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random");
@@ -25,12 +25,12 @@ function makeGlobject() {
   globject.pitches = [
     {
       classes: pcset.slice(0, 2),
-      time: 0
+      time: 0,
     },
     {
       classes: pcset,
-      time: 0.5
-    }
+      time: 0.5,
+    },
   ];
 
   // globject.duration = {
@@ -58,7 +58,7 @@ function makeGlobject() {
   globject.dynamics = [
     { value: newDynamics[0], time: 0 },
     { value: newDynamics[1], time: 0.5 },
-    { value: newDynamics[2], time: 1 }
+    { value: newDynamics[2], time: 1 },
   ];
 
   var durs = [0.5, 1, 1.5, 2];
@@ -66,13 +66,13 @@ function makeGlobject() {
   globject.phraseTexture = [
     VS.getItem(durs),
     VS.getItem(durs),
-    VS.getItem(durs)
+    VS.getItem(durs),
   ];
 
   return globject;
 }
 
-export default (function() {
+export default (function () {
   var _score = [];
   for (var i = 0; i < 8; i++) {
     _score.push([makeGlobject()]);

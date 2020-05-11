@@ -75,18 +75,18 @@ const score = [
           {
             type: "symbol",
             value: "mp",
-            x: 0
+            x: 0,
           },
           {
             type: "text",
             value: "cres.",
-            x: 0.5
-          }
+            x: 0.5,
+          },
         ],
         length,
         g
       );
-    }
+    },
   },
   {
     duration: seconds(3),
@@ -105,13 +105,13 @@ const score = [
           {
             type: "symbol",
             value: "ff",
-            x: 0
-          }
+            x: 0,
+          },
         ],
         length,
         g
       );
-    }
+    },
   },
   {
     duration: seconds(60),
@@ -138,34 +138,34 @@ const score = [
           {
             type: "symbol",
             value: "p",
-            x: 0
-          }
+            x: 0,
+          },
         ],
         length,
         g
       ).call(translate, 0, 20);
-    }
+    },
   },
   {
     duration: 0,
     render: ({ x }) => {
       const g = translate(group(), x, 0);
       doubleBar(g, pitchRange);
-    }
-  }
+    },
+  },
 ].map(startTimeFromDuration);
 
-const scoreWithRenderData = score.map(bar => {
+const scoreWithRenderData = score.map((bar) => {
   return {
     ...bar,
     x: timeScale(bar.startTime),
-    length: timeScale(bar.duration)
+    length: timeScale(bar.duration),
   };
 });
 
 const { setScorePosition, scrollToNextBar } = makeScrollHelpers(
   scoreGroup,
-  scoreWithRenderData.map(bar => bar.x)
+  scoreWithRenderData.map((bar) => bar.x)
 );
 
 score.forEach((bar, i) => {
@@ -174,7 +174,7 @@ score.forEach((bar, i) => {
 });
 
 function renderScore() {
-  scoreWithRenderData.forEach(bar => {
+  scoreWithRenderData.forEach((bar) => {
     const { render, ...data } = bar;
     render(data);
   });

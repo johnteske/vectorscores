@@ -18,7 +18,7 @@ import maul from "./maul";
 const durations = VS.dictionary.Bravura.durations.stemless;
 
 const margin = {
-  top: 64
+  top: 64,
 };
 
 function durationInBeats(beats) {
@@ -38,10 +38,7 @@ const dynamic = (selection, type, value) =>
   drawDynamics([{ type, value, x: 0 }], 0, selection);
 
 const bloodText = (selection, str) =>
-  selection
-    .append("text")
-    .text(str)
-    .attr("fill", "darkRed");
+  selection.append("text").text(str).attr("fill", "darkRed");
 
 const svg = d3.select("svg.main");
 svg.append("style").text(`
@@ -60,7 +57,7 @@ indicator.blinker = indicator.blinker
   .interval(durationInBeats(1))
   .offDuration(durationInBeats(0.5));
 
-const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
+const makeCue = (selection) => cue(selection).attr("y", -1 * pitchRange);
 
 const score = [
   {
@@ -93,7 +90,7 @@ const score = [
       dynamic(g, "symbol", "ff");
 
       makeCue(g);
-    }
+    },
   },
   {
     startTime: null,
@@ -108,7 +105,7 @@ const score = [
       maul(g, 87, pitchRange);
 
       translate(0, pitchScale(0.5), makeCue(g));
-    }
+    },
   },
   {
     startTime: null,
@@ -118,9 +115,7 @@ const score = [
 
       bloodText(g, "MAUL").attr("dy", "-2em");
 
-      g.append("text")
-        .attr("dy", "-1em")
-        .text("col legno, slapping");
+      g.append("text").attr("dy", "-1em").text("col legno, slapping");
 
       for (let i = 0; i < 25; i++) {
         translate(
@@ -164,7 +159,7 @@ const score = [
 
         drawDynamics([{ x: 0.5, type: "text", value: "decres." }], length, g)
       );
-    }
+    },
   },
   {
     startTime: null,
@@ -210,13 +205,13 @@ const score = [
         drawDynamics(
           [
             { x: 0, type: "symbol", value: "mp" },
-            { x: 0.5, type: "text", value: "decres." }
+            { x: 0.5, type: "text", value: "decres." },
           ],
           length,
           g
         )
       );
-    }
+    },
   },
   {
     startTime: null,
@@ -251,19 +246,19 @@ const score = [
         drawDynamics(
           [
             { x: 0.5, type: "text", value: "decres." },
-            { x: 1, type: "symbol", value: "n" }
+            { x: 1, type: "symbol", value: "n" },
           ],
           length,
           g
         )
       );
-    }
+    },
   },
   {
     startTime: 0,
     duration: 0,
-    render: () => {}
-  }
+    render: () => {},
+  },
 ].map(startTimeFromDuration);
 
 score.forEach((bar, i) => {
@@ -272,11 +267,11 @@ score.forEach((bar, i) => {
 });
 
 function renderScore() {
-  score.forEach(bar => {
+  score.forEach((bar) => {
     const { render, ...meta } = bar;
     const renderData = {
       x: timeScale(bar.startTime),
-      length: timeScale(bar.duration)
+      length: timeScale(bar.duration),
     };
     render({ ...meta, ...renderData });
   });
