@@ -1,6 +1,6 @@
 const fs = require("fs");
 const rootPath = require("app-root-path");
-const { maybeTemplate } = require(`${rootPath}/render-utils`);
+const { maybe } = require("eleventy-lib");
 
 const getRawSVG = basename =>
   fs.readFileSync(`${rootPath}/assets/svg/${basename}.svg`, "utf-8");
@@ -9,7 +9,7 @@ const linkListIcon = icon =>
 
 const linkListItem = ({ name, url, icon }) =>
   `<li><a href="${url}">
-    ${maybeTemplate(
+    ${maybe(
       linkListIcon(icon),
       icon
     )}<span class="username">${name}</span>

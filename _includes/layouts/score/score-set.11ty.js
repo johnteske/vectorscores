@@ -1,12 +1,9 @@
 const requireRoot = require("app-root-path").require;
+const { catMap, title, url } = require("eleventy-lib");
 const {
-  assetsUrl,
-  catMap,
   forEachModuleWithFile,
-  handleUndefined,
   movementsFromUrl
 } = requireRoot("render-utils.js");
-const { scoreTitle } = requireRoot("_eleventy/title.js");
 
 const partialPath = "_includes/partials";
 const header = requireRoot(`${partialPath}/score/header.11ty.js`);
@@ -21,8 +18,8 @@ module.exports = data => {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>${scoreTitle(data.site.title, data.title)}</title>
-        <link rel="stylesheet" href="${assetsUrl(data.site, "/css/score.css")}">
+        <title>${title(data.title, data.site.title)}</title>
+        <link rel="stylesheet" href="${url.asset(data.site.baseUrl, "/css/score.css")}">
     </head>
     <body class="score-set">
         ${header(data)}

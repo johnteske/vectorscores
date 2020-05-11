@@ -1,6 +1,4 @@
-const requireRoot = require("app-root-path").require;
-
-const { maybe, maybeTemplate } = requireRoot("render-utils");
+const { maybe } = require("eleventy-lib");
 
 const infoModal = data =>
   `<div id="score-info-modal" class="modal-content">
@@ -10,13 +8,13 @@ const infoModal = data =>
             ${maybe(data.composer)}
             ${maybe(data.publish_date)}
         </p>
-	${maybeTemplate(`<p>for ${data.instrumentation}</p>`, data.instrumentation)}
+	${maybe(`<p>for ${data.instrumentation}</p>`, data.instrumentation)}
         <p>${maybe(data.dedication)}</p>
-	${maybeTemplate(`<div>${data.info}</div>`, data.info)}
+	${maybe(`<div>${data.info}</div>`, data.info)}
     </div>`;
 
 const optionsModal = data =>
-  maybeTemplate(
+  maybe(
     `<div id="score-options-modal" class="modal-content">
             <span id="score-options-close" class="modal-close">×</span>
             <h2>Options</h2>

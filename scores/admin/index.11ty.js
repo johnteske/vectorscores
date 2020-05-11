@@ -1,5 +1,4 @@
-const requireRoot = require("app-root-path").require;
-const { catMap } = requireRoot("render-utils");
+const { catMap } = require("eleventy-lib");
 
 const options = require("./_options.11ty.js");
 

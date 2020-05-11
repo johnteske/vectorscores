@@ -1,5 +1,6 @@
 const requireRoot = require("app-root-path").require;
-const { catMap, maybe, maybeTemplate, maybeFunction, movementsFromUrl } = requireRoot("render-utils");
+const { movementsFromUrl } = requireRoot("render-utils");
+const { catMap, maybe } = require("eleventy-lib");
 
 const workLink = require("./work-link.11ty.js");
 
@@ -11,7 +12,7 @@ const hasFormat = (d, format) =>
 const workRow = d =>
   `<tr class="work-list-row">
         <td>
-          ${workLink(d)}${maybeTemplate(
+          ${workLink(d)}${maybe(
     `, for ${d.data.instrumentation}`,
     d.data.instrumentation
   )}
@@ -20,13 +21,13 @@ const workRow = d =>
             ${maybe(d.data.duration)}
         </td>
         <td class="work-list-duration">
-            ${maybeFunction(mvts => `${mvts} mvts`, movementsFromUrl(d.url, d.data).length)}
+            ${maybe(mvts => `${mvts} mvts`, movementsFromUrl(d.url, d.data).length || null)}
         </td>
         <td class="work-list-formats">
-            ${maybeTemplate("score", hasFormat(d, "score"))}
+            ${maybe("score", hasFormat(d, "score"))}
         </td>
         <td class="work-list-formats">
-            ${maybeTemplate("parts", hasFormat(d, "parts"))}
+            ${maybe("parts", hasFormat(d, "parts"))}
         </td>
      </tr>`;
 

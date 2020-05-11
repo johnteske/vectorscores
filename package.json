@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "A series of new compositions built on the web",
   "engines": {
-    "node": "8"
+    "node": ">=10"
   },
   "directories": {
     "doc": "docs"
@@ -20,7 +20,7 @@
     "copy": "copyfiles docs/README.md _includes",
     "deploy": "SITE_BASE_URL=vectorscores npm run build && gh-pages -d _site",
     "fix:css": "stylelint assets/css/**/*.css --fix",
-    "fix:format": "prettier --write {.,_includes/*/*,pages,scores/*,scores/*/*}/*.js",
+    "format": "prettier --write {.,_includes/*/*,pages,scores/*,scores/*/*}/*.js",
     "serve": "serve -n -l 8081 _site",
     "serve:external": "serve -n -l tcp://0.0.0.0:80 _site",
     "watch": "chokidar '**/*.*' -i 'node_modules' -i '_site' -i '_includes/docs/README.md' -c \"npm run build && echo 'done'\""
@@ -45,14 +45,17 @@
     "app-root-path": "^3.0.0",
     "chokidar-cli": "^2.1.0",
     "copyfiles": "^2.2.0",
-    "gh-pages": "^2.2.0",
+    "eleventy-lib": "johnteske/eleventy-lib",
     "ffdb-jtm": "johnteske/ffdb-jtm",
+    "gh-pages": "^2.2.0",
+    "moment": "^2.25.3",
     "postcss": "^7.0.27",
     "postcss-cli": "^7.1.0",
     "postcss-custom-properties": "^9.1.1",
     "postcss-import": "^12.0.1",
     "rollup": "^2.3.1",
     "serve": "^11.3.0",
+    "slugify": "^1.4.0",
     "ws": "^7.2.3"
   },
   "devDependencies": {
