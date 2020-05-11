@@ -1,13 +1,13 @@
-export default function(guideCurve, pathCurve) {
+export default function (guideCurve, pathCurve) {
   const lineGenerator = d3
     .line()
-    .x(d => d.x)
-    .y(d => d.y);
+    .x((d) => d.x)
+    .y((d) => d.y);
 
   const guideGenerator = lineGenerator.curve(guideCurve);
   const pathGenerator = lineGenerator.curve(pathCurve);
 
-  return function(guidePoints, pathPoints, pathPointMap, selection) {
+  return function (guidePoints, pathPoints, pathPointMap, selection) {
     const g = selection.append("g");
 
     const guide = g

@@ -1,3 +1,3 @@
 export const margin = {
-  top: 64
+  top: 64,
 };

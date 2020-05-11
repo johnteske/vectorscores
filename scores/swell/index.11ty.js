@@ -21,8 +21,8 @@ module.exports = class {
         "settings/radio",
         "settings/number",
         "settings/pitch-classes",
-        "websockets"
-      ]
+        "websockets",
+      ],
     };
   }
 

@@ -8,15 +8,15 @@ function makeEmptyArray(n) {
 
 const lineGenerator = d3
   .line()
-  .x(d => d.x)
-  .y(d => d.y);
+  .x((d) => d.x)
+  .y((d) => d.y);
 
-export default function(length, selection) {
+export default function (length, selection) {
   const n = 50;
 
   const points = makeEmptyArray(n).map((_, i) => ({
     x: (i / n) * length,
-    y: 0
+    y: 0,
   }));
   const segments = points.reduce((accumulator, point, i) => {
     const index = Math.floor(i / 5);
@@ -33,6 +33,6 @@ export default function(length, selection) {
     .append("path")
     .attr("fill", "none")
     .attr("stroke", "blue")
-    .attr("d", d => lineGenerator(d));
+    .attr("d", (d) => lineGenerator(d));
   return g;
 }

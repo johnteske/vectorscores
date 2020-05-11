@@ -29,8 +29,8 @@ module.exports = class {
         "settings/radio",
         "settings/pitch-classes",
         "websockets",
-        "trichords"
-      ]
+        "trichords",
+      ],
     };
   }
 

@@ -1,6 +1,6 @@
 import longTone from "../longTone";
 
-export default function(selection, length) {
+export default function (selection, length) {
   const g = longTone(selection, 0, 0, length).attr("stroke", "black");
 
   g.append("text")

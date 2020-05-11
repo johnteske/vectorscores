@@ -1,4 +1,4 @@
-export default function(selection) {
+export default function (selection) {
   const page = selection.append("g");
 
   let _scale = 1;
@@ -10,6 +10,6 @@ export default function(selection) {
 
   return {
     element: page,
-    scale
+    scale,
   };
 }

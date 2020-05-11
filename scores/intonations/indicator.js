@@ -1,6 +1,6 @@
 import translate from "./translate";
 
-export default function(selection) {
+export default function (selection) {
   // TODO from dirge,,march AND ad;sr
   const indicator = selection
     .append("path")
@@ -28,23 +28,23 @@ export default function(selection) {
     element: indicator,
     blinker: blinker(indicator),
     translateX,
-    translateY
+    translateY,
   };
 }
 
 function blinker(selection) {
   return VS.cueBlink(selection)
     .beats(3)
-    .inactive(function(selection) {
+    .inactive(function (selection) {
       selection.style("fill-opacity", 0);
     })
-    .on(function(selection) {
+    .on(function (selection) {
       selection.style("fill-opacity", 1);
     })
-    .off(function(selection) {
+    .off(function (selection) {
       selection.style("fill-opacity", 0);
     })
-    .down(function(selection) {
+    .down(function (selection) {
       selection.style("fill-opacity", 1);
     });
 }

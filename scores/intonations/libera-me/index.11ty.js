@@ -6,7 +6,7 @@ module.exports = class {
       ...baseTemplateData,
       title: "libera me",
       status: "wip",
-      modules: [...baseTemplateData.modules, "line-cloud"]
+      modules: [...baseTemplateData.modules, "line-cloud"],
     };
   }
 

@@ -1,5 +1,5 @@
 const requireRoot = require('app-root-path').require
-const { catMap } = requireRoot('render-utils')
+const { catMap } = require('eleventy-lib')
 
 module.exports = (name, pairs) => `
 <div class="settings-group">

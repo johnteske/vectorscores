@@ -1,4 +1,4 @@
-export default function(selection, w, h) {
+export default function (selection, w, h) {
   const g = selection.append("g");
 
   for (let i = 0; i < 50; i++) {

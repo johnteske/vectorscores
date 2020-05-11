@@ -89,19 +89,11 @@ function flutter(selection) {
 
   cell(g);
   bravura(g, "\ue227").attr("x", 8);
-  bravura(g, "\ue0b8")
-    .attr("x", 5)
-    .attr("dy", "0.5em");
+  bravura(g, "\ue0b8").attr("x", 5).attr("dy", "0.5em");
   //bloodText(g, "delicate flutter").attr("dy", "1em");
-  bloodText(g, "flutter")
-    .attr("dy", "1em")
-    .attr("text-anchor", "end");
-  text(g, "1-3x")
-    .attr("dy", "2em")
-    .attr("text-anchor", "end"); // or show repeats?
-  bravura(g, "\ue53f")
-    .attr("x", 3)
-    .attr("y", 20); // dim.
+  bloodText(g, "flutter").attr("dy", "1em").attr("text-anchor", "end");
+  text(g, "1-3x").attr("dy", "2em").attr("text-anchor", "end"); // or show repeats?
+  bravura(g, "\ue53f").attr("x", 3).attr("y", 20); // dim.
   //  drawDynamics(
   //    [
   //      // { type: "symbol", value: "p", x: 0 },
@@ -121,21 +113,15 @@ function papercuts(selection) {
   const length = 20;
 
   cell(g);
-  bloodText(g, "papercut")
-    .attr("dy", "1em")
-    .attr("text-anchor", "end");
-  text(g, "1-3x")
-    .attr("dy", "2em")
-    .attr("text-anchor", "end"); // or show repeats?
+  bloodText(g, "papercut").attr("dy", "1em").attr("text-anchor", "end");
+  text(g, "1-3x").attr("dy", "2em").attr("text-anchor", "end"); // or show repeats?
 
   // attack // TODO separate the attack and articulated release
   //  g.append("line")
   //    .attr("x2", length)
   //    .attr("y2", -10); //
 
-  bravura(g, "\ue53e")
-    .attr("x", 3)
-    .attr("y", 20); // cres.
+  bravura(g, "\ue53e").attr("x", 3).attr("y", 20); // cres.
   //  drawDynamics(
   //    [
   //      { type: "symbol", value: "sfz", x: 0 },
@@ -167,7 +153,7 @@ function papercuts(selection) {
 const score = [
   {
     duration: 0,
-    render: () => group()
+    render: () => group(),
   },
   {
     duration: seconds(20),
@@ -179,7 +165,7 @@ const score = [
 
       supportingTexture(g, length);
       return g;
-    }
+    },
   },
   {
     duration: seconds(20),
@@ -191,7 +177,7 @@ const score = [
 
       supportingTexture(g, length);
       return g;
-    }
+    },
   },
   {
     duration: seconds(20),
@@ -203,7 +189,7 @@ const score = [
 
       supportingTexture(g, length);
       return g;
-    }
+    },
   },
   {
     duration: seconds(20),
@@ -215,26 +201,24 @@ const score = [
 
       //supportingTexture(g, length);
       return g;
-    }
+    },
   },
   {
     duration: 0,
-    render: () => group()
-  }
+    render: () => group(),
+  },
 ]
   .map(startTimeFromDuration)
-  .map(bar => ({ ...bar, length: pitchRange }));
+  .map((bar) => ({ ...bar, length: pitchRange }));
 
 function renderScore() {
   score.forEach((bar, i) => {
     const { render, ...data } = bar;
-    render(data)
-      .attr("class", `frame frame-${i}`)
-      .style("opacity", 0);
+    render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
   });
 }
 
-const showFrame = i => {
+const showFrame = (i) => {
   d3.selectAll(".frame").style("opacity", 0);
   d3.selectAll(`.frame-${i}`).style("opacity", 1);
 };

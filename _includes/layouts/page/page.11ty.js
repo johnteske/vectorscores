@@ -1,7 +1,7 @@
 module.exports = class {
   data() {
     return {
-      layout: "default"
+      layout: "default",
     };
   }
 

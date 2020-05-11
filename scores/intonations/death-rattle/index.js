@@ -72,9 +72,7 @@ function shiver(selection) {
   cell(g);
 
   bravura(g, "\ue227").attr("x", 8);
-  bravura(g, "\ue0b8")
-    .attr("x", 5)
-    .attr("dy", "0.5em");
+  bravura(g, "\ue0b8").attr("x", 5).attr("dy", "0.5em");
   bloodText(g, "shiver/shudder").attr("dy", 19);
 
   bravura(g, "\ue540").attr("y", 30); // hairpin
@@ -99,15 +97,13 @@ function moan(selection) {
   // TODO fall away dotted line
   // mf
   // how long?
-  g.append("text")
-    .text("dying LNP/subharmonic")
-    .attr("dy", "2em");
+  g.append("text").text("dying LNP/subharmonic").attr("dy", "2em");
 }
 
 const score = [
   {
     duration: 0,
-    render: () => group()
+    render: () => group(),
   },
   {
     duration: seconds(20),
@@ -115,7 +111,7 @@ const score = [
       const g = group();
       shiver(g);
       return g;
-    }
+    },
   },
   {
     duration: seconds(20),
@@ -124,7 +120,7 @@ const score = [
       shiver(g);
       centerDrone(g, length);
       return g;
-    }
+    },
   },
   {
     duration: seconds(20),
@@ -134,7 +130,7 @@ const score = [
       moan(g);
       centerDrone(g, length);
       return g;
-    }
+    },
   },
   {
     duration: seconds(20),
@@ -143,26 +139,24 @@ const score = [
       centerDrone(g, length);
       moan(g);
       return g;
-    }
+    },
   },
   {
     duration: 0,
-    render: () => group()
-  }
+    render: () => group(),
+  },
 ]
   .map(startTimeFromDuration)
-  .map(bar => ({ ...bar, length: pitchRange }));
+  .map((bar) => ({ ...bar, length: pitchRange }));
 
 function renderScore() {
   score.forEach((bar, i) => {
     const { render, ...data } = bar;
-    render(data)
-      .attr("class", `frame frame-${i}`)
-      .style("opacity", 0);
+    render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
   });
 }
 
-const showFrame = i => {
+const showFrame = (i) => {
   d3.selectAll(".frame").style("opacity", 0);
   d3.selectAll(`.frame-${i}`).style("opacity", 1);
 };

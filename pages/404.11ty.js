@@ -3,7 +3,7 @@ module.exports = class {
     return {
       title: "404",
       layout: "page",
-      permalink: "/404.html"
+      permalink: "/404.html",
     };
   }
 

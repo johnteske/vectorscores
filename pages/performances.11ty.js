@@ -1,4 +1,4 @@
-const { catMap, handleUndefined } = require("../render-utils");
+const { catMap, maybe } = require("eleventy-lib");
 
 const dateFormat = (yyyymmdd) => {
   return yyyymmdd;
@@ -18,9 +18,9 @@ const getWorkUrl = (data, title) => {
 };
 
 const performanceList = (data) => {
-  const performances = data.performances.reverse().filter((p) =>
-    p.tags != null && p.tags.includes("vectorscores")
-  );
+  const performances = data.performances
+    .reverse()
+    .filter((p) => p.tags != null && p.tags.includes("vectorscores"));
   const workLink = (title) => {
     const url = getWorkUrl(data, title);
     return url ? `<a href="${url}" class="work-title">${title}/a>` : title;
@@ -38,7 +38,7 @@ const performanceList = (data) => {
   <a href="${perf.url}">${dateFormat(perf.date)}</a>
 </h4>
 <h3>${perf.title}</h3>
-  ${handleUndefined(perf.works && catMap(workLink, perf.works))}
+  ${maybe(perf.works && catMap(workLink, perf.works))}
 ${details(perf)}
 `;
   };

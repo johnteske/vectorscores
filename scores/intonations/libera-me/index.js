@@ -30,8 +30,8 @@ function phrase() {
 
 const lineGen = d3
   .line()
-  .x(d => d.x)
-  .y(d => d.y);
+  .x((d) => d.x)
+  .y((d) => d.y);
 
 function chant(selection, length) {
   const notes = phrase();
@@ -43,8 +43,8 @@ function chant(selection, length) {
         points: [
           ...acc.points,
           { x: acc.t, y: note.pitch },
-          { x: t, y: note.pitch }
-        ]
+          { x: t, y: note.pitch },
+        ],
       };
     },
     { t: 0, points: [] }
@@ -68,7 +68,7 @@ const phraseLength = seconds(20);
 const score = [
   {
     duration: 0,
-    render: () => group()
+    render: () => group(),
   },
   {
     duration: phraseLength,
@@ -76,7 +76,7 @@ const score = [
       const g = wrapper.append("g");
       chant(g, length);
       return g;
-    }
+    },
   },
   {
     duration: phraseLength,
@@ -84,7 +84,7 @@ const score = [
       const g = wrapper.append("g");
       chant(g, length);
       return g;
-    }
+    },
   },
   {
     duration: phraseLength,
@@ -92,7 +92,7 @@ const score = [
       const g = wrapper.append("g");
       chant(g, length);
       return g;
-    }
+    },
   },
   {
     duration: phraseLength,
@@ -100,7 +100,7 @@ const score = [
       const g = wrapper.append("g");
       chant(g, length);
       return g;
-    }
+    },
   },
   {
     duration: phraseLength,
@@ -108,26 +108,24 @@ const score = [
       const g = wrapper.append("g");
       chant(g, length);
       return g;
-    }
+    },
   },
   {
     duration: 0,
-    render: () => group()
-  }
+    render: () => group(),
+  },
 ]
   .map(startTimeFromDuration)
-  .map(bar => ({ ...bar, length: pitchRange }));
+  .map((bar) => ({ ...bar, length: pitchRange }));
 
 function renderScore() {
   score.forEach((bar, i) => {
     const { render, ...data } = bar;
-    render(data)
-      .attr("class", `frame frame-${i}`)
-      .style("opacity", 0);
+    render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
   });
 }
 
-const showFrame = i => {
+const showFrame = (i) => {
   d3.selectAll(".frame").style("opacity", 0);
   d3.selectAll(`.frame-${i}`).style("opacity", 1);
 };

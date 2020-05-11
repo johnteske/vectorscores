@@ -73,14 +73,12 @@ const score = [
 
       makeDuration(x, duration);
 
-      g.append("line")
-        .attr("x2", length)
-        .attr("class", "wip");
+      g.append("line").attr("x2", length).attr("class", "wip");
 
       ensemble(g, "solo");
 
       dynamic(g, "symbol", "pp", length);
-    }
+    },
   },
   {
     duration: seconds(8),
@@ -94,12 +92,8 @@ const score = [
       makeDuration(x, duration);
 
       ensemble(g, "tutti");
-      g.append("text")
-        .text("bell-like")
-        .attr("dy", "-2.5em");
-      g.append("text")
-        .text("let vibrate")
-        .attr("dy", "-1.5em");
+      g.append("text").text("bell-like").attr("dy", "-2.5em");
+      g.append("text").text("let vibrate").attr("dy", "-1.5em");
 
       g.append("text")
         .text(articulationGlyph[">"])
@@ -127,7 +121,7 @@ const score = [
         .attr("y", -10);
 
       dynamic(g, "symbol", "mf", length);
-    }
+    },
   },
   {
     duration: seconds(36),
@@ -141,9 +135,9 @@ const score = [
 
       // dissonant cluster, within an octave or octave and a half
       function cluster(selection, x, yOffset, length) {
-        const relativePitches = [-6, -3, 0, 3].map(y => 2 * y + yOffset);
+        const relativePitches = [-6, -3, 0, 3].map((y) => 2 * y + yOffset);
 
-        relativePitches.forEach(y => {
+        relativePitches.forEach((y) => {
           longTone(g, x, y, VS.getRandExcl(length, length * 1.5)); // up to 1.5x length // TODO set min bounds
         });
       }
@@ -152,7 +146,7 @@ const score = [
       cluster(g, 9, 3, length);
 
       dynamic(g, "symbol", "mf", length);
-    }
+    },
   },
   {
     // more open long tones
@@ -172,28 +166,28 @@ const score = [
           .attr("y2", y)
           .attr("class", "wip");
       }
-    }
+    },
   },
   {
     duration: 0,
     render: ({ x }) => {
       const g = translate(group(), x, 0);
       doubleBar(g, pitchRange);
-    }
-  }
+    },
+  },
 ].map(startTimeFromDuration);
 
-const scoreWithRenderData = score.map(bar => {
+const scoreWithRenderData = score.map((bar) => {
   return {
     ...bar,
     x: timeScale(bar.startTime),
-    length: timeScale(bar.duration)
+    length: timeScale(bar.duration),
   };
 });
 
 const { setScorePosition, scrollToNextBar } = makeScrollHelpers(
   scoreGroup,
-  scoreWithRenderData.map(bar => bar.x)
+  scoreWithRenderData.map((bar) => bar.x)
 );
 
 score.forEach((bar, i) => {
@@ -202,7 +196,7 @@ score.forEach((bar, i) => {
 });
 
 function renderScore() {
-  scoreWithRenderData.forEach(bar => {
+  scoreWithRenderData.forEach((bar) => {
     const { render, ...data } = bar;
     render(data);
   });

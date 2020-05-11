@@ -15,12 +15,11 @@ module.exports = class {
       title: "About",
       layout: "page",
       permalink: "/about/",
-      tags: ["topNav"]
+      tags: ["topNav"],
     };
   }
 
   render() {
-    return readme
-      .substring(readme.indexOf(vectorscores) + vectorscores.length);
+    return readme.substring(readme.indexOf(vectorscores) + vectorscores.length);
   }
 };

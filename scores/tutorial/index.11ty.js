@@ -7,7 +7,7 @@ module.exports = class {
       info:
         "Close the info modal by clicking away, clicking the close button in the top right, or by pressing the escape key.",
       options:
-        "Close the options modal by clicking away, clicking the close button in the top right, or by pressing the escape key."
+        "Close the options modal by clicking away, clicking the close button in the top right, or by pressing the escape key.",
     };
   }
 

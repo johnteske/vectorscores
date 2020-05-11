@@ -10,7 +10,7 @@ var score = {
   height: 320,
   cell: {
     size: 90,
-    buffer: 30
+    buffer: 30,
   },
   nEvents: 8,
   interval: 30000,
@@ -18,18 +18,18 @@ var score = {
   // TODO increase over time/score pointer?
   // TODO scale according to number of choices per param?
   weightScale: 5,
-  transitionTime: 300
+  transitionTime: 300,
 };
 
 var debug = +VS.getQueryString("debug") === 1;
 
 var layout = {
-  margin: {}
+  margin: {},
 };
 
 score.center = {
   x: score.width * 0.5,
-  y: score.height * 0.5
+  y: score.height * 0.5,
 };
 
 score.cell.halfSize = score.cell.size * 0.5;
@@ -57,16 +57,16 @@ scoreOptions.pitchClasses.preference = scoreOptions.pitchClasses["prefer"];
  */
 
 // {% include_relative _params.js %}
-var params = (function() {
+var params = (function () {
   var params = {
     keys: [],
-    data: []
+    data: [],
   };
 
-  params.add = function(key, keys) {
+  params.add = function (key, keys) {
     var property = {
       keys: [],
-      weights: []
+      weights: [],
     };
 
     for (var i = 0; i < keys.length; i++) {
@@ -82,7 +82,7 @@ var params = (function() {
     return property;
   };
 
-  params.createChoice = function(filterRest) {
+  params.createChoice = function (filterRest) {
     var choice = {};
 
     for (var i = 0; i < params.keys.length; i++) {
@@ -101,7 +101,7 @@ var params = (function() {
     return choice;
   };
 
-  params.updateWeights = function(choice, increment) {
+  params.updateWeights = function (choice, increment) {
     for (var i = 0; i < params.keys.length; i++) {
       var key = params.keys[i];
       var data = params.data[key];
@@ -111,7 +111,7 @@ var params = (function() {
     }
   };
 
-  params.getWeights = function() {
+  params.getWeights = function () {
     var weights = "";
 
     for (var i = 0; i < params.keys.length; i++) {
@@ -134,7 +134,7 @@ var phrases = [0, 1, 2, 3, 4];
 params.add("duration", Object.keys(durations));
 params.add(
   "dynamic",
-  Object.keys(dynamics).filter(function(k) {
+  Object.keys(dynamics).filter(function (k) {
     return k !== "n";
   })
 );
@@ -166,7 +166,10 @@ function formatPCSet(setString) {
     formatted = "";
 
   if (setString) {
-    var set = PC.transpose(setString.split(","), "random").sort(function(a, b) {
+    var set = PC.transpose(setString.split(","), "random").sort(function (
+      a,
+      b
+    ) {
       return a - b;
     });
     formatted = "{" + PC.format(set) + "}";
@@ -198,7 +201,7 @@ function updateChoices() {
 
     var set = choice.pitchClasses.split(",");
 
-    var formatted = VS.pitchClass.transpose(set, "random").map(function(pc) {
+    var formatted = VS.pitchClass.transpose(set, "random").map(function (pc) {
       return VS.pitchClass.format(
         pc,
         scoreOptions.pitchClasses.display,
@@ -249,10 +252,7 @@ function debugChoices() {
   var el = document.getElementsByClassName("debug")[0];
 
   el.innerHTML = "weight: " + score.partWeight + "<br />";
-  el.innerHTML += params
-    .getWeights()
-    .split("\n")
-    .join("<br />");
+  el.innerHTML += params.getWeights().split("\n").join("<br />");
 }
 
 /**
@@ -337,14 +337,14 @@ function createCell(selection) {
 score.topGroup = score.wrapper
   .append("g")
   .call(createCell)
-  .on("click", function() {
+  .on("click", function () {
     selectCell("top");
   });
 
 score.bottomGroup = score.wrapper
   .append("g")
   .call(createCell)
-  .on("click", function() {
+  .on("click", function () {
     selectCell("bottom");
   });
 
@@ -447,7 +447,7 @@ window.addEventListener("keydown", keydownListener, true);
 /**
  * Websocket
  */
-VS.WebSocket.hooks.add("message", function(data) {
+VS.WebSocket.hooks.add("message", function (data) {
   var cid = data[0];
   var type = data[1];
   var msg = data[2];

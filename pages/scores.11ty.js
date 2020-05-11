@@ -7,7 +7,7 @@ module.exports = class {
       title: "Scores",
       layout: "page",
       permalink: "/scores/",
-      tags: ["topNav"]
+      tags: ["topNav"],
     };
   }
 

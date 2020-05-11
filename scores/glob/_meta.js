@@ -10,7 +10,7 @@ export function pitchClassSet(canvas, wrapper, options) {
 
   function update(set) {
     var formatted = set
-      .map(function(pc) {
+      .map(function (pc) {
         return VS.pitchClass.format(
           pc,
           options.pitchClasses.display,
@@ -19,13 +19,13 @@ export function pitchClassSet(canvas, wrapper, options) {
       })
       .join(", ");
 
-    selection.text(function() {
+    selection.text(function () {
       return "{" + formatted + "}";
     });
   }
 
   return {
-    update: update
+    update: update,
   };
 }
 
@@ -46,6 +46,6 @@ export function dynamics(canvas, wrapper) {
   }
 
   return {
-    update: update
+    update: update,
   };
 }

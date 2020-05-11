@@ -10,8 +10,8 @@ module.exports = class {
         "dictionary",
         "x-by-duration",
         "trichords",
-        "pitch-class"
-      ]
+        "pitch-class",
+      ],
     };
   }
 

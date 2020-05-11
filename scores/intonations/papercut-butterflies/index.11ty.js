@@ -6,7 +6,7 @@ module.exports = class {
       ...baseTemplateData,
       title: "papercut butterflies",
       status: "wip",
-      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
+      modules: [...baseTemplateData.modules, "bravura", "dictionary"],
     };
   }
 

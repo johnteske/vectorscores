@@ -4,7 +4,7 @@ const head = requireRoot(`${partialPath}/head.11ty.js`);
 const header = requireRoot(`${partialPath}/header.11ty.js`);
 const footer = requireRoot(`${partialPath}/footer.11ty.js`);
 
-module.exports = data =>
+module.exports = (data) =>
   `<!DOCTYPE html>
     <html>
         ${head(data)}

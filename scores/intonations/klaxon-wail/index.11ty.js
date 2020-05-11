@@ -6,7 +6,7 @@ module.exports = class {
       ...baseTemplateData,
       title: "klaxon wail",
       status: "wip",
-      modules: [...baseTemplateData.modules, "bravura", "dictionary"]
+      modules: [...baseTemplateData.modules, "bravura", "dictionary"],
     };
   }
 

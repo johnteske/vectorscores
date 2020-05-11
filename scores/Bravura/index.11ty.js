@@ -5,7 +5,7 @@ module.exports = class {
       layout: "score",
       title: "Bravura test",
       status: "unlisted",
-      modules: ["bravura"]
+      modules: ["bravura"],
     };
   }
 

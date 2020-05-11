@@ -1,6 +1,6 @@
 const glyphs = {
   open: "\ue893",
-  closed: "\ue890"
+  closed: "\ue890",
 };
 
 export default function cue(selection, type = "closed") {

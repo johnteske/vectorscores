@@ -8,34 +8,34 @@
 var config = {
   semitoneTransposition: 2,
   numberOfPercussionParts: 2,
-  maxRhythmsPerBar: 2
+  maxRhythmsPerBar: 2,
 };
 
 // Display constants
 var layout = {
   container: {
     height: null, // set after render for resizing/scaling
-    scale: 1
+    scale: 1,
   },
   wrapper: {
-    y: 105
+    y: 105,
   },
   cueIndicator: {
-    y: 15
+    y: 15,
   },
   pitched: {
     y: 0,
     globjects: {
-      height: 127
-    }
+      height: 127,
+    },
   },
   percussion: {
-    y: 220
+    y: 220,
   },
-  scaleTime: function(x) {
+  scaleTime: function (x) {
     return x * 5.5;
   },
-  barPadding: 6
+  barPadding: 6,
 };
 
 var dynamics = VS.dictionary.Bravura.dynamics;
@@ -48,16 +48,16 @@ var rawGlobjects = [
         { value: 3, duration: 2 },
         { value: 3, duration: 2 },
         { value: 2, duration: 5 },
-        { value: 0, duration: 0 }
+        { value: 0, duration: 0 },
       ],
       lo: [
         { value: 3, duration: 1 },
         { value: 2, duration: 2 },
         { value: 0, duration: 2 },
         { value: -2, duration: 4 },
-        { value: 0, duration: 0 }
-      ]
-    }
+        { value: 0, duration: 0 },
+      ],
+    },
   },
   {
     contour: "descending",
@@ -66,15 +66,15 @@ var rawGlobjects = [
         { value: 3, duration: 2 },
         { value: 4, duration: 6 },
         { value: 3, duration: 4 },
-        { value: 0, duration: 0 }
+        { value: 0, duration: 0 },
       ],
       lo: [
         { value: 3, duration: 1 },
         { value: 3, duration: 5 },
         { value: -2, duration: 6 },
-        { value: 0, duration: 0 }
-      ]
-    }
+        { value: 0, duration: 0 },
+      ],
+    },
   },
   {
     contour: "ascending",
@@ -84,14 +84,14 @@ var rawGlobjects = [
         { value: -2, duration: 1 },
         { value: 0, duration: 5 },
         { value: 3, duration: 4 },
-        { value: 0, duration: 0 }
+        { value: 0, duration: 0 },
       ],
       lo: [
         { value: -5, duration: 5 },
         { value: -2, duration: 6 },
-        { value: 0, duration: 0 }
-      ]
-    }
+        { value: 0, duration: 0 },
+      ],
+    },
   },
   {
     contour: "descending",
@@ -102,16 +102,16 @@ var rawGlobjects = [
         { value: 10, duration: 4 },
         { value: 7, duration: 4 },
         { value: 7, duration: 4 },
-        { value: 0, duration: 0 }
+        { value: 0, duration: 0 },
       ],
       lo: [
         { value: 7, duration: 4 },
         { value: 5, duration: 4 },
         { value: 3, duration: 4 },
         { value: 0, duration: 2 },
-        { value: 0, duration: 0 }
-      ]
-    }
+        { value: 0, duration: 0 },
+      ],
+    },
   },
   {
     contour: "descending",
@@ -122,45 +122,45 @@ var rawGlobjects = [
         { value: 7, duration: 3 },
         { value: 3, duration: 4 },
         { value: 3, duration: 4 },
-        { value: 0, duration: 0 }
+        { value: 0, duration: 0 },
       ],
       lo: [
         { value: 3, duration: 5 },
         { value: 3, duration: 3 },
         { value: -2, duration: 6 },
-        { value: 0, duration: 0 }
-      ]
-    }
-  }
+        { value: 0, duration: 0 },
+      ],
+    },
+  },
 ];
 
 // {% include_relative _generate-globjects.js %}
 function generateGlobjects(rawGlobjects) {
-  return rawGlobjects.map(function(rawGlobject) {
+  return rawGlobjects.map(function (rawGlobject) {
     var globject = {
       contour: rawGlobject.contour,
-      rangeEnvelope: rawGlobject.rangeEnvelope
+      rangeEnvelope: rawGlobject.rangeEnvelope,
     };
 
     var highs = globject.rangeEnvelope.hi;
     var lows = globject.rangeEnvelope.lo;
 
     // NOTE highs and lows totalDurations should match
-    var totalDuration = highs.reduce(function(sum, point) {
+    var totalDuration = highs.reduce(function (sum, point) {
       return sum + point.duration;
     }, 0);
 
     /**
      * Normalize range values
      */
-    var extent = d3.extent(highs.concat(lows), function(d) {
+    var extent = d3.extent(highs.concat(lows), function (d) {
       return d.value;
     });
 
     function mapRangeEnvelope(envelope) {
       var currentTime = 0;
 
-      return envelope.map(function(point) {
+      return envelope.map(function (point) {
         point.value = VS.normalize(point.value, extent[0], extent[1]);
         point.time = currentTime;
         currentTime += point.duration / totalDuration;
@@ -184,11 +184,11 @@ function generateGlobjects(rawGlobjects) {
 }
 
 function generateRetrogradeGlobjects(generatedGlobjects) {
-  return generatedGlobjects.map(function(globject) {
+  return generatedGlobjects.map(function (globject) {
     function mapRetrogradeTime(point) {
       var mapped = {
         value: point.value,
-        time: 1 - point.time
+        time: 1 - point.time,
       };
       return mapped;
     }
@@ -198,7 +198,7 @@ function generateRetrogradeGlobjects(generatedGlobjects) {
     retrograde.rangeEnvelope = {
       type: globject.rangeEnvelope.type,
       hi: [].concat(globject.rangeEnvelope.hi).map(mapRetrogradeTime),
-      lo: [].concat(globject.rangeEnvelope.lo).map(mapRetrogradeTime)
+      lo: [].concat(globject.rangeEnvelope.lo).map(mapRetrogradeTime),
     };
 
     return retrograde;
@@ -209,10 +209,10 @@ var globjects = generateGlobjects(rawGlobjects);
 var retrogradeGlobjects = generateRetrogradeGlobjects(globjects);
 
 // {% include_relative _rhythms.js %}
-var rhythms = (function() {
+var rhythms = (function () {
   function flattenWithCommasBetween(array) {
     return array
-      .reduce(function(a, b) {
+      .reduce(function (a, b) {
         return a.concat(b, [","]);
       }, [])
       .slice(0, -1);
@@ -232,7 +232,7 @@ var rhythms = (function() {
       "1, ,1, ,r0.5., ,0.25,1.,-,=0.25",
       "1, ,1,-,-0.5, ,1,=,=0.25,=,=0.25,=,=0.25, ,1,-,-0.5",
       "1, ,1.,-,=0.25, ,1,-,-0.5,trip,-,-0.5, ,1.,-,=0.25",
-      "1,-,-0.5, ,1,-,-0.5,=,=0.25, ,1,=,=0.25,-,-0.5, ,1,-,-0.5"
+      "1,-,-0.5, ,1,-,-0.5,=,=0.25, ,1,=,=0.25,-,-0.5, ,1,-,-0.5",
     ],
     // Bravura: beamed groups of notes (U+E220–U+E23F), only long stem glyphs selected
     // TODO standardize and integrate in Bravura dictionary
@@ -251,11 +251,11 @@ var rhythms = (function() {
       trip: "\ue202",
       // "]": "\ue203"
       "r0.5": "\ue4e6",
-      "r0.5.": "\ue4e6\ue1e7"
+      "r0.5.": "\ue4e6\ue1e7",
     },
     // Display as unordered set, with brackets and comma-separated
-    getTextFragmentsFromIndices: function(indices) {
-      var rhythmStringFragments = indices.map(function(index) {
+    getTextFragmentsFromIndices: function (indices) {
+      var rhythmStringFragments = indices.map(function (index) {
         return rhythms.strings[index].split(",");
       });
 
@@ -264,22 +264,25 @@ var rhythms = (function() {
         flattenWithCommasBetween(rhythmStringFragments),
         "}"
       );
-    }
+    },
   };
 })();
 
 // Wrap in IIFE to aid in linting
-var rawScore = (function() {
+var rawScore = (function () {
   var raw = [
     {
       time: 0,
       pitched: {
         duration: 46.667,
         globjectContour: "descending",
-        pitch: [{ time: 0, classes: [0] }, { time: 1, classes: [0, 3] }],
+        pitch: [
+          { time: 0, classes: [0] },
+          { time: 1, classes: [0, 3] },
+        ],
         range: {
           high: 96,
-          low: 32
+          low: 32,
         },
         phraseType: null,
         dynamics: [
@@ -287,12 +290,12 @@ var rawScore = (function() {
           { time: 0.25, value: "<" },
           { time: 0.5, value: "p" },
           { time: 0.75, value: ">" },
-          { time: 1, value: "pp" }
-        ]
+          { time: 1, value: "pp" },
+        ],
       },
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 16,
@@ -303,9 +306,9 @@ var rawScore = (function() {
         dynamics: [
           { time: 0, value: "n" },
           { time: 0.5, value: "<" },
-          { time: 1, value: "ppp" }
-        ]
-      }
+          { time: 1, value: "ppp" },
+        ],
+      },
     },
     {
       time: 46.667,
@@ -315,16 +318,16 @@ var rawScore = (function() {
         pitch: [
           {
             time: 0,
-            classes: [0, 3]
+            classes: [0, 3],
           },
           {
             time: 1,
-            classes: [0, 3, 7]
-          }
+            classes: [0, 3, 7],
+          },
         ],
         range: {
           high: 96,
-          low: 0
+          low: 0,
         },
         phraseType: null,
         dynamics: [
@@ -332,12 +335,12 @@ var rawScore = (function() {
           { time: 0.25, value: "<" },
           { time: 0.5, value: "mp" },
           { time: 0.75, value: ">" },
-          { time: 1, value: "p" }
-        ]
+          { time: 1, value: "p" },
+        ],
       },
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 48,
@@ -348,9 +351,9 @@ var rawScore = (function() {
         dynamics: [
           { time: 0, value: "ppp" },
           { time: 0.5, value: "<" },
-          { time: 1, value: "p" }
-        ]
-      }
+          { time: 1, value: "p" },
+        ],
+      },
     },
     {
       time: 80,
@@ -361,9 +364,9 @@ var rawScore = (function() {
         dynamics: [
           { time: 0, value: "p" },
           { time: 0.5, value: "<" },
-          { time: 1, value: "mf" }
-        ]
-      }
+          { time: 1, value: "mf" },
+        ],
+      },
     },
     {
       time: 93.333,
@@ -373,7 +376,7 @@ var rawScore = (function() {
         pitch: [{ time: 0, classes: [0, 3, 7] }],
         range: {
           high: 64,
-          low: 0
+          low: 0,
         },
         phraseType: "descending",
         dynamics: [
@@ -381,18 +384,18 @@ var rawScore = (function() {
           { time: 0.25, value: "<" },
           { time: 0.5, value: "mf" },
           { time: 0.75, value: ">" },
-          { time: 1, value: "pp" }
-        ]
+          { time: 1, value: "pp" },
+        ],
       },
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 112,
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 144,
@@ -401,11 +404,11 @@ var rawScore = (function() {
         globjectContour: "rest",
         pitch: [],
         phraseType: "rest",
-        dynamics: []
+        dynamics: [],
       },
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 147,
@@ -415,11 +418,11 @@ var rawScore = (function() {
         pitch: [
           { time: 0, classes: [5] },
           { time: 0.5, classes: [5, 9] },
-          { time: 1, classes: [5, 9, 0] }
+          { time: 1, classes: [5, 9, 0] },
         ],
         range: {
           high: 127,
-          low: 64
+          low: 64,
         },
         phraseType: "ascending",
         dynamics: [
@@ -427,12 +430,12 @@ var rawScore = (function() {
           { time: 0.25, value: "<" },
           { time: 0.5, value: "p" },
           { time: 0.75, value: ">" },
-          { time: 1, value: "n" }
-        ]
+          { time: 1, value: "n" },
+        ],
       },
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 211,
@@ -443,26 +446,29 @@ var rawScore = (function() {
         dynamics: [
           { time: 0, value: "mf" },
           { time: 0.5, value: "<" },
-          { time: 1, value: "f" }
-        ]
-      }
+          { time: 1, value: "f" },
+        ],
+      },
     },
     {
       time: 243,
       pitched: {
         duration: 24,
         globjectContour: "all",
-        pitch: [{ time: 0, classes: [0] }, { time: 1, classes: [0, 3] }],
+        pitch: [
+          { time: 0, classes: [0] },
+          { time: 1, classes: [0, 3] },
+        ],
         range: {
           low: 32,
-          high: 96
+          high: 96,
         },
         phraseType: "both",
         dynamics: [
           { time: 0, value: "mf" },
           { time: 0.5, value: ">" },
-          { time: 1, value: "p" }
-        ]
+          { time: 1, value: "p" },
+        ],
       },
       percussion: {
         tempo: 120,
@@ -473,9 +479,9 @@ var rawScore = (function() {
           { time: 0.25, value: "<" },
           { time: 0.5, value: "ff" },
           { time: 0.75, value: ">" },
-          { time: 1, value: "f" }
-        ]
-      }
+          { time: 1, value: "f" },
+        ],
+      },
     },
     {
       time: 267,
@@ -483,21 +489,24 @@ var rawScore = (function() {
         duration: 24,
         globjectContour: "all",
         globjectCount: 2,
-        pitch: [{ time: 0, classes: [0, 3] }, { time: 1, classes: [0, 3, 7] }],
+        pitch: [
+          { time: 0, classes: [0, 3] },
+          { time: 1, classes: [0, 3, 7] },
+        ],
         range: {
           low: 0,
-          high: 127
+          high: 127,
         },
         phraseType: "both",
         dynamics: [
           { time: 0, value: "f" },
           { time: 0.5, value: ">" },
-          { time: 1, value: "mp" }
-        ]
+          { time: 1, value: "mp" },
+        ],
       },
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 275,
@@ -508,9 +517,9 @@ var rawScore = (function() {
         dynamics: [
           { time: 0, value: "f" },
           { time: 0.5, value: ">" },
-          { time: 1, value: "mf" }
-        ]
-      }
+          { time: 1, value: "mf" },
+        ],
+      },
     },
     {
       time: 291,
@@ -518,27 +527,30 @@ var rawScore = (function() {
         duration: 24,
         globjectContour: "all",
         globjectCount: 3,
-        pitch: [{ time: 0, classes: [0, 3] }, { time: 1, classes: [0, 3, 7] }],
+        pitch: [
+          { time: 0, classes: [0, 3] },
+          { time: 1, classes: [0, 3, 7] },
+        ],
         range: {
           low: 0,
-          high: 127
+          high: 127,
         },
         phraseType: "both",
         dynamics: [
           { time: 0, value: "f" },
           { time: 0.5, value: ">" },
-          { time: 1, value: "mp" }
-        ]
+          { time: 1, value: "mp" },
+        ],
       },
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 307,
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 315,
@@ -548,34 +560,34 @@ var rawScore = (function() {
         pitch: [{ time: 0, classes: [0, 3, 7] }],
         range: {
           low: 32,
-          high: 96
+          high: 96,
         },
         phraseType: "both",
         dynamics: [
           { time: 0, value: "mf" },
           { time: 0.5, value: ">" },
-          { time: 1, value: "n" }
-        ]
+          { time: 1, value: "n" },
+        ],
       },
       percussion: {
-        tempo: null
-      }
+        tempo: null,
+      },
     },
     {
       time: 338,
       percussion: {
-        tempo: null
-      }
-    }
+        tempo: null,
+      },
+    },
   ];
 
-  return raw.map(function(bar, i) {
+  return raw.map(function (bar, i) {
     bar.index = i;
     return bar;
   });
 })();
 
-var barTimes = rawScore.map(function(d) {
+var barTimes = rawScore.map(function (d) {
   return d.time;
 });
 
@@ -598,23 +610,23 @@ function generatePartsFromRawScore(rawScoreData) {
 
   function generatePitchedPart() {
     var contours = {
-      descending: globjects.filter(function(g) {
+      descending: globjects.filter(function (g) {
         return g.contour === "descending";
       }),
-      ascending: globjects.filter(function(g) {
+      ascending: globjects.filter(function (g) {
         return g.contour === "ascending";
       }),
-      all: [].concat(globjects, retrogradeGlobjects)
+      all: [].concat(globjects, retrogradeGlobjects),
     };
 
     shuffle(contours.descending);
     shuffle(contours.all);
 
-    var pitchedBars = rawScoreData.filter(function(bar) {
+    var pitchedBars = rawScoreData.filter(function (bar) {
       return bar.pitched;
     });
 
-    pitchedBars = pitchedBars.map(function(bar) {
+    pitchedBars = pitchedBars.map(function (bar) {
       var globject = [];
 
       if (bar.pitched.globjectContour !== "rest") {
@@ -631,7 +643,7 @@ function generatePartsFromRawScore(rawScoreData) {
         phraseType: bar.pitched.phraseType,
         pitch: bar.pitched.pitch,
         range: bar.pitched.range,
-        globjects: globject
+        globjects: globject,
       };
     });
 
@@ -656,7 +668,7 @@ function generatePartsFromRawScore(rawScoreData) {
       var pitch = barsWithSets[i].pitch;
       var newPitch = [];
 
-      pitch.forEach(function(current, index, array) {
+      pitch.forEach(function (current, index, array) {
         var next = array[index + 1];
 
         newPitch.push(current);
@@ -665,7 +677,7 @@ function generatePartsFromRawScore(rawScoreData) {
           newPitch.push({
             time: getMidPoint(current.time, next.time),
             classes: [],
-            type: "transform"
+            type: "transform",
           });
         }
       });
@@ -695,11 +707,11 @@ function generatePartsFromRawScore(rawScoreData) {
   }
 
   function generatePercussionPart() {
-    var percussionBars = rawScoreData.filter(function(bar) {
+    var percussionBars = rawScoreData.filter(function (bar) {
       return bar.percussion.tempo !== null;
     });
 
-    percussionBars = percussionBars.map(function(bar) {
+    percussionBars = percussionBars.map(function (bar) {
       bar.percussion.rhythmIndices = [];
 
       for (var i = 0; i < config.numberOfPercussionParts; i++) {
@@ -758,7 +770,7 @@ function generatePartsFromRawScore(rawScoreData) {
 
   return {
     pitched: generatePitchedPart(),
-    percussion: generatePercussionPart()
+    percussion: generatePercussionPart(),
   };
 }
 
@@ -774,20 +786,20 @@ function drawCrescendos(selection, width) {
 
   var line = d3
     .line()
-    .x(function(d) {
+    .x(function (d) {
       return d[0];
     })
-    .y(function(d) {
+    .y(function (d) {
       return d[1];
     });
 
   selection
-    .filter(function(d) {
+    .filter(function (d) {
       return d.x2 - d.x1 < lineWidthThreshold;
     })
     .append("path")
     .attr("transform", "translate(0," + y + ")")
-    .attr("d", function(d) {
+    .attr("d", function (d) {
       var x1 = d.x1 === 0 ? d.x1 : d.x1 + linePadding;
       var x2 = d.x2 === width ? d.x2 : d.x2 - linePadding;
       var hairpinStart;
@@ -804,7 +816,7 @@ function drawCrescendos(selection, width) {
       var points = [
         [hairpinEnd, halfHeight],
         [hairpinStart, 0],
-        [hairpinEnd, -halfHeight]
+        [hairpinEnd, -halfHeight],
       ];
 
       return line(points);
@@ -813,17 +825,17 @@ function drawCrescendos(selection, width) {
     .attr("fill", "none");
 
   selection
-    .filter(function(d) {
+    .filter(function (d) {
       return d.x2 - d.x1 > lineWidthThreshold;
     })
     .append("text")
     // .attr('class', 'dynamic text')
-    .attr("x", function(d) {
+    .attr("x", function (d) {
       return layout.scaleTime(d.time * d.duration);
     })
     .attr("y", y)
     .attr("dy", "0.3em")
-    .text(function(d) {
+    .text(function (d) {
       if (d.value === "<") {
         return "cres.";
       } else {
@@ -839,18 +851,18 @@ function drawCrescendos(selection, width) {
 // {% include_relative _pitched-part.js %}
 var globjectHeight = 42;
 
-var pitchedPart = (function() {
+var pitchedPart = (function () {
   var part = {};
 
   var bars;
 
-  part.init = function(parent) {
+  part.init = function (parent) {
     bars = parent
       .selectAll("g")
       .data(parts.pitched)
       .enter()
       .append("g")
-      .attr("transform", function(d, i) {
+      .attr("transform", function (d, i) {
         return "translate(" + getXByScoreIndex(d.index) + "," + 0 + ")";
       });
 
@@ -858,7 +870,7 @@ var pitchedPart = (function() {
     createArrowMarker();
   };
 
-  part.draw = function() {
+  part.draw = function () {
     drawGlobjects();
     drawPitchClasses();
     drawDynamics();
@@ -866,7 +878,7 @@ var pitchedPart = (function() {
   };
 
   var staticGlobject = VS.globject()
-    .width(function(d) {
+    .width(function (d) {
       return layout.scaleTime(d.duration);
     })
     .height(globjectHeight)
@@ -875,22 +887,22 @@ var pitchedPart = (function() {
   function drawGlobjects() {
     bars
       .selectAll(".globject")
-      .data(function(d) {
-        return d.globjects.map(function(globject) {
+      .data(function (d) {
+        return d.globjects.map(function (globject) {
           return {
             duration: d.duration,
             totalGlobjects: d.globjects.length,
             pitch: d.pitch,
             range: d.range,
             phraseType: d.phraseType,
-            rangeEnvelope: globject.rangeEnvelope
+            rangeEnvelope: globject.rangeEnvelope,
           };
         });
       })
       .enter()
       .append("g")
       .attr("class", "globject")
-      .attr("transform", function(d, i) {
+      .attr("transform", function (d, i) {
         var y = VS.getRandIntIncl(d.range.low + globjectHeight, d.range.high);
 
         // TODO this is an easy way to space out the globjects--
@@ -910,11 +922,11 @@ var pitchedPart = (function() {
   }
 
   function drawDynamics() {
-    bars.each(function(data) {
+    bars.each(function (data) {
       var selection = d3.select(this);
       var width = layout.scaleTime(data.duration);
 
-      var dynamicsData = data.dynamics.map(function(dynamic) {
+      var dynamicsData = data.dynamics.map(function (dynamic) {
         dynamic.duration = data.duration;
         return dynamic;
       });
@@ -942,7 +954,7 @@ var pitchedPart = (function() {
       dynamicsGroup.filter(includeCrescendos(true)).call(drawCrescendos, width);
 
       function includeCrescendos(include) {
-        return function(d) {
+        return function (d) {
           return include === ("<>".indexOf(d.value) !== -1);
         };
       }
@@ -951,7 +963,7 @@ var pitchedPart = (function() {
 
   function drawRests() {
     var rest = bars
-      .filter(function(d) {
+      .filter(function (d) {
         return d.phraseType === "rest";
       })
       .append("text")
@@ -962,17 +974,14 @@ var pitchedPart = (function() {
     rest.append("tspan").text("\ue4f5");
 
     // Dot
-    rest
-      .append("tspan")
-      .text("\ue1fc")
-      .attr("dx", "0.25em");
+    rest.append("tspan").text("\ue1fc").attr("dx", "0.25em");
   }
 
   return part;
 })();
 
 // {% include_relative _percussion-part.js %}
-var percussionPart = (function() {
+var percussionPart = (function () {
   var part = {};
 
   var bars;
@@ -981,25 +990,25 @@ var percussionPart = (function() {
 
   var rhythmLayout = {
     padding: 6,
-    height: 24
+    height: 24,
   };
 
   rhythmLayout.boxHeight =
     rhythmLayout.height * numberOfParts +
     rhythmLayout.padding * (numberOfParts + 1);
 
-  part.init = function(parent) {
+  part.init = function (parent) {
     bars = parent
       .selectAll("g")
       .data(parts.percussion)
       .enter()
       .append("g")
-      .attr("transform", function(d) {
+      .attr("transform", function (d) {
         return "translate(" + getXByScoreIndex(d.index) + "," + 0 + ")";
       });
   };
 
-  part.draw = function() {
+  part.draw = function () {
     drawTempi();
     drawBars();
   };
@@ -1020,7 +1029,7 @@ var percussionPart = (function() {
 
     text
       .append("tspan")
-      .text(function(d) {
+      .text(function (d) {
         return d.percussion.tempo;
       })
       .attr("class", "bpm");
@@ -1045,13 +1054,13 @@ var percussionPart = (function() {
   function drawRhythms() {
     var rhythms = bars
       .selectAll(".rhythm")
-      .data(function(d) {
+      .data(function (d) {
         return d.percussion.rhythmIndices;
       })
       .enter()
       .append("text")
       .attr("class", "rhythm")
-      .attr("y", function(d, i) {
+      .attr("y", function (d, i) {
         return i * (rhythmLayout.height + rhythmLayout.padding);
       })
       .attr("dy", 16 + rhythmLayout.padding)
@@ -1069,10 +1078,10 @@ var percussionPart = (function() {
 
     // Unordered set characters
     tspans
-      .filter(function(d) {
+      .filter(function (d) {
         return isSetCharacter(d);
       })
-      .text(function(d) {
+      .text(function (d) {
         return d;
       })
       .style("font-family", "monospace")
@@ -1080,19 +1089,19 @@ var percussionPart = (function() {
 
     // Rhythms
     tspans
-      .filter(function(d) {
+      .filter(function (d) {
         return !isSetCharacter(d);
       })
-      .text(function(d) {
+      .text(function (d) {
         return rhythms.stringToBravuraMap[d];
       })
       .style("font-family", "Bravura")
       .style("font-size", 12)
-      .style("baseline-shift", function(d) {
+      .style("baseline-shift", function (d) {
         var dy = d === "r0.5" || d === "r0.5." ? 0.4 : 0;
         return dy + "em";
       })
-      .style("letter-spacing", function(d) {
+      .style("letter-spacing", function (d) {
         var spacing = 0;
 
         if (d === "trip") {
@@ -1110,15 +1119,12 @@ var percussionPart = (function() {
   }
 
   function setBoundingRectWidth() {
-    bars.each(function(d) {
-      var groupWidth = d3
-        .select(this)
-        .node()
-        .getBBox().width;
+    bars.each(function (d) {
+      var groupWidth = d3.select(this).node().getBBox().width;
       d.width = groupWidth + rhythmLayout.padding;
     });
 
-    bars.selectAll("rect").attr("width", function(d) {
+    bars.selectAll("rect").attr("width", function (d) {
       return d.width;
     });
   }
@@ -1128,10 +1134,10 @@ var percussionPart = (function() {
 
     bars
       .append("line")
-      .attr("x1", function(d) {
+      .attr("x1", function (d) {
         return d.width;
       })
-      .attr("x2", function(d) {
+      .attr("x2", function (d) {
         var nextBarTime = d.time + d.percussion.duration;
         var nextBarIndex = barTimes.indexOf(nextBarTime);
         return getXByScoreIndex(nextBarIndex) - getXByScoreIndex(d.index);
@@ -1143,13 +1149,13 @@ var percussionPart = (function() {
   }
 
   function drawDynamics() {
-    bars.each(function(data) {
+    bars.each(function (data) {
       // TODO unlike the pitched part, `data` is not the percussion object, it is the full bar?
       data = data.percussion;
 
       var selection = d3.select(this);
       var width = layout.scaleTime(data.duration);
-      var dynamicsData = data.dynamics.map(function(dynamic) {
+      var dynamicsData = data.dynamics.map(function (dynamic) {
         dynamic.duration = data.duration;
         return dynamic;
       });
@@ -1174,7 +1180,7 @@ var percussionPart = (function() {
       dynamicsGroup.filter(includeCrescendos(true)).call(drawCrescendos, width);
 
       function includeCrescendos(include) {
-        return function(d) {
+        return function (d) {
           return include === ("<>".indexOf(d.value) !== -1);
         };
       }
@@ -1223,39 +1229,39 @@ function makeCueTriangle(selection) {
 var cueTriangle;
 var blink;
 
-cueIndicator.initAndRender = function() {
+cueIndicator.initAndRender = function () {
   cueTriangle = container.append("path").call(makeCueTriangle);
 
   // this.positionToCenter();
 
   blink = VS.cueBlink(cueTriangle)
     .beats(3)
-    .inactive(function(selection) {
+    .inactive(function (selection) {
       selection.style("fill-opacity", 0);
     })
-    .on(function(selection) {
+    .on(function (selection) {
       selection.style("fill-opacity", 1);
     })
-    .off(function(selection) {
+    .off(function (selection) {
       selection.style("fill-opacity", 0);
     })
-    .down(function(selection) {
+    .down(function (selection) {
       selection.style("fill-opacity", 1);
     });
 };
 
-cueIndicator.positionToCenter = function() {
+cueIndicator.positionToCenter = function () {
   cueTriangle.attr(
     "transform",
     "translate(" + viewCenter + "," + layout.cueIndicator.y + ")"
   );
 };
 
-cueIndicator.blink = function() {
+cueIndicator.blink = function () {
   blink.start();
 };
 
-cueIndicator.cancel = function() {
+cueIndicator.cancel = function () {
   blink.cancel();
 };
 
@@ -1290,30 +1296,27 @@ function textAnchor(t) {
 function renderLayout() {
   var barLineGroup = wrapper.append("g").attr("class", "bar-lines");
 
-  var barLineEnter = barLineGroup
-    .selectAll("null")
-    .data(barTimes)
-    .enter();
+  var barLineEnter = barLineGroup.selectAll("null").data(barTimes).enter();
 
   barLineEnter
     .append("text")
     .style("font-family", "serif")
     .style("font-style", "italic")
     .attr("dy", "-3em")
-    .attr("x", function(d, i) {
+    .attr("x", function (d, i) {
       return getXByScoreIndex(i);
     })
-    .text(function(d) {
+    .text(function (d) {
       return d + "\u2033";
     });
 
   function drawBarLine(selection, y1, y2) {
     selection
       .append("line")
-      .attr("x1", function(d, i) {
+      .attr("x1", function (d, i) {
         return getXByScoreIndex(i);
       })
-      .attr("x2", function(d, i) {
+      .attr("x2", function (d, i) {
         return getXByScoreIndex(i);
       })
       .attr("y1", y1)
@@ -1343,13 +1346,10 @@ function createFillPattern() {
     .attr("height", 2)
     .attr("patternUnits", "userSpaceOnUse");
 
-  pattern
-    .append("circle")
-    .attr("fill", "#eee")
-    .attr("r", 1);
+  pattern.append("circle").attr("fill", "#eee").attr("r", 1);
 }
 
-var fillGlobject = (function() {
+var fillGlobject = (function () {
   function fillGlobject(d) {
     var bar = d;
     var phraseType = bar.phraseType;
@@ -1398,7 +1398,7 @@ var fillGlobject = (function() {
       return Math.random() < (prob || 0.5);
     }
 
-    return function() {
+    return function () {
       var notes = [],
         pc1,
         pc2;
@@ -1424,17 +1424,17 @@ var fillGlobject = (function() {
       } else if (type === "both") {
         notes.push({
           pitch: VS.getItem(set) + config.semitoneTransposition,
-          duration: VS.getRandExcl(4, 6)
+          duration: VS.getRandExcl(4, 6),
         });
         notes.push({
           pitch:
             VS.getItem(set) + config.semitoneTransposition + (coin() ? 12 : 0),
-          duration: VS.getRandExcl(4, 6)
+          duration: VS.getRandExcl(4, 6),
         });
         notes.push({
           pitch:
             VS.getItem(set) + config.semitoneTransposition + (coin() ? 12 : 0),
-          duration: 0
+          duration: 0,
         });
       }
 
@@ -1450,14 +1450,11 @@ var fillGlobject = (function() {
 // TODO this flow could be written to avoid manipulating the data with the selections
 function calculateJoiningSymbolPoints(selection, width, data, joinFilter) {
   // Save rendered dimensions
-  selection.each(function(d) {
-    d.BBox = d3
-      .select(this)
-      .node()
-      .getBBox();
+  selection.each(function (d) {
+    d.BBox = d3.select(this).node().getBBox();
   });
 
-  data.forEach(function(current, index, array) {
+  data.forEach(function (current, index, array) {
     if (!joinFilter(current)) {
       return;
     }
@@ -1492,17 +1489,14 @@ function createArrowMarker() {
     .attr("orient", "auto")
     .attr("markerUnits", "strokeWidth");
 
-  marker
-    .append("path")
-    .attr("d", "M0,0 L9,3 L0,6")
-    .attr("fill", "grey");
+  marker.append("path").attr("d", "M0,0 L9,3 L0,6").attr("fill", "grey");
 }
 
-var drawPitchClassLayer = (function() {
+var drawPitchClassLayer = (function () {
   var y = "-1.5em";
 
   function filterSets(isSet) {
-    return function(d) {
+    return function (d) {
       return isSet === (d.type !== "transform");
     };
   }
@@ -1534,17 +1528,17 @@ var drawPitchClassLayer = (function() {
     selection
       .append("text")
       .attr("class", "pitch-class")
-      .attr("x", function(d) {
+      .attr("x", function (d) {
         return d.time * width;
       })
       .attr("dy", y)
-      .attr("text-anchor", function(d) {
+      .attr("text-anchor", function (d) {
         return textAnchor(d.time);
       })
-      .text(function(d) {
+      .text(function (d) {
         var set = VS.pitchClass
           .transpose(d.classes, config.semitoneTransposition)
-          .map(function(pc) {
+          .map(function (pc) {
             return VS.pitchClass.format(
               +pc,
               scoreOptions.pitchClasses.display,
@@ -1561,10 +1555,10 @@ var drawPitchClassLayer = (function() {
 
     selection
       .append("line")
-      .attr("x1", function(d) {
+      .attr("x1", function (d) {
         return d.x1 === 0 ? d.x1 : d.x1 + linePadding;
       })
-      .attr("x2", function(d) {
+      .attr("x2", function (d) {
         return d.x2 === width ? d.x2 : d.x2 - linePadding;
       })
       .attr("y1", y)
@@ -1582,15 +1576,15 @@ function appendDynamics(selection) {
   selection
     .append("text")
     .attr("class", "dynamic")
-    .attr("x", function(d) {
+    .attr("x", function (d) {
       // console.log(d);
       return layout.scaleTime(d.duration * d.time);
     })
     .attr("dy", "1em")
-    .attr("text-anchor", function(d) {
+    .attr("text-anchor", function (d) {
       return textAnchor(d.time);
     })
-    .text(function(d) {
+    .text(function (d) {
       return dynamics[d.value];
     });
 }
@@ -1678,7 +1672,7 @@ for (var i = 0; i < barTimes.length; i++) {
   var fn = scrollToNextBar;
 
   if (VS.score.getPointer() > barTimes.length - 1) {
-    fn = function() {};
+    fn = function () {};
   }
 
   var duration = (barTimes[i + 1] - barTimes[i]) * 1000;
@@ -1689,7 +1683,7 @@ for (var i = 0; i < barTimes.length; i++) {
 /**
  * Initialize score
  */
-d3.select(window).on("load", function() {
+d3.select(window).on("load", function () {
   renderLayout();
   cueIndicator.initAndRender();
   renderPitched();

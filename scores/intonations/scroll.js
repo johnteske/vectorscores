@@ -1,4 +1,4 @@
-export default function(selection) {
+export default function (selection) {
   const scroll = selection.append("g");
 
   let _center = null;
@@ -24,6 +24,6 @@ export default function(selection) {
     element: scroll,
     setCenter,
     scrollTo,
-    y
+    y,
   };
 }

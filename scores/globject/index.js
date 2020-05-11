@@ -21,7 +21,7 @@ function update(index) {
   d3.selectAll(".globject").remove();
 
   var globject = VS.globject()
-    .width(function(d) {
+    .width(function (d) {
       return d.width;
     })
     .height(127);
@@ -34,7 +34,7 @@ function update(index) {
     .each(globject)
     .each(centerGlobject);
 
-  globjectContainer.selectAll(".globject-content").each(function(d) {
+  globjectContainer.selectAll(".globject-content").each(function (d) {
     var selection = d3.select(this),
       w = d.width;
 
@@ -47,7 +47,7 @@ function update(index) {
     for (var phrase = 0, phrases = 13; phrase < phrases; phrase++) {
       selection
         .append("g")
-        .attr("transform", function() {
+        .attr("transform", function () {
           var halfWidth = w * 0.5,
             x = Math.random() * halfWidth + halfWidth * (phrase % 2),
             y = (127 / phrases) * phrase;
@@ -57,31 +57,31 @@ function update(index) {
         .data(d.phraseTexture)
         .enter()
         .append("text")
-        .text(function(d) {
+        .text(function (d) {
           return noteheads[d];
         })
         .call(phraseSpacing);
     }
   });
 
-  globjectContainer.selectAll(".globject").each(function(d) {
+  globjectContainer.selectAll(".globject").each(function (d) {
     var selection = d3.select(this),
       w = d.width;
 
     selection
       .append("g")
       .selectAll("text")
-      .data(function(d) {
+      .data(function (d) {
         return d.pitches;
       })
       .enter()
       .append("text")
-      .attr("x", function(d) {
+      .attr("x", function (d) {
         return d.time * w;
       })
       .attr("y", 127 + 24)
-      .text(function(d) {
-        var pcSet = d.classes.map(function(pc) {
+      .text(function (d) {
+        var pcSet = d.classes.map(function (pc) {
           return VS.pitchClass.format(pc);
         });
         return "{" + pcSet.join(", ") + "}";
@@ -93,11 +93,11 @@ function update(index) {
       .data(d.dynamics)
       .enter()
       .append("text")
-      .attr("x", function(d) {
+      .attr("x", function (d) {
         return d.time * w;
       })
       .attr("y", 127 + 42)
-      .text(function(d) {
+      .text(function (d) {
         return d.value;
       });
   });
@@ -143,9 +143,9 @@ update(0);
 /**
  * Score controls
  */
-VS.control.hooks.add("stop", function() {
+VS.control.hooks.add("stop", function () {
   update(0);
 });
-VS.control.hooks.add("step", function() {
+VS.control.hooks.add("step", function () {
   update(VS.score.getPointer());
 });

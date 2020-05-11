@@ -1,5 +1,5 @@
 export default function resize(svg, wrapper, pitchRange) {
-  return function() {
+  return function () {
     const w = parseInt(svg.style("width"), 10);
     const h = parseInt(svg.style("height"), 10);
 

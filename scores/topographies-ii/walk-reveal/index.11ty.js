@@ -14,7 +14,7 @@ module.exports = class {
           You may choose to rest at times during your travels to allow room for variety in instrumentation and texture.
         </p>
       `,
-      modules: ["dictionary", "bravura"]
+      modules: ["dictionary", "bravura"],
     };
   }
 
