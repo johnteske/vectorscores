@@ -25,5 +25,5 @@ jobs:
       run: npm ci
     - name: build  
       run: npm run build
-    - name: external links
-      run: find _site/**/*.html | xargs grep -ho 'href="http.*"' | sort | uniq
+    - name: audit urls
+      run: grep -roh 'http[s?]://[a-zA-Z0-9./\-\+\&\?\=]*' _site/**/*.html | sort | uniq | npx audit-urls
