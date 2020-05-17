@@ -9,7 +9,7 @@
     return { ...bar, startTime };
   };
 
-  const seconds = t => t * 1000;
+  const seconds = (t) => t * 1000;
 
   const pitchRange = 87;
 
@@ -21,7 +21,7 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  function makePage(selection) {
+  function makePage (selection) {
     const page = selection.append("g");
 
     let _scale = 1;
@@ -33,23 +33,23 @@
 
     return {
       element: page,
-      scale
+      scale,
     };
   }
 
-  function makeVignetteScore() {
+  function makeVignetteScore () {
     const svg = d3.select("svg.main");
 
     const page = makePage(svg);
 
     return {
       svg,
-      page
+      page,
     };
   }
 
   function resize(svg, wrapper, pitchRange) {
-    return function() {
+    return function () {
       const w = parseInt(svg.style("width"), 10);
       const h = parseInt(svg.style("height"), 10);
 
@@ -69,10 +69,10 @@
 
   const { dynamics } = VS.dictionary.Bravura;
 
-  function drawDynamics(data, scale, selection) {
+  function drawDynamics (data, scale, selection) {
     const g = selection.append("g");
 
-    data.forEach(d => {
+    data.forEach((d) => {
       const text = g.append("text").attr("x", d.x * scale);
 
       switch (d.x) {
@@ -88,16 +88,10 @@
 
       switch (d.type) {
         case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
+          text.text(dynamics[d.value]).attr("class", "bravura").attr("dy", "2em");
           break;
         case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
+          text.text(d.value).attr("class", "text-dynamic").attr("dy", "3.5em");
           break;
       }
     });
@@ -105,16 +99,16 @@
     return g;
   }
 
-  function pathAlongPath(guideCurve, pathCurve) {
+  function pathAlongPath (guideCurve, pathCurve) {
     const lineGenerator = d3
       .line()
-      .x(d => d.x)
-      .y(d => d.y);
+      .x((d) => d.x)
+      .y((d) => d.y);
 
     const guideGenerator = lineGenerator.curve(guideCurve);
     const pathGenerator = lineGenerator.curve(pathCurve);
 
-    return function(guidePoints, pathPoints, pathPointMap, selection) {
+    return function (guidePoints, pathPoints, pathPointMap, selection) {
       const g = selection.append("g");
 
       const guide = g
@@ -194,8 +188,8 @@
         {
           type: "symbol",
           value: "mp",
-          x: 0
-        }
+          x: 0,
+        },
       ],
       0,
       g
@@ -217,7 +211,7 @@
     "it can be so easy",
     "embrace the release",
     "it's time to rest",
-    "accept the inevitable"
+    "accept the inevitable",
   ].sort(() => Math.random() - 0.5);
 
   function boneFlute(selection) {
@@ -227,7 +221,7 @@
       [
         { x: 10, y: VS.getRandExcl(0, 20) },
         { x: pitchRange * 0.5, y: VS.getRandExcl(0, 20) },
-        { x: pitchRange - 10, y: VS.getRandExcl(0, 20) }
+        { x: pitchRange - 10, y: VS.getRandExcl(0, 20) },
       ],
       [...new Array(10)],
       (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-5, 5) }),
@@ -244,8 +238,8 @@
         {
           type: "symbol",
           value: "f",
-          x: 0
-        }
+          x: 0,
+        },
       ],
       0,
       g
@@ -268,8 +262,8 @@
         {
           type: "symbol",
           value: "mp",
-          x: 0
-        }
+          x: 0,
+        },
       ],
       0,
       g
@@ -296,46 +290,44 @@
       duration: 0,
       render: () => {
         return wrapper.append("g");
-      }
+      },
     },
     {
       duration: seconds(20),
-      render: boneFluteFrame
+      render: boneFluteFrame,
     },
     {
       duration: seconds(20),
-      render: boneFluteFrame
+      render: boneFluteFrame,
     },
     {
       duration: seconds(20),
-      render: boneFluteFrame
+      render: boneFluteFrame,
     },
     {
       duration: seconds(20),
-      render: boneFluteFrame
+      render: boneFluteFrame,
     },
     {
       duration: seconds(20),
-      render: boneFluteFrame
+      render: boneFluteFrame,
     },
     {
       duration: 0,
       render: () => {
         return wrapper.append("g");
-      }
-    }
+      },
+    },
   ].map(startTimeFromDuration);
 
   function renderScore() {
     score.forEach((bar, i) => {
       const { render, ...data } = bar;
-      render(data)
-        .attr("class", `frame frame-${i}`)
-        .style("opacity", 0);
+      render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
     });
   }
 
-  const showFrame = i => {
+  const showFrame = (i) => {
     d3.selectAll(".frame").style("opacity", 0);
     d3.selectAll(`.frame-${i}`).style("opacity", 1);
   };

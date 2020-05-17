@@ -2,10 +2,10 @@
   'use strict';
 
   const margin = {
-    top: 64
+    top: 64,
   };
 
-  const seconds = t => t * 1000;
+  const seconds = (t) => t * 1000;
 
   const pitchRange = 87;
 
@@ -13,13 +13,10 @@
     return (1 - value) * pitchRange;
   }
 
-  function doubleBar(selection, height) {
+  function doubleBar (selection, height) {
     const g = selection.append("g");
 
-    g.append("line")
-      .attr("y1", 0)
-      .attr("y2", height)
-      .attr("stroke-width", 1);
+    g.append("line").attr("y1", 0).attr("y2", height).attr("stroke-width", 1);
 
     g.append("line")
       .attr("x1", 3)
@@ -33,7 +30,7 @@
 
   const glyphs = {
     open: "\ue893",
-    closed: "\ue890"
+    closed: "\ue890",
   };
 
   function cue(selection, type = "closed") {
@@ -51,25 +48,19 @@
 
     group.attr("transform", `translate(${x}, ${y})`);
 
-    group
-      .append("text")
-      .attr("class", "bravura")
-      .text(durations[4]);
+    group.append("text").attr("class", "bravura").text(durations[4]);
 
-    group
-      .append("line")
-      .attr("x1", "0.5em")
-      .attr("x2", length);
+    group.append("line").attr("x1", "0.5em").attr("x2", length);
 
     return group;
   }
 
   const { dynamics } = VS.dictionary.Bravura;
 
-  function drawDynamics(data, scale, selection) {
+  function drawDynamics (data, scale, selection) {
     const g = selection.append("g");
 
-    data.forEach(d => {
+    data.forEach((d) => {
       const text = g.append("text").attr("x", d.x * scale);
 
       switch (d.x) {
@@ -85,16 +76,10 @@
 
       switch (d.type) {
         case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
+          text.text(dynamics[d.value]).attr("class", "bravura").attr("dy", "2em");
           break;
         case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
+          text.text(d.value).attr("class", "text-dynamic").attr("dy", "3.5em");
           break;
       }
     });
@@ -118,7 +103,7 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  function makeIndicator(selection) {
+  function makeIndicator (selection) {
     // TODO from dirge,,march AND ad;sr
     const indicator = selection
       .append("path")
@@ -146,28 +131,28 @@
       element: indicator,
       blinker: blinker(indicator),
       translateX,
-      translateY
+      translateY,
     };
   }
 
   function blinker(selection) {
     return VS.cueBlink(selection)
       .beats(3)
-      .inactive(function(selection) {
+      .inactive(function (selection) {
         selection.style("fill-opacity", 0);
       })
-      .on(function(selection) {
+      .on(function (selection) {
         selection.style("fill-opacity", 1);
       })
-      .off(function(selection) {
+      .off(function (selection) {
         selection.style("fill-opacity", 0);
       })
-      .down(function(selection) {
+      .down(function (selection) {
         selection.style("fill-opacity", 1);
       });
   }
 
-  function makeScroll(selection) {
+  function makeScroll (selection) {
     const scroll = selection.append("g");
 
     let _center = null;
@@ -193,11 +178,11 @@
       element: scroll,
       setCenter,
       scrollTo,
-      y
+      y,
     };
   }
 
-  function makePage(selection) {
+  function makePage (selection) {
     const page = selection.append("g");
 
     let _scale = 1;
@@ -209,11 +194,11 @@
 
     return {
       element: page,
-      scale
+      scale,
     };
   }
 
-  function makeScrollingScore() {
+  function makeScrollingScore () {
     const svg = d3.select("svg.main");
 
     const page = makePage(svg);
@@ -227,7 +212,7 @@
       svg,
       page,
       scoreGroup,
-      indicator
+      indicator,
     };
   }
 
@@ -240,7 +225,7 @@
     scoreGroup,
     setScorePosition
   ) {
-    return function() {
+    return function () {
       VS.score.isPlaying() && VS.score.pause();
 
       const w = parseInt(svg.style("width"), 10);
@@ -263,13 +248,13 @@
     }
 
     return {
-      setScorePosition: function() {
+      setScorePosition: function () {
         const index = VS.score.getPointer();
         centerScoreByIndex(index, 0);
       },
-      scrollToNextBar: function(index, duration) {
+      scrollToNextBar: function (index, duration) {
         centerScoreByIndex(index + 1, duration);
-      }
+      },
     };
   }
 
@@ -347,18 +332,18 @@
             {
               type: "symbol",
               value: "mp",
-              x: 0
+              x: 0,
             },
             {
               type: "text",
               value: "cres.",
-              x: 0.5
-            }
+              x: 0.5,
+            },
           ],
           length,
           g
         );
-      }
+      },
     },
     {
       duration: seconds(3),
@@ -377,13 +362,13 @@
             {
               type: "symbol",
               value: "ff",
-              x: 0
-            }
+              x: 0,
+            },
           ],
           length,
           g
         );
-      }
+      },
     },
     {
       duration: seconds(60),
@@ -410,34 +395,34 @@
             {
               type: "symbol",
               value: "p",
-              x: 0
-            }
+              x: 0,
+            },
           ],
           length,
           g
         ).call(translate, 0, 20);
-      }
+      },
     },
     {
       duration: 0,
       render: ({ x }) => {
         const g = translate(group(), x, 0);
         doubleBar(g, pitchRange);
-      }
-    }
+      },
+    },
   ].map(startTimeFromDuration);
 
-  const scoreWithRenderData = score.map(bar => {
+  const scoreWithRenderData = score.map((bar) => {
     return {
       ...bar,
       x: timeScale(bar.startTime),
-      length: timeScale(bar.duration)
+      length: timeScale(bar.duration),
     };
   });
 
   const { setScorePosition, scrollToNextBar } = makeScrollFunctions(
     scoreGroup,
-    scoreWithRenderData.map(bar => bar.x)
+    scoreWithRenderData.map((bar) => bar.x)
   );
 
   score.forEach((bar, i) => {
@@ -446,7 +431,7 @@
   });
 
   function renderScore() {
-    scoreWithRenderData.forEach(bar => {
+    scoreWithRenderData.forEach((bar) => {
       const { render, ...data } = bar;
       render(data);
     });

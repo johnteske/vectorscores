@@ -9,7 +9,7 @@
     return { ...bar, startTime };
   };
 
-  const seconds = t => t * 1000;
+  const seconds = (t) => t * 1000;
 
   const pitchRange = 87;
 
@@ -21,7 +21,7 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  function makePage(selection) {
+  function makePage (selection) {
     const page = selection.append("g");
 
     let _scale = 1;
@@ -33,23 +33,23 @@
 
     return {
       element: page,
-      scale
+      scale,
     };
   }
 
-  function makeVignetteScore() {
+  function makeVignetteScore () {
     const svg = d3.select("svg.main");
 
     const page = makePage(svg);
 
     return {
       svg,
-      page
+      page,
     };
   }
 
   function resize(svg, wrapper, pitchRange) {
-    return function() {
+    return function () {
       const w = parseInt(svg.style("width"), 10);
       const h = parseInt(svg.style("height"), 10);
 
@@ -67,7 +67,7 @@
     };
   }
 
-  const lcg = seed => () =>
+  const lcg = (seed) => () =>
     ((seed = Math.imul(741103597, seed)) >>> 0) / 2 ** 32;
 
   const { svg, page } = makeVignetteScore();
@@ -95,8 +95,8 @@
 
   const lineGen = d3
     .line()
-    .x(d => d.x)
-    .y(d => d.y);
+    .x((d) => d.x)
+    .y((d) => d.y);
 
   function chant(selection, length) {
     const notes = phrase();
@@ -108,8 +108,8 @@
           points: [
             ...acc.points,
             { x: acc.t, y: note.pitch },
-            { x: t, y: note.pitch }
-          ]
+            { x: t, y: note.pitch },
+          ],
         };
       },
       { t: 0, points: [] }
@@ -133,7 +133,7 @@
   const score = [
     {
       duration: 0,
-      render: () => group()
+      render: () => group(),
     },
     {
       duration: phraseLength,
@@ -141,7 +141,7 @@
         const g = wrapper.append("g");
         chant(g, length);
         return g;
-      }
+      },
     },
     {
       duration: phraseLength,
@@ -149,7 +149,7 @@
         const g = wrapper.append("g");
         chant(g, length);
         return g;
-      }
+      },
     },
     {
       duration: phraseLength,
@@ -157,7 +157,7 @@
         const g = wrapper.append("g");
         chant(g, length);
         return g;
-      }
+      },
     },
     {
       duration: phraseLength,
@@ -165,7 +165,7 @@
         const g = wrapper.append("g");
         chant(g, length);
         return g;
-      }
+      },
     },
     {
       duration: phraseLength,
@@ -173,26 +173,24 @@
         const g = wrapper.append("g");
         chant(g, length);
         return g;
-      }
+      },
     },
     {
       duration: 0,
-      render: () => group()
-    }
+      render: () => group(),
+    },
   ]
     .map(startTimeFromDuration)
-    .map(bar => ({ ...bar, length: pitchRange }));
+    .map((bar) => ({ ...bar, length: pitchRange }));
 
   function renderScore() {
     score.forEach((bar, i) => {
       const { render, ...data } = bar;
-      render(data)
-        .attr("class", `frame frame-${i}`)
-        .style("opacity", 0);
+      render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
     });
   }
 
-  const showFrame = i => {
+  const showFrame = (i) => {
     d3.selectAll(".frame").style("opacity", 0);
     d3.selectAll(`.frame-${i}`).style("opacity", 1);
   };

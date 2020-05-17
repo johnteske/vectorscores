@@ -2,10 +2,10 @@
   'use strict';
 
   const margin = {
-    top: 64
+    top: 64,
   };
 
-  const seconds = t => t * 1000;
+  const seconds = (t) => t * 1000;
 
   const pitchRange = 87;
 
@@ -13,13 +13,10 @@
     return (1 - value) * pitchRange;
   }
 
-  function doubleBar(selection, height) {
+  function doubleBar (selection, height) {
     const g = selection.append("g");
 
-    g.append("line")
-      .attr("y1", 0)
-      .attr("y2", height)
-      .attr("stroke-width", 1);
+    g.append("line").attr("y1", 0).attr("y2", height).attr("stroke-width", 1);
 
     g.append("line")
       .attr("x1", 3)
@@ -33,7 +30,7 @@
 
   const glyphs = {
     open: "\ue893",
-    closed: "\ue890"
+    closed: "\ue890",
   };
 
   function cue(selection, type = "closed") {
@@ -46,10 +43,10 @@
 
   const { dynamics } = VS.dictionary.Bravura;
 
-  function drawDynamics(data, scale, selection) {
+  function drawDynamics (data, scale, selection) {
     const g = selection.append("g");
 
-    data.forEach(d => {
+    data.forEach((d) => {
       const text = g.append("text").attr("x", d.x * scale);
 
       switch (d.x) {
@@ -65,16 +62,10 @@
 
       switch (d.type) {
         case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
+          text.text(dynamics[d.value]).attr("class", "bravura").attr("dy", "2em");
           break;
         case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
+          text.text(d.value).attr("class", "text-dynamic").attr("dy", "3.5em");
           break;
       }
     });
@@ -89,29 +80,23 @@
 
     group.attr("transform", `translate(${x}, ${y})`);
 
-    group
-      .append("text")
-      .attr("class", "bravura")
-      .text(durations[4]);
+    group.append("text").attr("class", "bravura").text(durations[4]);
 
-    group
-      .append("line")
-      .attr("x1", "0.5em")
-      .attr("x2", length);
+    group.append("line").attr("x1", "0.5em").attr("x2", length);
 
     return group;
   }
 
-  function pathAlongPath(guideCurve, pathCurve) {
+  function pathAlongPath (guideCurve, pathCurve) {
     const lineGenerator = d3
       .line()
-      .x(d => d.x)
-      .y(d => d.y);
+      .x((d) => d.x)
+      .y((d) => d.y);
 
     const guideGenerator = lineGenerator.curve(guideCurve);
     const pathGenerator = lineGenerator.curve(pathCurve);
 
-    return function(guidePoints, pathPoints, pathPointMap, selection) {
+    return function (guidePoints, pathPoints, pathPointMap, selection) {
       const g = selection.append("g");
 
       const guide = g
@@ -151,7 +136,7 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  function makeIndicator(selection) {
+  function makeIndicator (selection) {
     // TODO from dirge,,march AND ad;sr
     const indicator = selection
       .append("path")
@@ -179,28 +164,28 @@
       element: indicator,
       blinker: blinker(indicator),
       translateX,
-      translateY
+      translateY,
     };
   }
 
   function blinker(selection) {
     return VS.cueBlink(selection)
       .beats(3)
-      .inactive(function(selection) {
+      .inactive(function (selection) {
         selection.style("fill-opacity", 0);
       })
-      .on(function(selection) {
+      .on(function (selection) {
         selection.style("fill-opacity", 1);
       })
-      .off(function(selection) {
+      .off(function (selection) {
         selection.style("fill-opacity", 0);
       })
-      .down(function(selection) {
+      .down(function (selection) {
         selection.style("fill-opacity", 1);
       });
   }
 
-  function makeScroll(selection) {
+  function makeScroll (selection) {
     const scroll = selection.append("g");
 
     let _center = null;
@@ -226,11 +211,11 @@
       element: scroll,
       setCenter,
       scrollTo,
-      y
+      y,
     };
   }
 
-  function makePage(selection) {
+  function makePage (selection) {
     const page = selection.append("g");
 
     let _scale = 1;
@@ -242,11 +227,11 @@
 
     return {
       element: page,
-      scale
+      scale,
     };
   }
 
-  function makeScrollingScore() {
+  function makeScrollingScore () {
     const svg = d3.select("svg.main");
 
     const page = makePage(svg);
@@ -260,7 +245,7 @@
       svg,
       page,
       scoreGroup,
-      indicator
+      indicator,
     };
   }
 
@@ -273,7 +258,7 @@
     scoreGroup,
     setScorePosition
   ) {
-    return function() {
+    return function () {
       VS.score.isPlaying() && VS.score.pause();
 
       const w = parseInt(svg.style("width"), 10);
@@ -296,13 +281,13 @@
     }
 
     return {
-      setScorePosition: function() {
+      setScorePosition: function () {
         const index = VS.score.getPointer();
         centerScoreByIndex(index, 0);
       },
-      scrollToNextBar: function(index, duration) {
+      scrollToNextBar: function (index, duration) {
         centerScoreByIndex(index + 1, duration);
-      }
+      },
     };
   }
 
@@ -362,15 +347,15 @@
 
   const lineGenerator = d3
     .line()
-    .x(d => d.x)
-    .y(d => d.y);
+    .x((d) => d.x)
+    .y((d) => d.y);
 
-  function lineBecomingAir(length, selection) {
+  function lineBecomingAir (length, selection) {
     const n = 50;
 
     const points = makeEmptyArray(n).map((_, i) => ({
       x: (i / n) * length,
-      y: 0
+      y: 0,
     }));
     const segments = points.reduce((accumulator, point, i) => {
       const index = Math.floor(i / 5);
@@ -387,7 +372,7 @@
       .append("path")
       .attr("fill", "none")
       .attr("stroke", "blue")
-      .attr("d", d => lineGenerator(d));
+      .attr("d", (d) => lineGenerator(d));
     return g;
   }
 
@@ -397,13 +382,10 @@
     return t / 200;
   }
 
-  const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
+  const makeCue = (selection) => cue(selection).attr("y", -1 * pitchRange);
 
   const ensemble = (selection, str) =>
-    selection
-      .append("text")
-      .text(str)
-      .attr("class", "text-ensemble");
+    selection.append("text").text(str).attr("class", "text-ensemble");
 
   const { svg, page, scoreGroup, indicator } = makeScrollingScore();
 
@@ -431,27 +413,27 @@
 
   const { articulations, dynamics: dynamics$1 } = VS.dictionary.Bravura;
 
-  const splitDynamics = endDynamic => [
+  const splitDynamics = (endDynamic) => [
     {
       type: "symbol",
       value: "sffz", // sfffz?
-      x: 0
+      x: 0,
     },
     {
       type: "symbol",
       value: "mf",
-      x: 0.15
+      x: 0.15,
     },
     {
       type: "text",
       value: "decres.",
-      x: 0.5
+      x: 0.5,
     },
     {
       type: "symbol",
       value: endDynamic,
-      x: 1
-    }
+      x: 1,
+    },
   ];
 
   const score = [
@@ -471,13 +453,13 @@
             {
               type: "symbol",
               value: "p",
-              x: 0
+              x: 0,
             },
             {
               type: "text",
               value: "siempre",
-              x: 0.25
-            }
+              x: 0.25,
+            },
           ],
           length,
           g
@@ -486,7 +468,7 @@
         makeCue(g);
 
         makeDuration(x, duration);
-      }
+      },
     },
     {
       startTime: null,
@@ -497,17 +479,15 @@
         DEPRECATED_translate(x, pitchScale(0.5), g);
 
         // cluster
-        g.append("text")
-          .text("\ue123")
-          .attr("class", "bravura");
+        g.append("text").text("\ue123").attr("class", "bravura");
 
         drawDynamics(
           [
             {
               type: "symbol",
               value: "sffz", // sfffz?
-              x: 0
-            }
+              x: 0,
+            },
           ],
           length,
           g
@@ -523,7 +503,7 @@
 
         makeCue(g);
         makeDuration(x, duration);
-      }
+      },
     },
     {
       startTime: null,
@@ -566,7 +546,7 @@
         DEPRECATED_translate(0, pitchScale(0.5), line);
 
         const patches = DEPRECATED_translate(0, pitchScale(0.5), g.append("g"));
-        [0.2, 0.4, 0.6].forEach(x => {
+        [0.2, 0.4, 0.6].forEach((x) => {
           noisePatch(x * length, length * 0.1, patches);
         });
 
@@ -582,7 +562,7 @@
             { x: 0, y: pitchScale(0.5) },
             { x: length * 0.33, y: pitchScale(0.485) },
             { x: length * 0.66, y: pitchScale(0.265) },
-            { x: length, y: pitchScale(0.25) }
+            { x: length, y: pitchScale(0.25) },
           ],
           [...new Array(50)],
           (point, i, x, y) => ({ x, y: y + VS.getRandExcl(-1, 1) }),
@@ -592,7 +572,7 @@
         const bottomNoise = noisePatch(length * 0.25, length, g);
         DEPRECATED_translate(0, pitchScale(0.25), bottomNoise);
 
-        [0.2, 0.4, 0.6].forEach(x => {
+        [0.2, 0.4, 0.6].forEach((x) => {
           g.append("text") // TODO also add flag
             .text("\ue123")
             .attr("x", length * x)
@@ -605,7 +585,7 @@
 
         DEPRECATED_translate(0, pitchScale(0.5), makeCue(g));
         makeDuration(x, duration);
-      }
+      },
     },
     {
       startTime: null,
@@ -623,7 +603,7 @@
 
         ensemble(g, "(solo)");
         makeDuration(x, duration);
-      }
+      },
     },
     {
       startTime: null,
@@ -643,28 +623,25 @@
         const makeThread = (x, y, length, selection) => {
           const group = DEPRECATED_translate(x, y, selection.append("g"));
 
-          group
-            .append("line")
-            .attr("x1", 0)
-            .attr("x2", length);
+          group.append("line").attr("x1", 0).attr("x2", length);
 
           drawDynamics(
             [
               {
                 type: "symbol",
                 value: "n",
-                x: 0
+                x: 0,
               },
               {
                 type: "text",
                 value: "cres.",
-                x: 0.5
+                x: 0.5,
               },
               {
                 type: "symbol",
                 value: "mf",
-                x: 1
-              }
+                x: 1,
+              },
             ],
             length,
             group
@@ -679,7 +656,7 @@
 
         ensemble(g, "(tutti)");
         makeDuration(x, duration);
-      }
+      },
     },
     {
       startTime: null,
@@ -692,25 +669,25 @@
         doubleBar(g, pitchRange);
 
         DEPRECATED_translate(0, pitchScale(0.5), makeCue(g));
-      }
-    }
+      },
+    },
   ].map(startTimeFromDuration);
 
   const indexOfAttackBar = score
     .map((bar, index) => ({ ...bar, index }))
-    .find(bar => bar.addPaddingAfter).index;
+    .find((bar) => bar.addPaddingAfter).index;
 
   const scoreWithRenderData = score.map((bar, i) => {
     const padding = i > indexOfAttackBar ? timeScale(3000) : 0;
     return {
       ...bar,
       x: timeScale(bar.startTime) + padding,
-      length: timeScale(bar.duration)
+      length: timeScale(bar.duration),
     };
   });
 
   function renderScore() {
-    scoreWithRenderData.forEach(bar => {
+    scoreWithRenderData.forEach((bar) => {
       const { render, ...data } = bar;
       render(data);
     });
@@ -718,7 +695,7 @@
 
   const { setScorePosition, scrollToNextBar } = makeScrollFunctions(
     scoreGroup,
-    scoreWithRenderData.map(bar => bar.x)
+    scoreWithRenderData.map((bar) => bar.x)
   );
 
   score.forEach((bar, i) => {

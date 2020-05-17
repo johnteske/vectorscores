@@ -9,7 +9,7 @@
     return { ...bar, startTime };
   };
 
-  const seconds = t => t * 1000;
+  const seconds = (t) => t * 1000;
 
   const pitchRange = 87;
 
@@ -21,7 +21,7 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  function makePage(selection) {
+  function makePage (selection) {
     const page = selection.append("g");
 
     let _scale = 1;
@@ -33,23 +33,23 @@
 
     return {
       element: page,
-      scale
+      scale,
     };
   }
 
-  function makeVignetteScore() {
+  function makeVignetteScore () {
     const svg = d3.select("svg.main");
 
     const page = makePage(svg);
 
     return {
       svg,
-      page
+      page,
     };
   }
 
   function resize(svg, wrapper, pitchRange) {
-    return function() {
+    return function () {
       const w = parseInt(svg.style("width"), 10);
       const h = parseInt(svg.style("height"), 10);
 
@@ -69,10 +69,10 @@
 
   const { dynamics } = VS.dictionary.Bravura;
 
-  function drawDynamics(data, scale, selection) {
+  function drawDynamics (data, scale, selection) {
     const g = selection.append("g");
 
-    data.forEach(d => {
+    data.forEach((d) => {
       const text = g.append("text").attr("x", d.x * scale);
 
       switch (d.x) {
@@ -88,16 +88,10 @@
 
       switch (d.type) {
         case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
+          text.text(dynamics[d.value]).attr("class", "bravura").attr("dy", "2em");
           break;
         case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
+          text.text(d.value).attr("class", "text-dynamic").attr("dy", "3.5em");
           break;
       }
     });
@@ -136,9 +130,7 @@
   function wail(selection) {
     const g = group(selection).call(translate, 0, pitchScale(0.75));
 
-    text(g, "wail")
-      .attr("dy", "1.66em")
-      .style("font-size", 10);
+    text(g, "wail").attr("dy", "1.66em").style("font-size", 10);
     //text(g, "growl/scream though instrument");
     //bravura(g, articulationGlyph[">"]);
 
@@ -156,17 +148,10 @@
     const g = group(selection).call(translate, 0, pitchScale(1));
 
     //text(g, "alarm").attr("dy", "1em");
-    text(g, "0")
-      .attr("dy", "1em")
-      .style("font-size", 8);
-    text(g, "2")
-      .attr("dy", "1em")
-      .attr("dx", 16)
-      .style("font-size", 8);
+    text(g, "0").attr("dy", "1em").style("font-size", 8);
+    text(g, "2").attr("dy", "1em").attr("dx", 16).style("font-size", 8);
     bravura(g, durationGlyph[2]).attr("dy", "0.8em");
-    bravura(g, durationGlyph[1])
-      .attr("dy", "0.7em")
-      .attr("dx", 16);
+    bravura(g, durationGlyph[1]).attr("dy", "0.7em").attr("dx", 16);
 
     dynamic(g, "symbol", "mf").call(translate, 0, -12);
 
@@ -190,7 +175,7 @@
   const score = [
     {
       duration: 0,
-      render: () => group()
+      render: () => group(),
     },
     {
       duration: seconds(20),
@@ -202,7 +187,7 @@
         droneCluster(g, length);
 
         return g;
-      }
+      },
     },
     {
       duration: seconds(20),
@@ -214,7 +199,7 @@
         droneCluster(g, length);
 
         return g;
-      }
+      },
     },
     {
       duration: seconds(20),
@@ -226,26 +211,24 @@
         droneCluster(g, length);
 
         return g;
-      }
+      },
     },
     {
       duration: 0,
-      render: () => group()
-    }
+      render: () => group(),
+    },
   ]
     .map(startTimeFromDuration)
-    .map(bar => ({ ...bar, length: pitchRange }));
+    .map((bar) => ({ ...bar, length: pitchRange }));
 
   function renderScore() {
     score.forEach((bar, i) => {
       const { render, ...data } = bar;
-      render(data)
-        .attr("class", `frame frame-${i}`)
-        .style("opacity", 0);
+      render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
     });
   }
 
-  const showFrame = i => {
+  const showFrame = (i) => {
     d3.selectAll(".frame").style("opacity", 0);
     d3.selectAll(`.frame-${i}`).style("opacity", 1);
   };

@@ -9,7 +9,7 @@
     return { ...bar, startTime };
   };
 
-  const seconds = t => t * 1000;
+  const seconds = (t) => t * 1000;
 
   const pitchRange = 87;
 
@@ -21,7 +21,7 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  function makePage(selection) {
+  function makePage (selection) {
     const page = selection.append("g");
 
     let _scale = 1;
@@ -33,23 +33,23 @@
 
     return {
       element: page,
-      scale
+      scale,
     };
   }
 
-  function makeVignetteScore() {
+  function makeVignetteScore () {
     const svg = d3.select("svg.main");
 
     const page = makePage(svg);
 
     return {
       svg,
-      page
+      page,
     };
   }
 
   function resize(svg, wrapper, pitchRange) {
-    return function() {
+    return function () {
       const w = parseInt(svg.style("width"), 10);
       const h = parseInt(svg.style("height"), 10);
 
@@ -69,10 +69,10 @@
 
   const { dynamics } = VS.dictionary.Bravura;
 
-  function drawDynamics(data, scale, selection) {
+  function drawDynamics (data, scale, selection) {
     const g = selection.append("g");
 
-    data.forEach(d => {
+    data.forEach((d) => {
       const text = g.append("text").attr("x", d.x * scale);
 
       switch (d.x) {
@@ -88,16 +88,10 @@
 
       switch (d.type) {
         case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
+          text.text(dynamics[d.value]).attr("class", "bravura").attr("dy", "2em");
           break;
         case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
+          text.text(d.value).attr("class", "text-dynamic").attr("dy", "3.5em");
           break;
       }
     });
@@ -173,19 +167,11 @@
 
     cell(g);
     bravura(g, "\ue227").attr("x", 8);
-    bravura(g, "\ue0b8")
-      .attr("x", 5)
-      .attr("dy", "0.5em");
+    bravura(g, "\ue0b8").attr("x", 5).attr("dy", "0.5em");
     //bloodText(g, "delicate flutter").attr("dy", "1em");
-    bloodText(g, "flutter")
-      .attr("dy", "1em")
-      .attr("text-anchor", "end");
-    text(g, "1-3x")
-      .attr("dy", "2em")
-      .attr("text-anchor", "end"); // or show repeats?
-    bravura(g, "\ue53f")
-      .attr("x", 3)
-      .attr("y", 20); // dim.
+    bloodText(g, "flutter").attr("dy", "1em").attr("text-anchor", "end");
+    text(g, "1-3x").attr("dy", "2em").attr("text-anchor", "end"); // or show repeats?
+    bravura(g, "\ue53f").attr("x", 3).attr("y", 20); // dim.
     //  drawDynamics(
     //    [
     //      // { type: "symbol", value: "p", x: 0 },
@@ -205,21 +191,15 @@
     const length = 20;
 
     cell(g);
-    bloodText(g, "papercut")
-      .attr("dy", "1em")
-      .attr("text-anchor", "end");
-    text(g, "1-3x")
-      .attr("dy", "2em")
-      .attr("text-anchor", "end"); // or show repeats?
+    bloodText(g, "papercut").attr("dy", "1em").attr("text-anchor", "end");
+    text(g, "1-3x").attr("dy", "2em").attr("text-anchor", "end"); // or show repeats?
 
     // attack // TODO separate the attack and articulated release
     //  g.append("line")
     //    .attr("x2", length)
     //    .attr("y2", -10); //
 
-    bravura(g, "\ue53e")
-      .attr("x", 3)
-      .attr("y", 20); // cres.
+    bravura(g, "\ue53e").attr("x", 3).attr("y", 20); // cres.
     //  drawDynamics(
     //    [
     //      { type: "symbol", value: "sfz", x: 0 },
@@ -251,7 +231,7 @@
   const score = [
     {
       duration: 0,
-      render: () => group()
+      render: () => group(),
     },
     {
       duration: seconds(20),
@@ -263,7 +243,7 @@
 
         supportingTexture(g, length);
         return g;
-      }
+      },
     },
     {
       duration: seconds(20),
@@ -275,7 +255,7 @@
 
         supportingTexture(g, length);
         return g;
-      }
+      },
     },
     {
       duration: seconds(20),
@@ -287,7 +267,7 @@
 
         supportingTexture(g, length);
         return g;
-      }
+      },
     },
     {
       duration: seconds(20),
@@ -299,26 +279,24 @@
 
         //supportingTexture(g, length);
         return g;
-      }
+      },
     },
     {
       duration: 0,
-      render: () => group()
-    }
+      render: () => group(),
+    },
   ]
     .map(startTimeFromDuration)
-    .map(bar => ({ ...bar, length: pitchRange }));
+    .map((bar) => ({ ...bar, length: pitchRange }));
 
   function renderScore() {
     score.forEach((bar, i) => {
       const { render, ...data } = bar;
-      render(data)
-        .attr("class", `frame frame-${i}`)
-        .style("opacity", 0);
+      render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
     });
   }
 
-  const showFrame = i => {
+  const showFrame = (i) => {
     d3.selectAll(".frame").style("opacity", 0);
     d3.selectAll(`.frame-${i}`).style("opacity", 1);
   };

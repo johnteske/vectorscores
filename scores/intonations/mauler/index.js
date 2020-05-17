@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const seconds = t => t * 1000;
+  const seconds = (t) => t * 1000;
 
   const pitchRange = 87;
 
@@ -16,15 +16,9 @@
 
     group.attr("transform", `translate(${x}, ${y})`);
 
-    group
-      .append("text")
-      .attr("class", "bravura")
-      .text(durations[4]);
+    group.append("text").attr("class", "bravura").text(durations[4]);
 
-    group
-      .append("line")
-      .attr("x1", "0.5em")
-      .attr("x2", length);
+    group.append("line").attr("x1", "0.5em").attr("x2", length);
 
     return group;
   }
@@ -41,10 +35,10 @@
 
   const { dynamics } = VS.dictionary.Bravura;
 
-  function drawDynamics(data, scale, selection) {
+  function drawDynamics (data, scale, selection) {
     const g = selection.append("g");
 
-    data.forEach(d => {
+    data.forEach((d) => {
       const text = g.append("text").attr("x", d.x * scale);
 
       switch (d.x) {
@@ -60,16 +54,10 @@
 
       switch (d.type) {
         case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
+          text.text(dynamics[d.value]).attr("class", "bravura").attr("dy", "2em");
           break;
         case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
+          text.text(d.value).attr("class", "text-dynamic").attr("dy", "3.5em");
           break;
       }
     });
@@ -81,7 +69,7 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  function makeIndicator(selection) {
+  function makeIndicator (selection) {
     // TODO from dirge,,march AND ad;sr
     const indicator = selection
       .append("path")
@@ -109,28 +97,28 @@
       element: indicator,
       blinker: blinker(indicator),
       translateX,
-      translateY
+      translateY,
     };
   }
 
   function blinker(selection) {
     return VS.cueBlink(selection)
       .beats(3)
-      .inactive(function(selection) {
+      .inactive(function (selection) {
         selection.style("fill-opacity", 0);
       })
-      .on(function(selection) {
+      .on(function (selection) {
         selection.style("fill-opacity", 1);
       })
-      .off(function(selection) {
+      .off(function (selection) {
         selection.style("fill-opacity", 0);
       })
-      .down(function(selection) {
+      .down(function (selection) {
         selection.style("fill-opacity", 1);
       });
   }
 
-  function makePage(selection) {
+  function makePage (selection) {
     const page = selection.append("g");
 
     let _scale = 1;
@@ -142,13 +130,13 @@
 
     return {
       element: page,
-      scale
+      scale,
     };
   }
 
   const glyphs = {
     open: "\ue893",
-    closed: "\ue890"
+    closed: "\ue890",
   };
 
   function cue(selection, type = "closed") {
@@ -159,7 +147,7 @@
       .text(glyphs[type]);
   }
 
-  function makeScroll(selection) {
+  function makeScroll (selection) {
     const scroll = selection.append("g");
 
     let _center = null;
@@ -185,7 +173,7 @@
       element: scroll,
       setCenter,
       scrollTo,
-      y
+      y,
     };
   }
 
@@ -259,7 +247,7 @@
     return g;
   }
 
-  function tremoloLongTone(selection, length) {
+  function tremoloLongTone (selection, length) {
     const g = longTone(selection, 0, 0, length).attr("stroke", "black");
 
     g.append("text")
@@ -271,7 +259,7 @@
     return g;
   }
 
-  function maul(selection, w, h) {
+  function maul (selection, w, h) {
     const g = selection.append("g");
 
     for (let i = 0; i < 50; i++) {
@@ -290,7 +278,7 @@
   const durations$1 = VS.dictionary.Bravura.durations.stemless;
 
   const margin = {
-    top: 64
+    top: 64,
   };
 
   function durationInBeats(beats) {
@@ -310,10 +298,7 @@
     drawDynamics([{ type, value, x: 0 }], 0, selection);
 
   const bloodText = (selection, str) =>
-    selection
-      .append("text")
-      .text(str)
-      .attr("fill", "darkRed");
+    selection.append("text").text(str).attr("fill", "darkRed");
 
   const svg = d3.select("svg.main");
   svg.append("style").text(`
@@ -332,7 +317,7 @@
     .interval(durationInBeats(1))
     .offDuration(durationInBeats(0.5));
 
-  const makeCue = selection => cue(selection).attr("y", -1 * pitchRange);
+  const makeCue = (selection) => cue(selection).attr("y", -1 * pitchRange);
 
   const score = [
     {
@@ -365,7 +350,7 @@
         dynamic(g, "symbol", "ff");
 
         makeCue(g);
-      }
+      },
     },
     {
       startTime: null,
@@ -380,7 +365,7 @@
         maul(g, 87, pitchRange);
 
         DEPRECATED_translate(0, pitchScale(0.5), makeCue(g));
-      }
+      },
     },
     {
       startTime: null,
@@ -390,9 +375,7 @@
 
         bloodText(g, "MAUL").attr("dy", "-2em");
 
-        g.append("text")
-          .attr("dy", "-1em")
-          .text("col legno, slapping");
+        g.append("text").attr("dy", "-1em").text("col legno, slapping");
 
         for (let i = 0; i < 25; i++) {
           DEPRECATED_translate(
@@ -436,7 +419,7 @@
 
           drawDynamics([{ x: 0.5, type: "text", value: "decres." }], length, g)
         );
-      }
+      },
     },
     {
       startTime: null,
@@ -482,13 +465,13 @@
           drawDynamics(
             [
               { x: 0, type: "symbol", value: "mp" },
-              { x: 0.5, type: "text", value: "decres." }
+              { x: 0.5, type: "text", value: "decres." },
             ],
             length,
             g
           )
         );
-      }
+      },
     },
     {
       startTime: null,
@@ -523,19 +506,19 @@
           drawDynamics(
             [
               { x: 0.5, type: "text", value: "decres." },
-              { x: 1, type: "symbol", value: "n" }
+              { x: 1, type: "symbol", value: "n" },
             ],
             length,
             g
           )
         );
-      }
+      },
     },
     {
       startTime: 0,
       duration: 0,
-      render: () => {}
-    }
+      render: () => {},
+    },
   ].map(startTimeFromDuration);
 
   score.forEach((bar, i) => {
@@ -544,11 +527,11 @@
   });
 
   function renderScore() {
-    score.forEach(bar => {
+    score.forEach((bar) => {
       const { render, ...meta } = bar;
       const renderData = {
         x: timeScale(bar.startTime),
-        length: timeScale(bar.duration)
+        length: timeScale(bar.duration),
       };
       render({ ...meta, ...renderData });
     });

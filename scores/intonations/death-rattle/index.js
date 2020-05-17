@@ -9,7 +9,7 @@
     return { ...bar, startTime };
   };
 
-  const seconds = t => t * 1000;
+  const seconds = (t) => t * 1000;
 
   const pitchRange = 87;
 
@@ -21,7 +21,7 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  function makePage(selection) {
+  function makePage (selection) {
     const page = selection.append("g");
 
     let _scale = 1;
@@ -33,23 +33,23 @@
 
     return {
       element: page,
-      scale
+      scale,
     };
   }
 
-  function makeVignetteScore() {
+  function makeVignetteScore () {
     const svg = d3.select("svg.main");
 
     const page = makePage(svg);
 
     return {
       svg,
-      page
+      page,
     };
   }
 
   function resize(svg, wrapper, pitchRange) {
-    return function() {
+    return function () {
       const w = parseInt(svg.style("width"), 10);
       const h = parseInt(svg.style("height"), 10);
 
@@ -69,10 +69,10 @@
 
   const { dynamics } = VS.dictionary.Bravura;
 
-  function drawDynamics(data, scale, selection) {
+  function drawDynamics (data, scale, selection) {
     const g = selection.append("g");
 
-    data.forEach(d => {
+    data.forEach((d) => {
       const text = g.append("text").attr("x", d.x * scale);
 
       switch (d.x) {
@@ -88,16 +88,10 @@
 
       switch (d.type) {
         case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
+          text.text(dynamics[d.value]).attr("class", "bravura").attr("dy", "2em");
           break;
         case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
+          text.text(d.value).attr("class", "text-dynamic").attr("dy", "3.5em");
           break;
       }
     });
@@ -170,9 +164,7 @@
     cell(g);
 
     bravura(g, "\ue227").attr("x", 8);
-    bravura(g, "\ue0b8")
-      .attr("x", 5)
-      .attr("dy", "0.5em");
+    bravura(g, "\ue0b8").attr("x", 5).attr("dy", "0.5em");
     bloodText(g, "shiver/shudder").attr("dy", 19);
 
     bravura(g, "\ue540").attr("y", 30); // hairpin
@@ -197,15 +189,13 @@
     // TODO fall away dotted line
     // mf
     // how long?
-    g.append("text")
-      .text("dying LNP/subharmonic")
-      .attr("dy", "2em");
+    g.append("text").text("dying LNP/subharmonic").attr("dy", "2em");
   }
 
   const score = [
     {
       duration: 0,
-      render: () => group()
+      render: () => group(),
     },
     {
       duration: seconds(20),
@@ -213,7 +203,7 @@
         const g = group();
         shiver(g);
         return g;
-      }
+      },
     },
     {
       duration: seconds(20),
@@ -222,7 +212,7 @@
         shiver(g);
         centerDrone(g, length);
         return g;
-      }
+      },
     },
     {
       duration: seconds(20),
@@ -232,7 +222,7 @@
         moan(g);
         centerDrone(g, length);
         return g;
-      }
+      },
     },
     {
       duration: seconds(20),
@@ -241,26 +231,24 @@
         centerDrone(g, length);
         moan(g);
         return g;
-      }
+      },
     },
     {
       duration: 0,
-      render: () => group()
-    }
+      render: () => group(),
+    },
   ]
     .map(startTimeFromDuration)
-    .map(bar => ({ ...bar, length: pitchRange }));
+    .map((bar) => ({ ...bar, length: pitchRange }));
 
   function renderScore() {
     score.forEach((bar, i) => {
       const { render, ...data } = bar;
-      render(data)
-        .attr("class", `frame frame-${i}`)
-        .style("opacity", 0);
+      render(data).attr("class", `frame frame-${i}`).style("opacity", 0);
     });
   }
 
-  const showFrame = i => {
+  const showFrame = (i) => {
     d3.selectAll(".frame").style("opacity", 0);
     d3.selectAll(`.frame-${i}`).style("opacity", 1);
   };

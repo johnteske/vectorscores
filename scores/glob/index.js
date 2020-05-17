@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  function generateScore(update, tt) {
+  function generateScore (update, tt) {
     var score = [];
     var bars = [
       // <
@@ -10,109 +10,109 @@
         types: ["glob"],
         range: [0, 0],
         dynamics: "n",
-        pitch: { set: [] }
+        pitch: { set: [] },
       },
       // A
       {
         types: ["glob"],
         range: [1, 4],
         dynamics: "pp",
-        pitch: { set: [0, 1, 2] }
+        pitch: { set: [0, 1, 2] },
       },
       {
         types: ["glob"],
         range: [1, 4],
         dynamics: "p",
-        pitch: { set: [0, 1, 4] }
+        pitch: { set: [0, 1, 4] },
       },
       // B
       {
         types: ["glob", "chord"],
         range: [3, 7],
         dynamics: "mf",
-        pitch: { set: [0, 1, 6] }
+        pitch: { set: [0, 1, 6] },
       },
       {
         types: ["glob", "chord"],
         range: [3, 7],
         dynamics: "mf",
-        pitch: { set: [0, 2, 6] }
+        pitch: { set: [0, 2, 6] },
       },
       {
         types: ["glob", "chord"],
         range: [3, 7],
         dynamics: "mf",
-        pitch: { set: [0, 1, 3] }
+        pitch: { set: [0, 1, 3] },
       },
       // C
       {
         types: ["glob"],
         range: [3, 13],
         dynamics: "mp",
-        pitch: { set: [0, 1, 4] }
+        pitch: { set: [0, 1, 4] },
       },
       {
         types: ["rhythm"],
         range: [3, 13],
         dynamics: "p",
-        pitch: { set: [0, 2, 5] }
+        pitch: { set: [0, 2, 5] },
       },
       {
         types: ["glob", "rhythm"],
         range: [3, 13],
         dynamics: "mp",
-        pitch: { set: [0, 1, 5] }
+        pitch: { set: [0, 1, 5] },
       },
       // D
       {
         types: ["glob"],
         range: [12, 19],
         dynamics: "mf",
-        pitch: { set: [0, 1, 3] }
+        pitch: { set: [0, 1, 3] },
       },
       {
         types: ["glob"],
         range: [12, 25],
         dynamics: "ff",
-        pitch: { set: [0, 1, 4, 6] }
+        pitch: { set: [0, 1, 4, 6] },
       },
       {
         types: ["glob"],
         range: [12, 25],
         dynamics: "f",
-        pitch: { set: [0, 1, 4] }
+        pitch: { set: [0, 1, 4] },
       },
       // E
       {
         types: ["glob", "chord", "rhythm"],
         range: [12, 25],
         dynamics: "mf",
-        pitch: { set: [0, 2, 6] }
+        pitch: { set: [0, 2, 6] },
       },
       {
         types: ["glob", "chord", "rhythm"],
         range: [12, 25],
         dynamics: "mp",
-        pitch: { set: [0, 1, 6] }
+        pitch: { set: [0, 1, 6] },
       },
       {
         types: ["glob", "chord", "rhythm"],
         range: [12, 25],
         dynamics: "p",
-        pitch: { set: [0, 2, 5] }
+        pitch: { set: [0, 2, 5] },
       },
       // F
       {
         types: ["glob", "chord"],
         range: [1, 25],
         dynamics: "pp",
-        pitch: { set: [0, 1, 5] }
+        pitch: { set: [0, 1, 5] },
       },
       {
         types: ["glob", "rhythm"],
         range: [1, 4],
         dynamics: "ppp",
-        pitch: { set: [0, 1, 3] }
+        pitch: { set: [0, 1, 3] },
       },
       // >
       {
@@ -120,8 +120,8 @@
         types: ["glob"],
         range: [0, 0],
         dynamics: "n",
-        pitch: { set: [] }
-      }
+        pitch: { set: [] },
+      },
     ];
 
     var globules0 = [],
@@ -159,19 +159,19 @@
         globs: [
           {
             type: VS.getItem(bar.types),
-            durations: globules0
+            durations: globules0,
           },
           {
             type: VS.getItem(bar.types),
-            durations: globules1
+            durations: globules1,
           },
           {
             type: VS.getItem(bar.types),
-            durations: globules2
-          }
+            durations: globules2,
+          },
         ],
         dynamics: bar.dynamics,
-        pitch: bar.pitch
+        pitch: bar.pitch,
       });
 
       VS.score.add(time, update, [tt, score[i]]);
@@ -201,7 +201,7 @@
       d = Math.random() - Math.random();
     return {
       x: Math.cos(angle) * r * d + x,
-      y: Math.sin(angle) * r * d + y
+      y: Math.sin(angle) * r * d + y,
     };
   }
 
@@ -224,19 +224,16 @@
 
     this.center = {
       x: 0,
-      y: 0
+      y: 0,
     };
 
     // this.data = d3.range(this.size); // fallback if no data
   }
 
-  Glob.prototype.move = function(dur, data) {
+  Glob.prototype.move = function (dur, data) {
     var self = this,
       type = data.type,
-      t = d3
-        .transition()
-        .duration(dur)
-        .ease(d3.easeCubic);
+      t = d3.transition().duration(dur).ease(d3.easeCubic);
 
     // this.data = data;
 
@@ -248,7 +245,7 @@
 
     this.center = {
       x: VS.getRandExcl(-radius, radius),
-      y: VS.getRandExcl(-radius, radius)
+      y: VS.getRandExcl(-radius, radius),
     };
 
     function transform() {
@@ -272,17 +269,14 @@
       .remove();
 
     // update
-    globules
-      .transition(t)
-      .style("opacity", 1)
-      .attr("transform", transform);
+    globules.transition(t).style("opacity", 1).attr("transform", transform);
 
     // enter
     globules
       .enter()
       .append("text")
       .attr("class", "globule")
-      .text(function(d) {
+      .text(function (d) {
         return durationDict[d];
       })
       .attr("transform", "translate(" + oldCenter.x + "," + oldCenter.y + ")")
@@ -304,7 +298,7 @@
 
     function update(set) {
       var formatted = set
-        .map(function(pc) {
+        .map(function (pc) {
           return VS.pitchClass.format(
             pc,
             options.pitchClasses.display,
@@ -313,13 +307,13 @@
         })
         .join(", ");
 
-      selection.text(function() {
+      selection.text(function () {
         return "{" + formatted + "}";
       });
     }
 
     return {
-      update: update
+      update: update,
     };
   }
 
@@ -340,7 +334,7 @@
     }
 
     return {
-      update: update
+      update: update,
     };
   }
 
@@ -351,7 +345,7 @@
   );
   VS.scoreOptions.add("transposition", 0, new VS.NumberSetting("transposition"));
 
-  var scoreOptions = (function() {
+  var scoreOptions = (function () {
     var options = VS.scoreOptions.setFromQueryString();
 
     // TODO working with old property names in score, for now
@@ -367,15 +361,15 @@
   var canvas = {
       width: 400,
       height: 400,
-      center: 200
+      center: 200,
     },
     layout = {
       width: 240,
-      margin: {}
+      margin: {},
     },
     transitionTime = {
       long: 20000,
-      short: 600
+      short: 600,
     },
     debug = +VS.getQueryString("debug") === 1 || false,
     svg = d3.select(".main"),
@@ -388,8 +382,8 @@
   var glob1 = new Glob(wrapper, canvas);
   var glob2 = new Glob(wrapper, canvas);
 
-  var update = (function(options) {
-    return function(dur, bar) {
+  var update = (function (options) {
+    return function (dur, bar) {
       var pcSet = VS.pitchClass.transpose(
         bar.pitch.set,
         bar.pitch.transpose + options.transposition
@@ -473,7 +467,7 @@
 
   resize();
 
-  var updateAtPointer = function() {
+  var updateAtPointer = function () {
     var pointer = VS.score.getPointer();
 
     if (!VS.score.pointerAtLastEvent()) {

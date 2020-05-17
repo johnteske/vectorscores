@@ -53,7 +53,7 @@
       type: "midi",
       hi: hiRangeGen(4, 64, 127),
       lo: loRangeGen(4, 0, 63),
-      times: [0, 0.3, 0.5, 1]
+      times: [0, 0.3, 0.5, 1],
     };
 
     var pcset = VS.pitchClass.transpose(VS.getItem(VS.trichords), "random");
@@ -61,12 +61,12 @@
     globject.pitches = [
       {
         classes: pcset.slice(0, 2),
-        time: 0
+        time: 0,
       },
       {
         classes: pcset,
-        time: 0.5
-      }
+        time: 0.5,
+      },
     ];
 
     // globject.duration = {
@@ -94,7 +94,7 @@
     globject.dynamics = [
       { value: newDynamics[0], time: 0 },
       { value: newDynamics[1], time: 0.5 },
-      { value: newDynamics[2], time: 1 }
+      { value: newDynamics[2], time: 1 },
     ];
 
     var durs = [0.5, 1, 1.5, 2];
@@ -102,13 +102,13 @@
     globject.phraseTexture = [
       VS.getItem(durs),
       VS.getItem(durs),
-      VS.getItem(durs)
+      VS.getItem(durs),
     ];
 
     return globject;
   }
 
-  var score = (function() {
+  var score = (function () {
     var _score = [];
     for (var i = 0; i < 8; i++) {
       _score.push([makeGlobject()]);
@@ -137,7 +137,7 @@
     d3.selectAll(".globject").remove();
 
     var globject = VS.globject()
-      .width(function(d) {
+      .width(function (d) {
         return d.width;
       })
       .height(127);
@@ -150,7 +150,7 @@
       .each(globject)
       .each(centerGlobject);
 
-    globjectContainer.selectAll(".globject-content").each(function(d) {
+    globjectContainer.selectAll(".globject-content").each(function (d) {
       var selection = d3.select(this),
         w = d.width;
 
@@ -163,7 +163,7 @@
       for (var phrase = 0, phrases = 13; phrase < phrases; phrase++) {
         selection
           .append("g")
-          .attr("transform", function() {
+          .attr("transform", function () {
             var halfWidth = w * 0.5,
               x = Math.random() * halfWidth + halfWidth * (phrase % 2),
               y = (127 / phrases) * phrase;
@@ -173,31 +173,31 @@
           .data(d.phraseTexture)
           .enter()
           .append("text")
-          .text(function(d) {
+          .text(function (d) {
             return noteheads[d];
           })
           .call(phraseSpacing);
       }
     });
 
-    globjectContainer.selectAll(".globject").each(function(d) {
+    globjectContainer.selectAll(".globject").each(function (d) {
       var selection = d3.select(this),
         w = d.width;
 
       selection
         .append("g")
         .selectAll("text")
-        .data(function(d) {
+        .data(function (d) {
           return d.pitches;
         })
         .enter()
         .append("text")
-        .attr("x", function(d) {
+        .attr("x", function (d) {
           return d.time * w;
         })
         .attr("y", 127 + 24)
-        .text(function(d) {
-          var pcSet = d.classes.map(function(pc) {
+        .text(function (d) {
+          var pcSet = d.classes.map(function (pc) {
             return VS.pitchClass.format(pc);
           });
           return "{" + pcSet.join(", ") + "}";
@@ -209,11 +209,11 @@
         .data(d.dynamics)
         .enter()
         .append("text")
-        .attr("x", function(d) {
+        .attr("x", function (d) {
           return d.time * w;
         })
         .attr("y", 127 + 42)
-        .text(function(d) {
+        .text(function (d) {
           return d.value;
         });
     });
@@ -259,10 +259,10 @@
   /**
    * Score controls
    */
-  VS.control.hooks.add("stop", function() {
+  VS.control.hooks.add("stop", function () {
     update(0);
   });
-  VS.control.hooks.add("step", function() {
+  VS.control.hooks.add("step", function () {
     update(VS.score.getPointer());
   });
 

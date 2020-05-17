@@ -13,7 +13,7 @@
       [1, 1, 1],
       [1, 0, 1],
       // and a stray
-      [-2, 0, 0]
+      [-2, 0, 0],
     ];
 
     return score;
@@ -37,7 +37,7 @@
   }
 
   function flatten(array) {
-    return array.reduce(function(a, b) {
+    return array.reduce(function (a, b) {
       return a.concat(b);
     }, []);
   }
@@ -46,7 +46,7 @@
     return {
       x: array[0],
       y: array[1],
-      z: array[2]
+      z: array[2],
     };
   }
 
@@ -60,20 +60,32 @@
     // var c = makePoint([0, 0, -5]); // 3D point representing the camera
     // var theta = makePoint([Math.PI, 0, Math.PI]); // orientation of the camera (Tait–Bryan angles) NOTE x, y, z?
 
-    var xMatrix = (function() {
+    var xMatrix = (function () {
       var cosOx = Math.cos(theta.x),
         sinOx = Math.sin(theta.x);
-      return [[1, 0, 0], [0, cosOx, sinOx], [0, -sinOx, cosOx]];
+      return [
+        [1, 0, 0],
+        [0, cosOx, sinOx],
+        [0, -sinOx, cosOx],
+      ];
     })();
-    var yMatrix = (function() {
+    var yMatrix = (function () {
       var cosOy = Math.cos(theta.y),
         sinOy = Math.sin(theta.y);
-      return [[cosOy, 0, -sinOy], [0, 1, 0], [sinOy, 0, cosOy]];
+      return [
+        [cosOy, 0, -sinOy],
+        [0, 1, 0],
+        [sinOy, 0, cosOy],
+      ];
     })();
-    var zMatrix = (function() {
+    var zMatrix = (function () {
       var cosOz = Math.cos(theta.z),
         sinOz = Math.sin(theta.z);
-      return [[cosOz, sinOz, 0], [-sinOz, cosOz, 0], [0, 0, 1]];
+      return [
+        [cosOz, sinOz, 0],
+        [-sinOz, cosOz, 0],
+        [0, 0, 1],
+      ];
     })();
 
     var cameraRotationMatrix = multiplyMatrices(
@@ -93,7 +105,7 @@
 
       var b = {
         x: (d.x / d.z) * rz,
-        y: (d.y / d.z) * rz
+        y: (d.y / d.z) * rz,
       };
 
       score.container
@@ -118,11 +130,11 @@
       .select(".main")
       .attr("width", 640)
       .attr("height", 640)
-      .append("g")
+      .append("g"),
   };
   score.center = {
     x: score.width * 0.5 - 0.5,
-    y: score.height * 0.5 - 0.5
+    y: score.height * 0.5 - 0.5,
   };
   score.radius = Math.sqrt(Math.pow(score.width, 2) + Math.pow(score.height, 2)); // distance of player from center of score
   score.obj = createScore();
@@ -135,30 +147,30 @@
       _position = {};
 
     return {
-      setAngle: function(newAngle) {
+      setAngle: function (newAngle) {
         // substract 90 degress so origin is top, then convert to radians
         _angle = (newAngle - 90) * (Math.PI / 180);
 
         _position = {
           x: score.center.x + score.radius * Math.cos(_angle),
-          y: score.center.y + score.radius * Math.sin(_angle)
+          y: score.center.y + score.radius * Math.sin(_angle),
         };
 
         return _angle;
       },
-      getAngle: function() {
+      getAngle: function () {
         return _angle;
       },
-      getPosition: function() {
+      getPosition: function () {
         return _position;
       },
-      get: function() {
+      get: function () {
         return {
           x: _position.x,
           y: _position.y,
-          angle: _angle
+          angle: _angle,
         };
-      }
+      },
     };
   }
 

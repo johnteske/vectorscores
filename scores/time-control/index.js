@@ -42,7 +42,7 @@
     return {
       time: eventTime,
       action: isUserEvent ? greenEvent : blueEvent,
-      parameters: [eventTime, isBox]
+      parameters: [eventTime, isBox],
     };
   }
 
@@ -56,7 +56,7 @@
     score.push(createEvent(time));
   }
 
-  score.forEach(function(bar) {
+  score.forEach(function (bar) {
     VS.score.add(bar.time, bar.action, bar.parameters);
     createSpan(bar.time);
   });
@@ -78,12 +78,12 @@
   }
 
   // Activate all spans up to pointer
-  VS.control.hooks.add("step", function() {
+  VS.control.hooks.add("step", function () {
     resetSpans();
 
     var index = VS.score.getPointer();
 
-    score.slice(0, index).forEach(function(bar) {
+    score.slice(0, index).forEach(function (bar) {
       bar.action.apply(null, bar.parameters);
     });
   });

@@ -2,10 +2,10 @@
   'use strict';
 
   const margin = {
-    top: 64
+    top: 64,
   };
 
-  const seconds = t => t * 1000;
+  const seconds = (t) => t * 1000;
 
   const pitchRange = 87;
 
@@ -15,10 +15,10 @@
 
   const { dynamics } = VS.dictionary.Bravura;
 
-  function drawDynamics(data, scale, selection) {
+  function drawDynamics (data, scale, selection) {
     const g = selection.append("g");
 
-    data.forEach(d => {
+    data.forEach((d) => {
       const text = g.append("text").attr("x", d.x * scale);
 
       switch (d.x) {
@@ -34,16 +34,10 @@
 
       switch (d.type) {
         case "symbol":
-          text
-            .text(dynamics[d.value])
-            .attr("class", "bravura")
-            .attr("dy", "2em");
+          text.text(dynamics[d.value]).attr("class", "bravura").attr("dy", "2em");
           break;
         case "text":
-          text
-            .text(d.value)
-            .attr("class", "text-dynamic")
-            .attr("dy", "3.5em");
+          text.text(d.value).attr("class", "text-dynamic").attr("dy", "3.5em");
           break;
       }
     });
@@ -59,7 +53,7 @@
     return selection.attr("transform", `translate(${x}, ${y})`);
   }
 
-  function makeIndicator(selection) {
+  function makeIndicator (selection) {
     // TODO from dirge,,march AND ad;sr
     const indicator = selection
       .append("path")
@@ -87,28 +81,28 @@
       element: indicator,
       blinker: blinker(indicator),
       translateX,
-      translateY
+      translateY,
     };
   }
 
   function blinker(selection) {
     return VS.cueBlink(selection)
       .beats(3)
-      .inactive(function(selection) {
+      .inactive(function (selection) {
         selection.style("fill-opacity", 0);
       })
-      .on(function(selection) {
+      .on(function (selection) {
         selection.style("fill-opacity", 1);
       })
-      .off(function(selection) {
+      .off(function (selection) {
         selection.style("fill-opacity", 0);
       })
-      .down(function(selection) {
+      .down(function (selection) {
         selection.style("fill-opacity", 1);
       });
   }
 
-  function makePage(selection) {
+  function makePage (selection) {
     const page = selection.append("g");
 
     let _scale = 1;
@@ -120,11 +114,11 @@
 
     return {
       element: page,
-      scale
+      scale,
     };
   }
 
-  function makeScroll(selection) {
+  function makeScroll (selection) {
     const scroll = selection.append("g");
 
     let _center = null;
@@ -150,7 +144,7 @@
       element: scroll,
       setCenter,
       scrollTo,
-      y
+      y,
     };
   }
 
@@ -188,10 +182,7 @@
   const cues = wrapper.append("g");
 
   const bloodText = (selection, str) =>
-    selection
-      .append("text")
-      .text(str)
-      .attr("fill", "darkRed");
+    selection.append("text").text(str).attr("fill", "darkRed");
 
   function heavyBreath(selection) {
     const g = selection.append("g");
@@ -260,33 +251,33 @@
             {
               type: "symbol",
               value: "p",
-              x: 0
+              x: 0,
             },
             {
               type: "text",
               value: "cres.",
-              x: 0.25
+              x: 0.25,
             },
             {
               type: "symbol",
               value: "ff",
-              x: 0.5
+              x: 0.5,
             },
             {
               type: "text",
               value: "decres.",
-              x: 0.75
+              x: 0.75,
             },
             {
               type: "symbol",
               value: "n",
-              x: 1
-            }
+              x: 1,
+            },
           ],
           length,
           g
         );
-      }
+      },
     },
     {
       duration: 0,
@@ -296,14 +287,14 @@
         //appendmakeCue(x, "open");
         // TODO if all fades/moriendo, is a double bar needed?
         //doubleBar(g, pitchRange).attr("stroke", "black");
-      }
-    }
+      },
+    },
   ].map(startTimeFromDuration);
 
   const texture = [
     {
       duration: seconds(30),
-      render: () => {}
+      render: () => {},
     },
     // add low scrape
     {
@@ -311,14 +302,12 @@
       render: ({ x, length }) => {
         const g = wrapper.append("g");
         translate(g, x, pitchScale(0.25));
-        g.append("text")
-          .text("scrape")
-          .attr("fill", "blue");
+        g.append("text").text("scrape").attr("fill", "blue");
         scrapeDrone(g).attr("x2", length);
         bloodText(g, "choke hold").attr("y", -0.75 * pitchRange); // TODO y pos
         // TODO dynamics?
         //makeCue(x); // TODO dotted line pointing to this
-      }
+      },
     },
     // scrape cluster
     {
@@ -326,15 +315,11 @@
       render: ({ x, length }) => {
         const g = wrapper.append("g");
         translate(g, x, pitchScale(0.25));
-        scrapeDrone(g)
-          .attr("x2", length)
-          .call(translate, 0, -2);
+        scrapeDrone(g).attr("x2", length).call(translate, 0, -2);
         scrapeDrone(g).attr("x2", length);
-        scrapeDrone(g)
-          .attr("x2", length)
-          .call(translate, 0, 2);
+        scrapeDrone(g).attr("x2", length).call(translate, 0, 2);
         // TODO dynamics?
-      }
+      },
     },
     // TODO scrape and drone cres., more pressure
     // growl
@@ -353,14 +338,14 @@
           .call(translate, 0, 10);
 
         // TODO dynamics?
-      }
-    }
+      },
+    },
   ].map(startTimeFromDuration);
 
   const noise = [
     {
       duration: seconds(90),
-      render: () => {}
+      render: () => {},
     },
     {
       duration: seconds(30),
@@ -375,8 +360,8 @@
             .attr("x", Math.random() * length)
             .attr("y", Math.random() * pitchRange);
         }
-      }
-    }
+      },
+    },
   ].map(startTimeFromDuration);
 
   // TODO wall of texture, frantic
@@ -384,12 +369,12 @@
   const score = [...noise, ...breath, ...texture];
 
   const scoreTiming = score
-    .map(bar => bar.startTime)
+    .map((bar) => bar.startTime)
     .filter((startTime, i, times) => times.indexOf(startTime) === i)
     .sort((a, b) => a - b)
     .map((startTime, i, times) => ({
       startTime,
-      duration: times[i + 1] - times[i] || 0
+      duration: times[i + 1] - times[i] || 0,
     }));
 
   scoreTiming.forEach((bar, i) => {
@@ -398,11 +383,11 @@
   });
 
   function renderScore() {
-    score.forEach(bar => {
+    score.forEach((bar) => {
       const { render, ...meta } = bar;
       const renderData = {
         x: timeScale(bar.startTime),
-        length: timeScale(bar.duration)
+        length: timeScale(bar.duration),
       };
       render({ ...meta, ...renderData });
     });

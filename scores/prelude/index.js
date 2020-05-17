@@ -6,17 +6,17 @@
   var scoreConfig = {
     totalDuration: 300, // 481 // originally timed for 481 s // NOTE does not scale chords--actual total duration may be longer
     cueBlinks: 2,
-    transposeBy: 3
+    transposeBy: 3,
   };
 
   scoreConfig.cueDuration = 3000; // NOTE this is the max cue timing
   scoreConfig.scale = 1;
 
   // include_relative _card-content.js
-  var chord = (function() {
+  var chord = (function () {
     var timeSigs = {
       "2/4": "\uf589",
-      "3/4": "\uf58c"
+      "3/4": "\uf58c",
     };
 
     function makeChord(selection, args, x) {
@@ -101,7 +101,7 @@
         .text(notehead);
     }
 
-    return function(selection, args) {
+    return function (selection, args) {
       var center = cardWidth * 0.5,
         marginLeft = 36,
         spacing = (cardWidth - marginLeft) / (args.n + 1);
@@ -168,7 +168,10 @@
     var lineCloud = VS.lineCloud()
       .duration(args.duration || 1)
       .phrase(
-        args.phrase || [{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }]
+        args.phrase || [
+          { pitch: 0, duration: 1 },
+          { pitch: 0, duration: 0 },
+        ]
       )
       .curve(args.curve || d3.curveLinear)
       .width(cardWidth)
@@ -184,7 +187,10 @@
   }
 
   function microMelodyPhrase() {
-    var notes = [{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }];
+    var notes = [
+      { pitch: 0, duration: 1 },
+      { pitch: 0, duration: 0 },
+    ];
 
     var dir = VS.getItem([-1, 1]);
 
@@ -200,7 +206,10 @@
   }
 
   function melodyPhrase() {
-    var notes = [{ pitch: 0, duration: 1 }, { pitch: 0, duration: 0 }];
+    var notes = [
+      { pitch: 0, duration: 1 },
+      { pitch: 0, duration: 0 },
+    ];
 
     function addNote() {
       var dir = VS.getItem([-1, 1]);
@@ -250,23 +259,26 @@
       content: [
         {
           type: chord,
-          args: { n: 1, timeSig: "2/4" }
-        }
-      ]
+          args: { n: 1, timeSig: "2/4" },
+        },
+      ],
     },
     {
       duration: 11,
       cue: 2,
       type: "card",
-      dynamics: [{ time: 0, value: "n" }, { time: 0.5, value: "<" }],
+      dynamics: [
+        { time: 0, value: "n" },
+        { time: 0.5, value: "<" },
+      ],
       pcSet: [0, 1, 2, 4, 7, 8],
       transpose: 0,
       content: [
         {
           type: chord,
-          args: { n: 1, sustain: true }
-        }
-      ]
+          args: { n: 1, sustain: true },
+        },
+      ],
     },
     {
       duration: 3,
@@ -278,23 +290,26 @@
       content: [
         {
           type: chord,
-          args: { n: 2, timeSig: "3/4" }
-        }
-      ]
+          args: { n: 2, timeSig: "3/4" },
+        },
+      ],
     },
     {
       duration: 16,
       cue: 3,
       type: "card",
-      dynamics: [{ time: 0, value: "n" }, { time: 0.5, value: "<" }],
+      dynamics: [
+        { time: 0, value: "n" },
+        { time: 0.5, value: "<" },
+      ],
       pcSet: [0, 1, 2, 4, 7, 8],
       transpose: 0,
       content: [
         {
           type: chord,
-          args: { n: 1, sustain: true }
-        }
-      ]
+          args: { n: 1, sustain: true },
+        },
+      ],
     },
     {
       duration: 2,
@@ -306,9 +321,9 @@
       content: [
         {
           type: chord,
-          args: { n: 1, duration: 1.5, timeSig: "2/4" }
-        }
-      ]
+          args: { n: 1, duration: 1.5, timeSig: "2/4" },
+        },
+      ],
     },
     {
       duration: 23,
@@ -320,9 +335,9 @@
       content: [
         {
           type: chord,
-          args: { n: 1, sustain: true }
-        }
-      ]
+          args: { n: 1, sustain: true },
+        },
+      ],
     },
     /**
      * A
@@ -334,24 +349,24 @@
       dynamics: [
         { time: 0, value: "n" },
         { time: 0.5, value: "<" },
-        { time: 1, value: "p" }
+        { time: 1, value: "p" },
       ],
       pcSet: [0, 1, 2, 4, 7, 8],
       transpose: transposeInRange(0, 2),
       content: [
         {
           type: lnp,
-          args: {}
+          args: {},
         },
         {
           type: lines,
           args: {
             n: 6,
             duration: 1,
-            bottomMargin: 25
-          }
-        }
-      ]
+            bottomMargin: 25,
+          },
+        },
+      ],
     },
     {
       duration: 25.75,
@@ -360,24 +375,24 @@
       dynamics: [
         { time: 0, value: "p" },
         { time: 0.5, value: "<" },
-        { time: 1, value: "mf" }
+        { time: 1, value: "mf" },
       ],
       pcSet: [0, 1, 2, 4, 7, 8],
       transpose: transposeInRange(0, 4),
       content: [
         {
           type: lnp,
-          args: {}
+          args: {},
         },
         {
           type: lines,
           args: {
             n: 18,
             duration: 3,
-            bottomMargin: 25
-          }
-        }
-      ]
+            bottomMargin: 25,
+          },
+        },
+      ],
     },
     {
       duration: 25.75,
@@ -386,14 +401,14 @@
       dynamics: [
         { time: 0, value: "mf" },
         { time: 0.5, value: ">" },
-        { time: 1, value: "p" }
+        { time: 1, value: "p" },
       ],
       pcSet: [0, 1, 2, 4, 7, 8],
       transpose: transposeInRange(0, 4),
       content: [
         {
           type: lnp,
-          args: {}
+          args: {},
         },
         {
           type: lines,
@@ -401,10 +416,10 @@
             n: 18,
             duration: 9,
             phrase: microMelodyPhrase,
-            bottomMargin: 25
-          }
-        }
-      ]
+            bottomMargin: 25,
+          },
+        },
+      ],
     },
     {
       duration: 25.75,
@@ -413,14 +428,14 @@
       dynamics: [
         { time: 0, value: "p" },
         { time: 0.5, value: ">" },
-        { time: 1, value: "n" }
+        { time: 1, value: "n" },
       ],
       pcSet: [0, 1, 2, 4, 7, 8],
       transpose: transposeInRange(0, 2),
       content: [
         {
           type: lnp,
-          args: {}
+          args: {},
         },
         {
           type: lines,
@@ -428,10 +443,10 @@
             n: 18,
             duration: 9,
             phrase: melodyPhrase,
-            bottomMargin: 25
-          }
-        }
-      ]
+            bottomMargin: 25,
+          },
+        },
+      ],
     },
     /**
      * B
@@ -446,9 +461,9 @@
       content: [
         {
           type: chord,
-          args: { n: 2, timeSig: "3/4" }
-        }
-      ]
+          args: { n: 2, timeSig: "3/4" },
+        },
+      ],
     },
     {
       duration: 56.5,
@@ -457,7 +472,7 @@
       dynamics: [
         { time: 0, value: "n" },
         { time: 0.5, value: "<" },
-        { time: 1, value: "mf" }
+        { time: 1, value: "mf" },
       ],
       pcSet: [0, 1, 2, 4, 7, 8],
       transpose: transposeInRange(0, 3),
@@ -466,10 +481,10 @@
           type: lines,
           args: {
             n: 6,
-            duration: 1
-          }
-        }
-      ]
+            duration: 1,
+          },
+        },
+      ],
     },
     {
       duration: 76.5 * (3 / 7),
@@ -478,7 +493,7 @@
       dynamics: [
         { time: 0, value: "mf" },
         { time: 0.5, value: ">" },
-        { time: 1, value: "p" }
+        { time: 1, value: "p" },
       ],
       pcSet: [0, 1, 2, 4, 7, 8],
       transpose: transposeInRange(0, 6),
@@ -488,10 +503,10 @@
           args: {
             n: 18,
             duration: 9,
-            phrase: microMelodyPhrase
-          }
-        }
-      ]
+            phrase: microMelodyPhrase,
+          },
+        },
+      ],
     },
     {
       duration: 76.5 * (4 / 7),
@@ -500,7 +515,7 @@
       dynamics: [
         { time: 0, value: "p" },
         { time: 0.5, value: ">" },
-        { time: 1, value: "n" }
+        { time: 1, value: "n" },
       ],
       pcSet: [0, 1, 2, 4, 7, 8],
       transpose: transposeInRange(0, 3),
@@ -511,10 +526,10 @@
             n: 18,
             duration: 15,
             phrase: microtonalPhrase,
-            curve: d3.curveCardinal.tension(0)
-          }
-        }
-      ]
+            curve: d3.curveCardinal.tension(0),
+          },
+        },
+      ],
     },
     /**
      * C
@@ -530,9 +545,9 @@
       content: [
         {
           type: chord,
-          args: { n: 1, duration: 1.5, timeSig: "2/4" }
-        }
-      ]
+          args: { n: 1, duration: 1.5, timeSig: "2/4" },
+        },
+      ],
     },
     {
       duration: 180 * (3 / 7),
@@ -542,7 +557,7 @@
       dynamics: [
         { time: 0, value: "mp" },
         { time: 0.5, value: ">" },
-        { time: 1, value: "pp" }
+        { time: 1, value: "pp" },
       ],
       pcSet: [0, 1, 4, 6],
       transpose: transposeInRange(0, 3),
@@ -554,10 +569,10 @@
             n: 12,
             duration: 6,
             phrase: microtonalPhrase,
-            curve: d3.curveCardinal.tension(0)
-          }
-        }
-      ]
+            curve: d3.curveCardinal.tension(0),
+          },
+        },
+      ],
     },
     {
       duration: 180 * (4 / 7),
@@ -567,7 +582,7 @@
       dynamics: [
         { time: 0, value: "pp" },
         { time: 0.5, value: ">" },
-        { time: 1, value: "n" }
+        { time: 1, value: "n" },
       ],
       pcSet: [0, 1, 4, 6],
       transpose: transposeInRange(0, 7),
@@ -577,11 +592,11 @@
           type: lines,
           args: {
             n: 6,
-            duration: 1
-          }
-        }
-      ]
-    }
+            duration: 1,
+          },
+        },
+      ],
+    },
   ];
 
   var cues = [];
@@ -615,10 +630,10 @@
 
   var svg = d3.select(".main");
 
-  var scaleDuration = (function() {
+  var scaleDuration = (function () {
     var scale = scoreConfig.totalDuration / 481;
 
-    return function(i) {
+    return function (i) {
       var dur = cardList[i].duration;
       // Do not scale chords (2-3 s)
       return dur < 4 ? dur : dur * scale;
@@ -636,7 +651,7 @@
       // \ue890 // cue
       1: "\ue893", // weak cue
       2: "\ue894", // 2 beat
-      3: "\ue895" // 3 beat
+      3: "\ue895", // 3 beat
       // \ue896 // 4 beat
       // \ue89a // free
     };
@@ -651,17 +666,17 @@
 
     cues[index] = VS.cueBlink(selection)
       .beats(data.cue)
-      .inactive(function(selection) {
+      .inactive(function (selection) {
         selection.style("fill", "#888").style("opacity", 1);
       })
-      .on(function(selection) {
+      .on(function (selection) {
         selection.style("fill", "blue").style("opacity", 1);
       })
-      .off(function(selection) {
+      .off(function (selection) {
         selection.style("fill", "#888").style("opacity", 0.25);
       })
       // Do not blink on downbeat--card position animation signals downbeat
-      .down(function(selection) {
+      .down(function (selection) {
         selection.style("fill", "#888").style("opacity", 0.25);
       });
   }
@@ -688,7 +703,7 @@
     selection
       .append("text")
       .attr("dy", "-1em")
-      .text(function(d) {
+      .text(function (d) {
         var transpose =
           typeof d.transpose !== "undefined"
             ? d.transpose + scoreConfig.transposeBy
@@ -698,7 +713,7 @@
           transpose + scoreOptions.transposition
         );
 
-        pcSet = pcSet.map(function(pc) {
+        pcSet = pcSet.map(function (pc) {
           return VS.pitchClass.format(
             pc,
             scoreOptions.pitchClasses.display,
@@ -713,10 +728,7 @@
     var card = selection.append("g");
 
     if (data.type === "card") {
-      card
-        .append("rect")
-        .attr("width", cardWidth)
-        .attr("height", cardWidth);
+      card.append("rect").attr("width", cardWidth).attr("height", cardWidth);
     } else {
       card
         .append("line")
@@ -737,15 +749,15 @@
       .attr("class", "dynamics")
       .attr("transform", "translate(0, " + cardWidth + ")")
       .selectAll("text")
-      .data(function(d) {
+      .data(function (d) {
         return d.dynamics;
       })
       .enter()
       .append("text")
-      .attr("x", function(d) {
+      .attr("x", function (d) {
         return d.time * cardWidth;
       })
-      .attr("text-anchor", function(d) {
+      .attr("text-anchor", function (d) {
         var anchor = "start";
 
         if (d.time === 0.5) {
@@ -756,11 +768,11 @@
 
         return anchor;
       })
-      .attr("dx", function(d) {
+      .attr("dx", function (d) {
         return d.time === 0 ? "0.125em" : 0;
       })
       .attr("dy", "1em")
-      .text(function(d) {
+      .text(function (d) {
         return dynamicsDict[d.value];
       });
   }
@@ -790,10 +802,10 @@
     .append("g")
     .classed("card", 1)
     .each(makeCard)
-    .attr("transform", function(d, i) {
+    .attr("transform", function (d, i) {
       return "translate(" + cardX(i) + ", 100)";
     })
-    .style("opacity", function(d, i) {
+    .style("opacity", function (d, i) {
       return 1 - i * 0.5;
     });
 
@@ -812,14 +824,14 @@
     selection
       .transition()
       .duration(dur)
-      .style("opacity", function(d, i) {
+      .style("opacity", function (d, i) {
         return i === pointer + 1 ? 1 : 0;
       });
   }
 
   function fadePenultimateScene(active, dur) {
     cards
-      .filter(function(d, i) {
+      .filter(function (d, i) {
         return i === cardList.length - 1;
       })
       .style("opacity", 1)
@@ -834,7 +846,7 @@
     cardGroup
       .transition()
       .duration(dur)
-      .attr("transform", function() {
+      .attr("transform", function () {
         return translateCardGroup(pointer);
       });
 
@@ -843,7 +855,7 @@
     cards
       .transition()
       .duration(dur)
-      .style("opacity", function(d, i) {
+      .style("opacity", function (d, i) {
         // if rolling back to begin play, hide previous cards
         var p = control === "play" ? pointer + 1 : pointer;
 
@@ -853,7 +865,7 @@
           return 0.5 * (pointer - i) + 1;
         }
       })
-      .on("end", function() {
+      .on("end", function () {
         // if penultimate scene, fade
         if (
           VS.score.getPointer() === VS.score.getLength() - 2 &&
@@ -897,22 +909,22 @@
   // Add final event for proper timing of last card
   var cardsWithFinalEvent = [].concat(cardList, { duration: 0 });
 
-  var score = cardsWithFinalEvent.map(function(card, i, list) {
-    card.time = list.slice(0, i).reduce(function(sum, c, j) {
+  var score = cardsWithFinalEvent.map(function (card, i, list) {
+    card.time = list.slice(0, i).reduce(function (sum, c, j) {
       return (sum += scaleDuration(j) * 1000);
     }, 0);
 
     return card;
   });
 
-  score.slice(0, -1).forEach(function(card, i) {
+  score.slice(0, -1).forEach(function (card, i) {
     VS.score.add(card.time, goToCard, [i, "score"]);
   });
   VS.score.add(score[score.length - 1].time);
 
   VS.score.preroll = scoreConfig.cueDuration; // cardTransTime;
 
-  VS.control.hooks.add("play", function() {
+  VS.control.hooks.add("play", function () {
     var pointer = VS.score.getPointer();
     goToCard(pointer - 1, "play");
     // VS.score.schedule(VS.score.preroll - score.cueDuration, cueBlink);
