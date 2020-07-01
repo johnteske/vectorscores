@@ -54,7 +54,7 @@
     "postcss-custom-properties": "^9.1.1",
     "postcss-import": "^12.0.1",
     "rollup": "^2.10.2",
-    "serve": "^11.3.0",
+    "serve": "^11.3.2",
     "slugify": "^1.4.0",
     "ws": "^7.3.0"
   },
