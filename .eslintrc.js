@@ -1,3 +1,5 @@
+// const { eslintrc } = require("@vectorscores/configs")
+
 module.exports = {
   extends: "eslint:recommended",
   rules: {
