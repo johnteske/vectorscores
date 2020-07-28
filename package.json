@@ -20,10 +20,10 @@
     "copy": "copyfiles docs/README.md _includes",
     "deploy": "SITE_BASE_URL=vectorscores npm run build && gh-pages -d _site",
     "fix:css": "stylelint assets/css/**/*.css --fix",
-    "format": "prettier --write {.,_includes/*/*,pages,scores/*,scores/*/*}/*.js",
+    "format": "prettier --write '{.,scores/**/*}/*.js'",
     "serve": "serve -n -l 8081 _site",
     "serve:external": "serve -n -l tcp://0.0.0.0:80 _site",
-    "watch": "chokidar '**/*.*' -i 'node_modules' -i '_site' -i '_includes/docs/README.md' -c \"npm run build && echo 'done'\""
+    "watch": "chokidar '**/*.*' -i 'node_modules' -i '_site' -c \"npm run build && echo 'done'\""
   },
   "repository": {
     "type": "git",
@@ -46,7 +46,6 @@
     "chokidar-cli": "^2.1.0",
     "copyfiles": "^2.2.0",
     "eleventy-lib": "github:johnteske/eleventy-lib",
-    "ffdb-jtm": "github:johnteske/ffdb-jtm",
     "gh-pages": "^2.2.0",
     "moment": "^2.25.3",
     "postcss": "^7.0.30",

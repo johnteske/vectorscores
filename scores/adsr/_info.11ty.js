@@ -1,10 +1,8 @@
 const requireRoot = require("app-root-path").require;
 
-const partialPath = "_includes/partials";
-const termLink = requireRoot(`${partialPath}/glossary/term-link.11ty.js`);
-const termDescription = requireRoot(
-  `${partialPath}/glossary/term-description.11ty.js`
-);
+const partialPath = "partials";
+const termLink = requireRoot(`${partialPath}/term-link.11ty.js`);
+const termDescription = requireRoot(`${partialPath}/term-description.11ty.js`);
 
 module.exports = () => `
 ### Time

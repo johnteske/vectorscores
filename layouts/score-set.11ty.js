@@ -4,9 +4,10 @@ const { forEachModuleWithFile, movementsFromUrl } = requireRoot(
   "render-utils.js"
 );
 
-const partialPath = "_includes/partials";
-const header = requireRoot(`${partialPath}/score/header.11ty.js`);
-const workLink = requireRoot(`${partialPath}/work-link.11ty.js`);
+const partialPath = "partials";
+const header = requireRoot(`${partialPath}/header.11ty.js`);
+//const workLink = requireRoot(`${partialPath}/work-link.11ty.js`);
+const workLink = () => {};
 
 module.exports = (data) => {
   const works = movementsFromUrl(data.page.url, data);

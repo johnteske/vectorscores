@@ -1,7 +1,7 @@
 const requireRoot = require("app-root-path").require;
 const { title } = require("eleventy-lib");
 
-const partialPath = "_includes/partials/score";
+const partialPath = "partials";
 const styles = requireRoot(`${partialPath}/styles.11ty.js`);
 const header = requireRoot(`${partialPath}/header.11ty.js`);
 const footer = requireRoot(`${partialPath}/footer.11ty.js`);
