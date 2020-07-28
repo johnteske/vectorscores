@@ -20,7 +20,7 @@
     "copy": "copyfiles docs/README.md _includes",
     "deploy": "SITE_BASE_URL=vectorscores npm run build && gh-pages -d _site",
     "fix:css": "stylelint assets/css/**/*.css --fix",
-    "format": "prettier --write '{.,scores/**/*}/*.js'",
+    "format": "prettier --write '{layouts,partials,scores}/**/*.js'",
     "serve": "serve -n -l 8081 _site",
     "serve:external": "serve -n -l tcp://0.0.0.0:80 _site",
     "watch": "chokidar '**/*.*' -i 'node_modules' -i '_site' -c \"npm run build && echo 'done'\""
