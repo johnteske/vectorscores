@@ -1,10 +1,11 @@
 {
-  "name": "vectorscores",
-  "version": "2.0.0",
+  "name": "@vectorscores/scores",
+  "version": "3.0.0",
   "description": "A series of new compositions built on the web",
   "engines": {
     "node": ">=10"
   },
+  "main": "_site/works.json",
   "directories": {
     "doc": "docs"
   },
