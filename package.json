@@ -55,7 +55,8 @@
     "postcss-import": "^12.0.1",
     "rollup": "^2.10.2",
     "serve": "^11.3.2",
-    "slugify": "^1.4.0"
+    "slugify": "^1.4.0",
+    "typescript": "^3.9.7"
   },
   "devDependencies": {
     "@vectorscores/configs": "git+https://github.com/vectorscores/configs.git#main",
