@@ -14,7 +14,6 @@ VS.WebSocket = (function() {
   var notify = (function() {
     var element = document.getElementById("score-options-open");
 
-    // TODO this should set a classname but not change the UI directly
     return function(color) {
       element.style.background = color;
     };
