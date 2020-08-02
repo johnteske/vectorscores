@@ -13,12 +13,11 @@
     "postcss_options": "--no-map --use postcss-import postcss-custom-properties"
   },
   "scripts": {
-    "build": "mkdir -p _site; npm run build:js & npm run build:css & npm run copy && eleventy --quiet; wait",
+    "build": "mkdir -p _site; npm run build:js & npm run build:css & eleventy --quiet; wait",
     "build:css": "npm run build:css:assets & npm run build:css:scores",
     "build:css:assets": "postcss assets/css/*.css --dir _site/assets/css $npm_package_config_postcss_options",
     "build:css:scores": "postcss scores/{*,*/*}/styles.css --base scores --dir _site/scores $npm_package_config_postcss_options",
     "build:js": "find {assets/js,scores} -name 'vectorscores.js' -o -name 'index.js' | xargs -I {} rollup {} --silent --format iife --file _site/{}",
-    "copy": "copyfiles docs/README.md _includes",
     "deploy": "SITE_BASE_URL=vectorscores npm run build && gh-pages -d _site",
     "fix:css": "stylelint assets/css/**/*.css --fix",
     "format": "prettier --write '{layouts,partials,scores}/**/*.js'",
@@ -45,7 +44,6 @@
     "@11ty/eleventy": "^0.11.0",
     "app-root-path": "^3.0.0",
     "chokidar-cli": "^2.1.0",
-    "copyfiles": "^2.2.0",
     "eleventy-lib": "github:johnteske/eleventy-lib",
     "gh-pages": "^2.2.0",
     "moment": "^2.25.3",
@@ -59,7 +57,10 @@
     "typescript": "^3.9.7"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.7.1",
+    "@typescript-eslint/parser": "^3.7.1",
     "@vectorscores/configs": "git+https://github.com/vectorscores/configs.git#main",
+    "eslint": "^7.6.0",
     "prettier": "^2.0.5",
     "stylelint": "^13.3.3",
     "stylelint-config-standard": "^20.0.0"

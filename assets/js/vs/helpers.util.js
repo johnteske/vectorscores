@@ -9,7 +9,7 @@ export function getQueryString(param, url) {
     var match = new RegExp('[?&]' + param + '=([^&#]*)', 'i').exec(href);
 
     return match ? match[1] : null;
-};
+}
 
 /**
  * Make query string
@@ -20,7 +20,7 @@ export function makeQueryString(params) {
     return Object.keys(params).map(function(key) {
         return key + '=' + params[key];
     }).join('&');
-};
+}
 
 /**
  * Define constant as function (used in D3-idiomatic modules)
@@ -31,7 +31,7 @@ export function constant(val) {
     return function constant() {
         return val;
     };
-};
+}
 
 /**
  * Generate unique id

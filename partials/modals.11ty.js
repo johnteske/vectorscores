@@ -10,7 +10,12 @@ const infoModal = (data) =>
         </p>
 	${maybe(`<p>for ${data.instrumentation}</p>`, data.instrumentation)}
         <p>${maybe(data.dedication)}</p>
-	${maybe(`<div>${typeof data.info === "function" ? data.info(data) : data.info}</div>`, data.info)}
+	${maybe(
+    `<div>${
+      typeof data.info === "function" ? data.info(data) : data.info
+    }</div>`,
+    data.info
+  )}
     </div>`;
 
 const optionsModal = (data) =>
