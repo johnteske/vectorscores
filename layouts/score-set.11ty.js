@@ -1,3 +1,3 @@
 module.exports = (data) => {
-  return `TODO`
+  return `TODO`;
 };

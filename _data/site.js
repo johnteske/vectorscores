@@ -13,4 +13,7 @@ module.exports = {
   ],
   baseUrl: process.env.SITE_BASE_URL || "",
   assetsUrl: "assets",
+  path: {
+    partials: "partials"
+  },
 };

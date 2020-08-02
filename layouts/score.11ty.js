@@ -1,14 +1,14 @@
 const requireRoot = require("app-root-path").require;
 const { title } = require("eleventy-lib");
 
-const partialPath = "partials";
-const styles = requireRoot(`${partialPath}/styles.11ty.js`);
-const header = requireRoot(`${partialPath}/header.11ty.js`);
-const footer = requireRoot(`${partialPath}/footer.11ty.js`);
-const modals = requireRoot(`${partialPath}/modals.11ty.js`);
-const scripts = requireRoot(`${partialPath}/scripts.11ty.js`);
-
 module.exports = (data) => {
+  const partialPath = data.site.path.partials;
+  const styles = requireRoot(`${partialPath}/styles.11ty.js`);
+  const header = requireRoot(`${partialPath}/header.11ty.js`);
+  const footer = requireRoot(`${partialPath}/footer.11ty.js`);
+  const modals = requireRoot(`${partialPath}/modals.11ty.js`);
+  const scripts = requireRoot(`${partialPath}/scripts.11ty.js`);
+
   return `<!DOCTYPE html>
     <html>
     <head>
