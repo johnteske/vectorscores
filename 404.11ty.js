@@ -1,12 +1,3 @@
-module.exports = class {
-  data() {
-    return {
-      title: "404",
-      permalink: "/404.html",
-    };
-  }
+const { notFound } = require("@vectorscores/design")
 
-  render() {
-    return `Page not found.`;
-  }
-};
+module.exports = notFound

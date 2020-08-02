@@ -1,13 +1,16 @@
 const scoreLayouts = ["score", "score-set"];
 const movementLayouts = ["movement"];
 
+type Format = "score" | "parts";
+type Status = "unlisted" | "test" | "wip" | "publish";
+
 type Work = {
   title: string;
   instrumentation: string;
   duration: string;
   movements: Work[];
-  formats: string[]; // ENUM
-  status: string; // ENUM
+  formats: Format[];
+  status: Status;
   url: string;
 };
 
