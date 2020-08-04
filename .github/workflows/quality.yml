@@ -1,0 +1,26 @@
+name: quality
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        path: repo
+    - name: checkout actions
+      uses: actions/checkout@v2
+      with:
+        repository: vectorscores/actions
+        path: actions
+    - name: quality check
+      uses: ./actions
+      with:
+        cwd: ./repo
