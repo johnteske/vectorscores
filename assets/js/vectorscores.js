@@ -13,6 +13,7 @@
 
         return match ? match[1] : null;
     }
+
     /**
      * Make query string
      * @param {object} params : query parameters as key-value pairs
@@ -23,6 +24,7 @@
             return key + '=' + params[key];
         }).join('&');
     }
+
     /**
      * Define constant as function (used in D3-idiomatic modules)
      * @param {*} val : value to set as constant
@@ -33,6 +35,7 @@
             return val;
         };
     }
+
     /**
      * Generate unique id
      * @returns {number} : id

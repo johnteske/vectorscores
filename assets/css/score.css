@@ -5,7 +5,7 @@
   --layout-color-light: #eee;
   --layout-trans-time: 0.6s;
   --layout-header-font-stack: 'Times New Roman', serif;
-  --layout-font-stack: Courier, monospace;
+  --layout-font-stack: courier, monospace;
   --layout-border: 2px solid var(--layout-color-light);
   --layout-unit: 16px;
   --footer-height: calc(4 * var(--layout-unit));
@@ -38,7 +38,7 @@ footer {
   height: var(--footer-height);
   margin: 0;
   box-sizing: border-box;
-  font-family: Courier
+  font-family: courier
 ,
 monospace;
   font-family: var(--layout-font-stack);
@@ -114,25 +114,6 @@ serif;
   font-weight: bold;
 }
 
-.work-list a {
-  text-decoration: none;
-}
-
-.work-list a:hover {
-  text-decoration: underline;
-}
-
-.work-title {
-  font-family: 'Times New Roman'
-,
-serif;
-  font-family: var(--layout-header-font-stack);
-  font-style: italic;
-  letter-spacing: 0.2px;
-  font-size: 16px;
-  line-height: 1.40625;
-}
-
 .score-button,
 #score-pointer {
   margin: 0;
@@ -198,7 +179,7 @@ serif;
 }
 
 input {
-  font-family: Courier
+  font-family: courier
 ,
 monospace;
   font-family: var(--layout-font-stack);
@@ -213,7 +194,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 #score-info-open {
   float: right;
-  font-family: Courier
+  font-family: courier
 ,
 monospace;
   font-family: var(--layout-font-stack);
@@ -245,7 +226,7 @@ monospace;
 
 .modal-content {
   background: #fff;
-  font-family: Courier
+  font-family: courier
 ,
 monospace;
   font-family: var(--layout-font-stack);
@@ -356,31 +337,4 @@ svg.main {
 
 .settings-group label {
   display: block;
-}
-
-.work-list {
-  width: 100%;
-}
-
-.work-list-row {
-  vertical-align: top;
-}
-
-.work-list-duration {
-  width: 4em;
-}
-
-.work-list-formats {
-  width: 4em;
-}
-
-.score-set .work-list {
-  margin: 0;
-  padding: 16px calc(2 * 16px);
-  padding: var(--layout-unit) calc(2 * var(--layout-unit));
-  list-style: none;
-}
-
-.score-set #score-header {
-  opacity: 1;
 }
