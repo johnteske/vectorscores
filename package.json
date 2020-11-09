@@ -1,6 +1,6 @@
 {
   "name": "@vectorscores/scores",
-  "version": "3",
+  "version": "3.0.0",
   "description": "A series of new compositions built on the web",
   "engines": {
     "node": ">=10"
