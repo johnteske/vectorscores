@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johnteske/vectorscores.git"
+    "url": "git+https://github.com/vectorscores/scores.git"
   },
   "keywords": [
     "music",
@@ -38,17 +38,14 @@
   ],
   "author": "John Teske",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/johnteske/vectorscores/issues"
-  },
-  "homepage": "https://github.com/johnteske/vectorscores#readme",
+  "bugs": "https://github.com/vectorscores/scores/issues",
+  "homepage": "https://github.com/vectorscores/scores#readme",
   "dependencies": {
     "@11ty/eleventy": "^0.11.0",
     "app-root-path": "^3.0.0",
     "chokidar-cli": "^2.1.0",
     "eleventy-lib": "github:johnteske/eleventy-lib",
     "gh-pages": "^2.2.0",
-    "moment": "^2.27.0",
     "postcss": "^7.0.32",
     "postcss-cli": "^7.1.1",
     "postcss-custom-properties": "^9.1.1",
