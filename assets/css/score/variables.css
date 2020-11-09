@@ -3,7 +3,7 @@
   --layout-color-light: #eee;
   --layout-trans-time: 0.6s;
   --layout-header-font-stack: 'Times New Roman', serif;
-  --layout-font-stack: Courier, monospace;
+  --layout-font-stack: courier, monospace;
   --layout-border: 2px solid var(--layout-color-light);
   --layout-unit: 16px;
   --footer-height: calc(4 * var(--layout-unit));

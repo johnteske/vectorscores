@@ -12,7 +12,7 @@ module.exports = class {
       instrumentation: "for any ensemble",
       duration: "5&prime;", // TODO calculate more precisely
       formats: ["score"],
-      info: info(),
+      info: info,
       options: options(),
       modules: [
         "dictionary",

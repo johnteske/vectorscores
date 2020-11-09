@@ -1,11 +1,11 @@
 const requireRoot = require("app-root-path").require;
 const { catMap, title, url } = require("eleventy-lib");
-const { forEachModuleWithFile, movementsFromUrl } = requireRoot(
+const { /*forEachModuleWithFile,*/ movementsFromUrl } = requireRoot(
   "render-utils.js"
 );
 
 const partialPath = "_includes/partials";
-const header = requireRoot(`${partialPath}/score/header.11ty.js`);
+const header = requireRoot(`${partialPath}/header.11ty.js`);
 const workLink = requireRoot(`${partialPath}/work-link.11ty.js`);
 
 module.exports = (data) => {
@@ -28,7 +28,7 @@ module.exports = (data) => {
         <main>
             ${data.content}
             <ul class="work-list">
-                ${catMap((work) => `<li>${workLink(work)}</li>`, works)}
+                ${catMap((work) => `<li>${workLink(work.data.title, work.url.replace(/^\/scores/, ""),)}</li>`, works)}
             </ul>
         </main>
     </body>

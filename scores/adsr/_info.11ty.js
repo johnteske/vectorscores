@@ -1,12 +1,13 @@
 const requireRoot = require("app-root-path").require;
 
-const partialPath = "_includes/partials";
-const termLink = requireRoot(`${partialPath}/glossary/term-link.11ty.js`);
-const termDescription = requireRoot(
-  `${partialPath}/glossary/term-description.11ty.js`
-);
+module.exports = (data) => {
+  const partialPath = data.site.path.partials;
+  const termLink = requireRoot(`${partialPath}/term-link.11ty.js`);
+  const termDescription = requireRoot(
+    `${partialPath}/term-description.11ty.js`
+  );
 
-module.exports = () => `
+  return `
 ### Time
 Time is written proportionally.
 <!--, including durations. The release of notes is not shown—musicians should release in time. Play duration/phrase only once, not repeated. -->
@@ -84,3 +85,4 @@ D<i class="symbol">&#xe262;</i> for each note in the phrase.
     </dd>
 </dl>
 `;
+};

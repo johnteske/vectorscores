@@ -14,7 +14,7 @@ module.exports = class {
       formats: ["score", "parts"],
       composer: "John Teske",
       status: "published",
-      info: info(),
+      info: info,
       options: options(),
       modules: [
         "bravura",

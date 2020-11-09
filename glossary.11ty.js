@@ -5,7 +5,6 @@ module.exports = class {
   data() {
     return {
       title: "Glossary",
-      layout: "page",
       permalink: "/glossary/",
     };
   }
