@@ -6,19 +6,11 @@ module.exports = function(config) {
 
   const scoreLayouts = ["score", "score-set", "movement"];
   scoreLayouts.forEach(template =>
-    config.addLayoutAlias(template, `${template}.11ty.js`)
+    config.addLayoutAlias(template, `layouts/${template}.11ty.js`)
   );
 
   config.setBrowserSyncConfig({
     codeSync: false,
     ghostMode: false
   });
-
-  return {
-    dir: {
-      input: "./",
-      output: "./_site",
-      layouts: "layouts"
-    }
-  };
 };
