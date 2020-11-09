@@ -2,9 +2,6 @@
   "name": "@vectorscores/scores",
   "version": "3.0.0",
   "description": "A series of new compositions built on the web",
-  "engines": {
-    "node": ">=10"
-  },
   "main": "_site/works.json",
   "directories": {
     "doc": "docs"
@@ -68,6 +65,9 @@
     "prettier": "^2.0.5",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=10"
   },
   "stylelint": {
     "extends": "stylelint-config-standard"
