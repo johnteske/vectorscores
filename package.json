@@ -2,6 +2,7 @@
   "name": "@vectorscores/scores",
   "version": "3.0.0",
   "description": "A series of new compositions built on the web",
+  "author": "John Teske",
   "main": "_site/works.json",
   "directories": {
     "doc": "docs"
@@ -33,7 +34,6 @@
     "composition",
     "d3"
   ],
-  "author": "John Teske",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/johnteske/vectorscores/issues"
