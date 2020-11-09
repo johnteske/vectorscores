@@ -1,14 +1,5 @@
 const requireRoot = require("app-root-path").require;
 const { title } = require("eleventy-lib");
-//const slugify = require("slugify");
-
-//module.exports.data = {
-//  eleventyComputed: {
-//    permalink: data => data.page.filePathStem.replace(/^\/scores/, "").replace(/\/index$/, "") + "/"
-//    //permalink: data => `${data.title.replace(/^scores/, "")}`
-//    //permalink: data => `${slugify(data.title)}`
-//  }
-//}
 
 module.exports.render = (data) => {
   const partialPath = data.site.path.partials;
