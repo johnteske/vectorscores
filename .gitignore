@@ -8,3 +8,5 @@ _includes/docs
 # Node
 node_modules
 npm-debug.log
+
+dist/

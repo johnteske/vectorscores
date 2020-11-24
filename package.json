@@ -18,6 +18,7 @@
     "build:css:assets": "postcss assets/css/*.css --dir _site/assets/css $npm_package_config_postcss_options",
     "build:css:scores": "postcss scores/{*,*/*}/styles.css --base scores --dir _site/scores $npm_package_config_postcss_options",
     "build:js": "find {assets/js,scores} -name 'vectorscores.js' -o -name 'index.js' | xargs -I {} rollup {} --silent --format iife --file _site/{}",
+    "build:ts": "tsc -p .",
     "build:flatten": "mv _site/scores/* _site/ && rm -rf _site/scores",
     "clean": "rm -rf _site",
     "deploy": "SITE_BASE_URL=scores npm run build && gh-pages -d _site",
