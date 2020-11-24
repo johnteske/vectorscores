@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ad;sr - vectorscores</title>
+         
+  <link rel="stylesheet" href="/scores/assets/css/score.css">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="/scores/assets/modules/bravura/styles.css"><link rel="stylesheet" href="/scores/assets/modules/cue/blink/styles.css"><link rel="stylesheet" href="/scores/assets/modules/x-by-duration/styles.css"><link rel="stylesheet" href="/scores/assets/modules/dictionary/styles.css"><link rel="stylesheet" href="/scores/assets/modules/websockets/styles.css"><link rel="stylesheet" href="/scores/assets/modules/settings/number/styles.css"><link rel="stylesheet" href="/scores/assets/modules/settings/checkbox/styles.css">
+  <link rel="stylesheet" href="styles.css">
+ 
+    </head>
+    <body>
+        <header id="score-header">
+        <h1 class="score-title">ad;sr</h1>
+        <button id="score-info-open" class="score-button" title="About the score">[i]</button>
+    </header>
+        <main>
+            <svg class="main"></svg>
+            
+        </main>
+        <footer id="score-footer"><!--
+--><button id="score-back" class="score-button" title="Step score pointer -1">
+        <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="back">
+                <path d="M87.6339768,2.29522716 C87.6339768,2.29522716 88.3049233,3.45724886 89.1309373,4.8878341 L141.567017,95.7026202 C142.393765,97.1344775 141.722084,98.2952272 140.070056,98.2952272 L35.1978974,98.2952272" transform="translate(87.634006, 51.054823) scale(-1, 1) rotate(-30.000000) translate(-87.634006, -51.054823) "></path>
+            </g>
+        </svg>
+    </button><!--
+ --><button id="score-play" class="score-button" title="Play/pause score">
+        <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="play">
+                <path d="M62.7434149,18.1198759 C63.5701633,16.6880186 64.9113219,16.6892907 65.7373358,18.1198759 L118.173415,108.934662 C119.000164,110.366519 118.328483,111.527269 116.676455,111.527269 L11.804296,111.527269 C10.1507991,111.527269 9.48132156,110.365247 10.3073355,108.934662 L62.7434149,18.1198759 Z" transform="translate(64.240405, 64.286864) rotate(90.000000) translate(-64.240405, -64.286864) "></path>
+            </g>
+            <g id="pause">
+                <path d="M85,10 L85,118.57"></path>
+                <path d="M43,10 L43,118.57"></path>
+            </g>
+        </svg>
+    </button><!--
+ --><button id="score-stop" class="score-button" title="Stop score">
+        <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="stop">
+                <rect x="17" y="17" width="94.4800034" height="94.4800034" rx="3"></rect>
+            </g>
+        </svg>
+    </button><!--
+ --><button id="score-fwd" class="score-button" title="Step score pointer +1">
+        <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="fwd">
+                <path d="M41.6339768,2.29522716 C41.6339768,2.29522716 42.3049233,3.45724886 43.1309373,4.8878341 L95.5670167,95.7026202 C96.3937651,97.1344775 95.7220841,98.2952272 94.0700562,98.2952272 L-10.8021026,98.2952272" transform="translate(41.634006, 51.054823) rotate(-30.000000) translate(-41.634006, -51.054823) "></path>
+            </g>
+        </svg>
+    </button><!--
+ --><input id="score-pointer" type="number" value="0" pattern="d*" readonly="true" title="Score pointer" /><!-- step="1" --><!--
+ --><button id="score-options-open" class="score-button" title="Score options">
+         <svg viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+             <g id="score-options-icon">
+                 <path d="M17,10 L17,118.57"></path>
+                 <path d="M1.25,25.75 L32.75,25.75"></path>
+
+                 <path d="M64.24,10 L64.24,118.57"></path>
+                 <path d="M48.49,102.82 L79.99,102.82"></path>
+
+                 <path d="M111.48,10 L111.48,118.57"></path>
+                 <path d="M95.73,64.285 L127.23,64.285"></path>
+             </g>
+         </svg>
+    </button>
+</footer>
+        <div id="score-modal-overlay" class="modal-overlay">
+        <div id="score-info-modal" class="modal-content">
+        <span id="score-info-close" class="modal-close">×</span>
+        <h2 class="score-title">ad;sr</h2>
+        <p>
+            John Teske
+            
+        </p>
+	<p>for any ensemble (3+)</p>
+        <p>for Friction Quartet</p>
+	<div>
+### Time
+Time is written proportionally.
+<!--, including durations. The release of notes is not shown—musicians should release in time. Play duration/phrase only once, not repeated. -->
+Durations are indicated by note flags and stemless noteheads, including dotted values, at 60 beats per minute.
+Above each bar is its duration in seconds for reference.
+<ul>
+    <li>
+        <svg class="info-cue"></svg> score pointer and cues :
+        The fixed arrow symbol indicates the current position in the score.
+        Playing the score will start with a pre-roll of 3 seconds in which the pointer will flash before the score starts to scroll.
+
+        The arrow symbol also appears above every bar from the beginning to section A, indicating that theses bars should be cued.
+
+        For the start of the work and the bars to be cued, musicians should play off the leader's cue, not the score pointer.
+        After section A, each part becomes more independent.
+        Musicians should use the pointer to reference their relative position in the score.
+    </li>
+</ul>
+
+### Pitch
+As an ensemble, agree on a pitch center.
+If the same pitch is not possible on all instruments, octave transposition is allowed.
+All pitch is relative to the chosen pitch center, notated as <i class="symbol">&#xe261;</i>.
+
+Per each note in a phrase or single attack, a performer may choose a quarter-tone (or other microtone) pitch from the given range of accidentals, relative to the pitch center.
+
+For example, if the pitch center is
+D<i class="symbol">&#xe261;</i> and the given range is
+<i class="symbol">[ &#xe280;, &#xe262; ]</i>,
+a musician may choose from
+C<i class="symbol">&#xe282;</i>/D<i class="symbol">&#xe280;</i>,
+D<i class="symbol">&#xe261;</i>,
+D<i class="symbol">&#xe282;</i>, or
+D<i class="symbol">&#xe262;</i> for each note in the phrase.
+
+### Other symbols
+<ul>
+    <li>
+        <span class="symbol">&#xe630;</span> <a href="/glossary#snap" target="vectorscores-glossary">snap</a> : Strings: snap pizzicato (Bartok pizz.) Woodwinds: slap tongued, smack tone Brass: smack/pop
+    </li>
+    <li>
+        <span class="symbol">&#xe0a9;</span> ghost note : muted, pitch deemphasized
+    </li>
+    <li>
+        <svg class="info-ghost"></svg>
+        beams: after initial attack, rapidly <a href="/glossary#hammer-on" target="vectorscores-glossary">hammer-on</a> additional notes
+    </li>
+</ul>
+
+### Timbre and Techniques
+<dl>
+    <dt><a href="/glossary#rolling" target="vectorscores-glossary">rolling</a></dt>
+    <dd>
+        A continuous texture of small impulses.
+    </dd>
+    <dd>
+        <a href="/glossary#rolling pizzicato" target="vectorscores-glossary">rolling pizzicato</a> for string instruments
+    </dd>
+
+    <dt><a href="/glossary#glassy" target="vectorscores-glossary">glassy</a></dt>
+    <dd>
+        Glassy, metallic sound, emphasizing higher partials. Strings: sul ponticello Winds: emphasize higher partials, perhaps aided by multiphonics Brass: brassy, stopped horn
+    </dd>
+    <dd>
+        <a href="/glossary#bow hair pull" target="vectorscores-glossary">bow hair pull</a> for string instruments
+    </dd>
+
+    <dt><a href="/glossary#flutter" target="vectorscores-glossary">flutter</a></dt>
+    <dd>
+        A rapid muting and unmuting of the note or notes. Strings: trill by lightly touching a finger to a second note without depressing fully.
+    </dd>
+</dl>
+</div>
+    </div>
+	<div id="score-options-modal" class="modal-content">
+            <span id="score-options-close" class="modal-close">×</span>
+            <h2>Options</h2>
+            <div>
+<form class="score-options">
+    <div class="settings-group">
+        <label>Number of parts (1–16): <input type="number" min="1" max="16" name="parts"></label>
+    </div>
+    <div class="settings-group">
+        <label>Show parameters on each measure: <input name="verbose" type="checkbox"></label>
+    </div>
+    
+<button id="settings-generate" type="submit">Apply and generate new score</button>
+ </form>
+ 
+<div>
+  <h4>WebSocket Connection:</h4>
+  <p id="ws-log"></p>
+</div>
+</div>
+        </div>
+    </div>
+        <script src="/scores/assets/js/lib/d3.v4.min.js" charset="utf-8"></script>
+    <script src="/scores/assets/js/vectorscores.js" charset="utf-8"></script>
+    <script src="/scores/assets/modules/bravura/index.js" charset="utf-8"></script><script src="/scores/assets/modules/cue/blink/index.js" charset="utf-8"></script><script src="/scores/assets/modules/x-by-duration/index.js" charset="utf-8"></script><script src="/scores/assets/modules/dictionary/index.js" charset="utf-8"></script><script src="/scores/assets/modules/websockets/index.js" charset="utf-8"></script><script src="/scores/assets/modules/settings/number/index.js" charset="utf-8"></script><script src="/scores/assets/modules/settings/checkbox/index.js" charset="utf-8"></script>
+        <script src="index.js" charset="utf-8"></script>
+    </body>
+    </html>
