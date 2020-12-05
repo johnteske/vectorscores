@@ -1,7 +1,5 @@
-module.exports = process.env.WEBSOCKETS
-  ? () => `
+module.exports = () => `
 <div>
   <h4>WebSocket connection</h4>
-  <p id="ws-log"></p>
+  ${process.env.WEBSOCKETS ? '<p id="ws-log"></p>' : '<p>Not available</p>'}
 </div>`
-  : () => `<div><h4>WebSocket not enabled</h4></div>`;
