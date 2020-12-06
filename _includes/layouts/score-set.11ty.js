@@ -28,7 +28,7 @@ module.exports = (data) => {
         <main>
             ${data.content}
             <ul class="work-list">
-                ${catMap((work) => `<li>${workLink(work.data.title, work.url.replace(/^\/scores/, ""),)}</li>`, works)}
+                ${catMap((work) => `<li>${workLink(work.data.title, work.url)}</li>`, works)}
             </ul>
         </main>
     </body>
