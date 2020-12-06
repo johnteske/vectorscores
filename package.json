@@ -26,6 +26,7 @@
     "serve": "serve -n -l 8081 _site",
     "serve:external": "serve -n -l tcp://0.0.0.0:80 _site",
     "test": "./node_modules/.bin/tape assets/**/*.test.js",
+    "test:integration": "./node_modules/.bin/cypress open  #run",
     "watch": "chokidar '**/*.*' -i 'node_modules' -i '_site' -c \"npm run build && echo 'done'\""
   },
   "repository": {
