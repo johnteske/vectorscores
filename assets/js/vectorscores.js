@@ -593,14 +593,24 @@
     });
 
     window.VS = {
-        ...util,
-        ...math,
-        ...hooks,
-        ...layout$1,
-        ...score$1,
-        ...scoreOptions$1,
-        ...controls,
-        ...modals
+      ...util,
+      ...math,
+      ...hooks,
+      ...layout$1,
+      ...score$1,
+      ...scoreOptions$1,
+      ...controls,
+      ...modals,
+      WebSocket: {
+        connect: () => {
+          console.log("WebSocket module not available");
+        },
+        hooks: {
+          add: () => {
+            console.log("WebSocket module not available");
+          },
+        },
+      },
     };
 
 }());
