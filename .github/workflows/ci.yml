@@ -25,5 +25,7 @@ jobs:
       run: npm ci
     - name: build  
       run: npm run build
+    - name: test
+      run: npm test
     - name: audit urls
       run: grep -roh 'http[s?]://[a-zA-Z0-9./\-\+\&\?\=]*' _site/**/*.html | sort | uniq | npx audit-urls
