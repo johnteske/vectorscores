@@ -4,14 +4,18 @@ const { catMap, maybe, url } = require("eleventy-lib");
 const fileExists = (path) => fs.existsSync(path);
 
 const forEachModuleWithFile = (basename, render, data) => {
-  return data.modules
+  const modules = data.modules || [];
+  const filtered = process.env.WEBSOCKETS
+    ? modules
+    : modules.filter((m) => m !== "websockets");
+  return filtered.length
     ? catMap((m) => {
         const path = `/modules/${m}/${basename}`;
         return maybe(
           render(url.asset(data.site.baseUrl, path)),
           fileExists(`./assets/${path}`)
         );
-      }, data.modules)
+      }, filtered)
     : "";
 };
 
