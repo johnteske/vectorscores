@@ -25,6 +25,7 @@
     "format": "prettier --write '{layouts,partials,scores}/**/*.js'",
     "serve": "serve -n -l 8081 _site",
     "serve:external": "serve -n -l tcp://0.0.0.0:80 _site",
+    "test": "./node_modules/.bin/tape assets/**/*.test.js",
     "watch": "chokidar '**/*.*' -i 'node_modules' -i '_site' -c \"npm run build && echo 'done'\""
   },
   "repository": {
@@ -56,6 +57,7 @@
     "rollup": "^2.34.1",
     "serve": "^11.3.2",
     "slugify": "^1.4.6",
+    "tape": "^5.0.1",
     "typescript": "^4.1.2"
   },
   "devDependencies": {
@@ -65,6 +67,7 @@
     "@vectorscores/configs": "git+https://github.com/vectorscores/configs.git#main",
     "@vectorscores/design": "git+https://github.com/vectorscores/design.git#main",
     "eslint": "^7.14.0",
+    "mock-env": "^0.2.0",
     "prettier": "^2.2.1",
     "stylelint": "^13.8.0",
     "stylelint-config-standard": "^20.0.0"
