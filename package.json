@@ -13,12 +13,11 @@
     "postcss_options": "--no-map --use postcss-import postcss-custom-properties"
   },
   "scripts": {
-    "build": "npm run clean; mkdir -p _site; npm run build:js & npm run build:css & eleventy --quiet; wait && npm run build:flatten",
+    "build": "npm run clean; mkdir -p _site; npm run build:js & npm run build:css & eleventy --quiet; wait",
     "build:css": "npm run build:css:assets & npm run build:css:scores",
     "build:css:assets": "postcss assets/css/*.css --dir _site/assets/css $npm_package_config_postcss_options",
-    "build:css:scores": "postcss scores/{*,*/*}/styles.css --base scores --dir _site/scores $npm_package_config_postcss_options",
-    "build:js": "find {assets/js,scores} -name 'vectorscores.js' -o -name 'index.js' | xargs -I {} rollup {} --silent --format iife --file _site/{}",
-    "build:flatten": "mv _site/scores/* _site/ && rm -rf _site/scores",
+    "build:css:scores": "postcss scores/{*,*/*}/styles.css --base scores --dir _site $npm_package_config_postcss_options",
+    "build:js": "node bundle.js",
     "clean": "rm -rf _site",
     "deploy": "SITE_BASE_URL=scores npm run build && gh-pages -d _site",
     "fix:css": "stylelint assets/css/**/*.css --fix",
@@ -48,6 +47,7 @@
     "app-root-path": "^3.0.0",
     "chokidar-cli": "^2.1.0",
     "eleventy-lib": "github:johnteske/eleventy-lib",
+    "findit": "^2.0.0",
     "gh-pages": "^3.1.0",
     "moment": "^2.29.1",
     "postcss": "^8.1.14",

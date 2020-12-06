@@ -1,6 +1,12 @@
 const requireRoot = require("app-root-path").require;
 const { title } = require("eleventy-lib");
 
+module.exports.data = {
+  eleventyComputed: {
+    permalink: data => `${data.page.fileSlug}/`
+  }
+}
+
 module.exports.render = (data) => {
   const partialPath = data.site.path.partials;
   const styles = requireRoot(`${partialPath}/styles.11ty.js`);

@@ -8,7 +8,13 @@ const partialPath = "_includes/partials";
 const header = requireRoot(`${partialPath}/header.11ty.js`);
 const workLink = requireRoot(`${partialPath}/work-link.11ty.js`);
 
-module.exports = (data) => {
+module.exports.data = {
+  eleventyComputed: {
+    permalink: data => `${data.page.fileSlug}/`
+  }
+}
+
+module.exports.render = (data) => {
   const works = movementsFromUrl(data.page.url, data);
 
   return `
