@@ -66,6 +66,7 @@
     "@typescript-eslint/parser": "^4.9.0",
     "@vectorscores/configs": "git+https://github.com/vectorscores/configs.git#main",
     "@vectorscores/design": "git+https://github.com/vectorscores/design.git#main",
+    "cypress": "^6.0.1",
     "eslint": "^7.14.0",
     "mock-env": "^0.2.0",
     "prettier": "^2.2.1",
