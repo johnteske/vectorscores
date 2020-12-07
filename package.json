@@ -25,6 +25,7 @@
     "serve": "serve -n -l 8081 _site",
     "serve:external": "serve -n -l tcp://0.0.0.0:80 _site",
     "test": "./node_modules/.bin/tape {assets,build,scores}/**/*.test.js",
+    "test:integration": "./node_modules/.bin/cypress open  #run",
     "watch": "chokidar '**/*.*' -i 'node_modules' -i '_site' -c \"npm run build && echo 'done'\""
   },
   "repository": {
@@ -66,6 +67,7 @@
     "@typescript-eslint/parser": "^4.9.0",
     "@vectorscores/configs": "git+https://github.com/vectorscores/configs.git#main",
     "@vectorscores/design": "git+https://github.com/vectorscores/design.git#main",
+    "cypress": "^6.0.1",
     "eslint": "^7.14.0",
     "mock-env": "^0.2.0",
     "prettier": "^2.2.1",

@@ -34,7 +34,7 @@ module.exports.render = (data) => {
         ${footer(data)}
         ${modals(data)}
         ${scripts(data)}
-        <script src="index.js" charset="utf-8"></script>
+        <script src="${/* TODO make dynamic based on pathPrefix */ data.page.url.replace(/^\/scores/, "")}index.js" charset="utf-8"></script>
     </body>
     </html>`;
 };
