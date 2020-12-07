@@ -9,6 +9,6 @@ test("build directories", function (t) {
   });
 
   fs.stat("_site/scores", (err) => {
-    t.error(err == null, "score dir does not exist in target")//? t.pass() : t.fail()
+    t.error(err == null, "score dir does not exist in target")
   });
 });
