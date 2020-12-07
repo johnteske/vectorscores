@@ -1,11 +1,14 @@
+const path = require("path");
 const requireRoot = require("app-root-path").require;
 const { title } = require("eleventy-lib");
 
 module.exports.data = {
   eleventyComputed: {
-    permalink: data => `${data.page.fileSlug}/`
-  }
-}
+    permalink: (data) =>
+      data.page.filePathStem.split(path.sep).slice(2, -1).join(path.sep) +
+      path.sep,
+  },
+};
 
 module.exports.render = (data) => {
   const partialPath = data.site.path.partials;

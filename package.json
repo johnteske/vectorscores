@@ -13,7 +13,7 @@
     "postcss_options": "--no-map --use postcss-import postcss-custom-properties"
   },
   "scripts": {
-    "build": "npm run clean; mkdir -p _site; npm run build:js & npm run build:css & eleventy --quiet; wait",
+    "build": "npm run clean; mkdir -p _site; npm run build:js & npm run build:css & eleventy; wait",
     "build:css": "npm run build:css:assets & npm run build:css:scores",
     "build:css:assets": "postcss assets/css/*.css --dir _site/assets/css $npm_package_config_postcss_options",
     "build:css:scores": "postcss scores/{*,*/*}/styles.css --base scores --dir _site $npm_package_config_postcss_options",
