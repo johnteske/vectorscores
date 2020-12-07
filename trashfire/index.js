@@ -43,6 +43,32 @@
       .attr("width", tf.view.width)
       .attr("height", tf.view.height);
 
+    tf.svg.append("defs").node().innerHTML = `
+<g id="front" stroke="black" stroke-width="1" fill="white" fill-rule="evenodd" transform="translate(0.000000, 48.000000)">
+  <path d="M16,1 L296,1" id="top-edge"></path>
+  <polyline id="bottom" points="24 59 40 156 272 156 288 59"></polyline>
+  <polygon id="mid" points="16 14 296 14 296 59 16 59"></polygon>
+  <rect id="top-edge-fill" stroke="none" x="16" y="1" width="280" height="6"></rect>
+  <path d="M16,1 L296,1" id="top-edge"></path>
+  <rect id="top-lip" x="7" y="7" width="298" height="7"></rect>
+  <g id="fork-left" transform="translate(0.000000, 14.000000)">
+    <rect id="outer" x="0" y="12" width="16" height="29"></rect>
+    <rect id="inner" x="3" y="15" width="10" height="23"></rect>
+    <path d="M0,12 L12,0" id="Line" stroke-linecap="square"></path>
+  </g>
+  <g id="fork-right" transform="translate(312.000000, 14.000000) scale(-1, 1)">
+    <rect id="outer" x="0" y="12" width="16" height="29"></rect>
+    <rect id="inner" x="3" y="15" width="10" height="23"></rect>
+    <path d="M0,12 L12,0" id="Line" stroke-linecap="square"></path>
+  </g>
+</g>
+<g id="back" stroke="black" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(7.000000, 0.000000)">
+  <polyline id="outer" points="298 55 278 0 20 0 0 55"></polyline>
+  <polyline id="inner" points="289 49 273 5 25 5 9 49"></polyline>
+  <path d="M273,5 L273,49" id="line-r" stroke-linecap="square"></path>
+  <path d="M25,5 L25,49" id="line-l" stroke-linecap="square"></path>
+</g>`;
+
     tf.wrapper = tf.svg.append("g");
 
     tf.dumpster = {
@@ -154,7 +180,7 @@
       selection
         .append("g")
         .append("use")
-        .attr("xlink:href", "dumpster.svg#" + layer);
+        .attr("href", `#${layer}`);
     }
 
     return dumpster;
