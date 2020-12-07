@@ -1,6 +1,6 @@
 const rootRequire = require("app-root-path").require;
 const { url } = require("eleventy-lib");
-const { fileExists, forEachModuleWithFile } = rootRequire("render-utils");
+const { forEachModuleWithFile } = rootRequire("render-utils");
 
 module.exports = (data) =>
   `<script src="${url.asset(
