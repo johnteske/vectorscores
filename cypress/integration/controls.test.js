@@ -1,90 +1,80 @@
 /// <reference types="cypress" />
 
 const controlStates = {
-    playing: 4, // 0100,
-    firstStep: 3, // 0011,
-    step: 15, // 1111,
-    lastStep: 13 // 1101
-}
+  playing: 4, // 0100,
+  firstStep: 3, // 0011,
+  step: 15, // 1111,
+  lastStep: 13, // 1101
+};
 
 const controlMap = [
-    { key: 'back', flag: 8},
-    { key: 'stop', flag: 4},
-    { key: 'fwd', flag: 2}
-]
+  { key: "back", flag: 8 },
+  { key: "stop", flag: 4 },
+  { key: "fwd", flag: 2 },
+];
 
-context('VS.control', () => {
-    function assertControlState(name, controlState) {
-      cy.window().then(win => {
-      const { VS }  = win
+context("VS.control", () => {
+  function assertControlState(name, controlState) {
+    cy.window().then((win) => {
+      const { VS } = win;
 
-        let result = controlMap.reduce(function(mask, pair) {
-            return !VS.control[pair.key].disabled ? (mask | pair.flag) : mask
-        }, 0)
+      let result = controlMap.reduce(function (mask, pair) {
+        return !VS.control[pair.key].disabled ? mask | pair.flag : mask;
+      }, 0);
 
-        result |= VS.control.play.classList.contains('pause') ? 0 : 1
+      result |= VS.control.play.classList.contains("pause") ? 0 : 1;
 
-        //return result
-        assert.equal(result, controlState, name)
-})
-    }
-    function assertPointerPosition(name, position) {
-      cy.window().then(win => {
-      const { VS }  = win
-   assert.equal(+VS.control.pointer.value, position, name)
-
-})
-
-
-
-}
+      //return result
+      assert.equal(result, controlState, name);
+    });
+  }
+  function assertPointerPosition(name, position) {
+    cy.window().then((win) => {
+      const { VS } = win;
+      assert.equal(+VS.control.pointer.value, position, name);
+    });
+  }
 
   beforeEach(() => {
-    cy.visit('localhost:8081/tutorial')
-  })
+    cy.visit("localhost:8081/tutorial");
+  });
 
-  it('sets expected control state on UI interaction', () => {
-   assertControlState("show controls matching firstStep state on load", controlStates.firstStep)
-assertPointerPosition("show pointer at 0 on load", 0)
-    //cy.window().then(win => {
-//cy.clock()
-    //const { VS } = win
+  it("sets expected control state on UI interaction", () => {
+    // on load
+    assertControlState(
+      "show controls matching firstStep state on load",
+      controlStates.firstStep
+    );
+    assertPointerPosition("show pointer at 0 on load", 0);
 
-   //assert.equal(testControlState(VS), controlStates.firstStep, "show controls matching firstStep state on load")
-   //assert.equal(+VS.control.pointer.value, 0, "show pointer at 0 on load")
+    cy.get("#score-play").click();
+    assertControlState(
+      "show controls matching playing state after clicking play",
+      controlStates.playing
+    );
 
-   //cy.get('#score-play').click()
-   assertControlState("show controls matching firstStep state on load", controlStates.firstStep)
-//    cy.tick(1000)
-//   assert.equal(testControlState(VS), controlStates.playing, "show controls matching playing state after clicking play")
-////    t.equal(testControlState(), controlStates.playing, 'should show controls matching \'playing\' state after playing')
-  //})
-  })
-})
+    cy.get("#score-play").click();
+    assertControlState(
+      "show controls matching firstStep state when paused on first score event",
+      controlStates.firstStep
+    );
 
-//loadDomThenTest('VS.control states and pointer', htmlPath, (t, window) => {
-//    const playClick = makeClickEvent('score-play')
-//    const stopClick = makeClickEvent('score-stop')
-//    const forwardClick = makeClickEvent('score-fwd')
-//
-//    playClick()
-//    t.equal(testControlState(), controlStates.playing, 'should show controls matching \'playing\' state after playing')
-//
-//    // Pause
-//    playClick()
-//    t.equal(testControlState(), controlStates.firstStep, 'should show controls matching \'firstStep\' state when paused on first score event')
-//
-//    forwardClick()
-//    t.equal(testControlState(), controlStates.step, 'should show controls matching \'step\' state after clicking forward')
-//    t.equal(+VS.control.pointer.value, 1, 'should show pointer at 1 after clicking forward')
-//
-//    stopClick()
-//    t.equal(testControlState(), controlStates.firstStep, 'should show controls matching \'firstStep\' state after stop')
-//    t.equal(+VS.control.pointer.value, 0, 'should show pointer at 0 after stop')
-//
-//    t.end()
-//})
-//
+    cy.get("#score-fwd").click();
+    assertControlState(
+      "show controls matching step state after clicking forward",
+      controlStates.step
+    );
+    assertPointerPosition("show pointer at 1 after clicking forward", 1);
+
+    cy.get("#score-stop").click();
+    assertControlState(
+      "show controls matching step firstStep after clicking stop",
+      controlStates.firstStep
+    );
+    assertPointerPosition("show pointer at 0 after clicking stop", 0);
+  });
+});
+
 //loadDomThenTest('VS.control keyboard control', htmlPath, (t, window) => {
 //    const { VS } = window
 //
