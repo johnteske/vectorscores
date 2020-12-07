@@ -33,7 +33,7 @@ module.exports.render = (data) => {
             ${data.content}
             <ul class="work-list">
                 ${catMap(
-                  (work) => `<li>${workLink(work.data.title, work.url)}</li>`,
+                  (work) => `<li>${workLink(work.data.title, "/" + data.site.baseUrl + work.url)}</li>`,
                   works
                 )}
             </ul>
