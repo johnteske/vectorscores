@@ -1,18 +1,16 @@
 const requireRoot = require("app-root-path").require;
 const { catMap, title, url } = require("eleventy-lib");
-const { /*forEachModuleWithFile,*/ movementsFromUrl } = requireRoot(
-  "render-utils.js"
-);
+const { movementsFromUrl } = requireRoot("render-utils.js");
 
 const partialPath = "_includes/partials";
 const header = requireRoot(`${partialPath}/header.11ty.js`);
 const workLink = requireRoot(`${partialPath}/work-link.11ty.js`);
 
+const permalink = require("./permalink");
+
 module.exports.data = {
-  eleventyComputed: {
-    permalink: data => `${data.page.fileSlug}/`
-  }
-}
+  eleventyComputed: { permalink },
+};
 
 module.exports.render = (data) => {
   const works = movementsFromUrl(data.page.url, data);
@@ -34,7 +32,10 @@ module.exports.render = (data) => {
         <main>
             ${data.content}
             <ul class="work-list">
-                ${catMap((work) => `<li>${workLink(work.data.title, work.url)}</li>`, works)}
+                ${catMap(
+                  (work) => `<li>${workLink(work.data.title, work.url)}</li>`,
+                  works
+                )}
             </ul>
         </main>
     </body>

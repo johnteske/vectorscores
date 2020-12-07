@@ -1,12 +1,11 @@
-const path = require("path");
 const requireRoot = require("app-root-path").require;
 const { title } = require("eleventy-lib");
 
+const permalink = require("./permalink");
+
 module.exports.data = {
   eleventyComputed: {
-    permalink: (data) =>
-      data.page.filePathStem.split(path.sep).slice(2, -1).join(path.sep) +
-      path.sep,
+    permalink,
   },
 };
 
