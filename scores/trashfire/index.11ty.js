@@ -10,7 +10,7 @@ module.exports = class {
     };
   }
 
-  render(data) {
+  render(_data) {
     return "";
   }
 };
