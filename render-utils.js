@@ -1,7 +1,4 @@
-const fs = require("fs");
-const { catMap, maybe, url } = require("eleventy-lib");
-
-const fileExists = (path) => fs.existsSync(path);
+const { catMap, url } = require("eleventy-lib");
 
 const forEachModuleWithFile = (basename, render, data) => {
   const modules = data.modules || [];
@@ -11,10 +8,7 @@ const forEachModuleWithFile = (basename, render, data) => {
   return filtered.length
     ? catMap((m) => {
         const path = `/modules/${m}/${basename}`;
-        return maybe(
-          render(url.asset(data.site.baseUrl, path)),
-          fileExists(`./assets/${path}`)
-        );
+        return render(url.asset(data.site.baseUrl, path));
       }, filtered)
     : "";
 };
@@ -25,7 +19,6 @@ const movementsFromUrl = (url, data) =>
   );
 
 module.exports = {
-  fileExists,
   forEachModuleWithFile,
   movementsFromUrl,
 };
