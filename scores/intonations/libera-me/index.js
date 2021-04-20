@@ -161,3 +161,10 @@ VS.WebSocket.hooks.add("pause", showFrameAtPointer);
 VS.score.hooks.add("stop", showFrameAtPointer);
 
 VS.WebSocket.connect();
+
+VS.saveSVG.hooks.add("save", function () {
+  // A4 at 96dpi
+  svg.attr("width", 794);
+  svg.attr("height", 1123);
+  resize();
+});
