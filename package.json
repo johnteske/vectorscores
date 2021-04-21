@@ -51,7 +51,7 @@
     "postcss-cli": "^8.3.0",
     "postcss-custom-properties": "^11.0.0",
     "postcss-import": "^13.0.0",
-    "rollup": "^2.42.4",
+    "rollup": "^2.44.0",
     "serve": "^11.3.2",
     "slugify": "^1.4.6",
     "tape": "^5.0.1",
