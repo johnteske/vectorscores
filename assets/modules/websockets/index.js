@@ -1,20 +1,20 @@
-VS.WebSocket = (function() {
+VS.WebSocket = (function () {
   var ws = {};
 
   var socket;
 
-  var log = (function() {
+  var log = (function () {
     var element = document.getElementById("ws-log");
 
-    return function(msg) {
+    return function (msg) {
       element.innerHTML = msg;
     };
   })();
 
-  var notify = (function() {
+  var notify = (function () {
     var element = document.getElementById("score-options-open");
 
-    return function(color) {
+    return function (color) {
       element.style.background = color;
     };
   })();
@@ -24,22 +24,22 @@ VS.WebSocket = (function() {
   ws.hooks = VS.createHooks(["play", "pause", "stop", "step", "message"]);
 
   function addControlHooks() {
-    VS.control.hooks.add("play", function() {
+    VS.control.hooks.add("play", function () {
       VS.WebSocket.send(["vs", "play", VS.score.getPointer()]);
     });
-    VS.control.hooks.add("pause", function() {
+    VS.control.hooks.add("pause", function () {
       VS.WebSocket.send(["vs", "pause", VS.score.getPointer()]);
     });
-    VS.control.hooks.add("stop", function() {
+    VS.control.hooks.add("stop", function () {
       VS.WebSocket.send(["vs", "stop"]);
     });
-    VS.control.hooks.add("step", function() {
+    VS.control.hooks.add("step", function () {
       VS.WebSocket.send(["vs", "step", VS.score.getPointer()]);
     });
   }
 
   function handleWebSocketMsg(data) {
-    const [cid, _, content, msg] = data
+    const [cid, _, content, msg] = data;
 
     switch (content) {
       case "connected":
@@ -84,7 +84,7 @@ VS.WebSocket = (function() {
     }
   }
 
-  ws.connect = function() {
+  ws.connect = function () {
     var host =
       (location.protocol === "https:" ? "wss://" : "ws://") +
       location.hostname +
@@ -93,13 +93,13 @@ VS.WebSocket = (function() {
     try {
       socket = new WebSocket(host);
 
-      socket.onopen = function() {
+      socket.onopen = function () {
         log("Open");
         notify("transparent");
         addControlHooks();
       };
 
-      socket.onclose = function(e) {
+      socket.onclose = function (e) {
         if (e.code === 3001) {
           log("Closed");
         } else {
@@ -108,7 +108,7 @@ VS.WebSocket = (function() {
         notify("red");
       };
 
-      socket.onmessage = function(msg) {
+      socket.onmessage = function (msg) {
         try {
           var data = JSON.parse(msg.data);
           var cid = data[0];
@@ -134,7 +134,7 @@ VS.WebSocket = (function() {
     }
   };
 
-  ws.send = function(data) {
+  ws.send = function (data) {
     // attach client ID to all
     data.unshift(ws.cid);
 

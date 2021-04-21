@@ -36,16 +36,16 @@ var indicator = createTestCue("cue-1");
 
 var cue1 = VS.cueBlink(indicator)
   .beats(2)
-  .inactive(function(selection) {
+  .inactive(function (selection) {
     selection.style("fill-opacity", 0);
   })
-  .on(function(selection) {
+  .on(function (selection) {
     selection.style("fill-opacity", 1);
   })
-  .off(function(selection) {
+  .off(function (selection) {
     selection.style("fill-opacity", 0);
   })
-  .down(function(selection) {
+  .down(function (selection) {
     selection.style("fill-opacity", 1);
   });
 

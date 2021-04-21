@@ -1,10 +1,10 @@
-VS.lineCloud = function() {
+VS.lineCloud = function () {
   var w = VS.constant(127),
     h = VS.constant(127),
     dur = VS.constant(1),
     phrase = VS.constant([
       { pitch: 0, duration: 1 },
-      { pitch: 0, duration: 0 }
+      { pitch: 0, duration: 0 },
     ]),
     phrases = VS.constant(5),
     transposition = VS.constant("random"),
@@ -22,7 +22,7 @@ VS.lineCloud = function() {
 
   // NOTE x is currently used to ensure x values are evenly distributed in card
   function phraseToPoints(points, x, transposeFn) {
-    var phraseDuration = points.reduce(function(sum, o) {
+    var phraseDuration = points.reduce(function (sum, o) {
       return sum + o.duration;
     }, 0);
 
@@ -33,10 +33,10 @@ VS.lineCloud = function() {
     var xOffset = x * (1 - durationScale); // VS.getRandExcl(0, 1 - durationScale);
     var yOffset = transposeFn();
 
-    return points.map(function(o) {
+    return points.map(function (o) {
       var point = {
         x: currentTime + xOffset,
-        y: o.pitch + yOffset
+        y: o.pitch + yOffset,
       };
 
       currentTime += (o.duration / phraseDuration) * durationScale;
@@ -70,10 +70,10 @@ VS.lineCloud = function() {
 
     var line = d3
       .line()
-      .x(function(d) {
+      .x(function (d) {
         return d.x * width;
       })
-      .y(function(d) {
+      .y(function (d) {
         return midiToY(d.y) * height;
       })
       .curve(curve);
@@ -87,44 +87,44 @@ VS.lineCloud = function() {
       .attr("d", line);
   }
 
-  lineCloud.width = function(_) {
+  lineCloud.width = function (_) {
     return arguments.length
       ? ((w = typeof _ === "function" ? _ : VS.constant(+_)), lineCloud)
       : w;
   };
 
-  lineCloud.height = function(_) {
+  lineCloud.height = function (_) {
     return arguments.length
       ? ((h = typeof _ === "function" ? _ : VS.constant(+_)), lineCloud)
       : h;
   };
 
-  lineCloud.duration = function(_) {
+  lineCloud.duration = function (_) {
     return arguments.length
       ? ((dur = typeof _ === "function" ? _ : VS.constant(+_)), lineCloud)
       : dur;
   };
 
-  lineCloud.phrase = function(_) {
+  lineCloud.phrase = function (_) {
     return arguments.length
       ? ((phrase = typeof _ === "function" ? _ : VS.constant(_)), lineCloud)
       : phrase;
   };
 
-  lineCloud.phrases = function(_) {
+  lineCloud.phrases = function (_) {
     return arguments.length
       ? ((phrases = typeof _ === "function" ? _ : VS.constant(_)), lineCloud)
       : phrases;
   };
 
-  lineCloud.transposition = function(_) {
+  lineCloud.transposition = function (_) {
     return arguments.length
       ? ((transposition = typeof _ === "function" ? _ : VS.constant(_)),
         lineCloud)
       : transposition;
   };
 
-  lineCloud.curve = function(_) {
+  lineCloud.curve = function (_) {
     return arguments.length
       ? ((curve = typeof _ === "function" ? _ : curve), lineCloud)
       : curve;

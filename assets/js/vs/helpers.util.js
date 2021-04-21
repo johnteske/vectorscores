@@ -5,10 +5,10 @@
  * @returns {string} : query parameter value
  */
 export function getQueryString(param, url) {
-    var href = url || window.location.href;
-    var match = new RegExp('[?&]' + param + '=([^&#]*)', 'i').exec(href);
+  var href = url || window.location.href;
+  var match = new RegExp("[?&]" + param + "=([^&#]*)", "i").exec(href);
 
-    return match ? match[1] : null;
+  return match ? match[1] : null;
 }
 
 /**
@@ -17,9 +17,11 @@ export function getQueryString(param, url) {
  * @returns {string} : query string, joined by '&'
  */
 export function makeQueryString(params) {
-    return Object.keys(params).map(function(key) {
-        return key + '=' + params[key];
-    }).join('&');
+  return Object.keys(params)
+    .map(function (key) {
+      return key + "=" + params[key];
+    })
+    .join("&");
 }
 
 /**
@@ -28,19 +30,19 @@ export function makeQueryString(params) {
  * @returns {*} : value
  */
 export function constant(val) {
-    return function constant() {
-        return val;
-    };
+  return function constant() {
+    return val;
+  };
 }
 
 /**
  * Generate unique id
  * @returns {number} : id
  */
-export const id = (function() {
-    var id = 0;
+export const id = (function () {
+  var id = 0;
 
-    return function() {
-        return id++;
-    };
-}());
+  return function () {
+    return id++;
+  };
+})();
