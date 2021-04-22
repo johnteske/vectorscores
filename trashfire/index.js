@@ -177,10 +177,7 @@
     }
 
     function addDumpsterLayer(selection, layer) {
-      selection
-        .append("g")
-        .append("use")
-        .attr("href", `#${layer}`);
+      selection.append("g").append("use").attr("href", `#${layer}`);
     }
 
     return dumpster;
@@ -501,20 +498,20 @@
    */
   function fireCycle() {
     // Build 3-5 flames
-    var flames = TrashUtils.buildArray(itemFrom(prng, [3, 4, 5]), function (
-      index,
-      n
-    ) {
-      var type = index > 2 ? "blaze" : "crackle";
+    var flames = TrashUtils.buildArray(
+      itemFrom(prng, [3, 4, 5]),
+      function (index, n) {
+        var type = index > 2 ? "blaze" : "crackle";
 
-      return {
-        duration: (7 - index) * 1000, // duration: 7-2 seconds
-        action: "add",
-        fn: trash.set,
-        transitionDuration: 1000,
-        trashes: [makeTrash(type, 25, 25 + index * (50 / n))],
-      };
-    });
+        return {
+          duration: (7 - index) * 1000, // duration: 7-2 seconds
+          action: "add",
+          fn: trash.set,
+          transitionDuration: 1000,
+          trashes: [makeTrash(type, 25, 25 + index * (50 / n))],
+        };
+      }
+    );
 
     // Hit dumpster, 0-3 times
     // TODO reduce trash to last 3 items if no spike?
