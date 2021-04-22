@@ -2,7 +2,7 @@ const { catMap } = require("eleventy-lib");
 
 const options = require("./_options.11ty.js");
 
-const whitelist = ["adsr", "prelude", "swell", "intonations"];
+const allowlist = ["adsr", "prelude", "swell", "intonations"];
 
 module.exports = class {
   data() {
@@ -17,11 +17,8 @@ module.exports = class {
 
   render(data) {
     const works = data.collections.all
-      //.filter(w => ["score", "score-set", "movement"].includes(w.data.layout))
       .filter((w) => ["score", "movement"].includes(w.data.layout))
-      .filter((w) => whitelist.some((name) => w.url.includes(name)))
-      //.filter(w => w.data.status !== "test")
-      //.filter(w => w.data.status !== "unlisted");
+      .filter((w) => allowlist.some((name) => w.url.includes(name)))
       .sort((a, b) => {
         return a.data.order - b.data.order;
       });
