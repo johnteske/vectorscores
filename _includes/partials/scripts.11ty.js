@@ -5,7 +5,7 @@ module.exports = (data) => {
 
   const sources = [
     // d3
-    "https://d3js.org/d3.v6.min.js",
+    url.asset(data.site.baseUrl, "/js/d3.min.js"),
     // vectorscores core
     url.asset(data.site.baseUrl, "/js/vectorscores.js"),
     // modules
