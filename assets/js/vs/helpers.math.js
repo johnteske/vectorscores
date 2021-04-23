@@ -4,8 +4,8 @@
  * @param {number} max : upper limit (excluded)
  * @returns {number} float value between min and max, excluding max
  */
-export const getRandExcl = function(min, max) {
-    return Math.random() * (max - min) + min;
+export const getRandExcl = function (min, max) {
+  return Math.random() * (max - min) + min;
 };
 
 /**
@@ -15,8 +15,8 @@ export const getRandExcl = function(min, max) {
  * @param {number} max : upper limit (included)
  * @returns {number} integer value between min and max, including max
  */
-export const getRandIntIncl = function(min, max) {
-    return Math.floor(VS.getRandExcl(min, max + 1));
+export const getRandIntIncl = function (min, max) {
+  return Math.floor(VS.getRandExcl(min, max + 1));
 };
 
 /**
@@ -24,8 +24,8 @@ export const getRandIntIncl = function(min, max) {
  * @param {array} items
  * @returns {*}
  */
-export const getItem = function(items) {
-    return items[Math.floor(Math.random() * items.length)];
+export const getItem = function (items) {
+  return items[Math.floor(Math.random() * items.length)];
 };
 
 /**
@@ -33,20 +33,20 @@ export const getItem = function(items) {
  * @param {array} items
  * @returns {*}
  */
-export const getWeightedItem = function(items, weights) {
-    var totalWeight = weights.reduce(function(a, b) {
-        return a + b;
-    });
+export const getWeightedItem = function (items, weights) {
+  var totalWeight = weights.reduce(function (a, b) {
+    return a + b;
+  });
 
-    var rand = VS.getRandExcl(0, totalWeight);
+  var rand = VS.getRandExcl(0, totalWeight);
 
-    for (var i = 0, acc = 0; i < items.length; i++) {
-        acc += weights[i];
+  for (var i = 0, acc = 0; i < items.length; i++) {
+    acc += weights[i];
 
-        if (rand <= acc) {
-            return items[i];
-        }
+    if (rand <= acc) {
+      return items[i];
     }
+  }
 };
 
 /**
@@ -56,8 +56,8 @@ export const getWeightedItem = function(items, weights) {
  * @param {number} val
  * @returns {number}
  */
-export const clamp = function(val, min, max) {
-    return Math.min(Math.max(val, min), max);
+export const clamp = function (val, min, max) {
+  return Math.min(Math.max(val, min), max);
 };
 
 /**
@@ -67,8 +67,8 @@ export const clamp = function(val, min, max) {
  * @param {number} val
  * @returns {number}
  */
-export const normalize = function(val, min, max) {
-    return (val - min) / (max - min);
+export const normalize = function (val, min, max) {
+  return (val - min) / (max - min);
 };
 
 /**
@@ -77,6 +77,6 @@ export const normalize = function(val, min, max) {
  * @param {number} mod
  * @returns {number}
  */
-export const mod = function(val, mod) {
-    return ((val % mod) + mod) % mod;
+export const mod = function (val, mod) {
+  return ((val % mod) + mod) % mod;
 };

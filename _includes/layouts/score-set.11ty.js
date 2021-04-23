@@ -1,6 +1,5 @@
 const requireRoot = require("app-root-path").require;
 const { catMap, title, url } = require("eleventy-lib");
-const { movementsFromUrl } = requireRoot("render-utils.js");
 
 const partialPath = "_includes/partials";
 const header = requireRoot(`${partialPath}/header.11ty.js`);
@@ -13,7 +12,9 @@ module.exports.data = {
 };
 
 module.exports.render = (data) => {
-  const works = movementsFromUrl(data.page.url, data);
+  const works = data.collections.all.filter(
+    (page) => page.data.layout === "movement" && page.url.includes(data.page.url)
+  );
 
   return `
     <!DOCTYPE html>

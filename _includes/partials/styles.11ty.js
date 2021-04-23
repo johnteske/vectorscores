@@ -1,20 +1,20 @@
-const requireRoot = require("app-root-path").require;
-const { maybe, url } = require("eleventy-lib");
-const { forEachModuleWithFile } = requireRoot("render-utils.js");
+const { catMap, url } = require("eleventy-lib");
 
-module.exports = (data) => ` 
-  <link rel="stylesheet" href="${url.asset(
-    data.site.baseUrl,
-    "/css/score.css"
-  )}">
-  ${maybe(
-    `<link rel="stylesheet" href="../styles.css">`,
-    data.layout === "movement"
-  )}
-  ${forEachModuleWithFile(
+module.exports = (data) => {
+  const modules = data.modules || [];
+
+  const hrefs = [
+    // base score styles
+    url.asset(data.site.baseUrl, "/css/score.css"),
+    // styles from score-set if movement
+    data.layout === "movement" ? "../styles.css" : null,
+    // modules
+    ...modules.map((module) =>
+      url.asset(data.site.baseUrl, `/modules/${module}/styles.css`)
+    ),
+    // score styles
     "styles.css",
-    (path) => `<link rel="stylesheet" href="${path}">`,
-    data
-  )}
-  <link rel="stylesheet" href="styles.css">
- `;
+  ].filter(Boolean);
+
+  return catMap((href) => `<link rel="stylesheet" href=${href}>`, hrefs);
+};
