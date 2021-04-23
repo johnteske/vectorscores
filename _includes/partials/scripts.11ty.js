@@ -1,18 +1,27 @@
-const rootRequire = require("app-root-path").require;
-const { url } = require("eleventy-lib");
-const { forEachModuleWithFile } = rootRequire("render-utils");
+const { catMap, url } = require("eleventy-lib");
 
-module.exports = (data) =>
-  `<script src="${url.asset(
-    data.site.baseUrl,
-    "/js/lib/d3.v4.min.js"
-  )}" charset="utf-8"></script>
-    <script src="${url.asset(
-      data.site.baseUrl,
-      "/js/vectorscores.js"
-    )}" charset="utf-8"></script>
-    ${forEachModuleWithFile(
-      "index.js",
-      (path) => `<script src="${path}" charset="utf-8"></script>`,
-      data
-    )}`;
+module.exports = (data) => {
+  const modules = data.modules || [];
+
+  const sources = [
+    // d3
+    "https://d3js.org/d3.v6.min.js",
+    // vectorscores core
+    url.asset(data.site.baseUrl, "/js/vectorscores.js"),
+    // modules
+    ...modules
+      .filter((module) =>
+        process.env.WEBSOCKETS ? true : module !== "websockets"
+      )
+      .map((module) =>
+        url.asset(data.site.baseUrl, `/modules/${module}/index.js`)
+      ),
+    // score script
+    "index.js",
+  ];
+
+  return catMap(
+    (src) => `<script src="${src}" charset="utf-8"></script>`,
+    sources
+  );
+};

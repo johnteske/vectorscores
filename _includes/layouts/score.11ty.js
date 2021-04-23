@@ -34,7 +34,6 @@ module.exports.render = (data) => {
         ${footer(data)}
         ${modals(data)}
         ${scripts(data)}
-        <script src="index.js" charset="utf-8"></script>
     </body>
     </html>`;
 };
