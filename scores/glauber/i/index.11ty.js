@@ -5,7 +5,7 @@ module.exports = class {
       composer: "John Teske",
       title: "i",
       status: "wip",
-      modules: [],
+      modules: ["cue/blink"],
     };
   }
 
