@@ -13,13 +13,43 @@ function timeScale(t) {
   return t / 200;
 }
 
+const durations = VS.dictionary.Bravura.durations.stemless;
+
+//
+const patterns = [
+  (selection) => {
+    const p = selection
+      .append("pattern")
+      .attr("id", "test")
+      .attr("patternUnits", "userSpaceOnUse")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", 25)
+      .attr("height", 25);
+
+    p.append("text")
+      .text(durations[1])
+      .style("font-family", "Bravura")
+      .style("font-size", 8)
+      .attr("dy", "1em");
+  },
+];
+//
+
 // TODO VS.score events should have at least 1 event
 // the current render function expects duration => startTime => x, width
 const score = [
   {
     duration: 5000,
     render: (g, data) => {
-      g.append("rect").attr("width", data.width).attr("height", pitchRange);
+      g.append("rect")
+        .attr("width", data.width)
+        .attr("height", pitchRange)
+        // outline for debugging
+        .attr("stroke", "gray")
+        .attr("vector-effect", "non-scaling-stroke")
+        //
+        .attr("fill", "url(#test)");
       return g;
     },
   },
@@ -86,6 +116,12 @@ const resize = makeResize(
 d3.select(window).on("resize", resize);
 
 d3.select(window).on("load", () => {
+  // where to top-level things like this go
+  const defs = svg.append("defs");
+  patterns.forEach((p) => {
+    defs.call(p);
+  });
+
   renderScore(scoreGroup.element, score);
   resize();
 });
