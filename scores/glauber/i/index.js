@@ -10,8 +10,7 @@ import addHooks from "../../intonations/scroll-hooks";
 //TODO VS.score events should have at least 1 event
 const score = [
   {
-    render: () => {
-      const g = d3.create("svg:g");
+    render: (g, data) => {
       g.append("rect").attr("width", "99").attr("height", "99");
       return g;
     },
@@ -21,8 +20,8 @@ const score = [
 function renderScore(selection, score) {
   score.forEach((bar) => {
     const { render, ...data } = bar;
-    const g = render(data);
-    selection.append(() => g.node());
+    const g = selection.append("g");
+    render(g, data);
   });
 }
 
