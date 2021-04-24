@@ -16,23 +16,34 @@ function timeScale(t) {
 const durations = VS.dictionary.Bravura.durations.stemless;
 
 //
-const patterns = [
-  (selection) => {
-    const p = selection
-      .append("pattern")
-      .attr("id", "test")
-      .attr("patternUnits", "userSpaceOnUse")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", 25)
-      .attr("height", 25);
+const makePattern = (name, contentFn) => (selection) => {
+  const p = selection
+    .append("pattern")
+    .attr("id", name)
+    .attr("patternUnits", "userSpaceOnUse")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", pitchRange) // to make it square
+    .attr("height", pitchRange);
 
+  p.call(contentFn);
+};
+
+const patterns = [
+  makePattern("test", (p) => {
     p.append("text")
       .text(durations[1])
       .style("font-family", "Bravura")
       .style("font-size", 8)
       .attr("dy", "1em");
-  },
+  }),
+  makePattern("test2", (p) => {
+    p.append("text")
+      .text(durations[0.5])
+      .style("font-family", "Bravura")
+      .style("font-size", 8)
+      .attr("dy", "1em");
+  }),
 ];
 //
 
@@ -50,17 +61,19 @@ const score = [
         .attr("vector-effect", "non-scaling-stroke")
         //
         .attr("fill", "url(#test)");
-      return g;
     },
   },
   {
     duration: 3000,
     render: (g, data) => {
       g.append("rect")
-        .attr("fill", "red")
         .attr("width", data.width)
-        .attr("height", pitchRange);
-      return g;
+        .attr("height", pitchRange)
+        // outline for debugging
+        .attr("stroke", "gray")
+        .attr("vector-effect", "non-scaling-stroke")
+        //
+        .attr("fill", "url(#test2)");
     },
   },
   {
