@@ -1,15 +1,9 @@
-import { margin } from "../../intonations/layout";
 import { seconds, pitchRange, pitchScale } from "../../intonations/scale";
 import { translate } from "../../intonations/translate";
 import startTimeFromDuration from "../../intonations/startTimeFromDuration";
 
-// cue/blink module is a dependency
-import makeScrollingScore from "../../intonations/scrolling-score";
-import makeResize from "../../intonations/scroll-resize";
-import makeScrollHelpers from "../../intonations/scroll-center";
-import addHooks from "../../intonations/scroll-hooks";
-
 import * as sonataForm from "../sonata-form";
+import * as scrollingScore from "../scrolling-score";
 
 function timeScale(t) {
   return t / 200;
@@ -75,6 +69,8 @@ console.log(form);
 //
 // currently the form maps directly to the score
 // TODO development section needs filling
+//
+// TODO what is the timing of these sections
 const score = form
   .map((f) => {
     return {
@@ -103,64 +99,22 @@ const score = form
     width: timeScale(bar.duration),
   }));
 
-function renderScore(selection, score) {
-  score.forEach((bar) => {
-    const { render, ...data } = bar;
-    if (render == null) {
-      return;
-    }
-    const g = selection.append("g").call(translate, data.x, 0);
-    render(g, data);
-  });
-}
-
-//
-//
-//
-
-const { svg, page, scoreGroup, indicator } = makeScrollingScore();
-
-const { setScorePosition, scrollToNextBar } = makeScrollHelpers(
-  scoreGroup,
-  score.map((_) => _.x) // score x values
-);
-
-// this feels like scroll logic
-// it currently only passes duration to scrollToNextBar
-score.forEach((bar, i) => {
-  const callback = i < score.length - 1 ? scrollToNextBar : null;
-  VS.score.add(bar.startTime, callback, [i, bar.duration]);
-});
-
-const resize = makeResize(
-  svg,
-  page,
-  margin,
-  pitchRange,
-  indicator,
-  scoreGroup,
-  setScorePosition
-);
-
-d3.select(window).on("resize", resize);
-
-d3.select(window).on("load", () => {
-  // where to top-level things like this go
+/**
+ * Render--and also register hooks, events, cue blink, etc
+ * TODO render is too specific of a name
+ */
+scrollingScore.render((svg, g, score) => {
   const defs = svg.append("defs");
   patterns.forEach((p) => {
     defs.call(p);
   });
 
-  renderScore(scoreGroup.element, score);
-  resize();
-});
-
-// this preroll logic seems more related to the cue/blink than scroll
-VS.score.preroll = seconds(3);
-function prerollAnimateCue() {
-  VS.score.schedule(0, indicator.blinker.start());
-}
-VS.control.hooks.add("play", prerollAnimateCue);
-VS.WebSocket.hooks.add("play", prerollAnimateCue);
-
-addHooks(setScorePosition);
+  score.forEach((bar) => {
+    const { render, ...data } = bar;
+    if (render == null) {
+      return;
+    }
+    const _g = g.append("g").call(translate, data.x, 0);
+    render(_g, data);
+  });
+}, score);
