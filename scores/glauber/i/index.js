@@ -62,7 +62,6 @@ const patterns = [
 //
 
 const form = sonataForm.generate();
-console.log(form);
 
 // TODO VS.score events should have at least 1 event
 // the current render function expects duration => startTime => x, width
@@ -73,8 +72,15 @@ console.log(form);
 // TODO what is the timing of these sections
 const score = form
   .map((f) => {
+    const duration = {
+      primary: 5000,
+      secondary: 4000,
+      transition: 3000,
+      closing: 2000
+    }[f.type] || 10000
+
     return {
-      duration: 3000,
+      duration,
       render: (g, data) => {
         g.append("rect")
           .attr("width", data.width)
