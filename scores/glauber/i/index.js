@@ -9,8 +9,7 @@ import makeResize from "../../intonations/scroll-resize";
 import makeScrollHelpers from "../../intonations/scroll-center";
 import addHooks from "../../intonations/scroll-hooks";
 
-import { generate } from "../sonata-form";
-console.log(generate());
+import * as sonataForm from "../sonata-form";
 
 function timeScale(t) {
   return t / 200;
@@ -32,57 +31,71 @@ const makePattern = (name, contentFn) => (selection) => {
   p.call(contentFn);
 };
 
+// TODO example patterns to visualize form
 const patterns = [
-  makePattern("test", (p) => {
+  makePattern("meta", (p) => {
+    p.append("text")
+      .text(durations[8])
+      .style("font-family", "Bravura")
+      .attr("dy", "1em");
+  }),
+  //
+  makePattern("primary", (p) => {
     p.append("text")
       .text(durations[1])
       .style("font-family", "Bravura")
-      .style("font-size", 8)
       .attr("dy", "1em");
   }),
-  makePattern("test2", (p) => {
+  makePattern("transition", (p) => {
+    p.append("text")
+      .text(durations[0.75])
+      .style("font-family", "Bravura")
+      .attr("dy", "1em");
+  }),
+  makePattern("secondary", (p) => {
     p.append("text")
       .text(durations[0.5])
       .style("font-family", "Bravura")
-      .style("font-size", 8)
+      .attr("dy", "1em");
+  }),
+  makePattern("closing", (p) => {
+    p.append("text")
+      .text(durations[2])
+      .style("font-family", "Bravura")
       .attr("dy", "1em");
   }),
 ];
 //
 
+const form = sonataForm.generate();
+console.log(form);
+
 // TODO VS.score events should have at least 1 event
 // the current render function expects duration => startTime => x, width
-const score = [
-  {
-    duration: 5000,
-    render: (g, data) => {
-      g.append("rect")
-        .attr("width", data.width)
-        .attr("height", pitchRange)
-        // outline for debugging
-        .attr("stroke", "gray")
-        .attr("vector-effect", "non-scaling-stroke")
-        //
-        .attr("fill", "url(#test)");
+//
+// currently the form maps directly to the score
+// TODO development section needs filling
+const score = form
+  .map((f) => {
+    return {
+      duration: 3000,
+      render: (g, data) => {
+        g.append("rect")
+          .attr("width", data.width)
+          .attr("height", pitchRange)
+          // outline for debugging
+          .attr("stroke", "gray")
+          .attr("vector-effect", "non-scaling-stroke")
+          //
+          .attr("fill", `url(#${f.section === "meta" ? "meta" : f.type})`);
+      },
+    };
+  })
+  .concat([
+    {
+      duration: 0,
     },
-  },
-  {
-    duration: 3000,
-    render: (g, data) => {
-      g.append("rect")
-        .attr("width", data.width)
-        .attr("height", pitchRange)
-        // outline for debugging
-        .attr("stroke", "gray")
-        .attr("vector-effect", "non-scaling-stroke")
-        //
-        .attr("fill", "url(#test2)");
-    },
-  },
-  {
-    duration: 0,
-  },
-]
+  ])
   .map(startTimeFromDuration)
   .map((bar) => ({
     ...bar,

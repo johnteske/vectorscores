@@ -7,36 +7,54 @@ function coin(threshold = 0.5) {
   return prng() > threshold;
 }
 
-export function generate() {
-  // first subject group
-  // n subjects
+function typeWithSection(section) {
+  return (type) => ({
+    section,
+    type,
+  });
+}
 
+// Array<{
+//  section: meta | exposition | development | recapitulation
+//  type: primary | transition | secondary | cod(ett)a/closing
+//  next: { section, type }
+// }>
+export function generate() {
   const hasSecondSubject = coin();
   const hasFirstSubjectInRecap = hasSecondSubject ? coin() : true;
 
-  // second subject group
-  // optional
-  // n subjects
-
   const exposition = [
-    "exp, first subject group",
-    // ... and all the 1st subjects
-    hasSecondSubject && "exp, transition",
-    hasSecondSubject && "exp, second subject group",
-    // ... and all the 2nd subjects
-    coin() && "exp, closing theme",
-    coin() && "exp, codetta",
-  ];
+    "primary",
+    hasSecondSubject && "transition",
+    hasSecondSubject && "secondary",
+    coin() && "closing",
+    // todo transition, for the repeat?
+  ]
+    .filter(Boolean)
+    .map(typeWithSection("exposition"));
+
+  const development = [
+    "any", // TODO no enum for this
+    "transition", // I think this is the only one we can't be sure where it is leading and need "next" for
+  ]
+    .filter(Boolean)
+    .map(typeWithSection("development"));
+
+  const recapitulation = [
+    hasFirstSubjectInRecap && "primary",
+    hasFirstSubjectInRecap && hasSecondSubject && "transition",
+    hasSecondSubject && "secondary",
+    coin() && "closing",
+  ]
+    .filter(Boolean)
+    .map(typeWithSection("recapitulation"));
 
   return [
-    coin() && "introduction",
+    coin() && { section: "meta", type: "transition" }, // introduction
     ...exposition,
-    ...exposition, // optional repeat
-    "development",
-    hasFirstSubjectInRecap && "recap, first subject group",
-    hasFirstSubjectInRecap && hasSecondSubject && "recap, transition",
-    hasSecondSubject && "recap, second subject group",
-    coin() && "recap, codetta",
-    coin() && "coda",
+    ...exposition, // repeat
+    ...development,
+    ...recapitulation,
+    coin() && { section: "meta", type: "closing" }, // coda
   ].filter(Boolean);
 }
