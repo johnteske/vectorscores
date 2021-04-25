@@ -9,6 +9,9 @@ import makeResize from "../../intonations/scroll-resize";
 import makeScrollHelpers from "../../intonations/scroll-center";
 import addHooks from "../../intonations/scroll-hooks";
 
+import { generate } from "../sonata-form";
+console.log(generate());
+
 function timeScale(t) {
   return t / 200;
 }
