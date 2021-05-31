@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "A series of new compositions built on the web",
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "main": "_site/works.json",
   "directories": {

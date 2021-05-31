@@ -1,3 +1,9 @@
+// attributes
+// - duration (x density)
+// - range (y density)
+// - timbre
+// - dynamics
+
 import { seconds, pitchRange, pitchScale } from "../../intonations/scale";
 import { translate } from "../../intonations/translate";
 import startTimeFromDuration from "../../intonations/startTimeFromDuration";
@@ -5,11 +11,15 @@ import startTimeFromDuration from "../../intonations/startTimeFromDuration";
 import * as sonataForm from "../sonata-form";
 import * as scrollingScore from "../scrolling-score";
 
+import themes from "./themes";
+
 function timeScale(t) {
   return t / 200;
 }
 
 const durations = VS.dictionary.Bravura.durations.stemless;
+
+console.log("themes", themes);
 
 //
 const makePattern = (name, contentFn) => (selection) => {
@@ -69,15 +79,16 @@ const form = sonataForm.generate();
 // currently the form maps directly to the score
 // TODO development section needs filling
 //
-// TODO what is the timing of these sections
 const score = form
   .map((f) => {
-    const duration = {
-      primary: 5000,
-      secondary: 4000,
-      transition: 3000,
-      closing: 2000
-    }[f.type] || 10000
+    // TODO what is the timing of these sections
+    const duration =
+      {
+        primary: 5000,
+        secondary: 4000,
+        transition: 3000,
+        closing: 2000,
+      }[f.type] || 10000;
 
     return {
       duration,
