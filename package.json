@@ -21,10 +21,10 @@
     "clean": "rm -rf _site",
     "deploy": "SITE_BASE_URL=scores npm run build && gh-pages -d _site",
     "fix:css": "stylelint assets/css/**/*.css --fix",
-    "format": "prettier --write '{assets,layouts,partials,scores}/**/*.js'",
+    "format": "prettier --write '{assets,layouts,partials,scores}/**/*.{js,ts}'",
     "serve": "serve -n -l 8081 _site",
     "serve:external": "serve -n -l tcp://0.0.0.0:80 _site",
-    "test": "ts-node ./node_modules/.bin/tape \"{assets,build,scores}/**/*.test.{j,t}s\"",
+    "test": "ts-node ./node_modules/.bin/tape \"{assets,build,scores}/**/*.test.{js,ts}\"",
     "watch": "chokidar '**/*.*' -i 'node_modules' -i '_site' -c \"npm run build && echo 'done'\""
   },
   "repository": {
