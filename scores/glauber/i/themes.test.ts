@@ -1,15 +1,15 @@
-import test from "tape";
+import _test from "tape";
+
+const Page = require("../index.11ty.js");
+const page = new Page();
 
 import { fromDisp } from "./themes";
 
-const cont = Array.from({ length: 100 }, (x, i) => i);
+function test(title: string, fn: _test.TestCase) {
+  _test(`${page.data().title} - ${title}`, fn);
+}
 
-test(__dirname + " disparity", function (t) {
-  // given an array of 100 integers and 0.25 disparity,
-  // expect the min/max to be 25 apart
-  const [min0, max0] = fromDisp(cont, 0.25);
-  t.equal(max0 - min0, 25, "disparity accuracy");
-
+test("disparity bounds", function (t) {
   t.throws(
     () => {
       fromDisp([0, 1, 2], 1.1);
@@ -17,6 +17,7 @@ test(__dirname + " disparity", function (t) {
     /must be between/,
     "throws on disparity > 1"
   );
+
   t.throws(
     () => {
       fromDisp([0, 1, 2], -12);
@@ -25,14 +26,17 @@ test(__dirname + " disparity", function (t) {
     "throws on disparity < 0"
   );
 
-  const [min1, max1] = fromDisp([0, 1, 2], 0);
-  t.ok(min1 === max1, "no disparity");
+  t.end();
+});
 
-  // TODO test sample size to see if both occur (but low sample size)
-  const [min, max] = fromDisp([0, 1, 2], 0.5);
-  t.ok((min === 0 && max === 1) || (min === 1 && max === 2));
+test("disparity accuracy", function (t) {
+  const items = Array.from({ length: 100 }, (x, i) => i);
 
-  t.deepEquals(fromDisp([0, 1, 2], 1), [0, 2], "max disparity");
+  [0, 0.25, 0.5, 1].forEach((disparity) => {
+    const [min, max] = fromDisp(items, disparity);
+    const expectedRange = Math.round(disparity * 100);
+    t.equal(max - min, expectedRange, `${disparity} disparity`);
+  });
 
   t.end();
 });

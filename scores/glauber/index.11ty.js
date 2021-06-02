@@ -2,7 +2,7 @@ module.exports = class {
   data() {
     return {
       layout: "score-set",
-      title: "wip",
+      title: "glauber wip",
       instrumentation: "any ensemble",
       status: "wip",
       formats: ["score"],
