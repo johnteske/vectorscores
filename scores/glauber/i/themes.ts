@@ -27,6 +27,6 @@ const themes = {};
 export default themes;
 
 // TODO NOT A REAL FN
-function shuffle(a) {
+function shuffle(a: number[]) {
   return a.sort();
 }

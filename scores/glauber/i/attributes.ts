@@ -5,4 +5,4 @@ const attributes = {
   dynamics: ["pp", "p", "mp", "mf", "f", "ff"],
 };
 
-export default attributes
+export default attributes;
