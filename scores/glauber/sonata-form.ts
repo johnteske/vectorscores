@@ -21,7 +21,7 @@ enum Section {
   Recapitulation,
 }
 
-enum Role {
+export enum Role {
   Primary,
   Transition,
   Secondary,

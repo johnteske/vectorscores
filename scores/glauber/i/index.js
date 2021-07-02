@@ -8,7 +8,7 @@ import { seconds, pitchRange, pitchScale } from "../../intonations/scale";
 import { translate } from "../../intonations/translate";
 import startTimeFromDuration from "../../intonations/startTimeFromDuration";
 
-import * as sonataForm from "../sonata-form";
+import { generate as generateForm, Role } from "../sonata-form";
 import * as scrollingScore from "../scrolling-score";
 
 import themes from "./themes";
@@ -37,32 +37,33 @@ const makePattern = (name, contentFn) => (selection) => {
 
 // TODO example patterns to visualize form
 const patterns = [
+  // Section TODO
   makePattern("meta", (p) => {
     p.append("text")
       .text(durations[8])
       .style("font-family", "Bravura")
       .attr("dy", "1em");
   }),
-  //
-  makePattern("primary", (p) => {
+  // Role
+  makePattern(Role.Primary, (p) => {
     p.append("text")
       .text(durations[1])
       .style("font-family", "Bravura")
       .attr("dy", "1em");
   }),
-  makePattern("transition", (p) => {
+  makePattern(Role.Transition, (p) => {
     p.append("text")
       .text(durations[0.75])
       .style("font-family", "Bravura")
       .attr("dy", "1em");
   }),
-  makePattern("secondary", (p) => {
+  makePattern(Role.Secondary, (p) => {
     p.append("text")
       .text(durations[0.5])
       .style("font-family", "Bravura")
       .attr("dy", "1em");
   }),
-  makePattern("closing", (p) => {
+  makePattern(Role.Closing, (p) => {
     p.append("text")
       .text(durations[2])
       .style("font-family", "Bravura")
@@ -71,7 +72,7 @@ const patterns = [
 ];
 //
 
-const form = sonataForm.generate();
+const form = generateForm();
 
 // TODO VS.score events should have at least 1 event
 // the current render function expects duration => startTime => x, width
