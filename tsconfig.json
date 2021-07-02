@@ -4,6 +4,9 @@
   "exclude": ["node_modules", "**/*.test.*"],
   "compilerOptions": {
     "allowJs": true,
-    "outDir": "./.scores"
+    "outDir": "./.scores",
+    "target": "es2015",
+    "module": "es2015",
+    "removeComments": true
   }
 }
