@@ -1,9 +1,11 @@
 # System files
 .DS_Store
 
-# Static site
+# Built files
 _site/
-_includes/docs
+
+# Temp files
+.scores/
 
 # Node
 node_modules

@@ -4,7 +4,7 @@ const findit = require("findit");
 const rollup = require("rollup");
 async function getScoreScripts() {
   return new Promise((resolve, reject) => {
-    const finder = findit("scores");
+    const finder = findit(".scores");
 
     const scoreScripts = [];
 
