@@ -39,6 +39,8 @@ const makePattern = (name, contentFn) => (selection) => {
   p.call(contentFn);
 };
 
+// TODO ensure some more even distribution
+// https://www.jasondavies.com/poisson-disc/
 function addGlyphsWithDensity(selection, glyph, density) {
   for (let i = 0; i < density; i++) {
     selection
@@ -137,5 +139,13 @@ scrollingScore.render((svg, g, score) => {
     }
     const _g = g.append("g").call(translate, data.x, 0);
     render(_g, data);
+  });
+
+  const durations = g.append("g");
+  score.forEach((bar) => {
+    durations
+      .append("text")
+      .text(`${bar.duration / 1000}\u2033`)
+      .attr("x", bar.x);
   });
 }, score);
