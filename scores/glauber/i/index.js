@@ -18,11 +18,12 @@ import themes from "./themes";
 const prng = () => Math.random(); // lcg(Date.now());
 
 function timeScale(t) {
-  return t / 200;
+  return t / 150;
 }
 
 const durations = VS.dictionary.Bravura.durations.stemless;
 
+// TODO
 console.log("themes", themes);
 
 //
@@ -85,16 +86,25 @@ const form = generateForm();
 // currently the form maps directly to the score
 // TODO development section needs filling
 //
+function nested(val, n) {
+  const ratio = 0.62;
+  let result = val;
+  for (let i = 0; i < n; i++) {
+    result = result * ratio;
+  }
+  return result;
+}
+
 const score = form
   .map((f) => {
     // TODO what is the timing of these sections
-    const duration =
-      {
-        primary: 5000,
-        secondary: 4000,
-        transition: 3000,
-        closing: 2000,
-      }[f.type] || 10000;
+    const duration = {
+      [Role.Primary]: 10000 * nested(1, 0),
+      [Role.Transition]: 10000 * nested(1, 2),
+      [Role.Secondary]: 10000 * nested(1, 1),
+      [Role.Development]: 10000 * 2,
+      [Role.Closing]: 10000 * nested(1, 2),
+    }[f.type];
 
     return {
       duration,
@@ -142,10 +152,20 @@ scrollingScore.render((svg, g, score) => {
   });
 
   const durations = g.append("g");
-  score.forEach((bar) => {
-    durations
-      .append("text")
-      .text(`${bar.duration / 1000}\u2033`)
-      .attr("x", bar.x);
-  });
+  score
+    .filter((b) => b.duration !== 0)
+    .forEach((bar) => {
+      durations
+        .append("text")
+        .style("font-size", "9px")
+        .style("font-family", "monospace")
+        .text(`${decimalRound(bar.duration / 1000, 1)}\u2033`)
+        .attr("x", bar.x);
+    });
 }, score);
+
+// TODO copied from ad;sr
+function decimalRound(number, precision) {
+  var factor = Math.pow(10, precision);
+  return Math.round(number * factor) / factor;
+}

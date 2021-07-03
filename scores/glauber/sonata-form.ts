@@ -29,14 +29,15 @@ export enum Role {
   Closing, // including cod(ett)a
 }
 
-// Array<{
-//  section: meta | exposition | development | recapitulation
-//  type: primary | transition | secondary | cod(ett)a/closing
+// TODO do a second pass to add "next" to help with transitions
 //  next: { section, type }
-// }>
-export function generate() {
+export function generate(): Array<{ section: Section; type: Role }> {
   const hasSecondSubject = coin();
   const hasFirstSubjectInRecap = hasSecondSubject ? coin() : true;
+
+  const introduction = coin()
+    ? [{ section: Section.Meta, type: Role.Transition }]
+    : [];
 
   const exposition = [
     Role.Primary,
@@ -57,10 +58,10 @@ export function generate() {
     ...(coin() ? [Role.Closing] : []),
   ].map(typeWithSection(Section.Recapitulation));
 
-  const coda = coin() ? [{ section: Section.Meta, type: Role.Closing }] : []; // coda
+  const coda = coin() ? [{ section: Section.Meta, type: Role.Closing }] : [];
 
   return [
-    coin() && { section: Section.Meta, type: Role.Transition }, // introduction
+    ...introduction,
     ...exposition,
     ...exposition, // repeat
     ...development,
