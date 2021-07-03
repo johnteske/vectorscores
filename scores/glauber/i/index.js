@@ -13,6 +13,10 @@ import * as scrollingScore from "../scrolling-score";
 
 import themes from "./themes";
 
+//import { lcg } from "../intonations/prng";
+// TODO share prng and seed throughout entire score
+const prng = () => Math.random(); // lcg(Date.now());
+
 function timeScale(t) {
   return t / 200;
 }
@@ -35,6 +39,17 @@ const makePattern = (name, contentFn) => (selection) => {
   p.call(contentFn);
 };
 
+function addGlyphsWithDensity(selection, glyph, density) {
+  for (let i = 0; i < density; i++) {
+    selection
+      .append("text")
+      .text(glyph)
+      .style("font-family", "Bravura")
+      .attr("dx", pitchScale(prng()))
+      .attr("dy", pitchScale(prng()));
+  }
+}
+
 // TODO example patterns to visualize form
 const patterns = [
   // Section TODO
@@ -46,28 +61,16 @@ const patterns = [
   }),
   // Role
   makePattern(Role.Primary, (p) => {
-    p.append("text")
-      .text(durations[1])
-      .style("font-family", "Bravura")
-      .attr("dy", "1em");
+    p.append("g").call(addGlyphsWithDensity, durations[1], 5);
   }),
   makePattern(Role.Transition, (p) => {
-    p.append("text")
-      .text(durations[0.75])
-      .style("font-family", "Bravura")
-      .attr("dy", "1em");
+    p.append("g").call(addGlyphsWithDensity, durations[0.75], 5);
   }),
   makePattern(Role.Secondary, (p) => {
-    p.append("text")
-      .text(durations[0.5])
-      .style("font-family", "Bravura")
-      .attr("dy", "1em");
+    p.append("g").call(addGlyphsWithDensity, durations[0.5], 5);
   }),
   makePattern(Role.Closing, (p) => {
-    p.append("text")
-      .text(durations[2])
-      .style("font-family", "Bravura")
-      .attr("dy", "1em");
+    p.append("g").call(addGlyphsWithDensity, durations[2], 5);
   }),
 ];
 //
