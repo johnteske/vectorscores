@@ -8,7 +8,7 @@ import { seconds, pitchRange, pitchScale } from "../../intonations/scale";
 import { translate } from "../../intonations/translate";
 import startTimeFromDuration from "../../intonations/startTimeFromDuration";
 
-import { generate as generateForm, Role } from "../sonata-form";
+import { generate as generateForm, Section, Role } from "../sonata-form";
 import * as scrollingScore from "../scrolling-score";
 
 import themes from "./themes";
@@ -66,9 +66,6 @@ const patterns = [
   makePattern(Role.Primary, (p) => {
     p.append("g").call(addGlyphsWithDensity, durations[1], 5);
   }),
-  makePattern(Role.Transition, (p) => {
-    p.append("g").call(addGlyphsWithDensity, durations[0.75], 5);
-  }),
   makePattern(Role.Secondary, (p) => {
     p.append("g").call(addGlyphsWithDensity, durations[0.5], 5);
   }),
@@ -109,14 +106,30 @@ const score = form
     return {
       duration,
       render: (g, data) => {
-        g.append("rect")
+        const rect = g
+          .append("rect")
           .attr("width", data.width)
           .attr("height", pitchRange)
           // outline for debugging
           .attr("stroke", "gray")
-          .attr("vector-effect", "non-scaling-stroke")
-          //
-          .attr("fill", `url(#${f.section === "meta" ? "meta" : f.type})`);
+          .attr("vector-effect", "non-scaling-stroke");
+        //
+        if (f.section === Section.Meta) {
+          rect.attr("fill", `url(#${f.section})`);
+        } else if (f.type === Role.Transition) {
+          // prev
+          rect.attr("fill", `url(#${f.prev.type})`);
+          // TODO duplicated
+          g.append("rect")
+            .attr("width", data.width)
+            .attr("height", pitchRange)
+            // outline for debugging
+            //.attr("stroke", "gray")
+            //.attr("vector-effect", "non-scaling-stroke")
+            .attr("fill", `url(#${f.next.type})`);
+        } else {
+          rect.attr("fill", `url(#${f.type})`);
+        }
       },
     };
   })

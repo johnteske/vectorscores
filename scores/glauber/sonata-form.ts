@@ -14,7 +14,7 @@ function typeWithSection(section: Section) {
   });
 }
 
-enum Section {
+export enum Section {
   Meta,
   Exposition,
   Development,
@@ -29,9 +29,12 @@ export enum Role {
   Closing, // including cod(ett)a
 }
 
-// TODO do a second pass to add "next" to help with transitions
-//  next: { section, type }
-export function generate(): Array<{ section: Section; type: Role }> {
+export function generate(): Array<{
+  section: Section;
+  type: Role;
+  prev?: { section: Section; type: Role };
+  next?: { section: Section; type: Role };
+}> {
   const hasSecondSubject = coin();
   const hasFirstSubjectInRecap = hasSecondSubject ? coin() : true;
 
@@ -60,7 +63,7 @@ export function generate(): Array<{ section: Section; type: Role }> {
 
   const coda = coin() ? [{ section: Section.Meta, type: Role.Closing }] : [];
 
-  return [
+  const sequence = [
     ...introduction,
     ...exposition,
     ...exposition, // repeat
@@ -68,4 +71,14 @@ export function generate(): Array<{ section: Section; type: Role }> {
     ...recapitulation,
     ...coda,
   ];
+
+  return sequence.map((v, i, a) => {
+    const prev = a[i - 1];
+    const next = a[i + 1];
+    return {
+      ...v,
+      prev,
+      next,
+    };
+  });
 }
